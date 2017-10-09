@@ -1,0 +1,23 @@
+.notification{
+	position: fixed;
+	bottom: 0%;
+	left: 50%;
+	transform: translate(-50%, 0%) scale(1.0, 1.0);
+    padding: 8px 16px;
+    color: $notification-text-color;
+    background: $notification-bg-color;
+    outline: 1px solid $notification-border-color;
+    font-weight: 600;
+    border-radius: 2px;
+	opacity: 0;
+	z-index: 100;
+	animation: flash-message 3s forwards;
+	-webkit-font-smoothing: antialiased;
+}
+
+@keyframes flash-message {
+    0% {bottom: 0%}
+    10% {opacity: 1; bottom: 5%}
+    90% {opacity: 1; bottom: 5%}
+    100% {opacity: 0; display:none; bottom: 0%}
+}

@@ -1,0 +1,64 @@
+.project{
+	&.archived{
+		opacity: 0.2;
+		transition: 0.3s opacity;
+		&:hover {
+			opacity: 1;
+        }
+	}
+}
+
+.projects-list{
+	list-style: none;
+	width: 100%;
+	padding: 0;
+    margin: 0;
+
+    .project{
+	    display: flex;
+		flex-direction: row;
+		margin-bottom: 5px;
+		padding: 3px;
+		transition: 0.1s all;
+
+		h3{
+			&.primary-topic{flex-basis: 115px;}
+			&.supervisor{
+				margin-left: auto;
+				text-align: right;
+			}
+		}
+		
+		a.primary-topic{
+			display: inline-block;
+			margin: 0 15px 0 0;
+			flex-basis: 100px;
+			flex-shrink: 10;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			color: blue;
+		}
+
+		p.supervisor{
+			display: inline-block;
+			margin: 0 0 0 auto;
+			text-align: right;
+		}
+
+		a{
+			text-decoration: none;
+		}
+
+		a:hover{
+			text-decoration: underline;
+		}
+
+		a:visited{
+			color: grey;
+		}
+    }
+
+    .project:nth-child(even){
+    	background: darken(white, 3%);
+    }
+}

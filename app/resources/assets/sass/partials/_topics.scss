@@ -1,0 +1,85 @@
+.topics-list {
+    list-style: none;
+
+    .topic {
+        background: black;
+        display: inline-block;
+        color: white;
+        border: 1px solid black;
+        border-radius: 2px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+
+        &.primary{
+            background: #ffd700;
+            border-color: darken(#ffd700, 5%);
+            color: black;
+            &:before {
+                content: '★';
+                padding-left: 8px;
+            }
+        }
+
+        a, p {
+            display: inline-block;
+            text-decoration: none;
+            color: inherit;
+            margin: 0;
+            padding: 5px;
+        }
+    }
+
+    .no-topics {
+        background: $error-bg-color;
+        border: 2px solid $error-border-color;
+        border-radius: 2px;
+        padding: 8px;
+    }
+}
+
+.topics-list.edit {
+    display: inline-block;
+
+    .topic-remove {
+        display: inline-block;
+        background: none;
+        color: white;
+        padding: 5px;
+        width: 30px;
+        text-align: center;
+        border: none;
+        border-right: 1px solid white;
+    }
+
+    .topic{
+        cursor: -webkit-grab;
+        user-select: none;
+    }
+
+    .topic:first-child{
+        background: #ffd700;
+        border-color: darken(#ffd700, 5%);
+        color: black;
+
+        &:before {
+            content: '★';
+            padding-left: 8px;
+        }
+
+        .topic-remove {
+            display: none;
+        }
+    }
+}
+
+#addTopicInput{
+    outline: none;
+    display: inline-block;
+    width: auto;
+}
+
+// .topic:hover{
+//  background: white;
+//  color: black;
+// }
