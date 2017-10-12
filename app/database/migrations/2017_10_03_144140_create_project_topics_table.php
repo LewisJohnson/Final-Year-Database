@@ -14,8 +14,8 @@ class CreateProjectTopicsTable extends Migration
     public function up()
     {
         Schema::create('project_topics', function (Blueprint $table) {
-            $table->integer('project_id')->nullable(false);
-            $table->integer('topic_id')->nullable(false);
+            $table->unsignedInteger('project_id')->nullable(false);
+            $table->unsignedInteger('topic_id')->nullable(false);
             $table->boolean('primary')->default(0);
             $table->primary(['project_id', 'topic_id']);
         });

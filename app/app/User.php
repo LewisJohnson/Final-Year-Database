@@ -7,7 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+	use Notifiable;
+    public $timestamps = false;
+    protected $primaryKey = 'user_id';
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'first_name', 'last_name', 'email', 'password', 'access_type'
     ];
 
     /**
@@ -26,4 +28,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isAdmin(){
+        return $this->access_type === "admin";
+    }
+
+    public function isSupervisor(){
+        return $this->access_type === "supervisor";
+    }
+
+    public function isStudent(){
+        return $this->access_type === "student";
+    }
 }

@@ -63,9 +63,50 @@
 /******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 11:
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__shopify_draggable__);
+
+
+$(function () {
+	var swappable = new __WEBPACK_IMPORTED_MODULE_0__shopify_draggable__["Swappable"](document.querySelectorAll('ul'), {
+		draggable: '.topic'
+	});
+
+	// swappable.on('swappable:start', () => console.log('swappable:start'))
+	// swappable.on('swappable:swapped', () => console.log('swappable:swapped'));
+	swappable.on('swappable:stop', function () {});
+
+	$("#editProjectForm").submit(function (event) {
+		updatePrimaryTopicAjax($(".topics-list.edit li:first-child .topic-name").text());
+	});
+});
+
+function updatePrimaryTopicAjax(topic) {
+	$.ajax({
+		type: "PATCH",
+		url: "edit/topic",
+		data: { topic: topic }
+	});
+}
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -5775,47 +5816,5 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 /******/ ]);
 });
 
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(4);
-
-
-/***/ }),
-
-/***/ 4:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__shopify_draggable__);
-
-
-$(function () {
-	var swappable = new __WEBPACK_IMPORTED_MODULE_0__shopify_draggable__["Swappable"](document.querySelectorAll('ul'), {
-		draggable: '.topic'
-	});
-
-	// swappable.on('swappable:start', () => console.log('swappable:start'))
-	// swappable.on('swappable:swapped', () => console.log('swappable:swapped'));
-	swappable.on('swappable:stop', function () {});
-
-	$("#editProjectForm").submit(function (event) {
-		updatePrimaryTopicAjax($(".topics-list.edit li:first-child .topic-name").text());
-	});
-});
-
-function updatePrimaryTopicAjax(topic) {
-	$.ajax({
-		type: "PATCH",
-		url: "edit/topic",
-		data: { topic: topic }
-	});
-}
-
 /***/ })
-
-/******/ });
+/******/ ]);

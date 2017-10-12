@@ -1,10 +1,16 @@
 @extends ('layout')
 
 @section ('scripts')
-=-<script src="/js/project-topics.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/project-topics.js" type="text/javascript" charset="utf-8"></script>
 @endsection
 
 @section ('content')
+
+@if($user = Auth::user())
+	@if($user->isAdmin() || $user->isSupervisor())
+		
+	@endif
+@endif
 
 {!! App\Topic::getDatalist() !!}
 
