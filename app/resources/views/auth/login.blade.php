@@ -1,4 +1,4 @@
-@extends ('layout')
+@extends('layouts.app')
 @section('content')
 <h2>Log in with your Sussex credentails.</h2>
 <form role="form" method="POST" action="{{ route('login') }}">

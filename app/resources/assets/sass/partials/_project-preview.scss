@@ -1,0 +1,30 @@
+.project-preview{
+	padding: 1rem;
+    overflow: hidden;
+
+    .project{
+    	transition: 0.5s all;
+		max-height: 8rem;
+		overflow: hidden;
+		box-shadow: 0px 16px 11px -11px rgba(0, 0, 0, 0.1);
+	}
+
+	.project.expand{
+		max-height: 90rem;
+		overflow: overlay;
+		box-shadow: none;
+	}
+
+	.show-more{
+	    text-align: center;
+	    display: block;
+	    color: black;
+	    text-decoration: none;
+	    margin-top: 1rem;
+	    font-size: 12px;
+	}
+
+	.show-more:hover{
+		text-decoration: underline;
+	}
+}

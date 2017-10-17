@@ -8,7 +8,7 @@ class Topic extends Model
 {
     public $timestamps = false;
 
-    public function posts(){
+    public function projects(){
         return $this->belongsToMany(Project::class, 'project_topics');
     }
 
@@ -16,8 +16,8 @@ class Topic extends Model
         $topicNames = Topic::pluck('name');
 
         $rtnString = '<datalist id="topicsDataList">';
-        foreach ($topicNames as $topic) {
-            $rtnString .= '<option value="'. $topic.'">';
+        foreach ($topicNames as $name) {
+            $rtnString .= '<option value="'. $name.'">';
         }
         $rtnString .= '</datalist>';
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 use App\Project;
 
@@ -16,8 +18,15 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $projects = Project::all();
-        return view('projects.index', ['projects' => $projects]);
+        if(Auth::user()->isStudent()){
+            $projects = Project::all();
+            // Project::whereNotNull('supervisor_id');
+            // ->where('student_proposed_project', 0)
+            // ->where('status', 'on-offer');
+        } else {
+            $projects = Project::all();
+        }
+        return view('projects.index', compact('projects'));
     }
 
     /**
@@ -25,8 +34,7 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view('projects.create');
     }
 
@@ -40,14 +48,26 @@ class ProjectController extends Controller
 
         // Validate data
         $this->validate(request(), [
-            'supervisor'  => 'required',
-            'title'       => 'required',
-            'description' => 'required',
+            'title'       => 'required|max:255',
+            'description' => 'required|max:16777215',
+            'skills' => 'required|max:255',
+            'status' => 'required',
         ]);
 
-        // Submit data
-        $project = Project::create(request(['supervisor', 'title', 'description', 'archived']));
-        
+        $project = new Project;
+        $project->fill(array(
+            'title' => request('title'),
+            'description' => request('description'),
+            'status' => request('status'),
+            'skills' => request('skills'),
+            'start_date' => new Carbon
+        ));
+
+        $project->author_programme = 'no idea';
+        $project->supervisor_id = Auth::user()->supervisor->id;
+
+        $project->save();
+
         session()->flash('message', 'Project "'.$project->title.'"" created.');
 
         // Redirect
@@ -84,14 +104,10 @@ class ProjectController extends Controller
     public function update($id) {
         // todo: add form validation
         try {
-
-            $post = Project::findOrFail($id);
-
-            $post->update(request(['supervisor', 'title', 'description', 'archived']));
-
-            $project = $post; 
+            $project = Project::findOrFail($id);
+            $project->update(request(['title', 'description', 'skills']));
             session()->flash('message', '"'.$project->title.'" has been updated.');
-            return view('projects.project', compact('project'));
+            return redirect()->action('ProjectController@show', $project);
 
         } catch(ModelNotFoundException $err){
             //Show error page

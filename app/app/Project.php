@@ -2,12 +2,45 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
-class Project extends Model
-{
-    protected $fillable = ['supervisor', 'title', 'description', 'archived'];
+class Project extends Model{
+
+    // Mass fillable items
+    protected $fillable = ['title', 'description', 'skills', 'status', 'start_date'];
+    protected $guarded = ['supervisor'];
+
+    public function topics(){
+        return $this->belongsToMany(Topic::class, 'project_topics');
+    }
+
+    public function getSupervisor(){
+        return Supervisor::where('id', $this->supervisor_id)->first();
+    }
+
+    public function getSupervisorAsUser(){
+        return User::where('id', $this->supervisor_id)->first();
+    }
+
+    public function getStudent(){
+        return Student::where('id', $this->student_id)->first();
+    }
+
+    public function getStudentAsUser(){
+        return User::where('id', $this->student_id)->first();
+    }
+
+    public function isOwnedByUser(){
+        if(Auth::user()->isAdmin() || Auth::user()->isSupervisor()){
+            if(Auth::user()->isAdmin() || $this->supervisor_id == Auth::user()->supervisor->id){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
     public function scopeSearch($query, $searchterm, $title = false, $description = false, $supervisor = false, $topic = false)
     {
@@ -23,7 +56,7 @@ class Project extends Model
         }
 
         if($supervisor){
-            $query->orWhere("supervisor", "LIKE",'%'.$searchterm.'%');
+            // $query->orWhere("supervisor", "LIKE",'%'.$searchterm.'%');
         }
 
         if($topic){
@@ -33,7 +66,4 @@ class Project extends Model
         return $query->get();
     }
 
-    public function topics(){
-        return $this->belongsToMany(Topic::class, 'project_topics');
-    }
 }

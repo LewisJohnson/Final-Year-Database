@@ -8,10 +8,26 @@ Route::get('/about', 'Index@about');
 Route::get('/search', 'ProjectController@search');
 
 Route::group(['middleware' => ['auth']], function() {
+	// Admin
+	Route::get('/admin', 'AdminController@index');
+	Route::get('/admin/students', 'AdminController@students');
+	Route::get('/admin/supervisors', 'AdminController@supervisors');
+	Route::get('/admin/topics', 'AdminController@topics');
+	Route::get('/admin/login-as', 'AdminController@loginAsView');
+	Route::get('/admin/login-as/{id}', 'AdminController@loginAs');
+
+	// Supervisor
+	Route::get('/supervisor', 'SupervisorController@index');
+
+	// Student
+	Route::patch('/student/{student}/selectProject', 'StudentController@selectProject');
+
+	// Topic routes (Admin)
+	Route::patch('/topics/{topic}', 'TopicController@edit');
+
 	// Project routes
 	Route::get('/projects', 'ProjectController@index');
 	Route::post('/projects', 'ProjectController@store');
-
 	Route::get('/projects/create', 'ProjectController@create');
 	Route::get('/projects/{project}', 'ProjectController@show');
 
@@ -26,8 +42,8 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::patch('/projects/{project}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
 
 	// Topic routes
-	Route::any('/projects/topics', 'TopicController@index');
-	Route::any('/projects/topics/{topic}', 'TopicController@show');
+	Route::get('/topics', 'TopicController@index');
+	Route::get('/topics/{topic}', 'TopicController@show');
 });
 
 Auth::routes();

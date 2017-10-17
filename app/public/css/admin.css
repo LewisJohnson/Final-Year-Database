@@ -1,0 +1,23 @@
+.edit-topic-list {
+  list-style: none;
+  width: 15rem;
+}
+
+.edit-topic-list li {
+  margin-bottom: 20px;
+}
+
+.edit-topic-list li form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.edit-topic-list li form > * {
+  display: inline-block;
+}
+

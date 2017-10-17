@@ -7,6 +7,7 @@ use App\Project;
 use App\Topic;
 
 class ProjectTopic extends Model{
+	
 	public $timestamps = false;
 	public $incrementing = false;
 	protected $primaryKey = ['project_id', 'topic_id'];

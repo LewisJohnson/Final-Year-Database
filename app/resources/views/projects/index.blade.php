@@ -1,15 +1,19 @@
-@extends ('layout')
+@extends('layouts.app')
 @section ('content')
-<div class="supervisor-panel">
-	<h1>Supervisor Panel</h1>
-	<ul>
-		<li class="nav-button"><a href="/projects/create" title="">New Project</a></li>
-		{{-- show collectioon of projects created by logged in supervisor --}}
-		{{-- <li class="nav-button"><a href="/projects/create" title="">Edit Project</a></li> --}}
-	</ul>
-</div>
+@if($user = Auth::user())
+	@if($user->isAdmin() || $user->isSupervisor())
+		<div class="supervisor-panel">
+			<h2>Supervisor Panel</h2>
+			<ul class="buttons">
+				<li class="nav-button"><a href="/projects/create" title="">New Project</a></li>
+				<li class="nav-button"><a href="/supervisor" title="">My Projects</a></li>
+			</ul>
+		</div>
+	@endif
+@endif
 
-<h1>Projects</h1>
+
+<h2>Projects</h2>
 <form action="/search" method="get" accept-charset="utf-8">
 	<div>
 		<h4>Search fields:</h3>
@@ -53,18 +57,17 @@
 		@foreach($results as $project)
 			<li class="project">
 				<a href="/projects/{{$project->id}}">{{ $project->title }}</a>
-				<p class="supervisor">{{ $project->supervisor }}</p>
+				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
 			</li>
 		@endforeach
 	@elseif(isset($projects))
 	{{-- We don't have any search results --}}
 		@foreach($projects as $project)
 			@php ($pt = App\ProjectTopic::getProjectPrimaryTopicName($project))
-			
 			<li class="project{!! ($project->archived) ? ' archived': '' !!}">
-				<a class="primary-topic" href="/projects/topics/{{$pt}}">{{ $pt }}</a>
+				<a class="primary-topic" href="/topics/{{$pt}}">{{ $pt }}</a>
 				<a class="project-link" href="/projects/{{$project->id}}">{{ $project->title }}</a>
-				<p class="supervisor">{{ $project->supervisor }}</p>
+				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
 			</li>
 		@endforeach
 

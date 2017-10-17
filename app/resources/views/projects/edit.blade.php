@@ -1,4 +1,4 @@
-@extends ('layout')
+@extends('layouts.supervisor')
 
 @section ('scripts')
 <script src="/js/project-topics.js" type="text/javascript" charset="utf-8"></script>
@@ -6,43 +6,38 @@
 
 @section ('content')
 
-@if($user = Auth::user())
-	@if($user->isAdmin() || $user->isSupervisor())
-		
-	@endif
-@endif
-
 {!! App\Topic::getDatalist() !!}
 
 <div class="supervisor-panel">
-	<h1>Supervisor Panel</h1>
-	<ul>
+	<h2>Supervisor Panel</h2>
+	<ul class="buttons">
 		<li class="nav-button">
 			<button id="deleteProjectButton">Delete Project</button>
 		</li>
 	</ul>
 </div>
 
-<h1>You are editing "{{ $project->title }}"</h1>
+<h1>You are editing "{{ $project->title }}".</h1>
 
 <form id="editProjectForm" role="form" method="POST" action="{{URL::to('/projects/'.$project->id).'/edit' }}">
 	{{ csrf_field() }}
 	{{ method_field('PATCH') }}
 
 	<div class="form-field">
-		<label class="hover-label" for="supervisor">Supervisor</label>
-		<input type="text" value="{{ $project->supervisor }}" name="supervisor" id="supervisor">
-	</div>
-	
-	<div class="form-field">
 		<label class="hover-label" for="title">Title</label>
-		<input type="text" value="{{ $project->title }}" name="title" id="title">
+		<input maxlength="255" type="text" name="title" id="title" value="{{ $project->title }}">
 	</div>
 	
 	<div class="form-field">
 		<label class="hover-label" for="description">Description</label>
-		<textarea type="text" name="description" id="description">{{ $project->description }}</textarea>
+		<textarea maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
 	</div>
+
+	<div class="form-field">
+		<label class="hover-label" for="skills">Skills</label>
+		<input maxlength="255" type="text" name="skills" id="skills" value="{{ $project->skills }}"></input>
+	</div>
+
 	<div class="form-field">
 		<p>Topics</p>
 		<div id="newTopicInputContainer" class="fake-input">
@@ -57,15 +52,19 @@
 			</ul>
 		</div>
 	</div>
+
 	<div class="form-field">
-		<label for="archived">Mark as archived?</label>
-		<input class="bitValueCheckbox" id="archived" name="archived" value="{{ $project->archived }}" type="checkbox">
+		<select name="status">
+			<option value="on-offer">On Offer</option>
+			<option value="withdrawn">Withdrawn</option>
+		</select>
 	</div>
+
 	<div class="form-field">
 		<button type="submit" value="Submit">Update</button>
 	</div>
 	@include ('partials.errors')
 </form>
 
-<a href="/projects" title="">Back</a>
+<a href="{{ action('ProjectController@show', $project) }}">Back</a>
 @endsection

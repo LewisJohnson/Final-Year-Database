@@ -1,31 +1,39 @@
-@extends ('layout')
+@extends('layouts.supervisor')
 @section ('content')
-<h1>Create new project</h1>
+@php($user = Auth::user())
+<h2>Create new project</h2>
 
 <form method="POST" action="/projects">
 	{{ csrf_field() }}
 	
-	<div class="form-field">
-		<label class="hover-label" for="supervisor">Supervisor</label>
-		<input type="text" name="supervisor" id="supervisor" required>
-	</div>
+	<p><b>Supervisor:</b> {{ $user->getFullName() }}</p>
 	
 	<div class="form-field">
 		<label class="hover-label" for="title">Title</label>
-		<input type="text" name="title" id="title" required>
+		<input maxlength="255" type="text" name="title" id="title" required>
 	</div>
 	
 	<div class="form-field">
 		<label class="hover-label" for="description">Description</label>
-		<textarea type="text" name="description" id="description" required></textarea>
+		<textarea maxlength="16777215" type="text" name="description" id="description" required></textarea>
 	</div>
+
 	<div class="form-field">
-		<label for="archived">Sumbit as archived?</label>
-		<input class="bitValueCheckbox" id="archived" name="archived" type="checkbox" value="0">
+		<label class="hover-label" for="skills">Skills</label>
+		<input maxlength="255" type="text" name="skills" id="skills" required></input>
 	</div>
+
+	<div class="form-field">
+		<select name="status">
+			<option value="on-offer">On Offer</option>
+			<option value="withdrawn">Withdrawn</option>
+		</select>
+	</div>
+
 	<div class="form-field">
 		<button type="submit" value="Submit">Add</button>
 	</div>
+	
 	@include ('partials.errors')
 </form>
 

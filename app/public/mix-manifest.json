@@ -1,6 +1,9 @@
 {
     "/js/forms.js": "/js/forms.js",
     "/css/app.css": "/css/app.css",
+    "/css/admin.css": "/css/admin.css",
+    "/css/supervisor.css": "/css/supervisor.css",
     "/js/project-topics.js": "/js/project-topics.js",
-    "/js/main.js": "/js/main.js"
+    "/js/main.js": "/js/main.js",
+    "/js/supervisor.js": "/js/supervisor.js"
 }

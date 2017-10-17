@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTopicsTable extends Migration
+class Topic extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class CreateTopicsTable extends Migration
     public function up()
     {
         Schema::create('topics', function (Blueprint $table) {
-            $table->increments('topic_id');
-            $table->string('topic')->unique()->nullable(false);
+            $table->increments('id');
+            $table->string('name')->unique();
         });
     }
 

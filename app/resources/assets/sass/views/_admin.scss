@@ -1,0 +1,15 @@
+.edit-topic-list{
+	list-style: none;
+	width: 15rem;
+
+	li{
+		margin-bottom: 20px;
+		form{
+			display: flex;
+			flex-direction: row;
+		}
+		form > * {
+			display: inline-block;
+		}
+	}
+}

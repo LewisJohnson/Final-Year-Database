@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectTopicsTable extends Migration
+class ProjectTopic extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,20 @@ class CreateProjectTopicsTable extends Migration
     public function up()
     {
         Schema::create('project_topics', function (Blueprint $table) {
-            $table->unsignedInteger('project_id')->nullable(false);
-            $table->unsignedInteger('topic_id')->nullable(false);
+            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('topic_id');
             $table->boolean('primary')->default(0);
             $table->primary(['project_id', 'topic_id']);
+        });
+
+        Schema::table('project_topics', function($table) {
+            // $table->foreign('project_id')
+            //     ->references('project_id')->on('projects')
+            //     ->onDelete('cascade');
+
+            // $table->foreign('topic_id')
+            //     ->references('topic_id')->on('topics')
+            //     ->onDelete('cascade');
         });
     }
 
