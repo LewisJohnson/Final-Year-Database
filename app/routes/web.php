@@ -21,10 +21,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Student
 	Route::patch('/student/{student}/selectProject', 'StudentController@selectProject');
-
-	// Topic routes (Admin)
-	Route::patch('/topics/{topic}', 'TopicController@edit');
-
+	
 	// Project routes
 	Route::get('/projects', 'ProjectController@index');
 	Route::post('/projects', 'ProjectController@store');
@@ -43,6 +40,9 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Topic routes
 	Route::get('/topics', 'TopicController@index');
+	Route::post('/topics', 'TopicController@store');
+	Route::patch('/topics/{topic}', 'TopicController@edit');
+	Route::delete('/topics/{topic}', 'TopicController@destroy');
 	Route::get('/topics/{topic}', 'TopicController@show');
 });
 

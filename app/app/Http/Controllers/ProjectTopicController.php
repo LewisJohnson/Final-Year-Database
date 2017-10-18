@@ -28,7 +28,6 @@ class ProjectTopicController extends Controller
         $projectTopic = new ProjectTopic;
         $projectTopic->topic_id = $topic->id;
         $projectTopic->project_id = $project->id;
-        
         $projectTopic->save();
 
         // Return

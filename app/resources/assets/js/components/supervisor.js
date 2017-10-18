@@ -11,13 +11,13 @@ $(function() {
 });
 
 function acceptStudent(student_id, project_id) {
-	url = '/student/' + student_id +'/selectProject';
+	var url = '/student/' + student_id +'/selectProject';
 	$.ajax({
 		method: 'PATCH',
 		url: url,
 		data: {project_id : project_id},
 		success: function(){
-			alert('yes niga');
+			
         }
 	});
 }

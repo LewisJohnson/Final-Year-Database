@@ -5,9 +5,6 @@
 
 .edit-topic-list li {
   margin-bottom: 20px;
-}
-
-.edit-topic-list li form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -17,7 +14,62 @@
           flex-direction: row;
 }
 
-.edit-topic-list li form > * {
+.edit-topic-list li > * {
   display: inline-block;
+}
+
+.edit-topic-list li p {
+  margin: 0;
+}
+
+.edit-student-list {
+  list-style: none;
+}
+
+.edit-student-list .student-edit-item {
+  padding: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.edit-student-list .student-edit-item p {
+  margin: 0 0 0 5px;
+}
+
+.edit-student-list .student-edit-item :not(:first-child) {
+  width: 150px;
+}
+
+.edit-student-list .student-edit-item .checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-student-list .student-edit-item * {
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.edit-student-list .student-edit-item:nth-child(even) {
+  background: #f7f7f7;
+}
+
+.edit-student-list .student-edit-item.checked {
+  background: #cccccc;
+}
+
+.edit-student-list .student-edit-item.checked * {
+  font-weight: 800;
+}
+
+.edit-student-list .student-edit-item.checked > :nth-child(2) {
+  padding-left: 10px;
 }
 

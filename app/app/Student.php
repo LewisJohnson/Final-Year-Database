@@ -43,4 +43,16 @@ class Student extends Model{
         return Project::where('id', $this->project_id)->first();
     }
 
+    public static function getMailtoStringByProjectStatus($status){
+    	$return = 'mailto:';
+    	$students = Student::Where('project_status', $status)->get();
+
+    	foreach ($students as $key => $student) {
+    		$return .= $student->user->email;
+    		$return .= ',';
+    	}
+
+    	return $return;
+    }
+    
 }

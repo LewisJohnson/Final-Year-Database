@@ -79,6 +79,5 @@
 		</ul>
 	</div>
 </div>
-<script src="{{ asset('js/supervisor.js') }}"></script>
 @endsection
 

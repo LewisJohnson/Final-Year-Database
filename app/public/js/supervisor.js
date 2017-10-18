@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 8:
+/***/ 10:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(9);
+module.exports = __webpack_require__(11);
 
 
 /***/ }),
 
-/***/ 9:
+/***/ 11:
 /***/ (function(module, exports) {
 
 $(function () {
@@ -88,14 +88,12 @@ $(function () {
 });
 
 function acceptStudent(student_id, project_id) {
-	url = '/student/' + student_id + '/selectProject';
+	var url = '/student/' + student_id + '/selectProject';
 	$.ajax({
 		method: 'PATCH',
 		url: url,
 		data: { project_id: project_id },
-		success: function success() {
-			alert('yes niga');
-		}
+		success: function success() {}
 	});
 }
 

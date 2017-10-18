@@ -8,6 +8,15 @@ class Topic extends Model
 {
     public $timestamps = false;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name'
+    ];
+
     public function projects(){
         return $this->belongsToMany(Project::class, 'project_topics');
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Topic;
+use App\ProjectTopic;
 
 class TopicController extends Controller
 {
@@ -17,14 +18,6 @@ class TopicController extends Controller
         return view('topics.index', compact('topics'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,7 +26,8 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        //
+        $topic = Topic::create(request(['name']));
+        return true;
     }
 
     /**
@@ -53,16 +47,9 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Topic $topic){
-        // todo: add form validation (Capitalize)
-        try {
-            $topic->name = request('name');
-            $topic->save();
-            session()->flash('message', '"'.$topic->name.'" has been updated.');
-            return redirect('/admin/topics');
-
-        } catch(ModelNotFoundException $err){
-            //Show error page
-        }
+        $topic->name = request('name');
+        $topic->save();
+        return 'true';
     }
 
     /**
@@ -82,7 +69,10 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
-        //
+    public function destroy(Topic $topic){
+        //todo: this first statment needs to be checked
+        ProjectTopic::Where('topic_id', $topic->id)->delete();
+        $topic->delete();
+        return "true";
     }
 }
