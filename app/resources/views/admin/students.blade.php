@@ -8,21 +8,22 @@
 @foreach($statuses as $status)
 	<h3>Approved</h3>
 	<ul class="edit-student-list {{ $status }}">
-	@foreach(App\Student::Where('project_status', $status)->get() as $student)
-		@include ('partials.student-edit', array('student'=> $student))
-	@endforeach
-	<li>
-		<button class="select-all" data-project_status="{{ $status }}" >Select all</button>
-		<a href="{{ App\Student::getMailtoStringByProjectStatus($status) }}">Email all</a>
-	</li>
-</ul>
+		@foreach(App\Student::Where('project_status', $status)->get() as $student)
+			@include ('partials.student-edit', array('student'=> $student))
+		@endforeach
+		<li>
+			<button class="select-all" data-project_status="{{ $status }}" >Select all</button>
+			<button class="unselect-all" data-project_status="{{ $status }}">Unselect all</button>
+			<a href="{{ App\Student::getMailtoStringByProjectStatus($status) }}">Email all</a>
+		</li>
+	</ul>
 @endforeach
 
 <hr>
-<li>
-	<button class="unselect-all" data-project_status="none">Unselect all</button>
-	<button type="">Delete Selected</button>
-	<a class="email-selected" href="mailto:" >Email Selected</a>
-</li>
+<ul class="edit-student-list">
+	<li>
+		<button type="">Delete Selected</button>
+		<a class="email-selected" href="mailto:" >Email Selected</a>
+	</li>
 </ul>
 @endsection
