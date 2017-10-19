@@ -7,11 +7,3 @@
 .shadow-focus {
 	@include shadow-focus();
 }
-
-.shadow-2dp {
-	@include shadow-2dp();
-}
-
-.shadow-4dp {
-	@include shadow-4dp();
-}

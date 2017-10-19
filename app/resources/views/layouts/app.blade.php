@@ -4,7 +4,6 @@
 
 	<body>
 		@include('partials.no-script')
-
 		@include('partials.header')
 
 		@if(Session::get("after_login") != null)
@@ -20,14 +19,20 @@
 			@include('auth.login')
 		@endif
 
-		<div class="main-content">
-			@yield('content')
+		<div class="main-content mt-5">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-12">
+						@yield('content')
+					</div>
+				</div>
+
+				@include('partials.footer')
+			</div>
 		</div>
 
 		@include('partials.message')
 		<div class="mobile-nav-underlay"></div>
 		<div class="underlay"></div>
 	</body>
-
-	@include('partials.footer')
 </html>

@@ -7,7 +7,7 @@
 
 	<h4>Example Export</h4>
 	<div class="table-responsive">
-		<table class="table table-hover bg-white  mw-800">
+		<table class="table table-hover bg-white mw-800">
 			<thead>
 				<tr>
 					<th>Student Name</th>

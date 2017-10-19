@@ -76,13 +76,6 @@
 	}
 }
 
-@media screen and (max-width: 1200px) {
-	.main-content {
-		padding: 3rem 1rem !important;
-		padding-bottom: 10rem !important;
-	}
-}
-
 @media screen and (max-width: $mobile-width) {
 	.morph-dropdown-wrapper {
 		display: none;
@@ -113,12 +106,6 @@
 	}
 
 	ul.tab-container {
-		overflow-x: auto;
-	}
-
-	.main-content {
-		padding: 0 1rem;
-		padding-bottom: 12rem !important;
 		overflow-x: auto;
 	}
 
@@ -174,10 +161,6 @@
 		height: auto;
 		padding: 10px;
 
-		.footer-right, .footer-left {
-			position: relative;
-			width: 100%;
-		}
 
 		a, p {
 			padding: 6px;
@@ -200,7 +183,12 @@
 
 
 @media screen and (max-width: 410px) {
-
+	.department-select {
+		form {
+			width: 100%;
+		}
+	}
+	
 	header {
 		> a {
 			width: 100%;

@@ -10,9 +10,9 @@
 				<form id="loginForm" class="form" role="form" method="POST" action="{{ action('Auth\LoginController@login')}}" accept-charset="utf-8">
 					{{ csrf_field() }}
 	
-					<div type="email" autocorrect="off" autocapitalize="none" class="form-field">
+					<div class="form-group" type="email" autocorrect="off" autocapitalize="none">
 						<label for="username">Username/Email</label>
-						<input id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+						<input class="form-control" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 					</div>
 	
 					<div class="form-field">
@@ -23,7 +23,7 @@
 					<div class="form-field" title="This is not recommended for shared devices">
 						<div class="checkbox">
 							<input id="remember" name="title" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
-							<label for="remember">Remember Me</label>
+							<label class="ml-1" for="remember">Remember Me</label>
 						</div>
 					</div>
 	
@@ -60,20 +60,20 @@
 					<div class="col-12">
 						{{ csrf_field() }}
 									
-						<div class="form-field">
+						<div class="form-group">
 							<label for="username">Username/Email</label>
-							<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
+							<input class="form-control" id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 						</div>
 		
-						<div class="form-field">
+						<div class="form-group">
 							<label for="password">Password</label>
-							<input id="password" type="password" name="password" required>
+							<input class="form-control" id="password" type="password" name="password" required>
 						</div>
 		
-						<div class="form-field" title="This is not recommended for shared devices">
+						<div class="form-group" title="This is not recommended for shared devices">
 							<div class="checkbox">
 								<input id="remember" name="title" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
-								<label for="remember">Remember Me</label>
+								<label class="ml-1" for="remember">Remember Me</label>
 							</div>
 						</div>
 		

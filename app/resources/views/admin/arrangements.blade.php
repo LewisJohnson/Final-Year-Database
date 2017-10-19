@@ -7,7 +7,7 @@
 	<form action="{{ action('ProjectAdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
 		<div class="table-responsive mt-5">
-			<table class="table table-hover bg-white data-table shadow-2dp">
+			<table class="table table-hover bg-white data-table shadow-sm">
 				<thead>
 					<tr>
 						<th>Name</th>

@@ -19,9 +19,5 @@
 		<div class="card-header">Propose Project</div>
 		@include('forms.new-project', ['user_type' => 'student'])
 	</div>
-
-	<div class="mt-3">
-		<a class="btn btn-secondary" href="javascript:history.back()">Back</a>
-	</div>
 </div>
 @endsection

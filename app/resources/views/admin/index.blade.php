@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+	.centered.mw-800 .svg-container{
+		display: inline-block;
+		width: 20px;
+		height: 18px;
+	}
+</style>
 	<div class="centered mw-800">
 		<h1>{{ lang_sess("admin_hub_title") }}</h1>
 		<div class="row mt-3">

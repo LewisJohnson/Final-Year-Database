@@ -25,7 +25,7 @@
 			</div>
 		@endif
 
-		<table id="user-agent-table" class="table data-table shadow-2dp">
+		<table id="user-agent-table" class="table data-table shadow-sm">
 			<thead>
 				<tr>
 					<th>User Agent</th>

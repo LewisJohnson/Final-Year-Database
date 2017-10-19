@@ -9,7 +9,7 @@
 
 		{{-- STUDENTS --}}
 		<div class="col-8">
-			<table class="table table-hover table-sm bg-white data-table shadow-2dp sort-table" id="2nd-marker-student-table">
+			<table class="table table-hover table-sm bg-white data-table shadow-sm sort-table" id="2nd-marker-student-table">
 				<thead>
 					<tr>
 						<th>Student</th>
@@ -44,7 +44,7 @@
 
 		{{-- SUPERVISORS --}}
 		<div class="col-4">
-			<table class="table table-hover table-sm bg-white data-table shadow-2dp" id="2nd-marker-supervisor-table">
+			<table class="table table-hover table-sm bg-white data-table shadow-sm" id="2nd-marker-supervisor-table">
 				<thead>
 					<tr>
 						<th>Supervisor</th>

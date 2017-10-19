@@ -4,42 +4,6 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-select:not([readonly]), input:not([type='range']):not([readonly]), textarea:not([readonly]), .fake-input {
-	border: solid $form-border-width $form-border-color;
-	padding: $form-input-padding;
-	font-size: $form-input-font-size;
-	font-family: $font-family-sans-serif;
-}
-
-label {
-	font-size: 16px;
-}
-
-.form-field {
-	margin-bottom: 1.2rem;
-
-	input[type='text'], input[type='url'], input[type='password'], input[type='email'], textarea {
-		width: 100%;
-		clear: both;
-	}
-
-	textarea {
-		resize: vertical;
-		min-height: 36px;
-		height: 150px;
-		display: block;
-	}
-}
-
-.form-field.form-field--flex {
-	display: flex;
-	flex-flow: row;
-
-	:last-child {
-		margin-left: auto;
-	}
-}
-
 .form-field.form-field--toggle {
 	cursor: pointer;
 	outline: none;

@@ -1,4 +1,4 @@
-<tr class="project-row--{{ $project->status }} project-row" tabindex="0" data-project-id="{{ $project->id }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" >
+<tr class="project-row @if($project->status != "on-offer") border-left border-{{ $project->getStatusAsBootstrapClass() }} @endif" data-project-id="{{ $project->id }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" >
 	
 	@if($view != "topic")
 		@if($project->getPrimaryTopic() != null)
@@ -22,6 +22,6 @@
 	@endif
 
 	@if($view == "personal")
-		<td class="project-status--{{ $project->status }}">{{ $project->status }}</td>
+		<td>{{ $project->getStatus() }}</td>
 	@endif
 </tr>

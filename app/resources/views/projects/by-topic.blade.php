@@ -13,7 +13,7 @@
 		</thead>
 		<tbody>
 			@foreach($topics as $topic)
-				<tr tabindex="0" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}'">
+				<tr class="cursor--pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}'">
 					<td>{{ $topic->name }}</td>
 					<td class="text-right">{{ $topic->project_count }}</td>
 				</tr>

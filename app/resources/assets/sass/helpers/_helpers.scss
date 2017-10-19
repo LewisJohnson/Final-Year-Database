@@ -112,10 +112,9 @@
 }
 
 .svg-container {
-	display: inline-block;
-	margin-right: 6px;
-	max-width: 30px;
-	max-height: 30px;
+	display: inline;
+	margin-right: 2px;
+	overflow: hidden;
 
 	svg {
 		width: 100%;

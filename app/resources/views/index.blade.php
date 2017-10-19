@@ -2,7 +2,7 @@
 @section('content')
 
 @php
-	$helloArray = array("Hello", "Welcome", "Hi", "Bonjour", "Olá", "Guten tag", "Ahoj", "Merhaba", "Buongiorno");
+	$helloArray = array("Hello", "Welcome", "Hi", "Bonjour", "Olá", "Guten Tag", "Ahoj", "Merhaba", "Buongiorno");
 	$randIndex = array_rand($helloArray, 1);
 @endphp
 
@@ -13,11 +13,11 @@
 
 		<div class="row mt-4">
 			<div class="col-12">
-				<div class="search-container w-100 d-flex shadow-2dp">
-					<input id="universal-search-input" class="search-input flex-grow-1" type="text" minlength="3" autocomplete="off" name="searchTerm" placeholder="Search everywhere...">
+				<div class="search-container w-100 d-flex shadow-sm">
+					<input id="universal-search-input" class="search-input form-control flex-grow-1" type="text" minlength="3" name="searchTerm" placeholder="Search everywhere...">
 				</div>
 		
-				<div id="universal-search-results" style="display: none" class="p-2 shadow-2dp"></div>
+				<div id="universal-search-results" style="display: none" class="p-2 shadow-sm"></div>
 			</div>
 		</div>
 

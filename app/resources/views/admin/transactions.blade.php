@@ -4,11 +4,12 @@
 	<h1>{{ $transaction_type }} Transactions</h1>
 
 	<div class="d-flex">
-		<a class="btn external-link @if($transaction_type == "Project") {{'btn-primary'}} @else btn-light @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
-		<a class="btn external-link ml-2 @if($transaction_type == "Student") {{'btn-primary'}} @else btn-light @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
-		<a class="btn external-link ml-2 @if($transaction_type == "Marker") {{'btn-primary'}}  @else btn-light @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
-		<a class="btn external-link ml-2 @if($transaction_type == "Topic") {{'btn-primary'}}   @else btn-light @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
-
+		<div class="btn-group">
+			<a class="btn @if($transaction_type == "Project") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
+			<a class="btn @if($transaction_type == "Student") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
+			<a class="btn @if($transaction_type == "Marker") {{'btn-primary'}}  @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
+			<a class="btn @if($transaction_type == "Topic") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
+		</div>
 		<div class="checkbox ml-auto">
 			<input type="checkbox" id="showTransactionDetailOnHover">
 			<label class="ml-1" for="showTransactionDetailOnHover">Enable detail on hover</label>

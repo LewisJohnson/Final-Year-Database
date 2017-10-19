@@ -5,7 +5,7 @@
 	<h5>Select two projects to swap their second marker.</h5>
 
 	<div class="mt-3">
-		<table class="table table-hover bg-white data-table shadow-2dp" id="swap-marker-student-table">
+		<table class="table table-hover bg-white data-table shadow-sm" id="swap-marker-student-table">
 			<thead>
 				<tr>
 					<th>Project Title</th>

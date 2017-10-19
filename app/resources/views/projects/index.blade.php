@@ -40,7 +40,7 @@
 
 		<div class="form-row align-items-center form-inline ml-1 mt-3">
 			<label>Archived Projects</label>
-			<select class="ml-2" onchange="window.location.href = $('#showArchivedToggleButton').attr('href')">
+			<select class="ml-2 form-control" onchange="window.location.href = $('#showArchivedToggleButton').attr('href')">
 				<option value="0" @if(!$mp_hide_archived) selected @endif>Shown</option>
 				<option value="1" @if($mp_hide_archived) selected @endif>Hidden</option>
 			</select>
@@ -58,7 +58,7 @@
 
 	@if(count($projects) > 0)
 		<div class="table-responsive">
-			<table id="project-table" class="table table-hover bg-white data-table table-column-toggle shadow-2dp {{ $view }} @if($view != "search") server-sort-table @endif">
+			<table id="project-table" class="table table-hover bg-white data-table table-column-toggle shadow-sm {{ $view }} @if($view != "search") server-sort-table @endif">
 				<thead>
 					<tr>
 						@if($view != "topic")<th data-default="true" class="js-unsortable">Topic</th>@endif

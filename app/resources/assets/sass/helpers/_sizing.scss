@@ -5,3 +5,35 @@
 		max-width: #{$width + '00px'};
 	}
 }
+
+.svg-xs {
+	.svg-container {
+		svg {
+			width: 16px;
+		}
+	}
+}
+
+.svg-sm {
+	.svg-container {
+		svg {
+			width: 25px;
+		}
+	}
+}
+
+.svg-md {
+	.svg-container {
+		svg {
+			width: 50px;
+		}
+	}
+}
+
+.svg-lg {
+	.svg-container {
+		svg {
+			width: 75px;
+		}
+	}
+}

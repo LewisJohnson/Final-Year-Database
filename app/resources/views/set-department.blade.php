@@ -7,7 +7,7 @@
 		<p class="text-muted">Please select a department.</p>
 	</div>
 
-	<div class="department-select d-flex mt-5">
+	<div class="department-select d-flex flex-wrap mt-5">
 		@foreach(get_departments() as $key => $department)
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 				{{ csrf_field() }}

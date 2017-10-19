@@ -9,7 +9,7 @@
 		@include('supervisors.partials.supervisor-filter')
 	</div>
 
-	<table class="table table-hover bg-white data-table sort-table shadow-2dp mt-4">
+	<table class="table table-hover bg-white data-table sort-table shadow-sm mt-4">
 		<thead>
 			<tr>
 				<th>Supervisor</th>
