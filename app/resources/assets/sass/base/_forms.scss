@@ -87,3 +87,20 @@ input, textarea, .fake-input{
         box-shadow: 3px 3px 0px 0px darken(#f1f1f1, 10%);
     }
 }
+
+.vertical-select{
+    display: flex;
+    overflow: auto;
+    flex-direction: row;
+    width: 50%;
+    height: 9rem;
+    option{
+        flex-grow: 1;
+        flex-basis: 0;
+        padding: 8px;
+    }
+
+    :first-child {
+        margin-top: 1rem;
+    }
+}

@@ -16,6 +16,10 @@ class AdminController extends Controller
         return view('admin.students');
     }
 
+    public function importStudents(){
+        return view('admin.import');
+    }
+
     public function supervisors(){
         return view('admin.supervisors');
     }

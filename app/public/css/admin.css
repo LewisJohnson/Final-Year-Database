@@ -1,9 +1,8 @@
 .edit-topic-list {
   list-style: none;
-  width: 15rem;
 }
 
-.edit-topic-list li {
+.edit-topic-list .topic {
   margin-bottom: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -12,13 +11,14 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  width: 15rem;
 }
 
-.edit-topic-list li > * {
+.edit-topic-list .topic > * {
   display: inline-block;
 }
 
-.edit-topic-list li p {
+.edit-topic-list .topic p {
   margin: 0;
 }
 
@@ -71,5 +71,45 @@
 
 .edit-student-list .student-edit-item.checked > :nth-child(2) {
   padding-left: 10px;
+}
+
+#admin-form {
+  background: red;
+  padding: 1rem;
+  border: 3px solid yellow;
+  margin-bottom: 5rem;
+  text-align: center;
+  -webkit-animation: textAttention 0.7s infinite;
+          animation: textAttention 0.7s infinite;
+}
+
+@-webkit-keyframes textAttention {
+  0% {
+    color: black;
+  }
+
+  50% {
+    color: yellow;
+    border: 3px solid #990000;
+  }
+
+  100% {
+    color: black;
+  }
+}
+
+@keyframes textAttention {
+  0% {
+    color: black;
+  }
+
+  50% {
+    color: yellow;
+    border: 3px solid #990000;
+  }
+
+  100% {
+    color: black;
+  }
 }
 

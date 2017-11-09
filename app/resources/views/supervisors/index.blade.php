@@ -46,7 +46,7 @@
 				@foreach($user->supervisor->getAcceptedStudents() as $project)
 					<li class="project offer">
 						<a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a>
-						<a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a>
+						<a class="project-link" href="/project/{{ $project->id }}">{{ $project->title }}</a>
 						<button data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}" class="undo">Undo</button>
 					</li>					
 				@endforeach
@@ -69,7 +69,7 @@
 					<li class="project{!! ($project->archived) ? ' archived': '' !!}">
 						<input type="checkbox">
 						<p>{{ $project->status }}</p>
-						<a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a>
+						<a class="project-link" href="/projects/{{ $project->id }}">{{ $project->title }}</a>
 						<a href="/projects/{{ $project->id }}/edit">Edit</a>
 					</li>
 				@endforeach

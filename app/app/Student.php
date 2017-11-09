@@ -8,13 +8,14 @@ class Student extends Model{
 
 	public $timestamps = false;
 
-	// public static function getAll(){
-	// 	return User::where('access_type', 'student')->get();
-	// }
-
-	// public static function getAllSortedStatus(){
-	// 	return User::where('access_type', 'student')->get();
-	// }
+	/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'registration_number', 'programme'
+    ];
 
 	public function getStatusString(){
 		$return = '';

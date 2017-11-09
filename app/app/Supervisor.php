@@ -6,6 +6,17 @@ use DB;
 
 class Supervisor extends User{
 
+    public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'title', 'contact_type', 'project_load', 'take_students'
+    ];
+
 	public function user(){
         return $this->hasOne(User::class, 'id');
     }

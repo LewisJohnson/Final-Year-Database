@@ -19,7 +19,7 @@
 
 <h1>You are editing "{{ $project->title }}".</h1>
 
-<form id="editProjectForm" role="form" method="POST" action="{{URL::to('/projects/'.$project->id).'/edit' }}">
+<form id="editProjectForm" role="form" method="POST" action="{{URL::to('/project/'.$project->id).'/edit' }}">
 	{{ csrf_field() }}
 	{{ method_field('PATCH') }}
 

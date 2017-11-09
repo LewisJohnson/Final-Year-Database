@@ -14,10 +14,10 @@ class Supervisor extends Migration
     public function up()
     {
         Schema::create('supervisors', function (Blueprint $table) {
-            $table->increments('id');
+            $table->unique('id');
             $table->string('title', 6);
-            $table->string('contact_type');
             $table->unsignedTinyInteger('project_load');
+            $table->boolean('accept_email');
             $table->boolean('take_students');
         });
 

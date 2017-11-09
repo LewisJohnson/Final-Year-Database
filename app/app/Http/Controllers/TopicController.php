@@ -26,8 +26,12 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $topic = Topic::create(request(['name']));
-        return true;
+        $topic = new Topic;
+        $topic->fill(array(
+            'name' => Topic::getSluggedName(request('name'))
+        ));
+        $topic->save();
+        return $topic;
     }
 
     /**

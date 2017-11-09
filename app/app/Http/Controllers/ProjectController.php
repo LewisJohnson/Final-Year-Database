@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Project;
 use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-use App\Project;
 
 class ProjectController extends Controller
 {

@@ -21,6 +21,7 @@ class Topic extends Model
         return $this->belongsToMany(Project::class, 'project_topics');
     }
 
+
     public static function getDatalist(){
         $topicNames = Topic::pluck('name');
 
@@ -33,8 +34,13 @@ class Topic extends Model
         return $rtnString;
     }
 
-    public static function returnValidName($name){
-    	$name = str_replace(' ', '-', $name);
+    public function getUnsluggedName(){
+        $name = str_replace("-", " ", $this->name);
+        return $name;
+    }
+
+    public static function getSluggedName($name){
+    	$name = str_slug($name, "-");
     	return $name;
     }
 

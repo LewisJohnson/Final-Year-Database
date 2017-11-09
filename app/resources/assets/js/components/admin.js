@@ -41,7 +41,7 @@ $(function() {
 	});
 
 	$('.add-topic').click(function() {
-		deleteTopic($(this).prev().val());
+		addTopic($(this).prev().val());
 	});
 
 	$('.edit-topic').click(function() {
@@ -55,18 +55,42 @@ $(function() {
 	$('.delete-topic').click(function() {
 		deleteTopic($(this).data('topic_name'), $(this).parent());
 	});
+
+	$('#admin-form').hide();
+	$('#supervisor-form').hide();
+	$('#student-form').show();
+	$('#create-form-access-select').change(function(){
+		if($('#student-option').is(":selected")) {
+			$('#student-form').show();
+		} else {
+			$('#student-form').hide();
+		}
+
+		if($('#supervisor-option').is(":selected")) {
+			$('#supervisor-form').show();
+		} else {
+			$('#supervisor-form').hide();
+		}
+		if($('#admin-option').is(":selected")) {
+			$('#admin-form').show();
+		} else {
+			$('#admin-form').hide();
+		}
+
+	});
+
 });
 
 function addTopic(name) {
 	$.ajax({
 		method: 'POST',
-		url: '/topics',
+		url: '/topic',
 		context: this,
-		data: {name : name},
-		success: function(){
-			$(this).hide();
-        }
-    });
+		data: {name : name}
+    }).done(function(){
+    	//todo: Create list item;
+		location.reload();
+	});
 }
 
 function editTopic(topic_name, name, button) {
@@ -90,7 +114,7 @@ function deleteTopic(topic_name, li) {
 		url: url,
 		context: li,
 		success: function(result){
-			$(this).hide();
+			$(this).remove();
         }
     });
 }

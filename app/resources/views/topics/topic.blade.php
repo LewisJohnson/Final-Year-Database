@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section ('content')
 
-<h2>Projects with the tag "{{ $topic->name }}".</h2>
+<h2>Projects with the tag "{{ $topic->getUnsluggedName() }}".</h2>
 <ul>
 	@foreach($topic->projects as $project)
 		<li>

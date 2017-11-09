@@ -6,7 +6,7 @@
 
 @php($statuses = ['approved', 'selected', 'proposed', 'none'])
 @foreach($statuses as $status)
-	<h3>Approved</h3>
+	<h3>{{ ucfirst($status) }}</h3>
 	<ul class="edit-student-list {{ $status }}">
 		@foreach(App\Student::Where('project_status', $status)->get() as $student)
 			@include ('partials.student-edit', array('student'=> $student))

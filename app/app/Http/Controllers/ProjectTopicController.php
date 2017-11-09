@@ -19,7 +19,7 @@ class ProjectTopicController extends Controller
         // If topic isn't in topics, add it to DB
         if(count($topic) == 0){
             $newTopic = new Topic;
-            $newTopic->name = Topic::returnValidName(request('topic'));
+            $newTopic->name = Topic::getSluggedName(request('topic'));
             $newTopic->save();
             $topic = $newTopic;
         }
@@ -57,7 +57,6 @@ class ProjectTopicController extends Controller
         ProjectTopic::where('project_id', $project->id)->where('topic_id', $topic->id)->delete();
         return $topic->name;
     }
-
 
 }
 
