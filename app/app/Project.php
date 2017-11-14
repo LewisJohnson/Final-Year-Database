@@ -33,12 +33,10 @@ class Project extends Model{
     }
 
     public function isOwnedByUser(){
-        if(Auth::user()->isAdmin() || Auth::user()->isSupervisor()){
-            if(Auth::user()->isAdmin() || $this->supervisor_id == Auth::user()->supervisor->id){
-                return true;
-            } else {
-                return false;
-            }
+        if($this->supervisor_id == Auth::user()->supervisor->id){
+            return true;
+        } else {
+            return false;
         }
     }
 

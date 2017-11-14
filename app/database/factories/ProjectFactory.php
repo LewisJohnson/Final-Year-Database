@@ -11,5 +11,6 @@ $factory->define(App\Project::class, function (Faker $faker) {
         'status' => 'on-offer',
         'supervisor_id' => $faker->numberBetween(1,20),
         'start_date' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+        'project_type' => 'final'
     ];
 });

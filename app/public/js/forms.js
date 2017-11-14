@@ -103,6 +103,31 @@ $(function () {
 	$('#deleteProjectButton').click(function () {
 		deleteProjectAjax($('#title').val());
 	});
+
+	$('#search-filter-button').click(function () {
+		var container = $('.search-filter-container');
+		if (container.hasClass('active')) {
+			$('.search-filter-container').removeClass('active');
+			$('#search-filter-button').removeClass('active');
+		} else {
+			$('.search-filter-container').addClass('active');
+			$('#search-filter-button').addClass('active');
+		}
+	});
+
+	$('.search-input').on('focus', function (e) {
+		$('.search-container').removeClass(function (index, className) {
+			return (className.match(/\bshadow\-\S+/g) || []).join(' ');
+		});
+		$('.search-container').addClass('shadow-focus');
+	});
+
+	$('.search-input').on('focusout', function (e) {
+		$('.search-container').removeClass(function (index, className) {
+			return (className.match(/\bshadow\-\S+/g) || []).join(' ');
+		});
+		$('.search-container').addClass('shadow-2dp');
+	});
 });
 
 function addTopicAjax(topic) {

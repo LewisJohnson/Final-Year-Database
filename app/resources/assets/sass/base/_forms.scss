@@ -1,106 +1,141 @@
 form{
-    display: flex;
-    flex-flow: column;
-    // max-width: 400px;
+	display: flex;
+	flex-flow: column;
+	// max-width: 400px;
 }
 
 input, textarea, .fake-input{
-    border: solid $form-border-width $form-border-color;
-    padding: $form-input-padding;
-    font-size: $form-input-font-size;
-}
-
-.fake-input{
-    cursor: text;
-}
-
-.loader {
-    display: none;
-    border: 5px solid transparent;
-    border-top: 5px solid #5facff; /* Blue */
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+	border: solid $form-border-width $form-border-color;
+	padding: $form-input-padding;
+	font-size: $form-input-font-size;
 }
 
 .form-field {
-    margin-bottom: 1rem;
+	margin-bottom: 1rem;
 
-    label.hover-label {
-        position: relative;
-        background: white;
-        padding: 0 5px;
-        top: 10px;
-        left: 15px;
-        color: $form-label-text-color;
-    }
+	label.hover-label {
+		position: relative;
+		background: white;
+		padding: 0 5px;
+		top: 10px;
+		left: 15px;
+		color: $form-label-text-color;
+	}
 
-    input[type='text'], input[type='password'], input[type='email'], textarea {
-        width: 100%;
-        clear: both;
-    }
+	input[type='text'], input[type='password'], input[type='email'], textarea {
+		width: 100%;
+		clear: both;
+	}
 
-    textarea {
-        resize: vertical;
-        min-height: 36px;
-        height: 150px;
-    }
-}
-
-.search-form{
-    
-}
-
-.search-filter{
-    li {
-        display: inline-block;
-        margin: 0 10px 10px 0;
-        background: #fafafa;
-        border: 1px solid darken(#f1f1f1, 5%);
-        box-shadow: 5px 5px 0px 0px darken(#f1f1f1, 5%);
-        border-radius: 90px;
-        border-bottom-color: darken(#f1f1f1, 20%);
-        border-right-color: darken(#f1f1f1, 20%);
-        transition: 0.1s all ease;
-
-        label {
-            width: 120px;
-            display: block;
-            padding: 5px;
-            user-select: none;
-        }
-    }
-
-    li:active{
-        transform: translateY(2px);
-        box-shadow: 3px 3px 0px 0px darken(#f1f1f1, 10%);
-    }
-
-    li:active:after{
-        transform: translateY(40px);
-        box-shadow: 3px 3px 0px 0px darken(#f1f1f1, 10%);
-    }
+	textarea {
+		resize: vertical;
+		min-height: 36px;
+		height: 150px;
+	}
 }
 
 .vertical-select{
-    display: flex;
-    overflow: auto;
-    flex-direction: row;
-    width: 50%;
-    height: 9rem;
-    option{
-        flex-grow: 1;
-        flex-basis: 0;
-        padding: 8px;
-    }
+	display: flex;
+	overflow: auto;
+	flex-direction: row;
+	width: 50%;
+	height: 9rem;
+	option{
+		flex-grow: 1;
+		flex-basis: 0;
+		padding: 8px;
+	}
 
-    :first-child {
-        margin-top: 1rem;
-    }
+	:first-child {
+		margin-top: 1rem;
+	}
+}
+
+.checkbox {
+	position: relative;
+	margin: $checkbox-margin;
+	cursor: pointer;
+
+	label {
+		cursor: pointer;
+		color: #757575;
+		font-size: 16px;
+		&:before,
+		&:after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		&:before {
+			// box
+			width: $checkbox-size;
+			height: $checkbox-size;
+			background: #fff;
+			border: 2px solid $checkbox-border-color;
+			border-radius: 2px;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+
+		&:after {
+			// checkmark
+		}
+	}
+
+	input[type="checkbox"] {
+		outline: 0;
+		margin-right: $checkbox-size - 15px;
+	
+		&:checked {
+			+ label:before {
+				background: $checkbox-checked-color;
+				border: none;
+			}
+			+ label:after {
+				$checkmark-size: $checkbox-size - 2*$checkbox-padding;
+				transform: rotate(-45deg);
+				top: ($checkbox-size / 2) - ($checkmark-size / 4) - $checkbox-size/10;
+				left: $checkbox-padding;
+				width: $checkmark-size;
+				height: $checkmark-size / 2;
+				border: $checkmark-width solid $checkmark-color;
+				border-top-style: none;
+				border-right-style: none;
+			}
+		}
+	}
+}
+
+.button-group{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	font-size: $font-size-base;
+
+	.button{
+		border: none;
+		flex: 1;
+		padding: 1rem;
+		font-size: inherit;
+		border-top: 1px solid $accent;
+		border-bottom: 1px solid $accent;
+		border-radius: 2px;
+	}
+
+	> .button:first-child {
+		border-right: none;
+		border-left: 1px solid $accent;
+	}
+
+	> .button:last-child {
+		border-right: 1px solid $accent;
+		border-left: none;
+	}
+
+	.selected{
+		background: $accent;
+		color: white;
+	}
 }

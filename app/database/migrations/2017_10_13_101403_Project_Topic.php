@@ -19,16 +19,6 @@ class ProjectTopic extends Migration
             $table->boolean('primary')->default(0);
             $table->primary(['project_id', 'topic_id']);
         });
-
-        Schema::table('project_topics', function($table) {
-            // $table->foreign('project_id')
-            //     ->references('project_id')->on('projects')
-            //     ->onDelete('cascade');
-
-            // $table->foreign('topic_id')
-            //     ->references('topic_id')->on('topics')
-            //     ->onDelete('cascade');
-        });
     }
 
     /**

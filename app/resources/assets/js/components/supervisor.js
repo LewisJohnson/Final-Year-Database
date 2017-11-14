@@ -18,7 +18,7 @@ function acceptStudent(student_id, project_id) {
 		data: {project_id : project_id},
 		success: function(){
 			
-        }
+		}
 	});
 }
 
@@ -28,6 +28,6 @@ function rejectStudent(student_id, project_id) {
 		url: 'edit/topic',
 		data: {topic : topic},
 		success: function(oldTopicName){
-        },
-    });
+		},
+	});
 }

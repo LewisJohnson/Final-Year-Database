@@ -2,7 +2,7 @@
 @section ('content')
 @php ($user = Auth::user())
 
-@if($project->isOwnedByUser())
+{{-- @if($project->isOwnedByUser())
 	<div class="supervisor-panel">
 		<h2>Supervisor Panel</h2>
 		<ul class="buttons">
@@ -21,9 +21,9 @@
 
 @if($project->archived)
 	<h1>This project is archived.</h1>
-@endif
+@endif --}}
 
-<div class="project{!! ($project->archived) ? ' archived': '' !!}">
+<div class="card project-card {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>
 	<h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2>
 	<h3>Description</h3>
@@ -39,14 +39,19 @@
 				</li>
 			@endforeach
 		@else
-			<li class="no-topics">This project has no associated topics.</li>
+			<li class="no-topics">
+			<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
+				<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+			</svg>
+			<p>This project has no associated topics.</p>
+			</li>
 		@endif
 	</ul>
 </div>
 
 <hr>
 
-@if($user->isStudent())
+{{-- @if($user->isStudent())
 	@if($user->student->project_status == 'none')
 		<form action="{{ action('StudentController@selectProject', $user->student)}}" role="form" method="POST">
 			{{ csrf_field() }}
@@ -55,11 +60,9 @@
 			<button>Select project</button>
 		</form>
 	@else
-		{{-- Show selected/proposed topic --}}
 		<p>You have already selected/proposed a project.</p>
 	@endif
-
-@endif
+@endif --}}
 
 <a href="{{ action('ProjectController@index') }}">Back</a>
 @endsection

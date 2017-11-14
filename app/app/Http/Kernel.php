@@ -31,15 +31,28 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
         'api' => [
+            //todo: change throttle to lower (5)
             'throttle:60,1',
             'bindings',
+        ],
+
+        'masters' => [
+            'App\Http\Middleware\Masters_Admin',
+            'App\Http\Middleware\Masters_Supervisor',
+            'App\Http\Middleware\Masters_Student',
+        ],
+
+        'ug' => [
+            'App\Http\Middleware\Ug_Admin',
+            'App\Http\Middleware\Ug_Supervisor',
+            'App\Http\Middleware\Ug_Student',
         ],
     ];
 
@@ -57,5 +70,11 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'masters_admin' => 'App\Http\Middleware\Masters_Admin',
+        'masters_supervisor' => 'App\Http\Middleware\Masters_Supervisor',
+        'masters_student' => 'App\Http\Middleware\Masters_Student',
+        'ug_admin' => 'App\Http\Middleware\Ug_Admin',
+        'ug_supervisor' => 'App\Http\Middleware\Ug_Supervisor',
+        'ug_student' => 'App\Http\Middleware\Ug_Student',
     ];
 }

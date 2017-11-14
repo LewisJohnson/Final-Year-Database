@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 
-class ProjectController extends Controller
+class Masters_ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,14 +18,21 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        if(Auth::user()->isStudent()){
+        //Check supervisor cookie if(cookie = "master side") only get master projects
+        // if(Auth::user()->isUgSupervisor()){
+        //     $projects = Project::all();
+        //     // Project::whereNotNull('supervisor_id');
+        //     // ->where('student_proposed_project', 0)
+        //     // ->where('status', 'on-offer');
+        // } else if {
+
+        // }else if {
+            
+        // }else if {
+            
+        // }
             $projects = Project::all();
-            // Project::whereNotNull('supervisor_id');
-            // ->where('student_proposed_project', 0)
-            // ->where('status', 'on-offer');
-        } else {
-            $projects = Project::all();
-        }
+        
         return view('projects.index', compact('projects'));
     }
 

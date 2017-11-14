@@ -13,7 +13,9 @@ class Mode extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('mode', function (Blueprint $table) {
+            $table->boolean('lol')->default(0);
+        });
     }
 
     /**

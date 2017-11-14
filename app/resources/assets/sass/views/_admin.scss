@@ -17,48 +17,28 @@
 }
 
 .edit-student-list{
-	list-style: none;
 
 	.student-edit-item{
-		padding: 5px;
-		display: flex;
-		flex-direction: row;
-		
-		p {
-			margin: 0 0 0 5px;
-		}
-
 		:not(:first-child){
 			width: 150px;
 		}
-
-		.checkbox{
-			width: 16px;
-			height: 16px;
-		}
-
-		*{
-			transition: all 0.2s;
-		}
-
-		transition: all 0.2s;
 	}
 
-	.student-edit-item:nth-child(even){
-		background: darken(white, 3%);
-	}
+	// .student-edit-item:nth-child(even){
+	// 	background: darken(white, 3%);
+	// }
 
-	.student-edit-item.checked{
-		background: darken(white, 20%);
+	// .student-edit-item.checked{
+	// 	background: darken(white, 20%);
 
-		*{
-			font-weight: 800;
-		}
-	}
+	// 	*{
+	// 		font-weight: 800;
+	// 	}
+	// }
 
-	.student-edit-item.checked > :nth-child(2){
-		padding-left: 10px;
-	}
+	// .student-edit-item.checked > :nth-child(2){
+	// 	padding-left: 10px;
+	// }
 }
 
 #admin-form{
@@ -68,7 +48,6 @@
 	margin-bottom: 5rem;
 	text-align: center;
 	animation: textAttention 0.7s infinite;
-
 }
 
 @keyframes textAttention{

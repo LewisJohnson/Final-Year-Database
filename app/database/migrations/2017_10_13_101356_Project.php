@@ -14,7 +14,8 @@ class Project extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->increments('id')->unique();
+            $table->increments('id');
+            $table->enum('project_type', ['masters', 'final']);
             $table->string('title', 255);
             $table->mediumText('description');
             $table->string('skills', 255);
@@ -27,15 +28,6 @@ class Project extends Migration
             $table->timestamp('created_at')->useCurrent = true;
             $table->timestamp('updated_at')->useCurrent = true;
         });
-        
-        Schema::table('projects', function($table) {
-            // $table->foreign('student_id')
-            //     ->references('student_id')->on('students');
-
-            // $table->foreign('supervisor_id')
-            //     ->references('supervisor_id')->on('supervisors');
-        });
-
     }
 
     /**

@@ -1,4 +1,4 @@
-$(function() { 
+$(function() {
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -24,4 +24,11 @@ $(function() {
 		$('.project').addClass('expand');
 	});
 
+	$('.login-button').click(function() {
+		$('.login').fadeIn(400);
+	});
+
+	$('.login-underlay').click(function() {
+		$('.login').fadeOut(400);
+	});
 });

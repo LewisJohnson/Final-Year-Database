@@ -18,11 +18,16 @@ class Index extends Controller
 
     public function help()
     {
-        return view('help');
+        return view('help.help');
+    }
+
+    public function information()
+    {
+        return view('help.information');
     }
 
     public function about()
     {
-        return view('about');
+        return view('help.about');
     }
 }

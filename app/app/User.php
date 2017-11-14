@@ -31,16 +31,30 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function isAdmin(){
-        return $this->access_type === "admin";
+    public function isUgAdmin(){
+        return $this->access_type === "ug_administrator";
+    }
+
+    public function isMastersAdmin(){
+        return $this->access_type === "masters_administrator";
     }
 
     public function isSupervisor(){
         return $this->access_type === "supervisor";
     }
 
-    public function isStudent(){
-        return $this->access_type === "student";
+    public function isUgStudent(){
+        if($this->student != null){
+            return $this->student->student_year === "final";
+        }
+        return false;
+    }
+
+    public function isMastersStudent(){
+        if($this->student != null){
+            return $this->student->student_year === "master";
+        }
+        return false;
     }
 
     public function student(){
@@ -52,15 +66,11 @@ class User extends Authenticatable
     }
 
     public function projects(){
-        if($this->isAdmin() || $this->isSupervisor()){
-           return $this->hasMany(Project::class, 'supervisor_id');
-        } else {
-            return null;
-        }
+        return $this->hasMany(Project::class, 'supervisor_id');
     }
 
     public function getFullName(){
-        if($this->isAdmin() || $this->isSupervisor()){
+        if($this->isUgAdmin() || $this->isMastersAdmin() || $this->isSupervisor()){
             $format = '%s %s %s';
             return sprintf($format, $this->supervisor->title, $this->first_name, $this->last_name);
         } else {

@@ -1,22 +1,22 @@
 $(function() {
 
 	$('.student-edit-item .checkbox').change(function() {
-        if($(this).is(":checked")) {
-            $(this).parent().addClass("checked");
-        } else {
-        	$(this).parent().removeClass("checked");
-        }
+		if($(this).is(":checked")) {
+			$(this).parent().addClass("checked");
+		} else {
+			$(this).parent().removeClass("checked");
+		}
 
-        var emailString = "mailto:";
-        $('.student-edit-item .checkbox').each(function() {
-        	if($(this).is(":checked")) {
+		var emailString = "mailto:";
+		$('.student-edit-item .checkbox').each(function() {
+			if($(this).is(":checked")) {
 				emailString += $(this).parent().data('email');
 				emailString += ",";
 			}
 		});
 
 		$('.edit-student-list .email-selected').prop('href', emailString);
-    });
+	});
 
 
 	$('.edit-student-list .email-selected').click(function(e) {
@@ -26,18 +26,8 @@ $(function() {
 		}
 	});
 
-	$('.edit-student-list .select-all').click(function() {
-		var selector = ".edit-student-list." + $(this).data("project_status") + " li .checkbox";
-		$(selector).each(function() {
-			$(this).prop('checked', true).change();
-		});
-	});
-
-	$('.edit-student-list .unselect-all').click(function() {
-		var selector = ".edit-student-list." + $(this).data("project_status") + " li .checkbox";
-		$(selector).each(function() {
-			$(this).prop('checked', false).change();
-		});
+	$('.master-checkbox').click(function() {
+		$(this).parent().parent().siblings().find(':checkbox').attr('checked', this.checked);
 	});
 
 	$('.add-topic').click(function() {
@@ -87,8 +77,8 @@ function addTopic(name) {
 		url: '/topic',
 		context: this,
 		data: {name : name}
-    }).done(function(){
-    	//todo: Create list item;
+	}).done(function(){
+		//todo: Create list item;
 		location.reload();
 	});
 }
@@ -115,6 +105,6 @@ function deleteTopic(topic_name, li) {
 		context: li,
 		success: function(result){
 			$(this).remove();
-        }
-    });
+		}
+	});
 }

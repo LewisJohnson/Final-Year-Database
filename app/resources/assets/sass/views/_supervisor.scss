@@ -1,17 +1,43 @@
-.supervisor{
+.supervisor, .admin{
     display: flex;
     flex-flow: row;
     flex-wrap: wrap;
     width: 100%;
 
-    .section{
-        width: 50%;
-        padding: 0 7px;
+    .section:nth-child(odd){
+        margin-right: 7px;
+    }
 
+    .section:nth-child(even){
+        margin-left: 7px;
+    }
+
+    .section{
+        width: calc(50% - 7px);
+        border: 1px solid #d4d4d4;
+        margin-top: 7px;
+        border-radius: 3px;
         &.full{
             width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .header{
+            color: white;
+            background: #00488c;
+            h3{
+                color: inherit;
+                margin: 0;
+                padding: 8px;
+            }
+        }
+
+        .content{
+            padding: 1rem;
         }
     }
+
 
     .projects-list{
         li > * {

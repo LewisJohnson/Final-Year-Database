@@ -1,0 +1,15 @@
+.card{
+	@include shadow-2dp();
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	padding: 1rem;
+}
+
+.card-slim-content{
+	p{
+		margin: 2px;
+	}
+}
+
+.card-separator-vertical{
+	margin-top: 2rem;
+}
