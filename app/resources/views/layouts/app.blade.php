@@ -3,13 +3,9 @@
 @include ('partials.html-head')
 <body>
 	@if($user = Auth::user())
-		@if($user->isUgAdmin() || $user->isUgStudent())
-			@include ('partials.ug.header')
-		@elseif($user->isMastersAdmin() || $user->isMastersStudent())
-			@include ('partials.masters.header')
-		@endif
-	@else
 		@include ('partials.header')
+	@else
+		@include ('partials.header-guest')
 	@endif
 	<div class="content">
 		@yield('content')
@@ -17,6 +13,7 @@
 
 	@include ('partials.notification')
 	@include ('auth.login')
+	@include ('auth.change-auth')
 </body>
 @include ('partials.footer')
 

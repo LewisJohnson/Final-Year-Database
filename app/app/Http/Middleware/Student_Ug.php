@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Middleware;
+
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class Ug_Student
+class Student_Ug
 {
     /**
      * Handle an incoming request.
@@ -14,10 +14,9 @@ class Ug_Student
      * @return mixed
      */
     public function handle($request, Closure $next){
-        if ( Auth::check() && Auth::user()->isUgStudent()){
+        if (Auth::check() && Auth::user()->isUgStudent()){
             return $next($request);
         }
-
         return redirect('/');
     }
 }

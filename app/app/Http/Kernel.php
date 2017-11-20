@@ -44,15 +44,15 @@ class Kernel extends HttpKernel
         ],
 
         'masters' => [
-            'App\Http\Middleware\Masters_Admin',
-            'App\Http\Middleware\Masters_Supervisor',
-            'App\Http\Middleware\Masters_Student',
+            'App\Http\Middleware\Admin_Masters',
+            'App\Http\Middleware\Supervisor_Masters',
+            'App\Http\Middleware\Student_Masters',
         ],
 
         'ug' => [
-            'App\Http\Middleware\Ug_Admin',
-            'App\Http\Middleware\Ug_Supervisor',
-            'App\Http\Middleware\Ug_Student',
+            'App\Http\Middleware\Admin_Ug',
+            'App\Http\Middleware\Supervisor_Ug',
+            'App\Http\Middleware\Student_Ug',
         ],
     ];
 
@@ -70,11 +70,13 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'masters_admin' => 'App\Http\Middleware\Masters_Admin',
-        'masters_supervisor' => 'App\Http\Middleware\Masters_Supervisor',
-        'masters_student' => 'App\Http\Middleware\Masters_Student',
-        'ug_admin' => 'App\Http\Middleware\Ug_Admin',
-        'ug_supervisor' => 'App\Http\Middleware\Ug_Supervisor',
-        'ug_student' => 'App\Http\Middleware\Ug_Student',
+
+        'Admin_Masters' => 'App\Http\Middleware\Admin_Masters',
+        'Supervisor_Masters' => 'App\Http\Middleware\Supervisor_Masters',
+        'Student_Masters' => 'App\Http\Middleware\Studen_Masters',
+
+        'Admin_Ug' => 'App\Http\Middleware\Admin_Ug',
+        'Supervisor_Ug' => 'App\Http\Middleware\Supervisor_Ug',
+        'Student_Ug' => 'App\Http\Middleware\Student_Ug',
     ];
 }

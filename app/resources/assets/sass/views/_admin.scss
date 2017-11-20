@@ -6,39 +6,27 @@
 		display: flex;
 		flex-direction: row;
 		width: 15rem;
-		> * {
-			display: inline-block;
-		}
 
-		p{
-			margin: 0;
-		}
+		> * { display: inline-block; } 
+		p { margin: 0; }
 	}
 }
 
 .edit-student-list{
-
 	.student-edit-item{
 		:not(:first-child){
 			width: 150px;
 		}
 	}
+}
 
-	// .student-edit-item:nth-child(even){
-	// 	background: darken(white, 3%);
-	// }
-
-	// .student-edit-item.checked{
-	// 	background: darken(white, 20%);
-
-	// 	*{
-	// 		font-weight: 800;
-	// 	}
-	// }
-
-	// .student-edit-item.checked > :nth-child(2){
-	// 	padding-left: 10px;
-	// }
+.section-container{
+	display: flex;
+	
+	.horizontal{
+		margin: 0 1rem;
+		flex-grow: 1;
+	}
 }
 
 #admin-form{

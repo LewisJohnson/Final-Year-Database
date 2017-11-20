@@ -1,32 +1,21 @@
-<div class="login">
-<div class="login-underlay">
+<div class="login dialog">
+<div class="underlay">
 </div>
-<div class="login-popup">
+<div class="content">
 	<h2>Log in</h2>
 	<hr>
-	<form role="form" method="POST" action="{{ route('login') }}">
+	<form id="loginForm" role="form" method="POST" action="{{ route('login') }}">
 		{{ csrf_field() }}
+		<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
 
-		<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
+		<div id="login-username" class="form-field">
 			<label for="username">Username</label>
-			<input id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
-
-			@if($errors->has('username'))
-				<span class="help-block">
-					<strong>{{ $errors->first('username') }}</strong>
-				</span>
-			@endif
+			<input value="ug_admin" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 		</div>
 
-		<div class="form-field{{ $errors->has('password') ? ' has-error' : '' }}">
+		<div class="form-field">
 			<label for="password">Password</label>
-			<input id="password" type="password" name="password" required>
-			
-			@if ($errors->has('password'))
-				<span class="help-block">
-					<strong>{{ $errors->first('password') }}</strong>
-				</span>
-			@endif
+			<input value="admin" id="password" type="password" name="password" required>
 		</div>
 
 		<div class="form-field">
@@ -36,6 +25,10 @@
 				</label>
 			</div>
 		</div>
+
+		<p class="help-block" style="display:none">
+			{{ $errors->first('username') }}
+		</p>
 
 		<div class="form-field">
 			<button class="submit" type="submit">Login</button>

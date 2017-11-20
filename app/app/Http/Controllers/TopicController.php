@@ -14,7 +14,11 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $topics = Topic::all();
+        if(Session::get("db_type") == "ug"){
+            $topics = Topic_Ug::all();
+        } else {
+            $topics = Topic_Masters::all();
+        }
         return view('topics.index', compact('topics'));
     }
 
@@ -26,7 +30,12 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $topic = new Topic;
+        if(Session::get("db_type") == "ug"){
+            $topic = new Topic_Ug;
+        } else {
+            $topic = new Topic_Masters;
+        }
+
         $topic->fill(array(
             'name' => Topic::getSluggedName(request('name'))
         ));
@@ -40,7 +49,12 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Topic $topic){
+    public function show($id){
+        if(Session::get("db_type") == "ug"){
+            $topic = Topic_Ug::where('id', $id);
+        } else {
+            $topic = Topic_Masters::where('id', $id);
+        }
         return view('topics.topic', compact('topic'));
     }
 
@@ -50,10 +64,8 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Topic $topic){
-        $topic->name = request('name');
-        $topic->save();
-        return 'true';
+    public function edit($id){
+
     }
 
     /**
@@ -64,7 +76,14 @@ class TopicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        //
+        if(Session::get("db_type") == "ug"){
+            $topic = Topic_Ug::where('id', $id);
+        } else {
+            $topic = Topic_Masters::where('id', $id);
+        }
+        $topic->name = request('name');
+        $topic->save();
+        return 'true';
     }
 
     /**

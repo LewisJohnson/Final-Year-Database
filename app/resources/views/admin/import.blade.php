@@ -8,7 +8,7 @@
 	if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	  alert('The File APIs are not fully supported in this browser.');
 	  return;
-	}   
+	}
 
 	input = document.getElementById('fileinput');
 	if (!input) {

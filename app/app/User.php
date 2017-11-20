@@ -32,11 +32,11 @@ class User extends Authenticatable
     ];
 
     public function isUgAdmin(){
-        return $this->access_type === "ug_administrator";
+        return $this->access_type === "ug_admin";
     }
 
     public function isMastersAdmin(){
-        return $this->access_type === "masters_administrator";
+        return $this->access_type === "masters_admin";
     }
 
     public function isSupervisor(){

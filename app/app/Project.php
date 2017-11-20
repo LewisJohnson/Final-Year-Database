@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Project extends Model{
-
+    protected $table = 'NULL';
+    
     // Mass fillable items
     protected $fillable = ['title', 'description', 'skills', 'status', 'start_date'];
     protected $guarded = ['supervisor'];
-
-    public function topics(){
-        return $this->belongsToMany(Topic::class, 'project_topics');
-    }
 
     public function getSupervisor(){
         return Supervisor::where('id', $this->supervisor_id)->first();

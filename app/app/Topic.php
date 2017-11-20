@@ -17,11 +17,6 @@ class Topic extends Model
         'name'
     ];
 
-    public function projects(){
-        return $this->belongsToMany(Project::class, 'project_topics');
-    }
-
-
     public static function getDatalist(){
         $topicNames = Topic::pluck('name');
 

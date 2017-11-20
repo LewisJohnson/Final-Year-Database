@@ -1,4 +1,4 @@
-<section id="debug">
+{{-- <section id="debug">
 	<h1>Debug</h1>
 	<div class="debug-user">
 		<h2>User Information</h2>
@@ -29,7 +29,7 @@
 		@else
 		<p>You are not on a project page.</p>
 		@endisset
-	</div>
+	</div> --}}
 {{-- 	<div class="debug-topic">
 		<h2>User Information</h2>
 		<p>Logged in: <b>{{ $user = Auth::user() ? 'Yes' : 'No' }}</b></p>

@@ -2,26 +2,10 @@
 @section ('content')
 @php ($user = Auth::user())
 
-{{-- @if($project->isOwnedByUser())
-	<div class="supervisor-panel">
-		<h2>Supervisor Panel</h2>
-		<ul class="buttons">
-			<li class="nav-button"><a href="{{ action('ProjectController@create') }}">New Project</a></li>
-			<li class="nav-button"><a href="{{ action('ProjectController@edit', $project) }}">Edit Project</a></li>
-			<li class="nav-button"><a href="{{ action('ProjectController@destroy', $project) }}">Delete Project</a></li>
-		</ul>
-		<h3>Project Information</h3>
-		<ul>
-			<li><p>Created {{ $project->created_at->toFormattedDateString() }}</p></li>
-			<li><p>Last updated {{ $project->updated_at->toFormattedDateString() }} ({{ $project->updated_at->diffForHumans() }})</p></li>
-		</ul>
-	</div>
-	<hr>
-@endif
 
 @if($project->archived)
 	<h1>This project is archived.</h1>
-@endif --}}
+@endif
 
 <div class="card project-card {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>

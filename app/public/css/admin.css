@@ -26,6 +26,19 @@
   width: 150px;
 }
 
+.section-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.section-container .horizontal {
+  margin: 0 1rem;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
 #admin-form {
   background: red;
   padding: 1rem;

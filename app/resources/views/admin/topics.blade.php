@@ -18,7 +18,10 @@
 @foreach(App\Topic::get() as $topic)
 	<li class="topic">
 		<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
-		<button class="edit-topic" data-topic_name="{{ $topic->name }}" type="submit"><p>Edit</p><div class="loader"></div></button>
+		<button class="edit-topic" data-topic_name="{{ $topic->name }}" type="submit">
+			<p>Edit</p>
+			<div class="loader"></div>
+		</button>
 		<button class="delete-topic" data-topic_name="{{ $topic->name }}">Delete</button>
 	</li>
 @endforeach

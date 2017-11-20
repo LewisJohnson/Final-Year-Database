@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Closure;
 
 class Supervisor
@@ -14,11 +13,10 @@ class Supervisor
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-        if (Auth::check() && Auth::user()->isSupervisor() || Auth::user()->isMastersAdmin() || Auth::user()->isUgAdmin()){
+    public function handle($request, Closure $next){
+        if (Auth::check() && Auth::user()->isSupervisor()){
             return $next($request);
         }
-        return $next($request);
+        return redirect('/');
     }
 }

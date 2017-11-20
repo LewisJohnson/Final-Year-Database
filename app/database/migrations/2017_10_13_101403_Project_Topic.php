@@ -13,7 +13,14 @@ class ProjectTopic extends Migration
      */
     public function up()
     {
-        Schema::create('project_topics', function (Blueprint $table) {
+        Schema::create('project_topics_ug', function (Blueprint $table) {
+            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('topic_id');
+            $table->boolean('primary')->default(0);
+            $table->primary(['project_id', 'topic_id']);
+        });
+
+        Schema::create('project_topics_masters', function (Blueprint $table) {
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('topic_id');
             $table->boolean('primary')->default(0);

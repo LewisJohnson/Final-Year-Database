@@ -1,7 +1,14 @@
 <header id="header" class="">
 	<img class="logo" src="/images/sussex-logo.jpg">
-	<h1>Sussex Informatics Projects</h1>
-	<button class="login-button">Log in</button>
+	@if(Session::get('db_type') == 'ug')
+		<h1>Informatics Final Year Projects</h1>
+	@else
+		<h1>Informatics Masters Projects</h1>
+	@endif
+	<a class="logout-button" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+	<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+		{{ csrf_field() }}
+	</form>
 </header>
 
 <nav>
@@ -11,10 +18,16 @@
 				<button class="dropbtn">Browse</button>
 				<div class="dropdown-content">
 					<a href="/projects" title="">Projects</a>
+					<a href="/projects?sort=supervisor" title="">By Supervisor</a>
 					<a href="/topics" title="">Topics</a>
-					<a href="/projects" title="">By Supervisor</a>
 			  </div>
 			</li>
+			@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
+				<li class="nav-button"><a href="/supervisor" title="">Supervisor</a></li>
+			@endif
+			@if(strpos(Session::get("auth_type"), 'admin') !== false)
+				<li class="nav-button"><a href="/admin" title="">Administrator</a></li>
+			@endif
 		<li class="nav-button dropdown">
 		  <button class="dropbtn">Help</button>
 		  <div class="dropdown-content">
@@ -26,14 +39,3 @@
 		</li>
 	</ul>
 </nav>
-
-{{-- 		<li class="nav-button dropdown">
-		  <button class="dropbtn">Information</button>
-		  <div class="dropdown-content">
-			<a target="_blank" href="http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/">Final Year Students</a>
-			<a target="_blank" href="http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforsupervisors">Final Year Supervisors</a>
-			<a target="_blank" href="http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/projectprizes">Final Year Project Prizes</a>
-			<br>
-			<a target="_blank" href="http://www.sussex.ac.uk/ei/internal/forstudents/informatics/masters/dissertations">Masters</a>
-		  </div>
-		</li> --}}

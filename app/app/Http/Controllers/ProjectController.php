@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Project;
-use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Project_Ug;
+use App\Project_Masters;
+use Flash;
+use Session;
 
-
-class Masters_ProjectController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,8 +32,12 @@ class Masters_ProjectController extends Controller
         // }else if {
             
         // }
-            $projects = Project::all();
-        
+        if(Session::get("db_type") == "ug"){
+            $projects = Project_Ug::all();
+        } else {
+            $projects = Project_Masters::all();
+        }
+
         return view('projects.index', compact('projects'));
     }
 
@@ -88,7 +93,12 @@ class Masters_ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project) {
+    public function show($id) {
+        if(Session::get("db_type") == "ug"){
+            $project = Project_Ug::where('id', $id)->first();
+        } else {
+            $project = Project_Masters::where('id', $id)->first();
+        }
         return view('projects.project', compact('project'));
     }
 

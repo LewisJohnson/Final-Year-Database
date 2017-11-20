@@ -6,30 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 
-class Masters_AdminController extends Controller
+class AdminController extends Controller
 {
     public function index(){
-        return view('admin.masters.index');
+        return view('admin.index');
     }
 
     public function students(){
-        return view('admin.masters.students');
+        return view('admin.students');
     }
 
     public function importStudents(){
-        return view('admin.masters.import');
+        return view('admin.import');
     }
 
     public function supervisors(){
-        return view('admin.masters.supervisors');
+        return view('admin.supervisors');
     }
 
     public function topics(){
-        return view('admin.masters.topics');
+        return view('admin.topics');
     }
 
     public function loginAsView(){
-        return view('admin.masters.login-as');
+        return view('admin.login-as');
     }
 
     public function loginAs($id){

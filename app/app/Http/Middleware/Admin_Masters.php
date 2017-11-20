@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class Ug_Admin
+class Admin_Masters
 {
     /**
      * Handle an incoming request.
@@ -15,10 +14,9 @@ class Ug_Admin
      * @return mixed
      */
     public function handle($request, Closure $next){
-        if ( Auth::check() && Auth::user()->isUgAdmin()){
+        if (Auth::check() && Auth::user()->isMastersAdmin()){
             return $next($request);
         }
-
         return redirect('/');
     }
 }

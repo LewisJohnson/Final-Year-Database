@@ -63,12 +63,12 @@
 				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
 			</li>
 		@endforeach
-	@elseif(isset($projects))
+	@else
 	{{-- We don't have any search results --}}
 		@foreach($projects as $project)
-			@php ($pt = App\ProjectTopic::getProjectPrimaryTopicName($project))
+			@php ($primary_topic = App\ProjectTopic::getProjectPrimaryTopicName($project))
 			<li class="project{!! ($project->archived) ? ' archived': '' !!}">
-				<a class="primary-topic" href="/topics/{{$pt}}">Compilers{{ $pt }}</a>
+				<a class="primary-topic" href="/topics/{{$primary_topic}}">{{ $primary_topic }}</a>
 				<a class="project-link" href="/projects/{{$project->id}}">{{ $project->title }}</a>
 				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
 			</li>

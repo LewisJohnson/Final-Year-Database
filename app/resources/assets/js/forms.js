@@ -17,14 +17,10 @@ $(function() {
 		removeTopicAjax(topicName);
 	});
 
-	$('#newTopicInputContainer').click(function() {
-		addTopicInput.focus();
-	});
+	$('#newTopicInputContainer').click(function() { addTopicInput.focus(); });
 
 	// Project project
-	$('#deleteProjectButton').click(function() {
-		deleteProjectAjax($('#title').val());
-	});
+	$('#deleteProjectButton').click(function() { deleteProjectAjax($('#title').val());});
 
 	$('#search-filter-button').click(function() {
 		var container = $('.search-filter-container');
@@ -52,6 +48,33 @@ $(function() {
 	});
 });
 
+$("#loginForm").on('submit', function(e){
+    e.preventDefault();
+
+    $('.help-block', '#loginForm').css("display", "none");
+    $('.form-field', this).css("display", "none");
+	$('#login-loader').css("display", "block");
+
+    $.ajax({
+        url: $(this).attr('action'),
+        type:'POST',
+        data: $(this).serialize(),
+        success:function(data){
+        	$('#login-loader').css("display", "none");
+        	$('#loginForm').append(data);
+        },
+        error: function (data) {
+        	$('.help-block', '#loginForm').css("display", "block");
+        	$('.help-block', '#loginForm').text(data["responseJSON"]["errors"]["username"][0]);
+            
+            $('.form-field', '#loginForm').css("display", "block");
+            $('.form-field', '#loginForm').addClass("has-error");
+            
+            $('#login-loader').css("display", "none");
+        }
+    });
+});
+
 function addTopicAjax(topic) {
 	$.ajax({
 		type: "PUT",
@@ -61,6 +84,8 @@ function addTopicAjax(topic) {
 			$("#addTopicInput").val('');
 			$(".topics-list.edit li.topic:last").after('<li class="topic"><button type="button" class="topic-remove">X</button><p class="topic-name">' + newTopicName + '</p></li>');
 		}
+	}).done(function(){
+		$('.loader').css("display", "none");
 	});
 }
 

@@ -13,13 +13,29 @@ class Project extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('projects_ug', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('project_type', ['masters', 'final']);
             $table->string('title', 255);
             $table->mediumText('description');
             $table->string('skills', 255);
             $table->string('author_programme', 255);
+            $table->enum('project_type', ['ug', 'masters']);
+            $table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
+            $table->unsignedBigInteger('supervisor_id')->nullable(true);
+            $table->unsignedBigInteger('student_id')->nullable(true);
+            $table->boolean('student_proposed_project')->default(0);
+            $table->dateTime('start_date');
+            $table->timestamp('created_at')->useCurrent = true;
+            $table->timestamp('updated_at')->useCurrent = true;
+        });
+
+        Schema::create('projects_masters', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 255);
+            $table->mediumText('description');
+            $table->string('skills', 255);
+            $table->string('author_programme', 255);
+            $table->enum('project_type', ['ug', 'masters']);
             $table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
             $table->unsignedBigInteger('supervisor_id')->nullable(true);
             $table->unsignedBigInteger('student_id')->nullable(true);
@@ -37,6 +53,7 @@ class Project extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('projects_ug');
+        Schema::dropIfExists('projects_masters');
     }
 }
