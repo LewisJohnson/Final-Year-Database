@@ -108,7 +108,12 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project){
+    public function edit($id){
+        if(Session::get("db_type") == "ug"){
+            $project = ProjectUg::where('id', $id)->first();
+        } else {
+            $project = ProjectMasters::where('id', $id)->first();
+        }
         return view('projects.edit', compact('project'));
     }
 

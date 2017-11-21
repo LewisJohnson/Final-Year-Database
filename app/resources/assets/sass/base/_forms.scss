@@ -8,19 +8,25 @@ input, textarea, .fake-input{
 	border: solid $form-border-width $form-border-color;
 	padding: $form-input-padding;
 	font-size: $form-input-font-size;
+	font-family: $font-family-sans-serif;
+}
+
+label{
+	color: $form-label-text-color;
+	display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+button{
+	cursor: pointer;
+	background: none;
+	border: none;
+	font-family: $font-family-sans-serif;
 }
 
 .form-field {
 	margin-bottom: 1rem;
-
-	label.hover-label {
-		position: relative;
-		background: white;
-		padding: 0 5px;
-		top: 10px;
-		left: 15px;
-		color: $form-label-text-color;
-	}
 
 	input[type='text'], input[type='password'], input[type='email'], textarea {
 		width: 100%;
@@ -53,6 +59,7 @@ input, textarea, .fake-input{
 	flex-direction: row;
 	width: 50%;
 	height: 9rem;
+	
 	option{
 		flex-grow: 1;
 		flex-basis: 0;
@@ -152,6 +159,27 @@ input, textarea, .fake-input{
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
+.button--danger{
+	color: $accent-danger;
+}
+
+.button--success{
+	color: $accent-success;
+}
+
+.button--accent{
+	color: white;
+	background: $accent;
+}
+
+.button--accent-text{
+	color: $accent;
+}
+
+.button--unpadded{
+	padding: 0;
+}
+
 .button:disabled {
     background-color: rgba(0,0,0,.12);
     color: rgba(0,0,0,.26);
@@ -163,30 +191,15 @@ input, textarea, .fake-input{
 	display: flex;
 	flex-direction: row;
 	width: 100%;
-	font-size: $font-size-base;
+	margin: 1rem 0;
+	
+	button {
+		margin: 0 5px;
+	}
+}
 
-	.button{
-		border: none;
+.button-group--strech{
+	> *{
 		flex: 1;
-		padding: 1rem;
-		font-size: inherit;
-		border-top: 1px solid $accent;
-		border-bottom: 1px solid $accent;
-		border-radius: 2px;
-	}
-
-	> .button:first-child {
-		border-right: none;
-		border-left: 1px solid $accent;
-	}
-
-	> .button:last-child {
-		border-right: 1px solid $accent;
-		border-left: none;
-	}
-
-	.selected{
-		background: $accent;
-		color: white;
 	}
 }

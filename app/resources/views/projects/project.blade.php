@@ -7,7 +7,7 @@
 	<h1>This project is archived.</h1>
 @endif
 
-<div style="margin-bottom: 2rem;" class="card project-card {!! ($project->archived) ? ' archived': '' !!}">
+<div class="card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>
 	<h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2>
 	<h3>Description</h3>

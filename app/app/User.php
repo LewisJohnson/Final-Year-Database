@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Session;
 
 class User extends Authenticatable
 {
@@ -66,7 +67,11 @@ class User extends Authenticatable
     }
 
     public function projects(){
-        return $this->hasMany(Project::class, 'supervisor_id');
+        if(Session::get("db_type") == "ug"){
+            return $this->hasMany(ProjectUg::class, 'supervisor_id');
+        } else {
+           return $this->hasMany(ProjectMasters::class, 'supervisor_id');
+        }
     }
 
     public function getFullName(){

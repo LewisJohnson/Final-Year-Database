@@ -28,10 +28,11 @@ Route::group(['middleware' => ['Admin_Ug']], function() {
 	Route::get('users/create', 'UserController@create');
 	// Route::get('users/{user}', 'UserController@show');
 
+	Route::get('projects/{id}/edit', 'ProjectController@edit');
 	// Project edit topic routes
-	Route::put('projects/{project}/edit/topic', 'ProjectTopicController@store');
-	Route::delete('projects/{project}/edit/topic', 'ProjectTopicController@destroy');
-	Route::patch('projects/{project}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
+	Route::put('projects/{id}/edit/topic', 'ProjectTopicController@store');
+	Route::delete('projects/{id}/edit/topic', 'ProjectTopicController@destroy');
+	Route::patch('projects/{id}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
 
 	// Topic routes
 	Route::get('topics', 'TopicController@index');

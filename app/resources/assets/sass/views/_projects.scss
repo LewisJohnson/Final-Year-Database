@@ -1,6 +1,4 @@
 .project-card{
-	margin-top: 3rem;
-	
     .title{
     	text-transform: capitalize;
     }
@@ -15,7 +13,6 @@
 }
 
 .projects-list{
-
     .project{
 		:first-child{
 			padding: 0;
@@ -48,69 +45,4 @@
 			text-align: right;
 		}
     }
-}
-
-.table-list{
-	list-style: none;
-	width: 100%;
-	padding: 0;
-    margin: 0;
-    margin-top: 1rem;
-    border: 1px solid rgba(0,0,0,.12);
-
-    > li{
-	    display: flex;
-		flex-direction: row;
-		padding: 10px;
-	    transition-duration: .28s;
-	    transition-timing-function: cubic-bezier(.4,0,.2,1);
-	    transition-property: background-color;
-	    border-bottom: 1px solid rgba(0,0,0,.12);
-
-	    &:hover{
-			background-color: #eee;
-		}
-
-		> :last-child{
-	    	margin: 0 0 0 auto;
-	    	text-align: right;
-    	}
-    }
-
-
-
-    p, h3{
-		font-size: 13px;
-		color: #757575;
-		margin: 0;
-	}
-
-	a{
-		font-size: 13px;
-		text-transform: capitalize;
-		text-decoration: none;
-	}
-
-	a:hover{
-		text-decoration: underline;	
-	}
-
-	a:visited{
-		// color: grey;
-	}
-}
-
-
-.tl-checkbox{
-	> li{
-		padding-left: 1.5rem;
-
-		.checkbox{
-			margin: 0;
-		}
-
-		> :first-child{
-			width: 50px;
-		}
-	}
 }

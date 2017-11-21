@@ -1,13 +1,18 @@
-// Body
-$body-bg: #f5f8fa;
-
+/* TYPOGRAPHY */
+$font-family-sans-serif: "Roboto", sans-serif;
+$font-size-base: 16px;
+$text-color: #757575;
+$h3-color: darken($text-color, 5%);
+$h2-color: darken($h3-color, 5%);
+$h1-color: darken($h2-color, 5%);
+$list-text-color: #515151;
 
 /* FORMS */
 $form-border-color: rgba(0, 0, 0, 0.12);
 $form-border-width: 1px;
 $form-input-padding: 10px;
 $form-input-font-size: 16px;
-$form-label-text-color: darken($form-border-color, 50%);
+$form-label-text-color: $text-color;
 
 
 /* CHECKBOX */
@@ -27,10 +32,10 @@ $shadow-ambient-shadow-opacity: 0.12 !default;
 // Brands
 $brand-primary: #1D4289;
 $accent: darken($brand-primary, 6%);
-$brand-info: #8eb4cb;
-$brand-success: #2ab27b;
-$brand-warning: #cbb956;
-$brand-danger: #bf5329;
+$accent-info: #8eb4cb;
+$accent-success: #2ab27b;
+$accent-warning: #cbb956;
+$accent-danger: #bf5329;
 
 // Other
 $error-bg-color: #F44336;
@@ -39,15 +44,6 @@ $notification-bg-color: white;
 $notification-text-color: black;
 $notification-border-color: black;
 
-
-/* TYPOGRAPHY */
-$font-family-sans-serif: "Roboto", sans-serif;
-$font-size-base: 16px;
-$text-color: #757575;
-$h3-color: darken($text-color, 5%);
-$h2-color: darken($h3-color, 5%);
-$h1-color: darken($h2-color, 5%);
-$list-text-color: #515151;
 
 // Buttons
 $btn-default-color: $text-color;

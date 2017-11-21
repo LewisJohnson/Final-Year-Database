@@ -20,7 +20,7 @@
 		</li>
 	</ul>
 
-	<ul id="student-edit-list" class="table-list tl-checkbox {{ $status }} shadow-2dp">
+	<ul id="student-edit-list" class="table-list table-list--checkbox {{ $status }} shadow-2dp">
 		<li>
 			<div class="checkbox">
 				<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">

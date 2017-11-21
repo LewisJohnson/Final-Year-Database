@@ -26,6 +26,16 @@
 	}
 }
 
+.svg-container {
+	display: inline;
+	margin-right: 6px;
+	svg{
+		fill: currentColor;
+		width: 30px;
+		height: 30px;
+	}
+}
+
 .width-800{
 	width: 800px;
 }

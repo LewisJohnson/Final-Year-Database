@@ -18,18 +18,6 @@ class Topic extends Model
         'name'
     ];
 
-    public static function getDatalist(){
-        $topicNames = Topic::pluck('name');
-
-        $rtnString = '<datalist id="topicsDataList">';
-        foreach ($topicNames as $name) {
-            $rtnString .= '<option value="'. $name.'">';
-        }
-        $rtnString .= '</datalist>';
-
-        return $rtnString;
-    }
-
     public function getUnsluggedName(){
         $name = str_replace("-", " ", $this->name);
         return $name;

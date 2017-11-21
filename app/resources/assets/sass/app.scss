@@ -1,5 +1,3 @@
-
-
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900");
 
@@ -21,6 +19,7 @@
 @import "views/dialog";
 
 // Partials
+@import "partials/table-list";
 @import "partials/header";
 @import "partials/notification";
 @import "partials/topics";
@@ -30,5 +29,3 @@
 @import "partials/cards";
 
 @import "helpers";
-
-@import "partials/supervisor-panel";
