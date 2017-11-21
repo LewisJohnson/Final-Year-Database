@@ -1,13 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Topic;
+use App\TopicUG;
+use App\TopicMasters;
 use App\ProjectTopic;
+use App\ProjectTopicUg;
+use App\ProjectTopicMasters;
+use Session;
 
-class TopicController extends Controller
-{
+class TopicController extends Controller{
     /**
      * Display a listing of the resource.
      *
@@ -15,9 +18,9 @@ class TopicController extends Controller
      */
     public function index(){
         if(Session::get("db_type") == "ug"){
-            $topics = Topic_Ug::all();
+            $topics = TopicUg::all();
         } else {
-            $topics = Topic_Masters::all();
+            $topics = TopicMasters::all();
         }
         return view('topics.index', compact('topics'));
     }
@@ -31,9 +34,9 @@ class TopicController extends Controller
      */
     public function store(Request $request){
         if(Session::get("db_type") == "ug"){
-            $topic = new Topic_Ug;
+            $topic = new TopicUg;
         } else {
-            $topic = new Topic_Masters;
+            $topic = new TopicMasters;
         }
 
         $topic->fill(array(
@@ -51,9 +54,9 @@ class TopicController extends Controller
      */
     public function show($id){
         if(Session::get("db_type") == "ug"){
-            $topic = Topic_Ug::where('id', $id);
+            $topic = TopicUg::where('id', $id);
         } else {
-            $topic = Topic_Masters::where('id', $id);
+            $topic = TopicMasters::where('id', $id);
         }
         return view('topics.topic', compact('topic'));
     }
@@ -77,9 +80,9 @@ class TopicController extends Controller
      */
     public function update(Request $request, $id){
         if(Session::get("db_type") == "ug"){
-            $topic = Topic_Ug::where('id', $id);
+            $topic = TopicUg::where('id', $id);
         } else {
-            $topic = Topic_Masters::where('id', $id);
+            $topic = TopicMasters::where('id', $id);
         }
         $topic->name = request('name');
         $topic->save();

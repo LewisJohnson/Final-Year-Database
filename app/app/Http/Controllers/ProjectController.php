@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Project_Ug;
-use App\Project_Masters;
+use App\ProjectUg;
+use App\ProjectMasters;
 use Flash;
 use Session;
 
@@ -33,9 +33,9 @@ class ProjectController extends Controller
             
         // }
         if(Session::get("db_type") == "ug"){
-            $projects = Project_Ug::all();
+            $projects = ProjectUg::all();
         } else {
-            $projects = Project_Masters::all();
+            $projects = ProjectMasters::all();
         }
 
         return view('projects.index', compact('projects'));
@@ -95,9 +95,9 @@ class ProjectController extends Controller
      */
     public function show($id) {
         if(Session::get("db_type") == "ug"){
-            $project = Project_Ug::where('id', $id)->first();
+            $project = ProjectUg::where('id', $id)->first();
         } else {
-            $project = Project_Masters::where('id', $id)->first();
+            $project = ProjectMasters::where('id', $id)->first();
         }
         return view('projects.project', compact('project'));
     }

@@ -1,7 +1,7 @@
 
 
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,600");
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900");
 
 // Variables
 @import "variables";
@@ -15,6 +15,7 @@
 @import "base/typography";
 
 // Views
+@import "views/hub";
 @import "views/projects";
 @import "views/nav";
 @import "views/dialog";

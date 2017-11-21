@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section ('content')
-<h2>Projects</h2>
+<div class="centered width-1000">
+<h1>Projects</h1>
 <form action="/search" method="get" accept-charset="utf-8">
 	<div class="search-container shadow-4dp">
 		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm"  placeholder="Search...">
@@ -76,4 +77,5 @@
 
 	@endif
 </ul>
+</div>
 @endsection

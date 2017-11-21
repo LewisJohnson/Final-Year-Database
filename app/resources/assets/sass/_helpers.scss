@@ -13,6 +13,31 @@
 	margin: 0 auto;
 }
 
+.centered{
+	margin: 0 auto;
+}
+
+.section-container{
+	display: flex;
+	
+	.horizontal{
+		margin: 0 1rem;
+		flex-grow: 1;
+	}
+}
+
+.width-800{
+	width: 800px;
+}
+
+.width-1000{
+	width: 1000px;
+}
+
+.width-1200{
+	width: 1200px;
+}
+
 @keyframes spin {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }

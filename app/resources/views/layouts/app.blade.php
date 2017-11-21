@@ -7,7 +7,7 @@
 	@else
 		@include ('partials.header-guest')
 	@endif
-	<div class="content">
+	<div class="main-content">
 		@yield('content')
 	</div>
 

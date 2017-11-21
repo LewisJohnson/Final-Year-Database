@@ -1,10 +1,7 @@
 <?php
-
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Topic_Masters extends Topic
+class TopicMasters extends Topic
 {
     protected $table = 'topics_masters';
     public function projects(){

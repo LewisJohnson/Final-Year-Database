@@ -19,7 +19,6 @@ class Project extends Migration
             $table->mediumText('description');
             $table->string('skills', 255);
             $table->string('author_programme', 255);
-            $table->enum('project_type', ['ug', 'masters']);
             $table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
             $table->unsignedBigInteger('supervisor_id')->nullable(true);
             $table->unsignedBigInteger('student_id')->nullable(true);
@@ -35,7 +34,6 @@ class Project extends Migration
             $table->mediumText('description');
             $table->string('skills', 255);
             $table->string('author_programme', 255);
-            $table->enum('project_type', ['ug', 'masters']);
             $table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
             $table->unsignedBigInteger('supervisor_id')->nullable(true);
             $table->unsignedBigInteger('student_id')->nullable(true);

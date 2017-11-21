@@ -2,12 +2,12 @@
 @section ('content')
 @php ($user = Auth::user())
 
-
+<div class="centered width-800">
 @if($project->archived)
 	<h1>This project is archived.</h1>
 @endif
 
-<div class="card project-card {!! ($project->archived) ? ' archived': '' !!}">
+<div style="margin-bottom: 2rem;" class="card project-card {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>
 	<h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2>
 	<h3>Description</h3>
@@ -32,8 +32,8 @@
 		@endif
 	</ul>
 </div>
-
-<hr>
+<a class="button button--raised" href="javascript:history.back()">Back</a>
+</div>
 
 {{-- @if($user->isStudent())
 	@if($user->student->project_status == 'none')
@@ -48,7 +48,7 @@
 	@endif
 @endif --}}
 
-<a href="{{ action('ProjectController@index') }}">Back</a>
+
 @endsection
 
 

@@ -6,6 +6,8 @@ $(function() {
 	// Project Edit
 	var addTopicInput = $("#addTopicInput");
 
+
+	// LISTENERS
 	addTopicInput.keypress(function(e) {
 		if (e.which == 32) {
 			addTopicAjax(addTopicInput.val());
@@ -17,10 +19,17 @@ $(function() {
 		removeTopicAjax(topicName);
 	});
 
-	$('#newTopicInputContainer').click(function() { addTopicInput.focus(); });
+	$('#newTopicInputContainer').on('click', function() { 
+		addTopicInput.focus(); 
+	});
 
-	// Project project
-	$('#deleteProjectButton').click(function() { deleteProjectAjax($('#title').val());});
+	$('.master-checkbox').on('click', function() { 
+		$(this).parent().parent().siblings().find(':checkbox').attr('checked', this.checked);
+	});
+
+	$('#deleteProjectButton').click(function() { 
+		deleteProjectAjax($('#title').val());
+	});
 
 	$('#search-filter-button').click(function() {
 		var container = $('.search-filter-container');

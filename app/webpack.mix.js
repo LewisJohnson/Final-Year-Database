@@ -19,8 +19,6 @@ mix.js('resources/assets/js/main.js', 'public/js')
 	.js('resources/assets/js/components/supervisor.js', 'public/js')
 	.js('resources/assets/js/components/admin.js', 'public/js')
 	
-mix.sass('resources/assets/sass/app.scss', 'public/css')
-	.sass('resources/assets/sass/admin.scss', 'public/css')
-	.sass('resources/assets/sass/supervisor.scss', 'public/css');
+mix.sass('resources/assets/sass/app.scss', 'public/css');
 
 // mix.browserSync({proxy: 'localhost:8000'});

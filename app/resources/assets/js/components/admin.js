@@ -1,21 +1,18 @@
 $(function() {
-
-	$('.student-edit-item .checkbox').change(function() {
-		if($(this).is(":checked")) {
-			$(this).parent().addClass("checked");
-		} else {
-			$(this).parent().removeClass("checked");
-		}
-
+	$('#student-edit-list .checkbox input').change(function() {
+		var status = $(this).parents().eq(3).data('status');
 		var emailString = "mailto:";
-		$('.student-edit-item .checkbox').each(function() {
+		var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+		var emailButtonselector = ".email-selected." + status;
+
+		$(checkboxSelector).each(function() {
 			if($(this).is(":checked")) {
-				emailString += $(this).parent().data('email');
+				emailString += $(this).parent().parent().data('email');
 				emailString += ",";
 			}
 		});
 
-		$('.edit-student-list .email-selected').prop('href', emailString);
+		$(emailButtonselector).prop('href', emailString);
 	});
 
 
@@ -24,10 +21,6 @@ $(function() {
 			alert("You haven't selected anyone.")
 			e.preventDefault();
 		}
-	});
-
-	$('.master-checkbox').click(function() {
-		$(this).parent().parent().siblings().find(':checkbox').attr('checked', this.checked);
 	});
 
 	$('.add-topic').click(function() {

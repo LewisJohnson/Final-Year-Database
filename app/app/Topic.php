@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Topic extends Model
 {
     public $timestamps = false;
-
+    protected $table = null;
+    protected $primaryKey = 'id';
     /**
      * The attributes that are mass assignable.
      *

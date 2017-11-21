@@ -18,7 +18,6 @@ class Student extends Migration
             $table->unsignedInteger('registration_number');
             $table->string('programme');
             $table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-            $table->enum('student_year', ['master', 'final']);
             $table->unsignedBigInteger('project_id')->nullable(true);
             $table->boolean('share_project')->default(0);
         });
@@ -28,7 +27,6 @@ class Student extends Migration
             $table->unsignedInteger('registration_number');
             $table->string('programme');
             $table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-            $table->enum('student_year', ['master', 'final']);
             $table->unsignedBigInteger('project_id')->nullable(true);
             $table->boolean('share_project')->default(0);
         });

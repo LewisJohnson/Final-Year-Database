@@ -1,0 +1,182 @@
+.hub{
+	display: flex;
+	flex-flow: row;
+	flex-wrap: wrap;
+	width: 100%;
+
+	.section:nth-child(odd){
+		margin-right: 7px;
+	}
+
+	.section:nth-child(even){
+		margin-left: 7px;
+	}
+
+	.section{
+		width: calc(50% - 7px);
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		margin-top: 7px;
+		margin-bottom: 7px;
+		border-radius: 3px;
+
+		&.full{
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.header{
+			color: #707070;
+			background: rgba(158,158,158,.2);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+			padding: 8px;
+			padding-left: 1rem;
+			display: flex;
+
+			h2{
+				color: inherit;
+				margin: 0;
+				display: inline;
+			}
+
+			.svg-container {
+				display: inline;
+				margin-right: 6px;
+				svg{
+					fill: currentColor;
+					width: 30px;
+					height: 30px;
+				}
+			}
+		}
+
+		.content{
+			padding: 1rem;
+
+			.svg-container {
+				display: inline;
+				margin-right: 14px;
+				svg{
+					fill: currentColor;
+					width: 20px;
+					height: 20px;
+				}
+			}
+
+			.icon-list{
+				list-style: none;
+				color: $list-text-color;
+				li{
+					display: flex;
+					margin-bottom: 8px;
+
+					a{
+						text-decoration: none;
+						color: inherit;
+						display: inline-block;
+						width: 100%;
+						line-height: 22px;
+					}
+				}
+			}
+		}
+
+
+	}
+}
+
+
+
+
+// .supervisor, .admin{
+//	 .projects-list{
+//		 li > * {
+//			 display: inline-block;
+//			 margin: 0;
+//		 }
+
+//		 li > :first-child{
+//			 width: 20px;
+//		 }
+
+//		 li > :nth-child(2){
+//			 width: 80px;
+//		 }
+
+//		 li > :last-child{
+//			 margin-left: auto;
+//		 }
+//	 }
+
+//	 .offers{
+//		 list-style: none;
+
+//		 li{
+//			 display: flex;
+//			 flex-direction: row;
+//		 }
+
+//		 li:nth-child(even){
+//			 background: darken(white, 3%);
+//		 }
+
+//		 li > :first-child{
+//			 width: 80px;
+//		 }
+
+//		 li > * {
+//			 display: inline-block;
+//			 margin: 0;
+//		 }
+
+//		 .project-link{
+//			 flex-grow: 1;
+//		 }
+
+//		 .accept, .reject{
+//			 margin-left: auto;
+//			 padding-left: 5px;
+//		 }
+
+//		 .reject{
+//			 margin-right: 15px;
+//		 }
+//	 }
+// }
+
+// .edit-topic-list{
+// 	list-style: none;
+	
+// 	.topic{
+// 		margin-bottom: 20px;
+// 		display: flex;
+// 		flex-direction: row;
+// 		width: 15rem;
+
+// 		> * { display: inline-block; } 
+// 		p { margin: 0; }
+// 	}
+// }
+
+// .edit-student-list{
+// 	.student-edit-item{
+// 		:not(:first-child){
+// 			width: 150px;
+// 		}
+// 	}
+// }
+
+// #admin-form{
+// 	background: red;
+// 	padding: 1rem;
+// 	border: 3px solid yellow;
+// 	margin-bottom: 5rem;
+// 	text-align: center;
+// 	animation: textAttention 0.7s infinite;
+// }
+
+// @keyframes textAttention{
+// 	0%{color: black;}
+// 	50%{color: yellow; border: 3px solid darken(red, 20%);}
+// 	100%{color: black;}
+// }

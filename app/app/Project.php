@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Project extends Model{
-    protected $table = 'NULL';
+    protected $table = null;
+    protected $primaryKey = 'id';
     
     // Mass fillable items
     protected $fillable = ['title', 'description', 'skills', 'status', 'start_date'];

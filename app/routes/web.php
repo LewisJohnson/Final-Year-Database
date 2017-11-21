@@ -26,7 +26,7 @@ Route::group(['middleware' => ['Admin_Ug']], function() {
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
-	Route::get('users/{user}', 'UserController@show');
+	// Route::get('users/{user}', 'UserController@show');
 
 	// Project edit topic routes
 	Route::put('projects/{project}/edit/topic', 'ProjectTopicController@store');

@@ -1,11 +1,11 @@
 <?php
-
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Session;
 
 class Student extends Model{
-
+	protected $table = null;
 	public $timestamps = false;
 
 	/**
@@ -13,9 +13,7 @@ class Student extends Model{
      *
      * @var array
      */
-    protected $fillable = [
-        'id', 'registration_number', 'programme'
-    ];
+    protected $fillable = ['id', 'registration_number', 'programme'];
 
 	public function getStatusString(){
 		$return = '';
@@ -36,17 +34,17 @@ class Student extends Model{
 		return $return;
 	}
 
-	public function user(){
-        return $this->hasOne(User::class, 'id');
-    }
-
     public function getProject(){
         return Project::where('id', $this->project_id)->first();
     }
 
     public static function getMailtoStringByProjectStatus($status){
     	$return = 'mailto:';
-    	$students = Student::Where('project_status', $status)->get();
+    	if(Session::get("db_type") == "ug"){
+            $students = StudentUg::Where('project_status', $status)->get();
+        } else {
+            $students = StudentMasters::Where('project_status', $status)->get();
+        }
 
     	foreach ($students as $key => $student) {
     		$return .= $student->user->email;

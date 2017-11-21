@@ -8,18 +8,20 @@ use App\Topic;
 use Session;
 
 class ProjectTopic extends Model{
-	protected $table = 'NULL';
+	
 	public $timestamps = false;
 	public $incrementing = false;
+	
+	protected $table = null;
 	protected $primaryKey = ['project_id', 'topic_id'];
 	protected $fillable = ['project_id', 'topic_id'];
 
 	public static function getProjectPrimaryTopicId(Project $project){
 
 		if(Session::get("db_type") == "ug"){
-            $query = ProjectTopic_Ug::where('project_id', $project->id);
+            $query = ProjectTopicUg::where('project_id', $project->id);
         } else {
-            $query = ProjectTopic_Masters::where('project_id', $project->id);
+            $query = ProjectTopicMasters::where('project_id', $project->id);
         }
 
 		$primary_topic = $query->where('primary', 1)->first();
@@ -38,9 +40,9 @@ class ProjectTopic extends Model{
 			return '';
 		} else {
 			if(Session::get("db_type") == "ug"){
-				$t = Topic_Ug::where('id', $primary_topic_id)->first();
+				$t = TopicUg::where('id', $primary_topic_id)->first();
 		    } else {
-		    	$t = Topic_Masters::where('id', $primary_topic_id)->first();
+		    	$t = TopicMasters::where('id', $primary_topic_id)->first();
 		    }
 			return $t->name;
 		}
