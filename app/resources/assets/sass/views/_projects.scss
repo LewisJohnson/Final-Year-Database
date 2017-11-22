@@ -14,35 +14,27 @@
 
 .projects-list{
     .project{
-		:first-child{
-			padding: 0;
-		}
 
-		h3{
-			font-size: 14px;
-			color: #757575;
-			margin: 0;
-			&.primary-topic{flex-basis: 115px;}
-			&.supervisor{
-				margin-left: auto;
-				text-align: right;
-			}
-		}
 		
-		a.primary-topic{
-			display: inline-block;
-			margin: 0 15px 0 0;
-			flex-basis: 100px;
-			flex-shrink: 10;
+		a, p{
+			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			color: blue;
 		}
+		// a.primary-topic{
+		// 	display: inline-block;
+		// 	margin: 0 15px 0 0;
+		// 	flex-basis: 100px;
+		// 	flex-shrink: 10;
+		// 	overflow: hidden;
+		// 	text-overflow: ellipsis;
+		// 	color: blue;
+		// }
 
-		p.supervisor{
-			display: inline-block;
-			margin: 0 0 0 auto;
-			text-align: right;
-		}
+		// p.supervisor{
+		// 	display: inline-block;
+		// 	margin: 0 0 0 auto;
+		// 	text-align: right;
+		// }
     }
 }

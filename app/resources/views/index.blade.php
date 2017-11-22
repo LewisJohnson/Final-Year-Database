@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section ('content')
 
+<div class="centered width-800">
 @if($user = Auth::user())
 	<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 {{--	 @if($user->isStudent())
@@ -28,4 +29,5 @@ The results of the project will be submitted in report form to be examined and s
 </p>
 @endif
 
+</div>
 @endsection

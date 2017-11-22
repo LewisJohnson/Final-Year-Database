@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section ('content')
+<div class="centered width-800">
 <h2>Help</h2>
 <div id="TabbedPanels1" class="TabbedPanels">
 <ul class="TabbedPanelsTabGroup">
@@ -82,6 +83,7 @@
 	<li>General Information - displays the public home page</li>  
 	<li>About - shows information about the devlopment of the system</li>
 </ul></div>
+</div>
 </div>
 </div>
 @endsection
