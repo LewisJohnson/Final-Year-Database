@@ -2,6 +2,12 @@
 @section ('content')
 <div class="centered width-1200">
 <h1>Projects</h1>
+
+@if($view == "supervisor")
+	<h3>Projects by {{ $supervisor_name }}</h3>
+@endif
+
+@if($view == "index")
 <form action="/search" method="get" accept-charset="utf-8">
 	<div class="search-container shadow-4dp">
 		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm"  placeholder="Search...">
@@ -45,15 +51,16 @@
 		</div>
 	</div>
 </form>
-
-
+@endif
 
 <ul class="table-list table-list--margined projects-list shadow-2dp">
 	<li class="project">
 		<h3 style="flex-basis: 175px">Topic</h3>
-		<h3 style="flex-basis: 400px; flex-grow: 1;">Project Title</h3>
-		<h3 class="skills" style="flex-basis: 425px;">Skills</h3>
-		<h3 class="supervisor">Supervisor</h3>
+		<h3 style="flex-basis: 300px; flex-grow: 1;">Project Title</h3>
+		<h3 class="skills" style="flex-basis: 535px; @if($view == "supervisor") text-align: left; @endif">Skills</h3>
+		@if($view != "supervisor")
+			<h3 class="supervisor">Supervisor</h3>
+		@endif
 	</li>
 
 	{{-- We have search results--}}
@@ -65,18 +72,19 @@
 				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
 			</li>
 		@endforeach
-	@else
 	{{-- We don't have any search results --}}
+	@else
 		@foreach($projects as $project)
 			@php ($primary_topic = App\ProjectTopic::getProjectPrimaryTopicName($project))
 			<li class="project{!! ($project->archived) ? ' archived': '' !!}">
 				<a style="flex-basis: 175px;" href="/topics/{{$primary_topic}}">{{ $primary_topic }}</a>
-				<a style="flex-basis: 400px; flex-grow: 1;" href="/projects/{{$project->id}}">{{ $project->title }}</a>
-				<p class="skills" style="flex-basis: 400px;">{{ $project->skills }}</p>
-				<p>{{ $project->getSupervisor()->user->getFullName() }}</p>
+				<a style="flex-basis: 300px; flex-grow: 1;" href="/projects/{{$project->id}}">{{ $project->title }}</a>
+				<p class="skills" style="flex-basis: 500px; @if($view == "supervisor") text-align: left; @endif">{{ $project->skills }}</p>
+				@if($view != "supervisor")
+					<a href="projects/bySupervisor/{{ $project->getSupervisor()->id }}">{{ $project->getSupervisor()->user->getFullName() }}</a>
+				@endif
 			</li>
 		@endforeach
-
 	@endif
 </ul>
 </div>

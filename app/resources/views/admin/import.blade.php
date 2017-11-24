@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('content')
+<div class="centered card width-1000">
 <h2>Import Students With XML</h2>
 <p>Select file to upload.</p>
 <script>		
@@ -45,4 +46,5 @@
 		</li>
 	@endforeach
 </ul>
+</div>
 @endsection

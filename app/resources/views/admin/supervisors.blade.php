@@ -1,13 +1,15 @@
 @extends('layouts.admin')
 @section('content')
+<div class="centered width-800 card">
 <h2>Supervisors</h2>
 <p>There are a total of {{ count(App\Supervisor::get()) }} supervisors.</p>
-<ul>
+<ul style="list-style: none;">
 @foreach(App\Supervisor::get() as $supervisor)
 	<li>
-		<a href="mailto:{{ $supervisor->user->email }}">{{ $supervisor->user->first_name }} {{ $supervisor->user->last_name }}</a>
+		<a href="/admin/supervisors/arrangements/{{ $supervisor->user->id }}">{{ $supervisor->user->getFullName() }}<a>
 		<p>{{ $supervisor->project_status }}</p>
 	</li>
 @endforeach
 </ul>
+</div>
 @endsection

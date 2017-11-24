@@ -20,13 +20,15 @@ Route::group(['middleware' => ['Admin_Ug']], function() {
 	Route::get('/admin/students', 'AdminController@students');
 	Route::get('/admin/students/import', 'AdminController@importStudents');
 	Route::get('/admin/supervisors', 'AdminController@supervisors');
+	Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
 	Route::get('/admin/topics', 'AdminController@topics');
 	Route::get('/admin/login-as', 'AdminController@loginAsView');
 	Route::get('/admin/login-as/{id}', 'AdminController@loginAs');
+	Route::get('/admin/transactions', 'TransactionController@index');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
-	// Route::get('users/{user}', 'UserController@show');
+	Route::get('users/edit/{id}', 'UserController@edit');
 
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
 	// Project edit topic routes
@@ -37,9 +39,11 @@ Route::group(['middleware' => ['Admin_Ug']], function() {
 	// Topic routes
 	Route::get('topics', 'TopicController@index');
 	Route::post('topics', 'TopicController@store');
-	Route::patch('topics/{topic}', 'TopicController@edit');
-	Route::delete('topics/{topic}', 'TopicController@destroy');
-	Route::get('topics/{topic}', 'TopicController@show');
+	Route::patch('topics/{id}', 'TopicController@update');
+	Route::delete('topics/{id}', 'TopicController@destroy');
+	Route::get('topics/{id}', 'TopicController@show');
+
+
 });
 
 Route::group(['middleware' => ['auth']], function() {
@@ -56,6 +60,7 @@ Route::group(['middleware' => ['auth']], function() {
 	// Project routes
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
+	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');
 

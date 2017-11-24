@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
+<div class="centered width-800 card">
+<h1>Add New User</h1>
 <form method="POST" action="/users">
 	{{ csrf_field() }}
 	<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
@@ -107,7 +109,8 @@
 	</div>
 
 	<div class="form-field">
-		<button type="submit" class="btn btn-primary">Register</button>
+		<button type="submit" class="button button--raised button--accent">Register</button>
 	</div>
 </form>
+</div>
 @endsection

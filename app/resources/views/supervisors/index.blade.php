@@ -13,6 +13,9 @@
 
 <div class="supervisor hub">
 	{{-- OFFERS --}}
+	
+		<a class="button button--raised button--accent" href="/projects/create">New Project</a>
+
 	<div class="section section--full-width shadow-2dp">
 		<div class="header">
 			@include('svg.tag')

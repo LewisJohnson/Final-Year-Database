@@ -86,43 +86,17 @@
 	}
 }
 
-// .supervisor, .admin{
-//	 .projects-list{
-//		 li > * {
-//			 display: inline-block;
-//			 margin: 0;
-//		 }
-
-//		 li > :first-child{
-//			 width: 20px;
-//		 }
-
-//		 li > :nth-child(2){
-//			 width: 80px;
-//		 }
-
-//		 li > :last-child{
-//			 margin-left: auto;
-//		 }
-//	 }
-
-
-//	 }
-// }
-
-// .edit-topic-list{
-// 	list-style: none;
+.edit-topic-list{
+	list-style: none;
 	
-// 	.topic{
-// 		margin-bottom: 20px;
-// 		display: flex;
-// 		flex-direction: row;
-// 		width: 15rem;
+	.topic{
+		margin-bottom: 10px;
 
-// 		> * { display: inline-block; } 
-// 		p { margin: 0; }
-// 	}
-// }
+		input{
+			width: 300px;
+		}
+	}
+}
 
 // .edit-student-list{
 // 	.student-edit-item{
@@ -130,19 +104,4 @@
 // 			width: 150px;
 // 		}
 // 	}
-// }
-
-// #admin-form{
-// 	background: red;
-// 	padding: 1rem;
-// 	border: 3px solid yellow;
-// 	margin-bottom: 5rem;
-// 	text-align: center;
-// 	animation: textAttention 0.7s infinite;
-// }
-
-// @keyframes textAttention{
-// 	0%{color: black;}
-// 	50%{color: yellow; border: 3px solid darken(red, 20%);}
-// 	100%{color: black;}
 // }

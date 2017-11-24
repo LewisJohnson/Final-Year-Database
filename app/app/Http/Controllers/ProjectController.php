@@ -8,177 +8,232 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\ProjectUg;
 use App\ProjectMasters;
+use App\TransactionUg;
+use App\TransactionMasters;
+use App\Supervisor;
 use Flash;
 use Session;
+use DB;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(){
-        //Check supervisor cookie if(cookie = "master side") only get master projects
-        // if(Auth::user()->isUgSupervisor()){
-        //     $projects = Project::all();
-        //     // Project::whereNotNull('supervisor_id');
-        //     // ->where('student_proposed_project', 0)
-        //     // ->where('status', 'on-offer');
-        // } else if {
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(){
+		// Hide if supervisor take students = 0
+		// hide if not on offer
+		// hide if archived
 
-        // }else if {
-            
-        // }else if {
-            
-        // }
-        if(Session::get("db_type") == "ug"){
-            $projects = ProjectUg::all();
-        } else {
-            $projects = ProjectMasters::all();
-        }
+		//Check supervisor cookie if(cookie = "master side") only get master projects
+		// if(Auth::user()->isUgSupervisor()){
+		//     $projects = Project::all();
+		//     // Project::whereNotNull('supervisor_id');
+		//     // ->where('student_proposed_project', 0)
+		//     // ->where('status', 'on-offer');
+		// } else if {
 
-        return view('projects.index', compact('projects'));
-    }
+		// }else if {
+			
+		// }else if {
+			
+		// }
+		if(Session::get("db_type") == "ug"){
+			$projects = ProjectUg::all();
+		} else {
+			$projects = ProjectMasters::all();
+		}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-        return view('projects.create');
-    }
+		return view('projects.index')
+		->with('projects', $projects)
+		->with('view', 'index');
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) {
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create(){
+		return view('projects.create');
+	}
 
-        // Validate data
-        $this->validate(request(), [
-            'title'       => 'required|max:255',
-            'description' => 'required|max:16777215',
-            'skills' => 'required|max:255',
-            'status' => 'required',
-        ]);
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request) {
+		// Validate data
+		// Move to validation form
+		$this->validate(request(), [
+			'title'       => 'required|max:255',
+			'description' => 'required|max:16777215',
+			'skills' => 'required|max:255',
+			'status' => 'required',
+		]);
 
-        $project = new Project;
-        $project->fill(array(
-            'title' => request('title'),
-            'description' => request('description'),
-            'status' => request('status'),
-            'skills' => request('skills'),
-            'start_date' => new Carbon
-        ));
+		if(Auth::user()->supervisor == null){
+			Log::error('Someone who is not a supervsior tried to create a project.');
+		}
 
-        $project->author_programme = 'no idea';
-        $project->supervisor_id = Auth::user()->supervisor->id;
+		DB::transaction(function () {
+			// Creat project
+			if(Session::get("db_type") == "ug"){
+				$project = new ProjectUg;
+			} else {
+				$project = new ProjectMasters;
+			}
 
-        $project->save();
+			$project->fill(array(
+				'title' => request('title'),
+				'description' => request('description'),
+				'status' => request('status'),
+				'skills' => request('skills'),
+				'start_date' => new Carbon
+			));
 
-        session()->flash('message', 'Project "'.$project->title.'"" created.');
+			$project->author_programme = 'Computer Science';
+			$project->supervisor_id = Auth::user()->supervisor->id;
+			$project->save();
+			session()->flash('message', 'Project "'.$project->title.'"" created.');
 
-        // Redirect
-        return redirect()->action('ProjectController@show', ['project' => $project]);
+			// create transaction
+			if(Session::get("db_type") == "ug"){
+				$transaction = new TransactionUg;
+			} else {
+				$transaction = new TransactionMasters;
+			}
 
-    }
+			$transaction->fill(array(
+				'transaction_type' =>'created',
+				'project_id' => $project->id,
+				'supervisor_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        if(Session::get("db_type") == "ug"){
-            $project = ProjectUg::where('id', $id)->first();
-        } else {
-            $project = ProjectMasters::where('id', $id)->first();
-        }
-        return view('projects.project', compact('project'));
-    }
+			$transaction->save();
+			// Redirect
+			return redirect()->action('ProjectController@show', ['project' => $project]);
+		});
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        if(Session::get("db_type") == "ug"){
-            $project = ProjectUg::where('id', $id)->first();
-        } else {
-            $project = ProjectMasters::where('id', $id)->first();
-        }
-        return view('projects.edit', compact('project'));
-    }
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id) {
-        // todo: add form validation
-        try {
-            $project = Project::findOrFail($id);
-            $project->update(request(['title', 'description', 'skills']));
-            session()->flash('message', '"'.$project->title.'" has been updated.');
-            return redirect()->action('ProjectController@show', $project);
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id) {
+		if(Session::get("db_type") == "ug"){
+			$project = ProjectUg::where('id', $id)->first();
+		} else {
+			$project = ProjectMasters::where('id', $id)->first();
+		}
+		return view('projects.project', compact('project'));
+	}
 
-        } catch(ModelNotFoundException $err){
-            //Show error page
-        }
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id){
+		if(Session::get("db_type") == "ug"){
+			$project = ProjectUg::where('id', $id)->first();
+		} else {
+			$project = ProjectMasters::where('id', $id)->first();
+		}
+		return view('projects.edit', compact('project'));
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id) {
-        // Get data
-        $project = Project::findOrFail($id);
-        $title = $project-> title;
-        Project::destroy($id);
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update($id) {
+		// todo: add form validation
+		try {
+			$project = Project::findOrFail($id);
+			$project->update(request(['title', 'description', 'skills']));
+			session()->flash('message', '"'.$project->title.'" has been updated.');
+			return redirect()->action('ProjectController@show', $project);
 
-        session()->flash('message', 'Project "'.$title.'" deleted.');
+		} catch(ModelNotFoundException $err){
+			//Show error page
+		}
+	}
 
-        // Redirect
-        return 'done';
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id) {
+		// Get data
+		$project = Project::findOrFail($id);
+		$title = $project-> title;
+		Project::destroy($id);
 
-    public function search() {
-        $searchterm = Input::get('searchTerm');
-        $sByTitle = isset($_GET['title']) ? true : false;
-        $sByDesc = isset($_GET['description']) ? true : false;
-        $sBySuprv = isset($_GET['supervisor']) ? true : false;
-        $sByTopic = isset($_GET['topic']) ? true : false;
+		session()->flash('message', 'Project "'.$title.'" deleted.');
 
-        // Get data
-        $projects = Project::Search($searchterm, $sByTitle, $sByDesc, $sBySuprv, $sByTopic);
+		// Redirect
+		return 'done';
+	}
 
-        
-        // Redirect if we have results
-        if (count($projects) === 1) {
-            $project = $projects[0];
-            session()->flash('message', 'We only found this project.');
-            return view('projects.project');
+	/**
+	 * Display the projects with the supervisors.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function bySupervisor($id) {
+		$supervisor = Supervisor::where('id', $id)->first();
 
-        } else if (count($projects) > 1) {
-            return view('projects.index')
-            ->with('results', $projects)->with('searchTerm', $searchterm);
+		if(Session::get("db_type") == "ug"){
+			$projects = ProjectUg::where('supervisor_id', $id)->get();
+		} else {
+			$projects = ProjectMasters::where('supervisor_id', $id)->get();
+		}
+		return view('projects.index')
+			->with('projects', $projects)
+			->with('supervisor_name', $supervisor->user->getFullName())
+			->with('view', 'supervisor');
+	}
 
-        } else {
-            session()->flash('message', 'We couldn\'t find anything for "' . $searchterm . '".');
-            $projects = Project::all();
-            return view('projects.index', compact('projects'));
-        }
-    }
+	public function search() {
+		$searchterm = Input::get('searchTerm');
+		$sByTitle = isset($_GET['title']) ? true : false;
+		$sByDesc = isset($_GET['description']) ? true : false;
+		$sBySuprv = isset($_GET['supervisor']) ? true : false;
+		$sByTopic = isset($_GET['topic']) ? true : false;
+
+		// Get data
+		$projects = Project::Search($searchterm, $sByTitle, $sByDesc, $sBySuprv, $sByTopic);
+
+		
+		// Redirect if we have results
+		if (count($projects) === 1) {
+			$project = $projects[0];
+			session()->flash('message', 'We only found this project.');
+			return view('projects.project');
+
+		} else if (count($projects) > 1) {
+			return view('projects.index')
+			->with('results', $projects)->with('searchTerm', $searchterm);
+
+		} else {
+			session()->flash('message', 'We couldn\'t find anything for "' . $searchterm . '".');
+			$projects = Project::all();
+			return view('projects.index', compact('projects'));
+		}
+	}
 }

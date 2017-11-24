@@ -68,8 +68,8 @@ class DatabaseSeeder extends Seeder
 
  		// factory(App\User::class, 300)->create();
 		// factory(App\Student::class, 300)->create();
-		// factory(App\Topic::class, 10)->create();
-		factory(App\ProjectUg::class, 200)->create();
+		factory(App\TopicUg::class, 10)->create();
+		// factory(App\ProjectUg::class, 200)->create();
 		// factory(App\Supervisor::class, 5)->create();
 		
 

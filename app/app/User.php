@@ -59,7 +59,11 @@ class User extends Authenticatable
     }
 
     public function student(){
-        return $this->hasOne(Student::class, 'id');
+        if(Session::get("db_type") == "ug"){
+            return $this->hasOne(StudentUg::class, 'id');
+        } else {
+          return $this->hasOne(StudentMasters::class, 'id');
+        }
     }
 
     public function supervisor(){

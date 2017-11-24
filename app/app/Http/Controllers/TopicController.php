@@ -40,7 +40,7 @@ class TopicController extends Controller{
         }
 
         $topic->fill(array(
-            'name' => Topic::getSluggedName(request('name'))
+            'name' => request('name')
         ));
         $topic->save();
         return $topic;
@@ -54,21 +54,11 @@ class TopicController extends Controller{
      */
     public function show($id){
         if(Session::get("db_type") == "ug"){
-            $topic = TopicUg::where('id', $id);
+            $topic = TopicUg::where('id', $id)->first();
         } else {
-            $topic = TopicMasters::where('id', $id);
+            $topic = TopicMasters::where('id', $id)->first();
         }
         return view('topics.topic', compact('topic'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-
     }
 
     /**
@@ -80,9 +70,9 @@ class TopicController extends Controller{
      */
     public function update(Request $request, $id){
         if(Session::get("db_type") == "ug"){
-            $topic = TopicUg::where('id', $id);
+            $topic = TopicUg::where('id', $id)->first();
         } else {
-            $topic = TopicMasters::where('id', $id);
+            $topic = TopicMasters::where('id', $id)->first();
         }
         $topic->name = request('name');
         $topic->save();
@@ -99,6 +89,6 @@ class TopicController extends Controller{
         //todo: this first statment needs to be checked
         ProjectTopic::Where('topic_id', $topic->id)->delete();
         $topic->delete();
-        return "true";
+        return 'true';
     }
 }

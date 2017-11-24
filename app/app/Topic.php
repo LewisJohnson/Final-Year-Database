@@ -9,6 +9,8 @@ class Topic extends Model
     public $timestamps = false;
     protected $table = null;
     protected $primaryKey = 'id';
+    protected $guarded = ['id'];
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -17,16 +19,6 @@ class Topic extends Model
     protected $fillable = [
         'name'
     ];
-
-    public function getUnsluggedName(){
-        $name = str_replace("-", " ", $this->name);
-        return $name;
-    }
-
-    public static function getSluggedName($name){
-    	$name = str_slug($name, "-");
-    	return $name;
-    }
 
     public function getRouteKeyName(){
     	return 'name';

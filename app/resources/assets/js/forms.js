@@ -27,11 +27,11 @@ $(function() {
 		$(this).parent().parent().siblings().find(':checkbox').attr('checked', this.checked);
 	});
 
-	$('#deleteProjectButton').click(function() { 
+	$('#deleteProjectButton').on('click', function() { 
 		deleteProjectAjax($('#title').val());
 	});
 
-	$('#search-filter-button').click(function() {
+	$('#search-filter-button').on('click', function() {
 		var container = $('.search-filter-container');
 		if(container.hasClass('active')){
 			$('.search-filter-container').removeClass('active');
@@ -87,7 +87,7 @@ $("#loginForm").on('submit', function(e){
 function addTopicAjax(topic) {
 	$.ajax({
 		type: "PUT",
-		url: "edit/topic",
+		url: "/topic",
 		data: {topic : topic},
 		success: function(newTopicName){
 			$("#addTopicInput").val('');

@@ -56,6 +56,7 @@
 	</div>
 
 	<div class="form-field">
+		<label for="status">Project Status</label>
 		<select name="status">
 			<option value="on-offer">On Offer</option>
 			<option value="withdrawn">Withdrawn</option>

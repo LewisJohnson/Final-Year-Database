@@ -19,11 +19,11 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.account-plus')
-						<a href="/admin/user/create">Add User</a>
+						<a href="/users/create">Add User</a>
 					</li>
 					<li>
 						@include('svg.account-plus')
-						<a href="/admin/user/create">Edit User</a>
+						<a href="/users/edit">Edit User</a>
 					</li>
 					<li>
 						@include('svg.account-multiple-plus')
@@ -99,7 +99,7 @@
 					</li>
 					<li>
 						@include('svg.clock')
-						<a href="/admin/parameters">Browse Transactions by Time</a>
+						<a href="/admin/transactions">Browse Transactions by Time</a>
 					</li>
 					<li>
 						@include('svg.archive')

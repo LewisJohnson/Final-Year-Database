@@ -15,6 +15,6 @@ class AuthController extends Controller
         } else {
         	Session::put('db_type', 'masters');
         }
-        return redirect('/');
+        return redirect()->back()->with('message', 'Authentication changed.')->with('message_type', 'notification');
     }
 }

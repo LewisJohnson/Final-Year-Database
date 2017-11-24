@@ -1,7 +1,7 @@
 @extends('layouts.supervisor')
 @section ('content')
 @php($user = Auth::user())
-<h2>Create new project</h2>
+<h1>Create New Project</h1>
 
 <form method="POST" action="/projects">
 	{{ csrf_field() }}

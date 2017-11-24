@@ -21,4 +21,4 @@ mix.js('resources/assets/js/main.js', 'public/js')
 	
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-// mix.browserSync({proxy: 'localhost:8000'});
+mix.browserSync({proxy: 'localhost:8000'});

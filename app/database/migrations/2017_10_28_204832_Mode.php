@@ -13,8 +13,16 @@ class Mode extends Migration
      */
     public function up()
     {
-        Schema::create('mode', function (Blueprint $table) {
-            $table->boolean('lol')->default(0);
+        Schema::create('mode_ug', function (Blueprint $table) {
+            $table->smallInteger('project_year')->unique();
+            $table->dateTime('start_date');
+            $table->string('mode');
+        });
+
+        Schema::create('mode_masters', function (Blueprint $table) {
+            $table->smallInteger('project_year')->unique();
+            $table->dateTime('start_date');
+            $table->string('mode');
         });
     }
 
