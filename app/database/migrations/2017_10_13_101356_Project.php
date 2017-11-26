@@ -13,8 +13,8 @@ class Project extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
-            $table->increments('id')->unique();
+        Schema::create('projects_ug', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('title', 255);
             $table->mediumText('description');
             $table->string('skills', 255);
@@ -27,15 +27,21 @@ class Project extends Migration
             $table->timestamp('created_at')->useCurrent = true;
             $table->timestamp('updated_at')->useCurrent = true;
         });
-        
-        Schema::table('projects', function($table) {
-            // $table->foreign('student_id')
-            //     ->references('student_id')->on('students');
 
-            // $table->foreign('supervisor_id')
-            //     ->references('supervisor_id')->on('supervisors');
+        Schema::create('projects_masters', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 255);
+            $table->mediumText('description');
+            $table->string('skills', 255);
+            $table->string('author_programme', 255);
+            $table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
+            $table->unsignedBigInteger('supervisor_id')->nullable(true);
+            $table->unsignedBigInteger('student_id')->nullable(true);
+            $table->boolean('student_proposed_project')->default(0);
+            $table->dateTime('start_date');
+            $table->timestamp('created_at')->useCurrent = true;
+            $table->timestamp('updated_at')->useCurrent = true;
         });
-
     }
 
     /**
@@ -45,6 +51,7 @@ class Project extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('projects_ug');
+        Schema::dropIfExists('projects_masters');
     }
 }

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section ('content')
+<div class="centered width-800">
 <h2>About</h2>
 <p>
 This software manages project selection and allocation for final year students in the Informatics Department at the University of Sussex
@@ -14,4 +15,5 @@ It has been produced in 2008/2009 as a final year project by David Thomas under 
 <br><br>
 The system has been improved further by David Thomas and Bernhard Reus during 2010-11.
 </p>
+</div>
 @endsection

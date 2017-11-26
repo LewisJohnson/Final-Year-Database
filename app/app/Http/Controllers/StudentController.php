@@ -3,78 +3,89 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Student;
+use Illuminate\Support\Carbon;
+use App\StudentUg;
+use App\StudentMasters;
+use App\ProjectUg;
+use App\ProjectMasters;
+use App\TransactionUg;
+use App\TransactionMasters;
+use DB;
+use Session;
+use Auth;
 
 class StudentController extends Controller
 {
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id){
+		return view("student.edit");
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request){
-        //
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id){
+		//
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id){
-        //
-    }
+	public function selectProject(Request $request){
+		try {
+			DB::transaction(function ($request) use ($request) {
+				if(Session::get("db_type") == "ug"){
+					$project = ProjectUg::findOrFail(request('project_id'));
+					$transaction = new TransactionUg;
+				} else {
+					$project = ProjectMasters::findOrFail(request('project_id'));
+					$transaction = new TransactionMasters;
+				}
+				
+				$student = Auth::user()->student;
+				if($student->project_id != null){
+					session()->flash('message', 'You have already selected a project.');
+					session()->flash('message_type', 'danger');
+					return redirect('/');
+				}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        return view("student.edit");
-    }
+				$student->project_id = $project->id;
+				$student->project_status = 'selected';
+				$student->save();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id){
-        //
-    }
+				$transaction->fill(array(
+					'transaction_type' =>'selected',
+					'project_id' => request('project_id'),
+					'student_id' => Auth::user()->student->id,
+					'transaction_date' => new Carbon
+				));
+				$transaction->save();
+				
+				session()->flash('message', 'You have selected a project.');
+				session()->flash('message_type', 'success');
+				return redirect()->action('HomeController@index');
+			});
+		} catch(ModelNotFoundException $err){
+			session()->flash('message', 'There was a problem selected the project.');
+			session()->flash('message_type', 'danger');
+			return redirect()->action('HomeController@index');
+		}
+	}
 
-    public function selectProject($id)
-    {
-        try {
-            $student = Student::find($id);
-            $student->project_id = request('project_id');
-            $student->project_status = 'approved';
-            $student->save();
-
-            session()->flash('message', 'You have selected a project.');
-            return true;
-
-        } catch(ModelNotFoundException $err){
-            //Show error page
-            return false;
-        }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
 }

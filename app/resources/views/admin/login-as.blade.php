@@ -1,42 +1,56 @@
 @extends('layouts.admin')
 @section('content')
-<h2>Login As Another User</h2>
-<p>There are a total of {{ count(App\User::get()) }} users.</p>
 
-<h3>Supervisors</h3>
-<ul>
-	@foreach(App\User::Where('access_type', 'supervisor')->get() as $user)
-		<li>
-			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-		</li>
-	@endforeach
-</ul>
+<div class="centered width-1200">
+<h1>Login As Another User</h1>
 
-<h3>Students</h3>
-<ul>
-	@foreach(App\User::Where('access_type', 'student')->get() as $user)
-		<li>
-			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-		</li>
-	@endforeach
-</ul>
-
-<h3>Staff</h3>
-<ul>
-	@foreach(App\User::Where('access_type', 'staff')->get() as $user)
-		<li>
-			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-		</li>
-	@endforeach
-</ul>
+<div class="section-container">
+<div class="section horizontal card">
+	<h3>Supervisors</h3>
+	<ul style="list-style: none">
+		@foreach(App\User::Where('access_type', 'supervisor')->get() as $user)
+			<li>
+				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
+			</li>
+		@endforeach
+	</ul>
+</div>
 
 
-<h3>Administrators</h3>
-<ul>
-	@foreach(App\User::Where('access_type', 'admin')->get() as $user)
-		<li>
-			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-		</li>
-	@endforeach
-</ul>
+<div class="section horizontal card">
+	@if(Session::get('db_type') == 'ug')
+		<h3>Undergraduate Students</h3>
+	@else
+		<h3>Masters Students</h3>
+	@endif
+	
+	<ul style="list-style: none">
+		@if(Session::get('db_type') == 'ug')
+			@foreach(App\StudentUg::all() as $student)
+				<li>
+					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
+				</li>
+			@endforeach
+		@else
+			@foreach(App\StudentMasters::all() as $student)
+				<li>
+					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
+				</li>
+			@endforeach
+		@endif
+
+	</ul>
+</div>
+
+<div class="section horizontal card">
+	<h3>Staff</h3>
+	<ul style="list-style: none">
+		@foreach(App\User::Where('access_type', 'staff')->get() as $user)
+			<li>
+				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
+			</li>
+		@endforeach
+	</ul>
+</div>
+</div>
 @endsection

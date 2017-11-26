@@ -1,64 +1,71 @@
 <?php
 
 Route::group(['middleware' => ['web']], function() {
-
 	// Root Routes
-	Route::get('', 'Index@index');
-	Route::get('help', 'Index@help');
-	Route::get('about', 'Index@about');
+	Route::get('/', 'HomeController@index');
+	Route::get('index', 'HomeController@index');
+	Route::get('home', 'HomeController@index');
+	Route::get('information', 'HomeController@information');
+	Route::get('about', 'HomeController@about');
+	Route::get('help', 'HomeController@help');
 
 	// Login Routes
-    Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
-    Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
-    Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 });
 
+Route::group(['middleware' => ['Admin_Ug']], function() {
+
+	Route::get('/admin', 'AdminController@index');
+	Route::get('/admin/students', 'AdminController@students');
+	Route::get('/admin/students/import', 'AdminController@importStudents');
+	Route::get('/admin/supervisors', 'AdminController@supervisors');
+	Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
+	Route::get('/admin/topics', 'AdminController@topics');
+	Route::get('/admin/login-as', 'AdminController@loginAsView');
+	Route::get('/admin/login-as/{id}', 'AdminController@loginAs');
+	Route::get('/admin/transactions', 'TransactionController@index');
+
+	Route::post('users', 'UserController@store');
+	Route::get('users/create', 'UserController@create');
+	Route::get('users/edit/{id}', 'UserController@edit');
+
+	Route::get('projects/{id}/edit', 'ProjectController@edit');
+	// Project edit topic routes
+	Route::put('projects/{id}/edit/topic', 'ProjectTopicController@store');
+	Route::delete('projects/{id}/edit/topic', 'ProjectTopicController@destroy');
+	Route::patch('projects/{id}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
+
+	// Topic routes
+	Route::get('topics', 'TopicController@index');
+	Route::post('topics', 'TopicController@store');
+	Route::patch('topics/{id}', 'TopicController@update');
+	Route::delete('topics/{id}', 'TopicController@destroy');
+	Route::get('topics/{id}', 'TopicController@show');
+});
 
 Route::group(['middleware' => ['auth']], function() {
-	// Admin
-	Route::get('admin', 'AdminController@index');
-	Route::get('admin/students', 'AdminController@students');
-	Route::get('admin/students/import', 'AdminController@importStudents');
-	Route::get('admin/supervisors', 'AdminController@supervisors');
-	Route::get('admin/topics', 'AdminController@topics');
-	Route::get('admin/login-as', 'AdminController@loginAsView');
-	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
-
-	// Admin Users
-	Route::post('user', 'UserController@store');
-	Route::get('user/create', 'UserController@create');
-	Route::get('users/{user}', 'UserController@show');
-
 	// Search Route
 	Route::get('search', 'ProjectController@search');
 
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
+	Route::post('supervisor/acceptStudent', 'SupervisorController@acceptStudent');
+	Route::post('supervisor/rejectStudent', 'SupervisorController@rejectStudent');
 
 	// Student
-	Route::post('student', 'StudentController@store');
-	Route::patch('students/{student}/selectProject', 'StudentController@selectProject');
+	Route::post('students', 'StudentController@store');
+	Route::patch('students/selectProject', 'StudentController@selectProject');
 	
 	// Project routes
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
+	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
 	Route::get('projects/create', 'ProjectController@create');
-	Route::get('projects/{project}', 'ProjectController@show');
-
-	// Project edit routes
-	Route::get('projects/{project}/edit', 'ProjectController@edit');
-	Route::patch('projects/{project}/edit', 'ProjectController@update');
-	Route::delete('projects/{project}/edit', 'ProjectController@destroy');
-
-	// Project edit topic routes
-	Route::put('projects/{project}/edit/topic', 'ProjectTopicController@store');
-	Route::delete('projects/{project}/edit/topic', 'ProjectTopicController@destroy');
-	Route::patch('projects/{project}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
+	Route::get('projects/{id}', 'ProjectController@show');
 
 	// Topic routes
-	Route::get('topic', 'TopicController@index');
-	Route::post('topic', 'TopicController@store');
-	Route::patch('topics/{topic}', 'TopicController@edit');
-	Route::delete('topics/{topic}', 'TopicController@destroy');
-	Route::get('topics/{topic}', 'TopicController@show');
+	Route::get('topics', 'TopicController@index');
+	Route::post('authChange', 'Auth\AuthController@change');
 });

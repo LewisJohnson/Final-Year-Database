@@ -1,47 +1,48 @@
 #debug{
-    position: fixed;
-    bottom: 15px;
-    left: 15px;
-    background: white;
-    opacity: 0.7;
-    width: 75px;
-    height: 30px;
-    overflow: hidden;
-    transition: 0.2s all;
-    display: flex;
-    flex-flow: row wrap;
+	display: none !important;
+	position: fixed;
+	bottom: 15px;
+	left: 15px;
+	background: white;
+	opacity: 0.7;
+	width: 75px;
+	height: 30px;
+	overflow: hidden;
+	transition: 0.2s all;
+	display: flex;
+	flex-flow: row wrap;
 
-    div{
-        display: block;
-        margin-bottom: 1rem;
-    }
+	div{
+		display: block;
+		margin-bottom: 1rem;
+	}
 
-    h1{
-        background: red;
-        color: white;
-        flex: 1 100%;
-    }
+	h1{
+		background: red;
+		color: white;
+		flex: 1 100%;
+	}
 
-    h1,h2,h3{
-        margin: 2px;
-        margin-bottom: 5px;
-    }
+	h1,h2,h3{
+		margin: 2px;
+		margin-bottom: 5px;
+	}
 
-    p{
-        margin: 3px;
-    }
+	p{
+		margin: 3px;
+	}
 
-    ul{
-        margin-left: 20px;
-    }
+	ul{
+		margin-left: 20px;
+	}
 
-    &:hover{
-        opacity: 1;
-        width: 95vw;
-        height: 300px;
-        overflow: auto;
-        overflow-wrap: break-word;
-        padding: 15px;
-        border: 3px solid red;
-    }
+	&:hover{
+		opacity: 1;
+		width: 95vw;
+		height: 300px;
+		overflow: auto;
+		overflow-wrap: break-word;
+		padding: 15px;
+		border: 3px solid red;
+	}
 }

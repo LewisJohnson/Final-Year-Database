@@ -1,15 +1,7 @@
 body{
-	max-width: 800px;
-	margin: 0 auto;
-	font-family: 'Roboto', sans-serif;
-}
-
-footer{
-	height:  5rem;
-}
-
-header{
-	margin-top: 2rem;
+	margin: 0;
+	position: relative;
+	min-height: 100%;
 }
 
 // Normalise
@@ -19,6 +11,7 @@ ul{
 }
 
 html {
+	height: 100%;
 	box-sizing: border-box;
 }
 
@@ -26,8 +19,7 @@ html {
   box-sizing: inherit;
 }
 
-button{
-	cursor: pointer;
-	background: none;
-	border: 1px solid black;
+
+.main-content{
+	padding: 3rem 0;
 }

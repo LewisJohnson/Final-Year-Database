@@ -1,26 +1,114 @@
 @extends('layouts.admin')
 @section('content')
-<h2>Administrator Hub</h2>
-<ul>
-	<li><a href="/user/create">New User</a></li>
-	<li><a href="/admin/students/import">Import Students</a></li>
-	<hr>
-	<li><a href="/admin/students">View/Edit Students</a></li>
-	<li><a href="/admin/supervisors">View/Edit Supervisors</a></li>
-	<li><a href="/admin/login-as">Log in as another user</a></li>
-	<hr>
-	<li><a href="/admin/topics">View/Edit Topics</a></li>
-	<hr>
-	<li><a href="/admin/parameters">Change global parameters</a></li>
-</ul>
-<div>
-	<h2>Users</h2>
-	<p>A list of all users on the system.</p>
-	<ul>
-		@foreach(App\User::all() as $user)
-			<li><a href="{{ action('UserController@show', $user) }}">{{ $user->getFullName() }}</a></li>
-		@endforeach
-	</ul>
-</div>
+@php($user = Auth::user())
+<div class="centered width-800">
+	@if(Session::get('db_type') == 'ug')
+		<h1>Undergraduate Administrator Hub</h1>
+	@else
+		<h1>Masters Administrator Hub</h1>
+	@endif
+	<div class="admin hub">
 
+		{{-- USERS --}}
+		<div class="section shadow-2dp">
+			<div class="header">
+				@include('svg.account-multiple')
+				<h2>Users</h2>
+			</div>
+			<div class="content">
+				<ul class="icon-list">
+					<li>
+						@include('svg.account-plus')
+						<a href="/users/create">Add User</a>
+					</li>
+					<li>
+						@include('svg.account-plus')
+						<a href="/users/edit">Edit User</a>
+					</li>
+					<li>
+						@include('svg.account-multiple-plus')
+						<a href="/admin/students/import">Import Students</a>
+					</li>
+					<li>
+						@include('svg.account-settings')
+						<a href="/admin/supervisors">Edit Supervisors Arrangements</a>
+					</li>
+					<li>
+						@include('svg.login')
+						<a href="/admin/login-as">Log in as Another User</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+    
+
+		{{-- REPORTS --}}
+		<div class="section shadow-2dp">
+			<div class="header">
+				@include('svg.file')
+				<h2>Reports</h2>
+			</div>
+			<div class="content">
+				<ul class="icon-list">
+					<li>
+						@include('svg.account')
+						<a href="/admin/students">Summary Report - Students</a>
+					</li>
+					<li>
+						@include('svg.account')
+						<a href="/admin/parameters">Summary Report - Supervisor</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		{{-- Transactions --}}
+		<div class="section shadow-2dp">
+			<div class="header">
+				<div class="svg-container">
+					<svg viewBox="0 0 24 24">
+						<path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
+					</svg>
+				</div>
+				<h2>Transactions</h2>
+			</div>
+			<div class="content">
+				<ul class="icon-list">
+					<li>
+						@include('svg.file')
+						<a href="/admin/students">Browse Transactions by Project</a>
+					</li>
+					<li>
+						@include('svg.clock')
+						<a href="/admin/transactions">Browse Transactions by Time</a>
+					</li>
+					<li>
+						@include('svg.archive')
+						<a href="/admin/parameters">End of Year Archive</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+    	{{-- SETTINGS --}}
+		<div class="section shadow-2dp">
+			<div class="header">
+				@include('svg.cog')
+				<h2>Settings</h2>
+			</div>
+			<div class="content">
+				<ul class="icon-list">
+					<li>
+						@include('svg.pencil')
+						<a href="/admin/topics">Edit Topics</a>
+					</li>
+					<li>
+						@include('svg.globe')
+						<a href="/admin/parameters">Change Global Parameters</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection

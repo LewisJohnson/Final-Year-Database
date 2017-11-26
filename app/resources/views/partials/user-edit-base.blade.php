@@ -19,13 +19,13 @@
 </div>
 
 <div class="form-field">
-    <label for="access_type">Access Type</label>
-    <select name="access_type" name="access_type">
-        <option value="student">Student</option>
-        <option value="staff">Staff</option>
-        <option value="supervisor">Supervisor</option>
-        <option value="admin">Administrator</option>
-    </select>
+	<label for="access_type">Access Type</label>
+	<select name="access_type" name="access_type">
+		<option value="student">Student</option>
+		<option value="staff">Staff</option>
+		<option value="supervisor">Supervisor</option>
+		<option value="admin">Administrator</option>
+	</select>
 </div>
 
 </select>

@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Supervisor;
 
 class AdminController extends Controller
 {
@@ -24,6 +23,11 @@ class AdminController extends Controller
         return view('admin.supervisors');
     }
 
+    public function supervisorArrangements($id){
+        $supervisor = Supervisor::where('id', $id)->first();
+        return view('admin.supervisor-arrangements')->with('supervisor', $supervisor);
+    }
+    
     public function topics(){
         return view('admin.topics');
     }

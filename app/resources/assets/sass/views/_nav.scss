@@ -1,0 +1,151 @@
+// Desktop
+
+nav.desktop {
+	background: $accent;
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 99;
+	ul {
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+}
+
+nav.mobile{
+	display: none;
+	visibility: hidden;
+	position: fixed;
+	height: 100%;
+	width: 75vw;
+	max-width: 330px;
+	background: #fafafa;
+	z-index: 10;
+    top: 50px;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    transform: translateX(-75vw);
+    transition: .48s all cubic-bezier(.4,0,.2,1);
+
+    h3{
+		padding-left: 1rem;
+	}
+
+	.footer{
+		// position: absolute;
+		// bottom: 0;
+		// background: $accent;
+		// width: 100%;
+		// padding: 1rem;
+
+		// a{
+		// 	color: white;
+		// 	text-decoration: none;
+		// }
+	}
+}
+
+nav.mobile.is-visible{
+	visibility: visible;
+	transform: translateX(0vw);
+}
+
+.nav-button{
+	transition-duration: .28s;
+	transition-timing-function: cubic-bezier(.4,0,.2,1);
+	transition-property: background-color;
+	a {
+		display: block;
+		text-decoration: none;
+	}
+
+	button{
+		border: none;
+		margin: 0;
+		color: inherit;
+		font-size: inherit;
+		background: none;
+		padding: 0;
+	}
+
+}
+
+.nav-button--desktop{
+	margin-right: 10px;   
+	color: white;
+	transition: 0.3s all;
+	
+	a {
+		padding: 10px;
+		color: inherit;
+	}
+
+	button{
+		padding: 10px;
+	}
+
+	&:hover{
+		background: black;
+		color: white;
+	}
+}
+
+.nav-button--mobile{
+	display: flex;
+	flex-direction: column;
+	a{
+		padding: 1rem;
+		display: block;
+		width: 100%;
+	}
+
+	&:hover{
+		background-color: #e0e0e0;
+	}
+}
+
+.nav-button--grouped{
+	a{
+		padding-left: 2rem;
+	}
+}
+
+
+.dropdown-content{
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.mobile-nav-underlay{
+	opacity: 0;
+	visibility: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 3;
+	transition: .48s all cubic-bezier(.4,0,.2,1);
+}
+
+.mobile-nav-underlay.is-visible{
+	visibility: visible;
+	opacity: 1;
+}

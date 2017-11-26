@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\Auth;
+use Closure;
 
 class RedirectIfAuthenticated
 {
@@ -15,12 +14,11 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
-    {
+    public function handle($request, Closure $next, $guard = null){
+        // JUST DON'T TOUCH THIS LEWIS. STOP.
         if (Auth::guard($guard)->check()) {
             return redirect('/');
         }
-
         return $next($request);
     }
 }

@@ -1,26 +1,34 @@
 @extends('layouts.admin')
 @section('content')
-<h2>Amend Topics</h2>
-<p>There are a total of {{ count(App\Topic::all()) }} topics.</p>
+<div class="centered card width-1000">
+<h1>Amend Topics</h1>
+<h3>Add Topic</h3>
+	<div style="display: flex;">
+	<input style="margin-right: 1rem;" placeholder="Topic name" spellcheck="true" name="name" type="text"></input>
+	<button class="add-topic button button--raised" type="submit">Add</button>
+</div>
+
+<h3 style="margin-top: 3rem;">Edit Topics</h3>
+<p>Deleting a topic will also remove it from any associated projects.</p>
 <ul class="edit-topic-list">
-<li><h4>Add Topic</h4></li>
+@if(Session::get('db_type') == 'ug')
+	@foreach(App\TopicUg::get() as $topic)
+		<li class="topic">
+			<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
+			<button class="button edit-topic" data-topic-id="{{ $topic->id }}" type="submit">Edit</button>
+			<button class="button button--danger delete-topic" data-topic-id="{{ $topic->id }}">Delete</button>
+		</li>
+	@endforeach
+@else
+	@foreach(App\TopicMasters::get() as $topic)
+		<li class="topic">
+			<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
+			<button class="button edit-topic" data-topic-id="{{ $topic->id }}" type="submit">Edit</button>
+			<button class="button button--danger delete-topic" data-topic-id="{{ $topic->id }}">Delete</button>
+		</li>
+	@endforeach
+@endif
 
-<li>
-	<input spellcheck="true" name="name" type="text"></input>
-	<button class="add-topic" type="submit">Add</button>
-</li>
-
-<li>
-	<h4>Edit Topics</h4>
-	<p>Deleting a topic will also remove it from any associated projects.</p>
-</li>
-
-@foreach(App\Topic::get() as $topic)
-	<li class="topic">
-		<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
-		<button class="edit-topic" data-topic_name="{{ $topic->name }}" type="submit"><p>Edit</p><div class="loader"></div></button>
-		<button class="delete-topic" data-topic_name="{{ $topic->name }}">Delete</button>
-	</li>
-@endforeach
 </ul>
+</div>
 @endsection

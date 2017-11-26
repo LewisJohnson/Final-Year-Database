@@ -2,28 +2,12 @@
 @section ('content')
 @php ($user = Auth::user())
 
-@if($project->isOwnedByUser())
-	<div class="supervisor-panel">
-		<h2>Supervisor Panel</h2>
-		<ul class="buttons">
-			<li class="nav-button"><a href="{{ action('ProjectController@create') }}">New Project</a></li>
-			<li class="nav-button"><a href="{{ action('ProjectController@edit', $project) }}">Edit Project</a></li>
-			<li class="nav-button"><a href="{{ action('ProjectController@destroy', $project) }}">Delete Project</a></li>
-		</ul>
-		<h3>Project Information</h3>
-		<ul>
-			<li><p>Created {{ $project->created_at->toFormattedDateString() }}</p></li>
-			<li><p>Last updated {{ $project->updated_at->toFormattedDateString() }} ({{ $project->updated_at->diffForHumans() }})</p></li>
-		</ul>
-	</div>
-	<hr>
-@endif
-
+<div class="centered width-800">
 @if($project->archived)
 	<h1>This project is archived.</h1>
 @endif
 
-<div class="project{!! ($project->archived) ? ' archived': '' !!}">
+<div class="card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>
 	<h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2>
 	<h3>Description</h3>
@@ -35,33 +19,31 @@
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
 				<li class="topic{!! ($topic->id == App\ProjectTopic::getProjectPrimaryTopicId($project)) ? ' primary first': '' !!}">
-					<a href="{{ action('TopicController@show', $topic) }}">{{$topic->getUnsluggedName()}}</a>
+					<a href="{{ action('TopicController@show', $topic) }}">{{$topic->name}}</a>
 				</li>
 			@endforeach
 		@else
-			<li class="no-topics">This project has no associated topics.</li>
+			<li class="no-topics">
+			<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
+				<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+			</svg>
+			<p>This project has no associated topics.</p>
+			</li>
 		@endif
 	</ul>
 </div>
-
-<hr>
-
-@if($user->isStudent())
+<a style="margin-right: 1rem;" class="button button--raised" href="javascript:history.back()">Back</a>
+@if($user->student != null)
 	@if($user->student->project_status == 'none')
-		<form action="{{ action('StudentController@selectProject', $user->student)}}" role="form" method="POST">
+		<form action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 			<input type="hidden" name="project_id" value="{{ $project->id }}">
-			<button>Select project</button>
+			<button class="button button--raised button--accent">Select project</button>
 		</form>
 	@else
-		{{-- Show selected/proposed topic --}}
-		<p>You have already selected/proposed a project.</p>
+		<p>You have already selected or proposed a project.</p>
 	@endif
-
 @endif
-
-<a href="{{ action('ProjectController@index') }}">Back</a>
+</div>
 @endsection
-
-

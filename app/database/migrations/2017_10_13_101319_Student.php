@@ -13,22 +13,22 @@ class Student extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('students_ug', function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->unique();
             $table->unsignedInteger('registration_number');
             $table->string('programme');
             $table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
             $table->unsignedBigInteger('project_id')->nullable(true);
             $table->boolean('share_project')->default(0);
         });
-
-        Schema::table('students', function($table) {
-            // $table->foreign('student_id')
-            //     ->references('user_id')->on('users')
-            //     ->onDelete('cascade');
-                
-            // $table->foreign('project_id')
-            //     ->references('project_id')->on('projects');
+        
+        Schema::create('students_masters', function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->unique();
+            $table->unsignedInteger('registration_number');
+            $table->string('programme');
+            $table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
+            $table->unsignedBigInteger('project_id')->nullable(true);
+            $table->boolean('share_project')->default(0);
         });
     }
 
@@ -39,6 +39,7 @@ class Student extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('students_ug');
+        Schema::dropIfExists('students_masters');
     }
 }

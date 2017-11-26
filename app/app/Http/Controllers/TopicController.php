@@ -1,82 +1,111 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\ProjectTopicMasters;
+use App\ProjectTopicUg;
 use Illuminate\Http\Request;
 use App\Topic;
+use App\TopicUg;
+use App\TopicMasters;
 use App\ProjectTopic;
+use Session;
+use DB;
+use Illuminate\Support\Carbon;
 
-class TopicController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(){
-        $topics = Topic::all();
-        return view('topics.index', compact('topics'));
-    }
+class TopicController extends Controller{
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(){
+		if(Session::get("db_type") == "ug"){
+			$topics = TopicUg::all();
+		} else {
+			$topics = TopicMasters::all();
+		}
+		return view('topics.index', compact('topics'));
+	}
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request){
-        $topic = new Topic;
-        $topic->fill(array(
-            'name' => Topic::getSluggedName(request('name'))
-        ));
-        $topic->save();
-        return $topic;
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request){
+		DB::transaction(function ($request) use ($request) {
+			if(Session::get("db_type") == "ug"){
+				$topic = new TopicUg;
+			} else {
+				$topic = new TopicMasters;
+			}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Topic $topic){
-        return view('topics.topic', compact('topic'));
-    }
+			$topic->fill(array(
+				'name' => request('name')
+			));
+			$topic->save();
+			return $topic;
+		});
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Topic $topic){
-        $topic->name = request('name');
-        $topic->save();
-        return 'true';
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id){
+		if(Session::get("db_type") == "ug"){
+			$topic = TopicUg::where('id', $id)->first();
+		} else {
+			$topic = TopicMasters::where('id', $id)->first();
+		}
+		return view('topics.topic', compact('topic'));
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id){
-        //
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id){
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Topic $topic){
-        //todo: this first statment needs to be checked
-        ProjectTopic::Where('topic_id', $topic->id)->delete();
-        $topic->delete();
-        return "true";
-    }
+		DB::transaction(function ($request, $id) use ($request, $id) {
+			if(Session::get("db_type") == "ug"){
+				$topic = TopicUg::where('id', $id)->first();
+			} else {
+				$topic = TopicMasters::where('id', $id)->first();
+			}
+			$topic->name = request('name');
+			$topic->save();
+			return 'true';
+		});
+
+        return 'false';
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id){
+        DB::transaction(function ($id) use ($id) {
+            if(Session::get("db_type") == "ug"){
+                ProjectTopicUg::where('topic_id', $id)->delete();
+                Topic::where('id', $id)->delete();
+            } else {
+                ProjectTopicMasters::where('topic_id', $id)->delete();
+                TopicMasters::where('id', $id)->delete();
+            }
+            return 'true';
+        });
+
+		return 'false';
+	}
 }

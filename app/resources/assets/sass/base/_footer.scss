@@ -1,0 +1,33 @@
+footer{
+	position: absolute;
+  	right: 0;
+  	bottom: 0;
+  	left: 0;
+	background: $accent;
+	padding-top: 5px;
+	height: 25px;
+	font-size: 12px;
+
+	.footer-left, .footer-right{
+		padding: 0 10px;
+		a, p{
+			color: white;
+			display: inline-block;
+			margin: 0;
+		}
+	}
+
+	.footer-left{
+		position: absolute;
+		left: 0;
+	}
+
+	.footer-right{
+		position: absolute;
+		right: 0;
+	}
+
+	.seperator{
+		padding: 0 10px;
+	}
+}

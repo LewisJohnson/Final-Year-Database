@@ -13,7 +13,12 @@ class Topic extends Migration
      */
     public function up()
     {
-        Schema::create('topics', function (Blueprint $table) {
+        Schema::create('topics_ug', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->unique();
+        });
+
+        Schema::create('topics_masters', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
         });

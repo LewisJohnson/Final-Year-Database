@@ -1,29 +1,45 @@
 @extends('layouts.admin')
 @section('content')
 
-<h2>Students</h2>
-<p>There are a total of {{ count(App\Student::get()) }} students.</p>
+<h1>Students</h1>
+@if(Session::get('db_type') == 'ug')
+	<p>There are a total of <b>{{ count(App\StudentUg::get()) }}</b> undergraduate students.</p>
+@else
+	<p>There are a total of <b>{{ count(App\StudentMasters::get()) }}</b> masters students.</p>
+@endif
 
-@php($statuses = ['approved', 'selected', 'proposed', 'none'])
+
+@php($statuses = ['none', 'proposed', 'selected', 'accepted'])
+<div class="section-container">
 @foreach($statuses as $status)
+<div class="section horizontal" data-status= "{{ $status }}">
 	<h3>{{ ucfirst($status) }}</h3>
-	<ul class="edit-student-list {{ $status }}">
-		@foreach(App\Student::Where('project_status', $status)->get() as $student)
-			@include ('partials.student-edit', array('student'=> $student))
-		@endforeach
+	<ul style="list-style: none">
 		<li>
-			<button class="select-all" data-project_status="{{ $status }}" >Select all</button>
-			<button class="unselect-all" data-project_status="{{ $status }}">Unselect all</button>
-			<a href="{{ App\Student::getMailtoStringByProjectStatus($status) }}">Email all</a>
+			<a class="button button--raised email-selected {{ $status }}" href="mailto:" disabled >Email Selected</a>
 		</li>
 	</ul>
-@endforeach
 
-<hr>
-<ul class="edit-student-list">
-	<li>
-		<button type="">Delete Selected</button>
-		<a class="email-selected" href="mailto:" >Email Selected</a>
-	</li>
-</ul>
+	<ul id="student-edit-list" class="table-list table-list--checkbox {{ $status }} shadow-2dp">
+		<li>
+			<div class="checkbox">
+				<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
+				<label for="{{ $status }}" name="{{ $status }}"></label>
+			</div>
+			<h3>Name</h3>
+			<h3>Last Login</h3>
+		</li>
+		@if(Session::get('db_type') == 'ug')
+			@foreach(App\StudentUg::Where('project_status', $status)->get() as $student)
+				@include ('partials.student-edit', array('student'=> $student))
+			@endforeach
+		@else
+			@foreach(App\StudentMasters::Where('project_status', $status)->get() as $student)
+				@include ('partials.student-edit', array('student'=> $student))
+			@endforeach
+		@endif
+	</ul>
+</div>
+@endforeach
+</div>
 @endsection

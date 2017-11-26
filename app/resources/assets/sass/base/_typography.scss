@@ -1,0 +1,12 @@
+body{
+	font-family: $font-family-sans-serif;
+	font-size: $font-size-base;
+	margin: 0;
+	position: relative;
+	min-height: 100%;
+}
+
+h1{color: $h1-color;}
+h2{color: $h2-color;}
+h3{color: $h3-color;}
+p, a{color: $text-color;}

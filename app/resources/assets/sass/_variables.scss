@@ -1,41 +1,49 @@
+/* TYPOGRAPHY */
+$font-family-sans-serif: "Roboto", sans-serif;
+$font-size-base: 16px;
+$text-color: #757575;
+$h3-color: darken($text-color, 5%);
+$h2-color: darken($h3-color, 5%);
+$h1-color: darken($h2-color, 5%);
+$list-text-color: #515151;
 
-// Body
-$body-bg: #f5f8fa;
-
-// Form
-$form-border-color: #888;
+/* FORMS */
+$form-border-color: rgba(0, 0, 0, 0.12);
 $form-border-width: 1px;
-$form-input-padding: 10px;
+$form-input-padding: 8px;
 $form-input-font-size: 16px;
-$form-label-text-color: darken($form-border-color, 50%);
+$form-label-text-color: $text-color;
 
 
-// 
+/* CHECKBOX */
+$checkbox-margin: 16px 0;
+$checkbox-checked-color: #3f51b5;
+$checkbox-border-color: rgba(0, 0, 0, 0.54);
+$checkbox-size: 20px;
+$checkbox-padding: 4px;
+$checkmark-width: 2px;
+$checkmark-color: #fff;
+
+/* SHADOWS */
+$shadow-key-umbra-opacity: 0.2 !default;
+$shadow-key-penumbra-opacity: 0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
 
 // Brands
-$brand-primary: #3097D1;
-$brand-info: #8eb4cb;
-$brand-success: #2ab27b;
-$brand-warning: #cbb956;
-$brand-danger: #bf5329;
+$brand-primary: #1D4289;
+$accent: darken($brand-primary, 6%);
+$accent-info: #8eb4cb;
+$accent-success: #2ab27b;
+$accent-warning: #cbb956;
+$accent-danger: #bf5329;
 
 // Other
-$error-bg-color: #ff6161;
-$error-border-color: darken($error-bg-color, 10%);
+$error-bg-color: #F44336;
+$error-border-color: darken($error-bg-color, 5%);
 $notification-bg-color: white;
 $notification-text-color: black;
 $notification-border-color: black;
 
-// NOT USED
-// Typography
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$font-family-sans-serif: "Raleway", sans-serif;
-$font-size-base: 14px;
-$line-height-base: 1.6;
-$text-color: #636b6f;
-
-// Navbar
-$navbar-default-bg: #fff;
 
 // Buttons
 $btn-default-color: $text-color;

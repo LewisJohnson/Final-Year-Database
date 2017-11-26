@@ -1,65 +1,66 @@
 $(function() {
+	$('#student-edit-list .checkbox input').on('change', function() {
+		var status = $(this).parents().eq(3).data('status');
+		var emailString = "mailto:";
+		var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+		var emailButtonselector = ".email-selected." + status;
 
-	$('.student-edit-item .checkbox').change(function() {
-        if($(this).is(":checked")) {
-            $(this).parent().addClass("checked");
-        } else {
-        	$(this).parent().removeClass("checked");
-        }
-
-        var emailString = "mailto:";
-        $('.student-edit-item .checkbox').each(function() {
-        	if($(this).is(":checked")) {
-				emailString += $(this).parent().data('email');
+		$(checkboxSelector).each(function() {
+			if($(this).is(":checked")) {
+				emailString += $(this).parent().parent().data('email');
 				emailString += ",";
 			}
 		});
 
-		$('.edit-student-list .email-selected').prop('href', emailString);
-    });
+		$(emailButtonselector).prop('href', emailString);
+	});
 
 
-	$('.edit-student-list .email-selected').click(function(e) {
+	$('.edit-student-list .email-selected').on('click', function(e) {
 		if($(this).prop('href') === 'mailto:'){
 			alert("You haven't selected anyone.")
 			e.preventDefault();
 		}
 	});
 
-	$('.edit-student-list .select-all').click(function() {
-		var selector = ".edit-student-list." + $(this).data("project_status") + " li .checkbox";
-		$(selector).each(function() {
-			$(this).prop('checked', true).change();
-		});
-	});
-
-	$('.edit-student-list .unselect-all').click(function() {
-		var selector = ".edit-student-list." + $(this).data("project_status") + " li .checkbox";
-		$(selector).each(function() {
-			$(this).prop('checked', false).change();
-		});
-	});
-
-	$('.add-topic').click(function() {
+	// Topics
+	$('.add-topic').on('click', function() {
 		addTopic($(this).prev().val());
 	});
 
-	$('.edit-topic').click(function() {
+	$('.edit-topic').on('click', function() {
 		$(this).prop('disabled', true);
-		$('p', this).css("display", "none");
-		$('.loader', this).css("display", "block");
-		editTopic($(this).data('topic_name'), $(this).prev().val(), $(this));
-		
+		$(this).html('<div class="loader"></div>')
+		$('.loader', this).css('display', 'block');
+		editTopic($(this).data('topic-id'), $(this).prev().val(), $(this));
 	});
 
-	$('.delete-topic').click(function() {
-		deleteTopic($(this).data('topic_name'), $(this).parent());
+	$('.delete-topic').on('click', function() {
+		$(this).prev().prev().prop('disabled', true);
+		var response = confirm("Are you sure you want to delete \"" +  $(this).prev().prev().val() +"\"?");
+		if(response == true){
+			deleteTopic($(this).data('topic-id'), $(this).parent());
+		} else {
+			$(this).prev().prev().prop('disabled', false);
+		}
 	});
 
+	// Used for transactions
+	$('#show-raw-table-data').on('click', function() {
+		if($(this).prop('checked')){
+			$('table.full-detail').hide();
+			$('table.raw-detail').show();
+		} else {
+			$('table.full-detail').show();
+			$('table.raw-detail').hide();
+		}
+	});
+	
+	// NEW USER
 	$('#admin-form').hide();
 	$('#supervisor-form').hide();
 	$('#student-form').show();
-	$('#create-form-access-select').change(function(){
+	$('#create-form-access-select').on('change', function(){
 		if($('#student-option').is(":selected")) {
 			$('#student-form').show();
 		} else {
@@ -84,17 +85,17 @@ $(function() {
 function addTopic(name) {
 	$.ajax({
 		method: 'POST',
-		url: '/topic',
+		url: '/topics',
 		context: this,
 		data: {name : name}
-    }).done(function(){
-    	//todo: Create list item;
+	}).done(function(){
+		//todo: Create list item;
 		location.reload();
 	});
 }
 
-function editTopic(topic_name, name, button) {
-	var url = '/topics/' + topic_name;
+function editTopic(topicId, name, button) {
+	var url = '/topics/' + topicId;
 	$.ajax({
 		method: 'PATCH',
 		url: url,
@@ -102,19 +103,18 @@ function editTopic(topic_name, name, button) {
 		data: {name : name},
 	}).done(function(){
 		$(this).prop('disabled', false);
-		$('p', this).css("display", "block");
-		$('.loader', this).css("display", "none");
+		$(this).html('Edit')
 	});
 }
 
-function deleteTopic(topic_name, li) {
-	var url = '/topics/' + topic_name;
+function deleteTopic(topicId, li) {
+	var url = '/topics/' + topicId;
 	$.ajax({
 		method: 'DELETE',
 		url: url,
 		context: li,
 		success: function(result){
 			$(this).remove();
-        }
-    });
+		}
+	});
 }

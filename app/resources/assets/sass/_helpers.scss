@@ -1,0 +1,54 @@
+.fake-input{
+	cursor: text;
+}
+
+.loader {
+	display: none;
+	border: 5px solid transparent;
+	border-top: 5px solid #5facff; /* Blue */
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	animation: spin 1s linear infinite;
+	margin: 0 auto;
+}
+
+.centered{
+	margin: 0 auto;
+}
+
+.section-container{
+	display: flex;
+	
+	.horizontal{
+		margin: 0 1rem;
+		flex-grow: 1;
+	}
+}
+
+.svg-container {
+	display: inline;
+	margin-right: 6px;
+	svg{
+		fill: currentColor;
+		width: 30px;
+		height: 30px;
+	}
+}
+
+.width-800{
+	max-width: 800px;
+}
+
+.width-1000{
+	max-width: 1000px;
+}
+
+.width-1200{
+	max-width: 1200px;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
