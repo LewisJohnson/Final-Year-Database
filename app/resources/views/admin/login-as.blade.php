@@ -8,7 +8,7 @@
 <div class="section horizontal card">
 	<h3>Supervisors</h3>
 	<ul style="list-style: none">
-		@foreach(App\User::Where('access_type', 'supervisor')->get() as $user)
+		@foreach(SussexInformaticsProjects\User::Where('access_type', 'supervisor')->get() as $user)
 			<li>
 				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
 			</li>
@@ -26,13 +26,13 @@
 	
 	<ul style="list-style: none">
 		@if(Session::get('db_type') == 'ug')
-			@foreach(App\StudentUg::all() as $student)
+			@foreach(SussexInformaticsProjects\StudentUg::all() as $student)
 				<li>
 					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
 				</li>
 			@endforeach
 		@else
-			@foreach(App\StudentMasters::all() as $student)
+			@foreach(SussexInformaticsProjects\StudentMasters::all() as $student)
 				<li>
 					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
 				</li>
@@ -45,7 +45,7 @@
 <div class="section horizontal card">
 	<h3>Staff</h3>
 	<ul style="list-style: none">
-		@foreach(App\User::Where('access_type', 'staff')->get() as $user)
+		@foreach(SussexInformaticsProjects\User::Where('access_type', 'staff')->get() as $user)
 			<li>
 				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
 			</li>

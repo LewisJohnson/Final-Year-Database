@@ -18,31 +18,31 @@
 			<td>{{ $transaction->id }}</td>
 			<td>{{ ucfirst($transaction->transaction_type) }}</td>
 			@if(Session::get("db_type") == "ug")
-				@if($project = App\ProjectUg::where('id', $transaction->project_id)->first())
+				@if($project = SussexInformaticsProjects\ProjectUg::where('id', $transaction->project_id)->first())
 					<td><a href="{{ action("ProjectController@show", $project->id)}}">{{ $project->title }}</a></td>
 				@else
 					<td></td>
 				@endif
 			@else
-				@if($project = App\ProjectMasters::where('id', $transaction->project_id)->first())
+				@if($project = SussexInformaticsProjects\ProjectMasters::where('id', $transaction->project_id)->first())
 					<td><a href="{{ action("ProjectController@show", $project->id)}}">{{ $project->title }}</a></td>
 				@else
 					<td></td>
 				@endif
 			@endif
-			@if($student = App\User::where('id', $transaction->student_id)->first())
+			@if($student = SussexInformaticsProjects\User::where('id', $transaction->student_id)->first())
 				<td>{{ $student->getFullName() }}</td>
 			@else
 				<td></td>
 			@endif
 			
-			@if($supervisor = App\Supervisor::where('id', $transaction->supervisor_id)->first())
+			@if($supervisor = SussexInformaticsProjects\Supervisor::where('id', $transaction->supervisor_id)->first())
 				<td>{{ $supervisor->user->getFullName() }}</td>
 			@else
 				<td></td>
 			@endif
 
-			@if($admin = App\User::where('id', $transaction->admin_id)->first())
+			@if($admin = SussexInformaticsProjects\User::where('id', $transaction->admin_id)->first())
 				<td>{{ $admin->getFullName() }}</td>
 			@else
 				<td></td>

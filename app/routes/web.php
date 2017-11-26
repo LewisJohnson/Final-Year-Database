@@ -1,37 +1,45 @@
 <?php
 
 Route::group(['middleware' => ['web']], function() {
-	// Root Routes
+
+
+	// Login Routes
+	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+
+		// Root Routes
 	Route::get('/', 'HomeController@index');
 	Route::get('index', 'HomeController@index');
 	Route::get('home', 'HomeController@index');
 	Route::get('information', 'HomeController@information');
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
-
-	// Login Routes
-	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
-	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
-	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 });
 
-Route::group(['middleware' => ['Admin_Ug']], function() {
-
+Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('/admin', 'AdminController@index');
-	Route::get('/admin/students', 'AdminController@students');
+
+	Route::get('/admin/summary/students', 'AdminController@summaryStudents');
+	Route::get('/admin/summary/supervisors', 'AdminController@summarySupervisors');
+
 	Route::get('/admin/students/import', 'AdminController@importStudents');
 	Route::get('/admin/supervisors', 'AdminController@supervisors');
 	Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
 	Route::get('/admin/topics', 'AdminController@topics');
 	Route::get('/admin/login-as', 'AdminController@loginAsView');
 	Route::get('/admin/login-as/{id}', 'AdminController@loginAs');
+	Route::get('/admin/archive', 'AdminController@archive');
 	Route::get('/admin/transactions', 'TransactionController@index');
+
+	// Route::get('/admin/transactions/projects', 'TransactionController@index');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
 	Route::get('users/edit/{id}', 'UserController@edit');
 
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
+
 	// Project edit topic routes
 	Route::put('projects/{id}/edit/topic', 'ProjectTopicController@store');
 	Route::delete('projects/{id}/edit/topic', 'ProjectTopicController@destroy');
@@ -61,7 +69,10 @@ Route::group(['middleware' => ['auth']], function() {
 	// Project routes
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
+	
+	Route::get('projects/bySupervisor/', 'ProjectController@supervisors');
 	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
+	
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');
 

@@ -1,21 +1,24 @@
 <?php
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\ProjectUg;
-use App\ProjectMasters;
-use App\TransactionUg;
-use App\TransactionMasters;
-use App\Supervisor;
+use SussexInformaticsProjects\ProjectUg;
+use SussexInformaticsProjects\ProjectMasters;
+use SussexInformaticsProjects\TransactionUg;
+use SussexInformaticsProjects\TransactionMasters;
+use SussexInformaticsProjects\Supervisor;
 use Flash;
 use Illuminate\Support\Facades\Log;
 use Session;
 use DB;
-class ProjectController extends Controller
-{
+class ProjectController extends Controller{
+
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -227,14 +230,24 @@ class ProjectController extends Controller
 		$supervisor = Supervisor::where('id', $id)->first();
 
 		if(Session::get("db_type") == "ug"){
-			$projects = ProjectUg::where('supervisor_id', $id)->get();
+			$projects = ProjectUg::where('supervisor_id', $supervisor->id)->get();
 		} else {
-			$projects = ProjectMasters::where('supervisor_id', $id)->get();
+			$projects = ProjectMasters::where('supervisor_id', $supervisor->id)->get();
 		}
 		return view('projects.index')
 			->with('projects', $projects)
 			->with('supervisor_name', $supervisor->user->getFullName())
 			->with('view', 'supervisor');
+	}
+
+	/**
+	 * Displays all supervisors with projects on offer.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function supervisors() {
+		$supervisor = Supervisor::all();
+		return view('projects.supervisors')->with('supervisors', $supervisor);
 	}
 
 	public function search() {

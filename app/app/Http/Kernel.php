@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http;
+namespace SussexInformaticsProjects\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -16,9 +16,9 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
+        \SussexInformaticsProjects\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\TrustProxies::class,
+        \SussexInformaticsProjects\Http\Middleware\TrustProxies::class,
     ];
 
     /**
@@ -28,12 +28,12 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
+            \SussexInformaticsProjects\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            \SussexInformaticsProjects\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -44,15 +44,15 @@ class Kernel extends HttpKernel
         ],
 
         'masters' => [
-            'App\Http\Middleware\Admin_Masters',
-            'App\Http\Middleware\Supervisor_Masters',
-            'App\Http\Middleware\Student_Masters',
+            'SussexInformaticsProjects\Http\Middleware\Admin_Masters',
+            'SussexInformaticsProjects\Http\Middleware\Supervisor_Masters',
+            'SussexInformaticsProjects\Http\Middleware\Student_Masters',
         ],
 
         'ug' => [
-            'App\Http\Middleware\Admin_Ug',
-            'App\Http\Middleware\Supervisor_Ug',
-            'App\Http\Middleware\Student_Ug',
+            'SussexInformaticsProjects\Http\Middleware\Admin_Ug',
+            'SussexInformaticsProjects\Http\Middleware\Supervisor_Ug',
+            'SussexInformaticsProjects\Http\Middleware\Student_Ug',
         ],
     ];
 
@@ -68,15 +68,15 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest' => \SussexInformaticsProjects\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
-        'Admin_Masters' => 'App\Http\Middleware\Admin_Masters',
-        'Supervisor_Masters' => 'App\Http\Middleware\Supervisor_Masters',
-        'Student_Masters' => 'App\Http\Middleware\Studen_Masters',
+        'Admin_Masters' => 'SussexInformaticsProjects\Http\Middleware\Admin_Masters',
+        'Supervisor_Masters' => 'SussexInformaticsProjects\Http\Middleware\Supervisor_Masters',
+        'Student_Masters' => 'SussexInformaticsProjects\Http\Middleware\Studen_Masters',
 
-        'Admin_Ug' => 'App\Http\Middleware\Admin_Ug',
-        'Supervisor_Ug' => 'App\Http\Middleware\Supervisor_Ug',
-        'Student_Ug' => 'App\Http\Middleware\Student_Ug',
+        'Admin_Ug' => 'SussexInformaticsProjects\Http\Middleware\Admin_Ug',
+        'Supervisor_Ug' => 'SussexInformaticsProjects\Http\Middleware\Supervisor_Ug',
+        'Student_Ug' => 'SussexInformaticsProjects\Http\Middleware\Student_Ug',
     ];
 }

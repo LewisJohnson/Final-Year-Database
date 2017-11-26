@@ -1,9 +1,10 @@
 <?php
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ModeController extends Controller
-{
-    //
+class ModeController extends Controller{
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
 }

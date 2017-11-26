@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\ProjectUg::class, function (Faker $faker) {
+$factory->define(SussexInformaticsProjects\ProjectUg::class, function (Faker $faker) {
     return [
         'title' => $faker->bs,
         'description' => $faker->realText($maxNbChars = 600, $indexSize = 2),

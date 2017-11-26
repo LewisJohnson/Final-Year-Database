@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace SussexInformaticsProjects;
 
 use Illuminate\Database\Eloquent\Model;
 

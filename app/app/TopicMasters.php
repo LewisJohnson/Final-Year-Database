@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace SussexInformaticsProjects;
 
 class TopicMasters extends Topic
 {

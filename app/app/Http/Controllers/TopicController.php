@@ -1,29 +1,30 @@
 <?php
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
-use App\ProjectTopicMasters;
-use App\ProjectTopicUg;
+use SussexInformaticsProjects\ProjectTopicMasters;
+use SussexInformaticsProjects\ProjectTopicUg;
 use Illuminate\Http\Request;
-use App\Topic;
-use App\TopicUg;
-use App\TopicMasters;
-use App\ProjectTopic;
+use SussexInformaticsProjects\Topic;
+use SussexInformaticsProjects\TopicUg;
+use SussexInformaticsProjects\TopicMasters;
+use SussexInformaticsProjects\ProjectTopic;
 use Session;
 use DB;
 use Illuminate\Support\Carbon;
 
 class TopicController extends Controller{
+
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
+	
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		if(Session::get("db_type") == "ug"){
-			$topics = TopicUg::all();
-		} else {
-			$topics = TopicMasters::all();
-		}
+		$topics = Session::get("db_type") == "ug" ? TopicUg::all() : TopicMasters::all();
 		return view('topics.index', compact('topics'));
 	}
 

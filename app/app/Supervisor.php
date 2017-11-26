@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace SussexInformaticsProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -74,6 +74,14 @@ class Supervisor extends User{
 			$value->student_email = $student->email;
 		}
 		return $offers;
+	}
+
+	public function amountOfProjectsOnOffer(){
+		if(Session::get("db_type") == "ug"){
+			return ProjectUg::where('supervisor_id', $this->id)->count();
+		} else {
+			return ProjectMasters::where('supervisor_id', $this->id)->count();
+		}
 	}
 }
 

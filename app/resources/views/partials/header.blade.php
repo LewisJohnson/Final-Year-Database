@@ -6,9 +6,7 @@
 		<h1>Informatics Masters Projects</h1>
 	@endif
 	<a class="logout-button" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
-	<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-		{{ csrf_field() }}
-	</form>
+	<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 </header>
 
 
@@ -19,7 +17,7 @@
 				<button class="dropbtn">Browse</button>
 				<div class="dropdown-content">
 					<a href="/projects" title="">Projects</a>
-					<a href="/projects?sort=supervisor" title="">By Supervisor</a>
+					<a href="/projects/bySupervisor" title="">By Supervisor</a>
 					<a href="/topics" title="">Topics</a>
 			  </div>
 			</li>

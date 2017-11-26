@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace SussexInformaticsProjects\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -14,7 +14,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'Illuminate\Auth\Events\Login' => [
-            'App\Listeners\SuccessfulLogin',
+            'SussexInformaticsProjects\Listeners\SuccessfulLogin',
         ],
     ];
 

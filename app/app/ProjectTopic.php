@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace SussexInformaticsProjects;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Project;
-use App\Topic;
+use SussexInformaticsProjects\Project;
+use SussexInformaticsProjects\Topic;
 use Session;
 
 class ProjectTopic extends Model{

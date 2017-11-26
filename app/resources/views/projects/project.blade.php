@@ -18,7 +18,7 @@
 	<ul class="topics-list">
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
-				<li class="topic{!! ($topic->id == App\ProjectTopic::getProjectPrimaryTopicId($project)) ? ' primary first': '' !!}">
+				<li class="topic{!! ($topic->id == SussexInformaticsProjects\ProjectTopic::getProjectPrimaryTopicId($project)) ? ' primary first': '' !!}">
 					<a href="{{ action('TopicController@show', $topic) }}">{{$topic->name}}</a>
 				</li>
 			@endforeach

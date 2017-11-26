@@ -12,7 +12,7 @@
 <p>Deleting a topic will also remove it from any associated projects.</p>
 <ul class="edit-topic-list">
 @if(Session::get('db_type') == 'ug')
-	@foreach(App\TopicUg::get() as $topic)
+	@foreach(SussexInformaticsProjects\TopicUg::get() as $topic)
 		<li class="topic">
 			<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
 			<button class="button edit-topic" data-topic-id="{{ $topic->id }}" type="submit">Edit</button>
@@ -20,7 +20,7 @@
 		</li>
 	@endforeach
 @else
-	@foreach(App\TopicMasters::get() as $topic)
+	@foreach(SussexInformaticsProjects\TopicMasters::get() as $topic)
 		<li class="topic">
 			<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
 			<button class="button edit-topic" data-topic-id="{{ $topic->id }}" type="submit">Edit</button>

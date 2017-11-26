@@ -1,19 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
-use App\ProjectTopicMasters;
-use App\ProjectTopicUg;
-use App\TopicMasters;
-use App\TopicUg;
-use App\ProjectTopic;
-use App\Project;
-use App\Topic;
+use SussexInformaticsProjects\ProjectTopicMasters;
+use SussexInformaticsProjects\ProjectTopicUg;
+use SussexInformaticsProjects\TopicMasters;
+use SussexInformaticsProjects\TopicUg;
+use SussexInformaticsProjects\ProjectTopic;
+use SussexInformaticsProjects\Project;
+use SussexInformaticsProjects\Topic;
 use DB;
 use Session;
 use Illuminate\Support\Carbon;
-class ProjectTopicController extends Controller
-{
+class ProjectTopicController extends Controller{
+
+    public function __construct(){ 
+        $this->middleware('auth'); 
+    }
+    
 	public function index(ProjectTopic $projectTopic){
 		return ProjectTopic::find($projectTopic);
     }

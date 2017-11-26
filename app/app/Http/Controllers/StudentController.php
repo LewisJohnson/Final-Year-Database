@@ -1,21 +1,24 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\StudentUg;
-use App\StudentMasters;
-use App\ProjectUg;
-use App\ProjectMasters;
-use App\TransactionUg;
-use App\TransactionMasters;
+use SussexInformaticsProjects\StudentUg;
+use SussexInformaticsProjects\StudentMasters;
+use SussexInformaticsProjects\ProjectUg;
+use SussexInformaticsProjects\ProjectMasters;
+use SussexInformaticsProjects\TransactionUg;
+use SussexInformaticsProjects\TransactionMasters;
 use DB;
 use Session;
 use Auth;
 
-class StudentController extends Controller
-{
+class StudentController extends Controller{
+
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
+
 	/**
 	 * Show the form for editing the specified resource.
 	 *

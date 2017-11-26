@@ -1,11 +1,11 @@
 <?php
-namespace App;
+namespace SussexInformaticsProjects;
 
 class TopicUg extends Topic{
 	protected $table = 'topics_ug';
 
 	public function projects(){
-		return $this->belongsToMany('App\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
+		return $this->belongsToMany('SussexInformaticsProjects\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
 	}
 
 	public static function getDatalist(){

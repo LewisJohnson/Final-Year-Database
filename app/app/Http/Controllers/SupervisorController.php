@@ -1,19 +1,24 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace SussexInformaticsProjects\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\StudentUg;
-use App\StudentMasters;
-use App\TransactionUg;
-use App\TransactionMasters;
+use SussexInformaticsProjects\ProjectsUg;
+use SussexInformaticsProjects\ProjectsMasters;
+use SussexInformaticsProjects\StudentUg;
+use SussexInformaticsProjects\StudentMasters;
+use SussexInformaticsProjects\TransactionUg;
+use SussexInformaticsProjects\TransactionMasters;
 use Illuminate\Support\Carbon;
 use Session;
 use DB;
 use Auth;
 
 class SupervisorController extends Controller{
+
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
 
 	public function acceptStudent(Request $request){
 		try {
@@ -86,6 +91,7 @@ class SupervisorController extends Controller{
 			return 'false';
 		}
 	}
+
 	/**
 	 * Display a listing of the resource.
 	 *

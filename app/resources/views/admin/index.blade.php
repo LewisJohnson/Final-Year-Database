@@ -40,7 +40,6 @@
 				</ul>
 			</div>
 		</div>
-    
 
 		{{-- REPORTS --}}
 		<div class="section shadow-2dp">
@@ -76,7 +75,7 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.file')
-						<a href="/admin/students">Browse Transactions by Project</a>
+						<a href="/admin/transactions">Browse Transactions by Project</a>
 					</li>
 					<li>
 						@include('svg.clock')
@@ -84,7 +83,7 @@
 					</li>
 					<li>
 						@include('svg.archive')
-						<a href="/admin/parameters">End of Year Archive</a>
+						<a href="/admin/archive">End of Year Archive</a>
 					</li>
 				</ul>
 			</div>

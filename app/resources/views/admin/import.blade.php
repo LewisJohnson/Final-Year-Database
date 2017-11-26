@@ -40,7 +40,7 @@
 <input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
 <div id="editor"></div>
 <ul>
-	@foreach(App\User::Where('access_type', 'admin')->get() as $user)
+	@foreach(SussexInformaticsProjects\User::Where('access_type', 'admin')->get() as $user)
 		<li>
 			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
 		</li>
