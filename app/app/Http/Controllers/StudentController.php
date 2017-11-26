@@ -20,16 +20,6 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id){
-		return view("student.edit");
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -38,6 +28,14 @@ class StudentController extends Controller{
 	 */
 	public function update(Request $request, $id){
 		//
+	}
+
+	public function showProposeProject(){
+		return view("students.propose-project");
+	}
+
+	public function proposeProject(){
+
 	}
 
 	public function selectProject(Request $request){

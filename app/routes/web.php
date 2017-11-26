@@ -46,11 +46,9 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::patch('projects/{id}/edit/topic', 'ProjectTopicController@updatePrimaryTopic');
 
 	// Topic routes
-	Route::get('topics', 'TopicController@index');
 	Route::post('topics', 'TopicController@store');
 	Route::patch('topics/{id}', 'TopicController@update');
 	Route::delete('topics/{id}', 'TopicController@destroy');
-	Route::get('topics/{id}', 'TopicController@show');
 });
 
 Route::group(['middleware' => ['auth']], function() {
@@ -64,19 +62,23 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Student
 	Route::post('students', 'StudentController@store');
+	Route::get('students/proposeProject', 'StudentController@showProposeProject');
 	Route::patch('students/selectProject', 'StudentController@selectProject');
-	
+
 	// Project routes
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
 	
 	Route::get('projects/bySupervisor/', 'ProjectController@supervisors');
 	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
-	
+	Route::get('projects/byTopic/', 'TopicController@index');
+	Route::get('projects/byTopic/{id}', 'ProjectController@byTopic');
+
+	Route::get('/reports/supervisor', 'SupervisorController@report');
+
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');
 
 	// Topic routes
-	Route::get('topics', 'TopicController@index');
 	Route::post('authChange', 'Auth\AuthController@change');
 });

@@ -9,6 +9,10 @@ class TopicMasters extends Topic
 		return $this->belongsToMany(Project_Masters::class, 'project_topics_masters');
 	}
 
+	public function amountOfProjectsOnOffer(){
+		return ProjectTopicMasters::where('topic_ic', $this->id)->count();
+	}
+
 	public static function getDatalist(){
 		$topicNames = TopicMasters::pluck('name');
 

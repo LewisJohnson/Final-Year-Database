@@ -52,21 +52,6 @@ class TopicController extends Controller{
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		if(Session::get("db_type") == "ug"){
-			$topic = TopicUg::where('id', $id)->first();
-		} else {
-			$topic = TopicMasters::where('id', $id)->first();
-		}
-		return view('topics.topic', compact('topic'));
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -86,7 +71,7 @@ class TopicController extends Controller{
 			return 'true';
 		});
 
-        return 'false';
+		return 'false';
 	}
 
 	/**
@@ -96,16 +81,17 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id){
-        DB::transaction(function ($id) use ($id) {
-            if(Session::get("db_type") == "ug"){
-                ProjectTopicUg::where('topic_id', $id)->delete();
-                Topic::where('id', $id)->delete();
-            } else {
-                ProjectTopicMasters::where('topic_id', $id)->delete();
-                TopicMasters::where('id', $id)->delete();
-            }
-            return 'true';
-        });
+		DB::transaction(function ($id) use ($id) {
+
+			if(Session::get("db_type") == "ug"){
+				ProjectTopicUg::where('topic_id', $id)->delete();
+				Topic::where('id', $id)->delete();
+			} else {
+				ProjectTopicMasters::where('topic_id', $id)->delete();
+				TopicMasters::where('id', $id)->delete();
+			}
+			return 'true';
+		});
 
 		return 'false';
 	}

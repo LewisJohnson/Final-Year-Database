@@ -8,6 +8,10 @@ class TopicUg extends Topic{
 		return $this->belongsToMany('SussexInformaticsProjects\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
 	}
 
+	public function amountOfProjectsOnOffer(){
+		return ProjectTopicUg::where('topic_id', $this->id)->count();
+	}
+
 	public static function getDatalist(){
 		$topicNames = TopicUg::pluck('name');
 

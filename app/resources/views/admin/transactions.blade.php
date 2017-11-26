@@ -14,7 +14,7 @@
 		<th>Date</th>
 	</tr>
 	@foreach($transactions as $transaction)
-		<tr id="{{ $transaction->id }}">
+		<tr>
 			<td>{{ $transaction->id }}</td>
 			<td>{{ ucfirst($transaction->transaction_type) }}</td>
 			@if(Session::get("db_type") == "ug")

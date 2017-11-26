@@ -22,7 +22,7 @@
 		</div>
 		<div class="content">
 			<ul class="offers table-list table-list--margined table-list--checkbox">
-				@if (count($user->supervisor->getOffers()))
+				@if (count($user->supervisor->getProjectOffers()))
 					<li>
 						<div class="checkbox">
 							<input class="checkbox-input master-checkbox" id="offers" type="checkbox">
@@ -31,7 +31,7 @@
 						<h3>Name</h3>
 						<h3>Last Login</h3>
 					</li>
-					@foreach($user->supervisor->getOffers() as $project)
+					@foreach($user->supervisor->getProjectOffers() as $project)
 						<li class="offer">
 							<div class="checkbox">
 								<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
@@ -47,7 +47,7 @@
 				<li class="no-topics">You have no offers yet.</li>
 				@endif
 			</ul>
-			@if (count($user->supervisor->getOffers()))
+			@if (count($user->supervisor->getProjectOffers()))
 				<div class="button-group">
 					<button class="button button--raised" type="">Email Selected</button>
 					<button class="button button--raised" type="">Accept Selected</button>

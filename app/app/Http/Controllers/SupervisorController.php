@@ -3,6 +3,7 @@ namespace SussexInformaticsProjects\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use SussexInformaticsProjects\Supervisor;
 use SussexInformaticsProjects\ProjectsUg;
 use SussexInformaticsProjects\ProjectsMasters;
 use SussexInformaticsProjects\StudentUg;
@@ -90,6 +91,15 @@ class SupervisorController extends Controller{
 			session()->flash('message_type', 'danger');
 			return 'false';
 		}
+	}
+
+	public function report(){
+		if(Session::get("db_type") == "ug"){
+			$supervisors = Supervisor::all();
+		} else {
+			// $supervisors = StudentMasters::find?(request('student_id'))->first();
+		}
+		return view('supervisors.report')->with("supervisors", $supervisors);
 	}
 
 	/**

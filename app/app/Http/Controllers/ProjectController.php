@@ -5,8 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use SussexInformaticsProjects\ProjectTopicsUg;
+use SussexInformaticsProjects\ProjectTopicsMasters;
 use SussexInformaticsProjects\ProjectUg;
 use SussexInformaticsProjects\ProjectMasters;
+use SussexInformaticsProjects\TopicUg;
+use SussexInformaticsProjects\TopicMasters;
 use SussexInformaticsProjects\TransactionUg;
 use SussexInformaticsProjects\TransactionMasters;
 use SussexInformaticsProjects\Supervisor;
@@ -128,7 +132,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-        $project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
+		$project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
 		return view('projects.project', compact('project'));
 	}
 
@@ -139,7 +143,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id){
-        $project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
+		$project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
 		return view('projects.edit', compact('project'));
 	}
 
@@ -215,13 +219,35 @@ class ProjectController extends Controller{
 		} catch(ModelNotFoundException $err){
 			session()->flash('message', 'The project could not be deleted at this time.');
 			session()->flash('message_type', 'danger');
-        }
+		}
 
-        return 'false';
-    }
+		return 'false';
+	}
+
+	public function byTopic($id) {
+		if(Session::get("db_type") == "ug"){
+			$topic = TopicUg::where('id', $id)->first();
+			$projects = ProjectUg::
+				join('project_topics_ug', 'project_topics_ug.project_id', '=', 'projects_ug.id')
+				->where('project_topics_ug.topic_id', '=', $id)
+				->where('projects_ug.status', '=', 'on-offer')
+				->get();
+		} else {
+			$topic = TopicMasters::where('id', $id)->first();
+			$projects = ProjectMasters::
+				join('project_topics_masters', 'project_topics_masters.project_id', '=', 'projects_masters.id')
+				->where('project_topics_masters.topic_id', '=', $id)
+				->where('projects_masters.status', '=', 'on-offer')
+				->get();
+		}
+		return view('projects.index')
+			->with('projects', $projects)
+			->with('topic', $topic)
+			->with('view', 'topic');
+	}
 
 	/**
-	 * Display the projects with the supervisors.
+	 * Display the projects with by supervisors.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response

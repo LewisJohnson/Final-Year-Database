@@ -13,20 +13,27 @@
 <nav class="desktop">
 	<ul>
 		<li class="nav-button nav-button--desktop"><a href="/" title="">Home</a></li>
-			<li class="nav-button nav-button--desktop dropdown">
-				<button class="dropbtn">Browse</button>
-				<div class="dropdown-content">
-					<a href="/projects" title="">Projects</a>
-					<a href="/projects/bySupervisor" title="">By Supervisor</a>
-					<a href="/topics" title="">Topics</a>
-			  </div>
-			</li>
-			@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-				<li class="nav-button nav-button--desktop"><a href="/supervisor" title="">Supervisor</a></li>
-			@endif
-			@if(strpos(Session::get("auth_type"), 'admin') !== false)
-				<li class="nav-button nav-button--desktop"><a href="/admin" title="">Administrator</a></li>
-			@endif
+		<li class="nav-button nav-button--desktop dropdown">
+			<button class="dropbtn">Browse</button>
+			<div class="dropdown-content">
+				<a href="/projects" title="">Projects</a>
+				<a href="/projects/bySupervisor" title="">By Supervisor</a>
+				<a href="/projects/byTopic" title="">Topics</a>
+		  </div>
+		</li>
+		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
+			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="">Supervisor</a></li>
+		@endif
+		@if(strpos(Session::get("auth_type"), 'admin') !== false)
+			<li class="nav-button nav-button--desktop"><a href="/admin" title="">Administrator</a></li>
+		@endif
+		<li class="nav-button nav-button--desktop dropdown">
+		  <button class="dropbtn">Student</button>
+		  <div class="dropdown-content">
+			<a href="/students/proposeProject">Propose Project</a>
+			<a href="/reports/supervisor">Report by Supervisor</a>
+		  </div>
+		</li>
 		<li class="nav-button nav-button--desktop dropdown">
 		  <button class="dropbtn">Help</button>
 		  <div class="dropdown-content">

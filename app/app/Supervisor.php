@@ -22,7 +22,7 @@ class Supervisor extends User{
 		return $this->hasOne(User::class, 'id');
 	}
 
-	public function getOffers(){
+	public function getProjectOffers(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
 				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id')

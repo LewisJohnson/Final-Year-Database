@@ -7,6 +7,10 @@
 	<h3>Projects by {{ $supervisor_name }}</h3>
 @endif
 
+@if($view == "topic")
+	<h3>Projects with the topic "{{ $topic->name }}"</h3>
+@endif
+
 @if($view == "index")
 <form action="/search" method="get" accept-charset="utf-8">
 	<div class="search-container shadow-4dp">
