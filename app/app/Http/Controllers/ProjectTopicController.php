@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\ProjectTopicMasters;
+use App\ProjectTopicUg;
+use App\TopicMasters;
+use App\TopicUg;
 use App\ProjectTopic;
 use App\Project;
 use App\Topic;
-
+use DB;
+use Session;
+use Illuminate\Support\Carbon;
 class ProjectTopicController extends Controller
 {
 	public function index(ProjectTopic $projectTopic){
@@ -14,18 +19,22 @@ class ProjectTopicController extends Controller
     }
 
     public function store(Project $project){
-        $topic = Topic::where('name', request('topic'))->first();
+        if(Session::get("db_type") == "ug"){
+            $topic = TopicUg::where('name', request('topic'))->first();
+        } else {
+            $topic = TopicMasters::where('name', request('topic'))->first();
+        }
 
         // If topic isn't in topics, add it to DB
         if(count($topic) == 0){
-            $newTopic = new Topic;
-            $newTopic->name = Topic::getSluggedName(request('topic'));
+            $newTopic = Session::get("db_type") == "ug" ? new TopicUg : new TopicMasters;
+            $newTopic->name = request('topic');
             $newTopic->save();
             $topic = $newTopic;
         }
 
         // Validate data
-        $projectTopic = new ProjectTopic;
+        $projectTopic = Session::get("db_type") == "ug" ? new ProjectTopicUg : new ProjectTopicMasters;
         $projectTopic->topic_id = $topic->id;
         $projectTopic->project_id = $project->id;
         $projectTopic->save();
@@ -51,12 +60,22 @@ class ProjectTopicController extends Controller
     }
 
     public function destroy(Project $project){
-        // Destroy Topic
-        $topic = Topic::where('name', request('topic'))->first();
+        if(Session::get("db_type") == "ug"){
+            $topic = TopicUg::where('name', request('topic'))->first();
+            ProjectTopicUg::
+                where('project_id', $project->id)
+                ->where('topic_id', $topic->id)
+                ->delete();
+        } else {
+            $topic = TopicMasters::where('name', request('topic'))->first();
+            ProjectTopicMasters::
+                where('project_id', $project->id)
+                ->where('topic_id', $topic->id)
+                ->delete();
+        }
 
-        ProjectTopic::where('project_id', $project->id)->where('topic_id', $topic->id)->delete();
-        return $topic->name;
+        $topic->delete();
+        return 'true';
     }
-
 }
 

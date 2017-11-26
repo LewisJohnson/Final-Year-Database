@@ -7,7 +7,7 @@
 	 @if($user->student !== null)
 		<p><b>Status:</b> {{ $user->student->getStatusString() }}</p>
 
-		@if($user->student->project_status == 'selected' | $user->student->project_status == 'approved')
+		@if($user->student->project_status == 'selected' | $user->student->project_status == 'accepted')
 			@include ('partials.project-preview', array('project'=> $user->student->getProject()))
 		@endif
 	@endif 

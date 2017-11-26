@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,9 +11,9 @@ use App\TransactionUg;
 use App\TransactionMasters;
 use App\Supervisor;
 use Flash;
+use Illuminate\Support\Facades\Log;
 use Session;
 use DB;
-
 class ProjectController extends Controller
 {
 	/**
@@ -80,12 +79,14 @@ class ProjectController extends Controller
 			Log::error('Someone who is not a supervsior tried to create a project.');
 		}
 
-		DB::transaction(function () {
+		DB::transaction(function ($request) use ($request) {
 			// Creat project
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
+				$transaction = new TransactionUg;
 			} else {
 				$project = new ProjectMasters;
+				$transaction = new TransactionMasters;
 			}
 
 			$project->fill(array(
@@ -99,14 +100,6 @@ class ProjectController extends Controller
 			$project->author_programme = 'Computer Science';
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
-			session()->flash('message', 'Project "'.$project->title.'"" created.');
-
-			// create transaction
-			if(Session::get("db_type") == "ug"){
-				$transaction = new TransactionUg;
-			} else {
-				$transaction = new TransactionMasters;
-			}
 
 			$transaction->fill(array(
 				'transaction_type' =>'created',
@@ -116,10 +109,13 @@ class ProjectController extends Controller
 			));
 
 			$transaction->save();
-			// Redirect
-			return redirect()->action('ProjectController@show', ['project' => $project]);
-		});
 
+			// Redirect
+			session()->flash('message', '"'.$project->title.'" has been created.');
+			session()->flash('message_type', 'success');
+
+			return redirect()->action('ProjectController@show', $project);
+		});
 	}
 
 	/**
@@ -129,11 +125,7 @@ class ProjectController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		if(Session::get("db_type") == "ug"){
-			$project = ProjectUg::where('id', $id)->first();
-		} else {
-			$project = ProjectMasters::where('id', $id)->first();
-		}
+        $project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
 		return view('projects.project', compact('project'));
 	}
 
@@ -144,11 +136,7 @@ class ProjectController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id){
-		if(Session::get("db_type") == "ug"){
-			$project = ProjectUg::where('id', $id)->first();
-		} else {
-			$project = ProjectMasters::where('id', $id)->first();
-		}
+        $project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
 		return view('projects.edit', compact('project'));
 	}
 
@@ -160,17 +148,35 @@ class ProjectController extends Controller
 	 */
 	public function update($id) {
 		// todo: add form validation
+		// create transaction
 		try {
-			$project = Project::findOrFail($id);
-			$project->update(request(['title', 'description', 'skills']));
-			session()->flash('message', '"'.$project->title.'" has been updated.');
-			return redirect()->action('ProjectController@show', $project);
+			DB::Transaction(function($id) use ($id){
+				if(Session::get("db_type") == "ug"){
+					$project = ProjectUg::findOrFail($id);
+					$transaction = new TransactionUg;
+				} else {
+					$project = ProjectMasters::findOrFail($id);
+					$transaction = new TransactionMasters;
+				}
 
+				$project->update(request(['title', 'description', 'skills']));
+				$transaction->fill(array(
+					'transaction_type' =>'updated',
+					'project_id' => $project->id,
+					'supervisor_id' => Auth::user()->supervisor->id,
+					'transaction_date' => new Carbon
+				));
+				$transaction->save();
+				session()->flash('message', '"'.$project->title.'" has been updated.');
+				session()->flash('message_type', 'success');
+				return redirect()->action('ProjectController@show', $project);
+			});
 		} catch(ModelNotFoundException $err){
-			//Show error page
+			session()->flash('message', 'The project could not be created at this time.');
+			session()->flash('message_type', 'danger');
+			return redirect('/');
 		}
 	}
-
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -178,16 +184,38 @@ class ProjectController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id) {
-		// Get data
-		$project = Project::findOrFail($id);
-		$title = $project-> title;
-		Project::destroy($id);
+		try {
+			DB::Transaction(function($id) use ($id){
+				if(Session::get("db_type") == "ug"){
+					$transaction = new TransactionUg;
+					$project = ProjectUg::findOrFail($id);
+					$title = $project->title;
+					ProjectUg::destroy($id);
+				} else {
+					$project = ProjectMasters::findOrFail($id);
+					$transaction = new TransactionMasters;
+					$title = $project->title;
+					ProjectMasters::destroy($id);
+				}
+				
+				$transaction->fill(array(
+					'transaction_type' =>'deleted',
+					'project_id' => $id,
+					'supervisor_id' => Auth::user()->supervisor->id,
+					'transaction_date' => new Carbon
+				));
+				$transaction->save();
+				session()->flash('message', '"'.$title.'" has been deleted.');
+				session()->flash('message_type', 'danger');
+				return 'true';
+			});
+		} catch(ModelNotFoundException $err){
+			session()->flash('message', 'The project could not be deleted at this time.');
+			session()->flash('message_type', 'danger');
+        }
 
-		session()->flash('message', 'Project "'.$title.'" deleted.');
-
-		// Redirect
-		return 'done';
-	}
+        return 'false';
+    }
 
 	/**
 	 * Display the projects with the supervisors.

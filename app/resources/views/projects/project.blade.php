@@ -32,23 +32,18 @@
 		@endif
 	</ul>
 </div>
-<a class="button button--raised" href="javascript:history.back()">Back</a>
-</div>
-
-{{-- @if($user->isStudent())
+<a style="margin-right: 1rem;" class="button button--raised" href="javascript:history.back()">Back</a>
+@if($user->student != null)
 	@if($user->student->project_status == 'none')
-		<form action="{{ action('StudentController@selectProject', $user->student)}}" role="form" method="POST">
+		<form action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 			<input type="hidden" name="project_id" value="{{ $project->id }}">
-			<button>Select project</button>
+			<button class="button button--raised button--accent">Select project</button>
 		</form>
 	@else
-		<p>You have already selected/proposed a project.</p>
+		<p>You have already selected or proposed a project.</p>
 	@endif
-@endif --}}
-
-
+@endif
+</div>
 @endsection
-
-

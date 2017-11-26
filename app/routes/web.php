@@ -1,17 +1,18 @@
 <?php
 
 Route::group(['middleware' => ['web']], function() {
-
 	// Root Routes
-	Route::get('/', 'Index@index');
-	Route::get('information', 'Index@information');
-	Route::get('about', 'Index@about');
-	Route::get('help', 'Index@help');
+	Route::get('/', 'HomeController@index');
+	Route::get('index', 'HomeController@index');
+	Route::get('home', 'HomeController@index');
+	Route::get('information', 'HomeController@information');
+	Route::get('about', 'HomeController@about');
+	Route::get('help', 'HomeController@help');
 
 	// Login Routes
-    Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
-    Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
-    Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 });
 
 Route::group(['middleware' => ['Admin_Ug']], function() {
@@ -42,8 +43,6 @@ Route::group(['middleware' => ['Admin_Ug']], function() {
 	Route::patch('topics/{id}', 'TopicController@update');
 	Route::delete('topics/{id}', 'TopicController@destroy');
 	Route::get('topics/{id}', 'TopicController@show');
-
-
 });
 
 Route::group(['middleware' => ['auth']], function() {
@@ -52,10 +51,12 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
+	Route::post('supervisor/acceptStudent', 'SupervisorController@acceptStudent');
+	Route::post('supervisor/rejectStudent', 'SupervisorController@rejectStudent');
 
 	// Student
 	Route::post('students', 'StudentController@store');
-	Route::patch('students/{student}/selectProject', 'StudentController@selectProject');
+	Route::patch('students/selectProject', 'StudentController@selectProject');
 	
 	// Project routes
 	Route::get('projects', 'ProjectController@index');
@@ -68,4 +69,3 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::get('topics', 'TopicController@index');
 	Route::post('authChange', 'Auth\AuthController@change');
 });
-

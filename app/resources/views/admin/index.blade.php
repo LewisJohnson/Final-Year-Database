@@ -41,25 +41,6 @@
 			</div>
 		</div>
     
-    	{{-- SETTINGS --}}
-		<div class="section shadow-2dp">
-			<div class="header">
-				@include('svg.cog')
-				<h2>Settings</h2>
-			</div>
-			<div class="content">
-				<ul class="icon-list">
-					<li>
-						@include('svg.pencil')
-						<a href="/admin/topics">Edit Topics</a>
-					</li>
-					<li>
-						@include('svg.globe')
-						<a href="/admin/parameters">Change Global Parameters</a>
-					</li>
-				</ul>
-			</div>
-		</div>
 
 		{{-- REPORTS --}}
 		<div class="section shadow-2dp">
@@ -104,6 +85,26 @@
 					<li>
 						@include('svg.archive')
 						<a href="/admin/parameters">End of Year Archive</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+    	{{-- SETTINGS --}}
+		<div class="section shadow-2dp">
+			<div class="header">
+				@include('svg.cog')
+				<h2>Settings</h2>
+			</div>
+			<div class="content">
+				<ul class="icon-list">
+					<li>
+						@include('svg.pencil')
+						<a href="/admin/topics">Edit Topics</a>
+					</li>
+					<li>
+						@include('svg.globe')
+						<a href="/admin/parameters">Change Global Parameters</a>
 					</li>
 				</ul>
 			</div>

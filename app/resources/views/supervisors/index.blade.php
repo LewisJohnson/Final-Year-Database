@@ -14,8 +14,7 @@
 <div class="supervisor hub">
 	{{-- OFFERS --}}
 	
-		<a class="button button--raised button--accent" href="/projects/create">New Project</a>
-
+	<a class="button button--raised button--accent" href="/projects/create">New Project</a>
 	<div class="section section--full-width shadow-2dp">
 		<div class="header">
 			@include('svg.tag')
@@ -40,8 +39,8 @@
 							</div>
 							<a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a>
 							<a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a>
-							<button class="button button--success" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}" class="accept">Accept</button>
-							<button class="button button--danger" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}" class="reject">Reject</button>
+						<button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button>
+							<button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button>
 						</li>			
 					@endforeach
 				@else

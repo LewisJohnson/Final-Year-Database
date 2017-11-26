@@ -45,6 +45,17 @@ $(function() {
 		}
 	});
 
+	// Used for transactions
+	$('#show-raw-table-data').on('click', function() {
+		if($(this).prop('checked')){
+			$('table.full-detail').hide();
+			$('table.raw-detail').show();
+		} else {
+			$('table.full-detail').show();
+			$('table.raw-detail').hide();
+		}
+	});
+	
 	// NEW USER
 	$('#admin-form').hide();
 	$('#supervisor-form').hide();

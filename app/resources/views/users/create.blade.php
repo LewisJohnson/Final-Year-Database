@@ -70,7 +70,13 @@
 		</select>
 	</div>
 
+	{{-- STUDENT FORM --}}
 	<div id="student-form">
+		@if(Session::get('db_type') == 'ug')
+		<p>You are creating an undergraduate student.</p>
+		@else
+		<p>You are creating a masters student.</p>
+		@endif
 		<div class="form-field">
 			<label for="programme" class="hover-label">Programme</label>
 			<input id="programme" type="text" name="programme">
@@ -82,6 +88,7 @@
 		</div>
 	</div>
 
+	{{-- SUPERVISOR FORM --}}
 	<div id="supervisor-form">
 		<div class="form-field">
 			<label for="title" class="hover-label">Title</label>
@@ -104,6 +111,7 @@
 		</div>
 	</div>
 
+	{{-- ADMIN FORM --}}
 	<div id="admin-form">
 		<h2>ARE YOU SURE YOU WANT TO CREATE ANOTHER ADMINISTRATOR?</h2>
 	</div>

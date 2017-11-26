@@ -11,7 +11,7 @@
 		@yield('content')
 	</div>
 
-	@include ('partials.notification')
+	@include ('partials.message')
 	@include ('auth.login')
 	@include ('auth.change-auth')
 </body>
