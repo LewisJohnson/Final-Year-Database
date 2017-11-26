@@ -51,11 +51,11 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.account')
-						<a href="/admin/students">Summary Report - Students</a>
+						<a href="/summary/students">Summary Report - Students</a>
 					</li>
 					<li>
 						@include('svg.account')
-						<a href="/admin/parameters">Summary Report - Supervisor</a>
+						<a href="/summary/supervisors">Summary Report - Supervisor</a>
 					</li>
 				</ul>
 			</div>
