@@ -5,7 +5,7 @@
 	@else
 		<h1>Informatics Masters Projects</h1>
 	@endif
-	<a class="logout-button" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+	<a class="logout-button button button--raised" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
 	<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 </header>
 
@@ -19,7 +19,7 @@
 				<a href="/projects" title="">Projects</a>
 				<a href="/projects/bySupervisor" title="">By Supervisor</a>
 				<a href="/projects/byTopic" title="">Topics</a>
-		  </div>
+			</div>
 		</li>
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
 			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="">Supervisor</a></li>
@@ -28,20 +28,20 @@
 			<li class="nav-button nav-button--desktop"><a href="/admin" title="">Administrator</a></li>
 		@endif
 		<li class="nav-button nav-button--desktop dropdown">
-		  <button class="dropbtn">Student</button>
-		  <div class="dropdown-content">
+			<button class="dropbtn">Student</button>
+			<div class="dropdown-content">
 			<a href="/students/proposeProject">Propose Project</a>
 			<a href="/reports/supervisor">Report by Supervisor</a>
-		  </div>
+			</div>
 		</li>
 		<li class="nav-button nav-button--desktop dropdown">
-		  <button class="dropbtn">Help</button>
-		  <div class="dropdown-content">
+			<button class="dropbtn">Help</button>
+			<div class="dropdown-content">
 			<a href="/help">System Help</a>
 			<a href="/links">Links</a>
 			<a href="/information">General Information</a>
 			<a href="/about">About</a>
-		  </div>
+			</div>
 		</li>
 	</ul>
 </nav>
