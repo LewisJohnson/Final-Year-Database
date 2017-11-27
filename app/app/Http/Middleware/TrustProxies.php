@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects\Http\Middleware;
+namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Fideloper\Proxy\TrustProxies as Middleware;

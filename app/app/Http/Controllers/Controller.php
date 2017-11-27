@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

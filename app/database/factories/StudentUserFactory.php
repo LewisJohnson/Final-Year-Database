@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(SussexInformaticsProjects\User::class, function (Faker $faker) {
+$factory->define(SussexProjects\User::class, function (Faker $faker) {
 	$username = 
     $faker->randomLetter.
     $faker->randomLetter.

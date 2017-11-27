@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects\Http\Middleware;
+namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\TrimStrings as Middleware;
 

@@ -77,9 +77,30 @@ $(function() {
 		} else {
 			$('#admin-form').hide();
 		}
-
 	});
 
+	// STRINGS
+	$('#admin-form').hide();
+	$('#supervisor-form').hide();
+	$('#student-form').show();
+	$('#create-form-access-select').on('change', function(){
+		if($('#student-option').is(":selected")) {
+			$('#student-form').show();
+		} else {
+			$('#student-form').hide();
+		}
+
+		if($('#supervisor-option').is(":selected")) {
+			$('#supervisor-form').show();
+		} else {
+			$('#supervisor-form').hide();
+		}
+		if($('#admin-option').is(":selected")) {
+			$('#admin-form').show();
+		} else {
+			$('#admin-form').hide();
+		}
+	});
 });
 
 function addTopic(name) {

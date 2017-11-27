@@ -1,9 +1,9 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use SussexInformaticsProjects\User;
-use SussexInformaticsProjects\Supervisor;
+use SussexProjects\User;
+use SussexProjects\Supervisor;
 
 class AdminController extends Controller{
 	public function index(){

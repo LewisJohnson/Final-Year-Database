@@ -7,9 +7,9 @@
 @section ('content')
 
 @if(Session::get('db_type') == 'ug')
-	{!! SussexInformaticsProjects\TopicUg::getDatalist() !!}
+	{!! SussexProjects\TopicUg::getDatalist() !!}
 @else
-	{!! SussexInformaticsProjects\TopicMasters::getDatalist() !!}
+	{!! SussexProjects\TopicMasters::getDatalist() !!}
 @endif
 
 <div class="centered width-800">
@@ -42,9 +42,9 @@
 			<ul class="topics-list edit">
 				@foreach($project->topics as $topic)
 					@if(Session::get('db_type') == 'ug')
-					<li class="topic{!! ($topic->id == SussexInformaticsProjects\ProjectTopicUg::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
+					<li class="topic{!! ($topic->id == SussexProjects\ProjectTopicUg::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
 					@else
-					<li class="topic{!! ($topic->id == SussexInformaticsProjects\ProjectTopicMasters::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
+					<li class="topic{!! ($topic->id == SussexProjects\ProjectTopicMasters::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
 					@endif
 						<button type="button" class="topic-remove">X</button>
 						<p class="topic-name">{{$topic->name}}</p>

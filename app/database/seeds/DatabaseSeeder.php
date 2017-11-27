@@ -12,33 +12,33 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(){
 
-		// DB::table('users')->insert([
-		// 	'id' => 1,
-		// 	'first_name' => 'UG',
-		// 	'last_name' => 'Admin',
-		// 	'access_type' => "ug_administrator",
-		// 	'username' => 'ug_admin',
-		// 	'email' => 'ug_admin@susx.ac.uk',
-		// 	'password' => bcrypt('admin')
-		// ]);
+		DB::table('users')->insert([
+			'id' => 1,
+			'first_name' => 'UG',
+			'last_name' => 'Admin',
+			'access_type' => "ug_admin",
+			'username' => 'ug_admin',
+			'email' => 'ug_admin@susx.ac.uk',
+			'password' => bcrypt('admin')
+		]);
 
 
-		// DB::table('supervisors')->insert([
-		// 	'id' => 1,
-		// 	'title' => 'Prof.',
-		// 	'project_load_masters' => 5,
-		// 	'project_load_ug' => 3,
-		// 	'take_students_masters' => true,
-		// 	'accept_email_masters' => true,
-		// 	'take_students_ug' => true,
-		// 	'accept_email_ug' => true,
-		// ]);
+		DB::table('supervisors')->insert([
+			'id' => 1,
+			'title' => 'Prof.',
+			'project_load_masters' => 5,
+			'project_load_ug' => 3,
+			'take_students_masters' => true,
+			'accept_email_masters' => true,
+			'take_students_ug' => true,
+			'accept_email_ug' => true,
+		]);
 
 		// DB::table('users')->insert([
 		// 	 'id' => 2,
 		// 	 'first_name' => 'MSc',
 		// 	 'last_name' => 'Admin',
-		// 	 'access_type' => "masters_administrator",
+		// 	 'access_type' => "masters_admin",
 		// 	 'username' => 'msc_admin',
 		// 	 'email' => 'msc_admin@susx.ac.uk',
 		// 	 'password' => bcrypt('admin')
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
 
  		// factory(App\User::class, 300)->create();
 		// factory(App\Student::class, 300)->create();
-		factory(App\TopicUg::class, 10)->create();
+		// factory(App\TopicUg::class, 10)->create();
 		// factory(App\ProjectUg::class, 200)->create();
 		// factory(App\Supervisor::class, 5)->create();
 		

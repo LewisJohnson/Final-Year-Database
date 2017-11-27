@@ -1,11 +1,11 @@
 <?php
-namespace SussexInformaticsProjects;
+namespace SussexProjects;
 
 class TopicUg extends Topic{
 	protected $table = 'topics_ug';
 
 	public function projects(){
-		return $this->belongsToMany('SussexInformaticsProjects\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
+		return $this->belongsToMany('SussexProjects\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
 	}
 
 	public function amountOfProjectsOnOffer(){

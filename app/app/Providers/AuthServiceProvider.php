@@ -1,6 +1,6 @@
 <?php
 
-namespace SussexInformaticsProjects\Providers;
+namespace SussexProjects\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'SussexInformaticsProjects\Model' => 'SussexInformaticsProjects\Policies\ModelPolicy',
+        'SussexProjects\Model' => 'SussexProjects\Policies\ModelPolicy',
     ];
 
     /**

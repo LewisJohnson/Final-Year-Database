@@ -1,19 +1,19 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use SussexInformaticsProjects\ProjectTopicsUg;
-use SussexInformaticsProjects\ProjectTopicsMasters;
-use SussexInformaticsProjects\ProjectUg;
-use SussexInformaticsProjects\ProjectMasters;
-use SussexInformaticsProjects\TopicUg;
-use SussexInformaticsProjects\TopicMasters;
-use SussexInformaticsProjects\TransactionUg;
-use SussexInformaticsProjects\TransactionMasters;
-use SussexInformaticsProjects\Supervisor;
+use SussexProjects\ProjectTopicsUg;
+use SussexProjects\ProjectTopicsMasters;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectMasters;
+use SussexProjects\TopicUg;
+use SussexProjects\TopicMasters;
+use SussexProjects\TransactionUg;
+use SussexProjects\TransactionMasters;
+use SussexProjects\Supervisor;
 use Flash;
 use Illuminate\Support\Facades\Log;
 use Session;

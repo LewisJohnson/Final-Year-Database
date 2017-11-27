@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 

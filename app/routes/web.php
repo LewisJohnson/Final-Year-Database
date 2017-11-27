@@ -32,6 +32,9 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('/admin/archive', 'AdminController@archive');
 	Route::get('/admin/transactions', 'TransactionController@index');
 
+
+	Route::get('/system/strings', 'StringsController@edit');
+
 	// Route::get('/admin/transactions/projects', 'TransactionController@index');
 
 	Route::post('users', 'UserController@store');

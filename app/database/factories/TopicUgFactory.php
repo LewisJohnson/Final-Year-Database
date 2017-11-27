@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(SussexInformaticsProjects\TopicUg::class, function (Faker $faker) {
+$factory->define(SussexProjects\TopicUg::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->randomElement(
         	$array = array (

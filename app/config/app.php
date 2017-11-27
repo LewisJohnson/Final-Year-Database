@@ -171,11 +171,11 @@ return [
         /*
          * Application Service Providers...
          */
-        SussexInformaticsProjects\Providers\AppServiceProvider::class,
-        SussexInformaticsProjects\Providers\AuthServiceProvider::class,
-        // SussexInformaticsProjects\Providers\BroadcastServiceProvider::class,
-        SussexInformaticsProjects\Providers\EventServiceProvider::class,
-        SussexInformaticsProjects\Providers\RouteServiceProvider::class,
+        SussexProjects\Providers\AppServiceProvider::class,
+        SussexProjects\Providers\AuthServiceProvider::class,
+        // SussexProjects\Providers\BroadcastServiceProvider::class,
+        SussexProjects\Providers\EventServiceProvider::class,
+        SussexProjects\Providers\RouteServiceProvider::class,
 
     ],
 

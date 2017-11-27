@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects\Http\Middleware;
+namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Support\Facades\Auth;
 use Closure;

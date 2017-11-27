@@ -1,8 +1,8 @@
 <?php
 
-namespace SussexInformaticsProjects\Http\Controllers\Auth;
+namespace SussexProjects\Http\Controllers\Auth;
 
-use SussexInformaticsProjects\Http\Controllers\Controller;
+use SussexProjects\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
 use Auth;

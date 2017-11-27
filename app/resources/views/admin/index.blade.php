@@ -105,6 +105,10 @@
 						@include('svg.globe')
 						<a href="/admin/parameters">Change Global Parameters</a>
 					</li>
+					<li>
+						@include('svg.pencil')
+						<a href="/system/strings">Edit Language Strings</a>
+					</li>
 				</ul>
 			</div>
 		</div>

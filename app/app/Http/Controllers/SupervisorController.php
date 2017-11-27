@@ -1,15 +1,15 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use SussexInformaticsProjects\Supervisor;
-use SussexInformaticsProjects\ProjectsUg;
-use SussexInformaticsProjects\ProjectsMasters;
-use SussexInformaticsProjects\StudentUg;
-use SussexInformaticsProjects\StudentMasters;
-use SussexInformaticsProjects\TransactionUg;
-use SussexInformaticsProjects\TransactionMasters;
+use SussexProjects\Supervisor;
+use SussexProjects\ProjectsUg;
+use SussexProjects\ProjectsMasters;
+use SussexProjects\StudentUg;
+use SussexProjects\StudentMasters;
+use SussexProjects\TransactionUg;
+use SussexProjects\TransactionMasters;
 use Illuminate\Support\Carbon;
 use Session;
 use DB;

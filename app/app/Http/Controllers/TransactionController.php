@@ -1,9 +1,9 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Session;
-use SussexInformaticsProjects\TransactionUg;
-use SussexInformaticsProjects\TransactionMasters;
+use SussexProjects\TransactionUg;
+use SussexProjects\TransactionMasters;
 
 class TransactionController extends Controller{
 

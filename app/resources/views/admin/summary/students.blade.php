@@ -3,9 +3,9 @@
 
 <h1>Students</h1>
 @if(Session::get('db_type') == 'ug')
-	<p>There are a total of <b>{{ count(SussexInformaticsProjects\StudentUg::get()) }}</b> undergraduate students.</p>
+	<p>There are a total of <b>{{ count(SussexProjects\StudentUg::get()) }}</b> undergraduate students.</p>
 @else
-	<p>There are a total of <b>{{ count(SussexInformaticsProjects\StudentMasters::get()) }}</b> masters students.</p>
+	<p>There are a total of <b>{{ count(SussexProjects\StudentMasters::get()) }}</b> masters students.</p>
 @endif
 
 
@@ -30,11 +30,11 @@
 			<h3>Last Login</h3>
 		</li>
 		@if(Session::get('db_type') == 'ug')
-			@foreach(SussexInformaticsProjects\StudentUg::Where('project_status', $status)->get() as $student)
+			@foreach(SussexProjects\StudentUg::Where('project_status', $status)->get() as $student)
 				@include ('partials.student-edit', array('student'=> $student))
 			@endforeach
 		@else
-			@foreach(SussexInformaticsProjects\StudentMasters::Where('project_status', $status)->get() as $student)
+			@foreach(SussexProjects\StudentMasters::Where('project_status', $status)->get() as $student)
 				@include ('partials.student-edit', array('student'=> $student))
 			@endforeach
 		@endif

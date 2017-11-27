@@ -1,6 +1,6 @@
 <?php
 
-namespace SussexInformaticsProjects\Providers;
+namespace SussexProjects\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Broadcast;

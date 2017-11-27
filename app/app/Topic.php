@@ -1,14 +1,12 @@
 <?php
-
-namespace SussexInformaticsProjects;
+namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Topic extends Model
-{
-	public $timestamps = false;
-	protected $table = null;
+class Topic extends Model{
+	protected $timestamps = false;
 	protected $primaryKey = 'id';
+	protected $table = null;
 	protected $guarded = ['id'];
 	
 	/**

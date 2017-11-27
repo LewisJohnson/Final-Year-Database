@@ -1,9 +1,9 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
-use SussexInformaticsProjects\User;
-use SussexInformaticsProjects\StudentUg;
-use SussexInformaticsProjects\StudentMasters;
+use SussexProjects\User;
+use SussexProjects\StudentUg;
+use SussexProjects\StudentMasters;
 use Illuminate\Http\Request;
 use DB;
 use Session;
@@ -77,7 +77,7 @@ class UserController extends Controller{
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  \SussexInformaticsProjects\User  $user
+	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(User $user)
@@ -88,7 +88,7 @@ class UserController extends Controller{
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  \SussexInformaticsProjects\User  $user
+	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(User $user)
@@ -100,7 +100,7 @@ class UserController extends Controller{
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \SussexInformaticsProjects\User  $user
+	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, User $user)
@@ -111,7 +111,7 @@ class UserController extends Controller{
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  \SussexInformaticsProjects\User  $user
+	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(User $user)

@@ -1,14 +1,14 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use SussexInformaticsProjects\StudentUg;
-use SussexInformaticsProjects\StudentMasters;
-use SussexInformaticsProjects\ProjectUg;
-use SussexInformaticsProjects\ProjectMasters;
-use SussexInformaticsProjects\TransactionUg;
-use SussexInformaticsProjects\TransactionMasters;
+use SussexProjects\StudentUg;
+use SussexProjects\StudentMasters;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectMasters;
+use SussexProjects\TransactionUg;
+use SussexProjects\TransactionMasters;
 use DB;
 use Session;
 use Auth;

@@ -11,8 +11,7 @@ class CreateTransactionsTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up(){
 		Schema::create('transactions_ug', function (Blueprint $table) {
 			$table->increments('id');
 			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo']);
@@ -39,8 +38,8 @@ class CreateTransactionsTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::dropIfExists('transactions');
+	public function down(){
+		Schema::dropIfExists('transactions_ug');
+		Schema::dropIfExists('transactions_masters');
 	}
 }

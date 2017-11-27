@@ -1,6 +1,6 @@
 <?php
 
-namespace SussexInformaticsProjects\Listeners;
+namespace SussexProjects\Listeners;
 
 use Illuminate\Auth\Events\Login;
 use Illuminate\Queue\InteractsWithQueue;

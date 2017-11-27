@@ -22,7 +22,7 @@
             "database/factories"
         ],
         "psr-4": {
-            "SussexInformaticsProjects\\": "app/"
+            "SussexProjects\\": "app/"
         }
     },
     "autoload-dev": {

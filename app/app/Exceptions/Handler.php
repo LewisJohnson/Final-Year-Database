@@ -1,6 +1,6 @@
 <?php
 
-namespace SussexInformaticsProjects\Exceptions;
+namespace SussexProjects\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;

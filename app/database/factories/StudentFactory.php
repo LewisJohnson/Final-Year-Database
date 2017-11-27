@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 $autoIncrement = autoIncrement();
-$factory->define(SussexInformaticsProjects\Student::class, function (Faker $faker) use ($autoIncrement) {
+$factory->define(SussexProjects\Student::class, function (Faker $faker) use ($autoIncrement) {
 	$autoIncrement->next();
     return [
     	'id' => $autoIncrement->current(),

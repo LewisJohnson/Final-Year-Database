@@ -1,13 +1,13 @@
 <?php
-namespace SussexInformaticsProjects\Http\Controllers;
+namespace SussexProjects\Http\Controllers;
 
-use SussexInformaticsProjects\ProjectTopicMasters;
-use SussexInformaticsProjects\ProjectTopicUg;
+use SussexProjects\ProjectTopicMasters;
+use SussexProjects\ProjectTopicUg;
 use Illuminate\Http\Request;
-use SussexInformaticsProjects\Topic;
-use SussexInformaticsProjects\TopicUg;
-use SussexInformaticsProjects\TopicMasters;
-use SussexInformaticsProjects\ProjectTopic;
+use SussexProjects\Topic;
+use SussexProjects\TopicUg;
+use SussexProjects\TopicMasters;
+use SussexProjects\ProjectTopic;
 use Session;
 use DB;
 use Illuminate\Support\Carbon;

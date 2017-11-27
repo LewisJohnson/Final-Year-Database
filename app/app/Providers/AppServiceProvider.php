@@ -1,9 +1,11 @@
 <?php
 
-namespace SussexInformaticsProjects\Providers;
+namespace SussexProjects\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use SussexProjects\Strings;
+use Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(255);
+        Blade::directive('string', function ($expression) {
+            return "<?php echo SussexProjects\Strings::getString($expression) ?>";
+        });
     }
 
     /**

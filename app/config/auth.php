@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => SussexInformaticsProjects\User::class,
+            'model' => SussexProjects\User::class,
         ],
     ],
 

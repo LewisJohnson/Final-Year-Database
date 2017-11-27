@@ -1,5 +1,5 @@
 <?php
-namespace SussexInformaticsProjects;
+namespace SussexProjects;
 
 class StudentUg extends Student{
 	protected $table = 'students_ug';

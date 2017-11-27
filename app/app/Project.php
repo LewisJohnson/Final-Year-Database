@@ -1,6 +1,6 @@
 <?php
 
-namespace SussexInformaticsProjects;
+namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;

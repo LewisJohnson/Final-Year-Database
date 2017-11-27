@@ -79,7 +79,7 @@
 	{{-- We don't have any search results --}}
 	@else
 		@foreach($projects as $project)
-			@php ($primary_topic = SussexInformaticsProjects\ProjectTopic::getProjectPrimaryTopicName($project))
+			@php ($primary_topic = SussexProjects\ProjectTopic::getProjectPrimaryTopicName($project))
 			<li class="project{!! ($project->archived) ? ' archived': '' !!}">
 				<a style="flex-basis: 175px;" href="/topics/{{$primary_topic}}">{{ $primary_topic }}</a>
 				<a style="flex-basis: 300px; flex-grow: 1;" href="/projects/{{$project->id}}">{{ $project->title }}</a>
