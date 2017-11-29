@@ -13,6 +13,10 @@ class Mode extends Migration
 	 */
 	public function up()
 	{
+
+		Schema::create('mode_ug', function (Blueprint $table) {
+			$table->string('department_name')->unique();
+		});
 		Schema::create('mode_ug', function (Blueprint $table) {
 			$table->smallInteger('project_year')->unique();
 			$table->dateTime('start_date');

@@ -3,7 +3,6 @@
 <div class="centered width-1200">
 <h1>Language Strings</h1>
 
-
 @foreach ($strings as $string)
 <form action="" method="POST">
 	<div class="form-field">

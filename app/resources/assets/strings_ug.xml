@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resultset statement="YOUR SQL STATEMENTS TO GENERATE THIS XML FILE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<row>
+		<field name="key">homepage_main_header</field>
+		<field name="value">Informatics Final Year Projects</field>
+	</row>
+	<row>
+		<field name="key">homepage_introduction_header</field>
+		<field name="value">Overview</field>
+	</row>
+	<row>
+		<field name="key">homepage_introduction_body</field>
+		<field name="value">There is lots of useful information and advice about all aspects of the projects here for students and supervisors alike. Logging-in will allow browsing of sample projects at any time or full access during the project selection period..</field>
+	</row>
+	<row>
+		<field name="key">homepage_overview_header</field>
+		<field name="value">Overview</field>
+	</row>
+	<row>
+		<field name="key">homepage_overview_body</field>
+		<field name="value">The final year projects should be viewed as the culmination of the degree - it gives students a chance to demonstrate all they have learned. It will be the most demanding part of the undergraduate degree. It is very different from most other courses. Although students will be supervised, they are on their own to a large extent. The onus is on the student to define the problem boundaries, to investigate possible solutions, and to present the results verbally, in writing and (possibly) to demonstrate in action. There will be no formal lectures to attend. The teaching methods used will simply be fortnightly individual/small group meetings to discuss progress. The results of the project will be submitted in report form to be examined and students will be expected to give a presentation/demonstration of their work, which will also be examined.</field>
+	</row>
+</resultset>
+
+<!-- LOAD XML LOCAL INFILE 'C:/xampp/htdocs/Final-Year-Database/app/resources/assets/strings_ug.xml' 
+INTO TABLE strings_ug;  -->

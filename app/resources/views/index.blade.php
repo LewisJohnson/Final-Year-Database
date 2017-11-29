@@ -12,12 +12,11 @@
 		@endif
 	@endif 
 @else
-<h2>Welcome to the home of Final Year Projects in Informatics</h2>
-<p>There is lots of useful information and advice about all aspects of the projects here for students and supervisors alike. 
-Logging-in will allow browsing of sample projects at any time or full access during the project selection period. </p>
+<h2>@string("homepage_introduction_header")</h2>
+<p>@string("homepage_introduction_body")</p>
 
-<h2>Overview</h2>
-<p> @string("guest_overview_body") </p>
+<h2>@string("homepage_overview_header")</h2>
+<p> @string("homepage_overview_body") </p>
 @endif
 
 </div>

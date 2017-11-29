@@ -1,6 +1,6 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
-	<h1>Sussex Informatics Projects</h1>
+	<h1>@string("homepage_main_header")</h1>
 	<button class="login-button button button--raised">Login</button>
 </header>
 
@@ -27,7 +27,7 @@
 			<li class="hamburger-line hamburger-line--short"></li>
 		</ul>
 	</div>
-	<a href="/" title=""><h1>Sussex Informatics Projects</h1></a>
+	<a href="/" title=""><h1>@string("homepage_main_header")</h1></a>
 </header>
 
 <nav class="mobile" aria-hidden="true">

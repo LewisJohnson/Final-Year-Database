@@ -1,9 +1,9 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
 	@if(Session::get('db_type') == 'ug')
-		<h1>Informatics Final Year Projects</h1>
+		<h1>@string("homepage_main_header", "ug")</h1>
 	@else
-		<h1>Informatics Masters Projects</h1>
+		<h1>@string("homepage_main_header", "masters")</h1>
 	@endif
 	<a class="logout-button 
 	button button--raised" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>

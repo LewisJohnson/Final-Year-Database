@@ -12,13 +12,22 @@ class Strings extends Model{
 	
 	public static function getString($key, $authMode = null){
 		if($authMode == null){
-			return Strings::where('key', '=', $key)->pluck('value')->first();
+			$s = Strings::where('key', '=', $key)->pluck('value')->first();
 		} else{
 			if($authMode == "ug"){
-				return StringsUg::where('key', $key)->pluck('value')->first();
-			} else {
-				return StringsMasters::where('key', $key)->first();
+				$s = StringsUg::where('key', $key)->pluck('value')->first();
+			} else if($authMode == "masters") {
+				$s = StringsMasters::where('key', $key)->pluck('value')->first();
 			}
 		}
+
+		if($s == null){
+			// We don't want error messages if we are in production
+			if(App::isLocal()){
+				return "{# MISSING STRING \"".$key."\" #}";
+			}
+		}
+
+		return $s;
 	}
 }
