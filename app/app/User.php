@@ -56,6 +56,10 @@ class User extends Authenticatable
 		return false;
 	}
 
+	public function isStudent(){
+		return $this->student != null;
+	}
+	
 	public function student(){
 		if(Session::get("db_type") == "ug"){
 			return $this->hasOne(StudentUg::class, 'id');

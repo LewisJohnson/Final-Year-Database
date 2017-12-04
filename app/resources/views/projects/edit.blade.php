@@ -17,7 +17,7 @@
 <h1>You are editing "{{ $project->title }}".</h1>
 
 <div class="card card--margin-vertical">
-<form id="editProjectForm" role="form" method="POST" action="{{URL::to('/project/'.$project->id).'/edit' }}">
+<form id="editProjectForm" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}">
 	{{ csrf_field() }}
 	{{ method_field('PATCH') }}
 
@@ -38,20 +38,17 @@
 
 	<div class="form-field">
 		<label>Topics</label>
-		<div id="newTopicInputContainer" class="fake-input">
+		<div id="new-topic-input-container" class="fake-input">
 			<ul class="topics-list edit">
 				@foreach($project->topics as $topic)
-					@if(Session::get('db_type') == 'ug')
-					<li class="topic{!! ($topic->id == SussexProjects\ProjectTopicUg::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
-					@else
-					<li class="topic{!! ($topic->id == SussexProjects\ProjectTopicMasters::getProjectPrimaryTopicId($project)) ? ' first': '' !!}">
-					@endif
+					<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
 						<button type="button" class="topic-remove">X</button>
 						<p class="topic-name">{{$topic->name}}</p>
 					</li>
 				@endforeach
 				<input list="topicsDataList" style="border:none" type="text" name="name" id="addTopicInput">
 			</ul>
+			<div class="loader"></div>
 		</div>
 	</div>
 
@@ -60,6 +57,7 @@
 		<select name="status">
 			<option value="on-offer">On Offer</option>
 			<option value="withdrawn">Withdrawn</option>
+			<option value="archived">Archived</option>
 		</select>
 	</div>
 

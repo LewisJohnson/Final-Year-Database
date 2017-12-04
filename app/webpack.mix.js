@@ -18,7 +18,8 @@ mix.js('resources/assets/js/main.js', 'public/js')
 	.js('resources/assets/js/components/project-topics.js', 'public/js')
 	.js('resources/assets/js/components/supervisor.js', 'public/js')
 	.js('resources/assets/js/components/admin.js', 'public/js')
+	.js('resources/assets/js/components/data-table.js', 'public/js')
 	
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.browserSync({proxy: 'localhost:8000'});
+mix.browserSync({proxy: 'localhost:8000', notify: false});

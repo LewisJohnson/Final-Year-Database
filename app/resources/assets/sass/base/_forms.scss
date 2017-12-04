@@ -82,6 +82,8 @@ button{
 		color: #757575;
 		font-size: 16px;
 		display: inline-block;
+		margin-bottom: 0;
+		
 		&:before,
 		&:after {
 			content: "";

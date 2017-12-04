@@ -4,7 +4,7 @@ namespace SussexProjects;
 use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model{
-	protected $timestamps = false;
+	public $timestamps = false;
 	protected $primaryKey = 'id';
 	protected $table = null;
 	protected $guarded = ['id'];
@@ -17,8 +17,4 @@ class Topic extends Model{
 	protected $fillable = [
 		'name'
 	];
-
-	public function getRouteKeyName(){
-		return 'name';
-	}
 }

@@ -22,28 +22,62 @@ class Supervisor extends User{
 		return $this->hasOne(User::class, 'id');
 	}
 
+	public function getProjectsByStatus($status){
+		if(Session::get("db_type") == "ug"){
+			return ProjectUg::where("supervisor_id", $this->id)
+			->whereNull('student_id')
+			->where("status", "=", $status)
+			->get();
+		} else {
+			return ProjectMasters::where("supervisor_id", $this->id)
+			->whereNull('student_id')
+			->where("status", "=", $status)
+			->get();
+		}
+	}
+
+	public function getProjectsOrderByStatus(){
+		if(Session::get("db_type") == "ug"){
+			return ProjectUg::where("supervisor_id", $this->id)
+			->orderBy('status', 'asc')
+			->whereNull('student_id')
+			->get();
+		} else {
+			return ProjectMasters::where("supervisor_id", $this->id)
+			->orderBy('status', 'asc')
+			->whereNull('student_id')
+			->get();
+		}
+	}
 	public function getProjectOffers(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id')
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
-				->where('students_ug.project_status', '!=', 'accepted')
+				->where('projects_ug.status', '!=', 'student-proposed')
+				->where('students_ug.project_status', '=', 'selected')
 				->whereNotNull('students_ug.project_id')
 				->get();
 		} else {
 			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
-				->where('students_masters.project_status', '!=', 'accepted')
+				->where('projects_ug.status', '!=', 'student-proposed')
+				->where('students_masters.project_status', '=', 'selected')
 				->whereNotNull('students_masters.project_id')
 				->get();
 		}
 
 		foreach ($offers as $key => $value) {
 			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
-			$value->student_name = $student->first_name." ".$student->last_name;
+			//todo: show name if user is supervisor or admin.
+			if($value->student_share){
+				$value->student_name = $student->first_name." ".$student->last_name;
+			} else {
+				$value->student_name = "Hidden";
+			}
 			$value->student_email = $student->email;
 		}
 		return $offers;
@@ -52,7 +86,7 @@ class Supervisor extends User{
 	public function getAcceptedStudents(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id')
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('students_ug.project_status', '=', 'accepted')
@@ -60,7 +94,7 @@ class Supervisor extends User{
 				->get();
 		} else {
 			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('students_masters.project_status', '=', 'accepted')
@@ -70,18 +104,51 @@ class Supervisor extends User{
 
 		foreach ($offers as $key => $value) {
 			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
-			$value->student_name = $student->first_name." ".$student->last_name;
+			//todo: show name if user is supervisor or admin.
+			if($value->student_share){
+				$value->student_name = $student->first_name." ".$student->last_name;
+			} else {
+				$value->student_name = "Hidden";
+			}
 			$value->student_email = $student->email;
 		}
 		return $offers;
 	}
 
-	public function amountOfProjectsOnOffer(){
+	public function getStudentProposals(){
 		if(Session::get("db_type") == "ug"){
-			return ProjectUg::where('supervisor_id', $this->id)->count();
+			$studentProposedProjects = ProjectUg::
+				select('projects_ug.*', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
+				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
+				->where('projects_ug.supervisor_id', $this->id)
+				->where('projects_ug.status', '=', 'student-proposed')
+				->where('students_ug.project_status', '=', 'proposed')
+				->whereNotNull('students_ug.project_id')
+				->get();
 		} else {
-			return ProjectMasters::where('supervisor_id', $this->id)->count();
+			$studentProposedProjects = ProjectMasters::
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
+				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
+				->where('projects_masters.supervisor_id', $this->id)
+				->where('students_masters.project_status', '=', 'accepted')
+				->whereNotNull('students_masters.project_id')
+				->get();
 		}
+
+		foreach ($studentProposedProjects as $key => $value) {
+			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
+
+			//todo: show name if user is supervisor or admin.
+			if($value->student_share){
+				$value->student_name = $student->first_name." ".$student->last_name;
+			} else {
+				$value->student_name = "Hidden";
+			}
+
+			$value->student_email = $student->email;
+		}
+
+		return $studentProposedProjects;
 	}
 }
 

@@ -12,7 +12,8 @@
 @endif
 
 @if($view == "index")
-<form action="/search" method="get" accept-charset="utf-8">
+<form action="/projects/search" method="POST" accept-charset="utf-8">
+	 {{ csrf_field() }}
 	<div class="search-container shadow-4dp">
 		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm"  placeholder="Search...">
 		<button class="svg" type="submit">
@@ -29,26 +30,26 @@
 			<ul class="search-filter">
 				<li>
 					<div class="checkbox">
-						<input id="title" type="checkbox" checked>
-						<label for="title" name="title">Title</label>
+						<input id="title" name="title" type="checkbox" checked>
+						<label for="title">Title</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input id="description" type="checkbox" checked>
-						<label for="description" name="description">Description</label>
+						<input id="description" name="description" type="checkbox" checked>
+						<label for="description">Description</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input id="supervisor" type="checkbox" checked>
-						<label for="supervisor" name="supervisor">Supervisor</label>
+						<input id="skills" type="checkbox" name="skills" checked>
+						<label for="skills">Skills</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input id="topic" type="checkbox" checked>
-						<label for="topic" name="topic">Topics</label>
+						<input id="topic" type="checkbox"  name="topic" checked>
+						<label for="topic">Topics</label>
 					</div>
 				</li>
 			</ul>
@@ -57,39 +58,39 @@
 </form>
 @endif
 
-<ul class="table-list table-list--margined projects-list shadow-2dp">
-	<li class="project">
-		<h3 style="flex-basis: 175px">Topic</h3>
-		<h3 style="flex-basis: 300px; flex-grow: 1;">Project Title</h3>
-		<h3 class="skills" style="flex-basis: 535px; @if($view == "supervisor") text-align: left; @endif">Skills</h3>
-		@if($view != "supervisor")
-			<h3 class="supervisor">Supervisor</h3>
-		@endif
-	</li>
+{{-- We have search results--}}
+@if($view == "search")
+	<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
+@endif
 
-	{{-- We have search results--}}
-	@if(isset($results))
-		<p> We found <b>{{count($results)}}</b> projects with the term "<b> {{ $searchTerm }}</b>"</p>
-		@foreach($results as $project)
-			<li class="project">
-				<a href="/projects/{{$project->id}}">{{ $project->title }}</a>
-				<p class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</p>
-			</li>
-		@endforeach
-	{{-- We don't have any search results --}}
-	@else
-		@foreach($projects as $project)
-			@php ($primary_topic = SussexProjects\ProjectTopic::getProjectPrimaryTopicName($project))
-			<li class="project{!! ($project->archived) ? ' archived': '' !!}">
-				<a style="flex-basis: 175px;" href="/topics/{{$primary_topic}}">{{ $primary_topic }}</a>
-				<a style="flex-basis: 300px; flex-grow: 1;" href="/projects/{{$project->id}}">{{ $project->title }}</a>
-				<p class="skills" style="flex-basis: 500px; @if($view == "supervisor") text-align: left; @endif">{{ $project->skills }}</p>
-				@if($view != "supervisor")
-					<a href="projects/bySupervisor/{{ $project->getSupervisor()->id }}">{{ $project->getSupervisor()->user->getFullName() }}</a>
-				@endif
-			</li>
-		@endforeach
-	@endif
-</ul>
+<table class="data-table shadow-2dp">
+	<thead>
+		<tr>
+			<th>Topic</th>
+			<th>Project Title</th>
+			<th @if($view != "supervisor") class="mobile--hidden" @endif style="@if($view == "supervisor") text-align: left; @endif">Skills</th>
+			@if($view != "supervisor")
+				<th>Supervisor</th>
+			@endif
+		</tr>
+	</thead>
+
+	<tbody>
+	@foreach($projects as $project)
+		<tr class="pointer" onclick="window.location='{{ action('ProjectController@show', $project->id)}}';">
+			@if($project->getPrimaryTopic() != null)
+			<td><a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a></td>
+			@else
+			<td>No Topic</td>
+			@endif
+			<td>{{ $project->title }}</td>
+			<td @if($view != "supervisor") class="mobile--hidden" @endif style="@if($view == "supervisor") text-align: left; @endif">{{ $project->skills }}</td>
+			@if($view != "supervisor")
+				<td><a href="{{ action('ProjectController@bySupervisor', $project->supervisor->id) }}">{{ $project->supervisor->user->getFullName() }}</a></td>
+			@endif
+		</tr>
+	@endforeach
+	</tbody>
+</table>
 </div>
 @endsection

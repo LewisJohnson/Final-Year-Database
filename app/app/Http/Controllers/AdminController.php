@@ -10,25 +10,14 @@ class AdminController extends Controller{
 		return view('admin.index');
 	}
 
-	public function summaryStudents(){
-		return view('admin.summary.students');
-	}
-
-	public function summarySupervisors(){
-		return view('admin.summary.supervisors');
-	}
-
 	public function importStudents(){
 		return view('admin.import');
 	}
 
-	public function supervisors(){
-		return view('admin.supervisors');
-	}
-
-	public function supervisorArrangements($id){
-		$supervisor = Supervisor::where('id', $id)->first();
-		return view('admin.supervisor-arrangements')->with('supervisor', $supervisor);
+	public function supervisorArrangements(){
+		$supervisors = Supervisor::all();
+		return view('admin.arrangements')
+		->with('supervisors', $supervisors);;
 	}
 	
 	public function topics(){

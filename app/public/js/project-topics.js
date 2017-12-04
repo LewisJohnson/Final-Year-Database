@@ -86,26 +86,121 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 $(function () {
+	"use strict";
+
+	var ProjectTopics = function ProjectTopics() {};
+	window['ProjectTopics'] = ProjectTopics;
+
+	ProjectTopics.prototype.CssClasses_ = {
+		DATA_TABLE: 'data-table',
+		IS_SELECTED: 'is-selected'
+	};
+
+	ProjectTopics.prototype.Selectors_ = {
+		ADD_TOPIC_INPUT: '#addTopicInput',
+		NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container'
+	};
+
+	ProjectTopics.prototype.Keys_ = {
+		SPACE: 32,
+		ENTER: 13,
+		COMMA: 45
+	};
+
+	var projectTopics = new ProjectTopics();
+
+	ProjectTopics.prototype.functions = {
+		updateProjectPrimaryTopic: function updateProjectPrimaryTopic(projectId, topicId) {
+			$('.loader').show(0);
+			var ajaxUrl = "/projects/updatePrimaryTopic";
+			$.ajax({
+				type: "PATCH",
+				url: ajaxUrl,
+				data: {
+					topic_id: topicId,
+					project_id: projectId
+				}
+			}).done(function () {
+				$('.loader').hide(0);
+			});;
+		},
+
+		addTopicToProject: function addTopicToProject(projectId, topicName) {
+			$('.loader').show(0);
+			var ajaxUrl = "/projects/addTopic";
+			$.ajax({
+				type: "POST",
+				url: ajaxUrl,
+				data: {
+					topic_name: topicName,
+					project_id: projectId
+				},
+				success: function success(data) {
+					data = JSON.parse(data);
+					$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
+					$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+				}
+			}).done(function (data) {
+				$('body').append(data);
+				$('.loader').hide(0);
+			});
+		},
+
+		removeTopicFromProject: function removeTopicFromProject(projectId, topicId) {
+			$('.loader').show(0);
+			var ajaxUrl = "/projects/removeTopic";
+			$.ajax({
+				type: "DELETE",
+				url: ajaxUrl,
+				data: {
+					topic_id: topicId,
+					project_id: projectId
+				},
+				success: function success() {
+					$('.topics-list.edit li.topic').each(function (i, obj) {
+						if ($(this).data('topic-id') == topicId) {
+							$(this).remove();
+						}
+					});
+				}
+			}).done(function () {
+				$('.loader').hide(0);
+			});;
+		}
+	};
+
 	var swappable = new __WEBPACK_IMPORTED_MODULE_0__shopify_draggable__["Swappable"](document.querySelectorAll('ul'), {
 		draggable: '.topic'
 	});
 
-	// swappable.on('swappable:start', () => console.log('swappable:start'))
-	// swappable.on('swappable:swapped', () => console.log('swappable:swapped'));
-	swappable.on('swappable:stop', function () {});
+	swappable.on('swappable:swapped', function () {
+		var projectId = $('#editProjectForm').data('project-id');
+		projectTopics.functions.updateProjectPrimaryTopic(projectId, $(".topics-list.edit li:first-child").data('topic-id'));
+	});
 
-	$("#editProjectForm").submit(function (event) {
-		updatePrimaryTopicAjax($(".topics-list.edit li:first-child .topic-name").text());
+	// Add new topic
+	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function (e) {
+		if (e.which == projectTopics.Keys_.ENTER) {
+			var projectId = $("#editProjectForm").data('project-id');
+			projectTopics.functions.addTopicToProject(projectId, $(this).val());
+		}
+	});
+
+	// Remove topic
+	$('.topics-list.edit').on('click', '.topic .topic-remove', function () {
+		var projectId = $("#editProjectForm").data('project-id');
+		var topicId = $(this).parent('li').data('topic-id');
+		projectTopics.functions.removeTopicFromProject(projectId, topicId);
+	});
+
+	$("#editProjectForm").on('submit', function (e) {
+		e.preventDefault();
+	});
+
+	$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function () {
+		$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
 	});
 });
-
-function updatePrimaryTopicAjax(topic) {
-	$.ajax({
-		type: "PATCH",
-		url: "edit/topic",
-		data: { topic: topic }
-	});
-}
 
 /***/ }),
 /* 7 */

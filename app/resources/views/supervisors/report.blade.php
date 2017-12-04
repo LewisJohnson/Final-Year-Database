@@ -3,81 +3,86 @@
 
 <div class="centered width-1000">
 <h1>Report by Supervisor</h1>
-<h5>Some students may have their chosen project hidden.</h5>
+<h5>Some students may have their name hidden.</h5>
 <div style="overflow: auto;">
 
 
 @foreach($supervisors as $supervisor)
-	@php($iter = 0)
-	
-	<table class="shadow-2dp full-detail">
-		{{-- HEADER --}}
+@php($iter = 0)
+<table class="shadow-2dp full-detail">
+	{{-- HEADER --}}
+	<thead>
 		<tr>
 			<th>{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>
-			<th></th>
+			@if(Session::get("db_type") == "ug")
+			<th>@if($supervisor->take_students_ug)Open to offers @else Currently not accepting offers @endif</th>
+			@else
+			<th>@if($supervisor->take_students_masters)Open to offers @else Currently not accepting offers @endif</th>
+			@endif
 			<th></th>
 		</tr>
+	</thead>
 
-		{{-- SUPERVISOR PROJECTS --}}
-		@foreach($supervisor->user->projects as $project)
+	<tbody>
+	{{-- SUPERVISOR PROJECTS --}}
+	@foreach($supervisor->getProjectsByStatus('on-offer') as $project)
+		<tr>
+			<td>@if($iter == 0)Projects ({{count($supervisor->user->projects)}})@endif</td>
+			<td><a href="{{ action('ProjectController@show' ,$project->id) }}">{{ $project->title }}</a></td>
+			<td>{{ucfirst(str_replace('-', ' ', $project->status))}}</td>
+		</tr>
+		@php($iter++)
+	@endforeach
+	@php($iter = 0)
+
+	{{-- ACCEPTED STUDENTS --}}
+	@if(count($supervisor->getAcceptedStudents()) > 0)
+		@foreach($supervisor->getAcceptedStudents() as $project)
+				<tr>
+					<td>@if($iter == 0)Accepted projects ({{ count($supervisor->getAcceptedStudents()) }})@endif</td>
+					<td>{{ $project->title }}</td>
+					<td>{{ $project->student_name }}</td>
+				</tr>
+				@php($iter++)
+		@endforeach
+	@else
+		<tr>
+			<td>No accepted students.</td>
+			<td></td>
+			<td></td>
+		</tr>
+	@endif
+	@php($iter = 0)
+				
+	{{-- PROJECT OFFERS --}}
+	@if(count($supervisor->getProjectOffers()) > 0)
+		@foreach($supervisor->getProjectOffers() as $project)
 			<tr>
-				@if($iter == 0)
-				<td>Projects ({{count($supervisor->user->projects)}})</td>
-				@else
-				<td></td>
-				@endif
+				<td>@if($iter == 0)Awaiting Approval ({{count($supervisor->getProjectOffers())}})@endif</td>
 				<td>{{ $project->title }}</td>
-				<td>{{ $project->student }}</td>
+				<td>{{ $project->student_name }}</td>
 			</tr>
 			@php($iter++)
 		@endforeach
-		@php($iter = 0)
-
-		{{-- ACCEPTED STUDENTS --}}
-		@foreach($supervisor->user->projects as $project)
-			@foreach($project->getStudentsWithThisProjectAccepted() as $student)
-				<tr>
-					@if($iter == 0)
-						<td>Accepted projects ({{count($project->getStudentsWithThisProjectAccepted())}})</td>
-					@else
-						<td></td>
-					@endif
-					<td>{{ $project->title }}</td>
-					@if($student->share_project)
-						<td>{{ $student->user->getFullName() }}</td>
-					@else
-						<td>Hidden</td>
-					@endif
-				</tr>
-				@php($iter++)
-			@endforeach
-		@endforeach
-		@php($iter = 0)
-				
-		{{-- SELECTED STUDENTS --}}
-		@foreach($supervisor->user->projects as $project)
-			@foreach($project->getStudentsWithThisProjectSelected() as $student)
-				<tr>
-					@if($iter == 0)
-						<td>Awaiting Approval ({{count($supervisor->getProjectOffers())}})</td>
-					@else
-						<td></td>
-					@endif
-					<td>{{ $project->title }}</td>
-					@if($student->share_project)
-						<td>{{ $student->user->getFullName() }}</td>
-					@else
-						<td>Hidden</td>
-					@endif
-				</tr>
-				@php($iter++)
-			@endforeach
-		@endforeach
+	@else
 		<tr>
-			<td>Student Proposals</td>
-			<td> </td>
-			<td> </td>
+			<td>No arrangements to be decided.</td>
+			<td></td>
+			<td></td>
 		</tr>
+	@endif
+	@php($iter = 0)
+
+	@foreach($supervisor->getStudentProposals() as $project)
+		<tr>
+			<td>@if($iter == 0)Student Proposals ({{count($supervisor->getStudentProposals())}})@endif</td>
+			<td>{{ $project->title }}</td>
+			<td>{{ $project->student_name }}</td>
+		</tr>
+		@php($iter++)
 	@endforeach
+
+@endforeach
+</tbody>
 </div>
 @endsection

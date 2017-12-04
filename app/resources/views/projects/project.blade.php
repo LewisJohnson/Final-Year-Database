@@ -9,17 +9,25 @@
 
 <div class="card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}">
 	<h1 class="title">{{ $project->title }}</h1>
-	<h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2>
+
+	@if($view == "StudentProject")
+		<h2 class="supervisor">Proposed by {{ $student_name }} to {{ $project->supervisor->user->getFullName() }}</h2>
+	@else
+		<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
+	@endif
+
 	<h3>Description</h3>
 	<p>{{ $project->description }}</p>
+
 	<h3>Skills</h3>
 	<p>{{ $project->skills }}</p>
+
 	<h3>Topics</h3>
 	<ul class="topics-list">
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
-				<li class="topic{!! ($topic->id == SussexProjects\ProjectTopic::getProjectPrimaryTopicId($project)) ? ' primary first': '' !!}">
-					<a href="{{ action('TopicController@show', $topic) }}">{{$topic->name}}</a>
+				<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<p>{{$topic->name}}</p>
 				</li>
 			@endforeach
 		@else
@@ -33,6 +41,8 @@
 	</ul>
 </div>
 <a style="margin-right: 1rem;" class="button button--raised" href="javascript:history.back()">Back</a>
+
+{{-- STUDENT SELECT --}}
 @if($user->student != null)
 	@if($user->student->project_status == 'none')
 		<form action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
@@ -45,5 +55,6 @@
 		<p>You have already selected or proposed a project.</p>
 	@endif
 @endif
+
 </div>
 @endsection

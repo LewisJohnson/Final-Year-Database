@@ -5,7 +5,7 @@ class TopicUg extends Topic{
 	protected $table = 'topics_ug';
 
 	public function projects(){
-		return $this->belongsToMany('SussexProjects\ProjectUg', 'project_topics_ug', 'project_id', 'topic_id');
+		return $this->belongsToMany(ProjectUg::class, 'project_topics_ug', 'project_id', 'topic_id')->withPivot('primary');
 	}
 
 	public function amountOfProjectsOnOffer(){

@@ -22,44 +22,33 @@ class SupervisorController extends Controller{
 	}
 
 	public function acceptStudent(Request $request){
-		try {
-			DB::transaction(function ($request) use ($request) {
-				if(Session::get("db_type") == "ug"){
-					$student = StudentUg::find(request('student_id'))->first();
-					$transaction = new TransactionUg;
-				} else {
-					$student = StudentMasters::find(request('student_id'))->first();
-					$transaction = new TransactionMasters;
-				}
+		$result = DB::transaction(function ($request) use ($request) {
+			if(Session::get("db_type") == "ug"){
+				$student = StudentUg::find(request('student_id'))->first();
+				$transaction = new TransactionUg;
+			} else {
+				$student = StudentMasters::find(request('student_id'))->first();
+				$transaction = new TransactionMasters;
+			}
 
-				$student->project_status = 'accepted';
-				$student->save();
+			$student->project_status = 'accepted';
+			$student->save();
 
-				$transaction->fill(array(
-					'transaction_type' =>'accepted',
-					'project_id' => $student->project_id,
-					'student_id' => $student->id,
-					'supervisor_id' => Auth::user()->supervisor->id,
-					'transaction_date' => new Carbon
-				));
-				$transaction->save();
+			$transaction->fill(array(
+				'transaction_type' =>'accepted',
+				'project_id' => $student->project_id,
+				'student_id' => $student->id,
+				'supervisor_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+			$transaction->save();
+		});
 
-				session()->flash('message', ($student->id . 'has been accepted.'));
-				session()->flash('message_type', 'success');
-
-				return 'true';
-			});
-		} catch(ModelNotFoundException $err){
-			session()->flash('message', 'There was a problem accepting the student.');
-			session()->flash('message_type', 'danger');
-			return 'false';
-		}
+		return $result;
 	}
 
 	public function rejectStudent(Request $request){
-
-		try {
-			DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::find(request('student_id'))->first();
 				$transaction = new TransactionUg;
@@ -83,22 +72,13 @@ class SupervisorController extends Controller{
 
 			session()->flash('message', ($student->id . 'has been rejected.'));
 			session()->flash('message_type', 'success');
-
-			return 'true';
-			});
-		} catch(ModelNotFoundException $err){
-			session()->flash('message', 'There was a problem rejecting the student.');
-			session()->flash('message_type', 'danger');
-			return 'false';
-		}
+		});
+		
+		return $result;
 	}
 
 	public function report(){
-		if(Session::get("db_type") == "ug"){
-			$supervisors = Supervisor::all();
-		} else {
-			// $supervisors = StudentMasters::find?(request('student_id'))->first();
-		}
+		$supervisors = Supervisor::all();
 		return view('supervisors.report')->with("supervisors", $supervisors);
 	}
 

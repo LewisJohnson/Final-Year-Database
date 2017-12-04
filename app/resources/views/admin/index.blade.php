@@ -31,7 +31,7 @@
 					</li>
 					<li>
 						@include('svg.account-settings')
-						<a href="/admin/supervisors">Edit Supervisors Arrangements</a>
+						<a href="/admin/arrangements">Edit Supervisors Arrangements</a>
 					</li>
 					<li>
 						@include('svg.login')
@@ -51,11 +51,11 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.account')
-						<a href="/admin/summary/students">Summary Report - Students</a>
+						<a href="/reports/students">Summary Report - Students</a>
 					</li>
 					<li>
 						@include('svg.account')
-						<a href="/admin/summary/supervisors">Summary Report - Supervisor</a>
+						<a href="/reports/supervisors">Summary Report - Supervisor</a>
 					</li>
 				</ul>
 			</div>
@@ -75,7 +75,7 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.file')
-						<a href="/admin/transactions">Browse Transactions by Project</a>
+						<a href="/admin/transactions/byProject">Browse Transactions by Project</a>
 					</li>
 					<li>
 						@include('svg.clock')

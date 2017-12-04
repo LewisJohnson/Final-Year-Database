@@ -1,8 +1,7 @@
 <?php
 namespace SussexProjects;
 
-class TopicMasters extends Topic
-{
+class TopicMasters extends Topic{
 	protected $table = 'topics_masters';
 
 	public function projects(){

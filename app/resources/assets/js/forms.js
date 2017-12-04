@@ -1,130 +1,81 @@
 $(function() { 
+"use strict";
+var AjaxFunctions =  function AjaxFunctions() {};
+window['AjaxFunctions'] = AjaxFunctions;
 
-	// Makes primary topic first
-	$(".topics-list").prepend($(".first"));
+AjaxFunctions.prototype.CssClasses_ = {
+	DATA_TABLE: 'data-table',
+	IS_SELECTED: 'is-selected'
+};
 
-	// Project Edit
-	var addTopicInput = $("#addTopicInput");
+AjaxFunctions.prototype.Selectors_ = {
+	SEARCH_INPUT: '.search-input',
+	SEARCH_CONTAINER: '.search-container',
+	SEARCH_FILTER_CONTAINER: '.search-filter-container',
+	SEARCH_FILTER_BUTTON: '#search-filter-button',
+	LOG_IN_DIALOG: '.login.dialog',
+	CHANGE_AUTH_DIALOG: '.change-auth.dialog'
+};
 
+AjaxFunctions.prototype.Keys_ = {
+	SPACE: 32,
+	ENTER: 13,
+	COMMA: 45
+};
 
-	// LISTENERS
-	addTopicInput.keypress(function(e) {
-		if (e.which == 32) {
-			addTopicAjax(addTopicInput.val());
-		}
-	});
-
-	$('.topics-list.edit').on('click', '.topic .topic-remove', function(){
-		var topicName = $(this).next().text();
-		removeTopicAjax(topicName);
-	});
-
-	$('#newTopicInputContainer').on('click', function() { 
-		addTopicInput.focus(); 
-	});
-
-	$('.master-checkbox').on('click', function() { 
-		$(this).parent().parent().siblings().find(':checkbox').attr('checked', this.checked);
-	});
-
-	$('#deleteProjectButton').on('click', function() { 
-		deleteProjectAjax($('#title').val());
-	});
-
-	$('#search-filter-button').on('click', function() {
-		var container = $('.search-filter-container');
-		if(container.hasClass('active')){
-			$('.search-filter-container').removeClass('active');
-			$('#search-filter-button').removeClass('active');
-		} else{
-			$('.search-filter-container').addClass('active');
-			$('#search-filter-button').addClass('active');
-		}
-	});
-
-	$('.search-input').on('focus',  function(e){
-		$('.search-container').removeClass (function (index, className) {
-			return (className.match (/\bshadow\-\S+/g) || []).join(' ');
-		});
-		$('.search-container').addClass('shadow-focus');
-	});
-
-	$('.search-input').on('focusout',  function(e){
-		$('.search-container').removeClass (function (index, className) {
-			return (className.match (/\bshadow\-\S+/g) || []).join(' ');
-		});
-		$('.search-container').addClass('shadow-2dp');
-	});
-});
-
-$("#loginForm").on('submit', function(e){
-    e.preventDefault();
-
-    $('.help-block', '#loginForm').css("display", "none");
-    $('.form-field', this).css("display", "none");
-	$('#login-loader').css("display", "block");
-
-    $.ajax({
-        url: $(this).attr('action'),
-        type:'POST',
-        data: $(this).serialize(),
-        success:function(data){
-        	$('#login-loader').css("display", "none");
-        	$('#loginForm').append(data);
-        },
-        error: function (data) {
-        	$('.help-block', '#loginForm').css("display", "block");
-        	$('.help-block', '#loginForm').text(data["responseJSON"]["errors"]["username"][0]);
-            
-            $('.form-field', '#loginForm').css("display", "block");
-            $('.form-field', '#loginForm').addClass("has-error");
-            
-            $('#login-loader').css("display", "none");
-        }
-    });
-});
-
-function addTopicAjax(topic) {
-	$.ajax({
-		type: "PUT",
-		url: "/topic",
-		data: {topic : topic},
-		success: function(newTopicName){
-			$("#addTopicInput").val('');
-			$(".topics-list.edit li.topic:last").after('<li class="topic"><button type="button" class="topic-remove">X</button><p class="topic-name">' + newTopicName + '</p></li>');
-		}
-	}).done(function(){
-		$('.loader').css("display", "none");
-	});
-}
-
-function removeTopicAjax(topic) {
-	$.ajax({
-		type: "DELETE",
-		url: "edit/topic",
-		data: {topic : topic},
-		success: function(oldTopicName){
-			$('.topics-list.edit li.topic').each(function(i, obj) {
-				if($(this).find(".topic-name").text() == oldTopicName){
-					$(this).remove();
-					return;
+AjaxFunctions.prototype.functions = {
+	deleteProject: function (projectName) {
+		if(confirm("Are you sure you want to delete \"" + projectName +"\"?")){
+			$.ajax({
+				type: "DELETE",
+				url: "edit",
+				success: function(url){
+					window.location.href = "../";
 				}
 			});
-		},
+		}
+		else{
+			return false;
+		}
+	}
+}
+
+var ajax = new AjaxFunctions();
+
+function removeAllShadowClasses(element){
+	$(element).removeClass (function (index, className) {
+		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
 	});
 }
 
-function deleteProjectAjax(projectName) {
-	if(confirm("Are you sure you want to delete \"" + projectName +"\"?")){
-		$.ajax({
-			type: "DELETE",
-			url: "edit",
-			success: function(url){
-				window.location.href = "../";
-			}
-		});
+// PROJECT PAGE
+$(ajax.Selectors_.SEARCH_INPUT).on('focus',  function(e){
+	removeAllShadowClasses(ajax.Selectors_.SEARCH_CONTAINER);
+	$(ajax.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
+});
+
+$(ajax.Selectors_.SEARCH_INPUT).on('focusout',  function(e){
+	removeAllShadowClasses(ajax.Selectors_.SEARCH_CONTAINER);
+	$(ajax.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
+});
+
+// Makes primary topic first
+$(".topics-list").prepend($(".first"));
+
+// SUPERVISOR
+$('#deleteProjectButton').on('click', function() { Ajax.deleteProject($('#title').val()); });
+
+// SEARCH
+$(ajax.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
+	var container = $(ajax.Selectors_.SEARCH_FILTER_CONTAINER);
+	var filterButton = $(this);
+
+	if(container.hasClass('active')){
+		container.removeClass('active');
+		filterButton.removeClass('active');
+	} else{
+		container.addClass('active');
+		filterButton.addClass('active');
 	}
-	else{
-		return false;
-	}
-}
+});
+});

@@ -1,4 +1,4 @@
-<div class="login dialog">
+<div id="login-dialog" class="login dialog">
 <div class="underlay">
 </div>
 <div class="content">
@@ -20,9 +20,8 @@
 
 		<div class="form-field">
 			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-				</label>
+				<input id="remember" name="title" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
+				<label for="remember">Remember Me</label>
 			</div>
 		</div>
 

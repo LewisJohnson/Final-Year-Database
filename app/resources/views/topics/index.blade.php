@@ -3,21 +3,23 @@
 <div class="centered width-800">
 <h1>Topics</h1>
 <h3>Select a topic to browse projects.</h3>
-<ul class="table-list table-list--margined shadow-2dp">
-	<li>
-		<h3>Topic</h3>
-		<h3>Available Projects</h3>
-	</li>
+<table class="data-table shadow-2dp">
+	<thead>
+		<tr>
+			<th>Topic</th>
+			<th>Projects</th>
+		</tr>
+	</thead>
+	<tbody>
 	@foreach($topics as $topic)
 	@if($topic->amountOfProjectsOnOffer() > 0)
-		<li style="padding: 0;">
-			<a style="display: flex; width: 100%; padding: 10px;" href="{{ action('ProjectController@byTopic', $topic->id)}}">
-				<p>{{ $topic->name }}</p>
-				<p style="margin: auto; margin-right: 0;">{{ $topic->amountOfProjectsOnOffer() }}</p>
-			</a>
-		</li>
+		<tr class="pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}';">
+			<td>{{ $topic->name }}</td>
+			<td>{{ $topic->amountOfProjectsOnOffer() }}</td>
+		</tr>
 	@endif
 	@endforeach
-</ul>
+</tbody>
+</table>
 </div>
 @endsection

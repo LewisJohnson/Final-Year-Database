@@ -4,21 +4,23 @@
 <h1>Supervisors</h1>
 <h3>Select a supervisor to see their projects.</h3>
 
-<ul class="table-list table-list--margined shadow-2dp">
-	<li>
-		<h3 style="flex-basis: 175px">Supervisor</h3>
-		<h3 style="flex-basis: 300px; flex-grow: 1;">Available Projects</h3>
-	</li>
+<table class="data-table shadow-2dp">
+	<thead>
+		<tr>
+			<th>Supervisor</th>
+			<th>Projects</th>
+		</tr>
+	</thead>
+	<tbody>
 	@foreach($supervisors as $supervisor)
-		@if($supervisor->amountOfProjectsOnOffer() > 0)
-		<li style="padding: 0;">
-			<a style="display: flex; width: 100%; padding: 10px;" href="{{ action('ProjectController@bySupervisor', $supervisor->id)}}">
-				<p>{{ $supervisor->user->getFullName() }}</p>
-				<p style="margin: auto; margin-right: 0;">{{ $supervisor->amountOfProjectsOnOffer() }}</p>
-			</a>
-		</li>
+		@if(count($supervisor->getProjectsByStatus('on-offer')) > 0)
+		<tr class="pointer" onclick="window.location='{{ action('ProjectController@bySupervisor', $supervisor->id)}}';">
+			<td>{{ $supervisor->user->getFullName() }}</td>
+			<td>{{ count($supervisor->getProjectsByStatus('on-offer')) }}</td>
+		</tr>
 		@endif
 	@endforeach
-</ul>
+	</tbody>
+</table>
 </div>
 @endsection

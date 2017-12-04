@@ -1,4 +1,4 @@
-<div class="change-auth dialog">
+<div id="change-auth-dialog" class="change-auth dialog">
 <div class="underlay">
 </div>
 <div class="content">
@@ -15,7 +15,6 @@
 				<option value="masters_supervisor">Masters Supervisor</option>
 			</select>
 		</div>
-
 		<div class="form-field">
 			<button class="submit" type="submit">Change</button>
 		</div>

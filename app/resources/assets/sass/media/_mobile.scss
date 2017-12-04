@@ -28,11 +28,11 @@
 		}
 	}
 
-	.projects-list{
-		.skills{
-			display: none;
-		}
+	.mobile--hidden{
+		visibility: hidden;
+		display: none;
 	}
+	
 
 	#header.mobile{
 		display: flex;
@@ -48,5 +48,33 @@
 
 	nav.desktop{
 		display: none;
+	}
+
+	// SEARCH
+
+	.search-filter-container.active{
+		max-height: 170px;
+	}
+
+	.search-filter{
+
+		li{
+			display: block;
+			margin: 0 0 1rem 0;
+		}
+	}
+
+	// TABLE
+	th, td{
+		padding: 8px;
+	}
+
+	td:first-of-type, th:first-of-type{
+		padding-left: 8px;
+	}
+
+	td:last-of-type, th:last-of-type{
+		padding-right: 8px;
+		text-align: right;
 	}
 }
