@@ -30,7 +30,7 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function ($request) use ($request) {
 			$user = User::create([
 				'username' => $request['username'],
 				'first_name' => $request['first_name'],

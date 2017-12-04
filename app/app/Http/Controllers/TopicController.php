@@ -36,7 +36,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = new TopicUg;
 			} else {
@@ -49,6 +49,8 @@ class TopicController extends Controller{
 			$topic->save();
 			return $topic;
 		});
+		
+		return $result;
 	}
 
 	/**
@@ -59,8 +61,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, $id){
-
-		DB::transaction(function ($request, $id) use ($request, $id) {
+		$result = DB::transaction(function ($request, $id) use ($request, $id) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::where('id', $id)->first();
 			} else {
@@ -68,10 +69,9 @@ class TopicController extends Controller{
 			}
 			$topic->name = request('name');
 			$topic->save();
-			return 'true';
 		});
 
-		return 'false';
+		return $result;
 	}
 
 	/**
@@ -81,8 +81,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id){
-		DB::transaction(function ($id) use ($id) {
-
+		$result =  DB::transaction(function ($id) use ($id) {
 			if(Session::get("db_type") == "ug"){
 				ProjectTopicUg::where('topic_id', $id)->delete();
 				Topic::where('id', $id)->delete();
@@ -90,9 +89,8 @@ class TopicController extends Controller{
 				ProjectTopicMasters::where('topic_id', $id)->delete();
 				TopicMasters::where('id', $id)->delete();
 			}
-			return 'true';
 		});
 
-		return 'false';
+		return $result;
 	}
 }
