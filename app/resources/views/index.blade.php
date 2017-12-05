@@ -26,15 +26,15 @@
 		<h2>Options</h2>
 		{{-- AJAX --}}
 		<p>You may hide your name from other students.</p>
-		<form id="share-project-form" action="{{ url('/students/shareProject') }}" method="POST" accept-charset="utf-8">
-		{{csrf_field()}}
-		{{ method_field('PATCH') }}
-		<div class="form-field">
-			<div class="checkbox">
-				<input onclick="event.preventDefault();document.getElementById('share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if($user->student->share_project) checked @endif >
-				<label for="share_project">Share name</label>
+		<form id="share-project-form" class="form form--flex" action="{{ url('/students/shareProject') }}" method="POST" accept-charset="utf-8">
+			{{csrf_field()}}
+			{{ method_field('PATCH') }}
+			<div class="form-field">
+				<div class="checkbox">
+					<input onclick="event.preventDefault();document.getElementById('share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if($user->student->share_project) checked @endif >
+					<label for="share_project">Share name</label>
+				</div>
 			</div>
-		</div>
 		</form>
 	@endif 
 @else

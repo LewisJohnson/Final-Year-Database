@@ -47,7 +47,7 @@
 	@endforeach
 	</tbody>
 </table>
-<form class="card" action="" method="POST" accept-charset="utf-8">
+<form class="card form form--flex" action="" method="POST" accept-charset="utf-8">
 	{{ csrf_field() }}
 	<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
 

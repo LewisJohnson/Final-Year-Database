@@ -17,7 +17,7 @@
 <h1>You are editing "{{ $project->title }}".</h1>
 
 <div class="card card--margin-vertical">
-<form id="editProjectForm" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}">
+<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}">
 	{{ csrf_field() }}
 	{{ method_field('PATCH') }}
 

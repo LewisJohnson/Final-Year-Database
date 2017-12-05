@@ -20,16 +20,16 @@ Route::group(['middleware' => ['web']], function() {
 Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('/admin', 'AdminController@index');
 
-	Route::get('/admin/students/import', 'AdminController@importStudents');
-	Route::get('/admin/arrangements', 'AdminController@supervisorArrangements');
+	Route::get('admin/students/import', 'AdminController@importStudents');
+	Route::get('admin/arrangements', 'AdminController@supervisorArrangements');
 	// Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
-	Route::get('/admin/topics', 'AdminController@topics');
-	Route::get('/admin/login-as', 'AdminController@loginAsView');
-	Route::get('/admin/login-as/{id}', 'AdminController@loginAs');
-	Route::get('/admin/archive', 'AdminController@archive');
-	Route::get('/admin/transactions', 'TransactionController@index');
+	Route::get('admin/amendTopics', 'AdminController@amendTopics');
+	Route::get('admin/login-as', 'AdminController@loginAsView');
+	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
+	Route::get('admin/archive', 'AdminController@archive');
+	Route::get('admin/transactions', 'TransactionController@index');
 
-	Route::get('/system/strings', 'StringsController@edit');
+	Route::get('system/strings', 'StringsController@edit');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
@@ -39,8 +39,8 @@ Route::middleware(['Admin_Ug'])->group(function () {
 
 	// Topic routes
 	Route::post('topics', 'TopicController@store');
-	Route::patch('topics/{id}', 'TopicController@update');
-	Route::delete('topics/{id}', 'TopicController@destroy');
+	Route::patch('topics', 'TopicController@update');
+	Route::delete('topics', 'TopicController@destroy');
 });
 
 Route::group(['middleware' => ['auth']], function() {
@@ -84,8 +84,8 @@ Route::group(['middleware' => ['auth']], function() {
 	/* ============== 
 	   REPORT ROUTES 
 	   ============== */
-	Route::get('/reports/supervisor', 'SupervisorController@report');
-	Route::get('/reports/students', 'AdminController@report');
+	Route::get('reports/supervisor', 'SupervisorController@report');
+	Route::get('reports/students', 'AdminController@report');
 
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');

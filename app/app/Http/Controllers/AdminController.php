@@ -4,6 +4,9 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use SussexProjects\User;
 use SussexProjects\Supervisor;
+use SussexProjects\TopicUg;
+use SussexProjects\TopicMasters;
+use Session;
 
 class AdminController extends Controller{
 	public function index(){
@@ -20,8 +23,17 @@ class AdminController extends Controller{
 		->with('supervisors', $supervisors);;
 	}
 	
-	public function topics(){
-		return view('admin.topics');
+	public function amendTopics(){
+		
+		if(Session::get("db_type") == "ug"){
+			$topics = TopicUg::all();
+
+		} elseif(Session::get("db_type") == "masters") {
+			$topics = TopicMasters::all();
+		}
+
+		return view('admin.amend-topics')
+				->with('topics', $topics);
 	}
 
 	public function loginAsView(){
@@ -31,10 +43,10 @@ class AdminController extends Controller{
 	public function archive(){
 		return view('admin.archive');
 	}
+
 	public function loginAs($id){
 		$user = User::find($id);
 		Auth::login($user);
 		return redirect('/');
 	}
 }
-

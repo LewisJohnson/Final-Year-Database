@@ -45,7 +45,7 @@ class ProjectController extends Controller{
 			->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
 			->where('supervisors.take_students_ug', true);
 
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			$projects = ProjectMasters::
 			select('projects_masters.*', 'supervisors.take_students_masters')
 			->join('supervisors.take_students_masters', 'projects_ug.supervisor_id', '=', 'supervisors.id')

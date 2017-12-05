@@ -99,7 +99,7 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.pencil')
-						<a href="/admin/topics">Edit Topics</a>
+						<a href="/admin/amendTopics">Edit Topics</a>
 					</li>
 					<li>
 						@include('svg.globe')

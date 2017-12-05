@@ -17,7 +17,9 @@ class AuthController extends Controller{
 				Session::put('db_type', 'masters');
 			}
 
-			return redirect()->back()->with('message', 'Authentication changed.')->with('message_type', 'notification');
+			session()->flash('message', 'Authentication changed.');
+			session()->flash('message_type', 'success');
+			return redirect('/index');
 		}
 
 		public function show(){

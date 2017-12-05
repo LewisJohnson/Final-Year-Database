@@ -4,7 +4,7 @@
 <div class="content">
 	<h2>Log in</h2>
 	<hr>
-	<form id="loginForm" role="form" method="POST" action="{{ route('login') }}">
+	<form id="loginForm" role="form" class="form form--flex" method="POST" action="{{ route('login') }}">
 		{{ csrf_field() }}
 		<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
 

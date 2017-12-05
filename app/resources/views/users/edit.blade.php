@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
+<form class="form form--flex" role="form" method="POST" action="{{ route('register') }}">
 	{{ csrf_field() }}
 	<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
 		<label for="username" class="hover-label">Username</label>

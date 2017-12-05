@@ -45,7 +45,7 @@
 {{-- STUDENT SELECT --}}
 @if($user->student != null)
 	@if($user->student->project_status == 'none')
-		<form action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
+		<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 			<input type="hidden" name="project_id" value="{{ $project->id }}">

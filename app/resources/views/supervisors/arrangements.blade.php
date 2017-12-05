@@ -3,7 +3,7 @@
 <div class="centered width-800 card">
 <h1>Edit Supervisor Arrangments</h1>
 <h2><b>Supervisor:</b> {{ $supervisor->user->getFullName() }}</h2>
-<form method="POST" action="/projects">
+<form class="form form--flex" role="form" method="POST" action="/projects">
 	{{ csrf_field() }}
 	
 	<div class="form-field">

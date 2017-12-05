@@ -15,25 +15,25 @@ var DataTable = function DataTable(element) {
 window['DataTable'] = DataTable;
 
 DataTable.prototype.CssClasses_ = {
-		DATA_TABLE: 'data-table',
-		IS_SELECTED: 'is-selected'
+	DATA_TABLE: 'data-table',
+	IS_SELECTED: 'is-selected'
 };
 
 DataTable.prototype.Selectors_ = {
-		DATA_TABLE: '.data-table',
-		MASTER_CHECKBOX: 'thead .master-checkbox',
-		CHECKBOX: 'tbody .checkbox-input',
-		IS_SELECTED: '.is-selected'
+	DATA_TABLE: '.data-table',
+	MASTER_CHECKBOX: 'thead .master-checkbox',
+	CHECKBOX: 'tbody .checkbox-input',
+	IS_SELECTED: '.is-selected'
 };
 
 DataTable.prototype.functions = {
-	selectAllRows: function(table) {
-		if(table.masterCheckbox_.is(':checked')){
-			table.rows_.addClass("is-selected")
-			table.checkboxes_.prop('checked', true);
+	selectAllRows: function(dataTable) {
+		if(dataTable.masterCheckbox_.is(':checked')){
+			dataTable.rows_.addClass("is-selected")
+			dataTable.checkboxes_.prop('checked', true);
 		} else {
-			table.rows_.removeClass("is-selected")
-			table.checkboxes_.prop('checked', false);
+			dataTable.rows_.removeClass("is-selected")
+			dataTable.checkboxes_.prop('checked', false);
 		}
 	},
 	selectRow: function (checkbox, row) {

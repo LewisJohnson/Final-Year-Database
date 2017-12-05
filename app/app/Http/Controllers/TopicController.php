@@ -38,36 +38,29 @@ class TopicController extends Controller{
 	public function store(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$topic = new TopicUg;
+				return $topic = TopicUg::create(['name' => $request->topic_name]);
 			} else {
-				$topic = new TopicMasters;
+				return $topic = TopicMasters::create(['name' => $request->topic_name]);
 			}
-
-			$topic->fill(array(
-				'name' => request('name')
-			));
-			$topic->save();
-			return $topic;
 		});
 		
-		return $result;
+		return $result->toJson();
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id){
-		$result = DB::transaction(function ($request, $id) use ($request, $id) {
+	public function update(Request $request){
+		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$topic = TopicUg::where('id', $id)->first();
+				$topic = TopicUg::find($request->topic_id);
 			} else {
-				$topic = TopicMasters::where('id', $id)->first();
+				$topic = TopicMasters::find($request->topic_id);
 			}
-			$topic->name = request('name');
+			$topic->name = $request->topic_name;
 			$topic->save();
 		});
 
@@ -76,18 +69,17 @@ class TopicController extends Controller{
 
 	/**
 	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id){
-		$result =  DB::transaction(function ($id) use ($id) {
+	public function destroy(Request $request){
+		$result =  DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				ProjectTopicUg::where('topic_id', $id)->delete();
-				Topic::where('id', $id)->delete();
+				ProjectTopicUg::where('topic_id', $request->topic_id)->delete();
+				TopicUg::find($request->topic_id)->delete();
 			} else {
-				ProjectTopicMasters::where('topic_id', $id)->delete();
-				TopicMasters::where('id', $id)->delete();
+				ProjectTopicMasters::where('topic_id', $request->topic_id)->delete();
+				TopicMasters::find($request->topic_id)->delete();
 			}
 		});
 

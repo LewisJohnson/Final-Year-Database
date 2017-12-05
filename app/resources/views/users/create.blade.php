@@ -3,7 +3,7 @@
 @section('content')
 <div class="centered width-800 card">
 <h1>Add New User</h1>
-<form method="POST" action="/users">
+<form class="form form--flex" role="form" method="POST" action="/users">
 	{{ csrf_field() }}
 	<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
 		<label for="username" class="hover-label">Username</label>

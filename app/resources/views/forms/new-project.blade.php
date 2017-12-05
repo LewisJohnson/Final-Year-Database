@@ -1,6 +1,6 @@
 @php ($user = Auth::user())
 
-<form method="POST" @if($user_type == "student") action="/students/proposeProject" @elseif($user_type == "supervisor") action="/projects" @endif>
+<form class="form form--flex" method="POST" @if($user_type == "student") action="/students/proposeProject" @elseif($user_type == "supervisor") action="/projects" @endif>
 	{{ csrf_field() }}
 	@if($user_type == "supervisor")
 		<p><b>Supervisor:</b> {{ $user->getFullName() }}</p>
