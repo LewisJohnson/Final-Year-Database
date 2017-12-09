@@ -3,16 +3,19 @@
 <div class="centered width-1000">
 <h1>Transactions</h1>
 <div style="overflow: auto;">
-<table class="shadow-2dp full-detail">
-	<tr>
-		<th>Id</th>
-		<th>Type</th>
-		<th>Project</th>
-		<th>Student</th>
-		<th>Supervisor</th>
-		<th>Admin</th>
-		<th>Date</th>
-	</tr>
+<table class="data-table shadow-2dp full-detail">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Type</th>
+			<th>Project</th>
+			<th>Student</th>
+			<th>Supervisor</th>
+			<th>Admin</th>
+			<th>Date</th>
+		</tr>
+	</thead>
+	<tbody>
 	@foreach($transactions as $transaction)
 		<tr>
 			<td>{{ $transaction->id }}</td>
@@ -50,18 +53,22 @@
 			<td>{{ $transaction->transaction_date }}</td>
 		</tr>
 	@endforeach
+	</tbody>
 </table>
 
 <table class="shadow-2dp raw-detail">
-	<tr>
-		<th>Id</th>
-		<th>Type</th>
-		<th>Project Id</th>
-		<th>Student Id</th>
-		<th>Supervisor Id</th>
-		<th>Admin Id</th>
-		<th>Date</th>
-	</tr>
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Type</th>
+			<th>Project Id</th>
+			<th>Student Id</th>
+			<th>Supervisor Id</th>
+			<th>Admin Id</th>
+			<th>Date</th>
+		</tr>
+	</thead>
+	<tbody>
 	@foreach($transactions as $transaction)
 		<tr>
 			<td>{{ $transaction->id }}</td>
@@ -73,6 +80,7 @@
 			<td>{{ $transaction->transaction_date }}</td>
 		</tr>
 	@endforeach
+	</tbody>
 </table>
 
 </div>

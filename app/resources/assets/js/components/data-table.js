@@ -1,68 +1,113 @@
 $(function() {
 
 var DataTable = function DataTable(element) {
-	this.element_ = $(element);
-	this.firstHeader_ = $('th');
-	this.bodyRows_ = $('tbody tr');
-	this.footRows_ = $('tfoot tr');
-	this.rows_ = $.merge(this.bodyRows_, this.footRows_);
-	this.checkboxes_ = $(this.Selectors_.CHECKBOX);
-	this.masterCheckbox_ = $(this.Selectors_.MASTER_CHECKBOX);
+	this.element = $(element);
+	this.headers = $('thead tr th');
+	this.bodyRows = $('tbody tr');
+	this.footRows = $('tfoot tr');
+	this.rows = $.merge(this.bodyRows, this.footRows);
+	this.checkboxes = $(this.Selectors_.CHECKBOX);
+	this.masterCheckbox = $(this.Selectors_.MASTERCHECKBOX);
+	this.sortDirection = "asc";
 	this.init();
 };
 
 window['DataTable'] = DataTable;
 
 DataTable.prototype.CssClasses_ = {
-	DATA_TABLE: 'data-table',
+	DATATABLE: 'data-table',
 	IS_SELECTED: 'is-selected'
 };
 
 DataTable.prototype.Selectors_ = {
-	DATA_TABLE: '.data-table',
-	MASTER_CHECKBOX: 'thead .master-checkbox',
+	DATATABLE: '.data-table',
+	MASTERCHECKBOX: 'thead .master-checkbox',
 	CHECKBOX: 'tbody .checkbox-input',
 	IS_SELECTED: '.is-selected'
 };
 
 DataTable.prototype.functions = {
-	selectAllRows: function(dataTable) {
-		if(dataTable.masterCheckbox_.is(':checked')){
-			dataTable.rows_.addClass("is-selected")
-			dataTable.checkboxes_.prop('checked', true);
+	selectAllRows: function() {
+		if(this.masterCheckbox.is(':checked')){
+			this.rows.addClass(DataTable.prototype.CssClasses_.IS_SELECTED);
+			this.checkboxes.prop('checked', true);
 		} else {
-			dataTable.rows_.removeClass("is-selected")
-			dataTable.checkboxes_.prop('checked', false);
+			this.rows.removeClass(DataTable.prototype.CssClasses_.IS_SELECTED);
+			this.checkboxes.prop('checked', false);
 		}
 	},
 	selectRow: function (checkbox, row) {
 		if (row) {
-				if (checkbox.is(':checked')) {
-					row.addClass(DataTable.prototype.CssClasses_.IS_SELECTED);
-				} else {
-					row.removeClass(DataTable.prototype.CssClasses_.IS_SELECTED);
-				}
+			if (checkbox.is(':checked')) {
+				row.addClass(DataTable.prototype.CssClasses_.IS_SELECTED);
+			} else {
+				row.removeClass(DataTable.prototype.CssClasses_.IS_SELECTED);
 			}
 		}
+	},
+	sortTable: function(sortNumber, dataTable) {
+
+	}
 };
 
 DataTable.prototype.init = function () {
 	var dt = this;
-	this.masterCheckbox_.on('change', $.proxy(this.functions.selectAllRows, this, dt));
+	this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dt));
 
-	var i = 0;
+
 	var dt = this;
-	$(this.checkboxes_).each(function() {
-		$(this).on('change', $.proxy(dt.functions.selectRow, this, $(this), $(dt.bodyRows_[i])));
+
+	$(this.checkboxes).each(function(i) {
+		$(this).on('change', $.proxy(dt.functions.selectRow, this, $(this), dt.bodyRows.eq(i)));
+	});
+
+	$(this.headers).each(function(i) {
+		$(this).css("cursor", "pointer");
+	// 	// $(this).on('click', $.proxy(dt.functions.sortTable, this, j, dt));
+		
 	});
 };
 
 DataTable.prototype.initAll = function () {
-	$(this.Selectors_.DATA_TABLE).each(function() {
+	$(this.Selectors_.DATATABLE).each(function() {
 		$(this).DataTable = new DataTable(this);
 	});
 };
 
 DataTable.prototype.initAll();
 
+
 });
+
+function sortTable(table, col, reverse) {
+    var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
+        tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
+        i;
+    reverse = -((+reverse) || -1);
+    tr = tr.sort(function (a, b) { // sort rows
+        return reverse // `-1 *` if want opposite order
+            * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
+                .localeCompare(b.cells[col].textContent.trim())
+               );
+    });
+    for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
+}
+
+function makeSortable(table) {
+    var th = table.tHead, i;
+    th && (th = th.rows[0]) && (th = th.cells);
+    if (th) i = th.length;
+    else return; // if no `<thead>` then do nothing
+    while (--i >= 0) (function (i) {
+        var dir = 1;
+        th[i].addEventListener('click', function () {sortTable(table, i, (dir = 1 - dir))});
+    }(i));
+}
+
+function makeAllSortable(parent) {
+    parent = parent || document.body;
+    var t = parent.getElementsByTagName('table'), i = t.length;
+    while (--i >= 0) makeSortable(t[i]);
+}
+
+window.onload = function () {makeAllSortable();};

@@ -21,7 +21,7 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('/admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
-	Route::get('admin/amendArrangements', 'AdminController@amendSupervisorArrangements');
+	Route::get('admin/amendSupervisorArrangements', 'AdminController@amendSupervisorArrangements');
 
 	// Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
 
@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth']], function() {
 	   REPORT ROUTES 
 	   ============== */
 	Route::get('reports/supervisor', 'SupervisorController@report');
-	Route::get('reports/students', 'AdminController@report');
+	Route::get('reports/student', 'StudentController@report');
 
 	// CHANGE AUTH
 	Route::post('authChange', 'Auth\AuthController@change');
