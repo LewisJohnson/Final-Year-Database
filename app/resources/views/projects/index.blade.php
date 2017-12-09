@@ -11,6 +11,10 @@
 	<h3>Projects with the topic "{{ $topic->name }}"</h3>
 @endif
 
+@if($view == "transaction")
+	<h3>Click to see a project to browse it's transactions.</h3>
+@endif
+
 @if($view == "index")
 <form action="/projects/search" class="form form--flex" role="form" method="POST" accept-charset="utf-8">
 	 {{ csrf_field() }}
@@ -77,7 +81,13 @@
 
 	<tbody>
 	@foreach($projects as $project)
-		<tr class="pointer" onclick="window.location='{{ action('ProjectController@show', $project->id)}}';">
+		<tr class="pointer"
+		@if($view == "transaction")
+		onclick="window.location='{{ action('ProjectController@transactions', $project->id)}}';"
+		@else
+		onclick="window.location='{{ action('ProjectController@show', $project->id)}}';"
+		@endif
+		>
 			@if($project->getPrimaryTopic() != null)
 			<td><a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a></td>
 			@else

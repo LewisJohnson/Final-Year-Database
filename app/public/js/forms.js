@@ -81,6 +81,7 @@ $(function () {
 	"use strict";
 
 	var AjaxFunctions = function AjaxFunctions() {};
+
 	window['AjaxFunctions'] = AjaxFunctions;
 
 	AjaxFunctions.prototype.CssClasses_ = {

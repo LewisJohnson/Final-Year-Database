@@ -4,6 +4,8 @@ namespace SussexProjects\Http\Controllers;
 use Session;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectMasters;
 
 class TransactionController extends Controller{
 
@@ -20,11 +22,14 @@ class TransactionController extends Controller{
 		return view('admin.transactions')->with('transactions', $transactions);
 	}
 
-	public function byProject($id){
-		$transactions = Session::get("db_type") == "ug" ? 
-			TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get() : 
-			TransactionMasters::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
-			
-		return view('admin.transactions')->with('transactions', $transactions);
+	public function byProject(){
+		if(Session::get("db_type") == "ug"){
+			$projects = ProjectUg::all();
+		} elseif(Session::get("db_type") == "masters") {
+			$projects = ProjectMasters::all();
+		}
+		return view('projects.index')
+			->with('projects', $projects)
+			->with('view', 'transaction');
 	}
 }

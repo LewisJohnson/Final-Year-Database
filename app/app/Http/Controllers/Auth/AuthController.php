@@ -1,11 +1,11 @@
 <?php
-
 namespace SussexProjects\Http\Controllers\Auth;
 
 use SussexProjects\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
+
 class AuthController extends Controller{
 
 		public function change(Request $request){

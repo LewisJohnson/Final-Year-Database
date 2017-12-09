@@ -1,7 +1,7 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
 	<h1>@string("homepage_main_header")</h1>
-	<button class="login-button button button--raised">Login</button>
+	<button class="login-button button button--raised" data-activator="true" data-dialog="login">Login</button>
 </header>
 
 <nav class="desktop">
@@ -30,7 +30,7 @@
 	<a href="/" title=""><h1>@string("homepage_main_header")</h1></a>
 </header>
 
-<nav class="mobile" aria-hidden="true">
+<nav class="mobile" aria-hidden="true" aria-expanded="false">
 	<div style="width: 100%; height: 100%; overflow-y: scroll;">
 	<ul>
 
@@ -50,6 +50,7 @@
 		<li class="nav-button nav-button--mobile nav-button--grouped">
 			<a href="/about">About</a>
 		</li>
+			<button class="login-button button button--raised" data-activator="true" data-dialog="login">Login</button>
 		<li class="footer">
 			<a href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
 			<form id="logout-form" class="form form--flex" action="{{ route('logout') }}" method="POST" style="display: none;">

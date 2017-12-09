@@ -20,18 +20,20 @@
 
 	<div class="form-field">
 		<label class="hover-label" for="skills">Skills</label>
-		<input maxlength="255" type="text" name="skills" id="skills" required></input>
+		<input maxlength="255" type="text" name="skills" id="skills"></input>
 	</div>
 
 	<div class="form-field">
-		<select name="status">
+		<label class="hover-label" for="skills">Status</label>
+		<select name="status" id="status">
 			<option value="on-offer">On Offer</option>
 			<option value="withdrawn">Withdrawn</option>
+			<option value="archived">Archived</option>
 		</select>
 	</div>
 
 	<div class="form-field">
-		<button type="submit" value="Submit">Add</button>
+		<button class="button button--raised button--accent" type="submit" value="Submit">Create</button>
 	</div>
 	
 	@include ('partials.errors')

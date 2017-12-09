@@ -11,15 +11,17 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.disableNotifications();
+// mix.disableNotifications();
 
-mix.js('resources/assets/js/main.js', 'public/js')
-	.js('resources/assets/js/forms.js', 'public/js')
-	.js('resources/assets/js/components/project-topics.js', 'public/js')
-	.js('resources/assets/js/components/supervisor.js', 'public/js')
-	.js('resources/assets/js/components/admin.js', 'public/js')
-	.js('resources/assets/js/components/data-table.js', 'public/js')
+
+mix.babel('resources/assets/js/main.js')
+	.babel('resources/assets/js/forms.js')
+	.babel('resources/assets/js/components/project-topics.js')
+	.babel('resources/assets/js/components/supervisor.js')
+	.babel('resources/assets/js/components/admin.js')
+	.babel('resources/assets/js/components/dialog.js')
+	.babel('resources/assets/js/components/data-table.js')
 	
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.browserSync({proxy: 'localhost:8000', notify: false});
+// mix.browserSync({proxy: 'localhost:8000', notify: false});

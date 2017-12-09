@@ -1,7 +1,7 @@
 <footer>
 	@if ($user = Auth::user())
 	<div class="footer-left">
-		<button id="changeModeButton" class="">{{ Session::get("auth_type") }}</button>
+		<button class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">{{ Session::get("auth_type") }}</button>
 {{-- 		<p class="seperator">|</p>
 		<p >{{ ucwords($user->access_type) }} Access</p> --}}
 		<p class="seperator">|</p>

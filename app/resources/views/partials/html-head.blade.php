@@ -19,7 +19,8 @@
 	<script src="{{ asset('js/main.js') }}"></script>
 	<script src="{{ asset('js/forms.js') }}" async></script>
 	<script src="{{ asset('js/data-table.js') }}" async></script>
-
+	<script src="{{ asset('js/dialog.js') }}" async></script>
+	
 	@yield('scripts')
 
 </head>

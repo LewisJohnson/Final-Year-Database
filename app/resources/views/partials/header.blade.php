@@ -5,11 +5,8 @@
 	@else
 		<h1>@string("homepage_main_header", "masters")</h1>
 	@endif
-	<a class="logout-button 
-	button button--raised" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
-	<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
 </header>
-
 
 <nav class="desktop">
 	<ul>
@@ -102,10 +99,7 @@
 			<a href="/about">About</a>
 		</li>
 		<li class="footer">
-			<a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
-			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-				{{ csrf_field() }}
-			</form>
+			<button class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
 		</li>
 	</ul>
 </div>
@@ -113,3 +107,5 @@
 
 <div class="mobile-nav-underlay">
 </div>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>

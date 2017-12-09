@@ -21,21 +21,23 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('/admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
-	Route::get('admin/arrangements', 'AdminController@supervisorArrangements');
+	Route::get('admin/amendArrangements', 'AdminController@amendSupervisorArrangements');
+
 	// Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
+
 	Route::get('admin/amendTopics', 'AdminController@amendTopics');
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 	Route::get('admin/archive', 'AdminController@archive');
+
 	Route::get('admin/transactions', 'TransactionController@index');
+	Route::get('admin/transactions/byProject', 'TransactionController@byProject');
 
 	Route::get('system/strings', 'StringsController@edit');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
 	Route::get('users/edit/{id}', 'UserController@edit');
-
-	Route::get('projects/{id}/edit', 'ProjectController@edit');
 
 	// Topic routes
 	Route::post('topics', 'TopicController@store');
@@ -49,6 +51,11 @@ Route::group(['middleware' => ['auth']], function() {
 	   ============== */
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
+	Route::get('projects/create', 'ProjectController@create');
+
+	Route::get('projects/{id}', 'ProjectController@show');
+	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
+	Route::get('projects/{id}/edit', 'ProjectController@edit');
 
 	// Projects by Supervisor
 	Route::get('projects/bySupervisor/', 'ProjectController@supervisors');
@@ -86,9 +93,6 @@ Route::group(['middleware' => ['auth']], function() {
 	   ============== */
 	Route::get('reports/supervisor', 'SupervisorController@report');
 	Route::get('reports/students', 'AdminController@report');
-
-	Route::get('projects/create', 'ProjectController@create');
-	Route::get('projects/{id}', 'ProjectController@show');
 
 	// CHANGE AUTH
 	Route::post('authChange', 'Auth\AuthController@change');

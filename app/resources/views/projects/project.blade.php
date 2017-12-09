@@ -40,7 +40,14 @@
 		@endif
 	</ul>
 </div>
-<a style="margin-right: 1rem;" class="button button--raised" href="javascript:history.back()">Back</a>
+
+<div class="button-group button-group--horizontal" >
+	<a class="button button--raised" href="javascript:history.back()">Back</a>
+	@if($project->isOwnedByUser())
+		<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
+		<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
+	@endif
+</div>
 
 {{-- STUDENT SELECT --}}
 @if($user->student != null)

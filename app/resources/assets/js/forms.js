@@ -1,6 +1,5 @@
-$(function() { 
-"use strict";
 var AjaxFunctions =  function AjaxFunctions() {};
+
 window['AjaxFunctions'] = AjaxFunctions;
 
 AjaxFunctions.prototype.CssClasses_ = {
@@ -77,5 +76,4 @@ $(ajax.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
 		container.addClass('active');
 		filterButton.addClass('active');
 	}
-});
 });

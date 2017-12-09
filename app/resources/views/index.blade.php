@@ -20,7 +20,7 @@
 		<p><b>Status:</b> {{ $user->student->getStatusString() }}</p>
 		@if($user->student->project_status != 'none')
 			<h2>Project</h2>
-			@include ('partials.project-preview', array('project'=> $user->student->getProject()))
+			@include ('partials.project-preview', array('project'=> $user->student->project))
 		@endif
 
 		<h2>Options</h2>

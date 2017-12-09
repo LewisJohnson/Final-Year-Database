@@ -1,5 +1,4 @@
-$(function() { 
-"use strict";
+$(function() {
 
 var DataTable = function DataTable(element) {
 	this.element_ = $(element);
@@ -65,4 +64,5 @@ DataTable.prototype.initAll = function () {
 };
 
 DataTable.prototype.initAll();
+
 });

@@ -1,12 +1,12 @@
 $(function() { 
 
-	$('.accept').on('click', function() {
-		acceptStudent($(this).data('student_id'));
-	});
+$('.accept').on('click', function() {
+	acceptStudent($(this).data('student_id'));
+});
 
-	$('.reject').on('click', function() {
-		rejectStudent($(this).data('student_id'), $(this).data('project_id'));
-	});
+$('.reject').on('click', function() {
+	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
+});
 
 });
 

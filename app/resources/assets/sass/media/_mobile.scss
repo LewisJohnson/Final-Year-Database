@@ -50,6 +50,11 @@
 		display: none;
 	}
 
+	.dialog{
+		left: 2vw;
+		right: 2vw;
+	}
+
 	// SEARCH
 
 	.search-filter-container.active{
@@ -77,4 +82,6 @@
 		padding-right: 8px;
 		text-align: right;
 	}
+
+
 }

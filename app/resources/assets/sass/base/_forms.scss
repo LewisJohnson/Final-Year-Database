@@ -17,18 +17,25 @@
 	}
 }
 
-input, textarea, .fake-input{
+select, input, textarea, .fake-input{
 	border: solid $form-border-width $form-border-color;
 	padding: $form-input-padding;
 	font-size: $form-input-font-size;
 	font-family: $font-family-sans-serif;
+	
 }
+
+select, select > option {
+
+	color: $text-color;
+}
+
 
 label{
 	color: $form-label-text-color;
 	display: block;
     margin-bottom: 5px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 button{
@@ -39,7 +46,7 @@ button{
 }
 
 .form-field {
-	margin-bottom: 1rem;
+	margin-bottom: 1.2rem;
 
 	input[type='text'], input[type='password'], input[type='email'], textarea {
 		width: 100%;
@@ -211,6 +218,12 @@ button{
 	
 	button {
 		margin: 0 5px;
+	}
+}
+
+.button-group--horizontal{
+	> *{
+		margin-right: 1rem;
 	}
 }
 

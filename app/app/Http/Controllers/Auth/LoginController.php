@@ -1,5 +1,4 @@
 <?php
-
 namespace SussexProjects\Http\Controllers\Auth;
 
 use SussexProjects\Http\Controllers\Controller;

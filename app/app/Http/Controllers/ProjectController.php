@@ -386,6 +386,14 @@ class ProjectController extends Controller{
 			->with('view', 'supervisor');
 	}
 
+	public function transactions($id){
+		$transactions = Session::get("db_type") == "ug" ? 
+			TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get() : 
+			TransactionMasters::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
+			
+		return view('admin.transactions')->with('transactions', $transactions);
+	}
+
 	/**
 	 * Displays all supervisors with projects on offer.
 	 *

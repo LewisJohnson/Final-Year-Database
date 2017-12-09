@@ -17,7 +17,7 @@ class AdminController extends Controller{
 		return view('admin.import');
 	}
 
-	public function supervisorArrangements(){
+	public function amendSupervisorArrangements(){
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
 		->with('supervisors', $supervisors);;
