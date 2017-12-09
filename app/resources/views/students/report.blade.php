@@ -14,31 +14,36 @@
 @foreach($statuses as $status)
 <div class="section horizontal" data-status= "{{ $status }}">
 	<h3>{{ ucfirst($status) }}</h3>
-	<ul style="list-style: none">
-		<li>
-			<a class="button button--raised email-selected {{ $status }}" href="mailto:" disabled >Email Selected</a>
-		</li>
-	</ul>
-
-	<ul id="student-edit-list" class="table-list table-list--checkbox {{ $status }} shadow-2dp">
-		<li>
-			<div class="checkbox">
-				<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
-				<label for="{{ $status }}" name="{{ $status }}"></label>
-			</div>
-			<h3>Name</h3>
-			<h3>Last Login</h3>
-		</li>
-		@if(Session::get('db_type') == 'ug')
-			@foreach(SussexProjects\StudentUg::Where('project_status', $status)->get() as $student)
-				@include ('partials.student-edit', array('student'=> $student))
-			@endforeach
-		@else
-			@foreach(SussexProjects\StudentMasters::Where('project_status', $status)->get() as $student)
-				@include ('partials.student-edit', array('student'=> $student))
-			@endforeach
-		@endif
-	</ul>
+	<table class="data-table {{ $status }} shadow-2dp" id="student-edit-list">
+		<thead>
+			<tr>
+				<th>			
+					<div class="checkbox">
+						<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
+						<label for="{{ $status }}" name="{{ $status }}"></label>
+					</div>
+				</th>
+				<th>Name</th>
+				<th>Last Login</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if(Session::get('db_type') == 'ug')
+				@foreach(SussexProjects\StudentUg::Where('project_status', $status)->get() as $student)
+					@include ('partials.student-edit', array('student'=> $student))
+				@endforeach
+			@else
+				@foreach(SussexProjects\StudentMasters::Where('project_status', $status)->get() as $student)
+					@include ('partials.student-edit', array('student'=> $student))
+				@endforeach
+			@endif
+		</tbody>
+	</table>
+	<div class="button-group">
+		<button class="button button--raised email-selected {{ $status }}" type="">Email Selected</button>
+		<button class="button button--raised" type="">Accept Selected</button>
+		<button class="button button--raised" type="">Reject Selected</button>
+	</div>
 </div>
 @endforeach
 </div>
