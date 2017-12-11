@@ -15,12 +15,7 @@ mix.disableNotifications();
 // mix.sourceMaps();
 
 mix.js('resources/assets/js/main.js', 'public/js')
-	.js('resources/assets/js/forms.js', 'public/js')
-	.js('resources/assets/js/components/project-topics.js', 'public/js')
-	.js('resources/assets/js/components/supervisor.js', 'public/js')
 	.js('resources/assets/js/components/admin.js', 'public/js')
-	.js('resources/assets/js/components/dialog.js', 'public/js')
-	.js('resources/assets/js/components/data-table.js', 'public/js')
 	
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 

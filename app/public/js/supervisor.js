@@ -60,67 +60,23 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 8:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(9);
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
 
-/***/ 9:
+/***/ 19:
 /***/ (function(module, exports) {
 
-$(function () {
-
-	$('.accept').on('click', function () {
-		acceptStudent($(this).data('student_id'));
-	});
-
-	$('.reject').on('click', function () {
-		rejectStudent($(this).data('student_id'), $(this).data('project_id'));
-	});
-});
-
-function acceptStudent(student_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/acceptStudent',
-		data: {
-			student_id: student_id
-		},
-		success: function success() {}
-	});
-}
-
-function rejectStudent(student_id, project_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/rejectStudent',
-		data: {
-			project_id: project_id,
-			student_id: student_id
-		},
-		success: function success() {}
-	});
-}
-
-// function acceptStudent(student_id, project_id) {
-// 	var url = '/student/' + student_id +'/selectProject';
-// 	$.ajax({
-// 		method: 'PATCH',
-// 		url: url,
-// 		data: {project_id : project_id},
-// 		success: function(){
-
-// 		}
-// 	});
-// }
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\xampp\\htdocs\\Final-Year-Database\\app\\resources\\assets\\js\\components\\supervisor.js'");
 
 /***/ })
 

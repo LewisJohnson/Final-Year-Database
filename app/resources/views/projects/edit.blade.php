@@ -1,9 +1,5 @@
 @extends('layouts.supervisor')
 
-@section ('scripts')
-<script src="/js/project-topics.js" type="text/javascript" charset="utf-8"></script>
-@endsection
-
 @section ('content')
 
 @if(Session::get('db_type') == 'ug')
