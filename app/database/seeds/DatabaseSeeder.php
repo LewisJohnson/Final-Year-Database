@@ -11,43 +11,24 @@ class DatabaseSeeder extends Seeder
 	 * @return void
 	 */
 	public function run(){
-
-		DB::table('users')->insert([
-			'id' => 1,
-			'first_name' => 'UG',
-			'last_name' => 'Admin',
-			'access_type' => "admin_ug",
-			'username' => 'admin_ug',
-			'email' => 'admin_ug@susx.ac.uk',
-			'password' => bcrypt('admin')
-		]);
-
-
-		DB::table('supervisors')->insert([
-			'id' => 1,
-			'title' => 'Prof.',
-			'project_load_masters' => 5,
-			'project_load_ug' => 3,
-			'take_students_masters' => true,
-			'accept_email_masters' => true,
-			'take_students_ug' => true,
-			'accept_email_ug' => true,
-		]);
-
 		// Admin: 1 [id 1 & 2]
 		// Supervisors: 40 [id 3 - 43]
-		// Students: 160 [id 43 - 203]
-		// Projects: 320
+		// Students: 300 [id 44 - 344] (150 UG, 150 MSc)
+		// Projects: 600 (300 UG, 300 MSc)
 
 		// First 100 students select projects 1 - 100
 
-		factory(SussexProjects\User::class, 200)->create();
+		factory(SussexProjects\User::class, 344)->create();
 		factory(SussexProjects\Supervisor::class, 40)->create();
 
-		factory(SussexProjects\StudentUg::class, 160)->create();
+		factory(SussexProjects\StudentUg::class, 150)->create();
+		factory(SussexProjects\StudentMasters::class, 150)->create();
 
-		// factory(SussexProjects\TopicUg::class, 10)->create();
-		// factory(SussexProjects\ProjectUg::class, 200)->create();
+		factory(SussexProjects\ProjectUg::class, 300)->create();
+		factory(SussexProjects\ProjectMasters::class, 300)->create();
+
+		factory(SussexProjects\TopicUg::class, 53)->create();
+		factory(SussexProjects\TopicMasters::class, 53)->create();
 	}
 }
 

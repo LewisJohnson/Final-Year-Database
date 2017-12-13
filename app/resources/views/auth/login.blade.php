@@ -9,12 +9,14 @@
 
 			<div id="login-username" class="form-field">
 				<label for="username">Username</label>
+				{{-- todo: Remove value="admin_ug" --}}
 				<input value="admin_ug" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 			</div>
 
 			<div class="form-field">
 				<label for="password">Password</label>
-				<input value="admin" id="password" type="password" name="password" required>
+				{{-- todo: Remove value="password" --}}
+				<input value="password" id="password" type="password" name="password" required>
 			</div>
 
 			<div class="form-field">

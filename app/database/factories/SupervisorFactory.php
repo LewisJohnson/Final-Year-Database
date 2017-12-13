@@ -1,11 +1,12 @@
 <?php
 use Faker\Generator as Faker;
 
-$autoIncrement = autoIncrement();
+$supervisorIncrement = supervisorIncrement();
 
-$factory->define(SussexProjects\Supervisor::class, function (Faker $faker) {
-	$autoIncrement->next();
+$factory->define(SussexProjects\Supervisor::class, function (Faker $faker) use ($supervisorIncrement) {
+	$supervisorIncrement->next();
 	return [
+		'id' => $supervisorIncrement->current(),
 		'title' => $faker->title,
 		'project_load_masters' => $faker->randomDigitNotNull,
 		'project_load_ug' => $faker->randomDigitNotNull,
@@ -17,9 +18,9 @@ $factory->define(SussexProjects\Supervisor::class, function (Faker $faker) {
 	];
 });
 
-function autoIncrement()
+function supervisorIncrement()
 {
-	for ($i = 3; $i < 1000; $i++) {
+	for ($i = 2; $i < 1000; $i++) {
 		yield $i;
 	}
 }
