@@ -36,6 +36,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
+		//todo: add topic created transaction to DB
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				return $topic = TopicUg::create(['name' => $request->topic_name]);
@@ -54,6 +55,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
+		//todo: add topic updated transaction to DB
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::find($request->topic_id);
@@ -73,7 +75,8 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Request $request){
-		$result =  DB::transaction(function ($request) use ($request) {
+		//todo: add topic destroyed transaction to DB
+		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				ProjectTopicUg::where('topic_id', $request->topic_id)->delete();
 				TopicUg::find($request->topic_id)->delete();

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 <div class="centered width-800">
 <h1>Supervisors</h1>
@@ -14,7 +14,7 @@
 	<tbody>
 	@foreach($supervisors as $supervisor)
 		@if(count($supervisor->getProjectsByStatus('on-offer')) > 0)
-		<tr class="pointer" onclick="window.location='{{ action('ProjectController@bySupervisor', $supervisor->id)}}';">
+		<tr class="pointer" tabindex="0" onclick="window.location='{{ action('ProjectController@bySupervisor', $supervisor->id)}}';">
 			<td>{{ $supervisor->user->getFullName() }}</td>
 			<td>{{ count($supervisor->getProjectsByStatus('on-offer')) }}</td>
 		</tr>

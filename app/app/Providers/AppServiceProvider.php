@@ -16,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(255);
+        Schema::defaultStringLength(191);
+
         Blade::directive('string', function ($expression) {
             return "<?php echo SussexProjects\Strings::getString($expression) ?>";
         });

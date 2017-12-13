@@ -2,6 +2,7 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
+use App;
 
 class Strings extends Model{
 	public $timestamps = false;

@@ -73,9 +73,13 @@
 	width: 20px;
 }
 
-.login-button, .logout-button{
+.login-button, .logout-button, .change-auth-button{
 	position: absolute;
 	top: 10px;
 	right: 10px;
 	background: white;
+}
+
+.change-auth-button{
+	right: 110px;
 }

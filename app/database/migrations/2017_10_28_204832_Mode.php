@@ -15,17 +15,14 @@ class Mode extends Migration
 	{
 
 		Schema::create('mode_ug', function (Blueprint $table) {
-			$table->string('department_name')->unique();
-		});
-		Schema::create('mode_ug', function (Blueprint $table) {
 			$table->smallInteger('project_year')->unique();
-			$table->dateTime('start_date');
+			$table->dateTimeTz('start_date');
 			$table->string('mode');
 		});
 
 		Schema::create('mode_masters', function (Blueprint $table) {
 			$table->smallInteger('project_year')->unique();
-			$table->dateTime('start_date');
+			$table->dateTimeTz('start_date');
 			$table->string('mode');
 		});
 	}

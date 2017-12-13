@@ -6,6 +6,10 @@ use SussexProjects\User;
 use SussexProjects\Supervisor;
 use SussexProjects\TopicUg;
 use SussexProjects\TopicMasters;
+use SussexProjects\StudentUg;
+use SussexProjects\StudentMasters;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectMasters;
 use Session;
 
 class AdminController extends Controller{
@@ -42,6 +46,21 @@ class AdminController extends Controller{
 
 	public function archive(){
 		return view('admin.archive');
+	}
+
+	public function showAssignMarker(){
+		$supervisors = Supervisor::all();
+
+		if(Session::get("db_type") == "ug"){
+			$students = StudentUg::all();
+
+		} elseif(Session::get("db_type") == "masters") {
+			$students = StudentMasters::all();
+		}
+
+		return view('admin.assign-marker')
+		->with('supervisors', $supervisors)
+		->with('students', $students);
 	}
 
 	public function loginAs($id){

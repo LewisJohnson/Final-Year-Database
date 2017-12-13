@@ -52,10 +52,32 @@
 }
 
 .dialog.active{
+	overflow-y: auto;
 	opacity: 1;
 	visibility: visible;
 	transform: scale3d(1,1,1);
 	box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
+}
+
+#assign-dialog{
+	h3{ margin: 0}
+	p {margin-top: 5px;}
+
+	.arrow{
+		flex-grow: 1; 
+		text-align: center;
+
+		p{
+			font-size: 76px; 
+			margin: 0;
+			line-height: calc(76px / 2);
+		}
+	}
+
+	#project-description{
+		height: 95px;
+		overflow: hidden;
+	}
 }
 
 #change-auth-dialog select{

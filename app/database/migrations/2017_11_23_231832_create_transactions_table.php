@@ -14,20 +14,24 @@ class CreateTransactionsTable extends Migration
 	public function up(){
 		Schema::create('transactions_ug', function (Blueprint $table) {
 			$table->increments('id');
-			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo']);
+			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
 			$table->unsignedBigInteger('project_id')->nullable('true');
 			$table->unsignedBigInteger('student_id')->nullable('true');
 			$table->unsignedBigInteger('supervisor_id')->nullable('true');
+			$table->unsignedBigInteger('marker_id')->nullable('true');
+			$table->unsignedBigInteger('topic_id')->nullable('true');
 			$table->unsignedBigInteger('admin_id')->nullable('true');
 			$table->dateTimeTz('transaction_date');
 		});
 
 		Schema::create('transactions_masters', function (Blueprint $table) {
 			$table->increments('id');
-			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo']);
+			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
 			$table->unsignedBigInteger('project_id')->nullable('true');
 			$table->unsignedBigInteger('student_id')->nullable('true');
 			$table->unsignedBigInteger('supervisor_id')->nullable('true');
+			$table->unsignedBigInteger('marker_id')->nullable('true');
+			$table->unsignedBigInteger('topic_id')->nullable('true');
 			$table->unsignedBigInteger('admin_id')->nullable('true');
 			$table->dateTimeTz('transaction_date');
 		});

@@ -99,6 +99,10 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.pencil')
+						<a href="/admin/assignMarker">Assign Second Marker</a>
+					</li>
+					<li>
+						@include('svg.pencil')
 						<a href="/admin/amendTopics">Edit Topics</a>
 					</li>
 					<li>

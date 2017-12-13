@@ -2,7 +2,8 @@
 	cursor: text;
 }
 
-.loader {
+.loader{
+	position: relative;
 	display: none;
 	border: 5px solid transparent;
 	border-top: 5px solid #5facff; /* Blue */

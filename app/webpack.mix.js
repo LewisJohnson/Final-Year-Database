@@ -12,11 +12,9 @@ let mix = require('laravel-mix');
  */
 
 mix.disableNotifications();
-// mix.sourceMaps();
+mix.sourceMaps();
 
-mix.js('resources/assets/js/main.js', 'public/js')
-	.js('resources/assets/js/components/admin.js', 'public/js')
-	
+mix.js('resources/assets/js/main.js', 'public/js');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-// mix.browserSync({proxy: 'localhost:8000', notify: false});
+mix.browserSync({proxy: 'localhost:8000', notify: false});

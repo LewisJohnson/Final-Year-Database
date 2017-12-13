@@ -1,5 +1,4 @@
 @extends('layouts.supervisor')
-
 @section ('content')
 
 @if(Session::get('db_type') == 'ug')
@@ -13,7 +12,7 @@
 <h1>You are editing "{{ $project->title }}".</h1>
 
 <div class="card card--margin-vertical">
-<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}">
+<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif onkeypress="return event.keyCode != 13;">
 	{{ csrf_field() }}
 	{{ method_field('PATCH') }}
 
@@ -37,10 +36,17 @@
 		<div id="new-topic-input-container" class="fake-input">
 			<ul class="topics-list edit">
 				@foreach($project->topics as $topic)
-					<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
-						<button type="button" class="topic-remove">X</button>
-						<p class="topic-name">{{$topic->name}}</p>
-					</li>
+					@if($project->getPrimaryTopic())
+						<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
+							<button type="button" class="topic-remove">X</button>
+							<p class="topic-name">{{$topic->name}}</p>
+						</li>
+					@else
+						<li class="topic" data-topic-id="{{ $topic->id }}">
+							<button type="button" class="topic-remove">X</button>
+							<p class="topic-name">{{$topic->name}}</p>
+						</li>
+					@endif
 				@endforeach
 				<input list="topicsDataList" style="border:none" type="text" name="name" id="addTopicInput">
 			</ul>

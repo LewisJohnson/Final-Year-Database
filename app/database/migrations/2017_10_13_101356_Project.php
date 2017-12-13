@@ -24,7 +24,7 @@ class Project extends Migration
             $table->unsignedBigInteger('marker_id')->nullable(true);
             $table->unsignedBigInteger('student_id')->nullable(true);
             $table->boolean('student_proposed_project')->default(0);
-            $table->dateTime('start_date');
+            $table->dateTimeTz('start_date');
             $table->timestamp('created_at')->useCurrent = true;
             $table->timestamp('updated_at')->useCurrent = true;
         });
@@ -40,7 +40,7 @@ class Project extends Migration
             $table->unsignedBigInteger('marker_id')->nullable(true);
             $table->unsignedBigInteger('student_id')->nullable(true);
             $table->boolean('student_proposed_project')->default(0);
-            $table->dateTime('start_date');
+            $table->dateTimeTz('start_date');
             $table->timestamp('created_at')->useCurrent = true;
             $table->timestamp('updated_at')->useCurrent = true;
         });

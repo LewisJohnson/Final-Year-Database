@@ -69,11 +69,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		$project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
+		$project = Session::get("db_type") == "ug" ? ProjectUg::find($id) : ProjectMasters::find($id);
 
 		$view = "SupervisorProject";
 		$student_name = "a student";
-
 		if($project->student_proposed_project){
 			$view = "StudentProject";
 
@@ -301,6 +300,23 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@show', $project);
 		});
 
+		return $result;
+	}
+
+	public function updateMarker(Request $request) {
+		//todo: make sure user is authorized to perform this action
+		//todo: add marker selected transaction to DB
+		$result = DB::transaction(function ($request) use ($request) {
+			if(Session::get("db_type") == "ug"){
+				$project = ProjectUg::findOrFail(request('project_id'));
+			} else {
+				$project = ProjectMasters::findOrFail(request('project_id'));
+			}
+
+			// Validate data
+			$project->marker_id = request('marker_id');
+			$project->save();
+		});
 		return $result;
 	}
 

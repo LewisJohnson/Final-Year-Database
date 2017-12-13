@@ -1,20 +1,45 @@
+import {Swappable} from "../../../public/js/draggable";
 
-import {Swappable} from '@shopify/draggable';
+/* FILE STRUCTURE
+
+1. AJAX Setup
+2. HTML Modifications
+3. Generic Functions
+4. Components
+	4.1 Mobile Menu
+	4.2 Dialog / Modal
+	4.3 Data Table
+	4.4 Project Topics [Supervisor]
+	4.5 Forms / AJAX Functions
+	4.6 Edit Topics [Admin]
+5.
+6. Initialise Everything
+*/
 
 $(function() {
 "use strict";
 
-// Adds token to all AJAX calls
+
+/* ======================
+   1. AJAX Setup
+   ====================== */
 $.ajaxSetup({
 	headers: {
 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	}
 });
 
+
+/* ======================
+   2. HTML Modifications
+   ====================== */
 // Adds global underlay
 $('body').append('<div class="underlay"></div>');
 
-// Functions
+
+/* ======================
+   3. Generic Functions
+   ====================== */
 function sortTable(table, col, reverse) {
 	var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
 		tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
@@ -46,21 +71,125 @@ function makeAllSortable(parent) {
 	while (--i >= 0) makeSortable(t[i]);
 }
 
+function acceptStudent(student_id) {
+	$.ajax({
+		method: 'POST',
+		url: '/supervisor/acceptStudent',
+		data: {
+			student_id : student_id
+		},
+		success: function(){
+
+		}
+	});
+}
+
+function rejectStudent(student_id, project_id) {
+	$.ajax({
+		method: 'POST',
+		url: '/supervisor/rejectStudent',
+		data: {
+			project_id : project_id,
+			student_id : student_id
+		},
+		success: function(){
+
+		}
+	});
+}
+
+$('.show-more').on('click',  function(e) {
+	$(this).hide();
+	$('.project').addClass('expand');
+});
+
+// Makes primary topic first
+$(".topics-list").prepend($(".first"));
+
+// SUPERVISOR
+$('#deleteProjectButton').on('click', function() { AjaxFunctions.prototype.deleteProject($('#title').val()); });
+
+/* ======================
+   4. Components
+   ====================== */
+
+/* ======================
+   4.1 Mobile Menu
+   ====================== */
+/**
+   * Class constructor for mobile menu.
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MobileMenu =  function MobileMenu(element) {
+	if(window['MobileMenu'] == null){
+		window['MobileMenu'] = this;
+		this.element = $(element);
+		this.activator = $(this.Selectors_.HAMBURGER_CONTAINER);
+		this.underlay = $(this.Selectors_.UNDERLAY);
+		this.init();
+	}
+};
+
+MobileMenu.prototype.CssClasses_ = {
+	VISIBLE: 'is-visible'
+};
+
+MobileMenu.prototype.Selectors_ = {
+	MOBILE_MENU: 'nav.mobile',
+	HAMBURGER_CONTAINER: '.hamburger-container',
+	UNDERLAY: '.mobile-nav-underlay'
+};
+
+MobileMenu.prototype.openMenu = function (){
+	this.activator.attr("aria-expanded", "true");
+	this.element.addClass(this.CssClasses_.VISIBLE);
+
+	this.underlay.attr("aria-hidden", "false");
+	this.underlay.addClass(this.CssClasses_.VISIBLE);
+};
+
+MobileMenu.prototype.closeMenu = function (){
+	this.activator.attr("aria-expanded", "false");
+	this.element.removeClass(this.CssClasses_.VISIBLE);
+	
+	this.underlay.attr("aria-hidden", "true");
+	this.underlay.removeClass(this.CssClasses_.VISIBLE);
+};
+
+MobileMenu.prototype.init = function () {
+	var mobileMenu = this;
+	this.activator.on('click', mobileMenu.openMenu.bind(mobileMenu));
+	this.underlay.on('click', mobileMenu.closeMenu.bind(mobileMenu));
+};
+
+MobileMenu.prototype.initAll = function () {
+	$(this.Selectors_.MOBILE_MENU).each(function() {
+		this.mobileMenu = new MobileMenu(this);
+	});
+};
+
+/* ======================
+   4.2 Dialog / Modal
+   ====================== */
 var Dialog = function Dialog(element) {
 	this.element = $(element);
 	this.dialogName = $(element).data('dialog');
 	this.underlay = $('.underlay');
 	this.header = $(element).find(this.Selectors_.DIALOG_HEADER);
 	this.content = $(element).find(this.Selectors_.DIALOG_CONTENT);
-	this.loader = this.content.prepend('<div class="loader" style="width: 75px; height: 75px;"></div>');
+	this.content.before(this.HtmlSnippets_.LOADER);
+	this.loader = $(element).find(".loader");
 	this.isClosable = true;
 	this.activatorButtons = [];
-	this.isActive = $();
 	this.init();
-	
 };
 
 window['Dialog'] = Dialog;
+
+Dialog.prototype.HtmlSnippets_ = {
+	LOADER: '<div class="loader" style="width: 100px; height: 100px;top: 25%;"></div>',
+};
 
 Dialog.prototype.CssClasses_ = {
 	ACTIVE: 'active',
@@ -72,27 +201,30 @@ Dialog.prototype.Selectors_ = {
 	DIALOG_CONTENT: '.content',
 };
 
-Dialog.prototype.functions = {
-	hideDialog: function() {
-		if(this.isClosable){
-			this.element.attr("aria-hidden", "true");
-			this.underlay.removeClass(this.CssClasses_.ACTIVE);
-			this.element.removeClass(this.CssClasses_.ACTIVE);
-			this.isActive = false;
-		}
-	},
-	showDialog: function() {
-		this.element.attr("aria-hidden", "false");
-		this.underlay.addClass(this.CssClasses_.ACTIVE);
-		this.element.addClass(this.CssClasses_.ACTIVE);
-		this.isActive = true;
+Dialog.prototype.showLoader = function(){
+	this.loader.show(0);
+	this.content.hide(0);
+};
 
-		// Replace this
-		$('.mobile-nav-underlay').attr("aria-hidden", "true");
-		$('.hamburger-container').attr("aria-expanded", "false");
-		$('nav.mobile').removeClass("is-visible");
-		$('.mobile-nav-underlay').removeClass("is-visible");
-	},
+Dialog.prototype.hideLoader = function(){
+	this.loader.hide(0);
+	this.content.show(0);
+};
+
+Dialog.prototype.showDialog = function(){
+	this.element.attr("aria-hidden", "false");
+	this.underlay.addClass(this.CssClasses_.ACTIVE);
+	this.underlay.data("owner", this.dialogName);
+	this.element.addClass(this.CssClasses_.ACTIVE);
+	window['MobileMenu'].closeMenu();
+};
+
+Dialog.prototype.hideDialog = function(){
+	if(this.isClosable && this.underlay.data("owner") == this.dialogName){
+		this.element.attr("aria-hidden", "true");
+		this.underlay.removeClass(this.CssClasses_.ACTIVE);
+		this.element.removeClass(this.CssClasses_.ACTIVE);
+	}
 };
 
 Dialog.prototype.init = function(){
@@ -106,18 +238,18 @@ Dialog.prototype.init = function(){
 		}
 	});
 
-	// Add seperator after header 
-	this.header.append('<hr>');
+	// Add seperator after header
+	dialog.header.append('<hr>');
 
 	// For disabilty
-	this.element.attr("aria-hidden", "true");
+	dialog.element.attr("aria-hidden", "true");
 
 	// Set underlay
-	this.underlay.on('click', $.proxy(this.functions.hideDialog, dialog));
+	dialog.underlay.on('click', dialog.hideDialog.bind(dialog));
 
 	try{
 		$(dialog.activatorButtons).each(function() {
-			$(this).on('click', $.proxy(dialog.functions.showDialog, dialog));
+			$(this).on('click', dialog.showDialog.bind(dialog));
 		});
 	} catch(err){
 		console.error("Dialog " + dialog.dialogName + " has no activator button.");
@@ -127,36 +259,39 @@ Dialog.prototype.init = function(){
 
 Dialog.prototype.initAll = function(){
 	$(this.Selectors_.DIALOG).each(function() {
-		var dialog = new Dialog(this);
-		this.dialog = dialog;
-		console.log($(this));
+		this.dialog = new Dialog(this);
 	});
 };
 
-/* DATA TABLE */
-
+/* ======================
+   4.3 Data Table
+   ====================== */
+/**
+   * Class constructor for data tables.
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
 var DataTable = function DataTable(element) {
 	this.element = $(element);
-	this.headers = $('thead tr th');
-	this.bodyRows = $('tbody tr');
-	this.footRows = $('tfoot tr');
+	this.headers = $(element).find('thead tr th');
+	this.bodyRows = $(element).find('tbody tr');
+	this.footRows = $(element).find('tfoot tr');
 	this.rows = $.merge(this.bodyRows, this.footRows);
-	this.checkboxes = $(this.Selectors_.CHECKBOX);
-	this.masterCheckbox = $(this.Selectors_.MASTERCHECKBOX);
-	this.sortDirection = "asc";
+	this.checkboxes = $(element).find(this.Selectors_.CHECKBOX);
+	this.masterCheckbox = $(element).find(this.Selectors_.MASTER_CHECKBOX);
 	this.init();
 };
 
 window['DataTable'] = DataTable;
 
 DataTable.prototype.CssClasses_ = {
-	DATATABLE: 'data-table',
+	DATA_TABLE: 'data-table',
 	IS_SELECTED: 'is-selected'
 };
 
 DataTable.prototype.Selectors_ = {
-	DATATABLE: '.data-table',
-	MASTERCHECKBOX: 'thead .master-checkbox',
+	DATA_TABLE: '.data-table',
+	MASTER_CHECKBOX: 'thead .master-checkbox',
 	CHECKBOX: 'tbody .checkbox-input',
 	IS_SELECTED: '.is-selected'
 };
@@ -179,39 +314,36 @@ DataTable.prototype.functions = {
 				row.removeClass(DataTable.prototype.CssClasses_.IS_SELECTED);
 			}
 		}
-	},
-	sortTable: function(sortNumber, dataTable) {
-
 	}
 };
 
 DataTable.prototype.init = function () {
-	var dt = this;
-	this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dt));
-
-
-	var dt = this;
+	var dataTable = this;
+	this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dataTable));
 
 	$(this.checkboxes).each(function(i) {
-		$(this).on('change', $.proxy(dt.functions.selectRow, this, $(this), dt.bodyRows.eq(i)));
+		$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
 	});
 
 	$(this.headers).each(function(i) {
 		$(this).css("cursor", "pointer");
-	// 	// $(this).on('click', $.proxy(dt.functions.sortTable, this, j, dt));
-		
 	});
 };
 
 DataTable.prototype.initAll = function () {
-	$(this.Selectors_.DATATABLE).each(function() {
-		$(this).DataTable = new DataTable(this);
+	$(this.Selectors_.DATA_TABLE).each(function() {
+		this.dataTable = new DataTable(this);
 	});
 };
 
-DataTable.prototype.initAll();
-
-
+/* ======================
+   4.4 Project Topics [Supervisor]
+   ====================== */
+/**
+   * Class constructor for project topics.
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
 var ProjectTopics =  function ProjectTopics() {};
 window['ProjectTopics'] = ProjectTopics;
 
@@ -225,7 +357,6 @@ ProjectTopics.prototype.Selectors_ = {
 	NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
 };
 
-	
 ProjectTopics.prototype.Keys_ = {
 	SPACE: 32,
 	ENTER: 13,
@@ -235,21 +366,6 @@ ProjectTopics.prototype.Keys_ = {
 var projectTopics = new ProjectTopics();
 
 ProjectTopics.prototype.functions = {
-	updateProjectPrimaryTopic: function(projectId, topicId){
-		$('.loader').show(0);
-		var ajaxUrl = "/projects/updatePrimaryTopic";
-		$.ajax({
-			type: "PATCH",
-			url: ajaxUrl,
-			data: {
-				topic_id: topicId, 
-				project_id: projectId
-			},
-		}).done(function(){
-			$('.loader').hide(0);
-		});;
-	},
-
 	addTopicToProject: function (projectId, topicName) {
 		$('.loader').show(0);
 		var ajaxUrl = "/projects/addTopic";
@@ -278,7 +394,7 @@ ProjectTopics.prototype.functions = {
 			type: "DELETE",
 			url: ajaxUrl,
 			data: {
-				topic_id : topicId, 
+				topic_id : topicId,
 				project_id: projectId
 			},
 			success: function(){
@@ -290,17 +406,46 @@ ProjectTopics.prototype.functions = {
 			},
 		}).done(function(){
 			$('.loader').hide(0);
-		});;
-	}
-}
+		});
+	},
 
-const swappable = new Swappable(document.querySelectorAll('ul'), {
+	updateProjectPrimaryTopic: function (projectId, topicId) {
+		$('.loader').show(0);
+		var ajaxUrl = "/projects/updatePrimaryTopic";
+		$.ajax({
+			type: "PATCH",
+			url: ajaxUrl,
+			data: {
+				topic_id : topicId,
+				project_id: projectId
+			},
+			success: function(){
+				$('#editProjectForm').attr('data-project-id', topicId);
+				$('.topics-list.edit li.topic').each(function(i, obj) {
+					if($(this).data('topic-id') == topicId){
+						$(this).addClass("first");
+					} else {
+						$(this).removeClass("first");
+					}
+				});
+			},
+		}).done(function(){
+			$('.loader').hide(0);
+		});
+	},
+};
+
+const swappable = new Swappable(document.querySelectorAll('.topics-list.edit'), {
   draggable: '.topic',
 });
 
 swappable.on('swappable:swapped', function(){
 	var projectId = $('#editProjectForm').data('project-id');
-	projectTopics.functions.updateProjectPrimaryTopic(projectId, $(".topics-list.edit li:first-child").data('topic-id'));
+	var originalPrimaryTopicId = $('#editProjectForm').data('primary-topic-id');
+	var topicId = $(".topics-list.edit li:first-child").data('topic-id');
+	if(topicId != originalPrimaryTopicId){
+		projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
+	}
 });
 
 // Add new topic
@@ -318,45 +463,19 @@ $('.topics-list.edit').on('click', '.topic .topic-remove', function(){
 	projectTopics.functions.removeTopicFromProject(projectId, topicId);
 });
 
-$("#editProjectForm").on('submit', function(e){
-	e.preventDefault();
+$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
+	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
 });
 
-$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() { 
-	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus(); 
-});
-
-
-makeAllSortable();
-
-$('.show-more').on('click',  function(e) {
-	$(this).hide();
-	$('.project').addClass('expand');
-});
-
-$('.mobile-nav-underlay').on('click',  function(e) {
-	$('.mobile-nav-underlay').attr("aria-hidden", "true");
-	$('.hamburger-container').attr("aria-expanded", "false");
-	$('nav.mobile').removeClass("is-visible");
-	$('.mobile-nav-underlay').removeClass("is-visible");
-});
-
-
-$('.hamburger-container').on('click',  function(e) {
-	$('.mobile-nav-underlay').attr("aria-hidden", "false");
-	$('.hamburger-container').attr("aria-expanded", "true");
-	$('nav.mobile').addClass("is-visible");
-	$('.mobile-nav-underlay').addClass("is-visible");
-});
-
-Dialog.prototype.initAll();
-
-
-/* FORMS */
-
-
+/* ======================
+   4.5 Forms / AJAX Functions
+   ====================== */
+/**
+   * Class constructor for ajax functions.
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
 var AjaxFunctions =  function AjaxFunctions() {};
-
 window['AjaxFunctions'] = AjaxFunctions;
 
 AjaxFunctions.prototype.CssClasses_ = {
@@ -394,9 +513,7 @@ AjaxFunctions.prototype.functions = {
 			return false;
 		}
 	}
-}
-
-var ajax = new AjaxFunctions();
+};
 
 function removeAllShadowClasses(element){
 	$(element).removeClass (function (index, className) {
@@ -404,26 +521,21 @@ function removeAllShadowClasses(element){
 	});
 }
 
-// PROJECT PAGE
-$(ajax.Selectors_.SEARCH_INPUT).on('focus',  function(e){
-	removeAllShadowClasses(ajax.Selectors_.SEARCH_CONTAINER);
-	$(ajax.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
+// Project page search focus
+$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus',  function(e){
+	removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
 });
 
-$(ajax.Selectors_.SEARCH_INPUT).on('focusout',  function(e){
-	removeAllShadowClasses(ajax.Selectors_.SEARCH_CONTAINER);
-	$(ajax.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
+// Project page search focus out
+$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout',  function(e){
+	removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
 });
-
-// Makes primary topic first
-$(".topics-list").prepend($(".first"));
-
-// SUPERVISOR
-$('#deleteProjectButton').on('click', function() { Ajax.deleteProject($('#title').val()); });
 
 // SEARCH
-$(ajax.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
-	var container = $(ajax.Selectors_.SEARCH_FILTER_CONTAINER);
+$(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
+	var container = $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_CONTAINER);
 	var filterButton = $(this);
 
 	if(container.hasClass('active')){
@@ -435,69 +547,389 @@ $(ajax.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
 	}
 });
 
+/* ======================
+   4.6 Edit Topics [Admin]
+   ====================== */
+/**
+   * Class constructor for ajax functions.
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var EditTopic = function EditTopic(element) {
+	this.element = $(element);
+	this.originalName = $(element).data("original-topic-name");
+	this.topicId = $(element).data('topic-id');
+	this.topicNameInput = $(element).find('input');
+	this.editButton = $(element).find('.edit-topic');
+	this.deleteButton = $(element).find('.delete-topic');
+	this.init();
+};
+
+window['EditTopic'] = EditTopic;
+
+EditTopic.prototype.CssClasses_ = {};
+
+EditTopic.prototype.Selectors_ = {
+	EDIT_TOPIC: '.edit-topic-list .topic',
+};
+
+EditTopic.prototype.Urls_ = {
+	DELETE_TOPIC: '/topics/',
+	PATCH_TOPIC: '/topics/',
+	NEW_TOPIC: '/topics/'
+};
+
+EditTopic.prototype.functions = {
+	editTopic: function() {
+		var response = confirm("Are you sure you want to change the topic name from \"" +  this.originalName +"\" to \"" +  this.topicNameInput.val() +"\"?");
+
+		if(response){
+			this.topicNameInput.prop('disabled', true);
+			this.editButton.html('<div class="loader"></div>');
+			$('.loader', this.element).css('display', 'block');
+
+			$.ajax({
+				method: 'PATCH',
+				url: this.Urls_.DELETE_TOPIC,
+				context: this,
+				data: {
+					topic_id: this.topicId,
+					topic_name : this.topicNameInput.val()
+				},
+			}).done(function(){
+				this.topicNameInput.prop('disabled', false);
+				this.editButton.html('Edit');
+				this.originalName = this.topicNameInput.val();
+			});
+		} else {
+			this.topicNameInput.val(this.originalName);
+		}
+	},
+
+	deleteTopic: function() {
+		var response = confirm("Are you sure you want to delete the topic \"" +  this.originalName +"\"?");
+		if(response){
+			this.topicNameInput.prop('disabled', true);
+			$.ajax({
+				method: 'DELETE',
+				url: this.Urls_.DELETE_TOPIC,
+				context: this,
+				data: {
+					topic_id: this.topicId,
+				},
+				success: function(){
+					this.element.hide(800, function() {
+						this.remove();
+					});
+				}
+			});
+		}
+	},
+
+	createEditTopicDOM: function(topicId, originalName){
+		$(".edit-topic-list").prepend('<li class="topic" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
+		EditTopic.prototype.initAll();
+	}
+};
+
+EditTopic.prototype.init = function () {
+	var editTopic = this;
+	this.editButton.on('click', $.proxy(this.functions.editTopic, this, editTopic));
+	this.deleteButton.on('click', $.proxy(this.functions.deleteTopic, this, editTopic));
+};
+
+EditTopic.prototype.initAll = function () {
+	$(this.Selectors_.EDIT_TOPIC).each(function() {
+		this.EditTopic = new EditTopic(this);
+	});
+};
+
+/* ======================
+   5. OTHER
+   ====================== */
+// Accept Student
+$('.accept').on('click', function() {
+	acceptStudent($(this).data('student_id'));
+});
+
+// Reject Student
+$('.reject').on('click', function() {
+	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
+});
+
 $("#loginForm").on('submit', function(e){
 	e.preventDefault();
 
 	$('.help-block', '#loginForm').css("display", "none");
-	$('.form-field', this).css("display", "none");
-	$('#login-loader').css("display", "block");
+	$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
 
 	$.ajax({
 		url: $(this).prop('action'),
 		type:'POST',
 		data: $(this).serialize(),
 		success:function(data){
-			$('#login-loader').css("display", "none");
-			console.log($(ajax.Selectors_.LOG_IN_DIALOG));
-			$(ajax.Selectors_.LOG_IN_DIALOG).removeClass('active');
-			$(ajax.Selectors_.CHANGE_AUTH_DIALOG).addClass('active');
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
+			$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
+			$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
 		},
 		error: function (data) {
-			$('.help-block', '#loginForm').css("display", "block");
-			$('.help-block', '#loginForm').text(data["responseJSON"]["errors"]["username"][0]);
-			
-			$('.form-field', '#loginForm').css("display", "block");
-			$('.form-field', '#loginForm').addClass("has-error");
-			
-			$('#login-loader').css("display", "none");
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showDialog();
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
+
+			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data["responseJSON"]["errors"]["username"][0]);
+			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
+			$('.form-field', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
 		}
 	});
 });
 
+$('#new-topic-form').on('submit', function(e) {
+	e.preventDefault();
+	var submitButton = $(this).find(':submit');
+	submitButton.html('<div class="loader"></div>');
 
-/* SUPERVISOR */
-$('.accept').on('click', function() {
-	acceptStudent($(this).data('student_id'));
-});
+	$('.loader', submitButton).css('display', 'block');
 
-$('.reject').on('click', function() {
-	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
-});
-
-function acceptStudent(student_id) {
 	$.ajax({
-		method: 'POST',
-		url: '/supervisor/acceptStudent',
-		data: {
-			student_id : student_id
-		},
-		success: function(){
-			
+		url: $(this).prop('action'),
+		type:'POST',
+		context: $(this),
+		data: $(this).serialize(),
+		success:function(data){
+			data = JSON.parse(data);
+			EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
+			},
+		error: function () {}
+	}).done(function(){
+		$(this).find('input').val('');
+		$(this).find(':submit').html('Add');
+	});
+});
+
+$('#student-edit-list').find('.checkbox input').on('change', function() {
+	var status = $(this).parents().eq(3).data('status');
+	var emailString = "mailto:";
+	var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+	var emailButtonselector = ".email-selected." + status;
+	$(checkboxSelector).each(function() {
+		if($(this).is(":checked")) {
+			emailString += $(this).parent().parent().data('email');
+			emailString += ",";
 		}
+	});
+	$(emailButtonselector).prop('href', emailString);
+});
+
+$('.edit-student-list .email-selected').on('click', function(e) {
+	if($(this).prop('href') === 'mailto:'){
+		alert("You haven't selected anyone.");
+		e.preventDefault();
+	}
+});
+
+// Used for transactions
+$('#show-raw-table-data').on('click', function() {
+	if($(this).prop('checked')){
+		$('table.full-detail').hide();
+		$('table.raw-detail').show();
+	} else {
+		$('table.full-detail').show();
+		$('table.raw-detail').hide();
+	}
+});
+
+// NEW USER
+// put this stuff in an array
+$('#admin-form').hide();
+$('#supervisor-form').hide();
+$('#student-form').show();
+$('#create-form-access-select').on('change', function(){
+	if($('#student-option').is(":selected")) {
+		$('#student-form').show();
+	} else {
+		$('#student-form').hide();
+	}
+	if($('#supervisor-option').is(":selected")) {
+		$('#supervisor-form').show();
+	} else {
+		$('#supervisor-form').hide();
+	}
+	if($('#admin-option').is(":selected")) {
+		$('#admin-form').show();
+	} else {
+		$('#admin-form').hide();
+	}
+});
+
+// STRINGS
+$('#admin-form').hide();
+$('#supervisor-form').hide();
+$('#student-form').show();
+$('#create-form-access-select').on('change', function(){
+	if($('#student-option').is(":selected")) {
+		$('#student-form').show();
+	} else {
+		$('#student-form').hide();
+	}
+	if($('#supervisor-option').is(":selected")) {
+		$('#supervisor-form').show();
+	} else {
+		$('#supervisor-form').hide();
+	}
+	if($('#admin-option').is(":selected")) {
+		$('#admin-form').show();
+	} else {
+		$('#admin-form').hide();
+	}
+});
+
+
+/* ========================
+   6. Second Marker
+   ======================== */
+var Marker = function Marker() {
+	if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
+		return;
+	}
+	this.selectedStudent = null;
+	this.selectedSupervisor = null;
+	this.studentTable = $("#2nd-marker-student-table");
+	this.studentDataTable = this.studentTable[0].dataTable;
+	this.supervisorTable = $("#2nd-marker-supervisor-table");
+	this.supervisorDataTable = this.supervisorTable[0].dataTable;
+	this.init();
+};
+
+
+
+Marker.prototype.init = function(){
+	var marker = this;
+
+	$(marker.studentDataTable.bodyRows).on('click', function() {
+		Marker.prototype.selectStudent(this, marker);
+	});
+
+	$(marker.supervisorDataTable.bodyRows).on('click', function() {
+		Marker.prototype.selectSupervisor(this, marker);
 	});
 }
 
-function rejectStudent(student_id, project_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/rejectStudent',
-		data: {
-			project_id : project_id,
-			student_id : student_id
-		},
-		success: function(){
-			
+
+Marker.prototype.initAll = function(){
+	window['Marker'] = new Marker();
+}
+
+Marker.prototype.selectStudent = function(studentRowDOM, marker){
+	var row = $(studentRowDOM);
+		
+	marker.unselectAll(marker);
+	row.addClass("is-selected");
+	marker.selectedStudent = $(row);
+
+	$(marker.supervisorDataTable.bodyRows).each(function() {
+		if($(this).data('marker-id') == row.data('supervisor-id')){
+			$(this).attr('disabled', true);
+		} else {
+			$(this).attr('disabled', false);
 		}
 	});
+		
 }
+
+Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
+	var row = $(supervisorRowDOM);
+
+	if(row.attr('disabled')){return;}
+
+	if(marker.selectedStudent != null){
+		row.addClass("is-selected");
+		marker.selectedSupervisor = row;
+		Marker.prototype.showDialog(
+			marker.selectedStudent.data('student-name'),
+			marker.selectedStudent.data('supervisor-name'), 
+			row.data('marker-name'), 
+			marker.selectedStudent.data('project'));
+	}
+}
+
+Marker.prototype.resetView = function(marker){
+	$(marker.studentDataTable.bodyRows).removeClass("is-selected");
+	$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
+	$(marker.supervisorDataTable.bodyRows).attr("disabled", true);
+	marker.selectedStudent = null;
+	marker.selectedSupervisor = null;
+}
+
+Marker.prototype.unselectAll = function(marker){
+	$(marker.studentDataTable.bodyRows).removeClass("is-selected");
+	$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
+}
+
+Marker.prototype.showDialog = function(studentName, supervisorName, markerName, project){
+	$("#student-name").text(studentName);
+	$("#supervisor-name").text(supervisorName);
+	$("#marker-name").text(markerName);
+
+	$("#project-title").html('<b>Title: </b>' + project["title"]);
+	$("#project-description").html('<b>Description: </b>' + project["description"]);
+
+	$("#assign-dialog")[0].dialog.showDialog();
+}
+
+$('#submitAssignMarker').on('click', function(){
+	var marker = window['Marker'];
+
+	if(marker.selectedStudent == null || marker.selectedSupervisor == null){
+		$("#assign-dialog")[0].dialog.hideDialog();
+		return;
+	};
+
+	$("#assign-dialog")[0].dialog.showLoader();
+
+	var projectId = marker.selectedStudent.data('project')["id"];
+	var markerId = marker.selectedSupervisor.data('marker-id');
+	var ajaxUrl = "/projects/assignMarker";
+
+	$.ajax({
+		type: "PATCH",
+		url: ajaxUrl,
+		data: {
+			project_id: projectId,
+			marker_id: markerId
+		},
+		success: function(data){
+
+		},
+		// Add fail
+	}).done(function(data){
+		$("#assign-dialog")[0].dialog.hideDialog();
+		$("#assign-dialog")[0].dialog.hideLoader();
+		marker.selectedStudent.remove();
+		marker.resetView(marker);
+	});
+});
+
+/* ========================
+   6. Initialise Everything
+   ======================== */
+MobileMenu.prototype.initAll();
+Dialog.prototype.initAll();
+DataTable.prototype.initAll();
+EditTopic.prototype.initAll();
+Marker.prototype.initAll();
+makeAllSortable();
+
+// .on('click', function(){
+// 	var dataTable = this;
+// 	this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dataTable));
+
+// 	$(this.checkboxes).each(function(i) {
+// 		$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
+// 	});
+
+// 	$(this.headers).each(function(i) {
+// 		$(this).css("cursor", "pointer");
+// 	});
+// });
+
 });

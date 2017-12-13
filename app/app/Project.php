@@ -13,6 +13,7 @@ class Project extends Model{
 	// Mass fillable items
 	protected $fillable = ['title', 'description', 'skills', 'status', 'start_date'];
 	protected $guarded = ['supervisor'];
+	protected $hidden = ['supervisor', 'marker', 'created_at', 'updated_at'];
 
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
@@ -24,7 +25,7 @@ class Project extends Model{
 
 	public function isOwnedByUser(){
 		if(Auth::user()){
-			if(Auth::user()->isSupervisor()){
+			if(Auth::user()->isSupervisorOrSuperior()){
 				if(Auth::user()->supervisor->id === $this->supervisor_id){
 					return true;
 				} else {

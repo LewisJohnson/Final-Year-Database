@@ -23,7 +23,8 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin/students/import', 'AdminController@importStudents');
 	Route::get('admin/amendSupervisorArrangements', 'AdminController@amendSupervisorArrangements');
 
-	// Route::get('/admin/supervisors/arrangements/{id}', 'AdminController@supervisorArrangements');
+	Route::get('admin/assignMarker', 'AdminController@showAssignMarker');
+	Route::patch('projects/assignMarker', 'ProjectController@updateMarker');
 
 	Route::get('admin/amendTopics', 'AdminController@amendTopics');
 	Route::get('admin/login-as', 'AdminController@loginAsView');
@@ -53,16 +54,16 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::post('projects', 'ProjectController@store');
 	Route::get('projects/create', 'ProjectController@create');
 
+	// Projects by Supervisor
+	Route::get('projects/bySupervisor', 'ProjectController@supervisors');
+	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
+	
 	Route::get('projects/{id}', 'ProjectController@show');
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
-
-	// Projects by Supervisor
-	Route::get('projects/bySupervisor/', 'ProjectController@supervisors');
-	Route::get('projects/bySupervisor/{id}', 'ProjectController@bySupervisor');
 	
 	// Projects by Topic
-	Route::get('projects/byTopic/', 'TopicController@index');
+	Route::get('projects/byTopic', 'TopicController@index');
 	Route::get('projects/byTopic/{id}', 'ProjectController@byTopic');
 
 	// Project search

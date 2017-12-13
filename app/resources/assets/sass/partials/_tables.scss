@@ -35,8 +35,21 @@ tr{
 	transition-property: background-color;
 }
 
-tbody tr:hover, tbody tr.is-selected{
+tr[disabled]{
+	background: #f4f4f4;
+	color: darken(#f4f4f4, 20%);
+	cursor: default;
+}
+
+
+tbody tr:hover:not([disabled]), 
+tbody tr:focus:not([disabled]), 
+tbody tr:active:not([disabled]){
 	background-color: #eee;
+}
+ 
+tbody tr.is-selected:not([disabled]){
+	background-color: darken(#eee, 5%);
 }
 
 td{

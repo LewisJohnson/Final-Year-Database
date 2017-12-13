@@ -9,7 +9,7 @@
 
 			<div id="login-username" class="form-field">
 				<label for="username">Username</label>
-				<input value="ug_admin" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+				<input value="admin_ug" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 			</div>
 
 			<div class="form-field">
@@ -23,7 +23,7 @@
 					<label for="remember">Remember Me</label>
 				</div>
 			</div>
-
+			
 			<p class="help-block" style="display:none">
 				{{ $errors->first('username') }}
 			</p>

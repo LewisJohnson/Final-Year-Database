@@ -13,7 +13,7 @@
 	<tbody>
 	@foreach($topics as $topic)
 	@if($topic->amountOfProjectsOnOffer() > 0)
-		<tr class="pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}';">
+		<tr tabindex="0" class="pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}';">
 			<td>{{ $topic->name }}</td>
 			<td>{{ $topic->amountOfProjectsOnOffer() }}</td>
 		</tr>

@@ -6,6 +6,7 @@
 		<h1>@string("homepage_main_header", "masters")</h1>
 	@endif
 	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
+	<button class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
 </header>
 
 <nav class="desktop">
@@ -14,16 +15,16 @@
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Browse</button>
 			<div class="dropdown-content">
-				<a href="/projects" title="">Projects</a>
-				<a href="/projects/bySupervisor" title="">By Supervisor</a>
-				<a href="/projects/byTopic" title="">Topics</a>
+				<a href="/projects" title="browse all projects">Projects</a>
+				<a href="/projects/bySupervisor" title="Projects sorted by supervisor">Projects by Supervisor</a>
+				<a href="/projects/byTopic" title="Projects sorted by topic">Projects by Topics</a>
 			</div>
 		</li>
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="">Supervisor</a></li>
+			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif
 		@if(strpos(Session::get("auth_type"), 'admin') !== false)
-			<li class="nav-button nav-button--desktop"><a href="/admin" title="">Administrator</a></li>
+			<li class="nav-button nav-button--desktop"><a href="/admin" title="Administrator options">Administrator</a></li>
 		@endif
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Student</button>
@@ -100,6 +101,7 @@
 		</li>
 		<li class="footer">
 			<button class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
+			<button class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
 		</li>
 	</ul>
 </div>

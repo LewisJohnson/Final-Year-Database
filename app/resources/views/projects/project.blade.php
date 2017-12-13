@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section ('content')
+@section('content')
 @php ($user = Auth::user())
 
 <div class="centered width-800">
@@ -26,16 +26,30 @@
 	<ul class="topics-list">
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
-				<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
-					<p>{{$topic->name}}</p>
-				</li>
+				@if($project->getPrimaryTopic())
+					<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+						<p>{{$topic->name}}</p>
+					</li>
+				@else
+					<li class="pointer topic"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+						<p>{{$topic->name}}</p>
+					</li>
+				@endif
 			@endforeach
-		@else
+		@endif
+		@if(!count($project->topics))
 			<li class="no-topics">
 			<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
 				<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
 			</svg>
 			<p>This project has no associated topics.</p>
+			</li>
+		@elseif(!$project->getPrimaryTopic())
+			<li class="no-topics">
+				<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
+					<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+				</svg>
+				<p>This project has no primary topic.</p>
 			</li>
 		@endif
 	</ul>
