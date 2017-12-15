@@ -15,17 +15,17 @@ class Strings extends Migration
 
 		Schema::create('strings', function (Blueprint $table) {
 			$table->string('key')->unique();
-			$table->string('value');
+			$table->text('value');
 		});
 
 		Schema::create('strings_ug', function (Blueprint $table) {
 			$table->string('key')->unique();;
-			$table->string('value');
+			$table->text('value');
 		});
 
 		Schema::create('strings_masters', function (Blueprint $table) {
 			$table->string('key')->unique();;
-			$table->string('value');
+			$table->text('value');
 		});
 	}
 

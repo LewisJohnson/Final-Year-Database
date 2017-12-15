@@ -9,6 +9,7 @@ use SussexProjects\ProjectUg;
 use SussexProjects\ProjectMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
+use SussexProjects\Supervisor;
 use DB;
 use Session;
 use Auth;
@@ -34,8 +35,64 @@ class StudentController extends Controller{
 		return view("students.propose-project");
 	}
 
-	public function proposeProject(){
+	public function proposeProject(Request $request){
+		try {
+			DB::transaction(function ($request) use ($request) {
+				$student = Auth::user()->student;
 
+				// Student has already selected a project
+				if($student->project_id != null){
+					session()->flash('message', 'You have already selected a project.');
+					session()->flash('message_type', 'danger');
+					return redirect('/');
+				}
+
+				if(Session::get("db_type") == "ug"){
+					$project = new ProjectUg;
+					$transaction = new TransactionUg;
+				} elseif(Session::get("db_type") == "masters") {
+					$project = new ProjectMasters;
+					$transaction = new TransactionMasters;
+				}
+
+				$supervisor = Supervisor::findOrFail(request('supervisor_id'));
+
+				$project->supervisor_id = request('supervisor_id');
+				$project->student_id = Auth::user()->student->id;
+				$project->student_proposed_project = true;
+				$project->fill(array(
+					'title' => request('title'),
+					'description' => request('description'),
+					'status' => request('status'),
+					'skills' => request('skills'),
+					'author_programme' => 'Computer Science'
+				));
+
+				$project->save();
+			
+				$transaction->fill(array(
+					'transaction_type' =>'proposed',
+					'project_id' => $project->id,
+					'student_id' => Auth::user()->student->id,
+					'supervisor_id' => $supervisor->id,
+					'transaction_date' => new Carbon
+				));
+
+				$student->project_id = $project->id;
+				$student->project_status = 'proposed';
+
+				$student->save();
+				$transaction->save();
+
+				session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
+				session()->flash('message_type', 'success');
+			});
+		} catch(ModelNotFoundException $err){
+			session()->flash('message', 'There was a problem proposing the project.');
+			session()->flash('message_type', 'danger');
+		}
+
+		return redirect()->action('HomeController@index');
 	}
 
 	public function shareProject(Request $request){
@@ -44,9 +101,9 @@ class StudentController extends Controller{
 		$student->save();
 
 		if($student->share_project){
-			session()->flash('message', 'Your name is now visible to others.');
+			session()->flash('message', 'Your name is now visible from other students.');
 		} else {
-			session()->flash('message', 'Your name is now hidden to others.');
+			session()->flash('message', 'Your name is now hidden from other students.');
 		}
 		session()->flash('message_type', 'success');
 		return redirect('/');
@@ -56,6 +113,7 @@ class StudentController extends Controller{
 		try {
 			DB::transaction(function ($request) use ($request) {
 				$student = Auth::user()->student;
+
 				// Student has already selected a project
 				if($student->project_id != null){
 					session()->flash('message', 'You have already selected a project.');
@@ -79,15 +137,16 @@ class StudentController extends Controller{
 					'transaction_type' =>'selected',
 					'project_id' => request('project_id'),
 					'student_id' => Auth::user()->student->id,
+					'supervisor_id' => $project->supervisor->id,
 					'transaction_date' => new Carbon
 				));
 
 				$transaction->save();
-				session()->flash('message', 'You have selected a project.');
+				session()->flash('message', 'You have selected "'.$project->title.'".');
 				session()->flash('message_type', 'success');
 			});
 		} catch(ModelNotFoundException $err){
-			session()->flash('message', 'There was a problem selected the project.');
+			session()->flash('message', 'There was a problem selecting the project.');
 			session()->flash('message_type', 'danger');
 		}
 

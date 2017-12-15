@@ -19,7 +19,11 @@ import {Swappable} from "../../../public/js/draggable";
 $(function() {
 "use strict";
 
-
+// var $table = $('.table--float-head');
+// $table.floatThead({
+// 	top: 39,
+// 	position: 'fixed'
+// });
 /* ======================
    1. AJAX Setup
    ====================== */

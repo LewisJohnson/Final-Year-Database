@@ -231,8 +231,7 @@ class ProjectController extends Controller{
 				'title' => request('title'),
 				'description' => request('description'),
 				'status' => request('status'),
-				'skills' => request('skills'),
-				'start_date' => new Carbon
+				'skills' => request('skills')
 			));
 
 			$project->author_programme = 'Computer Science';

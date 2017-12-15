@@ -9,11 +9,11 @@
 
 @foreach($supervisors as $supervisor)
 @php($iter = 0)
-<table class="shadow-2dp full-detail">
+<table class="shadow-2dp table--dark-head full-detail">
 	{{-- HEADER --}}
 	<thead>
 		<tr>
-			<th>{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>
+			<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>
 			@if(Session::get("db_type") == "ug")
 			<th>@if($supervisor->take_students_ug)Open to offers @else Currently not accepting offers @endif</th>
 			@else

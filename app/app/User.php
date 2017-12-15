@@ -43,11 +43,11 @@ class User extends Authenticatable
 	}
 
 	public function isSupervisorOrSuperior(){
-		return $this->access_type === "supervisor" || 
-		$this->access_type === "admin_ug" || 
-		$this->access_type === "admin_masters" ||
-		$this->access_type === "admin_department" || 
-		$this->access_type === "admin_system";
+		return $this->access_type == "supervisor" || 
+		$this->access_type == "admin_ug" || 
+		$this->access_type == "admin_masters" ||
+		$this->access_type == "admin_department" || 
+		$this->access_type == "admin_system";
 	}
 
 	public function isUgStudent(){

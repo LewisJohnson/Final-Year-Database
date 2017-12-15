@@ -11,7 +11,7 @@ class Project extends Model{
 	protected $primaryKey = 'id';
 	
 	// Mass fillable items
-	protected $fillable = ['title', 'description', 'skills', 'status', 'start_date'];
+	protected $fillable = ['title', 'description', 'skills', 'status', 'author_programme'];
 	protected $guarded = ['supervisor'];
 	protected $hidden = ['supervisor', 'marker', 'created_at', 'updated_at'];
 
@@ -34,4 +34,5 @@ class Project extends Model{
 			}
 		}
 	}
+	
 }

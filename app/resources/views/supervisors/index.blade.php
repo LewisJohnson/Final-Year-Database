@@ -1,8 +1,8 @@
 @extends('layouts.supervisor')
 @section ('content')
 @php($user = Auth::user())
-
 <div class="centered width-1000">
+
 @if(Session::get('db_type') == 'ug')
 	<h1>Undergraduate Supervisor Hub</h1>
 	<p>Your <b>Undergraduate</b> project load is currently {{ $user->supervisor->project_load_ug }}.</p>
@@ -143,7 +143,7 @@
 					<tr>
 						<td><a href="{{ action('ProjectController@show', $project->id) }}" class="project-link">{{ $project->title }}</a></td>
 						@if($project->marker)
-							<td>{{ $project->marker }}</td>
+							<td>{{ $project->marker->user->getFullName() }}</td>
 						@else
 							<td>None</td>
 						@endif

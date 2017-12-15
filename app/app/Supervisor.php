@@ -28,7 +28,7 @@ class Supervisor extends User{
 			->whereNull('student_id')
 			->where("status", "=", $status)
 			->get();
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			return ProjectMasters::where("supervisor_id", $this->id)
 			->whereNull('student_id')
 			->where("status", "=", $status)
@@ -42,7 +42,7 @@ class Supervisor extends User{
 			->orderBy('status', 'asc')
 			->whereNull('student_id')
 			->get();
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			return ProjectMasters::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
 			->whereNull('student_id')
@@ -59,12 +59,12 @@ class Supervisor extends User{
 				->where('students_ug.project_status', '=', 'selected')
 				->whereNotNull('students_ug.project_id')
 				->get();
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			$offers = ProjectMasters::
 				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
-				->where('projects_ug.status', '!=', 'student-proposed')
+				->where('projects_masters.status', '!=', 'student-proposed')
 				->where('students_masters.project_status', '=', 'selected')
 				->whereNotNull('students_masters.project_id')
 				->get();
@@ -92,7 +92,7 @@ class Supervisor extends User{
 				->where('students_ug.project_status', '=', 'accepted')
 				->whereNotNull('students_ug.project_id')
 				->get();
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			$offers = ProjectMasters::
 				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
@@ -125,7 +125,7 @@ class Supervisor extends User{
 				->where('students_ug.project_status', '=', 'proposed')
 				->whereNotNull('students_ug.project_id')
 				->get();
-		} else {
+		} elseif(Session::get("db_type") == "masters") {
 			$studentProposedProjects = ProjectMasters::
 				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')

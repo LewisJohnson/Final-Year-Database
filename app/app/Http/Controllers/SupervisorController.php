@@ -24,10 +24,10 @@ class SupervisorController extends Controller{
 	public function acceptStudent(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::find(request('student_id'))->first();
+				$student = StudentUg::find(request('student_id'));
 				$transaction = new TransactionUg;
 			} else {
-				$student = StudentMasters::find(request('student_id'))->first();
+				$student = StudentMasters::find(request('student_id'));
 				$transaction = new TransactionMasters;
 			}
 
@@ -42,6 +42,9 @@ class SupervisorController extends Controller{
 				'transaction_date' => new Carbon
 			));
 			$transaction->save();
+
+			session()->flash('message', $student->user->getFullName(). ' has been accepted.');
+			session()->flash('message_type', 'success');
 		});
 
 		return $result;
@@ -50,10 +53,10 @@ class SupervisorController extends Controller{
 	public function rejectStudent(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::find(request('student_id'))->first();
+				$student = StudentUg::find(request('student_id'));
 				$transaction = new TransactionUg;
 			} else {
-				$student = StudentMasters::find(request('student_id'))->first();
+				$student = StudentMasters::find(request('student_id'));
 				$transaction = new TransactionMasters;
 			}
 
@@ -70,7 +73,7 @@ class SupervisorController extends Controller{
 			$student->project_status = 'none';
 			$student->save();
 
-			session()->flash('message', ($student->id . 'has been rejected.'));
+			session()->flash('message', $student->user->getFullName(). ' has been rejected.');
 			session()->flash('message_type', 'success');
 		});
 		

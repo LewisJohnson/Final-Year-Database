@@ -9,28 +9,43 @@
 	@endif
 	
 	<div class="form-field">
-		<label class="hover-label" for="title">Title</label>
+		<label for="title">Title</label>
 		<input maxlength="255" type="text" name="title" id="title" required>
 	</div>
 	
 	<div class="form-field">
-		<label class="hover-label" for="description">Description</label>
+		<label for="description">Description</label>
 		<textarea maxlength="16777215" type="text" name="description" id="description" required></textarea>
 	</div>
 
 	<div class="form-field">
-		<label class="hover-label" for="skills">Skills</label>
+		<label for="skills">Skills</label>
 		<input maxlength="255" type="text" name="skills" id="skills"></input>
 	</div>
 
-	<div class="form-field">
-		<label class="hover-label" for="skills">Status</label>
-		<select name="status" id="status">
-			<option value="on-offer">On Offer</option>
-			<option value="withdrawn">Withdrawn</option>
-			<option value="archived">Archived</option>
-		</select>
-	</div>
+	@if($user_type == "supervisor")
+		<div class="form-field">
+			<label for="skills">Status</label>
+			<select name="status" id="status">
+				<option value="on-offer">On Offer</option>
+				<option value="withdrawn">Withdrawn</option>
+				<option value="archived">Archived</option>
+			</select>
+		</div>
+	@elseif($user_type == "student")
+		<input type="hidden" name="status" value="student-proposed">
+	@endif
+
+	@if($user_type == "student")
+		<div class="form-field">
+			<label for="supervisor_id">Supervisor</label>
+			<select id="supervisor_id" name="supervisor_id">
+				@foreach(SussexProjects\Supervisor::all() as $supervisor)
+					<option value="{{ $supervisor->user->id }}">{{ $supervisor->user->getFullName() }}</option>
+				@endforeach
+			</select>
+		</div>
+	@endif
 
 	<div class="form-field">
 		<button class="button button--raised button--accent" type="submit" value="Submit">Create</button>

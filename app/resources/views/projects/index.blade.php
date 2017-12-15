@@ -16,6 +16,7 @@
 @endif
 
 @if($view == "index")
+
 <form action="/projects/search" class="form form--flex" role="form" method="POST" accept-charset="utf-8">
 	 {{ csrf_field() }}
 	<div class="search-container shadow-4dp">
@@ -67,7 +68,7 @@
 	<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
 @endif
 
-<table class="data-table shadow-2dp">
+<table class="data-table table--float-head table--dark-head shadow-2dp">
 	<thead>
 		<tr>
 			<th>Topic</th>

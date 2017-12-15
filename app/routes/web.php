@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function() {
 	   ============== */
 	Route::post('students', 'StudentController@store');
 	Route::get('students/proposeProject', 'StudentController@showProposeProject');
+	Route::post('students/proposeProject', 'StudentController@proposeProject');
 	Route::patch('students/selectProject', 'StudentController@selectProject');
 	Route::patch('students/shareProject', 'StudentController@shareProject');
 

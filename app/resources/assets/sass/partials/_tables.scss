@@ -82,6 +82,13 @@ td:last-of-type, th:last-of-type {
 	text-align: right;
 }
 
+.table--dark-head{
+	thead{
+		background: rgba(0, 0, 0, 0.02);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	}
+}
+
 .raw-detail{
 	display: none;
 }

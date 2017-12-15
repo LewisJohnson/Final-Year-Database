@@ -9,9 +9,14 @@ use Auth;
 class AuthController extends Controller{
 
 		public function change(Request $request){
+			if(!Auth::user()->isSupervisorOrSuperior()){
+			dd(Auth::user());
+				return redirect()->action('HomeController@index');
+			}
+
 			Session::put('auth_type', $request->auth_type);
 			
-			if($request->auth_type === "admin_ug" || $request->auth_type === "ug_supervisor"){
+			if($request->auth_type === "admin_ug" || $request->auth_type === "supervisor_ug"){
 				Session::put('db_type', 'ug');
 			} else {
 				Session::put('db_type', 'masters');
@@ -19,7 +24,7 @@ class AuthController extends Controller{
 
 			session()->flash('message', 'Authentication changed.');
 			session()->flash('message_type', 'success');
-			return redirect('/index');
+			return redirect()->action('HomeController@index');
 		}
 
 		public function show(){
