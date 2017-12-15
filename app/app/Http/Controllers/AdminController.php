@@ -10,6 +10,7 @@ use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\ProjectUg;
 use SussexProjects\ProjectMasters;
+use SussexProjects\UserAgentString;
 use Session;
 
 class AdminController extends Controller{
@@ -19,6 +20,12 @@ class AdminController extends Controller{
 
 	public function importStudents(){
 		return view('admin.import');
+	}
+
+	public function userAgent(){
+	$userAgents = UserAgentString::all();
+		return view('system.user-agent')
+		->with('userAgents', $userAgents);;
 	}
 
 	public function amendSupervisorArrangements(){
@@ -37,7 +44,7 @@ class AdminController extends Controller{
 		}
 
 		return view('admin.amend-topics')
-				->with('topics', $topics);
+			->with('topics', $topics);
 	}
 
 	public function loginAsView(){

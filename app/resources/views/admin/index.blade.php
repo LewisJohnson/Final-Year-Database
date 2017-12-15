@@ -98,7 +98,7 @@
 			<div class="content">
 				<ul class="icon-list">
 					<li>
-						@include('svg.pencil')
+						@include('svg.account-multiple-plus')
 						<a href="/admin/assignMarker">Assign Second Marker</a>
 					</li>
 					<li>
@@ -109,9 +109,14 @@
 						@include('svg.globe')
 						<a href="/admin/parameters">Change Global Parameters</a>
 					</li>
+					<hr>
 					<li>
 						@include('svg.pencil')
 						<a href="/system/strings">Edit Language Strings</a>
+					</li>
+					<li>
+						@include('svg.pencil')
+						<a href="/system/userAgent">User Agent Overview</a>
 					</li>
 				</ul>
 			</div>

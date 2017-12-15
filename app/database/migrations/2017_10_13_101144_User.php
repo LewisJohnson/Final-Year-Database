@@ -11,8 +11,7 @@ class User extends Migration
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up(){
 		Schema::create('users', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('first_name', 128);
@@ -31,8 +30,7 @@ class User extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down(){
 		Schema::dropIfExists('users');
 	}
 }

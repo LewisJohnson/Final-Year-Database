@@ -26,11 +26,14 @@ class Project extends Model{
 	public function isOwnedByUser(){
 		if(Auth::user()){
 			if(Auth::user()->isSupervisorOrSuperior()){
-				if(Auth::user()->supervisor->id === $this->supervisor_id){
-					return true;
-				} else {
+				if($this->student_proposed_project){
 					return false;
+				} else{
+					return $this->supervisor_id === Auth::user()->supervisor->id;
 				}
+			}
+			if(Auth::user()->isStudent()){
+				return $this->student_id === Auth::user()->student->id;
 			}
 		}
 	}

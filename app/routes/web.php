@@ -18,7 +18,7 @@ Route::group(['middleware' => ['web']], function() {
 });
 
 Route::middleware(['Admin_Ug'])->group(function () {
-	Route::get('/admin', 'AdminController@index');
+	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
 	Route::get('admin/amendSupervisorArrangements', 'AdminController@amendSupervisorArrangements');
@@ -35,6 +35,7 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin/transactions/byProject', 'TransactionController@byProject');
 
 	Route::get('system/strings', 'StringsController@edit');
+	Route::get('system/userAgent', 'AdminController@userAgent');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');

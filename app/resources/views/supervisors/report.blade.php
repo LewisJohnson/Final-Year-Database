@@ -73,9 +73,9 @@
 	@endif
 	@php($iter = 0)
 
-	@foreach($supervisor->getStudentProposals() as $project)
+	@foreach($supervisor->getProjectProposals() as $project)
 		<tr>
-			<td>@if($iter == 0)Student Proposals ({{count($supervisor->getStudentProposals())}})@endif</td>
+			<td>@if($iter == 0)Student Proposals ({{count($supervisor->getProjectProposals())}})@endif</td>
 			<td>{{ $project->title }}</td>
 			<td>{{ $project->student_name }}</td>
 		</tr>

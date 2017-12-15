@@ -1,6 +1,5 @@
 @extends('layouts.supervisor')
 @section ('content')
-
 @if(Session::get('db_type') == 'ug')
 	{!! SussexProjects\TopicUg::getDatalist() !!}
 @else

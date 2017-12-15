@@ -264,8 +264,13 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id){
-		$project = Session::get("db_type") == "ug" ? ProjectUg::where('id', $id)->first() : ProjectMasters::where('id', $id)->first();
-		return view('projects.edit', compact('project'));
+		$project = Session::get("db_type") == "ug" ? ProjectUg::find($id) : ProjectMasters::find($id);
+		if($project->isOwnedByUser()){
+			return view('projects.edit')
+			->with('project', $project);
+		} else {
+			return redirect()->action('ProjectController@show', $project);
+		}
 	}
 
 	/**

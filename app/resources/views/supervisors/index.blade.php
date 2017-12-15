@@ -22,7 +22,7 @@
 		</div>
 		<div class="content">
 			<table class="data-table">
-				@if (count($user->supervisor->getProjectOffers()))
+				@if (count($user->supervisor->getProjectOffers()) || count($user->supervisor->getProjectProposals()))
 				<thead>
 					<tr>
 						<th>						
@@ -31,6 +31,7 @@
 								<label for="offers" name="offers"></label>
 							</div>
 						</th>
+						<th>Type</th>
 						<th>Student</th>
 						<th>Project</th>
 						<th></th>
@@ -46,7 +47,22 @@
 										<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
 									</div>
 								</td>
-								
+								<td>Selected</td>
+								<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
+								<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+								<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
+								<td><button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button></td>
+							</tr>
+						@endforeach
+						@foreach($user->supervisor->getProjectProposals() as $project)
+							<tr>
+								<td>
+									<div class="checkbox">
+										<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
+										<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
+									</div>
+								</td>
+								<td>Student Proposed</td>
 								<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
 								<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
 								<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
@@ -83,8 +99,8 @@
 					<tr>
 						<th>						
 							<div class="checkbox">
-								<input class="checkbox-input master-checkbox" id="offers" type="checkbox">
-								<label for="offers" name="offers"></label>
+								<input class="checkbox-input master-checkbox" id="accepted" type="checkbox">
+								<label for="accepted" name="accepted"></label>
 							</div>
 						</th>
 						<th>Student Name</th>
@@ -145,7 +161,7 @@
 						@if($project->marker)
 							<td>{{ $project->marker->user->getFullName() }}</td>
 						@else
-							<td>None</td>
+							<td>-</td>
 						@endif
 						<td>{{ ucfirst(str_replace('-', ' ', $project->status)) }}</td>
 						<td><a class="button" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a></td>
