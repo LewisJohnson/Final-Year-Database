@@ -921,7 +921,6 @@ Dialog.prototype.initAll();
 DataTable.prototype.initAll();
 EditTopic.prototype.initAll();
 Marker.prototype.initAll();
-makeAllSortable();
 
 // .on('click', function(){
 // 	var dataTable = this;

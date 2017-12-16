@@ -5,8 +5,6 @@
 <h1>Report by Supervisor</h1>
 <h5>Some students may have their name hidden.</h5>
 <div style="overflow: auto;">
-
-
 @foreach($supervisors as $supervisor)
 @php($iter = 0)
 <table class="shadow-2dp table--dark-head full-detail">

@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 @section('content')
+@php($statuses = ['none', 'proposed', 'selected', 'accepted'])
 
-<h1>Students</h1>
+<div class="centered width-1600">
+<h1>Report by Student</h1>
 @if(Session::get('db_type') == 'ug')
-	<p>There are a total of <b>{{ count(SussexProjects\StudentUg::get()) }}</b> undergraduate students.</p>
+	<h5>There are a total of <b>{{ count(SussexProjects\StudentUg::get()) }}</b> undergraduate students.</h5>
 @else
-	<p>There are a total of <b>{{ count(SussexProjects\StudentMasters::get()) }}</b> masters students.</p>
+	<h5>There are a total of <b>{{ count(SussexProjects\StudentMasters::get()) }}</b> masters students.</h5>
 @endif
 
-
-@php($statuses = ['none', 'proposed', 'selected', 'accepted'])
 <div class="section-container">
 @foreach($statuses as $status)
 <div class="section horizontal" data-status= "{{ $status }}">
 	<h3>{{ ucfirst($status) }}</h3>
-	<table class="data-table {{ $status }} shadow-2dp" id="student-edit-list">
+	<table class="data-table {{ $status }}  full-detail shadow-2dp" id="student-edit-list">
 		<thead>
 			<tr>
 				<th>			
@@ -41,10 +41,9 @@
 	</table>
 	<div class="button-group">
 		<button class="button button--raised email-selected {{ $status }}" type="">Email Selected</button>
-		<button class="button button--raised" type="">Accept Selected</button>
-		<button class="button button--raised" type="">Reject Selected</button>
 	</div>
 </div>
 @endforeach
+</div>
 </div>
 @endsection

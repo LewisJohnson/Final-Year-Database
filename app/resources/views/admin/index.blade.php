@@ -22,7 +22,7 @@
 						<a href="/users/create">Add User</a>
 					</li>
 					<li>
-						@include('svg.account-plus')
+						@include('svg.account-settings')
 						<a href="/users/edit">Edit User</a>
 					</li>
 					<li>
