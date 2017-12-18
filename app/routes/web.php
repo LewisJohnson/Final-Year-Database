@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth']], function() {
 	   PROJECT ROUTES 
 	   ============== */
 	Route::get('projects', 'ProjectController@index');
+	Route::get('projects/paginated', 'ProjectController@paginatedProjects');
+	
 	Route::post('projects', 'ProjectController@store');
 	Route::get('projects/create', 'ProjectController@create');
 
@@ -99,4 +101,15 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// CHANGE AUTH
 	Route::post('authChange', 'Auth\AuthController@change');
+
+	Route::get('afterLogin', function (){
+		if(Auth::user()->isSupervisorOrSuperior()){
+			return "true";
+		} else {
+			return "false";
+		}
+	});
+
+
+
 });

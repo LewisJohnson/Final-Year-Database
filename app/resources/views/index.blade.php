@@ -1,17 +1,9 @@
 @extends('layouts.app')
 @section ('content')
 
-@if (session('openLogin'))
-    //some js function that will open your hidden modal
-    //if you use bootstrap modal
-    <script>
-       console.log("dddd");
-    </script>
-@endif
-
 <div class="centered width-800">
 @if($user = Auth::user())
-	<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
+	<h1>Welcome, {{ $user->first_name }}.</h1>
 	<h2>@string("homepage_introduction_header", Session::get("db_type"))</h2>
 	<p>@string("homepage_introduction_body", Session::get("db_type"))</p>
 	<h2>@string("homepage_overview_header", Session::get("db_type"))</h2>

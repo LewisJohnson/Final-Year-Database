@@ -58,7 +58,43 @@ class ProjectController extends Controller{
 			->where('student_proposed_project', 0);
 
 		return view('projects.index')
-		->with('projects', $projects->get())
+		->with('projects', $projects->paginate(25))
+		->with('view', 'index');
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function paginatedProjects(){
+		/* SELECT CONDITIONS
+			Select if supervisor take_students is true
+			Select if on-offer
+			Select if NOT archived
+			select if NOT student proposed
+		*/
+
+		if(Session::get("db_type") == "ug"){
+			$projects = ProjectUg::
+			select('projects_ug.*', 'supervisors.take_students_ug')
+			->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
+			->where('supervisors.take_students_ug', true);
+
+		} elseif(Session::get("db_type") == "masters") {
+			$projects = ProjectMasters::
+			select('projects_masters.*', 'supervisors.take_students_masters')
+			->join('supervisors.take_students_masters', 'projects_ug.supervisor_id', '=', 'supervisors.id')
+			->where('supervisors.take_students_masters', true);
+		}
+
+		$projects->
+			whereNotNull('supervisor_id')
+			->where('status', 'on-offer')
+			->where('student_proposed_project', 0);
+
+		return view('projects.partials.project-table-row')
+		->with('projects', $projects->paginate(25))
 		->with('view', 'index');
 	}
 

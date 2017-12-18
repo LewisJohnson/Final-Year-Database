@@ -671,10 +671,15 @@ $("#loginForm").on('submit', function(e){
 		url: $(this).prop('action'),
 		type:'POST',
 		data: $(this).serialize(),
-		success:function(data){
-			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
-			$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
-			$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
+		success:function(showDialog){
+			if(showDialog == "true"){
+				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
+				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
+				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
+			} else {
+				location.reload();
+			}
+
 		},
 		error: function (data) {
 			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showDialog();
@@ -922,17 +927,44 @@ DataTable.prototype.initAll();
 EditTopic.prototype.initAll();
 Marker.prototype.initAll();
 
-// .on('click', function(){
-// 	var dataTable = this;
-// 	this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dataTable));
+var pageNumber = 2;
+var reachedEndOfProjectTable = false, 
+	awaitingResponse = false;
 
-// 	$(this.checkboxes).each(function(i) {
-// 		$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
-// 	});
+$(window).scroll(function() {
+	if($(window).scrollTop() + $(window).height() == $(document).height()) {
 
-// 	$(this.headers).each(function(i) {
-// 		$(this).css("cursor", "pointer");
-// 	});
-// });
+		if(!$('#project-table').hasClass("index")){
+			return;
+		}
+
+		if(!reachedEndOfProjectTable && !awaitingResponse){
+			$(".loader.projects").show();
+			awaitingResponse = true;
+			var urlPath = "/projects/paginated?page=" + pageNumber;
+			$.ajax({
+				type : 'GET',
+				url: urlPath,
+				success : function(data){
+					$(".loader.projects").hide();
+					if(data.length == 0){
+						reachedEndOfProjectTable = true;
+						$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
+					}else{
+						$('#project-table tbody').append($(data));
+						window.history.replaceState("", "", "/projects?page=" + pageNumber);
+					}
+					pageNumber += 1;
+				},
+				error: function(data){
+				}
+			}).done(function(data){
+				awaitingResponse = false;
+			});
+		} else {
+			$(".loader.projects").hide();
+		}
+	}
+});
 
 });

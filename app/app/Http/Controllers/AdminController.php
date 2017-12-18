@@ -23,9 +23,9 @@ class AdminController extends Controller{
 	}
 
 	public function userAgent(){
-	$userAgents = UserAgentString::all();
+	$userAgents = UserAgentString::paginate(50);
 		return view('system.user-agent')
-		->with('userAgents', $userAgents);;
+		->with('userAgents', $userAgents);
 	}
 
 	public function amendSupervisorArrangements(){

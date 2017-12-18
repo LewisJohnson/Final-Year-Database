@@ -6,20 +6,25 @@
 		<h1>@string("homepage_main_header", "masters")</h1>
 	@endif
 	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
-	<button class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
+	@if($user->isSupervisorOrSuperior())
+		<button class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
+	@endif
 </header>
 
 <nav class="desktop">
 	<ul>
+		<li class="nav-button nav-button--desktop"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li>
 		<li class="nav-button nav-button--desktop"><a href="/" title="">Home</a></li>
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Browse</button>
-			<div class="dropdown-content">
+			@include('svg.arrow-down')
+			<div class="dropdown-content shadow-2dp">
 				<a href="/projects" title="browse all projects">Projects</a>
 				<a href="/projects/bySupervisor" title="Projects sorted by supervisor">Projects by Supervisor</a>
 				<a href="/projects/byTopic" title="Projects sorted by topic">Projects by Topics</a>
 			</div>
 		</li>
+
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
 			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif
@@ -28,14 +33,16 @@
 		@endif
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Student</button>
-			<div class="dropdown-content">
+			@include('svg.arrow-down')
+			<div class="dropdown-content shadow-2dp">
 			<a href="/students/proposeProject">Propose Project</a>
 			<a href="/reports/supervisor">Report by Supervisor</a>
 			</div>
 		</li>
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Help</button>
-			<div class="dropdown-content">
+			@include('svg.arrow-down')
+			<div class="dropdown-content shadow-2dp">
 			<a href="/help">System Help</a>
 			<a href="/links">Links</a>
 			<a href="/information">General Information</a>

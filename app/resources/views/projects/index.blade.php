@@ -12,7 +12,7 @@
 @endif
 
 @if($view == "transaction")
-	<h3>Click to see a project to browse it's transactions.</h3>
+	<h3>Click a project to browse it's transactions.</h3>
 @endif
 
 @if($view == "index")
@@ -68,7 +68,7 @@
 	<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
 @endif
 
-<table class="data-table table--float-head table--dark-head shadow-2dp">
+<table id="project-table" class="data-table table--dark-head shadow-2dp {{$view}}">
 	<thead>
 		<tr>
 			<th>Topic</th>
@@ -81,22 +81,10 @@
 	</thead>
 
 	<tbody>
-	@foreach($projects as $project)
-		<tr class="pointer" tabindex="0" @if($view == "transaction") onclick="window.location='{{ action('ProjectController@transactions', $project->id)}}';" @else onclick="window.location='{{ action('ProjectController@show', $project->id)}}';"@endif >
-			@if($project->getPrimaryTopic() != null)
-				<td><a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a></td>
-			@else
-				<td>No Topic</td>
-			@endif
-
-			<td>{{ $project->title }}</td>
-			<td @if($view != "supervisor") class="mobile--hidden" @endif style="@if($view == "supervisor") text-align: left; @endif">{{ $project->skills }}</td>
-			@if($view != "supervisor")
-				<td><a href="{{ action('ProjectController@bySupervisor', $project->supervisor->id) }}">{{ $project->supervisor->user->getFullName() }}</a></td>
-			@endif
-		</tr>
-	@endforeach
+		@include('projects.partials.project-table-row')
 	</tbody>
 </table>
+
+<div style="margin: 1rem auto" class="loader loader--medium projects"></div>
 </div>
 @endsection

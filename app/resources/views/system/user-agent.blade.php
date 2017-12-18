@@ -20,5 +20,7 @@
 	@endforeach
 	</tbody>
 </table>
+
+{{ $userAgents->links() }}
 </div>
 @endsection

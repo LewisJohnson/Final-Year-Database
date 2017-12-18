@@ -6,30 +6,31 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use SussexProjects\Strings;
 use Blade;
-
+use Auth;
+use View;
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		Schema::defaultStringLength(191);
+		View::share('user', Auth::user());
+		Blade::directive('string', function ($expression) {
+			return "<?php echo SussexProjects\Strings::getString($expression) ?>";
+		});
+	}
 
-        Blade::directive('string', function ($expression) {
-            return "<?php echo SussexProjects\Strings::getString($expression) ?>";
-        });
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		//
+	}
 }
