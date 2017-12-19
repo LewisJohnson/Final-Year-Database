@@ -11,7 +11,14 @@ class Controller extends BaseController
 {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+	// The amount of paginated items per page
+	public $paginationCount;
+
 	public function __construct(){
+
+		// A default value
+		$this->paginationCount = 25;
+
 		$this->middleware(function ($request, $next) {
 			$this->user = Auth::user();
 			return $next($request);

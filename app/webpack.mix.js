@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+// require('babel-polyfill'); for ie 10
 
 /*
  |--------------------------------------------------------------------------

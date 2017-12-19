@@ -1,4 +1,7 @@
-import {Swappable} from "../../../public/js/draggable";
+import {Swappable} from '@shopify/draggable';
+
+$(function() {
+"use strict";
 
 /* FILE STRUCTURE
 
@@ -16,34 +19,23 @@ import {Swappable} from "../../../public/js/draggable";
 6. Initialise Everything
 */
 
-$(function() {
-"use strict";
-
-// var $table = $('.table--float-head');
-// $table.floatThead({
-// 	top: 39,
-// 	position: 'fixed'
-// });
 /* ======================
-   1. AJAX Setup
-   ====================== */
+	 1. AJAX Setup
+	 ====================== */
 $.ajaxSetup({
-	headers: {
-		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	}
+	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
 });
 
 
 /* ======================
-   2. HTML Modifications
-   ====================== */
+	 2. HTML Modifications
+	 ====================== */
 // Adds global underlay
 $('body').append('<div class="underlay"></div>');
 
-
 /* ======================
-   3. Generic Functions
-   ====================== */
+	 3. Generic Functions
+	 ====================== */
 function sortTable(table, col, reverse) {
 	var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
 		tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
@@ -78,7 +70,7 @@ function makeAllSortable(parent) {
 function acceptStudent(student_id) {
 	$.ajax({
 		method: 'POST',
-		url: '/supervisor/acceptStudent',
+		url: '/supervisor/student-accept',
 		data: {
 			student_id : student_id
 		},
@@ -91,7 +83,7 @@ function acceptStudent(student_id) {
 function rejectStudent(student_id, project_id) {
 	$.ajax({
 		method: 'POST',
-		url: '/supervisor/rejectStudent',
+		url: '/supervisor/student-reject',
 		data: {
 			project_id : project_id,
 			student_id : student_id
@@ -102,29 +94,24 @@ function rejectStudent(student_id, project_id) {
 	});
 }
 
-$('.show-more').on('click',  function(e) {
-	$(this).hide();
-	$('.project').addClass('expand');
-});
-
-// Makes primary topic first
-$(".topics-list").prepend($(".first"));
-
-// SUPERVISOR
-$('#deleteProjectButton').on('click', function() { AjaxFunctions.prototype.deleteProject($('#title').val()); });
+function removeAllShadowClasses(element){
+	$(element).removeClass (function (index, className) {
+		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
+	});
+}
 
 /* ======================
-   4. Components
-   ====================== */
+	 4. Components
+	 ====================== */
 
 /* ======================
-   4.1 Mobile Menu
-   ====================== */
+	 4.1 Mobile Menu
+	 ====================== */
 /**
-   * Class constructor for mobile menu.
-   *
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
+	 * Class constructor for mobile menu.
+	 *
+	 * @param {HTMLElement} element The element that will be upgraded.
+	 */
 var MobileMenu =  function MobileMenu(element) {
 	if(window['MobileMenu'] == null){
 		window['MobileMenu'] = this;
@@ -174,8 +161,8 @@ MobileMenu.prototype.initAll = function () {
 };
 
 /* ======================
-   4.2 Dialog / Modal
-   ====================== */
+	 4.2 Dialog / Modal
+	 ====================== */
 var Dialog = function Dialog(element) {
 	this.element = $(element);
 	this.dialogName = $(element).data('dialog');
@@ -268,13 +255,13 @@ Dialog.prototype.initAll = function(){
 };
 
 /* ======================
-   4.3 Data Table
-   ====================== */
+	 4.3 Data Table
+	 ====================== */
 /**
-   * Class constructor for data tables.
-   *
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
+	 * Class constructor for data tables.
+	 *
+	 * @param {HTMLElement} element The element that will be upgraded.
+	 */
 var DataTable = function DataTable(element) {
 	this.element = $(element);
 	this.headers = $(element).find('thead tr th');
@@ -341,13 +328,13 @@ DataTable.prototype.initAll = function () {
 };
 
 /* ======================
-   4.4 Project Topics [Supervisor]
-   ====================== */
+	 4.4 Project Topics [Supervisor]
+	 ====================== */
 /**
-   * Class constructor for project topics.
-   *
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
+	 * Class constructor for project topics.
+	 *
+	 * @param {HTMLElement} element The element that will be upgraded.
+	 */
 var ProjectTopics =  function ProjectTopics() {};
 window['ProjectTopics'] = ProjectTopics;
 
@@ -372,7 +359,7 @@ var projectTopics = new ProjectTopics();
 ProjectTopics.prototype.functions = {
 	addTopicToProject: function (projectId, topicName) {
 		$('.loader').show(0);
-		var ajaxUrl = "/projects/addTopic";
+		var ajaxUrl = "/projects/topic-add";
 		$.ajax({
 			type: "POST",
 			url: ajaxUrl,
@@ -393,7 +380,7 @@ ProjectTopics.prototype.functions = {
 
 	removeTopicFromProject: function (projectId, topicId) {
 		$('.loader').show(0);
-		var ajaxUrl = "/projects/removeTopic";
+		var ajaxUrl = "/projects/topic-remove";
 		$.ajax({
 			type: "DELETE",
 			url: ajaxUrl,
@@ -415,7 +402,7 @@ ProjectTopics.prototype.functions = {
 
 	updateProjectPrimaryTopic: function (projectId, topicId) {
 		$('.loader').show(0);
-		var ajaxUrl = "/projects/updatePrimaryTopic";
+		var ajaxUrl = "/projects/topic-update-primary";
 		$.ajax({
 			type: "PATCH",
 			url: ajaxUrl,
@@ -440,7 +427,7 @@ ProjectTopics.prototype.functions = {
 };
 
 const swappable = new Swappable(document.querySelectorAll('.topics-list.edit'), {
-  draggable: '.topic',
+	draggable: '.topic',
 });
 
 swappable.on('swappable:swapped', function(){
@@ -472,13 +459,13 @@ $(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
 });
 
 /* ======================
-   4.5 Forms / AJAX Functions
-   ====================== */
+	 4.5 Forms / AJAX Functions
+	 ====================== */
 /**
-   * Class constructor for ajax functions.
-   *
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
+	 * Class constructor for ajax functions.
+	 *
+	 * @param {HTMLElement} element The element that will be upgraded.
+	 */
 var AjaxFunctions =  function AjaxFunctions() {};
 window['AjaxFunctions'] = AjaxFunctions;
 
@@ -519,12 +506,6 @@ AjaxFunctions.prototype.functions = {
 	}
 };
 
-function removeAllShadowClasses(element){
-	$(element).removeClass (function (index, className) {
-		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
-	});
-}
-
 // Project page search focus
 $(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus',  function(e){
 	removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
@@ -552,13 +533,13 @@ $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function(
 });
 
 /* ======================
-   4.6 Edit Topics [Admin]
-   ====================== */
+	 4.6 Edit Topics [Admin]
+	 ====================== */
 /**
-   * Class constructor for ajax functions.
-   *
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
+	 * Class constructor for ajax functions.
+	 *
+	 * @param {HTMLElement} element The element that will be upgraded.
+	 */
 var EditTopic = function EditTopic(element) {
 	this.element = $(element);
 	this.originalName = $(element).data("original-topic-name");
@@ -649,8 +630,8 @@ EditTopic.prototype.initAll = function () {
 };
 
 /* ======================
-   5. OTHER
-   ====================== */
+	 5. OTHER
+	 ====================== */
 // Accept Student
 $('.accept').on('click', function() {
 	acceptStudent($(this).data('student_id'));
@@ -660,6 +641,17 @@ $('.accept').on('click', function() {
 $('.reject').on('click', function() {
 	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
 });
+
+$('.show-more').on('click',  function(e) {
+	$(this).hide();
+	$('.project').addClass('expand');
+});
+
+// Makes primary topic first
+$(".topics-list").prepend($(".first"));
+
+// SUPERVISOR
+$('#deleteProjectButton').on('click', function() { AjaxFunctions.prototype.deleteProject($('#title').val()); });
 
 $("#loginForm").on('submit', function(e){
 	e.preventDefault();
@@ -792,10 +784,9 @@ $('#create-form-access-select').on('change', function(){
 	}
 });
 
-
 /* ========================
-   6. Second Marker
-   ======================== */
+	 6. Second Marker
+	 ======================== */
 var Marker = function Marker() {
 	if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
 		return;
@@ -809,8 +800,6 @@ var Marker = function Marker() {
 	this.init();
 };
 
-
-
 Marker.prototype.init = function(){
 	var marker = this;
 
@@ -822,7 +811,6 @@ Marker.prototype.init = function(){
 		Marker.prototype.selectSupervisor(this, marker);
 	});
 }
-
 
 Marker.prototype.initAll = function(){
 	window['Marker'] = new Marker();
@@ -841,8 +829,7 @@ Marker.prototype.selectStudent = function(studentRowDOM, marker){
 		} else {
 			$(this).attr('disabled', false);
 		}
-	});
-		
+	});	
 }
 
 Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
@@ -897,7 +884,7 @@ $('#submitAssignMarker').on('click', function(){
 
 	var projectId = marker.selectedStudent.data('project')["id"];
 	var markerId = marker.selectedSupervisor.data('marker-id');
-	var ajaxUrl = "/projects/assignMarker";
+	var ajaxUrl = "/projects/marker-assign";
 
 	$.ajax({
 		type: "PATCH",
@@ -919,17 +906,17 @@ $('#submitAssignMarker').on('click', function(){
 });
 
 /* ========================
-   6. Initialise Everything
-   ======================== */
+	 6. Initialise Everything
+	 ======================== */
 MobileMenu.prototype.initAll();
 Dialog.prototype.initAll();
 DataTable.prototype.initAll();
 EditTopic.prototype.initAll();
 Marker.prototype.initAll();
 
-var pageNumber = 2;
-var reachedEndOfProjectTable = false, 
-	awaitingResponse = false;
+var projects_pageNumber = 2;
+var projects_reachedEndOfProjectTable = false, 
+	projects_awaitingResponse = false;
 
 $(window).scroll(function() {
 	if($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -938,31 +925,73 @@ $(window).scroll(function() {
 			return;
 		}
 
-		if(!reachedEndOfProjectTable && !awaitingResponse){
+		if(!projects_reachedEndOfProjectTable && !projects_awaitingResponse){
 			$(".loader.projects").show();
-			awaitingResponse = true;
-			var urlPath = "/projects/paginated?page=" + pageNumber;
+			projects_awaitingResponse = true;
+			var urlPath = "/projects/paginated?page=" + projects_pageNumber;
 			$.ajax({
 				type : 'GET',
 				url: urlPath,
 				success : function(data){
 					$(".loader.projects").hide();
 					if(data.length == 0){
-						reachedEndOfProjectTable = true;
+						projects_reachedEndOfProjectTable = true;
 						$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
 					}else{
 						$('#project-table tbody').append($(data));
-						window.history.replaceState("", "", "/projects?page=" + pageNumber);
+						window.history.replaceState("", "", "/projects?page=" + projects_pageNumber);
 					}
-					pageNumber += 1;
+					projects_pageNumber += 1;
 				},
 				error: function(data){
 				}
 			}).done(function(data){
-				awaitingResponse = false;
+				projects_awaitingResponse = false;
 			});
 		} else {
 			$(".loader.projects").hide();
+		}
+	}
+});
+
+var agents_pageNumber = 2;
+var agents_reachedEndOfProjectTable = false, 
+	agents_awaitingResponse = false;
+
+$(window).scroll(function() {
+	if($(window).scrollTop() + $(window).height() == $(document).height()) {
+
+		if(!$('#user-agent-table')){
+			return;
+		}
+
+		if(!agents_reachedEndOfProjectTable && !agents_awaitingResponse){
+			$(".loader.user-agent").show();
+			agents_awaitingResponse = true;
+			var urlPath = "/system/user-agent/paginated?page=" + agents_pageNumber;
+			$.ajax({
+				type : 'GET',
+				url: urlPath,
+				success : function(data){
+					$(".loader.user-agent").hide();
+
+					if(data.length == 0){
+						agents_reachedEndOfProjectTable = true;
+						$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
+					}else{
+						$('#user-agent-table tbody').append($(data));
+						window.history.replaceState("", "", "/system/user-agent?page=" + agents_pageNumber);
+					}
+
+					agents_pageNumber += 1;
+				},
+				error: function(data){
+				}
+			}).done(function(data){
+				agents_awaitingResponse = false;
+			});
+		} else {
+			$(".loader.user-agent").hide();
 		}
 	}
 });

@@ -88,7 +88,14 @@
 
 .edit-topic-list{
 	list-style: none;
-	
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+
+	.topic:nth-child(odd) {
+		margin-right: 59px;
+	}
+
 	.topic{
 		margin-bottom: 10px;
 
@@ -97,11 +104,3 @@
 		}
 	}
 }
-
-// .edit-student-list{
-// 	.student-edit-item{
-// 		:not(:first-child){
-// 			width: 150px;
-// 		}
-// 	}
-// }

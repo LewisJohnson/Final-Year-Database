@@ -13,7 +13,7 @@
 
 <nav class="desktop">
 	<ul>
-		<li class="nav-button nav-button--desktop"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li>
+		{{-- <li class="nav-button nav-button--desktop"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
 		<li class="nav-button nav-button--desktop"><a href="/" title="">Home</a></li>
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Browse</button>
@@ -24,7 +24,6 @@
 				<a href="/projects/byTopic" title="Projects sorted by topic">Projects by Topics</a>
 			</div>
 		</li>
-
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
 			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif

@@ -14,6 +14,11 @@ use SussexProjects\UserAgentString;
 use Session;
 
 class AdminController extends Controller{
+
+	public function __construct(){
+		$this->paginationCount = 100;
+	}
+
 	public function index(){
 		return view('admin.index');
 	}
@@ -23,9 +28,17 @@ class AdminController extends Controller{
 	}
 
 	public function userAgent(){
-	$userAgents = UserAgentString::paginate(50);
+		$userAgents = UserAgentString::paginate($this->paginationCount);
+
 		return view('system.user-agent')
-		->with('userAgents', $userAgents);
+			->with('userAgents', $userAgents);
+	}
+
+	public function userAgentPaginated(){
+		$userAgents = UserAgentString::paginate($this->paginationCount);
+
+		return view('system.partials.user-agent-row')
+			->with('userAgents', $userAgents);
 	}
 
 	public function amendSupervisorArrangements(){

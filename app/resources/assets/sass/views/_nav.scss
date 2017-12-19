@@ -70,7 +70,7 @@ nav.mobile.is-visible{
 }
 
 .nav-button--desktop{
-	margin-right: 10px;   
+	margin-right: 10px;
 	color: white;
 	transition: 0.3s all;
 	
@@ -106,35 +106,43 @@ nav.mobile.is-visible{
 
 .dropdown{
 	overflow: hidden;
+	height: 50px;
 }
 
 .dropdown-content{
+	// background-color: rgba(255, 255, 255, 0.8);
 	display: none;
 	position: absolute;
-	// background-color: rgba(255, 255, 255, 0.8);
 	background: #f9f9f9;
 	z-index: 1;
 	transform-origin: top left;
 	border: 1px solid #e5e5e5;
 	border-top: none;
-}
+	top: 50px;
 
-.dropdown-content a {
-	display: block;
-	padding: 12px 16px;
-	text-decoration: none;
-	color: lighten(black, 10%);
+	a {
+		display: block;
+		padding: 12px 16px;
+		text-decoration: none;
+		color: lighten(black, 10%);
+	}
 }
 
 .dropdown:hover .dropdown-content {
 	display: block;
-	animation: showDropdownContentAnim 0.24s ease;
+	animation: showDropdownContentAnim 0.12s ease;
 }
 
+.dropdown{
+	.svg-container{
+		display: inline-block;
 
-.dropdown .svg-container svg {
-	position: relative;
-	transition: .25s all cubic-bezier(.4,0,.2,1);
+		svg {
+			position: relative;
+			margin-top: 10px;
+			transition: .25s all cubic-bezier(.4,0,.2,1);
+		}
+	}
 }
 
 .dropdown:hover .svg-container svg {

@@ -16,10 +16,11 @@
 	
 	<!-- Scripts -->
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-	<script src="{{ asset('js/jquery.floatThead.min.js') }}"></script>
-	<script src="{{ asset('js/draggable.js') }}"></script>
-	<script src="{{ asset('js/swappable.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.3/lib/swappable.js"></script>
 	<script src="{{ asset('js/main.js') }}" async></script>
+	{{-- <script src="{{ asset('js/jquery.floatThead.min.js') }}"></script> --}}
+	{{-- <script src="{{ asset('js/draggable.js') }}"></script> --}}
+	{{-- <script src="{{ asset('js/swappable.js') }}"></script> --}}
 	
 	@yield('scripts')
 
