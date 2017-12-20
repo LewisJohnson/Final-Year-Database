@@ -2,7 +2,8 @@
 
 Route::group(['middleware' => ['web']], function() {
 
-	Route::get('authChange', 'Auth\AuthController@show');
+	Route::get('authenticaion-change', 'Auth\AuthController@show');
+
 	// Login Routes
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
@@ -110,7 +111,4 @@ Route::group(['middleware' => ['auth']], function() {
 			return "false";
 		}
 	});
-
-
-
 });

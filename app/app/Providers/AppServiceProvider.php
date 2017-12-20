@@ -19,9 +19,6 @@ class AppServiceProvider extends ServiceProvider
 	{
 		Schema::defaultStringLength(191);
 		View::share('user', Auth::user());
-		Blade::directive('string', function ($expression) {
-			return "<?php echo SussexProjects\Strings::getString($expression) ?>";
-		});
 	}
 
 	/**
