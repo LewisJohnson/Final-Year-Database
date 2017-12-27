@@ -5,9 +5,10 @@ use SussexProjects\User;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use DB;
 use Session;
-use Illuminate\Support\Carbon;
+
 class UserController extends Controller{
 
 	public function __construct(){ 

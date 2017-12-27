@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
 		// Projects: 600 (300 UG, 300 MSc)
 
 		// First 100 students select projects 1 - 100
-
 		factory(SussexProjects\User::class, 344)->create();
 		factory(SussexProjects\Supervisor::class, 40)->create();
 

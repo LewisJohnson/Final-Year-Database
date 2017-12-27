@@ -1,9 +1,9 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
 	@if(Session::get('db_type') == 'ug')
-		<h1>@string("homepage_main_header", "ug")</h1>
+		<h1>@lang("messages_ug.homepage_main_header")</h1>
 	@else
-		<h1>@string("homepage_main_header", "masters")</h1>
+		<h1>@lang("messages_masters.homepage_main_header"))</h1>
 	@endif
 	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
 	@if($user->isSupervisorOrSuperior())
@@ -19,9 +19,9 @@
 			<button class="dropbtn">Browse</button>
 			@include('svg.arrow-down')
 			<div class="dropdown-content shadow-2dp">
-				<a href="/projects" title="browse all projects">Projects</a>
-				<a href="/projects/bySupervisor" title="Projects sorted by supervisor">Projects by Supervisor</a>
-				<a href="/projects/byTopic" title="Projects sorted by topic">Projects by Topics</a>
+				<a href="/projects" title="Browse all projects">Projects</a>
+				<a href="/projects/bySupervisor" title="Browse projects sorted by supervisor">Projects by Supervisor</a>
+				<a href="/projects/byTopic" title="Browse projects sorted by topic">Projects by Topics</a>
 			</div>
 		</li>
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
@@ -30,22 +30,35 @@
 		@if(strpos(Session::get("auth_type"), 'admin') !== false)
 			<li class="nav-button nav-button--desktop"><a href="/admin" title="Administrator options">Administrator</a></li>
 		@endif
-		<li class="nav-button nav-button--desktop dropdown">
-			<button class="dropbtn">Student</button>
-			@include('svg.arrow-down')
-			<div class="dropdown-content shadow-2dp">
-			<a href="/students/proposeProject">Propose Project</a>
-			<a href="/reports/supervisor">Report by Supervisor</a>
-			</div>
-		</li>
+
+		@if($user->isStudent())
+			<li class="nav-button nav-button--desktop dropdown">
+				<button class="dropbtn">Student</button>
+				@include('svg.arrow-down')
+				<div class="dropdown-content shadow-2dp">
+					<a href="/students/project-propose">Propose Project</a>
+					<a href="/reports/supervisor">Report by Supervisor</a>
+				</div>
+			</li>
+		@endif
+
 		<li class="nav-button nav-button--desktop dropdown">
 			<button class="dropbtn">Help</button>
 			@include('svg.arrow-down')
 			<div class="dropdown-content shadow-2dp">
-			<a href="/help">System Help</a>
-			<a href="/links">Links</a>
-			<a href="/information">General Information</a>
-			<a href="/about">About</a>
+				<a href="/help">System Help</a>
+				<div class="sub-dropdown">
+					<button class="sub-dropbtn">Links</button>
+					@include('svg.arrow-right')
+					<div class="dropdown-content shadow-2dp">
+						@for ($i = 1; $i <= 20; $i++)
+							@if(Lang::has("messages_ug.help_link_".$i))
+								<a href="@lang("messages_ug.help_link_".$i."_url")">@lang("messages_ug.help_link_".$i)</a>
+							@endif
+						@endfor
+					</div>
+				</div>
+				<a href="/information">General Information</a>
 			</div>
 		</li>
 	</ul>
@@ -97,11 +110,11 @@
 		<li class="nav-button nav-button--mobile nav-button--grouped">
 			<a href="/links">Links</a>
 		</li>
-		
+
 		<li class="nav-button nav-button--mobile nav-button--grouped">
-			<a href="/information">General Information</a>	
+			<a href="/information">General Information</a>
 		</li>
-		
+
 		<li class="nav-button nav-button--mobile nav-button--grouped">
 			<a href="/about">About</a>
 		</li>

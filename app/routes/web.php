@@ -22,12 +22,12 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
-	Route::get('admin/amend-supervisor-arrangements', 'AdminController@amendSupervisorArrangements');
+	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
 	Route::get('admin/marker-assign', 'AdminController@showAssignMarker');
 	Route::patch('projects/marker-assign', 'ProjectController@updateMarker');
 
-	Route::get('admin/amendTopics', 'AdminController@amendTopics');
+	Route::get('admin/topics-amend', 'AdminController@amendTopics');
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 	Route::get('admin/archive', 'AdminController@archive');

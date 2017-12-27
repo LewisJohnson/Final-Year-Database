@@ -143,7 +143,7 @@ MobileMenu.prototype.openMenu = function (){
 MobileMenu.prototype.closeMenu = function (){
 	this.activator.attr("aria-expanded", "false");
 	this.element.removeClass(this.CssClasses_.VISIBLE);
-	
+
 	this.underlay.attr("aria-hidden", "true");
 	this.underlay.removeClass(this.CssClasses_.VISIBLE);
 };
@@ -818,7 +818,7 @@ Marker.prototype.initAll = function(){
 
 Marker.prototype.selectStudent = function(studentRowDOM, marker){
 	var row = $(studentRowDOM);
-		
+
 	marker.unselectAll(marker);
 	row.addClass("is-selected");
 	marker.selectedStudent = $(row);
@@ -829,7 +829,7 @@ Marker.prototype.selectStudent = function(studentRowDOM, marker){
 		} else {
 			$(this).attr('disabled', false);
 		}
-	});	
+	});
 }
 
 Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
@@ -842,8 +842,8 @@ Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
 		marker.selectedSupervisor = row;
 		Marker.prototype.showDialog(
 			marker.selectedStudent.data('student-name'),
-			marker.selectedStudent.data('supervisor-name'), 
-			row.data('marker-name'), 
+			marker.selectedStudent.data('supervisor-name'),
+			row.data('marker-name'),
 			marker.selectedStudent.data('project'));
 	}
 }
@@ -915,7 +915,7 @@ EditTopic.prototype.initAll();
 Marker.prototype.initAll();
 
 var projects_pageNumber = 2;
-var projects_reachedEndOfProjectTable = false, 
+var projects_reachedEndOfProjectTable = false,
 	projects_awaitingResponse = false;
 
 $(window).scroll(function() {
@@ -944,9 +944,13 @@ $(window).scroll(function() {
 					projects_pageNumber += 1;
 				},
 				error: function(data){
+					$('#project-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+					projects_awaitingResponse = false;
+					$(".loader.projects").hide();
 				}
 			}).done(function(data){
 				projects_awaitingResponse = false;
+				$(".loader.projects").hide();
 			});
 		} else {
 			$(".loader.projects").hide();
@@ -955,7 +959,7 @@ $(window).scroll(function() {
 });
 
 var agents_pageNumber = 2;
-var agents_reachedEndOfProjectTable = false, 
+var agents_reachedEndOfProjectTable = false,
 	agents_awaitingResponse = false;
 
 $(window).scroll(function() {
@@ -986,9 +990,12 @@ $(window).scroll(function() {
 					agents_pageNumber += 1;
 				},
 				error: function(data){
+					$('#user-agent-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+					agents_awaitingResponse = false;
 				}
 			}).done(function(data){
 				agents_awaitingResponse = false;
+				$(".loader.user-agent").hide();
 			});
 		} else {
 			$(".loader.user-agent").hide();

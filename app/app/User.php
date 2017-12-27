@@ -1,13 +1,12 @@
 <?php
-
 namespace SussexProjects;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Session;
+use Auth;
+class User extends Authenticatable{
 
-class User extends Authenticatable
-{
 	use Notifiable;
 	public $timestamps = false;
 	protected $dates = ['last_login'];
@@ -89,7 +88,7 @@ class User extends Authenticatable
 	}
 
 	public function getFullName(){
-		if($this->isUgAdmin() || $this->isMastersAdmin() || $this->isSupervisor()){
+		if(Auth::user()->isSupervisorOrSuperior()){
 			$format = '%s %s %s';
 			return sprintf($format, $this->supervisor->title, $this->first_name, $this->last_name);
 		} else {

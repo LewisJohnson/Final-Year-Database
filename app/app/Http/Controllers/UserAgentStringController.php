@@ -1,12 +1,10 @@
 <?php
-
 namespace SussexProjects\Http\Controllers;
 
 use SussexProjects\name;
 use Illuminate\Http\Request;
 
-class UserString extends Controller
-{
+class UserAgentStringController extends Controller{
     /**
      * Display a listing of the resource.
      *

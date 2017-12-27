@@ -1,6 +1,14 @@
 <?php
 
 return [
+	'help_link_1' => 'For Students and Supervisors',
+	'help_link_1_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/',
+	'help_link_2' => 'For Students and Supervisors',
+	'help_link_2_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/',
+	'help_link_3' => 'For Students and Supervisors',
+	'help_link_3_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/',
+	'help_link_4' => 'For Students and Supervisors',
+	'help_link_4_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/',
 	'password' => 'Passwords must be at least six characters and match the confirmation.',
 	'reset' => 'Your password has been reset!',
 	'sent' => 'We have e-mailed your password reset link!',
