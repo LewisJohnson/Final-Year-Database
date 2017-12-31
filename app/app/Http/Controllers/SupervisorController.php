@@ -43,8 +43,6 @@ class SupervisorController extends Controller{
 			));
 
 			$transaction->save();
-			session()->flash('message', $student->user->getFullName(). ' has been accepted.');
-			session()->flash('message_type', 'success');
 		});
 
 		return $result;
@@ -62,7 +60,7 @@ class SupervisorController extends Controller{
 
 			$transaction->fill(array(
 				'transaction_type' =>'rejected',
-				'project_id' => request('project_id'),
+				'project_id' => $student->project_id,
 				'student_id' => $student->id,
 				'supervisor_id' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
@@ -72,9 +70,6 @@ class SupervisorController extends Controller{
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
-
-			session()->flash('message', $student->user->getFullName(). ' has been rejected.');
-			session()->flash('message_type', 'success');
 		});
 
 		return $result;

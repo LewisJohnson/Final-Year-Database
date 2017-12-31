@@ -28,7 +28,6 @@ $(function() {
 $.ajaxSetup({
 	headers: {
 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-		'MADE-BY': 'Lewis Johnson'
 	}
 });
 
@@ -554,7 +553,7 @@ EditTopic.prototype.functions = {
 					topic_id: this.topicId,
 				},
 				success: function(){
-					this.element.hide(800, function() {
+					this.element.hide(400, function() {
 						this.remove();
 					});
 				}
@@ -798,47 +797,57 @@ $(window).scroll(function() {
 /* ======================
 	 7. SUPERVISOR
    ====================== */
+
 // Accept Student
-$('.supervisor-table .accept').on('click', function() {
-	var student_id = $(this).data('student_id');
+$('.supervisor-table .offer-action').on('click', function() {
+	var actionButton = $(this);
+	var actionType = actionButton.data('action-type');
+	var tableRow = actionButton.parents().eq(1);
+	var student_id = tableRow.data('student-id');
+
+	actionButton.html('<div class="loader"></div>');
+	$('.loader', actionButton).css('display', 'block');
+
+	if(actionType === "accept"){
+		var ajaxUrl = '/supervisor/student-accept';
+	} else if (actionType === "reject"){
+		var ajaxUrl = '/supervisor/student-reject';
+	}
+
+	if(ajaxUrl == null){
+		console.log("Invalid supervisor action.");
+		return;
+	}
+
 	$.ajax({
 		method: 'POST',
-		url: '/supervisor/student-accept',
+		url: ajaxUrl,
 		data: {
 			student_id : student_id
 		},
-		success: function(){
-
+		success: function(data){
+			tableRow.hide(400, function() {
+				tableRow.remove();
+			});
+			if(actionType === "accept"){
+				showNotification('', 'Student has been accepted.');
+				// todo: add to thingy to table
+				// todo: maybe php that refreshes table instead
+				// $("#supervisor-accepted-students-table tbody").prepend();
+			} else if (actionType === "reject"){
+				showNotification('', 'Student has been rejected.');
+			}
+		},
+		error: function() {
+			actionButton.html(actionType);
 		}
 	});
-});
-
-// Reject Student
-$('.supervisor-table .reject').on('click', function() {
-	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
 });
 
 $('#deleteProjectButton').on('click', function() {
 	AjaxFunctions.prototype.deleteProject($('#title').val());
 });
 
-function acceptStudent(student_id) {
-
-}
-
-function rejectStudent(student_id, project_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/student-reject',
-		data: {
-			project_id : project_id,
-			student_id : student_id
-		},
-		success: function(){
-
-		}
-	});
-}
 
 $('#student-edit-list').find('.checkbox input').on('change', function() {
 	var status = $(this).parents().eq(3).data('status');
@@ -873,8 +882,6 @@ $('.show-more').on('click',  function(e) {
 $(".topics-list").prepend($(".first"));
 
 // SUPERVISOR
-
-
 $("#loginForm").on('submit', function(e){
 	e.preventDefault();
 
@@ -910,7 +917,6 @@ $('#new-topic-form').on('submit', function(e) {
 	e.preventDefault();
 	var submitButton = $(this).find(':submit');
 	submitButton.html('<div class="loader"></div>');
-
 	$('.loader', submitButton).css('display', 'block');
 
 	$.ajax({
@@ -997,3 +1003,18 @@ Marker.prototype.initAll();
 
 // END OF FILE
 });
+
+$(document).ajaxError(function( event, request, settings ) {
+	showNotification('error', 'Something went wrong with that request.');
+});
+
+function showNotification(type, message){
+	var notification = $('.notification');
+	notification.addClass(type);
+	$(notification).html("<p>" + message + "</p>");
+	notification.show();
+
+	setTimeout(function() {
+		notification.hide(0);
+	}, 3000);
+}

@@ -44,4 +44,9 @@ class HomeController extends Controller{
 	public function about(Request $request){
 		return view('help.about');
 	}
+
+	public function noJs(Request $request){
+		return view('no-js');
+	}
+
 }
