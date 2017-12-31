@@ -1,11 +1,6 @@
 <?php
 
 return [
-	'password' => 'Passwords must be at least six characters and match the confirmation.',
-	'reset' => 'Your password has been reset!',
-	'sent' => 'We have e-mailed your password reset link!',
-	'token' => 'This password reset token is invalid.',
-	'user' => "We can't find a user with that e-mail address.",
 	'homepage_main_header' => 'Sussex Informatics Projects',
 	'homepage_introduction_header' => 'Overview',
 	'homepage_introduction_body' => 'There is lots of useful information and advice about all aspects of the projects here for students and supervisors alike. Logging-in will allow browsing of sample projects at any time or full access during the project selection period.',

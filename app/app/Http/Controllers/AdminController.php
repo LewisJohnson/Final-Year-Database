@@ -1,7 +1,12 @@
 <?php
 namespace SussexProjects\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 use SussexProjects\User;
 use SussexProjects\Supervisor;
 use SussexProjects\TopicUg;
@@ -11,11 +16,13 @@ use SussexProjects\StudentMasters;
 use SussexProjects\ProjectUg;
 use SussexProjects\ProjectMasters;
 use SussexProjects\UserAgentString;
-use Session;
+use SussexProjects\TransactionUg;
+use SussexProjects\TransactionMasters;
 
 class AdminController extends Controller{
 
 	public function __construct(){
+		$this->middleware('auth');
 		$this->paginationCount = 100;
 	}
 
@@ -27,18 +34,16 @@ class AdminController extends Controller{
 		return view('admin.import');
 	}
 
-	public function userAgent(){
+	public function userAgent(Request $request){
 		$userAgents = UserAgentString::paginate($this->paginationCount);
 
-		return view('system.user-agent')
+		if($request->query("partial")){
+			return view('system.partials.user-agent-row')
 			->with('userAgents', $userAgents);
-	}
-
-	public function userAgentPaginated(){
-		$userAgents = UserAgentString::paginate($this->paginationCount);
-
-		return view('system.partials.user-agent-row')
+		} else {
+			return view('system.user-agent')
 			->with('userAgents', $userAgents);
+		}
 	}
 
 	public function amendSupervisorArrangements(){
@@ -46,9 +51,9 @@ class AdminController extends Controller{
 		return view('admin.arrangements')
 		->with('supervisors', $supervisors);;
 	}
-	
+
 	public function amendTopics(){
-		
+
 		if(Session::get("db_type") == "ug"){
 			$topics = TopicUg::all();
 
@@ -87,5 +92,47 @@ class AdminController extends Controller{
 		$user = User::find($id);
 		Auth::login($user);
 		return redirect('/');
+	}
+
+	public function export(Request $request){
+
+		if($request->query("db") == "tran_ug"){
+			$filename = "transactions-ug [".Carbon::now()->toDateString()."].json";
+			$handle = fopen($filename, 'w+');
+			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
+			fclose($handle);
+
+			$headers = array(
+				'Content-Type' => 'text/json',
+			);
+
+			return response()->download($filename, $filename, $headers);
+		}
+
+		if($request->query("db") == "tran_masters"){
+			$filename = "transactions-masters [".Carbon::now()->toDateString()."].json";
+			$handle = fopen($filename, 'w+');
+			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
+			fclose($handle);
+
+			$headers = array(
+				'Content-Type' => 'text/json',
+			);
+
+			return response()->download($filename, $filename, $headers);
+		}
+
+		if($request->query("db") == "uas"){
+			$filename = "user-agent-string [".Carbon::now()->toDateString()."].json";
+			$handle = fopen($filename, 'w+');
+			fwrite($handle, json_encode(UserAgentString::all()->toArray(), JSON_PRETTY_PRINT));
+			fclose($handle);
+
+			$headers = array(
+				'Content-Type' => 'text/json',
+			);
+
+			return response()->download($filename, $filename, $headers);
+		}
 	}
 }

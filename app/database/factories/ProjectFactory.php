@@ -3,11 +3,11 @@ use Faker\Generator as Faker;
 
 
 $factory->define(SussexProjects\ProjectUg::class, function (Faker $faker) {
-	$supervisor_id = $faker->numberBetween(3, 43);
-	$marker_id = $faker->numberBetween(3, 43);
+	$supervisor_id = $faker->numberBetween(1, 43);
+	$marker_id = $faker->numberBetween(1, 43);
 
 	while($supervisor_id == $marker_id){
-		$marker_id = $faker->numberBetween(3, 43);
+		$marker_id = $faker->numberBetween(1, 43);
 	}
 
 	return [

@@ -21,17 +21,17 @@
 			<h2>Offers</h2>
 		</div>
 		<div class="content">
-			<table class="data-table">
-				@if (count($user->supervisor->getProjectOffers()) || count($user->supervisor->getProjectProposals()))
+			<h5>Selected Projects</h5>
+			<table class="data-table supervisor-table">
+				@if (count($user->supervisor->getProjectOffers()))
 				<thead>
 					<tr>
-						<th>						
+						<th>
 							<div class="checkbox">
 								<input class="checkbox-input master-checkbox" id="offers" type="checkbox">
 								<label for="offers" name="offers"></label>
 							</div>
 						</th>
-						<th>Type</th>
 						<th>Student</th>
 						<th>Project</th>
 						<th></th>
@@ -39,36 +39,20 @@
 					</tr>
 				</thead>
 				<tbody>
-						@foreach($user->supervisor->getProjectOffers() as $project)
-							<tr>
-								<td>
-									<div class="checkbox">
-										<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
-										<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
-									</div>
-								</td>
-								<td>Selected</td>
-								<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
-								<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-								<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
-								<td><button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button></td>
-							</tr>
-						@endforeach
-						@foreach($user->supervisor->getProjectProposals() as $project)
-							<tr>
-								<td>
-									<div class="checkbox">
-										<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
-										<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
-									</div>
-								</td>
-								<td>Student Proposed</td>
-								<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
-								<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-								<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
-								<td><button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button></td>
-							</tr>
-						@endforeach
+					@foreach($user->supervisor->getProjectOffers() as $project)
+						<tr>
+							<td>
+								<div class="checkbox">
+									<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
+									<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
+								</div>
+							</td>
+							<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
+							<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+							<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
+							<td><button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button></td>
+						</tr>
+					@endforeach
 				</tbody>
 				@else
 					<tfoot>
@@ -76,7 +60,47 @@
 					</tfoot>
 				@endif
 			</table>
-			@if (count($user->supervisor->getProjectOffers()))
+
+			<h5>Students Proposals</h5>
+			<table class="data-table supervisor-table">
+				@if (count($user->supervisor->getProjectProposals()))
+				<thead>
+					<tr>
+						<th>
+							<div class="checkbox">
+								<input class="checkbox-input master-checkbox" id="offers" type="checkbox">
+								<label for="offers" name="offers"></label>
+							</div>
+						</th>
+						<th>Student</th>
+						<th>Project</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($user->supervisor->getProjectProposals() as $project)
+						<tr>
+							<td>
+								<div class="checkbox">
+									<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
+									<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
+								</div>
+							</td>
+							<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
+							<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+							<td><button class="button button--success accept" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Accept</button></td>
+							<td><button class="button button--danger reject" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Reject</button></td>
+						</tr>
+					@endforeach
+				</tbody>
+				@else
+					<tfoot>
+						<tr><td>You have no student project proposals yet.</td></tr>
+					</tfoot>
+				@endif
+			</table>
+			@if (count($user->supervisor->getProjectProposals()))
 				<div class="button-group">
 					<button class="button button--raised" type="">Email Selected</button>
 					<button class="button button--raised" type="">Accept Selected</button>
@@ -97,7 +121,7 @@
 				@if (count($user->supervisor->getAcceptedStudents()))
 				<thead>
 					<tr>
-						<th>						
+						<th>
 							<div class="checkbox">
 								<input class="checkbox-input master-checkbox" id="accepted" type="checkbox">
 								<label for="accepted" name="accepted"></label>

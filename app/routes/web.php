@@ -31,13 +31,13 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 	Route::get('admin/archive', 'AdminController@archive');
+	Route::get('admin/export', 'AdminController@export');
 
 	Route::get('admin/transactions', 'TransactionController@index');
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
 	Route::get('system/strings', 'StringsController@edit');
 	Route::get('system/user-agent', 'AdminController@userAgent');
-	Route::get('system/user-agent/paginated', 'AdminController@userAgentPaginated');
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/create', 'UserController@create');
@@ -50,23 +50,23 @@ Route::middleware(['Admin_Ug'])->group(function () {
 });
 
 Route::group(['middleware' => ['auth']], function() {
-	/* ============== 
-	   PROJECT ROUTES 
+	/* ==============
+	   PROJECT ROUTES
 	   ============== */
 	Route::get('projects', 'ProjectController@index');
-	Route::get('projects/paginated', 'ProjectController@paginatedProjects');
-	
 	Route::post('projects', 'ProjectController@store');
+
 	Route::get('projects/create', 'ProjectController@create');
+	Route::get('projects/{id}', 'ProjectController@show');
+	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
+	Route::get('projects/{id}/edit', 'ProjectController@edit');
+
+	Route::patch('projects/{id}/edit', 'ProjectController@update');
 
 	// Projects by Supervisor
 	Route::get('projects/by-supervisor', 'ProjectController@supervisors');
 	Route::get('projects/by-supervisor/{id}', 'ProjectController@bySupervisor');
-	
-	Route::get('projects/{id}', 'ProjectController@show');
-	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
-	Route::get('projects/{id}/edit', 'ProjectController@edit');
-	
+
 	// Projects by Topic
 	Route::get('projects/by-topic', 'TopicController@index');
 	Route::get('projects/by-topic/{id}', 'ProjectController@byTopic');
@@ -77,17 +77,17 @@ Route::group(['middleware' => ['auth']], function() {
 	// Project edit topic routes
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
-	Route::patch('projects/topic-update-primar', 'ProjectController@updatePrimaryTopic');
+	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	/* ============== 
-	   SUPERVISOR ROUTES 
+	/* ==============
+	   SUPERVISOR ROUTES
 	   ============== */
 	Route::get('supervisor', 'SupervisorController@index');
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
 
-	/* ============== 
-	   STUDENT ROUTES 
+	/* ==============
+	   STUDENT ROUTES
 	   ============== */
 	Route::post('students', 'StudentController@store');
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
@@ -95,8 +95,8 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::patch('students/project-select', 'StudentController@selectProject');
 	Route::patch('students/project-share', 'StudentController@shareProject');
 
-	/* ============== 
-	   REPORT ROUTES 
+	/* ==============
+	   REPORT ROUTES
 	   ============== */
 	Route::get('reports/supervisor', 'SupervisorController@report');
 	Route::get('reports/student', 'StudentController@report');

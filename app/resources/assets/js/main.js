@@ -7,7 +7,7 @@ $(function() {
 
 1. AJAX Setup
 2. HTML Modifications
-3. Generic Functions
+3. Helper Functions
 4. Components
 	4.1 Mobile Menu
 	4.2 Dialog / Modal
@@ -15,103 +15,50 @@ $(function() {
 	4.4 Project Topics [Supervisor]
 	4.5 Forms / AJAX Functions
 	4.6 Edit Topics [Admin]
-5.
-6. Initialise Everything
+5. Second Marker
+6. Dynamic Pagination
+7. Supervisor
+8. Other
+9. Initialise Everything
 */
 
-/* ======================
-	 1. AJAX Setup
-	 ====================== */
+/* ================
+	1. AJAX Setup
+   ================ */
 $.ajaxSetup({
-	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		'MADE-BY': 'Lewis Johnson'
+	}
 });
 
-
-/* ======================
-	 2. HTML Modifications
-	 ====================== */
-// Adds global underlay
+/* ========================
+	2. HTML Modifications
+   ======================== */
 $('body').append('<div class="underlay"></div>');
 
 /* ======================
-	 3. Generic Functions
-	 ====================== */
-function sortTable(table, col, reverse) {
-	var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
-		tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
-		i;
-	reverse = -((+reverse) || -1);
-	tr = tr.sort(function (a, b) { // sort rows
-		return reverse // `-1 *` if want opposite order
-			* (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
-				.localeCompare(b.cells[col].textContent.trim())
-			);
-	});
-	for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
-}
-
-function makeSortable(table) {
-	var th = table.tHead, i;
-	th && (th = th.rows[0]) && (th = th.cells);
-	if (th) i = th.length;
-	else return; // if no `<thead>` then do nothing
-	while (--i >= 0) (function (i) {
-		var dir = 1;
-		th[i].addEventListener('click', function () {sortTable(table, i, (dir = 1 - dir))});
-	}(i));
-}
-
-function makeAllSortable(parent) {
-	parent = parent || document.body;
-	var t = parent.getElementsByTagName('table'), i = t.length;
-	while (--i >= 0) makeSortable(t[i]);
-}
-
-function acceptStudent(student_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/student-accept',
-		data: {
-			student_id : student_id
-		},
-		success: function(){
-
-		}
-	});
-}
-
-function rejectStudent(student_id, project_id) {
-	$.ajax({
-		method: 'POST',
-		url: '/supervisor/student-reject',
-		data: {
-			project_id : project_id,
-			student_id : student_id
-		},
-		success: function(){
-
-		}
-	});
-}
-
+	3. Helpers Functions
+   ====================== */
 function removeAllShadowClasses(element){
 	$(element).removeClass (function (index, className) {
 		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
 	});
 }
 
-/* ======================
-	 4. Components
-	 ====================== */
+/* ===============
+	4. Components
+   =============== */
 
-/* ======================
+/* ==================
 	 4.1 Mobile Menu
-	 ====================== */
+   ================== */
+
 /**
-	 * Class constructor for mobile menu.
-	 *
-	 * @param {HTMLElement} element The element that will be upgraded.
-	 */
+	* Class constructor for mobile menu.
+	*
+	* @param {HTMLElement} element The element that will be upgraded.
+*/
 var MobileMenu =  function MobileMenu(element) {
 	if(window['MobileMenu'] == null){
 		window['MobileMenu'] = this;
@@ -160,9 +107,9 @@ MobileMenu.prototype.initAll = function () {
 	});
 };
 
-/* ======================
-	 4.2 Dialog / Modal
-	 ====================== */
+/* ====================
+	4.2 Dialog / Modal
+   ==================== */
 var Dialog = function Dialog(element) {
 	this.element = $(element);
 	this.dialogName = $(element).data('dialog');
@@ -254,14 +201,15 @@ Dialog.prototype.initAll = function(){
 	});
 };
 
-/* ======================
-	 4.3 Data Table
-	 ====================== */
+/* ================
+	4.3 Data Table
+   ================ */
+
 /**
-	 * Class constructor for data tables.
-	 *
-	 * @param {HTMLElement} element The element that will be upgraded.
-	 */
+* Class constructor for data tables.
+*
+* @param {HTMLElement} element The element that will be upgraded.
+*/
 var DataTable = function DataTable(element) {
 	this.element = $(element);
 	this.headers = $(element).find('thead tr th');
@@ -327,14 +275,15 @@ DataTable.prototype.initAll = function () {
 	});
 };
 
-/* ======================
-	 4.4 Project Topics [Supervisor]
-	 ====================== */
+/* =================================
+	4.4 Project Topics [Supervisor]
+   ================================= */
+
 /**
-	 * Class constructor for project topics.
-	 *
-	 * @param {HTMLElement} element The element that will be upgraded.
-	 */
+* Class constructor for project topics.
+*
+* @param {HTMLElement} element The element that will be upgraded.
+*/
 var ProjectTopics =  function ProjectTopics() {};
 window['ProjectTopics'] = ProjectTopics;
 
@@ -458,14 +407,15 @@ $(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
 	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
 });
 
-/* ======================
-	 4.5 Forms / AJAX Functions
-	 ====================== */
+/* ============================
+	4.5 Forms / AJAX Functions
+   ============================ */
+
 /**
-	 * Class constructor for ajax functions.
-	 *
-	 * @param {HTMLElement} element The element that will be upgraded.
-	 */
+* Class constructor for ajax functions.
+*
+* @param {HTMLElement} element The element that will be upgraded.
+*/
 var AjaxFunctions =  function AjaxFunctions() {};
 window['AjaxFunctions'] = AjaxFunctions;
 
@@ -532,14 +482,15 @@ $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function(
 	}
 });
 
-/* ======================
-	 4.6 Edit Topics [Admin]
-	 ====================== */
+/* ========================
+   4.6 Edit Topics [Admin]
+   ======================== */
+
 /**
-	 * Class constructor for ajax functions.
-	 *
-	 * @param {HTMLElement} element The element that will be upgraded.
-	 */
+* Class constructor for ajax functions.
+*
+* @param {HTMLElement} element The element that will be upgraded.
+*/
 var EditTopic = function EditTopic(element) {
 	this.element = $(element);
 	this.originalName = $(element).data("original-topic-name");
@@ -629,164 +580,10 @@ EditTopic.prototype.initAll = function () {
 	});
 };
 
-/* ======================
-	 5. OTHER
-	 ====================== */
-// Accept Student
-$('.accept').on('click', function() {
-	acceptStudent($(this).data('student_id'));
-});
+/* ==================
+	5. Second Marker
+   ================== */
 
-// Reject Student
-$('.reject').on('click', function() {
-	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
-});
-
-$('.show-more').on('click',  function(e) {
-	$(this).hide();
-	$('.project').addClass('expand');
-});
-
-// Makes primary topic first
-$(".topics-list").prepend($(".first"));
-
-// SUPERVISOR
-$('#deleteProjectButton').on('click', function() { AjaxFunctions.prototype.deleteProject($('#title').val()); });
-
-$("#loginForm").on('submit', function(e){
-	e.preventDefault();
-
-	$('.help-block', '#loginForm').css("display", "none");
-	$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
-
-	$.ajax({
-		url: $(this).prop('action'),
-		type:'POST',
-		data: $(this).serialize(),
-		success:function(showDialog){
-			if(showDialog == "true"){
-				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
-				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
-				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
-			} else {
-				location.reload();
-			}
-
-		},
-		error: function (data) {
-			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showDialog();
-			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
-
-			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data["responseJSON"]["errors"]["username"][0]);
-			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
-			$('.form-field', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
-		}
-	});
-});
-
-$('#new-topic-form').on('submit', function(e) {
-	e.preventDefault();
-	var submitButton = $(this).find(':submit');
-	submitButton.html('<div class="loader"></div>');
-
-	$('.loader', submitButton).css('display', 'block');
-
-	$.ajax({
-		url: $(this).prop('action'),
-		type:'POST',
-		context: $(this),
-		data: $(this).serialize(),
-		success:function(data){
-			data = JSON.parse(data);
-			EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
-			},
-		error: function () {}
-	}).done(function(){
-		$(this).find('input').val('');
-		$(this).find(':submit').html('Add');
-	});
-});
-
-$('#student-edit-list').find('.checkbox input').on('change', function() {
-	var status = $(this).parents().eq(3).data('status');
-	var emailString = "mailto:";
-	var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
-	var emailButtonselector = ".email-selected." + status;
-	$(checkboxSelector).each(function() {
-		if($(this).is(":checked")) {
-			emailString += $(this).parent().parent().data('email');
-			emailString += ",";
-		}
-	});
-	$(emailButtonselector).prop('href', emailString);
-});
-
-$('.edit-student-list .email-selected').on('click', function(e) {
-	if($(this).prop('href') === 'mailto:'){
-		alert("You haven't selected anyone.");
-		e.preventDefault();
-	}
-});
-
-// Used for transactions
-$('#show-raw-table-data').on('click', function() {
-	if($(this).prop('checked')){
-		$('table.full-detail').hide();
-		$('table.raw-detail').show();
-	} else {
-		$('table.full-detail').show();
-		$('table.raw-detail').hide();
-	}
-});
-
-// NEW USER
-// put this stuff in an array
-$('#admin-form').hide();
-$('#supervisor-form').hide();
-$('#student-form').show();
-$('#create-form-access-select').on('change', function(){
-	if($('#student-option').is(":selected")) {
-		$('#student-form').show();
-	} else {
-		$('#student-form').hide();
-	}
-	if($('#supervisor-option').is(":selected")) {
-		$('#supervisor-form').show();
-	} else {
-		$('#supervisor-form').hide();
-	}
-	if($('#admin-option').is(":selected")) {
-		$('#admin-form').show();
-	} else {
-		$('#admin-form').hide();
-	}
-});
-
-// STRINGS
-$('#admin-form').hide();
-$('#supervisor-form').hide();
-$('#student-form').show();
-$('#create-form-access-select').on('change', function(){
-	if($('#student-option').is(":selected")) {
-		$('#student-form').show();
-	} else {
-		$('#student-form').hide();
-	}
-	if($('#supervisor-option').is(":selected")) {
-		$('#supervisor-form').show();
-	} else {
-		$('#supervisor-form').hide();
-	}
-	if($('#admin-option').is(":selected")) {
-		$('#admin-form').show();
-	} else {
-		$('#admin-form').hide();
-	}
-});
-
-/* ========================
-	 6. Second Marker
-	 ======================== */
 var Marker = function Marker() {
 	if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
 		return;
@@ -905,17 +702,12 @@ $('#submitAssignMarker').on('click', function(){
 	});
 });
 
-/* ========================
-	 6. Initialise Everything
-	 ======================== */
-MobileMenu.prototype.initAll();
-Dialog.prototype.initAll();
-DataTable.prototype.initAll();
-EditTopic.prototype.initAll();
-Marker.prototype.initAll();
 
-var projects_pageNumber = 2;
-var projects_reachedEndOfProjectTable = false,
+/* =========================
+	6. Dynamic Pagination
+   ========================= */
+var projects_pageNumber = 2,
+	projects_endOfTable = false,
 	projects_awaitingResponse = false;
 
 $(window).scroll(function() {
@@ -925,17 +717,17 @@ $(window).scroll(function() {
 			return;
 		}
 
-		if(!projects_reachedEndOfProjectTable && !projects_awaitingResponse){
+		if(!projects_endOfTable && !projects_awaitingResponse){
 			$(".loader.projects").show();
 			projects_awaitingResponse = true;
-			var urlPath = "/projects/paginated?page=" + projects_pageNumber;
+			var urlPath = "/projects?partial=true?page=" + projects_pageNumber;
 			$.ajax({
 				type : 'GET',
 				url: urlPath,
 				success : function(data){
 					$(".loader.projects").hide();
 					if(data.length == 0){
-						projects_reachedEndOfProjectTable = true;
+						projects_endOfTable = true;
 						$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
 					}else{
 						$('#project-table tbody').append($(data));
@@ -958,8 +750,8 @@ $(window).scroll(function() {
 	}
 });
 
-var agents_pageNumber = 2;
-var agents_reachedEndOfProjectTable = false,
+var agents_pageNumber = 2,
+	agents_endOfTable = false,
 	agents_awaitingResponse = false;
 
 $(window).scroll(function() {
@@ -969,10 +761,10 @@ $(window).scroll(function() {
 			return;
 		}
 
-		if(!agents_reachedEndOfProjectTable && !agents_awaitingResponse){
+		if(!agents_endOfTable && !agents_awaitingResponse){
 			$(".loader.user-agent").show();
 			agents_awaitingResponse = true;
-			var urlPath = "/system/user-agent/paginated?page=" + agents_pageNumber;
+			var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
 			$.ajax({
 				type : 'GET',
 				url: urlPath,
@@ -980,7 +772,7 @@ $(window).scroll(function() {
 					$(".loader.user-agent").hide();
 
 					if(data.length == 0){
-						agents_reachedEndOfProjectTable = true;
+						agents_endOfTable = true;
 						$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
 					}else{
 						$('#user-agent-table tbody').append($(data));
@@ -1003,4 +795,205 @@ $(window).scroll(function() {
 	}
 });
 
+/* ======================
+	 7. SUPERVISOR
+   ====================== */
+// Accept Student
+$('.supervisor-table .accept').on('click', function() {
+	var student_id = $(this).data('student_id');
+	$.ajax({
+		method: 'POST',
+		url: '/supervisor/student-accept',
+		data: {
+			student_id : student_id
+		},
+		success: function(){
+
+		}
+	});
+});
+
+// Reject Student
+$('.supervisor-table .reject').on('click', function() {
+	rejectStudent($(this).data('student_id'), $(this).data('project_id'));
+});
+
+$('#deleteProjectButton').on('click', function() {
+	AjaxFunctions.prototype.deleteProject($('#title').val());
+});
+
+function acceptStudent(student_id) {
+
+}
+
+function rejectStudent(student_id, project_id) {
+	$.ajax({
+		method: 'POST',
+		url: '/supervisor/student-reject',
+		data: {
+			project_id : project_id,
+			student_id : student_id
+		},
+		success: function(){
+
+		}
+	});
+}
+
+$('#student-edit-list').find('.checkbox input').on('change', function() {
+	var status = $(this).parents().eq(3).data('status');
+	var emailString = "mailto:";
+	var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+	var emailButtonselector = ".email-selected." + status;
+	$(checkboxSelector).each(function() {
+		if($(this).is(":checked")) {
+			emailString += $(this).parent().parent().data('email');
+			emailString += ",";
+		}
+	});
+	$(emailButtonselector).prop('href', emailString);
+});
+
+$('.edit-student-list .email-selected').on('click', function(e) {
+	if($(this).prop('href') === 'mailto:'){
+		alert("You haven't selected anyone.");
+		e.preventDefault();
+	}
+});
+
+/* ======================
+	 8. OTHER
+   ====================== */
+$('.show-more').on('click',  function(e) {
+	$(this).hide();
+	$('.project').addClass('expand');
+});
+
+// Makes primary topic first
+$(".topics-list").prepend($(".first"));
+
+// SUPERVISOR
+
+
+$("#loginForm").on('submit', function(e){
+	e.preventDefault();
+
+	$('.help-block', '#loginForm').css("display", "none");
+	$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
+
+	$.ajax({
+		url: $(this).prop('action'),
+		type:'POST',
+		data: $(this).serialize(),
+		success:function(showDialog){
+			if(showDialog == "true"){
+				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
+				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
+				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
+			} else {
+				location.reload();
+			}
+
+		},
+		error: function (data) {
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showDialog();
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
+
+			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data["responseJSON"]["errors"]["username"][0]);
+			$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
+			$('.form-field', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
+		}
+	});
+});
+
+$('#new-topic-form').on('submit', function(e) {
+	e.preventDefault();
+	var submitButton = $(this).find(':submit');
+	submitButton.html('<div class="loader"></div>');
+
+	$('.loader', submitButton).css('display', 'block');
+
+	$.ajax({
+		url: $(this).prop('action'),
+		type:'POST',
+		context: $(this),
+		data: $(this).serialize(),
+		success:function(data){
+			data = JSON.parse(data);
+			EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
+			},
+		error: function () {}
+	}).done(function(){
+		$(this).find('input').val('');
+		$(this).find(':submit').html('Add');
+	});
+});
+
+// Used for transactions
+$('#show-raw-table-data').on('click', function() {
+	if($(this).prop('checked')){
+		$('table.full-detail').hide();
+		$('table.raw-detail').show();
+	} else {
+		$('table.full-detail').show();
+		$('table.raw-detail').hide();
+	}
+});
+
+// NEW USER
+// put this stuff in an array
+$('#admin-form').hide();
+$('#supervisor-form').hide();
+$('#student-form').show();
+$('#create-form-access-select').on('change', function(){
+	if($('#student-option').is(":selected")) {
+		$('#student-form').show();
+	} else {
+		$('#student-form').hide();
+	}
+	if($('#supervisor-option').is(":selected")) {
+		$('#supervisor-form').show();
+	} else {
+		$('#supervisor-form').hide();
+	}
+	if($('#admin-option').is(":selected")) {
+		$('#admin-form').show();
+	} else {
+		$('#admin-form').hide();
+	}
+});
+
+// STRINGS
+$('#admin-form').hide();
+$('#supervisor-form').hide();
+$('#student-form').show();
+$('#create-form-access-select').on('change', function(){
+	if($('#student-option').is(":selected")) {
+		$('#student-form').show();
+	} else {
+		$('#student-form').hide();
+	}
+	if($('#supervisor-option').is(":selected")) {
+		$('#supervisor-form').show();
+	} else {
+		$('#supervisor-form').hide();
+	}
+	if($('#admin-option').is(":selected")) {
+		$('#admin-form').show();
+	} else {
+		$('#admin-form').hide();
+	}
+});
+
+
+/* ===============
+	9. Initialise
+   =============== */
+MobileMenu.prototype.initAll();
+Dialog.prototype.initAll();
+DataTable.prototype.initAll();
+EditTopic.prototype.initAll();
+Marker.prototype.initAll();
+
+// END OF FILE
 });

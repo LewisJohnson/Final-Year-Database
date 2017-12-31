@@ -14,10 +14,10 @@ use Session;
 use Illuminate\Support\Carbon;
 class ProjectTopicController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
+	public function __construct(){
+		$this->middleware('auth');
 	}
-	
+
 	public function index(ProjectTopic $projectTopic){
 		return ProjectTopic::find($projectTopic);
 	}

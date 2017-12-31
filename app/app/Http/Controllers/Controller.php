@@ -18,7 +18,7 @@ class Controller extends BaseController
 
 		// A default value
 		$this->paginationCount = 25;
-
+		$this->user = Auth::user();
 		$this->middleware(function ($request, $next) {
 			$this->user = Auth::user();
 			return $next($request);

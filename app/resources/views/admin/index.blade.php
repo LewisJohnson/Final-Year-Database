@@ -51,11 +51,11 @@
 				<ul class="icon-list">
 					<li>
 						@include('svg.account')
-						<a href="/reports/student">Summary Report - Students</a>
+						<a href="/reports/student">Report by Student</a>
 					</li>
 					<li>
 						@include('svg.account')
-						<a href="/reports/supervisor">Summary Report - Supervisor</a>
+						<a href="/reports/supervisor">Report by Supervisor</a>
 					</li>
 				</ul>
 			</div>
@@ -88,7 +88,7 @@
 				</ul>
 			</div>
 		</div>
-		
+
     	{{-- SETTINGS --}}
 		<div class="section shadow-2dp">
 			<div class="header">

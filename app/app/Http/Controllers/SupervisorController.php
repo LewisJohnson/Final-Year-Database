@@ -17,8 +17,8 @@ use Auth;
 
 class SupervisorController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
+	public function __construct(){
+		$this->middleware('auth');
 	}
 
 	public function acceptStudent(Request $request){
@@ -41,8 +41,8 @@ class SupervisorController extends Controller{
 				'supervisor_id' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
-			$transaction->save();
 
+			$transaction->save();
 			session()->flash('message', $student->user->getFullName(). ' has been accepted.');
 			session()->flash('message_type', 'success');
 		});
@@ -76,7 +76,7 @@ class SupervisorController extends Controller{
 			session()->flash('message', $student->user->getFullName(). ' has been rejected.');
 			session()->flash('message_type', 'success');
 		});
-		
+
 		return $result;
 	}
 

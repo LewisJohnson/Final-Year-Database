@@ -16,8 +16,8 @@ use Auth;
 
 class StudentController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
+	public function __construct(){
+		$this->middleware('auth');
 	}
 
 	/**
@@ -36,6 +36,7 @@ class StudentController extends Controller{
 	}
 
 	public function proposeProject(Request $request){
+		// todo: check mode year
 		try {
 			DB::transaction(function ($request) use ($request) {
 				$student = Auth::user()->student;
@@ -69,7 +70,7 @@ class StudentController extends Controller{
 				));
 
 				$project->save();
-			
+
 				$transaction->fill(array(
 					'transaction_type' =>'proposed',
 					'project_id' => $project->id,
@@ -110,6 +111,7 @@ class StudentController extends Controller{
 	}
 
 	public function selectProject(Request $request){
+		// todo: check mode selection date before selecting project
 		try {
 			DB::transaction(function ($request) use ($request) {
 				$student = Auth::user()->student;
@@ -128,7 +130,7 @@ class StudentController extends Controller{
 					$project = ProjectMasters::findOrFail(request('project_id'));
 					$transaction = new TransactionMasters;
 				}
-	
+
 				$student->project_id = $project->id;
 				$student->project_status = 'selected';
 				$student->save();

@@ -5,6 +5,18 @@ $supervisorIncrement = supervisorIncrement();
 
 $factory->define(SussexProjects\Supervisor::class, function (Faker $faker) use ($supervisorIncrement) {
 	$supervisorIncrement->next();
+	if($supervisorIncrement->current() == 1){
+		return [
+			'id' => $supervisorIncrement->current(),
+			'title' => "Prof",
+			'project_load_masters' => 6,
+			'project_load_ug' => 6,
+			'accept_email_masters' => true,
+			'accept_email_ug' => true,
+			'take_students_masters' => true,
+			'take_students_ug' => true
+		];
+	}
 	return [
 		'id' => $supervisorIncrement->current(),
 		'title' => $faker->title,
@@ -20,7 +32,7 @@ $factory->define(SussexProjects\Supervisor::class, function (Faker $faker) use (
 
 function supervisorIncrement()
 {
-	for ($i = 2; $i < 1000; $i++) {
+	for ($i = 0; $i < 1000; $i++) {
 		yield $i;
 	}
 }

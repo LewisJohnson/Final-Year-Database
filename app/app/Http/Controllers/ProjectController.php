@@ -2,9 +2,13 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Flash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use SussexProjects\ProjectTopicUg;
 use SussexProjects\ProjectTopicMasters;
 use SussexProjects\Project;
@@ -15,15 +19,13 @@ use SussexProjects\TopicMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\Supervisor;
-use Flash;
-use Illuminate\Support\Facades\Log;
-use Session;
-use DB;
+
 
 class ProjectController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
+	public function __construct(){
+		$this->middleware('auth');
+		$this->paginationCount = 500;
 	}
 
 	/**
@@ -31,7 +33,7 @@ class ProjectController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(){
+	public function index(Request $request){
 		/* SELECT CONDITIONS
 			Select if supervisor take_students is true
 			Select if on-offer
@@ -57,45 +59,16 @@ class ProjectController extends Controller{
 			->where('status', 'on-offer')
 			->where('student_proposed_project', 0);
 
-		return view('projects.index')
-		->with('projects', $projects->paginate(25))
-		->with('view', 'index');
-	}
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function paginatedProjects(){
-		/* SELECT CONDITIONS
-			Select if supervisor take_students is true
-			Select if on-offer
-			Select if NOT archived
-			select if NOT student proposed
-		*/
-
-		if(Session::get("db_type") == "ug"){
-			$projects = ProjectUg::
-			select('projects_ug.*', 'supervisors.take_students_ug')
-			->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_ug', true);
-
-		} elseif(Session::get("db_type") == "masters") {
-			$projects = ProjectMasters::
-			select('projects_masters.*', 'supervisors.take_students_masters')
-			->join('supervisors.take_students_masters', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_masters', true);
+		if($request->query("partial")){
+			return view('projects.partials.project-table-row')
+				->with('projects', $projects->paginate($this->paginationCount))
+				->with('view', 'index');
+		} else {
+			return view('projects.index')
+				->with('projects', $projects->paginate($this->paginationCount))
+				->with('view', 'index');
 		}
 
-		$projects->
-			whereNotNull('supervisor_id')
-			->where('status', 'on-offer')
-			->where('student_proposed_project', 0);
-
-		return view('projects.partials.project-table-row')
-		->with('projects', $projects->paginate(25))
-		->with('view', 'index');
 	}
 
 	/**
@@ -249,8 +222,9 @@ class ProjectController extends Controller{
 			'status' => 'required',
 		]);
 
-		if(Auth::user()->supervisor == null){
+		if(!Auth::user()->isSupervisorOrSuperior()){
 			Log::error('Someone who is not a supervsior tried to create a project.');
+			return redirect('/');
 		}
 
 		$result = DB::transaction(function ($request) use ($request) {
@@ -317,7 +291,12 @@ class ProjectController extends Controller{
 	 */
 	public function update($id) {
 		// todo: add form validation
-		// create transaction
+
+		if(!Auth::user()->isSupervisorOrSuperior()){
+			Log::error('Someone who is not a supervsior tried to create a project.');
+			return redirect('/');
+		}
+
 		$result = DB::Transaction(function($id) use ($id){
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail($id);
@@ -379,7 +358,7 @@ class ProjectController extends Controller{
 				$title = $project->title;
 				ProjectMasters::destroy($id);
 			}
-			
+
 			$transaction->fill(array(
 				'transaction_type' =>'deleted',
 				'project_id' => $id,
@@ -443,10 +422,10 @@ class ProjectController extends Controller{
 	}
 
 	public function transactions($id){
-		$transactions = Session::get("db_type") == "ug" ? 
-			TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get() : 
+		$transactions = Session::get("db_type") == "ug" ?
+			TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get() :
 			TransactionMasters::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
-			
+
 		return view('admin.transactions')->with('transactions', $transactions);
 	}
 
