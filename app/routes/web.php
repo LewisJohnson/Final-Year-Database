@@ -25,7 +25,7 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
 	Route::get('admin/marker-assign', 'AdminController@showAssignMarker');
-	Route::patch('projects/marker-assign', 'ProjectController@updateMarker');
+	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
 	Route::get('admin/topics-amend', 'AdminController@amendTopics');
 	Route::get('admin/login-as', 'AdminController@loginAsView');

@@ -20,6 +20,11 @@ class StudentController extends Controller{
 		$this->middleware('auth');
 	}
 
+	public function report(){
+		return view('students.report');
+	}
+
+
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -155,8 +160,36 @@ class StudentController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
-	public function report(){
-		return view('students.report');
+	public function updateMarker(Request $request) {
+		//todo: make sure user is authorized to perform this action
+		$result = DB::transaction(function ($request) use ($request) {
+			if(Session::get("db_type") == "ug"){
+				$project = ProjectUg::findOrFail(request('project_id'));
+				$student = StudentUg::findOrFail(request('student_id'));
+				$transaction = new TransactionUg;
+			} else {
+				$project = ProjectMasters::findOrFail(request('project_id'));
+				$student = StudentMasters::findOrFail(request('student_id'));
+				$transaction = new TransactionMasters;
+			}
+
+			$marker = Supervisor::findOrFail(request('marker_id'));
+
+			$transaction->fill(array(
+				'transaction_type' => 'marker-assigned',
+				'project_id' => $project->id,
+				'student_id' => $student->id,
+				'supervisor_id' => $project->supervisor_id,
+				'marker_id' => $marker->id,
+				'admin_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+			$transaction->save();
+
+			$student->marker_id = $marker->id;
+			$student->save();
+		});
+		return $result;
 	}
 
 	/**

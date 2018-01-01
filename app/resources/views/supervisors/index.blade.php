@@ -133,6 +133,7 @@
 							</div>
 						</th>
 						<th>Student Name</th>
+						<th>Second Marker</th>
 						<th>Project</th>
 						<th></th>
 					</tr>
@@ -147,6 +148,11 @@
 								</div>
 							</td>
 							<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
+							@if($project->marker)
+								<td>{{ $project->marker->user->getFullName() }}</td>
+							@else
+								<td>-</td>
+							@endif
 							<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
 							<td><button class="button button--raised undo" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Undo</button></td>
 						</tr>
@@ -180,7 +186,6 @@
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Marker</th>
 						<th>Status</th>
 						<th></th>
 					</tr>
@@ -189,11 +194,6 @@
 					@foreach($user->supervisor->getProjectsOrderByStatus() as $project)
 					<tr>
 						<td><a href="{{ action('ProjectController@show', $project->id) }}" class="project-link">{{ $project->title }}</a></td>
-						@if($project->marker)
-							<td>{{ $project->marker->user->getFullName() }}</td>
-						@else
-							<td>-</td>
-						@endif
 						<td>{{ ucfirst(str_replace('-', ' ', $project->status)) }}</td>
 						<td><a class="button" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a></td>
 					</tr>

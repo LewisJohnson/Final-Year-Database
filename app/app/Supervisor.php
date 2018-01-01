@@ -4,6 +4,7 @@ namespace SussexProjects;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
+use Auth;
 
 class Supervisor extends User{
 
@@ -72,8 +73,7 @@ class Supervisor extends User{
 
 		foreach ($offers as $key => $value) {
 			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
-			//todo: show name if user is supervisor or admin.
-			if($value->student_share){
+			if($value->student_share || Auth::user()->isSupervisorOrSuperior()){
 				$value->student_name = $student->first_name." ".$student->last_name;
 			} else {
 				$value->student_name = "Hidden";
@@ -86,7 +86,7 @@ class Supervisor extends User{
 	public function getAcceptedStudents(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share', 'students_ug.marker_id as marker')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('students_ug.project_status', '=', 'accepted')
@@ -94,7 +94,7 @@ class Supervisor extends User{
 				->get();
 		} elseif(Session::get("db_type") == "masters") {
 			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share', 'students_masters.marker_id as marker')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('students_masters.project_status', '=', 'accepted')
@@ -104,8 +104,7 @@ class Supervisor extends User{
 
 		foreach ($offers as $key => $value) {
 			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
-			//todo: show name if user is supervisor or admin.
-			if($value->student_share){
+			if($value->student_share || Auth::user()->isSupervisorOrSuperior()){
 				$value->student_name = $student->first_name." ".$student->last_name;
 			} else {
 				$value->student_name = "Hidden";
@@ -140,8 +139,7 @@ class Supervisor extends User{
 
 		foreach ($studentProposedProjects as $key => $value) {
 			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
-			//todo: show name if user is supervisor or admin.
-			if($value->student_share){
+			if($value->student_share || Auth::user()->isSupervisorOrSuperior()){
 				$value->student_name = $student->first_name." ".$student->last_name;
 			} else {
 				$value->student_name = "Hidden";
@@ -154,4 +152,4 @@ class Supervisor extends User{
 	}
 }
 
-		
+

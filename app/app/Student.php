@@ -14,6 +14,7 @@ class Student extends Model{
 	 * @var array
 	 */
 	protected $fillable = ['id', 'registration_number', 'programme'];
+	protected $hidden = ['marker'];
 
 	public function getStatusString(){
 		$return = '';
@@ -49,5 +50,4 @@ class Student extends Model{
 
 		return $return;
 	}
-	
 }

@@ -602,7 +602,7 @@ var Marker = function Marker() {
 };
 
 Marker.prototype.Urls_ = {
-	ASSIGN_MARKER: '/projects/marker-assign',
+	ASSIGN_MARKER: '/admin/marker-assign',
 };
 
 Marker.prototype.selectStudent = function(studentRowDOM, marker){

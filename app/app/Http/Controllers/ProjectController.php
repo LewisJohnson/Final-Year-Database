@@ -326,40 +326,6 @@ class ProjectController extends Controller{
 		return $result;
 	}
 
-	public function updateMarker(Request $request) {
-		//todo: make sure user is authorized to perform this action
-		//todo: add marker selected transaction to DB
-		$result = DB::transaction(function ($request) use ($request) {
-
-			if(Session::get("db_type") == "ug"){
-				$project = ProjectUg::findOrFail(request('project_id'));
-				$student = StudentUg::findOrFail(request('student_id'));
-				$transaction = new TransactionUg;
-			} else {
-				$project = ProjectMasters::findOrFail(request('project_id'));
-				$student = StudentMasters::findOrFail(request('student_id'));
-				$transaction = new TransactionMasters;
-			}
-
-			$marker = Supervisor::findOrFail(request('marker_id'));
-
-			$transaction->fill(array(
-				'transaction_type' => 'marker-assigned',
-				'project_id' => $project->id,
-				'student_id' => $student->id,
-				'supervisor_id' => $project->supervisor_id,
-				'marker_id' => $marker->id,
-				'admin_id' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
-			$transaction->save();
-
-			$project->marker_id = $marker->id;
-			$project->save();
-		});
-		return $result;
-	}
-
 	/**
 	 * Remove the specified resource from storage.
 	 *
