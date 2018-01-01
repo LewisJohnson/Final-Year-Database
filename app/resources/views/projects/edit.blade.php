@@ -19,7 +19,7 @@
 		<label for="title">Title</label>
 		<input maxlength="255" type="text" name="title" id="title" value="{{ $project->title }}">
 	</div>
-	
+
 	<div class="form-field">
 		<label for="description">Description</label>
 		<textarea maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
@@ -56,9 +56,9 @@
 	<div class="form-field">
 		<label for="status">Project Status</label>
 		<select name="status">
-			<option value="on-offer">On Offer</option>
-			<option value="withdrawn">Withdrawn</option>
-			<option value="archived">Archived</option>
+			<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
+			<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
+			<option @if($project->status == "archived") selected @endif value="archived">Archived</option>
 		</select>
 	</div>
 

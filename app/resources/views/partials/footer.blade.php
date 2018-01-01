@@ -1,12 +1,10 @@
 <footer>
-{{-- 	@if ($user = Auth::user())
 	<div class="footer-left">
-		<button class="" data-activator="true" data-dialog="change-auth">{{ Session::get("auth_type") }}</button>
+		{{-- <p>Happy New Year!</p> --}}
 	</div>
-	@endif --}}
 	<div class="footer-right">
-		<a href="http://www.sussex.ac.uk/disclaimer/">Sussex websites Disclaimer</a>
+		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
-		<p>Information maintained by Bernhard Reus</p>
+		<p>@lang("messages.footer_maintainer_text")</p>
 	</div>
 </footer>

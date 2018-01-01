@@ -21,7 +21,7 @@
 	@foreach($transactions as $transaction)
 		<tr>
 			<td>{{ $transaction->id }}</td>
-			<td>{{ ucfirst($transaction->transaction_type) }}</td>
+			<td>{{ ucwords(str_replace('-', ' ', $transaction->transaction_type)) }}</td>
 
 			@if(Session::get("db_type") == "ug")
 				@if($project = SussexProjects\ProjectUg::find($transaction->project_id))
@@ -42,7 +42,7 @@
 			@else
 				<td></td>
 			@endif
-			
+
 			@if($supervisor = SussexProjects\Supervisor::find($transaction->supervisor_id))
 				<td>{{ $supervisor->user->getFullName() }}</td>
 			@else
@@ -50,7 +50,7 @@
 			@endif
 
 			@if($marker = SussexProjects\Supervisor::find($transaction->marker_id))
-				<td>{{ $marker->getFullName() }}</td>
+				<td>{{ $marker->user->getFullName() }}</td>
 			@else
 				<td></td>
 			@endif

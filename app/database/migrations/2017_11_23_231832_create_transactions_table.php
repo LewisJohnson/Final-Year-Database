@@ -18,7 +18,6 @@ class CreateTransactionsTable extends Migration
 			$table->unsignedBigInteger('project_id')->nullable('true');
 			$table->unsignedBigInteger('student_id')->nullable('true');
 			$table->unsignedBigInteger('supervisor_id')->nullable('true');
-			$table->unsignedBigInteger('marker_id')->nullable('true');
 			$table->unsignedBigInteger('topic_id')->nullable('true');
 			$table->unsignedBigInteger('admin_id')->nullable('true');
 			$table->dateTimeTz('transaction_date');
@@ -30,14 +29,13 @@ class CreateTransactionsTable extends Migration
 			$table->unsignedBigInteger('project_id')->nullable('true');
 			$table->unsignedBigInteger('student_id')->nullable('true');
 			$table->unsignedBigInteger('supervisor_id')->nullable('true');
-			$table->unsignedBigInteger('marker_id')->nullable('true');
 			$table->unsignedBigInteger('topic_id')->nullable('true');
 			$table->unsignedBigInteger('admin_id')->nullable('true');
 			$table->dateTimeTz('transaction_date');
 		});
 	}
 
-	/** 
+	/**
 	 * Reverse the migrations.
 	 *
 	 * @return void

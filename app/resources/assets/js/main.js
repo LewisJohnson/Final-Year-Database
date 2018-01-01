@@ -318,7 +318,12 @@ ProjectTopics.prototype.functions = {
 			success: function(data){
 				data = JSON.parse(data);
 				$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
-				$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+
+				if($(".topics-list.edit li.topic:last").length > 0){
+					$(".topics-list.edit li.topic:last").after('<li draggable class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+				} else {
+					$(".topics-list.edit").prepend('<li draggable class="topic first" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+				}
 			}
 		}).done(function(data){
 			$('body').append(data);
@@ -596,21 +601,9 @@ var Marker = function Marker() {
 	this.init();
 };
 
-Marker.prototype.init = function(){
-	var marker = this;
-
-	$(marker.studentDataTable.bodyRows).on('click', function() {
-		Marker.prototype.selectStudent(this, marker);
-	});
-
-	$(marker.supervisorDataTable.bodyRows).on('click', function() {
-		Marker.prototype.selectSupervisor(this, marker);
-	});
-}
-
-Marker.prototype.initAll = function(){
-	window['Marker'] = new Marker();
-}
+Marker.prototype.Urls_ = {
+	ASSIGN_MARKER: '/projects/marker-assign',
+};
 
 Marker.prototype.selectStudent = function(studentRowDOM, marker){
 	var row = $(studentRowDOM);
@@ -679,15 +672,17 @@ $('#submitAssignMarker').on('click', function(){
 	$("#assign-dialog")[0].dialog.showLoader();
 
 	var projectId = marker.selectedStudent.data('project')["id"];
+	var studentId = marker.selectedStudent.data('student-id');
 	var markerId = marker.selectedSupervisor.data('marker-id');
-	var ajaxUrl = "/projects/marker-assign";
 
 	$.ajax({
 		type: "PATCH",
-		url: ajaxUrl,
+		url: marker.Urls_.ASSIGN_MARKER,
 		data: {
 			project_id: projectId,
-			marker_id: markerId
+			student_id: studentId,
+			marker_id: markerId,
+
 		},
 		success: function(data){
 
@@ -701,104 +696,114 @@ $('#submitAssignMarker').on('click', function(){
 	});
 });
 
+Marker.prototype.init = function(){
+	var marker = this;
+
+	$(marker.studentDataTable.bodyRows).on('click', function() {
+		Marker.prototype.selectStudent(this, marker);
+	});
+
+	$(marker.supervisorDataTable.bodyRows).on('click', function() {
+		Marker.prototype.selectSupervisor(this, marker);
+	});
+}
+
+Marker.prototype.initAll = function(){
+	window['Marker'] = new Marker();
+}
 
 /* =========================
 	6. Dynamic Pagination
    ========================= */
-var projects_pageNumber = 2,
-	projects_endOfTable = false,
-	projects_awaitingResponse = false;
+if($('#project-table').hasClass("index")){
+	var projects_pageNumber = 2,
+		projects_endOfTable = false,
+		projects_awaitingResponse = false;
 
-$(window).scroll(function() {
-	if($(window).scrollTop() + $(window).height() == $(document).height()) {
-
-		if(!$('#project-table').hasClass("index")){
-			return;
-		}
-
-		if(!projects_endOfTable && !projects_awaitingResponse){
-			$(".loader.projects").show();
-			projects_awaitingResponse = true;
-			var urlPath = "/projects?partial=true?page=" + projects_pageNumber;
-			$.ajax({
-				type : 'GET',
-				url: urlPath,
-				success : function(data){
-					$(".loader.projects").hide();
-					if(data.length == 0){
-						projects_endOfTable = true;
-						$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
-					}else{
-						$('#project-table tbody').append($(data));
-						window.history.replaceState("", "", "/projects?page=" + projects_pageNumber);
+	$(window).scroll(function() {
+		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+			if(!projects_endOfTable && !projects_awaitingResponse){
+				$(".loader.projects").show();
+				projects_awaitingResponse = true;
+				var urlPath = "/projects?partial=true?page=" + projects_pageNumber;
+				$.ajax({
+					type : 'GET',
+					url: urlPath,
+					success : function(data){
+						$(".loader.projects").hide();
+						if(data.length == 0){
+							projects_endOfTable = true;
+							$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
+						}else{
+							$('#project-table tbody').append($(data));
+							window.history.replaceState("", "", "/projects?page=" + projects_pageNumber);
+						}
+						projects_pageNumber += 1;
+					},
+					error: function(data){
+						$('#project-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+						projects_awaitingResponse = false;
+						$(".loader.projects").hide();
 					}
-					projects_pageNumber += 1;
-				},
-				error: function(data){
-					$('#project-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+				}).done(function(data){
 					projects_awaitingResponse = false;
 					$(".loader.projects").hide();
-				}
-			}).done(function(data){
-				projects_awaitingResponse = false;
+				});
+			} else {
 				$(".loader.projects").hide();
-			});
-		} else {
-			$(".loader.projects").hide();
+			}
 		}
-	}
-});
+	});
+}
 
-var agents_pageNumber = 2,
-	agents_endOfTable = false,
-	agents_awaitingResponse = false;
 
-$(window).scroll(function() {
-	if($(window).scrollTop() + $(window).height() == $(document).height()) {
 
-		if(!$('#user-agent-table')){
-			return;
-		}
+if($('#user-agent-table').length > 0){
+	var agents_pageNumber = 2,
+		agents_endOfTable = false,
+		agents_awaitingResponse = false;
 
-		if(!agents_endOfTable && !agents_awaitingResponse){
-			$(".loader.user-agent").show();
-			agents_awaitingResponse = true;
-			var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
-			$.ajax({
-				type : 'GET',
-				url: urlPath,
-				success : function(data){
-					$(".loader.user-agent").hide();
+	$(window).scroll(function() {
+		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+			if(!agents_endOfTable && !agents_awaitingResponse){
+				$(".loader.user-agent").show();
+				agents_awaitingResponse = true;
+				var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
+				$.ajax({
+					type : 'GET',
+					url: urlPath,
+					success : function(data){
+						$(".loader.user-agent").hide();
 
-					if(data.length == 0){
-						agents_endOfTable = true;
-						$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
-					}else{
-						$('#user-agent-table tbody').append($(data));
-						window.history.replaceState("", "", "/system/user-agent?page=" + agents_pageNumber);
+						if(data.length == 0){
+							agents_endOfTable = true;
+							$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
+						}else{
+							$('#user-agent-table tbody').append($(data));
+							window.history.replaceState("", "", "/system/user-agent?page=" + agents_pageNumber);
+						}
+
+						agents_pageNumber += 1;
+					},
+					error: function(data){
+						$('#user-agent-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+						agents_awaitingResponse = false;
 					}
-
-					agents_pageNumber += 1;
-				},
-				error: function(data){
-					$('#user-agent-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
+				}).done(function(data){
 					agents_awaitingResponse = false;
-				}
-			}).done(function(data){
-				agents_awaitingResponse = false;
+					$(".loader.user-agent").hide();
+				});
+			} else {
 				$(".loader.user-agent").hide();
-			});
-		} else {
-			$(".loader.user-agent").hide();
+			}
 		}
-	}
-});
-
+	});
+}
 /* ======================
 	 7. SUPERVISOR
    ====================== */
 
-// Accept Student
+// Accept or Reject Student
 $('.supervisor-table .offer-action').on('click', function() {
 	var actionButton = $(this);
 	var actionType = actionButton.data('action-type');
@@ -847,7 +852,6 @@ $('.supervisor-table .offer-action').on('click', function() {
 $('#deleteProjectButton').on('click', function() {
 	AjaxFunctions.prototype.deleteProject($('#title').val());
 });
-
 
 $('#student-edit-list').find('.checkbox input').on('change', function() {
 	var status = $(this).parents().eq(3).data('status');

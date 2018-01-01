@@ -9,7 +9,7 @@ use Session;
 class Project extends Model{
 	protected $table = null;
 	protected $primaryKey = 'id';
-	
+
 	// Mass fillable items
 	protected $fillable = ['title', 'description', 'skills', 'status', 'author_programme'];
 	protected $guarded = ['supervisor'];
@@ -37,5 +37,5 @@ class Project extends Model{
 			}
 		}
 	}
-	
+
 }

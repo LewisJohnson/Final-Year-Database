@@ -22,6 +22,7 @@
 		</div>
 		<div class="content">
 			<h5>Selected Projects</h5>
+			<div style="overflow: auto;">
 			<table class="data-table supervisor-table">
 				@if (count($user->supervisor->getProjectOffers()))
 				<thead>
@@ -60,8 +61,10 @@
 					</tfoot>
 				@endif
 			</table>
+			</div>
 
 			<h5>Students Proposals</h5>
+			<div style="overflow: auto;">
 			<table class="data-table supervisor-table">
 				@if (count($user->supervisor->getProjectProposals()))
 				<thead>
@@ -100,6 +103,7 @@
 					</tfoot>
 				@endif
 			</table>
+			</div>
 			@if (count($user->supervisor->getProjectProposals()))
 				<div class="button-group">
 					<button class="button button--raised" type="">Email Selected</button>
@@ -117,6 +121,7 @@
 			<h2>Accepted Students</h2>
 		</div>
 		<div class="content">
+			<div style="overflow: auto;">
 			<table class="data-table" id="supervisor-accepted-students-table">
 				@if (count($user->supervisor->getAcceptedStudents()))
 				<thead>
@@ -153,6 +158,7 @@
 				</tfoot>
 				@endif
 			</table>
+			</div>
 			@if (count($user->supervisor->getAcceptedStudents()))
 				<div class="button-group">
 					<button class="button button--raised" type="">Email Selected</button>
@@ -168,6 +174,7 @@
 			<h2>Projects</h2>
 		</div>
 		<div class="content">
+			<div style="overflow: auto;">
 			<table class="data-table">
 			@if(count($user->supervisor->getProjectsOrderByStatus()))
 				<thead>
@@ -198,6 +205,7 @@
 				</tfoot>
 			@endif
 			</table>
+			</div>
 		</div>
 	</div>
 </div>

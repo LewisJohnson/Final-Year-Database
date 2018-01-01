@@ -27,11 +27,11 @@
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
 				@if($project->getPrimaryTopic())
-					<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 						<p>{{$topic->name}}</p>
 					</li>
 				@else
-					<li class="pointer topic"  onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<li class="pointer topic" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 						<p>{{$topic->name}}</p>
 					</li>
 				@endif
@@ -39,12 +39,13 @@
 		@endif
 		@if(!count($project->topics))
 			<li class="no-topics">
-			<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
-				<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
-			</svg>
-			<p>This project has no associated topics.</p>
+				<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
+					<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+				</svg>
+				<p>This project has no associated topics.</p>
 			</li>
 		@elseif(!$project->getPrimaryTopic())
+			{{-- This should never be shown. --}}
 			<li class="no-topics">
 				<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
 					<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />

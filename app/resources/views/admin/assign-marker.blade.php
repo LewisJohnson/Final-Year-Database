@@ -19,7 +19,7 @@
 			@foreach($students as $student)
 				@if($student->project != null)
 					@if($student->project->marker == null)
-						<tr class="pointer" tabindex="0" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
+						<tr class="pointer" tabindex="0" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
 							<td>{{ $student->user->getFullName() }}</td>
 							<td>{{ $student->project->title }}</td>
 						</tr>

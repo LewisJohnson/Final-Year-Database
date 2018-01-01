@@ -1,8 +1,8 @@
-@media screen and (min-width: 720px){
+@media screen and (min-width: 970px){
 	.mobile-nav-underlay{display: none !important;}
 }
 
-@media screen and (max-width: 720px){
+@media screen and (max-width: 970px){
 	.main-content{
 		padding: 3rem 1rem;
 	}
@@ -36,7 +36,7 @@
 		visibility: hidden;
 		display: none;
 	}
-	
+
 
 	#header.mobile{
 		display: flex;
@@ -60,7 +60,6 @@
 	}
 
 	// SEARCH
-
 	.search-filter-container.active{
 		max-height: 170px;
 	}
@@ -86,6 +85,4 @@
 		padding-right: 8px;
 		text-align: right;
 	}
-
-
 }

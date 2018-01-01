@@ -95,18 +95,12 @@ class AdminController extends Controller{
 	}
 
 	public function export(Request $request){
-
+		//todo: change to a temp file
 		if($request->query("db") == "tran_ug"){
 			$filename = "transactions-ug [".Carbon::now()->toDateString()."].json";
 			$handle = fopen($filename, 'w+');
 			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
 			fclose($handle);
-
-			$headers = array(
-				'Content-Type' => 'text/json',
-			);
-
-			return response()->download($filename, $filename, $headers);
 		}
 
 		if($request->query("db") == "tran_masters"){
@@ -114,12 +108,6 @@ class AdminController extends Controller{
 			$handle = fopen($filename, 'w+');
 			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
 			fclose($handle);
-
-			$headers = array(
-				'Content-Type' => 'text/json',
-			);
-
-			return response()->download($filename, $filename, $headers);
 		}
 
 		if($request->query("db") == "uas"){
@@ -127,12 +115,11 @@ class AdminController extends Controller{
 			$handle = fopen($filename, 'w+');
 			fwrite($handle, json_encode(UserAgentString::all()->toArray(), JSON_PRETTY_PRINT));
 			fclose($handle);
-
-			$headers = array(
-				'Content-Type' => 'text/json',
-			);
-
-			return response()->download($filename, $filename, $headers);
 		}
+
+		$headers = array(
+			'Content-Type' => 'text/json',
+		);
+		return response()->download($filename, $filename, $headers);
 	}
 }

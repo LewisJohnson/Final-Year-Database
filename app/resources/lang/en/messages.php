@@ -1,6 +1,9 @@
 <?php
 
 return [
+	'footer_maintainer_text' => 'Information maintained by Bernhard Reus',
+	'footer_link_text' => 'Sussex websites Disclaimer',
+	'footer_link_url' => 'http://www.sussex.ac.uk/disclaimer/',
 	'official_name' => 'Sussex Informatics Projects',
 	'password' => 'Passwords must be at least six characters and match the confirmation.',
 	'reset' => 'Your password has been reset!',

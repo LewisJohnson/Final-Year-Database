@@ -7,6 +7,14 @@ $h2-color: darken($h3-color, 5%);
 $h1-color: darken($h2-color, 5%);
 $list-text-color: #515151;
 
+/* BRAND */
+$brand-primary: #1D4289;
+$accent: darken($brand-primary, 6%);
+$accent-info: #8eb4cb;
+$accent-success: #2ab27b;
+$accent-warning: #cbb956;
+$accent-danger: #bf5329;
+
 /* DIALOG */
 $underlay-background: rgba(0, 0, 0, 0.2);
 
@@ -17,6 +25,10 @@ $form-input-padding: 8px;
 $form-input-font-size: 16px;
 $form-label-text-color: $text-color;
 
+$input-color: $text-color;
+$input-border: lighten($text-color, 40%);
+$input-border-focus: lighten($brand-primary, 25%);
+$input-color-placeholder: lighten($text-color, 30%);
 
 /* CHECKBOX */
 $checkbox-margin: 16px 0;
@@ -28,31 +40,18 @@ $checkmark-width: 2px;
 $checkmark-color: #fff;
 
 /* SHADOWS */
-$shadow-key-umbra-opacity: 0.2 !default;
-$shadow-key-penumbra-opacity: 0.14 !default;
-$shadow-ambient-shadow-opacity: 0.12 !default;
+$shadow-key-umbra-opacity: 0.2;
+$shadow-key-penumbra-opacity: 0.14;
+$shadow-ambient-shadow-opacity: 0.12;
 
-// Brands
-$brand-primary: #1D4289;
-$accent: darken($brand-primary, 6%);
-$accent-info: #8eb4cb;
-$accent-success: #2ab27b;
-$accent-warning: #cbb956;
-$accent-danger: #bf5329;
+/* ERROR */
+$error-bg: #F44336;
+$error-border-color: darken($error-bg, 5%);
 
-// Other
-$error-bg-color: #F44336;
-$error-border-color: darken($error-bg-color, 5%);
-$notification-bg-color: white;
-
-
-// Buttons
-$btn-default-color: $text-color;
-
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
+/* NOTIFICATION */
+$notification-bg: #ececec;
+$notification-error-bg: #ff0033;
+$notification-success-bg: #00b724;
 
 // Panels
 $panel-default-heading-bg: #fff;
