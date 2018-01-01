@@ -4,7 +4,7 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class Project extends Model{
 	protected $table = null;
@@ -17,10 +17,6 @@ class Project extends Model{
 
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
-	}
-
-	public function marker(){
-		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
 	public function isOwnedByUser(){

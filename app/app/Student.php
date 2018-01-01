@@ -50,4 +50,8 @@ class Student extends Model{
 
 		return $return;
 	}
+
+	public function marker(){
+		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
+	}
 }

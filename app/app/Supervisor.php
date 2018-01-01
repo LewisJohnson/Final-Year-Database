@@ -2,9 +2,9 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Session;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class Supervisor extends User{
 
@@ -103,13 +103,21 @@ class Supervisor extends User{
 		}
 
 		foreach ($offers as $key => $value) {
-			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
+			if(Session::get("db_type") == "ug"){
+				$student = StudentUg::findOrFail($value->student_id);
+			} elseif(Session::get("db_type") == "masters") {
+				$student = StudentMasters::findOrFail($value->student_id);
+			}
+
 			if($value->student_share || Auth::user()->isSupervisorOrSuperior()){
-				$value->student_name = $student->first_name." ".$student->last_name;
+				$value->student_name = $student->user->getFullName();
 			} else {
 				$value->student_name = "Hidden";
 			}
-			$value->student_email = $student->email;
+
+			// dd($student->marker_id);
+			$value->marker = Supervisor::where('id', $value->marker)->first();
+			$value->student_email = $student->user->email;
 		}
 		return $offers;
 	}
