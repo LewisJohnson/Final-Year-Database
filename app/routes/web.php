@@ -32,6 +32,7 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 	Route::get('admin/archive', 'AdminController@archive');
 	Route::get('admin/export', 'AdminController@export');
+	Route::get('admin/parameters', 'AdminController@parameters');
 
 	Route::get('admin/transactions', 'TransactionController@index');
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');

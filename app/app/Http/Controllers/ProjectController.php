@@ -27,7 +27,7 @@ class ProjectController extends Controller{
 
 	public function __construct(){
 		$this->middleware('auth');
-		$this->paginationCount = 500;
+		$this->paginationCount = 25;
 	}
 
 	/**
@@ -87,8 +87,7 @@ class ProjectController extends Controller{
 		if($project->student_proposed_project){
 			$view = "StudentProject";
 
-			//todo: Show name if user is supervisor or admin
-			if($project->student->share_project){
+			if($project->student->share_project || Auth::user()->isSupervisorOrSuperior()){
 				$student_name = $project->student->user->getFullName();
 			}
 		}
@@ -115,7 +114,12 @@ class ProjectController extends Controller{
 	 * @return string topic name
 	 */
 	public function addTopic(Request $request){
-		//todo: make sure user is authorized to perform this action
+
+		if(!Auth::user()->isSupervisorOrSuperior()){
+			Log::error('Someone who is not a supervsior tried to create a project.');
+			return redirect('/');
+		}
+
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::where('name', request('topic_name'))->first();
@@ -158,7 +162,11 @@ class ProjectController extends Controller{
 	 * @return string topic name
 	 */
 	public function removeTopic(Request $request){
-		//todo: make sure user is authorized to perform this action
+
+		if(!Auth::user()->isSupervisorOrSuperior()){
+			Log::error('Someone who is not a supervsior tried to create a project.');
+			return redirect('/');
+		}
 
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
@@ -182,7 +190,11 @@ class ProjectController extends Controller{
 	}
 
 	public function updatePrimaryTopic(Request $request){
-		//todo: make sure user is authorized to perform this action
+
+		if(!Auth::user()->isSupervisorOrSuperior()){
+			Log::error('Someone who is not a supervsior tried to create a project.');
+			return redirect('/');
+		}
 
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){

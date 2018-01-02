@@ -220,6 +220,11 @@ nav.mobile.is-visible{
 	opacity: 1;
 }
 
+
+.transition--medium {
+	transition: .25s all cubic-bezier(.4,0,.2,1);
+}
+
 @keyframes showDropdownContentAnim {
 	0% {
 		transform: scale3d(0.2, 0.2, 1);

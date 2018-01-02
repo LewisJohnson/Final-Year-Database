@@ -118,19 +118,20 @@
 			<button >Help</button>
 			@include('svg.arrow-down')
 			<div class="dropdown-content shadow-2dp">
-				<a href="/help">System Help</a>
 				<div class="sub-dropdown">
 					<button class="sub-dropbtn">Links</button>
 					@include('svg.arrow-right')
 					<div class="dropdown-content shadow-2dp">
 						@for ($i = 1; $i <= 20; $i++)
 							@if(Lang::has("messages_ug.help_link_".$i))
-								<a href="@lang("messages_ug.help_link_".$i."_url")">@lang("messages_ug.help_link_".$i)</a>
+								<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
 							@endif
 						@endfor
 					</div>
 				</div>
-				<a href="/information">General Information</a>
+				<a href="/help" title="System Help">System Help</a>
+				<a href="/information" title="General Information">General Information</a>
+				<a href="/about" title="About this software">About</a>
 			</div>
 		</li>
 	</ul>

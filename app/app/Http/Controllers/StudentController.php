@@ -107,7 +107,7 @@ class StudentController extends Controller{
 		$student->save();
 
 		if($student->share_project){
-			session()->flash('message', 'Your name is now visible from other students.');
+			session()->flash('message', 'Your name is now visible to other students.');
 		} else {
 			session()->flash('message', 'Your name is now hidden from other students.');
 		}

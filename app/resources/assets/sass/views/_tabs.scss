@@ -1,0 +1,15 @@
+.tab-container{
+	list-style: none;
+}
+
+.tab{
+	display: inline-block;
+
+	.content{display: none;}
+}
+
+.content-host{
+	ul{
+		padding-left: 2rem;
+	}
+}

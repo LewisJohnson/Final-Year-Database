@@ -11,9 +11,7 @@ class Mode extends Migration
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-
+	public function up(){
 		Schema::create('mode_ug', function (Blueprint $table) {
 			$table->smallInteger('project_year')->unique();
 			$table->dateTimeTz('start_date');

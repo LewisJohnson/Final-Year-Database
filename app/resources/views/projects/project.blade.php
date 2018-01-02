@@ -27,15 +27,18 @@
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
 				@if($project->getPrimaryTopic())
-					<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<li style="display: none" class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 						<p>{{$topic->name}}</p>
 					</li>
 				@else
-					<li class="pointer topic" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<li style="display: none" class="pointer topic" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 						<p>{{$topic->name}}</p>
 					</li>
 				@endif
 			@endforeach
+			<li>
+				<div class="loader loader--medium" style="display: block"></div>
+			</li>
 		@endif
 		@if(!count($project->topics))
 			<li class="no-topics">
@@ -57,26 +60,25 @@
 </div>
 
 <div class="button-group button-group--horizontal" >
+	{{-- STUDENT SELECT --}}
+	@if($user->student != null)
+		@if($user->student->project_status == 'none')
+			<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+				{{ csrf_field() }}
+				{{ method_field('PATCH') }}
+				<input type="hidden" name="project_id" value="{{ $project->id }}">
+				<button class="button button--raised button--accent">Select project</button>
+			</form>
+		@else
+			<button class="button button--raised button--accent" disabled>Select project</button>
+		@endif
+	@endif
 	<a class="button button--raised" href="javascript:history.back()">Back</a>
 	@if($project->isOwnedByUser())
 		<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 		<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
 	@endif
 </div>
-
-{{-- STUDENT SELECT --}}
-@if($user->student != null)
-	@if($user->student->project_status == 'none')
-		<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" style="width: 150px; display: inline-block;">
-			{{ csrf_field() }}
-			{{ method_field('PATCH') }}
-			<input type="hidden" name="project_id" value="{{ $project->id }}">
-			<button class="button button--raised button--accent">Select project</button>
-		</form>
-	@else
-		<p>You have already selected or proposed a project.</p>
-	@endif
-@endif
 
 </div>
 @endsection

@@ -9,7 +9,6 @@
 		border-radius: 2px;
 		margin-right: 5px;
 		margin-bottom: 5px;
-		transition: all 0.3s;
 
 		&.primary{
 			background: #ffd700;
@@ -64,6 +63,7 @@
 	.topic{
 		cursor: -webkit-grab;
 		user-select: none;
+		transition: all 0.3s;
 	}
 
 	.topic:first-child.first{

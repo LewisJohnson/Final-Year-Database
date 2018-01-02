@@ -63,6 +63,10 @@
 			line-height: 22px;
 		}
 	}
+
+	&.hidden{
+		display: none;
+	}
 }
 
 .section--full-width{

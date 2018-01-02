@@ -37,6 +37,13 @@ class User extends Authenticatable{
 		return $this->access_type === "admin_masters";
 	}
 
+	public function isAdmin(){
+		return $this->access_type == "admin_ug" ||
+		$this->access_type == "admin_masters" ||
+		$this->access_type == "admin_department" ||
+		$this->access_type == "admin_system";
+	}
+
 	public function isSupervisor(){
 		return $this->access_type === "supervisor";
 	}

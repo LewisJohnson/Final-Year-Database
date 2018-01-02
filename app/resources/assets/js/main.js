@@ -36,6 +36,13 @@ $.ajaxSetup({
    ======================== */
 $('body').append('<div class="underlay"></div>');
 
+// Makes primary topic first
+$(".topics-list").prepend($(".first"));
+$(".topics-list .loader").hide(200);
+$(".topics-list li").first().fadeIn(200, function showNext() {
+	$(this).next( ".topics-list li" ).fadeIn(200, showNext);
+});
+
 /* ======================
 	3. Helpers Functions
    ====================== */
@@ -874,6 +881,23 @@ $('.edit-student-list .email-selected').on('click', function(e) {
 	}
 });
 
+$('.expand').on('click', function(e) {
+	var content = $(this).parents().eq(1).find('.content');
+	if(content.attr("aria-expanded") == "true"){
+		$(this).find("svg").css("transform", "rotateZ(0deg)");
+		content.hide(200);
+		content.attr("aria-expanded", "false");
+		setCookie(content.data("cookie-name"), true, 365);
+
+	} else {
+		$(this).find("svg").css("transform", "rotateZ(180deg)");
+		content.show(200);
+		content.attr("aria-expanded", "true");
+		setCookie(content.data("cookie-name"), false, 365);
+	}
+});
+
+
 /* ======================
 	 8. OTHER
    ====================== */
@@ -881,9 +905,6 @@ $('.show-more').on('click',  function(e) {
 	$(this).hide();
 	$('.project').addClass('expand');
 });
-
-// Makes primary topic first
-$(".topics-list").prepend($(".first"));
 
 // SUPERVISOR
 $("#loginForm").on('submit', function(e){
@@ -996,6 +1017,28 @@ $('#create-form-access-select').on('change', function(){
 });
 
 
+$(".open-tab").on('click', function() {
+	var currentTab = $(this).parent();
+	var currentContent = currentTab.find(".content");
+	var tabs = $(".tab-container li");
+	var tabsContent = tabs.find(".content");
+	var buttons = tabs.find("button");
+	var host = $(".content-host");
+
+	if(currentContent.attr("aria-hidden") == "true"){
+		host.html("");
+		tabsContent.attr("aria-expanded", "false");
+		tabsContent.attr("aria-hidden", "true");
+		buttons.removeClass("button--accent");
+
+		host.html(currentContent.html());
+		currentContent.attr("aria-expanded", "true");
+		currentContent.attr("aria-hidden", "false");
+		$(this).addClass("button--accent");
+		// setCookie(content.data("cookie-name"), false, 365);
+	}
+});
+
 /* ===============
 	9. Initialise
    =============== */
@@ -1005,7 +1048,7 @@ DataTable.prototype.initAll();
 EditTopic.prototype.initAll();
 Marker.prototype.initAll();
 
-// END OF FILE
+// END OF DOC READY FILE
 });
 
 $(document).ajaxError(function( event, request, settings ) {
@@ -1021,4 +1064,26 @@ function showNotification(type, message){
 	setTimeout(function() {
 		notification.hide(0);
 	}, 3000);
+}
+
+function setCookie(cname, cvalue, exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires="+d.toUTCString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }

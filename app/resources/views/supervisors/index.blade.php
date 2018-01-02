@@ -11,7 +11,7 @@
 	<p>Your <b>Masters</b> project load is currently {{ $user->supervisor->project_load_masters }}.</p>
 @endif
 
-<a class="button button--raised button--accent" href="/projects/create">New Project</a>
+<a class="button button--raised button--accent" style="margin-bottom: 1rem;" href="/projects/create">New Project</a>
 
 <div class="supervisor hub">
 	{{-- OFFERS --}}
@@ -19,8 +19,13 @@
 		<div class="header">
 			@include('svg.tag')
 			<h2>Offers</h2>
+			<div class="svg-container expand pointer" style="margin-left: auto;">
+				<svg class="transition--medium" viewBox="0 0 24 24">
+					<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+				</svg>
+			</div>
 		</div>
-		<div class="content">
+		<div class="content" data-cookie-name="hide-offers" @if(!empty($_COOKIE["hide-offers"])) @if($_COOKIE["hide-offers"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 			<h5>Selected Projects</h5>
 			<div style="overflow: auto;">
 			<table class="data-table supervisor-table">
@@ -119,8 +124,13 @@
 		<div class="header">
 			@include('svg.check-circle')
 			<h2>Accepted Students</h2>
+			<div class="svg-container expand pointer" style="margin-left: auto;">
+				<svg class="transition--medium" viewBox="0 0 24 24">
+					<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+				</svg>
+			</div>
 		</div>
-		<div class="content">
+		<div class="content" data-cookie-name="hide-accepted"  @if(!empty($_COOKIE["hide-accepted"])) @if($_COOKIE["hide-accepted"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 			<div style="overflow: auto;">
 			<table class="data-table" id="supervisor-accepted-students-table">
 				@if (count($user->supervisor->getAcceptedStudents()))
@@ -178,8 +188,13 @@
 		<div class="header">
 			@include('svg.file')
 			<h2>Projects</h2>
+			<div class="svg-container expand pointer" style="margin-left: auto;">
+				<svg class="transition--medium" viewBox="0 0 24 24">
+					<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+				</svg>
+			</div>
 		</div>
-		<div class="content">
+		<div class="content" data-cookie-name="hide-projects" @if(!empty($_COOKIE["hide-projects"])) @if($_COOKIE["hide-projects"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 			<div style="overflow: auto;">
 			<table class="data-table">
 			@if(count($user->supervisor->getProjectsOrderByStatus()))

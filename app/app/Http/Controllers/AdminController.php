@@ -30,6 +30,10 @@ class AdminController extends Controller{
 		return view('admin.index');
 	}
 
+	public function parameters(){
+		return view('admin.parameters');
+	}
+
 	public function importStudents(){
 		return view('admin.import');
 	}
