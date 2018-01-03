@@ -10,7 +10,7 @@
 	position: relative;
 	display: none;
 	border: 5px solid transparent;
-	border-top: 5px solid #5facff; /* Blue */
+	border-top: 5px solid #5facff;
 	border-radius: 50%;
 	width: 25px;
 	height: 25px;
@@ -94,6 +94,32 @@
 
 .width-1600{
 	max-width: 1600px;
+}
+
+.favourite-container {
+	position: relative;
+	float: right;
+	margin-top: 1.6rem;
+
+	svg {
+		fill-opacity: 0.3;
+		fill: $text-color;
+
+		:hover{
+			fill-opacity: 0.6;
+		}
+
+		polygon { transition: .18s all ease; }
+	}
+
+	svg.favourite {
+		fill-opacity: 1;
+		fill: gold;
+
+		:hover{
+			fill-opacity: 1;
+		}
+	}
 }
 
 @keyframes spin {

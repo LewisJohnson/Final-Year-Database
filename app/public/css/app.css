@@ -1550,6 +1550,10 @@ th:last-of-type {
   word-wrap: break-word;
 }
 
+.card h2 {
+  margin-top: 5px;
+}
+
 .card-slim-content p {
   margin: 2px;
 }
@@ -1663,7 +1667,6 @@ th:last-of-type {
   display: none;
   border: 5px solid transparent;
   border-top: 5px solid #5facff;
-  /* Blue */
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -1754,6 +1757,35 @@ th:last-of-type {
 
 .width-1600 {
   max-width: 1600px;
+}
+
+.favourite-container {
+  position: relative;
+  float: right;
+  margin-top: 1.6rem;
+}
+
+.favourite-container svg {
+  fill-opacity: 0.3;
+  fill: #757575;
+}
+
+.favourite-container svg :hover {
+  fill-opacity: 0.6;
+}
+
+.favourite-container svg polygon {
+  -webkit-transition: .18s all ease;
+  transition: .18s all ease;
+}
+
+.favourite-container svg.favourite {
+  fill-opacity: 1;
+  fill: gold;
+}
+
+.favourite-container svg.favourite :hover {
+  fill-opacity: 1;
 }
 
 @-webkit-keyframes spin {

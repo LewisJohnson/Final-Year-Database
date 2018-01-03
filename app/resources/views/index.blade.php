@@ -28,6 +28,27 @@
 			@endif
 		</div>
 
+		<div class="card card--margin-vertical" style="border: 1px solid gold; background: rgba(255, 215, 0, 0.5)">
+			<h2>Favourite Projects</h2>
+			@if($projects = $user->student->getFavouriteProjects())
+				<table id="project-table" class="data-table table--dark-head">
+					<thead>
+						<tr>
+							<th>Topic</th>
+							<th>Project Title</th>
+							<th class="mobile--hidden">Skills</th>
+							<th>Supervisor</th>
+						</tr>
+					</thead>
+					<tbody>
+						@include('projects.partials.project-table-row', ['view' => 'index'])
+					</tbody>
+				</table>
+			@else
+				<p title="Simple press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
+			@endif
+		</div>
+
 		<div class="card card--margin-vertical">
 			<h2>Options</h2>
 			<p>You may hide your name from other students.</p>

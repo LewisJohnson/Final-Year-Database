@@ -7,6 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Carbon;
 use Session;
+use Cookie;
 
 class SuccessfulLogin
 {
@@ -26,11 +27,15 @@ class SuccessfulLogin
      * @param  Login  $event
      * @return void
      */
-    public function handle(Login $event)
-    {
+    public function handle(Login $event){
         Session::start();
         Session::put('db_type', "ug");
         Session::put('auth_type', $event->user->access_type);
+
+        if(empty(Cookie::get('fp'))){
+            Cookie::queue('fp', 'none', 525600);
+        }
+
         $event->user->last_login = new Carbon;
         $event->user->save();
     }

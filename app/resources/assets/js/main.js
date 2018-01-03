@@ -5,7 +5,7 @@ $(function() {
 
 /* FILE STRUCTURE
 
-1. AJAX Setup
+1. AJAX Setup and Cookies
 2. HTML Modifications
 3. Helper Functions
 4. Components
@@ -1018,6 +1018,7 @@ $('#create-form-access-select').on('change', function(){
 });
 
 
+// Used for the help page
 $(".open-tab").on('click', function() {
 	var currentTab = $(this).parent();
 	var currentContent = currentTab.find(".content");
@@ -1040,6 +1041,38 @@ $(".open-tab").on('click', function() {
 	}
 });
 
+
+
+$(".favourite-container").on('click', function() {
+	var svg = $(this).find('svg');
+	var projectId = window['project'].data('project-id');
+
+	if(svg.hasClass('favourite')){
+		var action = 'remove';
+		var ajaxUrl = '/students/remove-favourite';
+
+	} else {
+		var action = 'add';
+		var ajaxUrl = '/students/add-favourite';
+	}
+
+	$.ajax({
+		url: ajaxUrl,
+		type:'PATCH',
+		data: {
+			project_id: projectId
+		},
+		success:function(){
+			if(action == "add"){
+				svg.addClass('favourite');
+			} else {
+				svg.removeClass('favourite');
+			}
+		}
+	});
+});
+
+
 /* ===============
 	9. Initialise
    =============== */
@@ -1048,6 +1081,10 @@ Dialog.prototype.initAll();
 DataTable.prototype.initAll();
 EditTopic.prototype.initAll();
 Marker.prototype.initAll();
+
+if($('.project-card').length > 0){
+	window['project'] = $('.project-card');
+}
 
 // END OF DOC READY FILE
 });
@@ -1086,5 +1123,5 @@ function getCookie(cname) {
 			return c.substring(name.length, c.length);
 		}
 	}
-	return "";
+	return '';
 }

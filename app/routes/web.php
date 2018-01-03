@@ -96,6 +96,9 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::patch('students/project-select', 'StudentController@selectProject');
 	Route::patch('students/project-share', 'StudentController@shareProject');
 
+	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
+	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
+
 	/* ==============
 	   REPORT ROUTES
 	   ============== */

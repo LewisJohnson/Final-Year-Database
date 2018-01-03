@@ -7,7 +7,15 @@
 	<h1>This project is archived.</h1>
 @endif
 
-<div class="card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}">
+<div class="card project-card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
+	@if($user->isStudent())
+
+		<div class="favourite-container pointer">
+			<svg viewBox="0 0 24 24" height="30" width="30" @if($user->student->isFavouriteProject($project->id)) class="favourite" @endif>
+				<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
+			</svg>
+		</div>
+	@endif
 	<h1 class="title">{{ $project->title }}</h1>
 
 	@if($view == "StudentProject")
@@ -31,7 +39,7 @@
 						<p>{{$topic->name}}</p>
 					</li>
 				@else
-					<li style="display: none" class="pointer topic" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+					<li style="display: none" class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 						<p>{{$topic->name}}</p>
 					</li>
 				@endif
@@ -61,7 +69,7 @@
 
 <div class="button-group button-group--horizontal" >
 	{{-- STUDENT SELECT --}}
-	@if($user->student != null)
+	@if($user->isStudent())
 		@if($user->student->project_status == 'none')
 			<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
 				{{ csrf_field() }}

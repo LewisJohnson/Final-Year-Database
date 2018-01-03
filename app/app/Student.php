@@ -2,7 +2,8 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
-use Session;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 
 class Student extends Model{
 	protected $table = null;
@@ -53,5 +54,33 @@ class Student extends Model{
 
 	public function marker(){
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
+	}
+
+	public function isFavouriteProject($id){
+		if(empty(Cookie::get('fp'))){
+			return false;
+		}
+
+		if(Cookie::get('fp') != "none"){
+			$favProjects = unserialize(Cookie::get('fp'));
+
+			if (($key = array_search($id, $favProjects)) !== false) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function getFavouriteProjects(){
+		if(Cookie::get('fp') == "none" || Cookie::get('fp') == "a:0:{}" || empty(Cookie::get('fp'))){
+			return null;
+		} else {
+			if(Session::get("db_type") == "ug"){
+				$projects = ProjectUg::whereIn('id', unserialize(Cookie::get('fp')))->get();
+			} elseif(Session::get("db_type") == "masters") {
+				$projects = ProjectMasters::whereIn('id', unserialize(Cookie::get('fp')))->get();
+			}
+		}
+		return $projects;
 	}
 }

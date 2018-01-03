@@ -10,12 +10,12 @@ class AuthController extends Controller{
 
 		public function change(Request $request){
 			if(!Auth::user()->isSupervisorOrSuperior()){
-			dd(Auth::user());
+				dd(Auth::user());
 				return redirect()->action('HomeController@index');
 			}
 
 			Session::put('auth_type', $request->auth_type);
-			
+
 			if($request->auth_type === "admin_ug" || $request->auth_type === "supervisor_ug"){
 				Session::put('db_type', 'ug');
 			} else {

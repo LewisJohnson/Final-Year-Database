@@ -3,6 +3,9 @@ namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\ProjectUg;
@@ -10,8 +13,6 @@ use SussexProjects\ProjectMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\Supervisor;
-use DB;
-use Session;
 use Auth;
 
 class StudentController extends Controller{
@@ -24,6 +25,47 @@ class StudentController extends Controller{
 		return view('students.report');
 	}
 
+	public function addFavouriteProject(Request $request){
+		if(Session::get("db_type") == "ug"){
+			$project = ProjectUg::findOrFail(request('project_id'));
+		} elseif(Session::get("db_type") == "masters") {
+			$project = ProjectMasters::findOrFail(request('project_id'));
+		}
+
+		if(Cookie::get('fp') == "none" || Cookie::get('fp') == "a:0:{}" || empty(Cookie::get('fp'))){
+			Cookie::queue('fp', serialize(array($project->id)), 525600);
+		} else {
+			$projectInCookie = false;
+			$favProjects = unserialize(Cookie::get('fp'));
+
+			if (($key = array_search($project->id, $favProjects)) !== false) {
+				$projectInCookie = true;
+			}
+
+			if(!$projectInCookie){
+				$favProjects[] = $project->id;
+				Cookie::queue('fp', serialize($favProjects), 525600);
+			}
+		}
+		return;
+	}
+
+	public function removeFavouriteProject(Request $request){
+		if(Session::get("db_type") == "ug"){
+			$project = ProjectUg::findOrFail(request('project_id'));
+		} elseif(Session::get("db_type") == "masters") {
+			$project = ProjectMasters::findOrFail(request('project_id'));
+		}
+
+		$favProjects = unserialize(Cookie::get('fp'));
+		if (($key = array_search($project->id, $favProjects)) !== false) {
+			unset($favProjects[$key]);
+		}
+
+		Cookie::queue('fp', serialize($favProjects), 525600);
+
+		return;
+	}
 
 	/**
 	 * Update the specified resource in storage.

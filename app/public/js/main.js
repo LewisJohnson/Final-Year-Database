@@ -68,7 +68,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(2);
+module.exports = __webpack_require__(3);
 
 
 /***/ }),
@@ -77,7 +77,7 @@ module.exports = __webpack_require__(2);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__);
 
 
@@ -86,7 +86,7 @@ $(function () {
 
 	/* FILE STRUCTURE
  
- 1. AJAX Setup
+ 1. AJAX Setup and Cookies
  2. HTML Modifications
  3. Helper Functions
  4. Components
@@ -1089,6 +1089,7 @@ $(function () {
 		}
 	});
 
+	// Used for the help page
 	$(".open-tab").on('click', function () {
 		var currentTab = $(this).parent();
 		var currentContent = currentTab.find(".content");
@@ -1111,6 +1112,34 @@ $(function () {
 		}
 	});
 
+	$(".favourite-container").on('click', function () {
+		var svg = $(this).find('svg');
+		var projectId = window['project'].data('project-id');
+
+		if (svg.hasClass('favourite')) {
+			var action = 'remove';
+			var ajaxUrl = '/students/remove-favourite';
+		} else {
+			var action = 'add';
+			var ajaxUrl = '/students/add-favourite';
+		}
+
+		$.ajax({
+			url: ajaxUrl,
+			type: 'PATCH',
+			data: {
+				project_id: projectId
+			},
+			success: function success() {
+				if (action == "add") {
+					svg.addClass('favourite');
+				} else {
+					svg.removeClass('favourite');
+				}
+			}
+		});
+	});
+
 	/* ===============
  	9. Initialise
     =============== */
@@ -1119,6 +1148,10 @@ $(function () {
 	DataTable.prototype.initAll();
 	EditTopic.prototype.initAll();
 	Marker.prototype.initAll();
+
+	if ($('.project-card').length > 0) {
+		window['project'] = $('.project-card');
+	}
 
 	// END OF DOC READY FILE
 });
@@ -1157,24 +1190,11 @@ function getCookie(cname) {
 			return c.substring(name.length, c.length);
 		}
 	}
-	return "";
+	return '';
 }
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -7781,6 +7801,12 @@ SwappableStopEvent.type = 'swappable:stop';
 /***/ })
 /******/ ]);
 });
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
