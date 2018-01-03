@@ -1,4 +1,4 @@
-import {Swappable} from '@shopify/draggable';
+import Swappable from '@shopify/draggable/lib/swappable';
 
 $(function() {
 "use strict";
@@ -327,9 +327,9 @@ ProjectTopics.prototype.functions = {
 				$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
 
 				if($(".topics-list.edit li.topic:last").length > 0){
-					$(".topics-list.edit li.topic:last").after('<li draggable class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+					$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
 				} else {
-					$(".topics-list.edit").prepend('<li draggable class="topic first" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+					$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
 				}
 			}
 		}).done(function(data){
@@ -386,7 +386,7 @@ ProjectTopics.prototype.functions = {
 	},
 };
 
-const swappable = new Swappable(document.querySelectorAll('.topics-list.edit'), {
+const swappable = new Swappable(document.querySelectorAll('.topics-list.edit .topic'), {
 	draggable: '.topic',
 });
 
@@ -394,6 +394,7 @@ swappable.on('swappable:swapped', function(){
 	var projectId = $('#editProjectForm').data('project-id');
 	var originalPrimaryTopicId = $('#editProjectForm').data('primary-topic-id');
 	var topicId = $(".topics-list.edit li:first-child").data('topic-id');
+
 	if(topicId != originalPrimaryTopicId){
 		projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
 	}
