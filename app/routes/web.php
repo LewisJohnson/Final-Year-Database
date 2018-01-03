@@ -9,7 +9,7 @@ Route::group(['middleware' => ['web']], function() {
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
 	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
-		// Root Routes
+	// Root Routes
 	Route::get('/', 'HomeController@index');
 	Route::get('index', 'HomeController@index');
 	Route::get('home', 'HomeController@index');

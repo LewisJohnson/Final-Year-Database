@@ -48,5 +48,4 @@ class HomeController extends Controller{
 	public function noJs(Request $request){
 		return view('no-js');
 	}
-
 }
