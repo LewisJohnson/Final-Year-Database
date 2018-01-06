@@ -18,7 +18,7 @@ class Kernel extends HttpKernel
 		\Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
 		\SussexProjects\Http\Middleware\TrimStrings::class,
 		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-		\SussexProjects\Http\Middleware\TrustProxies::class,
+		\SussexProjects\Http\Middleware\TrustProxies::class
 	];
 
 	/**
@@ -35,25 +35,13 @@ class Kernel extends HttpKernel
 			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
 			\SussexProjects\Http\Middleware\VerifyCsrfToken::class,
 			\Illuminate\Routing\Middleware\SubstituteBindings::class,
-			\SussexProjects\Http\Middleware\UserAgentStringCollector::class
+			\SussexProjects\Http\Middleware\UserAgentStringCollector::class,
 		],
 
 		'api' => [
 			'throttle:5,1',
 			'bindings',
-		],
-
-		'masters' => [
-			'SussexProjects\Http\Middleware\Admin_Masters',
-			'SussexProjects\Http\Middleware\Supervisor_Masters',
-			'SussexProjects\Http\Middleware\Student_Masters',
-		],
-
-		'ug' => [
-			'SussexProjects\Http\Middleware\Admin_Ug',
-			'SussexProjects\Http\Middleware\Supervisor_Ug',
-			'SussexProjects\Http\Middleware\Student_Ug',
-		],
+		]
 	];
 
 	/**
@@ -70,13 +58,8 @@ class Kernel extends HttpKernel
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
 		'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
 		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-
-		'Admin_Masters' => 'SussexProjects\Http\Middleware\Admin_Masters',
-		'Supervisor_Masters' => 'SussexProjects\Http\Middleware\Supervisor_Masters',
-		'Student_Masters' => 'SussexProjects\Http\Middleware\Studen_Masters',
-
-		'Admin_Ug' => 'SussexProjects\Http\Middleware\Admin_Ug',
-		'Supervisor_Ug' => 'SussexProjects\Http\Middleware\Supervisor_Ug',
-		'Student_Ug' => 'SussexProjects\Http\Middleware\Student_Ug',
+		'admin' => \SussexProjects\Http\Middleware\Admin::class,
+		'supervisorOrSuperior' => \SussexProjects\Http\Middleware\SupervisorOrSuperior::class,
+		'student' => \SussexProjects\Http\Middleware\SupervisorOrSuperior::class,
 	];
 }

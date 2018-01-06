@@ -9,7 +9,7 @@ class ProjectUg extends Project{
 	}
 
 	public function student(){
-		return $this->belongsTo(StudentUg::class, 'student_id', 'project_id');
+		return $this->belongsTo(StudentUg::class);
 	}
 
 	public function getPrimaryTopic(){

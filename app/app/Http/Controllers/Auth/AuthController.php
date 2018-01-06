@@ -10,7 +10,6 @@ class AuthController extends Controller{
 
 		public function change(Request $request){
 			if(!Auth::user()->isSupervisorOrSuperior()){
-				dd(Auth::user());
 				return redirect()->action('HomeController@index');
 			}
 

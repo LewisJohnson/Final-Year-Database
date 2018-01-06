@@ -4,13 +4,13 @@ namespace SussexProjects;
 
 class ProjectMasters extends Project{
 	protected $table = 'projects_masters';
-	
+
     public function topics(){
-        return $this->belongsToMany('SussexProjects\TopicMasters', 'project_topics_masters', 'project_id', 'topic_id')->withPivot('primary');
+        return $this->belongsToMany(TopicMasters::class, 'project_topics_masters', 'project_id', 'topic_id')->withPivot('primary');
     }
 
 	public function student(){
-		return $this->belongsTo(StudentMasters::class, 'student_id', 'project_id');
+		return $this->belongsTo(StudentMasters::class);
 	}
 
 	public function getPrimaryTopic(){

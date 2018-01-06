@@ -1,10 +1,10 @@
 <?php
+
 namespace SussexProjects\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class Supervisor
+class Student
 {
 	/**
 	 * Handle an incoming request.
@@ -14,7 +14,7 @@ class Supervisor
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (Auth::check() && Auth::user()->isSupervisor()){
+		if (Auth::check() && Auth::user()->isStudent()){
 			return $next($request);
 		}
 		return redirect('/');

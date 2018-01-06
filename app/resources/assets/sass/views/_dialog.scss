@@ -29,7 +29,7 @@
 	box-shadow: none;
 	border-radius: 5px;
 	border: 1px solid rgba(0, 0, 0, 0.12);
-	overflow: hidden;
+	overflow-y: auto;
 	max-width: 500px;
 	max-height: 450px;
 	transform: scale3d(0.98, 0.94, 0.98);
@@ -52,7 +52,7 @@
 }
 
 .dialog.active{
-	overflow-y: auto;
+
 	opacity: 1;
 	visibility: visible;
 	transform: scale3d(1,1,1);
@@ -64,11 +64,11 @@
 	p {margin-top: 5px;}
 
 	.arrow{
-		flex-grow: 1; 
+		flex-grow: 1;
 		text-align: center;
 
 		p{
-			font-size: 76px; 
+			font-size: 76px;
 			margin: 0;
 			line-height: calc(76px / 2);
 		}

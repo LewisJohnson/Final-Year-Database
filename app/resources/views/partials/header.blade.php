@@ -15,10 +15,10 @@
 	<ul>
 		{{-- <li class="nav-button nav-button--desktop"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
 		<li class="nav-button nav-button--desktop"><a href="/" title="">Home</a></li>
-		<li class="nav-button nav-button--desktop dropdown">
+		<li class="nav-button nav-button--desktop dropdown" aria-expanded="false">
 			<button>Browse</button>
 			@include('svg.arrow-down')
-			<div class="dropdown-content shadow-2dp">
+			<div class="dropdown-content shadow-2dp" aria-hidden="true">
 				<a href="/projects" title="Browse all projects">Projects</a>
 				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor">Projects by Supervisor</a>
 				<a href="/projects/by-topic" title="Browse projects sorted by topic">Projects by Topics</a>
@@ -163,34 +163,64 @@
 			@endif
 
 			<h3>Browse</h3>
-			<li class="nav-button nav-button--mobile nav-button--grouped">
+			<li class="nav-button nav-button--mobile">
 				<a href="/projects" title="">All Projects</a>
 			</li>
 
-			<li class="nav-button nav-button--mobile nav-button--grouped">
+			<li class="nav-button nav-button--mobile">
 				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor" title="">By Supervisor</a>
 			</li>
 
-			<li class="nav-button nav-button--mobile nav-button--grouped">
+			<li class="nav-button nav-button--mobile">
 				<a href="/projects/by-topic" title="Browse projects sorted by topic">By Topic</a>
 			</li>
 
-			<h3>Help</h3>
-			<li class="nav-button nav-button--mobile nav-button--grouped">
-				<a href="/help">System Help</a>
+			@if($user->isStudent())
+			<li class="nav-button nav-button--desktop dropdown">
+				<h3>Student</h3>
+				<div class="dropdown-content">
+					<a href="/students/project-propose">Propose Project</a>
+					<a href="/reports/supervisor">Report by Supervisor</a>
+				</div>
+			</li>
+			@endif
+
+			<li class="nav-button nav-button--mobile">
+				<div class="sub-dropdown">
+					<h3>Help</h3>
+					<div class="svg-container pointer" style="margin-left: auto;">
+						<svg class="transition--medium" viewBox="0 0 24 24">
+							<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+						</svg>
+					</div>
+					<div class="dropdown-content">
+						<a href="/help">System Help</a>
+						<a href="/information">General Information</a>
+						<a href="/about">About</a>
+					</div>
+				</div>
 			</li>
 
-			<li class="nav-button nav-button--mobile nav-button--grouped">
-				<a href="/links">Links</a>
+			@if(Lang::has("messages_ug.help_link_1"))
+			<li class="nav-button nav-button--mobile">
+				<div class="sub-dropdown">
+					<h3 class="sub-dropbtn">Links</h3>
+					<div class="svg-container pointer" style="margin-left: auto;">
+						<svg class="transition--medium" viewBox="0 0 24 24">
+							<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+						</svg>
+					</div>
+					<div class="dropdown-content">
+						@for ($i = 1; $i <= 20; $i++)
+							@if(Lang::has("messages_ug.help_link_".$i))
+								<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
+							@endif
+						@endfor
+					</div>
+				</div>
 			</li>
+			@endif
 
-			<li class="nav-button nav-button--mobile nav-button--grouped">
-				<a href="/information">General Information</a>
-			</li>
-
-			<li class="nav-button nav-button--mobile nav-button--grouped">
-				<a href="/about">About</a>
-			</li>
 			<li class="footer">
 				<button class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
 				<button class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>

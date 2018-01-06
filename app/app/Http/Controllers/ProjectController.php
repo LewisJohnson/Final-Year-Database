@@ -86,7 +86,6 @@ class ProjectController extends Controller{
 		$student_name = "a student";
 		if($project->student_proposed_project){
 			$view = "StudentProject";
-
 			if($project->student->share_project || Auth::user()->isSupervisorOrSuperior()){
 				$student_name = $project->student->user->getFullName();
 			}

@@ -18,7 +18,7 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('help', 'HomeController@help');
 });
 
-Route::middleware(['Admin_Ug'])->group(function () {
+Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
@@ -48,9 +48,54 @@ Route::middleware(['Admin_Ug'])->group(function () {
 	Route::post('topics', 'TopicController@store');
 	Route::patch('topics', 'TopicController@update');
 	Route::delete('topics', 'TopicController@destroy');
+
+	/* ==============
+	   STUDENT ROUTES
+	   ============== */
+	Route::post('students', 'StudentController@store');
 });
 
+
+Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
+	/* ==============
+	   PROJECT ROUTES
+	   ============== */
+	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
+
+	/* ==============
+	   SUPERVISOR ROUTES
+	   ============== */
+	Route::get('supervisor', 'SupervisorController@index');
+	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
+	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
+
+	/* ==============
+	   REPORT ROUTES
+	   ============== */
+	Route::get('reports/student', 'StudentController@report');
+});
+
+Route::group(['middleware' => ['web', 'student']], function() {
+	// Route::get('students/project-propose', 'StudentController@showProposeProject');
+	// Route::post('students/project-propose', 'StudentController@proposeProject');
+	// Route::patch('students/project-select', 'StudentController@selectProject');
+	// Route::patch('students/project-share', 'StudentController@shareProject');
+
+	// Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
+	// Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
+});
+
+
 Route::group(['middleware' => ['auth']], function() {
+
+	// REMOVE THIS
+		Route::get('students/project-propose', 'StudentController@showProposeProject');
+	Route::post('students/project-propose', 'StudentController@proposeProject');
+	Route::patch('students/project-select', 'StudentController@selectProject');
+	Route::patch('students/project-share', 'StudentController@shareProject');
+
+	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
+	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
 	/* ==============
 	   PROJECT ROUTES
 	   ============== */
@@ -59,7 +104,6 @@ Route::group(['middleware' => ['auth']], function() {
 
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');
-	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
 
 	Route::patch('projects/{id}/edit', 'ProjectController@update');
@@ -80,30 +124,11 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	/* ==============
-	   SUPERVISOR ROUTES
-	   ============== */
-	Route::get('supervisor', 'SupervisorController@index');
-	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
-	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
-
-	/* ==============
-	   STUDENT ROUTES
-	   ============== */
-	Route::post('students', 'StudentController@store');
-	Route::get('students/project-propose', 'StudentController@showProposeProject');
-	Route::post('students/project-propose', 'StudentController@proposeProject');
-	Route::patch('students/project-select', 'StudentController@selectProject');
-	Route::patch('students/project-share', 'StudentController@shareProject');
-
-	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
-	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
 
 	/* ==============
 	   REPORT ROUTES
 	   ============== */
 	Route::get('reports/supervisor', 'SupervisorController@report');
-	Route::get('reports/student', 'StudentController@report');
 
 	// CHANGE AUTH
 	Route::post('authenticaion-change', 'Auth\AuthController@change');

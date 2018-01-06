@@ -907,7 +907,6 @@ $('.show-more').on('click',  function(e) {
 	$('.project').addClass('expand');
 });
 
-// SUPERVISOR
 $("#loginForm").on('submit', function(e){
 	e.preventDefault();
 
@@ -1017,7 +1016,6 @@ $('#create-form-access-select').on('change', function(){
 	}
 });
 
-
 // Used for the help page
 $(".open-tab").on('click', function() {
 	var currentTab = $(this).parent();
@@ -1041,11 +1039,13 @@ $(".open-tab").on('click', function() {
 	}
 });
 
-
-
 $(".favourite-container").on('click', function() {
-	var svg = $(this).find('svg');
+	var svgContainer = $(this);
+	var svg = svgContainer.find('svg');
 	var projectId = window['project'].data('project-id');
+
+	svg.hide(0);
+	$('.loader', svgContainer).show(0);
 
 	if(svg.hasClass('favourite')){
 		var action = 'remove';
@@ -1069,10 +1069,32 @@ $(".favourite-container").on('click', function() {
 				svg.removeClass('favourite');
 			}
 		}
+	}).done(function(data){
+		svg.fadeIn(200);
+		$('.loader', svgContainer).hide(0);
 	});
 });
 
+$('.nav-button--mobile .sub-dropdown').on('click', function(){
+	var dropdown = $(this);
+	var content = dropdown.find('.dropdown-content');
 
+	if(dropdown.attr("aria-expanded") == "true"){
+		dropdown.attr("aria-expanded", false);
+		content.attr("aria-hidden", true);
+
+		dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
+		dropdown.removeClass("active");
+		content.hide(250);
+	} else {
+		dropdown.attr("aria-expanded", true);
+		content.attr("aria-hidden", false);
+
+		dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
+		dropdown.addClass("active");
+		content.show(250);
+	}
+});
 /* ===============
 	9. Initialise
    =============== */

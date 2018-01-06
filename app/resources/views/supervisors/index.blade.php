@@ -97,8 +97,8 @@
 							</td>
 							<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
 							<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-							<td><button class="button button--success accept">Accept</button></td>
-							<td><button class="button button--danger reject">Reject</button></td>
+							<td><button class="offer-action button button--success" data-action-type="accept">Accept</button></td>
+							<td><button class="offer-action button button--danger" data-action-type="reject">Reject</button></td>
 						</tr>
 					@endforeach
 				</tbody>

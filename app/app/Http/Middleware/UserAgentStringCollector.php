@@ -1,10 +1,10 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
-use Closure;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Db;
 use SussexProjects\UserAgentString;
+use Closure;
 
 class UserAgentStringCollector{
 	/**

@@ -14,6 +14,7 @@
 			<svg viewBox="0 0 24 24" height="30" width="30" @if($user->student->isFavouriteProject($project->id)) class="favourite" @endif>
 				<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 			</svg>
+			<div class="loader"></div>
 		</div>
 	@endif
 	<h1 class="title">{{ $project->title }}</h1>
@@ -67,7 +68,7 @@
 	</ul>
 </div>
 
-<div class="button-group button-group--horizontal" >
+<div class="button-group button-group--horizontal">
 	{{-- STUDENT SELECT --}}
 	@if($user->isStudent())
 		@if($user->student->project_status == 'none')
@@ -81,11 +82,16 @@
 			<button class="button button--raised button--accent" disabled>Select project</button>
 		@endif
 	@endif
-	<a class="button button--raised" href="javascript:history.back()">Back</a>
+
 	@if($project->isOwnedByUser())
 		<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
-		<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
+
+		@if($user->isSupervisorOrSuperior())
+			<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
+		@endif
 	@endif
+
+	<a class="button button--raised" href="javascript:history.back()">Back</a>
 </div>
 
 </div>
