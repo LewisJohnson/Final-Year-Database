@@ -66,6 +66,7 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
 	   SUPERVISOR ROUTES
 	   ============== */
 	Route::get('supervisor', 'SupervisorController@index');
+	Route::get('supervisor/acceptedStudentsTable', 'SupervisorController@acceptedStudentTable');
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
 

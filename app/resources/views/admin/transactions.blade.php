@@ -2,7 +2,11 @@
 @section('content')
 <div class="centered width-1400">
 <h1>Transactions</h1>
-<div style="overflow: auto;">
+<div style="">
+<div class="checkbox" style="margin-top: 15px;">
+	<input class="checkbox-input" id="show-raw-table-data" type="checkbox">
+	<label for="show-raw-table-data">Show Raw Data</label>
+</div>
 <table class="data-table shadow-2dp full-detail">
 	<thead>
 		<tr>
@@ -75,7 +79,7 @@
 				@endif
 			@endif
 
-			<td>{{ $transaction->transaction_date }}</td>
+			<td>{{ $transaction->transaction_date->toDayDateTimeString() }}</td>
 		</tr>
 	@endforeach
 	</tbody>
@@ -111,11 +115,7 @@
 	@endforeach
 	</tbody>
 </table>
+</div>
 
-</div>
-<div class="checkbox" style="margin-top: 15px;">
-	<input class="checkbox-input" id="show-raw-table-data" type="checkbox">
-	<label for="show-raw-table-data">Show raw data</label>
-</div>
 </div>
 @endsection

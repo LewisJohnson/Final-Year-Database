@@ -5,6 +5,7 @@
 	<div class="footer-right">
 		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
-		<p>@lang("messages.footer_maintainer_text")</p>
+
+		<p>@lang_sess("footer_maintainer_text")</p>
 	</div>
 </footer>

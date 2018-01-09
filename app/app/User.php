@@ -56,29 +56,30 @@ class User extends Authenticatable{
 		$this->access_type == "admin_system";
 	}
 
-	public function isUgStudent(){
-		if($this->student != null){
-			return $this->student->student_year === "final";
-		}
-		return false;
-	}
-
-	public function isMastersStudent(){
-		if($this->student != null){
-			return $this->student->student_year === "master";
-		}
-		return false;
-	}
-
 	public function isStudent(){
-		return $this->student != null;
+		if($this->access_type != "student"){
+			return false;
+		}
+
+		return !is_null($this->student);
+	}
+
+
+	public function studentType(){
+		if($this->hasOne(StudentUg::class, 'id')->exists()){
+			return "ug";
+		}
+		if($this->hasOne(StudentMasters::class, 'id')->exists()){
+			return "masters";
+		}
+		return null;
 	}
 
 	public function student(){
 		if(Session::get("db_type") == "ug"){
 			return $this->hasOne(StudentUg::class, 'id');
-		} else {
-		  return $this->hasOne(StudentMasters::class, 'id');
+		} elseif(Session::get("db_type") == "masters"){
+			return $this->hasOne(StudentMasters::class, 'id');
 		}
 	}
 

@@ -5,11 +5,11 @@ class TopicMasters extends Topic{
 	public $table = 'topics_masters';
 
 	public function projects(){
-		return $this->belongsToMany(Project_Masters::class, 'project_topics_masters');
+		return $this->belongsToMany(ProjectMasters::class, ProjectTopicMasters::class)->withPivot('primary');
 	}
 
 	public function amountOfProjectsOnOffer(){
-		return ProjectTopicMasters::where('topic_ic', $this->id)->count();
+		return ProjectTopicMasters::where('topic_id', $this->id)->count();
 	}
 
 	public static function getDatalist(){
@@ -24,4 +24,4 @@ class TopicMasters extends Topic{
 		return $rtnString;
 	}
 }
-	
+

@@ -803,10 +803,16 @@ nav.mobile.is-visible {
 
 .dropdown .dropdown-content > a ul > li:hover,
 .dropdown .dropdown-content > a:hover,
+.dropdown .dropdown-content > a ul > li:focus,
+.dropdown .dropdown-content > a:focus,
 .dropdown .dropdown-content > div ul > li:hover,
 .dropdown .dropdown-content > div:hover,
+.dropdown .dropdown-content > div ul > li:focus,
+.dropdown .dropdown-content > div:focus,
 .dropdown .dropdown-content > button ul > li:hover,
-.dropdown .dropdown-content > button:hover {
+.dropdown .dropdown-content > button:hover,
+.dropdown .dropdown-content > button ul > li:focus,
+.dropdown .dropdown-content > button:focus {
   -webkit-transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
   transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
   background: #1D4289;
@@ -825,18 +831,21 @@ nav.mobile.is-visible {
   display: inline-block;
 }
 
-.dropdown:hover > .dropdown-content {
+.dropdown:hover > .dropdown-content,
+.dropdown:focus > .dropdown-content {
   display: block;
   -webkit-animation: showDropdownContentAnim 0.12s ease;
           animation: showDropdownContentAnim 0.12s ease;
 }
 
-.dropdown:hover > .svg-container svg {
+.dropdown:hover > .svg-container svg,
+.dropdown:focus > .svg-container svg {
   -webkit-transform: rotateZ(180deg);
           transform: rotateZ(180deg);
 }
 
-.nav-button--desktop .sub-dropdown:hover .dropdown-content {
+.nav-button--desktop .sub-dropdown:hover .dropdown-content,
+.nav-button--desktop .sub-dropdown:focus .dropdown-content {
   display: block;
   -webkit-animation: showSubDropdownContentAnim 0.1s ease;
           animation: showSubDropdownContentAnim 0.1s ease;
@@ -852,10 +861,10 @@ nav.mobile.is-visible {
   -webkit-transform-origin: left;
           transform-origin: left;
   top: 0px;
-  left: 165px;
+  left: 100%;
   min-width: 300px;
-  -webkit-box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.14), 2px 3px 1px -2px rgba(0, 0, 0, 0.2), 2px 1px 5px 0 rgba(0, 0, 0, 0.12);
-          box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.14), 2px 3px 1px -2px rgba(0, 0, 0, 0.2), 2px 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 4px 2px 2px 0 rgba(0, 0, 0, 0.14), 4px 3px 1px -2px rgba(0, 0, 0, 0.2), 4px 1px 5px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 4px 2px 2px 0 rgba(0, 0, 0, 0.14), 4px 3px 1px -2px rgba(0, 0, 0, 0.2), 4px 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .nav-button--desktop .sub-dropdown > .dropdown-content .svg-container {
@@ -968,7 +977,6 @@ nav.mobile.is-visible {
   -webkit-box-shadow: none;
           box-shadow: none;
   border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   max-width: 500px;
   max-height: 450px;
@@ -998,8 +1006,8 @@ nav.mobile.is-visible {
   visibility: visible;
   -webkit-transform: scale3d(1, 1, 1);
           transform: scale3d(1, 1, 1);
-  -webkit-box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.12) inset;
+          box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.12) inset;
 }
 
 #assign-dialog h3 {
@@ -1601,13 +1609,6 @@ th:last-of-type {
     margin: 7px auto !important;
   }
 
-  .dialog .content {
-    top: 5%;
-    bottom: 5%;
-    left: 5%;
-    right: 5%;
-  }
-
   .mobile--hidden {
     visibility: hidden;
     display: none;
@@ -1678,8 +1679,8 @@ th:last-of-type {
   border-radius: 50%;
   width: 25px;
   height: 25px;
-  -webkit-animation: spin 0.25s linear infinite;
-          animation: spin 0.25s linear infinite;
+  -webkit-animation: spin 0.5s linear infinite;
+          animation: spin 0.5s linear infinite;
   margin: 0 auto;
 }
 

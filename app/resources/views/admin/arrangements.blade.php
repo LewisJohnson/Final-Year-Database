@@ -2,16 +2,12 @@
 @section('content')
 <div class="centered width-1200">
 <h1>Supervisors</h1>
-@if(Session::get("db_type") == "ug")
-<h3>Select a supervisor to amend their undergradate arrangements.</h3>
-@else
-<h3>Select a supervisor to amend their masters arrangements.</h3>
-@endif
+<h3>@lang_sess("select_supervisor_arragments")</h3>
 <div class="arrangements-container">
 <table class="data-table data-table--selectable shadow-2dp">
 	<thead>
 	<tr>
-		<th>			
+		<th>
 			<div class="checkbox">
 				<input class="checkbox-input master-checkbox" id="arrangements" type="checkbox">
 				<label for="arrangements" name="arrangements"></label>
@@ -63,13 +59,13 @@
 		</div>
 	</div>
 	<div>
-		<input type="submit" class="button button--raised button--accent" name="save" value="Save">	
+		<input type="submit" class="button button--raised button--accent" name="save" value="Save">
 	</div>
 </form>
 </div>
 </div>
 @endsection
-{{-- 
+{{--
 	<li style="padding: 0;">
 		<a style="display: flex; width: 100%; padding: 10px;" href="{{ action('AdminController@supervisorArrangements', $supervisor->id)}}">
 			<p>{{ $supervisor->user->getFullName() }}</p>

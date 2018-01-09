@@ -2,11 +2,7 @@
 @section('content')
 @php($user = Auth::user())
 <div class="centered width-800">
-	@if(Session::get('db_type') == 'ug')
-		<h1>Undergraduate Administrator Hub</h1>
-	@else
-		<h1>Masters Administrator Hub</h1>
-	@endif
+	<h1>@lang_sess("admin_hub_title")</h1>
 	<div class="admin hub">
 
 		{{-- USERS --}}

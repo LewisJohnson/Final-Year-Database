@@ -134,6 +134,8 @@ $(function () {
 		});
 	}
 
+	function fadeBetweenElements(elem1, elem2) {}
+
 	/* ===============
  	4. Components
     =============== */
@@ -851,7 +853,12 @@ $(function () {
 				if (!agents_endOfTable && !agents_awaitingResponse) {
 					$(".loader.user-agent").show();
 					agents_awaitingResponse = true;
-					var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
+
+					if ($('#show-fv-only').prop('checked')) {
+						var urlPath = "/system/user-agent?partial=true?unqiue=1?page=" + agents_pageNumber;
+					} else {
+						var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
+					}
 					$.ajax({
 						type: 'GET',
 						url: urlPath,
@@ -882,6 +889,7 @@ $(function () {
 			}
 		});
 	}
+
 	/* ======================
  	 7. SUPERVISOR
     ====================== */
@@ -897,6 +905,9 @@ $(function () {
 		$('.loader', actionButton).css('display', 'block');
 
 		if (actionType === "accept") {
+			$("#supervisor-accepted-students-table").html('<div class="loader loader--x-large"></div>');
+			$('.loader', '#supervisor-accepted-students-table').css('display', 'block');
+
 			var ajaxUrl = '/supervisor/student-accept';
 		} else if (actionType === "reject") {
 			var ajaxUrl = '/supervisor/student-reject';
@@ -919,9 +930,16 @@ $(function () {
 				});
 				if (actionType === "accept") {
 					showNotification('', 'Student has been accepted.');
-					// todo: add to thingy to table
-					// todo: maybe php that refreshes table instead
-					// $("#supervisor-accepted-students-table tbody").prepend();
+					$.ajax({
+						method: 'GET',
+						url: '/supervisor/acceptedStudentsTable',
+						success: function success(data) {
+							$("#supervisor-accepted-students-table").html(data);
+						},
+						error: function error() {
+							actionButton.html(actionType);
+						}
+					});
 				} else if (actionType === "reject") {
 					showNotification('', 'Student has been rejected.');
 				}
@@ -980,6 +998,10 @@ $(function () {
 		$('.project').addClass('expand');
 	});
 
+	$('#show-fv-only').on('change', function (e) {
+		window.location.href = $(this).data("goto");
+	});
+
 	$("#loginForm").on('submit', function (e) {
 		e.preventDefault();
 
@@ -1035,11 +1057,23 @@ $(function () {
 	// Used for transactions
 	$('#show-raw-table-data').on('click', function () {
 		if ($(this).prop('checked')) {
-			$('table.full-detail').hide();
-			$('table.raw-detail').show();
+			$('table.raw-detail').css('width', $('table.full-detail').css('width'));
+			$('table.full-detail').css('position', 'absolute');
+			$('table.raw-detail').css('position', 'absolute');
+
+			$('table.full-detail').fadeOut(200);
+			$('table.raw-detail').fadeIn(200, function () {
+				$(this).css('position', 'relative');
+			});
 		} else {
-			$('table.full-detail').show();
-			$('table.raw-detail').hide();
+			$('table.full-detail').css('width', $('table.raw-detail').css('width'));
+			$('table.full-detail').css('position', 'absolute');
+			$('table.raw-detail').css('position', 'absolute');
+
+			$('table.raw-detail').fadeOut(200);
+			$('table.full-detail').fadeIn(200, function () {
+				$(this).css('position', 'relative');
+			});
 		}
 	});
 

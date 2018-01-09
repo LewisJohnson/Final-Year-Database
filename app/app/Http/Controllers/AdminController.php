@@ -39,7 +39,12 @@ class AdminController extends Controller{
 	}
 
 	public function userAgent(Request $request){
-		$userAgents = UserAgentString::paginate($this->paginationCount);
+		if($request->query("unqiue") == "1"){
+			$userAgents = UserAgentString::where('first_visit', 1)->paginate($this->paginationCount);
+		}
+		else{
+			$userAgents = UserAgentString::paginate($this->paginationCount);
+		}
 
 		if($request->query("partial")){
 			return view('system.partials.user-agent-row')

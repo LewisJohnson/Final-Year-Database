@@ -1,6 +1,6 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
-	<h1>@string("homepage_main_header")</h1>
+	<h1>@lang("messages.homepage_main_header")</h1>
 	<button class="login-button button button--raised" data-activator="true" data-dialog="login">Login</button>
 </header>
 
@@ -42,11 +42,11 @@
 		<li class="nav-button nav-button--mobile nav-button--grouped">
 			<a href="/links">Links</a>
 		</li>
-		
+
 		<li class="nav-button nav-button--mobile nav-button--grouped">
-			<a href="/information">General Information</a>	
+			<a href="/information">General Information</a>
 		</li>
-		
+
 		<li class="nav-button nav-button--mobile nav-button--grouped">
 			<a href="/about">About</a>
 		</li>

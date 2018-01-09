@@ -80,6 +80,9 @@ class SupervisorController extends Controller{
 		return view('supervisors.report')->with("supervisors", $supervisors);
 	}
 
+	public function acceptedStudentTable(){
+		return view('supervisors.partials.accepted-students-table');
+	}
 	/**
 	 * Display a listing of the resource.
 	 *

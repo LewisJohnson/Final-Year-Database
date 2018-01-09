@@ -5,19 +5,20 @@
 @if($user = Auth::user())
 	<h1>Welcome, {{ $user->first_name }}.</h1>
 
+	@if($user->isSupervisorOrSuperior())
+		<div class="card card--margin-vertical">
+			<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
+			<p>@lang("messages_supervisor.homepage_introduction_body")</p>
+			<h2>@lang("messages_supervisor.homepage_overview_header")</h2>
+			<p>@lang("messages_supervisor.homepage_overview_body")</p>
+		</div>
+	@endif
 	@if($user->isStudent())
 		<div class="card card--margin-vertical">
-			@if(Session::get("db_type") == "ug")
-				<h2>@lang("messages_ug.homepage_introduction_header")</h2>
-				<p>@lang("messages_ug.homepage_introduction_body")</p>
-				<h2>@lang("messages_ug.homepage_overview_header")</h2>
-				<p>@lang("messages_ug.homepage_overview_body")</p>
-			@elseif(Session::get("db_type") == "masters")
-				<h2>@lang("messages_masters.homepage_introduction_header")</h2>
-				<p>@lang("messages_masters.homepage_introduction_body")</p>
-				<h2>@lang("messages_masters.homepage_overview_header")</h2>
-				<p>@lang("messages_masters.homepage_overview_body")</p>
-			@endif
+			<h2>@lang_sess("homepage_introduction_header")</h2>
+			<p>@lang_sess("homepage_introduction_body")</p>
+			<h2>@lang_sess("homepage_overview_header")</h2>
+			<p>@lang_sess("homepage_overview_body")</p>
 		</div>
 
 		<div class="card card--margin-vertical">

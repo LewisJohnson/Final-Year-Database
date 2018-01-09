@@ -1,10 +1,7 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
-	@if(Session::get('db_type') == 'ug')
-		<h1>@lang("messages_ug.homepage_main_header")</h1>
-	@else
-		<h1>@lang("messages_masters.homepage_main_header"))</h1>
-	@endif
+	<h1>@lang_sess("homepage_main_header")</h1>
+
 	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
 	@if($user->isSupervisorOrSuperior())
 		<button class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
@@ -115,20 +112,37 @@
 		@endif
 
 		<li class="nav-button nav-button--desktop dropdown">
-			<button >Help</button>
+			<button>Help</button>
 			@include('svg.arrow-down')
+
 			<div class="dropdown-content shadow-2dp">
-				<div class="sub-dropdown">
-					<button class="sub-dropbtn">Links</button>
-					@include('svg.arrow-right')
-					<div class="dropdown-content shadow-2dp">
-						@for ($i = 1; $i <= 20; $i++)
-							@if(Lang::has("messages_ug.help_link_".$i))
-								<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
-							@endif
-						@endfor
+				@if(Lang::has("messages_ug.help_link_1") && Session::get('db_type') == 'ug')
+					<div class="sub-dropdown">
+						<button class="sub-dropbtn">Links</button>
+						@include('svg.arrow-right')
+						<div class="dropdown-content shadow-2dp">
+							@for ($i = 1; $i <= 20; $i++)
+								@if(Lang::has("messages_ug.help_link_".$i))
+									<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
+								@endif
+							@endfor
+						</div>
 					</div>
-				</div>
+				@endif
+
+				@if(Lang::has("messages_masters.help_link_1") && Session::get('db_type') == 'masters')
+					<div class="sub-dropdown">
+						<button class="sub-dropbtn">Links</button>
+						@include('svg.arrow-right')
+						<div class="dropdown-content shadow-2dp">
+							@for ($i = 1; $i <= 20; $i++)
+								@if(Lang::has("messages_masters.help_link_".$i))
+									<a href="@lang("messages_masters.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
+								@endif
+							@endfor
+						</div>
+					</div>
+				@endif
 				<a href="/help" title="System Help">System Help</a>
 				<a href="/information" title="General Information">General Information</a>
 				<a href="/about" title="About this software">About</a>
@@ -145,11 +159,7 @@
 			<li class="hamburger-line hamburger-line--short"></li>
 		</ul>
 	</div>
-	@if(Session::get('db_type') == 'ug')
-		<a href="/" title=""><h1>@lang("messages_ug.homepage_main_header")</h1></a>
-	@else
-		<a href="/" title=""><h1>@lang("messages_masters.homepage_main_header")</h1></a>
-	@endif
+	<a href="/" title=""><h1>@lang_sess("homepage_main_header")</h1></a>
 </header>
 
 <nav class="mobile" aria-hidden="true">
@@ -200,27 +210,47 @@
 					</div>
 				</div>
 			</li>
-
-			@if(Lang::has("messages_ug.help_link_1"))
-			<li class="nav-button nav-button--mobile">
-				<div class="sub-dropdown">
-					<h3 class="sub-dropbtn">Links</h3>
-					<div class="svg-container pointer" style="margin-left: auto;">
-						<svg class="transition--medium" viewBox="0 0 24 24">
-							<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-						</svg>
-					</div>
-					<div class="dropdown-content">
-						@for ($i = 1; $i <= 20; $i++)
-							@if(Lang::has("messages_ug.help_link_".$i))
-								<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
-							@endif
-						@endfor
-					</div>
-				</div>
-			</li>
+			@if(Session::get('db_type') == 'ug')
+				@if(Lang::has("messages_ug.help_link_1"))
+					<li class="nav-button nav-button--mobile">
+						<div class="sub-dropdown">
+							<h3 class="sub-dropbtn">Links</h3>
+							<div class="svg-container pointer" style="margin-left: auto;">
+								<svg class="transition--medium" viewBox="0 0 24 24">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+								</svg>
+							</div>
+							<div class="dropdown-content">
+								@for ($i = 1; $i <= 20; $i++)
+									@if(Lang::has("messages_ug.help_link_".$i))
+										<a href="@lang("messages_ug.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
+									@endif
+								@endfor
+							</div>
+						</div>
+					</li>
+				@endif
+			@elseif(Session::get('db_type') == 'masters')
+				@if(Lang::has("messages_masters.help_link_1"))
+					<li class="nav-button nav-button--mobile">
+						<div class="sub-dropdown">
+							<h3 class="sub-dropbtn">Links</h3>
+							<div class="svg-container pointer" style="margin-left: auto;">
+								<svg class="transition--medium" viewBox="0 0 24 24">
+									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+								</svg>
+							</div>
+							<div class="dropdown-content">
+								@for ($i = 1; $i <= 20; $i++)
+									@if(Lang::has("messages_masters.help_link_".$i))
+										<a href="@lang("messages_masters.help_link_".$i."_url")" title="@lang("messages_masters.help_link_".$i)">@lang("messages_masters.help_link_".$i)</a>
+									@endif
+								@endfor
+							</div>
+						</div>
+					</li>
+				@endif
 			@endif
-
 			<li class="footer">
 				<button class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
 				<button class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
@@ -229,7 +259,5 @@
 	</div>
 </nav>
 
-<div class="mobile-nav-underlay">
-</div>
-
+<div class="mobile-nav-underlay"></div>
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>

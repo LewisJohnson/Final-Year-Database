@@ -4,10 +4,11 @@ namespace SussexProjects\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use SussexProjects\Strings;
-use Blade;
-use Auth;
-use View;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
+
 class AppServiceProvider extends ServiceProvider
 {
 	/**
@@ -19,6 +20,20 @@ class AppServiceProvider extends ServiceProvider
 	{
 		Schema::defaultStringLength(191);
 		View::share('user', Auth::user());
+
+		Blade::directive('lang_sess', function ($key) {
+			$key = trim($key, '"');
+
+			if(Session::get("db_type") == "ug"){
+				$key = '"messages_ug.'.$key.'"';
+				return "<?php echo Lang::get($key); ?>";
+			} elseif (Session::get("db_type") == "masters") {
+				$key = '"messages_masters.'.$key.'"';
+				return "<?php echo Lang::get($key); ?>";
+			}
+
+			return "#{INVALID USE OF SESSION STRING}";
+		});
 	}
 
 	/**
