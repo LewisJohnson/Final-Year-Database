@@ -180,7 +180,7 @@
 </header>
 
 <nav class="mobile" aria-hidden="true">
-	<div style="width: 100%; height: 100%; overflow-y: scroll;">
+	<div>
 		<ul>
 			@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
 				<li class="nav-button nav-button--mobile"><a href="/supervisor" title="">Supervisor</a></li>
