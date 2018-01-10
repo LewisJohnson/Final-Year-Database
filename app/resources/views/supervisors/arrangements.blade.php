@@ -1,11 +1,11 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 <div class="centered width-800 card">
 <h1>Edit Supervisor Arrangments</h1>
 <h2><b>Supervisor:</b> {{ $supervisor->user->getFullName() }}</h2>
 <form class="form form--flex" role="form" method="POST" action="/projects">
 	{{ csrf_field() }}
-	
+
 	<div class="form-field">
 		<label class="hover-label" for="title">Title</label>
 		<input maxlength="255" type="text" name="title" id="title" value="{{ $supervisor->title }}" required>
@@ -38,7 +38,7 @@
 	<div class="form-field">
 		<button class="button button--raised button--accent" type="submit" value="Submit">Update</button>
 	</div>
-	
+
 </form>
 
 </div>

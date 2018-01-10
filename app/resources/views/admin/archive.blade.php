@@ -1,11 +1,11 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 
 <div class="centered card width-1000">
 	<h1>End of Year Archive</h1>
 	<p>The end of year archive will do the following in a single transaction;</p>
 
-	<ul style="margin-left: 2rem;">
+	<ul>
 		<li>Add “This student was undertaken by [STUDENT NAME]” to project description.</li>
 		<li>Set all projects status to archived.</li>
 		<li>Empty the student tables.</li>

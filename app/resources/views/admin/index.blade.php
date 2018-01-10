@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 @php($user = Auth::user())
 <div class="centered width-800">
@@ -104,11 +104,6 @@
 					<li>
 						@include('svg.globe')
 						<a href="/admin/parameters">Change Global Parameters</a>
-					</li>
-					<hr>
-					<li>
-						@include('svg.pencil')
-						<a href="/system/strings">Edit Language Strings</a>
 					</li>
 					<li>
 						@include('svg.pencil')

@@ -1,11 +1,11 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 <div class="centered card width-1000">
 <h2>Import Students With XML</h2>
 <p>Select file to upload.</p>
-<script>		
+<script>
   function handleFileSelect()
-  {			   
+  {
 	if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	  alert('The File APIs are not fully supported in this browser.');
 	  return;
@@ -19,7 +19,7 @@
 	  alert("This browser doesn't seem to support the `files` property of file inputs.");
 	}
 	else if (!input.files[0]) {
-	  alert("Please select a file before clicking 'Load'");			   
+	  alert("Please select a file before clicking 'Load'");
 	}
 	else {
 	  file = input.files[0];
@@ -32,7 +32,7 @@
 
   function receivedText() {
 	document.getElementById('editor').appendChild(document.createTextNode(fr.result));
-  }		   
+  }
 
 </script>
 

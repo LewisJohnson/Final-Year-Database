@@ -1,4 +1,4 @@
-@extends('layouts.supervisor')
+@extends('layouts.app')
 @section ('content')
 @if(Session::get('db_type') == 'ug')
 	{!! SussexProjects\TopicUg::getDatalist() !!}

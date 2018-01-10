@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 @php($statuses = ['none', 'proposed', 'selected', 'accepted'])
 
@@ -17,7 +17,7 @@
 	<table class="data-table {{ $status }}  full-detail shadow-2dp" id="student-edit-list">
 		<thead>
 			<tr>
-				<th>			
+				<th>
 					<div class="checkbox">
 						<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
 						<label for="{{ $status }}" name="{{ $status }}"></label>

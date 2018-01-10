@@ -95,7 +95,7 @@
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-
+	padding: 0 !important;
 	.topic:nth-child(odd) {
 		margin-right: 59px;
 	}

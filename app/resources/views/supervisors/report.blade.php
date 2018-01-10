@@ -1,4 +1,4 @@
-@extends('layouts.supervisor')
+@extends('layouts.app')
 @section ('content')
 
 <div class="centered width-1000">
@@ -51,7 +51,7 @@
 		</tr>
 	@endif
 	@php($iter = 0)
-				
+
 	{{-- PROJECT OFFERS --}}
 	@if(count($supervisor->getProjectOffers()) > 0)
 		@foreach($supervisor->getProjectOffers() as $project)

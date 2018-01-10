@@ -6,8 +6,8 @@ $(function() {
 /* FILE STRUCTURE
 
 1. AJAX Setup and Cookies
-2. HTML Modifications
-3. Helper Functions
+2. Helper Functions
+3. HTML Modifications
 4. Components
 	4.1 Mobile Menu
 	4.2 Dialog / Modal
@@ -31,20 +31,8 @@ $.ajaxSetup({
 	}
 });
 
-/* ========================
-	2. HTML Modifications
-   ======================== */
-$('body').append('<div class="underlay"></div>');
-
-// Makes primary topic first
-$(".topics-list").prepend($(".first"));
-$(".topics-list .loader").hide(200);
-$(".topics-list li").first().fadeIn(200, function showNext() {
-	$(this).next( ".topics-list li" ).fadeIn(200, showNext);
-});
-
 /* ======================
-	3. Helpers Functions
+	2. Helpers Functions
    ====================== */
 function removeAllShadowClasses(element){
 	$(element).removeClass (function (index, className) {
@@ -52,9 +40,104 @@ function removeAllShadowClasses(element){
 	});
 }
 
-function fadeBetweenElements(elem1, elem2){
+function sortUnorderedList(ul) {
+	var listitems = ul.children('li').get();
 
+	listitems.sort(function(a, b) {
+		return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+	})
+
+	$.each(listitems, function(idx, itm) { ul.append(itm); });
 }
+
+
+function addAlphaHeadersToList(ul) {
+	var listitems = ul.children('li').get();
+	var links = $('#' + ul.attr('id') + '-links');;
+
+	for (var i = 0; i < listitems.length; i++) {
+		var firstChar = $(listitems[i]).text().replace(/\s/g, '').charAt(0).toUpperCase();
+
+		if(i == 0){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
+			continue;
+		}
+		var prevFirstChar = $(listitems[i - 1]).text().replace(/\s/g, '').charAt(0).toUpperCase();
+		if(firstChar != prevFirstChar){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
+		}
+	}
+}
+
+function addTitleHeadersToList(ul) {
+	var listitems = ul.children('li').get();
+	var links = $('#' + ul.attr('id') + '-links');;
+
+	for (var i = 0; i < listitems.length; i++) {
+		var t = $(listitems[i]).text();
+		var nameTitle = /[^[, ]*]*/.exec(t)[0].toUpperCase().replace(/\s/g, '');
+
+		if(i == 0){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
+			continue;
+		}
+
+		var pt = $(listitems[i - 1]).text();
+		var prevNameTitle = /[^[, ]*]*/.exec(pt)[0].toUpperCase().replace(/\s/g, '');
+
+		if(nameTitle != prevNameTitle){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
+		}
+	}
+}
+
+/* ========================
+	3. HTML Modifications
+   ======================== */
+$('body').append('<div class="underlay"></div>');
+
+// Accessibility
+// $('button').attr('tab-index', '-1');
+$('.dropdown').attr('tabindex', '0');
+$('.dropdown > button').attr('tabindex', '-1');
+$('.dropdown .dropdown-content a').attr('tabindex', '0');
+
+// Makes primary topic first
+$('.topics-list').prepend($('.first'));
+$('.topics-list .loader').hide(200);
+$('.topics-list li').first().fadeIn(200, function showNext() {
+	$(this).next( ".topics-list li" ).fadeIn(200, showNext);
+});
+
+$('.order-list-js').each(function() {
+	var list = $(this);
+	sortUnorderedList(list);
+
+	if(list.hasClass('alpha-header-list-js')){
+		if(!list.attr('id')){
+			console.error('A unique id is required.');
+			return;
+		}
+
+		list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
+		addAlphaHeadersToList(list);
+	}
+
+	if(list.hasClass('title-header-list-js')){
+		if(!list.attr('id')){
+			console.error('A unique id is required.');
+			return;
+		}
+
+		list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
+		addTitleHeadersToList(list);
+	}
+});
+
 
 /* ===============
 	4. Components
@@ -126,14 +209,22 @@ var Dialog = function Dialog(element) {
 	this.underlay = $('.underlay');
 	this.header = $(element).find(this.Selectors_.DIALOG_HEADER);
 	this.content = $(element).find(this.Selectors_.DIALOG_CONTENT);
+
+	// Register Component
+	this.element.addClass("registered");
+
+	// ARIA
+	this.element.attr("role", "dialog");
+	this.element.attr("aria-labelledby", "dialog-title");
+	this.element.attr("aria-describedby", "dialog-desc");
+	this.header.attr('title', this.header.find('#dialog-desc').html());
+
 	this.content.before(this.HtmlSnippets_.LOADER);
 	this.loader = $(element).find(".loader");
 	this.isClosable = true;
 	this.activatorButtons = [];
 	this.init();
 };
-
-window['Dialog'] = Dialog;
 
 Dialog.prototype.HtmlSnippets_ = {
 	LOADER: '<div class="loader" style="width: 100px; height: 100px;top: 25%;"></div>',
@@ -164,6 +255,7 @@ Dialog.prototype.showDialog = function(){
 	this.underlay.addClass(this.CssClasses_.ACTIVE);
 	this.underlay.data("owner", this.dialogName);
 	this.element.addClass(this.CssClasses_.ACTIVE);
+	window['Dialog'] = this;
 	window['MobileMenu'].closeMenu();
 };
 
@@ -189,10 +281,9 @@ Dialog.prototype.init = function(){
 	// Add seperator after header
 	dialog.header.append('<hr>');
 
-	// For disabilty
+	// ARIA
 	dialog.element.attr("aria-hidden", "true");
 
-	// Set underlay
 	dialog.underlay.on('click', dialog.hideDialog.bind(dialog));
 
 	try{
@@ -210,6 +301,14 @@ Dialog.prototype.initAll = function(){
 		this.dialog = new Dialog(this);
 	});
 };
+
+$(document).ready(function() {
+	$(this).keydown(function(e) {
+		if(e.keyCode == 27 && window['Dialog'] != null) {
+			window['Dialog'].hideDialog();
+		}
+	});
+});
 
 /* ================
 	4.3 Data Table
@@ -492,6 +591,7 @@ $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function(
 	if(container.hasClass('active')){
 		container.removeClass('active');
 		filterButton.removeClass('active');
+		filterButton.blur();
 	} else{
 		container.addClass('active');
 		filterButton.addClass('active');
@@ -929,6 +1029,15 @@ $('.show-more').on('click',  function(e) {
 
 $('#show-fv-only').on('change',  function(e) {
 	window.location.href = $(this).data("goto");
+});
+
+$('#project-search-form').on('submit',  function(e) {
+	var pt = $("#project-table");
+	removeAllShadowClasses(pt);
+	pt.css('border', 'none');
+	pt.html('<div class="loader loader--x-large"></div>');
+	$('.loader', pt).css('display', 'block');
+	$(this).hide();
 });
 
 $("#loginForm").on('submit', function(e){

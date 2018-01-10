@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section ('content')
+@section('content')
 
 <div class="centered width-800">
 @if($user = Auth::user())
@@ -66,10 +66,13 @@
 		</div>
 	@endif
 @else
-<h2>@lang("messages.homepage_introduction_header")</h2>
-<p>@lang("messages.homepage_introduction_body")</p>
-<h2>@lang("messages.homepage_overview_header")</h2>
-<p>@lang("messages.homepage_overview_body")</p>
+	<h1>Welcome.</h1>
+	<div class="card card--margin-vertical">
+		<h2>@lang("messages.homepage_introduction_header")</h2>
+		<p>@lang("messages.homepage_introduction_body")</p>
+		<h2>@lang("messages.homepage_overview_header")</h2>
+		@lang("messages.homepage_overview_body")
+	</div>
 @endif
 
 </div>

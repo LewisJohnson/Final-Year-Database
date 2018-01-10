@@ -451,7 +451,7 @@ class ProjectController extends Controller{
 			$project_db = "projects_masters.";
 			$projects = ProjectMasters::
 			select('projects_masters.*', 'supervisors.take_students_masters')
-			->join('supervisors.take_students_masters', 'projects_masters.supervisor_id', '=', 'supervisors.id')
+			->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
 			->where('supervisors.take_students_masters', true);
 		}
 

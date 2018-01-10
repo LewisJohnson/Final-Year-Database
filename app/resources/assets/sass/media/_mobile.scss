@@ -63,6 +63,12 @@
 		}
 	}
 
+
+	/* HELPERS */
+	.alpha-header{
+		top: 40px;
+	}
+
 	// TABLE
 	th, td{
 		padding: 8px;
@@ -75,5 +81,22 @@
 	td:last-of-type, th:last-of-type{
 		padding-right: 8px;
 		text-align: right;
+	}
+
+	footer{
+		position: relative;
+		height: auto;
+
+		.footer-right, .footer-left{
+			position: relative;
+
+			a, p {
+				padding: 5px;
+			}
+
+			.seperator{
+				display: none;
+			}
+		}
 	}
 }

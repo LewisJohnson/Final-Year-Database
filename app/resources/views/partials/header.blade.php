@@ -33,7 +33,28 @@
 						<button class="sub-dropbtn">Users</button>
 						@include('svg.arrow-right')
 						<div class="dropdown-content shadow-2dp">
-							<a href="/users/create">Add User</a>
+							<ul class="icon-list">
+								<li>
+									@include('svg.account-plus')
+									<a href="/users/create">Add User</a>
+								</li>
+								<li>
+									@include('svg.account-settings')
+									<a href="/users/edit">Edit User</a>
+								</li>
+								<li>
+									@include('svg.account-multiple-plus')
+									<a href="/admin/students/import">Import Students</a>
+								</li>
+								<li>
+									@include('svg.account-settings')
+									<a href="/admin/supervisor-arrangements-amend">Edit Supervisors Arrangements</a>
+								</li>
+								<li>
+									@include('svg.login')
+									<a href="/admin/login-as">Log in as Another User</a>
+								</li>
+							</ul>
 						</div>
 					</div>
 
@@ -84,10 +105,6 @@
 								<li>
 									@include('svg.globe')
 									<a href="/admin/parameters">Change Global Parameters</a>
-								</li>
-								<li>
-									@include('svg.pencil')
-									<a href="/system/strings">Edit Language Strings</a>
 								</li>
 								<li>
 									@include('svg.pencil')

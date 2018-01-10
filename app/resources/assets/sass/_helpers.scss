@@ -54,6 +54,55 @@
 	}
 }
 
+.section-user-selector{
+	ul, ol{
+		padding-left: 10px;
+	}
+
+	li{
+		margin-bottom: 5px;
+
+		a {
+			text-decoration: none;
+			transition: 0.2s all;
+			outline: none;
+		}
+
+		a:hover, a:focus{
+			padding-left: 5px;
+			font-size: 110%;
+			text-decoration: underline;
+		}
+	}
+
+	a:hover, a:focus{
+		color: black;
+	}
+}
+
+.header-links{
+	text-align: center;
+
+	a{
+		transition: 0.2s all;
+		margin: 2px;
+	}
+}
+
+.alpha-header{
+	display: block;
+	position: sticky;
+	top: 40px;
+	padding: 1rem 0;
+	padding-bottom: 5px;
+	background: white;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+	h3{
+		margin: 0;
+	}
+}
+
 .svg-container {
 	display: inline;
 	margin-right: 6px;

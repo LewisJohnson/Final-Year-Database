@@ -9,7 +9,6 @@
 
 <div class="card project-card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
 	@if($user->isStudent())
-
 		<div class="favourite-container pointer">
 			<svg viewBox="0 0 24 24" height="30" width="30" @if($user->student->isFavouriteProject($project->id)) class="favourite" @endif>
 				<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>

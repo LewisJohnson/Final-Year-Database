@@ -1,6 +1,7 @@
 <div id="login-dialog" class="dialog login" data-dialog="login">
 	<div class="header">
-		<h2>LOG IN</h2>
+		<h2 id="dialog-title">LOG IN</h2>
+		<p id="dialog-desc" hidden>Use your Sussex ITS login details to log in to this system</p>
 	</div>
 
 	<div class="content">
@@ -19,13 +20,13 @@
 				<input value="password" id="password" type="password" name="password" required>
 			</div>
 
-			<div class="form-field">
+			<div class="form-field" title="This is not recommended for shared devices">
 				<div class="checkbox">
 					<input id="remember" name="title" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
 					<label for="remember">Remember Me</label>
 				</div>
 			</div>
-			
+
 			<p class="help-block" style="display:none">
 				{{ $errors->first('username') }}
 			</p>

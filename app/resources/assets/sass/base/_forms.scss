@@ -38,6 +38,11 @@ button{
 	border: none;
 	font-family: $font-family-sans-serif;
 	color: $input-color;
+	transition-duration: background-color .28s cubic-bezier(0.19, 0.49, 0.35, 0.76);
+}
+
+button:focus{
+	background: #e6e6e6;
 }
 
 .form-field {
@@ -190,6 +195,15 @@ button{
 .button--accent{
 	color: white;
 	background: $accent;
+}
+
+.button--dark{
+	border: none;
+	border-right: 1px solid $form-border-color;
+	border-top: 1px solid $form-border-color;
+	border-bottom: 1px solid $form-border-color;
+	outline: none;
+	background: rgba(0, 0, 0, 0.02);
 }
 
 .button--accent-text{

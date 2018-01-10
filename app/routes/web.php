@@ -37,7 +37,6 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::get('admin/transactions', 'TransactionController@index');
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
-	Route::get('system/strings', 'StringsController@edit');
 	Route::get('system/user-agent', 'AdminController@userAgent');
 
 	Route::post('users', 'UserController@store');
@@ -77,26 +76,17 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
 });
 
 Route::group(['middleware' => ['web', 'student']], function() {
-	// Route::get('students/project-propose', 'StudentController@showProposeProject');
-	// Route::post('students/project-propose', 'StudentController@proposeProject');
-	// Route::patch('students/project-select', 'StudentController@selectProject');
-	// Route::patch('students/project-share', 'StudentController@shareProject');
-
-	// Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
-	// Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
-});
-
-
-Route::group(['middleware' => ['auth']], function() {
-
-	// REMOVE THIS
-		Route::get('students/project-propose', 'StudentController@showProposeProject');
+	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
 	Route::patch('students/project-share', 'StudentController@shareProject');
 
 	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
 	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
+});
+
+
+Route::group(['middleware' => ['auth']], function() {
 	/* ==============
 	   PROJECT ROUTES
 	   ============== */

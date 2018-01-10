@@ -1,12 +1,22 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
+@php
+if(empty($_GET["unqiue"])){
+	$_GET["unqiue"] = 0;
+}
+@endphp
 <div class="centered width-800">
 <h1>User Agent Strings</h1>
 <h3>An overview of user agent strings of everyone who has visited the index page.</h3>
 
 <div class="checkbox" style="margin-top: 15px;">
 	<input class="checkbox-input" id="show-fv-only" type="checkbox"
-	@if($_GET["unqiue"] == 1) checked data-goto="{{ action('AdminController@userAgent', "unqiue=0")}}" @else data-goto="{{ action('AdminController@userAgent', "unqiue=1")}}" @endif>
+		@if($_GET["unqiue"] == 1)
+			checked data-goto="{{ action('AdminController@userAgent', "unqiue=0")}}"
+			@else
+			data-goto="{{ action('AdminController@userAgent', "unqiue=1")}}"
+		@endif
+		>
 	<label for="show-fv-only">Show first visits only</label>
 </div>
 

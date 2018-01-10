@@ -1,56 +1,49 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 
 <div class="centered width-1200">
-<h1>Login As Another User</h1>
+	<h1>Login As Another User</h1>
+	<p>Select a user, and you will log in as that user, bypassing authentication.</p>
 
-<div class="section-container">
-<div class="section horizontal card">
-	<h3>Supervisors</h3>
-	<ul style="list-style: none">
-		@foreach(SussexProjects\User::Where('access_type', 'supervisor')->get() as $user)
-			<li>
-				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-			</li>
-		@endforeach
-	</ul>
-</div>
+	<div class="section-container section-user-selector">
+		<div class="section horizontal card">
+			<h2>Supervisors</h2>
+			<ol class="order-list-js title-header-list-js" id="supervisorList" sorted="false" style="list-style: none">
+				@foreach($supervisors as $supervisor)
+					<li>
+						<a title="Log in as {{ $supervisor->user->getFullName() }}" href="{{ action('AdminController@loginAs', $supervisor->id) }}">{{ $supervisor->user->getFullName() }}</a>
+					</li>
+				@endforeach
+			</ol>
+		</div>
 
 
-<div class="section horizontal card">
-	@if(Session::get('db_type') == 'ug')
-		<h3>Undergraduate Students</h3>
-	@else
-		<h3>Masters Students</h3>
-	@endif
-	
-	<ul style="list-style: none">
-		@if(Session::get('db_type') == 'ug')
-			@foreach(SussexProjects\StudentUg::all() as $student)
-				<li>
-					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
-				</li>
-			@endforeach
-		@else
-			@foreach(SussexProjects\StudentMasters::all() as $student)
-				<li>
-					<a href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
-				</li>
-			@endforeach
-		@endif
+		<div class="section horizontal card">
+			@if(Session::get('db_type') == 'ug')
+				<h2>Undergraduate Students</h2>
+			@elseif(Session::get('db_type') == 'masters')
+				<h2>Masters Students</h2>
+			@endif
 
-	</ul>
-</div>
+			<ol class="order-list-js alpha-header-list-js" id="studentList" sorted="false" style="list-style: none">
+				@foreach($students as $student)
+					<li>
+						<a title="Log in as {{ $student->user->getFullName() }}" href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
+					</li>
+				@endforeach
+			</ol>
+		</div>
 
-<div class="section horizontal card">
-	<h3>Staff</h3>
-	<ul style="list-style: none">
-		@foreach(SussexProjects\User::Where('access_type', 'staff')->get() as $user)
-			<li>
-				<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
-			</li>
-		@endforeach
-	</ul>
-</div>
+		<div class="section horizontal card">
+			<h2>Staff</h2>
+			<ol class="order-list-js alpha-header-list-js" id="staffList" sorted="false" style="list-style: none">
+				@foreach($staff as $staffUser)
+					<li>
+						<a title="Log in as {{ $staffUser->getFullName() }}" href="{{ action('AdminController@loginAs', $staffUser->id) }}">{{ $staffUser->getFullName() }}</a>
+					</li>
+				@endforeach
+			</ol>
+		</div>
+	</div>
 </div>
 @endsection

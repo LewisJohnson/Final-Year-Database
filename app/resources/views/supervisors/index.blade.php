@@ -1,13 +1,13 @@
-@extends('layouts.supervisor')
+@extends('layouts.app')
 @section ('content')
 @php($user = Auth::user())
 <div class="centered width-1000">
 
+<h1>@lang_sess("supervisor_hub_title")</h1	>
+
 @if(Session::get('db_type') == 'ug')
-	<h1>Undergraduate Supervisor Hub</h1>
 	<p>Your <b>Undergraduate</b> project load is currently {{ $user->supervisor->project_load_ug }}.</p>
 @else
-	<h1>Masters Supervisor Hub</h1>
 	<p>Your <b>Masters</b> project load is currently {{ $user->supervisor->project_load_masters }}.</p>
 @endif
 

@@ -75,7 +75,20 @@ class AdminController extends Controller{
 	}
 
 	public function loginAsView(){
-		return view('admin.login-as');
+		if(Session::get("db_type") == "ug"){
+			$students = StudentUg::all();
+
+		} elseif(Session::get("db_type") == "masters") {
+			$students = StudentMasters::all();
+		}
+
+		$supervisors = Supervisor::all();
+		$staff = User::Where('access_type', 'staff')->get();
+
+		return view('admin.login-as')
+		->with('supervisors', $supervisors->sortBy('title'))
+		->with('staff', $staff)
+		->with('students', $students);
 	}
 
 	public function archive(){
