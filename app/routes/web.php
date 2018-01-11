@@ -1,5 +1,25 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| The following language lines are used throughout the application for
+| messages we need to display to the user. You are free to modify the
+| language lines according to your application's requirements.
+|
+| 1. Web Routes (Accessible by any request)
+| 2. Admin Routes (UG and Msc Admin)
+| 3. Supervisor And Admin Routes (UG/Msc Admin/Supervisor)
+| 4. Student Routes (UG and Msc Students)
+| 5. Authenticated User Routes (Anyone who is logged in)
+|
+*/
+
+/* =============
+   1. WEB ROUTES
+   ============= */
 Route::group(['middleware' => ['web']], function() {
 
 	Route::get('authenticaion-change', 'Auth\AuthController@show');
@@ -18,6 +38,9 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('help', 'HomeController@help');
 });
 
+/* ===============
+   2. ADMIN ROUTES
+   =============== */
 Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::get('admin', 'AdminController@index');
 
@@ -54,27 +77,30 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::post('students', 'StudentController@store');
 });
 
-
+/* ==============================
+   3. SUPERVISOR AND ADMIN ROUTES
+   ============================== */
 Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
-	/* ==============
-	   PROJECT ROUTES
-	   ============== */
+
+	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 
-	/* ==============
-	   SUPERVISOR ROUTES
-	   ============== */
+	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
 	Route::get('supervisor/acceptedStudentsTable', 'SupervisorController@acceptedStudentTable');
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
 
-	/* ==============
-	   REPORT ROUTES
-	   ============== */
+	// Student Report
 	Route::get('reports/student', 'StudentController@report');
+
+	// Change Authenticaion
+	Route::post('authenticaion-change', 'Auth\AuthController@change');
 });
 
+/* =================
+   4. STUDENT ROUTES
+   ================= */
 Route::group(['middleware' => ['web', 'student']], function() {
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
@@ -86,17 +112,19 @@ Route::group(['middleware' => ['web', 'student']], function() {
 });
 
 
+/* ============================
+   5. AUTHENTICATED USER ROUTES
+   ============================ */
 Route::group(['middleware' => ['auth']], function() {
-	/* ==============
-	   PROJECT ROUTES
-	   ============== */
+
+	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
+	Route::delete('projects/{id}/delete', 'ProjectController@destroy');
 
 	Route::get('projects/create', 'ProjectController@create');
 	Route::get('projects/{id}', 'ProjectController@show');
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
-
 	Route::patch('projects/{id}/edit', 'ProjectController@update');
 
 	// Projects by Supervisor
@@ -115,20 +143,8 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-
-	/* ==============
-	   REPORT ROUTES
-	   ============== */
+	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 
-	// CHANGE AUTH
-	Route::post('authenticaion-change', 'Auth\AuthController@change');
-
-	Route::get('afterLogin', function (){
-		if(Auth::user()->isSupervisorOrSuperior()){
-			return "true";
-		} else {
-			return "false";
-		}
-	});
+	Route::get('afterLogin', function (){return Auth::user()->isSupervisorOrSuperior();});
 });

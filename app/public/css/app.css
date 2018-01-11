@@ -254,6 +254,7 @@ button:focus {
 }
 
 .button--raised:hover {
+  background: rgba(133, 132, 132, 0.4);
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.16);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.16);
 }
@@ -754,6 +755,10 @@ nav.mobile.is-visible {
   padding-left: 2rem;
   display: block;
   width: 100%;
+}
+
+.nav-button--mobile .sub-dropdown {
+  cursor: pointer;
 }
 
 .nav-button--mobile .sub-dropdown h3 {
@@ -1344,11 +1349,12 @@ th:last-of-type {
   }
 }
 
-.topics-list {
+.card ul.topics-list {
   list-style: none;
+  padding: 0;
 }
 
-.topics-list .topic {
+.card ul.topics-list .topic {
   background: black;
   display: inline-block;
   color: white;
@@ -1358,19 +1364,19 @@ th:last-of-type {
   margin-bottom: 5px;
 }
 
-.topics-list .topic.primary {
+.card ul.topics-list .topic.primary {
   background: #ffd700;
   border-color: #e6c200;
   color: black;
 }
 
-.topics-list .topic.primary:before {
+.card ul.topics-list .topic.primary:before {
   content: '\2605';
   padding-left: 8px;
 }
 
-.topics-list .topic a,
-.topics-list .topic p {
+.card ul.topics-list .topic a,
+.card ul.topics-list .topic p {
   display: inline-block;
   text-decoration: none;
   color: inherit;
@@ -1378,7 +1384,7 @@ th:last-of-type {
   padding: 5px;
 }
 
-.topics-list .no-topics {
+.card ul.topics-list .no-topics {
   background: #F44336;
   border: 2px solid #f32c1e;
   border-radius: 2px;
@@ -1389,8 +1395,8 @@ th:last-of-type {
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
-.topics-list .no-topics svg,
-.topics-list .no-topics p {
+.card ul.topics-list .no-topics svg,
+.card ul.topics-list .no-topics p {
   display: inline-block;
   margin: 0;
   color: inherit;
@@ -1690,7 +1696,6 @@ th:last-of-type {
   }
 
   footer {
-    position: relative;
     height: auto;
   }
 

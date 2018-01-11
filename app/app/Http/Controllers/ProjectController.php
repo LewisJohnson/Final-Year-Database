@@ -331,7 +331,7 @@ class ProjectController extends Controller{
 			session()->flash('message', '"'.$project->title.'" has been updated.');
 			session()->flash('message_type', 'success');
 			return redirect()->action('ProjectController@show', $project);
-		});
+	destroy	});
 
 		return $result;
 	}

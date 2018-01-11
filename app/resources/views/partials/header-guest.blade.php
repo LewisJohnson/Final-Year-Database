@@ -1,7 +1,7 @@
 <header id="header" class="desktop">
 	<img class="logo" src="/images/sussex-logo.jpg">
 	<h1>@lang("messages.homepage_main_header")</h1>
-	<button class="login-button button button--raised" data-activator="true" data-dialog="login">Login</button>
+	<button class="button button--raised login-button" data-activator="true" data-dialog="login">Login</button>
 </header>
 
 <nav class="desktop">

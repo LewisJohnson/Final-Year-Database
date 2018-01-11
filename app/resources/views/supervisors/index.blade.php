@@ -160,7 +160,9 @@
 				<thead>
 					<tr>
 						<th>Title</th>
+						<th>Topic</th>
 						<th>Status</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -168,8 +170,16 @@
 					@foreach($user->supervisor->getProjectsOrderByStatus() as $project)
 					<tr>
 						<td><a href="{{ action('ProjectController@show', $project->id) }}" class="project-link">{{ $project->title }}</a></td>
+						@if($project->getPrimaryTopic() != null)
+							<td>
+								<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
+							</td>
+						@else
+							<td>No Topic</td>
+						@endif
 						<td>{{ ucfirst(str_replace('-', ' ', $project->status)) }}</td>
-						<td><a class="button" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a></td>
+						<td><a class="button" title="Edit {{ $project->title }}" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a></td>
+						<td><a class="button button--danger" title="Delete {{ $project->title }}" href="{{ action('ProjectController@destroy', $project->id) }}">Delete</a></td>
 					</tr>
 					@endforeach
 				</tbody>

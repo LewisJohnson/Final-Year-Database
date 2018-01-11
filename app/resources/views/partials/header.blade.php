@@ -2,9 +2,9 @@
 	<img class="logo" src="/images/sussex-logo.jpg">
 	<h1>@lang_sess("homepage_main_header")</h1>
 
-	<button class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
+	<button title="Log out" class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
 	@if($user->isSupervisorOrSuperior())
-		<button class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
+		<button title="Change Authentication" class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
 	@endif
 </header>
 
