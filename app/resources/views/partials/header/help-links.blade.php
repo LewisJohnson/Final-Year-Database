@@ -1,7 +1,7 @@
 @php($localePrefix = Session::get('db_type') == 'ug' ?  "messages_ug" : "messages_masters")
 
 @if(Lang::has($localePrefix.".help_link_1"))
-	@if($platform = "mobile")
+	@if($platform == "mobile")
 		{{-- MOBILE --}}
 		<li class="nav-button nav-button--mobile">
 			<div class="sub-dropdown" tab-index="0">
@@ -20,15 +20,15 @@
 				</div>
 			</div>
 		</li>
-	@elseif($platform = "desktop")
+	@elseif($platform == "desktop")
 		{{-- DESKTOP --}}
 		<div class="sub-dropdown">
 			<button class="sub-dropbtn">Links</button>
 			@include('svg.arrow-right')
 			<div class="dropdown-content shadow-2dp">
 				@for ($i = 1; $i <= 20; $i++)
-					@if(Lang::has("messages_masters.help_link_".$i))
-						<a href="@lang("messages_masters.help_link_".$i."_url")" title="@lang("messages_ug.help_link_".$i)">@lang("messages_ug.help_link_".$i)</a>
+					@if(Lang::has($localePrefix.".help_link_".$i))
+						<a href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
 					@endif
 				@endfor
 			</div>

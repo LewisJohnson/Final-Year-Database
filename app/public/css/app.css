@@ -627,6 +627,29 @@ ul {
   text-overflow: ellipsis;
 }
 
+.nav-button {
+  -webkit-transition-duration: .28s;
+          transition-duration: .28s;
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition-property: background-color;
+  transition-property: background-color;
+}
+
+.nav-button a {
+  display: block;
+  text-decoration: none;
+}
+
+.nav-button button {
+  border: none;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
 nav.desktop {
   background: #183670;
   position: -webkit-sticky;
@@ -648,6 +671,25 @@ nav.desktop ul {
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
   height: 42px;
+}
+
+nav.desktop .nav-button {
+  margin-right: 10px;
+  color: white;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+
+nav.desktop .nav-button a {
+  padding: 10px;
+  color: inherit;
+}
+
+nav.desktop .nav-button > button,
+nav.desktop .nav-button > a {
+  display: inline-block;
+  padding: 10px;
+  padding-right: 0;
 }
 
 nav.mobile {
@@ -681,7 +723,7 @@ nav.mobile a:hover,
 nav.mobile a:focus {
   -webkit-transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
   transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
-  background: #1D4289;
+  background: #183670;
   color: white;
 }
 
@@ -707,55 +749,7 @@ nav.mobile .footer button {
   width: 80%;
 }
 
-nav.mobile.is-visible {
-  visibility: visible;
-  -webkit-transform: translateX(0vw);
-          transform: translateX(0vw);
-}
-
-.nav-button {
-  -webkit-transition-duration: .28s;
-          transition-duration: .28s;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  -webkit-transition-property: background-color;
-  transition-property: background-color;
-}
-
-.nav-button a {
-  display: block;
-  text-decoration: none;
-}
-
-.nav-button button {
-  border: none;
-  margin: 0;
-  color: inherit;
-  font-size: inherit;
-  background: none;
-  padding: 0;
-}
-
-.nav-button--desktop {
-  margin-right: 10px;
-  color: white;
-  -webkit-transition: 0.3s all;
-  transition: 0.3s all;
-}
-
-.nav-button--desktop a {
-  padding: 10px;
-  color: inherit;
-}
-
-.nav-button--desktop > button,
-.nav-button--desktop > a {
-  display: inline-block;
-  padding: 10px;
-  padding-right: 0;
-}
-
-.nav-button--mobile {
+nav.mobile .nav-button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -765,36 +759,42 @@ nav.mobile.is-visible {
           flex-direction: column;
 }
 
-.nav-button--mobile a {
+nav.mobile .nav-button a {
   padding: 1rem;
   padding-left: 2rem;
   display: block;
   width: 100%;
 }
 
-.nav-button--mobile .sub-dropdown {
+nav.mobile .nav-button .sub-dropdown {
   cursor: pointer;
 }
 
-.nav-button--mobile .sub-dropdown h3 {
+nav.mobile .nav-button .sub-dropdown h3 {
   display: inline-block;
   width: 80%;
 }
 
-.nav-button--mobile .sub-dropdown .dropdown-content {
+nav.mobile .nav-button .sub-dropdown .dropdown-content {
   display: none;
 }
 
-.nav-button--mobile .sub-dropdown svg {
+nav.mobile .nav-button .sub-dropdown svg {
   vertical-align: sub;
 }
 
-.nav-button--mobile .sub-dropdown.active {
+nav.mobile .nav-button .sub-dropdown.active {
   -webkit-transform: scale3d(1, 1, 1);
           transform: scale3d(1, 1, 1);
   background-color: rgba(224, 224, 224, 0.15);
   -webkit-box-shadow: 0 4px 2px -2px rgba(224, 224, 224, 0.8);
           box-shadow: 0 4px 2px -2px rgba(224, 224, 224, 0.8);
+}
+
+nav.mobile.is-visible {
+  visibility: visible;
+  -webkit-transform: translateX(0vw);
+          transform: translateX(0vw);
 }
 
 .dropdown {
@@ -854,7 +854,7 @@ nav.mobile.is-visible {
 .dropdown .dropdown-content > button:focus {
   -webkit-transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
   transition: 0.25s all cubic-bezier(0.4, 0, 0.2, 1);
-  background: #1D4289;
+  background: #183670;
   color: white;
 }
 

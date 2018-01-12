@@ -10,9 +10,9 @@
 
 <nav class="desktop">
 	<ul>
-		{{-- <li class="nav-button nav-button--desktop"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
-		<li class="nav-button nav-button--desktop"><a href="/" title="">Home</a></li>
-		<li class="nav-button nav-button--desktop dropdown" aria-expanded="false">
+		{{-- <li class="nav-button "><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
+		<li class="nav-button "><a href="/" title="">Home</a></li>
+		<li class="nav-button dropdown" aria-expanded="false">
 			<button>Browse</button>
 			@include('svg.arrow-down')
 			<div class="dropdown-content shadow-2dp" aria-hidden="true">
@@ -22,13 +22,13 @@
 			</div>
 		</li>
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-			<li class="nav-button nav-button--desktop"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
+			<li class="nav-button "><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif
 
 		@include("partials.header.desktop-admin-dropdown")
 
 		@if($user->isStudent())
-			<li class="nav-button nav-button--desktop dropdown">
+			<li class="nav-button dropdown">
 				<button >Student</button>
 				@include('svg.arrow-down')
 				<div class="dropdown-content shadow-2dp">
@@ -38,12 +38,12 @@
 			</li>
 		@endif
 
-		<li class="nav-button nav-button--desktop dropdown">
+		<li class="nav-button dropdown">
 			<button>Help</button>
 			@include('svg.arrow-down')
 
 			<div class="dropdown-content shadow-2dp">
-				@include('partials.header.help-links',  ['platform' => 'desktop'])
+				@include('partials.header.help-links', ['platform' => 'desktop'])
 				<a href="/help" title="System Help">System Help</a>
 				<a href="/information" title="General Information">General Information</a>
 				<a href="/about" title="About this software">About</a>
@@ -67,27 +67,31 @@
 	<div>
 		<ul>
 			@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-				<li class="nav-button nav-button--mobile"><a href="/supervisor" title="">Supervisor</a></li>
+				<li class="nav-button "><a href="/supervisor" title="">Supervisor</a></li>
 			@endif
 			@if(strpos(Session::get("auth_type"), 'admin') !== false)
-				<li class="nav-button nav-button--mobile"><a href="/admin" title="">Administrator</a></li>
+
+				<li class="nav-button ">
+					@include('svg.shield')
+					<a href="/admin" title="">Administrator</a>
+				</li>
 			@endif
 
 			<h3>Browse</h3>
-			<li class="nav-button nav-button--mobile">
+			<li class="nav-button ">
 				<a href="/projects" title="">All Projects</a>
 			</li>
 
-			<li class="nav-button nav-button--mobile">
+			<li class="nav-button ">
 				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor" title="">By Supervisor</a>
 			</li>
 
-			<li class="nav-button nav-button--mobile">
+			<li class="nav-button ">
 				<a href="/projects/by-topic" title="Browse projects sorted by topic">By Topic</a>
 			</li>
 
 			@if($user->isStudent())
-			<li class="nav-button nav-button--mobile dropdown">
+			<li class="nav-button dropdown">
 				<h3>Student</h3>
 				<div class="dropdown-content">
 					<a href="/students/project-propose">Propose Project</a>
@@ -96,7 +100,7 @@
 			</li>
 			@endif
 
-			<li class="nav-button nav-button--mobile">
+			<li class="nav-button ">
 				<div class="sub-dropdown" tab-index="0">
 					<h3>Help</h3>
 					<div class="svg-container pointer">
@@ -112,7 +116,7 @@
 				</div>
 			</li>
 
-			@include('partials.header.help-links',  ['platform' => 'mobile'])
+			@include('partials.header.help-links', ['platform' => 'mobile'])
 
 			<li class="footer">
 				<button title="Log out" class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
