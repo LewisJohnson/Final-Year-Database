@@ -37,18 +37,22 @@ class Supervisor extends User{
 		}
 	}
 
-	public function getProjectsOrderByStatus(){
+	public function getProjectsOrderByStatus($includeDeleted = false){
 		if(Session::get("db_type") == "ug"){
-			return ProjectUg::where("supervisor_id", $this->id)
+			$proj =  ProjectUg::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
-			->whereNull('student_id')
-			->get();
+			->whereNull('student_id');
 		} elseif(Session::get("db_type") == "masters") {
-			return ProjectMasters::where("supervisor_id", $this->id)
+			$proj = ProjectMasters::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
-			->whereNull('student_id')
-			->get();
+			->whereNull('student_id');
 		}
+
+		if($includeDeleted){
+			$proj->withTrashed();
+		}
+
+		return $proj->get();
 	}
 	public function getProjectOffers(){
 		if(Session::get("db_type") == "ug"){

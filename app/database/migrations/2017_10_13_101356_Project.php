@@ -24,8 +24,9 @@ class Project extends Migration
 			$table->unsignedBigInteger('marker_id')->nullable(true);
 			$table->unsignedBigInteger('student_id')->nullable(true);
 			$table->boolean('student_proposed_project')->default(0);
-			$table->timestamp('created_at')->useCurrent = true;
-			$table->timestamp('updated_at')->useCurrent = true;
+			$table->timestampsTz();
+			$table->softDeletesTz();
+			$table->timestampTz('destroy_at')->nullable(true);
 		});
 
 		Schema::create('projects_masters', function (Blueprint $table) {
@@ -39,8 +40,9 @@ class Project extends Migration
 			$table->unsignedBigInteger('marker_id')->nullable(true);
 			$table->unsignedBigInteger('student_id')->nullable(true);
 			$table->boolean('student_proposed_project')->default(0);
-			$table->timestamp('created_at')->useCurrent = true;
-			$table->timestamp('updated_at')->useCurrent = true;
+			$table->timestampsTz();
+			$table->softDeletesTz();
+			$table->timestampTz('destroy_at')->nullable(true);
 		});
 	}
 

@@ -21,13 +21,14 @@ use SussexProjects\StudentMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\Supervisor;
-
+use SussexProjects\Jobs\ProcessDeleteProject;
 
 class ProjectController extends Controller{
 
 	public function __construct(){
 		$this->middleware('auth');
 		$this->paginationCount = 25;
+		$this->restoreTimeInMinutes = 1;
 	}
 
 	/**
@@ -69,7 +70,6 @@ class ProjectController extends Controller{
 				->with('projects', $projects->paginate($this->paginationCount))
 				->with('view', 'index');
 		}
-
 	}
 
 	/**
@@ -306,12 +306,6 @@ class ProjectController extends Controller{
 	 */
 	public function update($id) {
 		// todo: add form validation
-
-		if(!Auth::user()->isSupervisorOrSuperior()){
-			Log::error('Someone who is not a supervsior tried to create a project.');
-			return redirect('/');
-		}
-
 		$result = DB::Transaction(function($id) use ($id){
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail($id);
@@ -331,7 +325,7 @@ class ProjectController extends Controller{
 			session()->flash('message', '"'.$project->title.'" has been updated.');
 			session()->flash('message_type', 'success');
 			return redirect()->action('ProjectController@show', $project);
-	destroy	});
+		});
 
 		return $result;
 	}
@@ -343,31 +337,58 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id) {
-		$result = DB::Transaction(function($id) use ($id){
+
+		$softDeletedproject = DB::Transaction(function($id) use ($id){
+			$deleteTime = Carbon::now()->addMinutes($this->restoreTimeInMinutes);
+
 			if(Session::get("db_type") == "ug"){
-				$transaction = new TransactionUg;
-				$project = ProjectUg::findOrFail($id);
-				$title = $project->title;
-				ProjectUg::destroy($id);
+				$project = ProjectUg::find($id);
+				// $transaction = new TransactionUg;
 			} else {
-				$project = ProjectMasters::findOrFail($id);
-				$transaction = new TransactionMasters;
-				$title = $project->title;
-				ProjectMasters::destroy($id);
+				$project = ProjectMasters::find($id);
+				// $transaction = new TransactionMasters;
 			}
 
-			$transaction->fill(array(
-				'transaction_type' =>'deleted',
-				'project_id' => $id,
-				'supervisor_id' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
-			$transaction->save();
-			session()->flash('message', '"'.$title.'" has been deleted.');
-			session()->flash('message_type', 'danger');
+			// $transaction->fill(array(
+			// 	'transaction_type' =>'deleted',
+			// 	'project_id' => $id,
+			// 	'supervisor_id' => Auth::user()->supervisor->id,
+			// 	'transaction_date' => new Carbon
+			// ));
+
+			// ProcessDeleteProject::dispatch($project, $transaction)->delay($deleteTime);
+			ProcessDeleteProject::dispatch($project, null)->delay($deleteTime);
+
+			// This is a soft delete
+			$project->destroy_at = $deleteTime;
+			$project->save();
+			$project->delete();
+			return $project;
 		});
 
-		return $result;
+		return view('supervisors.partials.restore-project-row')->with('project', $softDeletedproject);
+	}
+
+	/**
+	 * Restore the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function restore($id) {
+
+		$restoredProject = DB::Transaction(function($id) use ($id){
+			if(Session::get("db_type") == "ug"){
+				$project = ProjectUg::withTrashed()->where('id', $id)->first();
+			} else {
+				$project = ProjectMasters::withTrashed()->where('id', $id)->first();
+			}
+
+			$project->restore();
+			return $project;
+		});
+
+		return view('supervisors.partials.project-row')->with('project', $restoredProject);
 	}
 
 	/**

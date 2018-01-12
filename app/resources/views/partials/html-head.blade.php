@@ -31,10 +31,12 @@
 
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery-confirm.min.css') }}">
 	@yield('styles')
 
 	<!-- Scripts -->
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
 	<script src="{{ asset('js/main.js') }}" async></script>
 	{{-- <script src="{{ asset('js/sw.js') }}" async></script> --}}
 

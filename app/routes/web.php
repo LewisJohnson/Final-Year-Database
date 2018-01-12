@@ -87,7 +87,7 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
 
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
-	Route::get('supervisor/acceptedStudentsTable', 'SupervisorController@acceptedStudentTable');
+	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
 
@@ -102,6 +102,8 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
    4. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'student']], function() {
+	Route::patch('projects/{id}/restore', 'ProjectController@restore');
+
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
@@ -120,12 +122,12 @@ Route::group(['middleware' => ['auth']], function() {
 	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
-	Route::delete('projects/{id}/delete', 'ProjectController@destroy');
-
 	Route::get('projects/create', 'ProjectController@create');
+
 	Route::get('projects/{id}', 'ProjectController@show');
-	Route::get('projects/{id}/edit', 'ProjectController@edit');
+	Route::delete('projects/{id}/delete', 'ProjectController@destroy');
 	Route::patch('projects/{id}/edit', 'ProjectController@update');
+	Route::get('projects/{id}/edit', 'ProjectController@edit');
 
 	// Projects by Supervisor
 	Route::get('projects/by-supervisor', 'ProjectController@supervisors');
@@ -146,5 +148,7 @@ Route::group(['middleware' => ['auth']], function() {
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 
-	Route::get('afterLogin', function (){return Auth::user()->isSupervisorOrSuperior();});
+	Route::get('showChangeAuthDialog', function (){
+		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
+	});
 });

@@ -14,13 +14,12 @@ class Controller extends BaseController
 
 	// The amount of paginated items per page
 	public $paginationCount;
+	public $restoreTimeInMinutes;
 	private $user;
 
 	public function __construct(){
-
-		// A default value
 		$this->paginationCount = 25;
-
+		$this->restoreTimeInMinutes = 60;
 		$this->middleware(function ($request, $next) {
 			$this->user = Auth::user();
 			view()->share('user', $this->user);

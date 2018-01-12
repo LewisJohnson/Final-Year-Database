@@ -554,23 +554,6 @@ AjaxFunctions.prototype.Keys_ = {
 	COMMA: 45
 };
 
-AjaxFunctions.prototype.functions = {
-	deleteProject: function (projectName) {
-		if(confirm("Are you sure you want to delete \"" + projectName +"\"?")){
-			$.ajax({
-				type: "DELETE",
-				url: "edit",
-				success: function(url){
-					window.location.href = "../";
-				}
-			});
-		}
-		else{
-			return false;
-		}
-	}
-};
-
 // Project page search focus
 $(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus',  function(e){
 	removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
@@ -959,7 +942,7 @@ $('.supervisor-table .offer-action').on('click', function() {
 				showNotification('', 'Student has been accepted.');
 				$.ajax({
 					method: 'GET',
-					url: '/supervisor/acceptedStudentsTable',
+					url: '/supervisor/accepted-students-table',
 					success: function(data){
 						$("#supervisor-accepted-students-table").html(data);
 					},
@@ -977,8 +960,68 @@ $('.supervisor-table .offer-action').on('click', function() {
 	});
 });
 
-$('#deleteProjectButton').on('click', function() {
-	AjaxFunctions.prototype.deleteProject($('#title').val());
+$('.supervisor-table').on('submit', 'form.delete-project', function(e) {
+	e.preventDefault();
+	var form = $(this);
+	var projectName = form.data('project-title');
+
+	$.confirm({
+		title: 'Delete',
+		type: 'red',
+		icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+		theme: 'modern',
+		escapeKey: true,
+		backgroundDismiss: true,
+		animateFromElement : false,
+		content: 'Are you sure you want to delete <b>' + projectName + '</b>?',
+		buttons: {
+			confirm: {
+				btnClass: 'btn-red',
+				action: function(){
+					$.ajax({
+						url: form.prop('action'),
+						type:'DELETE',
+						success:function(row){
+							form.parent().parent().replaceWith(row);
+						}
+					});
+				}
+			},
+			cancel: {},
+		}
+	});
+});
+
+$('.supervisor-table').on('submit', 'form.restore-project', function(e) {
+	e.preventDefault();
+	var form = $(this);
+	var projectName = form.data('project-title');
+
+	$.confirm({
+		title: 'Restore',
+		type: 'green',
+		icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3M12,8V13L16.28,15.54L17,14.33L13.5,12.25V8H12Z" /></svg></div>',
+		theme: 'modern',
+		escapeKey: true,
+		backgroundDismiss: true,
+		animateFromElement : false,
+		content: 'Are you sure you want to restore <b>' + projectName + '</b>?',
+		buttons: {
+			confirm: {
+				btnClass: 'btn-green',
+				action: function(){
+					$.ajax({
+						url: form.prop('action'),
+						type:'PATCH',
+						success:function(row){
+							form.parent().parent().replaceWith(row);
+						}
+					});
+				}
+			},
+			cancel: {},
+		}
+	});
 });
 
 $('#student-edit-list').find('.checkbox input').on('change', function() {

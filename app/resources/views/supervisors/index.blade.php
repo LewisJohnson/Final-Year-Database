@@ -155,40 +155,36 @@
 		</div>
 		<div class="content" data-cookie-name="hide-projects" @if(!empty($_COOKIE["hide-projects"])) @if($_COOKIE["hide-projects"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 			<div style="overflow: auto;">
-			<table class="data-table">
-			@if(count($user->supervisor->getProjectsOrderByStatus()))
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Topic</th>
-						<th>Status</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($user->supervisor->getProjectsOrderByStatus() as $project)
-					<tr>
-						<td><a href="{{ action('ProjectController@show', $project->id) }}" class="project-link">{{ $project->title }}</a></td>
-						@if($project->getPrimaryTopic() != null)
-							<td>
-								<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
-							</td>
-						@else
-							<td>No Topic</td>
-						@endif
-						<td>{{ ucfirst(str_replace('-', ' ', $project->status)) }}</td>
-						<td><a class="button" title="Edit {{ $project->title }}" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a></td>
-						<td><a class="button button--danger" title="Delete {{ $project->title }}" href="{{ action('ProjectController@destroy', $project->id) }}">Delete</a></td>
-					</tr>
-					@endforeach
-				</tbody>
-			@else
-				<tfoot>
-					<tr><td>You have not created any projects yet.</td></tr>
-				</tfoot>
-			@endif
-			</table>
+				<table class="data-table supervisor-table">
+					@if(count($user->supervisor->getProjectsOrderByStatus(true)))
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Topic</th>
+								<th>Status</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($user->supervisor->getProjectsOrderByStatus(true) as $project)
+								@if ($project->trashed())
+									@if(\Carbon\Carbon::now()->gt($project->destroy_at))
+										@include('supervisors.partials.queued-for-deletion-project-row', $project)
+									@else
+										@include('supervisors.partials.restore-project-row', $project)
+									@endif
+								@else
+									@include('supervisors.partials.project-row', $project)
+								@endif
+							@endforeach
+						</tbody>
+					@else
+						<tfoot>
+							<tr><td>You have not created any projects yet.</td></tr>
+						</tfoot>
+					@endif
+				</table>
 			</div>
 		</div>
 	</div>
