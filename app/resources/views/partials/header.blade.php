@@ -10,8 +10,8 @@
 
 <nav class="desktop">
 	<ul>
-		{{-- <li class="nav-button "><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
-		<li class="nav-button "><a href="/" title="">Home</a></li>
+		{{-- <li class="nav-button"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
+		<li class="nav-button"><a href="/" title="">Home</a></li>
 		<li class="nav-button dropdown" aria-expanded="false">
 			<button>Browse</button>
 			@include('svg.arrow-down')
@@ -22,7 +22,7 @@
 			</div>
 		</li>
 		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-			<li class="nav-button "><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
+			<li class="nav-button"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif
 
 		@include("partials.header.desktop-admin-dropdown")
@@ -67,26 +67,32 @@
 	<div>
 		<ul>
 			@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
-				<li class="nav-button "><a href="/supervisor" title="">Supervisor</a></li>
+				<li class="nav-button">
+					<a class="icon" href="/supervisor" title="Supervisor">
+						@include('svg.shield')
+						<p>Supervisor</p>
+					</a>
+				</li>
 			@endif
 			@if(strpos(Session::get("auth_type"), 'admin') !== false)
-
-				<li class="nav-button ">
-					@include('svg.shield')
-					<a href="/admin" title="">Administrator</a>
+				<li class="nav-button">
+					<a class="icon" href="/admin" title="Administrator">
+						@include('svg.shield')
+						<p>Administrator</p>
+					</a>
 				</li>
 			@endif
 
 			<h3>Browse</h3>
-			<li class="nav-button ">
-				<a href="/projects" title="">All Projects</a>
+			<li class="nav-button">
+				<a href="/projects" title="Browse all on-offer projects">All Projects</a>
 			</li>
 
-			<li class="nav-button ">
-				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor" title="">By Supervisor</a>
+			<li class="nav-button">
+				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor">By Supervisor</a>
 			</li>
 
-			<li class="nav-button ">
+			<li class="nav-button">
 				<a href="/projects/by-topic" title="Browse projects sorted by topic">By Topic</a>
 			</li>
 
@@ -100,7 +106,7 @@
 			</li>
 			@endif
 
-			<li class="nav-button ">
+			<li class="nav-button">
 				<div class="sub-dropdown" tab-index="0">
 					<h3>Help</h3>
 					<div class="svg-container pointer">
@@ -119,8 +125,12 @@
 			@include('partials.header.help-links', ['platform' => 'mobile'])
 
 			<li class="footer">
-				<button title="Log out" class="button button--raised button--accent" onclick="document.getElementById('logout-form').submit();">Logout</a>
-				<button title="Change Authenticaion" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
+				<button class="logout" title="Log out" onclick="document.getElementById('logout-form').submit();">
+					@include('svg.logout')
+				</a>
+				@if($user->isSupervisorOrSuperior())
+					<button title="Change Authenticaion" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
+				@endif
 			</li>
 		</ul>
 	</div>

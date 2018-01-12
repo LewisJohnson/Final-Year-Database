@@ -1335,7 +1335,7 @@ $(function () {
 		});
 	});
 
-	$('.nav-button--mobile .sub-dropdown').on('click', function () {
+	$('nav.mobile .sub-dropdown').on('click', function () {
 		var dropdown = $(this);
 		var content = dropdown.find('.dropdown-content');
 

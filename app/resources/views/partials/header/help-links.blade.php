@@ -3,7 +3,7 @@
 @if(Lang::has($localePrefix.".help_link_1"))
 	@if($platform == "mobile")
 		{{-- MOBILE --}}
-		<li class="nav-button nav-button--mobile">
+		<li class="nav-button">
 			<div class="sub-dropdown" tab-index="0">
 				<h3 class="sub-dropbtn">Links</h3>
 				<div class="svg-container pointer" style="margin-left: auto;">
