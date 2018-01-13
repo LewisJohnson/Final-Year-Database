@@ -32,7 +32,14 @@
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery-confirm.min.css') }}">
-	@yield('styles')
+
+	@if(Cookie::get('highContrast') == "true")
+		<link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}">
+	@endif
+
+	@if(Cookie::get('largeFont') == "true")
+		<link rel="stylesheet" href="{{ asset('css/accessible-font.css') }}">
+	@endif
 
 	<!-- Scripts -->
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>

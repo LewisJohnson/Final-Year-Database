@@ -2,10 +2,26 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller{
 
 	public function index(Request $request){
+		if($request->query("largeFont") == "true"){
+			Cookie::queue('largeFont', "true", 525600);
+		}
+		if($request->query("largeFont") == "false"){
+			Cookie::queue('largeFont', "false", 525600);
+		}
+
+		if($request->query("highContrast") == "true"){
+			Cookie::queue('highContrast', "true", 525600);
+		}
+
+		if($request->query("highContrast") == "false"){
+			Cookie::queue('highContrast', "false", 525600);
+		}
+
 		return view('index');
 	}
 

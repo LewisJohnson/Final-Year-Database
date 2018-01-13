@@ -1,6 +1,17 @@
 <footer>
 	<div class="footer-left">
-		{{-- <p>Happy New Year!</p> --}}
+		@if(Cookie::get('largeFont') == "true")
+			<a href="{{ action('HomeController@index', 'largeFont=false')}}">Regular Font</a>
+		@else
+			<a href="{{ action('HomeController@index', 'largeFont=true')}}">Large Font</a>
+		@endif
+
+		@if(Cookie::get('highContrast') == "true")
+			<a href="{{ action('HomeController@index', 'highContrast=false')}}">Standard Contast</a>
+		@else
+			<a href="{{ action('HomeController@index', 'highContrast=true')}}">High Contrast</a>
+		@endif
+
 	</div>
 	<div class="footer-right">
 		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>

@@ -18,5 +18,7 @@ mix.disableNotifications();
 mix.js('resources/assets/js/main.js', 'public/js');
 mix.js('resources/assets/js/sw.js', 'public/js');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
+mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
+mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');
 
 mix.browserSync({proxy: 'localhost:8000', notify: false});

@@ -1033,8 +1033,9 @@ nav.mobile.is-visible {
   width: 100%;
 }
 
-.tab-container {
+ul.tab-container {
   list-style: none;
+  padding: 0px !important;
 }
 
 .tab {

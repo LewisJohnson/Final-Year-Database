@@ -1,5 +1,7 @@
 {
     "/js/main.js": "/js/main.js",
     "/css/app.css": "/css/app.css",
+    "/css/accessible-contrast.css": "/css/accessible-contrast.css",
+    "/css/accessible-font.css": "/css/accessible-font.css",
     "/js/sw.js": "/js/sw.js"
 }

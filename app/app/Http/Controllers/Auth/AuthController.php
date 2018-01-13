@@ -3,8 +3,8 @@ namespace SussexProjects\Http\Controllers\Auth;
 
 use SussexProjects\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Session;
-use Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller{
 

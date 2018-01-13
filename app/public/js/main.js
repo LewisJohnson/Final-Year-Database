@@ -68,7 +68,9 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(3);
+__webpack_require__(3);
+__webpack_require__(4);
+module.exports = __webpack_require__(5);
 
 
 /***/ }),
@@ -8019,6 +8021,18 @@ SwappableStopEvent.type = 'swappable:stop';
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
