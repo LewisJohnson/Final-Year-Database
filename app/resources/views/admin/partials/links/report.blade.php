@@ -1,13 +1,13 @@
 <ul class="icon-list">
 	<li>
 		<a class="icon" href="/reports/student">
-			@include('svg.account')
+			@include('svg.school')
 			<p>Report by Student</p>
 		</a>
 	</li>
 	<li>
 		<a class="icon" href="/reports/supervisor">
-			@include('svg.account')
+			@include('svg.shield')
 			<p>Report by Supervisor</p>
 		</a>
 	</li>

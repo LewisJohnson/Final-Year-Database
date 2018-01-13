@@ -6,15 +6,15 @@
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="/users/edit">
-			@include('svg.account-settings')
-			<p>Edit User</p>
-		</a>
-	</li>
-	<li>
 		<a class="icon" href="/admin/students/import">
 			@include('svg.account-multiple-plus')
 			<p>Import Students</p>
+		</a>
+	</li>
+	<li>
+		<a class="icon" href="/users/edit">
+			@include('svg.account-edit')
+			<p>Edit User</p>
 		</a>
 	</li>
 	<li>
