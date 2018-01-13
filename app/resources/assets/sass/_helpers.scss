@@ -110,6 +110,41 @@
 		fill: currentColor;
 		width: 30px;
 		height: 30px;
+		transition: 0.18s all cubic-bezier(0.4, 0, 0.54, 1.46);
+	}
+}
+
+.icon{
+	margin: 0;
+	padding: 1rem;
+	width: 100%;
+	display: block;
+	text-decoration: none;
+
+	p{
+		margin-left: 5px;
+		line-height: 32px;
+		margin: 0;
+		display: inline-block;
+		color: inherit;
+	}
+
+	.svg-container{
+		vertical-align: middle;
+			svg{
+				width: 20px;
+				height: 20px;
+				vertical-align: text-bottom;
+			}
+	}
+}
+
+.icon-list{
+	display: flex;
+	flex-direction: column;
+	list-style: none;
+	.icon{
+		padding: 6.5px;
 	}
 }
 
@@ -171,17 +206,39 @@
 	}
 }
 
-@keyframes spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
+
+.arrangements-container{
+	display: flex;
+	table{
+		width: 65%;
+		margin: 0;
+	}
+
+	form{
+		width: 30%;
+		margin: auto;
+	}
+}
+
+
+.transition--slow {
+	@include transition--slow();
 }
 
 .transition--medium {
-	outline: none;
-	transition: .25s all cubic-bezier(0.4, 0, 0, 1.52);
+	@include transition--medium();
+}
+
+.transition--fast {
+	@include transition--fast();
 }
 
 
 .transition--medium:focus {
 	outline: none;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }

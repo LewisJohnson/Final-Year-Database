@@ -12,10 +12,10 @@
 	<ul>
 		{{-- <li class="nav-button"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
 		<li class="nav-button"><a href="/" title="">Home</a></li>
-		<li class="nav-button dropdown" aria-expanded="false">
+		<li class="nav-button dropdown">
 			<button>Browse</button>
 			@include('svg.arrow-down')
-			<div class="dropdown-content shadow-2dp" aria-hidden="true">
+			<div class="dropdown-content shadow-2dp">
 				<a href="/projects" title="Browse all projects">Projects</a>
 				<a href="/projects/by-supervisor" title="Browse projects sorted by supervisor">Projects by Supervisor</a>
 				<a href="/projects/by-topic" title="Browse projects sorted by topic">Projects by Topics</a>
@@ -25,7 +25,7 @@
 			<li class="nav-button"><a href="/supervisor" title="Supervisor options">Supervisor</a></li>
 		@endif
 
-		@include("partials.header.desktop-admin-dropdown")
+		@include("partials.header.admin-dropdown")
 
 		@if($user->isStudent())
 			<li class="nav-button dropdown">
@@ -52,6 +52,7 @@
 	</ul>
 </nav>
 
+{{-- MOBILE --}}
 <header id="header" class="mobile">
 	<div class="hamburger-container" role="button">
 		<ul class="hamburger-list">

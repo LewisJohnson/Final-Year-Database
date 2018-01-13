@@ -43,15 +43,30 @@
 				0 24px 38px  3px rgba(0, 0, 0, $shadow-key-umbra-opacity);
 }
 
-.arrangements-container{
-	display: flex;
-	table{
-		width: 65%;
-		margin: 0;
-	}
+@mixin transition--fast() {
+	transition: .12s all ease-out;
+}
 
-	form{
-		width: 30%;
-		margin: auto;
-	}
+@mixin transition--medium() {
+	outline: none;
+	transition: .24s all ease-out;
+}
+
+@mixin transition--slow() {
+	outline: none;
+	transition: .48s all ease-out;
+}
+
+@mixin transition--fast-cb() {
+	transition: .12s all cubic-bezier(0.4, 0, 0, 1.52);
+}
+
+@mixin transition--medium-cb() {
+	outline: none;
+	transition: .24s all cubic-bezier(0.4, 0, 0, 1.52);
+}
+
+@mixin transition--slow-cb() {
+	outline: none;
+	transition: .48s all cubic-bezier(0.4, 0, 0, 1.52);
 }

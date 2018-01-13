@@ -38,29 +38,20 @@
 
 .hub .section .content{
 	padding: 1rem;
+
 	.svg-container {
 		display: inline;
 		margin-right: 14px;
-		svg{
-			fill: currentColor;
-			width: 20px;
-			height: 20px;
-		}
 	}
 
 	.icon-list{
-		list-style: none;
-		color: $list-text-color;
-		li{
-			display: flex;
-			margin-bottom: 8px;
-		}
-		a{
-			text-decoration: none;
-			color: inherit;
-			display: inline-block;
-			width: 100%;
-			line-height: 22px;
+		.icon{
+			padding: 0;
+
+			&:hover, &:focus{
+				outline: none;
+				color: black;
+			}
 		}
 	}
 
