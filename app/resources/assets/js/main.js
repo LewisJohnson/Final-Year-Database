@@ -159,6 +159,8 @@ var MobileMenu =  function MobileMenu(element) {
 		this.activator = $(this.Selectors_.HAMBURGER_CONTAINER);
 		this.underlay = $(this.Selectors_.UNDERLAY);
 		this.init();
+	} else {
+		console.log("There can only be one mobile menu.");
 	}
 };
 
@@ -306,6 +308,10 @@ $(document).ready(function() {
 	$(this).keydown(function(e) {
 		if(e.keyCode == 27 && window['Dialog'] != null) {
 			window['Dialog'].hideDialog();
+		}
+
+		if(e.keyCode == 27 && window['MobileMenu'] != null) {
+			window['MobileMenu'].closeMenu();
 		}
 	});
 });

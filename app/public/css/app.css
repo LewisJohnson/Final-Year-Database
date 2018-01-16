@@ -751,7 +751,7 @@ nav.desktop .nav-button .sub-dropdown:hover .dropdown-content {
 }
 
 /* ================
-	mobile
+	Mobile
    ================ */
 
 nav.mobile {
@@ -820,21 +820,21 @@ nav.mobile .nav-button {
           flex-direction: column;
 }
 
-nav.mobile .nav-button:hover,
-nav.mobile .nav-button:focus {
-  outline: none;
-  -webkit-transition: .24s all ease-out;
-  transition: .24s all ease-out;
-  background: #183670;
-  color: white;
-}
-
 nav.mobile .nav-button a {
   padding: 1rem;
   padding-left: 2rem;
   display: block;
   width: 100%;
   color: inherit;
+}
+
+nav.mobile .nav-button a:hover,
+nav.mobile .nav-button a:focus {
+  outline: none;
+  -webkit-transition: .24s all ease-out;
+  transition: .24s all ease-out;
+  background: #183670;
+  color: white;
 }
 
 nav.mobile .nav-button .sub-dropdown {
@@ -848,6 +848,15 @@ nav.mobile .nav-button .sub-dropdown h3 {
 
 nav.mobile .nav-button .sub-dropdown .dropdown-content {
   display: none;
+}
+
+nav.mobile .nav-button .sub-dropdown .dropdown-content > :hover,
+nav.mobile .nav-button .sub-dropdown .dropdown-content > :focus {
+  outline: none;
+  -webkit-transition: .24s all ease-out;
+  transition: .24s all ease-out;
+  background: #183670;
+  color: white;
 }
 
 nav.mobile .nav-button .sub-dropdown svg {

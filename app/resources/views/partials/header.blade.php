@@ -100,7 +100,7 @@
 			</li>
 
 			@if($user->isStudent())
-			<li class="nav-button dropdown">
+			<li class="dropdown">
 				<h3>Student</h3>
 				<div class="svg-container pointer">
 					<svg class="transition--medium" viewBox="0 0 24 24">

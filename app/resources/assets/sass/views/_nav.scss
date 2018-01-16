@@ -127,7 +127,7 @@ nav.desktop{
 }
 
 /* ================
-	mobile
+	Mobile
    ================ */
 nav.mobile{
 	display: none;
@@ -180,18 +180,18 @@ nav.mobile{
 		display: flex;
 		flex-direction: column;
 
-		&:hover, &:focus{
-			@include transition--medium();
-			background: $accent;
-			color: white;
-		}
-
 		a{
 			padding: 1rem;
 			padding-left: 2rem;
 			display: block;
 			width: 100%;
 			color: inherit;
+
+			&:hover, &:focus{
+				@include transition--medium();
+				background: $accent;
+				color: white;
+			}
 		}
 
 		.sub-dropdown{
@@ -203,6 +203,12 @@ nav.mobile{
 
 			.dropdown-content{
 				display: none;
+
+				>:hover, >:focus{
+					@include transition--medium();
+					background: $accent;
+					color: white;
+				}
 			}
 
 			svg{
