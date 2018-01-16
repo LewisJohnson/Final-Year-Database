@@ -16,18 +16,8 @@ use DB;
 
 class TopicController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
-	}
-	
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index(){
-		$topics = Session::get("db_type") == "ug" ? TopicUg::all() : TopicMasters::all();
-		return view('topics.index', compact('topics'));
+	public function __construct(){
+		$this->middleware('auth');
 	}
 
 
@@ -57,7 +47,7 @@ class TopicController extends Controller{
 			$transaction->save();
 			return $topic;
 		});
-		
+
 		return $result->toJson();
 	}
 

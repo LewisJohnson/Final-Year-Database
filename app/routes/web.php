@@ -130,11 +130,11 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
 
 	// Projects by Supervisor
-	Route::get('projects/by-supervisor', 'ProjectController@supervisors');
+	Route::get('projects/by-supervisor', 'ProjectController@showSupervisors');
 	Route::get('projects/by-supervisor/{id}', 'ProjectController@bySupervisor');
 
 	// Projects by Topic
-	Route::get('projects/by-topic', 'TopicController@index');
+	Route::get('projects/by-topic', 'ProjectController@showTopics');
 	Route::get('projects/by-topic/{id}', 'ProjectController@byTopic');
 
 	// Project search

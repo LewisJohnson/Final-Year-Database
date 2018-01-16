@@ -452,9 +452,19 @@ class ProjectController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function supervisors() {
+	public function showSupervisors() {
 		$supervisor = Supervisor::all();
 		return view('projects.supervisors')->with('supervisors', $supervisor);
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function showTopics(){
+		$topics = Session::get("db_type") == "ug" ? TopicUg::all() : TopicMasters::all();
+		return view('topics.index', compact('topics'));
 	}
 
 	public function search(Request $request) {

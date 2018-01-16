@@ -1,83 +1,36 @@
-
-div{
-	background: black  !important;
-}
-
 .card{
-	border: 1px solid yellow !important;
-}
-
-.dialog{
-	border: 1px solid yellow !important;
-	top: 0 !important;
-	left: 0 !important;
-	width: 100% !important;
+	border: 1px solid black !important;
 }
 
 .section{
-	border: 1px solid yellow !important;
+	border: 1px solid black !important;
 	border-radius: 0px !important;
 }
 
-.search-container{
-	background: black !important;
 
-	> {
-		background: black !important;
-		border: 1px solid yellow !important;
-		color: yellow !important;
-	}
+input, textarea, .button{
+	border: 1px solid black !important;
+	border-radius: 0px !important;
 }
 
-button, input, textarea, .button{
-	border: 1px solid yellow !important;
-	background: black !important;
-	border-radius: 0px !important;
+a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6{
+	color: black;
 }
 
 svg{
-	fill: yellow !important;
+	fill: black !important;
 }
 
 *{
-	color: yellow !important;
 	transition: none !important;
 	animation-duration: 0s !important;
 }
 
-a:hover, a:focus{
-	color: blue !important;
-
-	*{
-		fill: blue !important;
-		color: blue !important;
-	}
-}
-
-nav{
-	background: black !important;
-	border-top: 1px solid yellow !important;
-	border-bottom: 1px solid yellow !important;
-}
-
-header{
-	background: black !important;
-}
-
-footer{
-	background: black !important;
-	border-top: 1px solid yellow !important;
-}
-
-table{
-	background: black !important;
-	border: 1px solid yellow !important;
-}
-
-tr, th, td{
-	border: 1px solid yellow !important;
-}
-
 tr:hover{
-	background: red !important;
+	background: rgb(160,160,160) !important;
+	color: white !important;
+
+	* {
+		color: white !important;
+	}
 }
