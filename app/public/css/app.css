@@ -634,6 +634,13 @@ ul {
 ul.dot-menu {
   display: none;
   white-space: nowrap;
+  position: fixed;
+  background: white;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  z-index: 1;
+  text-align: left;
 }
 
 ul.dot-menu .dot-menu__item .dot-menu__action {
@@ -659,17 +666,6 @@ ul.dot-menu .dot-menu__item:active {
 
 ul.dot-menu .dot-menu__item--form .icon {
   width: auto;
-}
-
-ul.dot-menu.dot-menu--table-right {
-  position: absolute;
-  right: 15px;
-  background: white;
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 2px;
-  z-index: 999;
-  text-align: left;
 }
 
 .project-card .title {
@@ -1701,6 +1697,7 @@ th:last-of-type {
 
   .main-content {
     padding: 3rem 1rem;
+    padding-bottom: 20vh;
     overflow: scroll;
   }
 
