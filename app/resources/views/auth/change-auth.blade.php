@@ -17,7 +17,7 @@
 				</select>
 			</div>
 
-			<div class="form-field">
+			<div class="footer footer--dark">
 				<button class="button button--raised button--accent" type="submit">CHANGE AUTHENTICATION</button>
 			</div>
 		</form>

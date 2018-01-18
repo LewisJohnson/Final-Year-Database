@@ -3,8 +3,18 @@
 }
 
 @media screen and (max-width: 970px){
+
+	.table-action-header, .table-action{
+		display: none;
+	}
+
+	.table-mobile-menu-header, .table-mobile-menu{
+		display: table-cell;
+	}
+
 	.main-content{
 		padding: 3rem 1rem;
+		overflow: scroll;
 	}
 
 	.section-container{
@@ -23,6 +33,25 @@
 		}
 	}
 
+	.hub-container{
+		> .header{
+			flex-wrap: wrap;
+
+			.title{
+				display: inline-block;
+				flex: 1 0 70%;
+			}
+
+			.svg-container{
+				display: inline-block;
+				flex: 1 0 10%;
+			}
+
+			.actions{
+				margin-top: 1rem;
+			}
+		}
+	}
 	.mobile--hidden{
 		visibility: hidden;
 		display: none;

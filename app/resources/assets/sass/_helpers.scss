@@ -233,6 +233,22 @@
 	@include transition--fast();
 }
 
+.underlay{
+	visibility: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 500;
+	transition: 0.14s background cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.underlay.active{
+	transition: 1s background;
+	visibility: visible;
+	background: $underlay-background;
+}
 
 .transition--medium:focus {
 	outline: none;

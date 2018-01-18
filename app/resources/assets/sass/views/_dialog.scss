@@ -1,20 +1,4 @@
-.underlay{
-	visibility: hidden;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 500;
-	transition: 0.14s background cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
 
-.underlay.active{
-	transition: 1s background;
-	visibility: visible;
-	background: $underlay-background;
-	// background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAALElEQVQYV03LwQkAIAwDwOtMDqgO6EyVioJ5hSMJJKabwEDDKntQvdfyh3Pax7IFBeIcKF0AAAAASUVORK5CYII=");
-}
 
 .dialog{
 	visibility: hidden;
@@ -45,8 +29,26 @@
 		padding: 1rem 2rem;
 	}
 
-	*[type="submit"]{
+	.header{
+		border-bottom: 1px solid darken(#fafafa, 5%);
+	}
+	
+	.footer{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
 		width: 100%;
+		padding: 1rem;
+
+		* {
+			float: right;
+		}
+	}
+
+	.footer--dark{
+		background: #fafafa;
+		border-top: 1px solid darken(#fafafa, 5%);
 	}
 }
 

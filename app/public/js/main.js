@@ -101,6 +101,7 @@ $(function () {
  	4.4 Project Topics [Supervisor]
  	4.5 Forms / AJAX Functions
  	4.6 Edit Topics [Admin]
+ 	4.7 Menu
  5. Second Marker
  6. Dynamic Pagination
  7. Supervisor
@@ -251,7 +252,7 @@ $(function () {
 	};
 
 	MobileMenu.prototype.CssClasses_ = {
-		VISIBLE: 'is-visible'
+		IS_VISIBLE: 'is-visible'
 	};
 
 	MobileMenu.prototype.Selectors_ = {
@@ -262,18 +263,18 @@ $(function () {
 
 	MobileMenu.prototype.openMenu = function () {
 		this.activator.attr("aria-expanded", "true");
-		this.element.addClass(this.CssClasses_.VISIBLE);
+		this.element.addClass(this.CssClasses_.IS_VISIBLE);
 
 		this.underlay.attr("aria-hidden", "false");
-		this.underlay.addClass(this.CssClasses_.VISIBLE);
+		this.underlay.addClass(this.CssClasses_.IS_VISIBLE);
 	};
 
 	MobileMenu.prototype.closeMenu = function () {
 		this.activator.attr("aria-expanded", "false");
-		this.element.removeClass(this.CssClasses_.VISIBLE);
+		this.element.removeClass(this.CssClasses_.IS_VISIBLE);
 
 		this.underlay.attr("aria-hidden", "true");
-		this.underlay.removeClass(this.CssClasses_.VISIBLE);
+		this.underlay.removeClass(this.CssClasses_.IS_VISIBLE);
 	};
 
 	MobileMenu.prototype.init = function () {
@@ -365,9 +366,6 @@ $(function () {
 				dialog.activatorButtons.push($(this));
 			}
 		});
-
-		// Add seperator after header
-		dialog.header.append('<hr>');
 
 		// ARIA
 		dialog.element.attr("aria-hidden", "true");
@@ -806,6 +804,75 @@ $(function () {
 		});
 	};
 
+	/* ========================
+    4.7 Menu
+    ======================== */
+
+	/**
+ * Class constructor for ajax functions.
+ *
+ * @param {HTMLElement} element The element that will be upgraded.
+ */
+	var DotMenu = function Menu(element) {
+		this.button = $(element);
+		this.menu = null;
+		this.init();
+	};
+
+	DotMenu.prototype.Selectors_ = {
+		DOT_MENU: '.dot-menu',
+		ACTIVATOR: '.dot-menu__activator',
+		IS_VISIBLE: '.is-visible'
+	};
+
+	DotMenu.prototype.CssClasses_ = {
+		IS_VISIBLE: 'is-visible'
+	};
+
+	DotMenu.prototype.show = function () {
+		$(this.menu).addClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
+		$(this.menu).show();
+		$(this.menu).focus();
+	};
+
+	DotMenu.prototype.hide = function () {
+		$(this.menu).removeClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
+		$(this.menu).hide();
+	};
+
+	DotMenu.prototype.toggle = function () {
+		if ($(this.menu).hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)) {
+			var boundHide = DotMenu.prototype.hide.bind(this);
+			boundHide();
+		} else {
+			var boundShow = DotMenu.prototype.show.bind(this);
+			boundShow();
+		}
+	};
+
+	DotMenu.prototype.init = function () {
+		var dotMenu = this;
+		var menuId = $(this.button).attr('id') + '-menu';
+
+		this.menu = $('#' + menuId);
+
+		this.button.on('click', function () {
+			var boundToggle = DotMenu.prototype.toggle.bind(dotMenu);
+			boundToggle();
+		});
+
+		this.menu.on('focusout', function () {
+			var boundHide = DotMenu.prototype.hide.bind(dotMenu);
+			boundHide();
+		});
+	};
+
+	DotMenu.prototype.initAll = function () {
+		$(this.Selectors_.ACTIVATOR).each(function () {
+			this.DotMenu = new DotMenu(this);
+		});
+	};
+
 	/* ==================
  	5. Second Marker
     ================== */
@@ -1168,12 +1235,15 @@ $(function () {
 
 	$('.expand').on('click', function (e) {
 		var content = $(this).parents().eq(1).find('.content');
+
 		if (content.attr("aria-expanded") == "true") {
+			$(this).parent().removeClass("active");
 			$(this).find("svg").css("transform", "rotateZ(0deg)");
 			content.hide(200);
 			content.attr("aria-expanded", "false");
 			setCookie(content.data("cookie-name"), true, 365);
 		} else {
+			$(this).parent().addClass("active");
 			$(this).find("svg").css("transform", "rotateZ(180deg)");
 			content.show(200);
 			content.attr("aria-expanded", "true");
@@ -1184,6 +1254,7 @@ $(function () {
 	/* ======================
  	 8. OTHER
     ====================== */
+
 	$('.show-more').on('click', function (e) {
 		$(this).hide();
 		$('.project').addClass('expand');
@@ -1408,6 +1479,7 @@ $(function () {
 	DataTable.prototype.initAll();
 	EditTopic.prototype.initAll();
 	Marker.prototype.initAll();
+	DotMenu.prototype.initAll();
 
 	if ($('.project-card').length > 0) {
 		window['project'] = $('.project-card');
