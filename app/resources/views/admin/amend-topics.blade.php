@@ -13,11 +13,11 @@
 
 <h3 style="margin-top: 3rem;">Edit Topics</h3>
 <p>Deleting a topic will also remove it from any associated projects.</p>
-<ul class="edit-topic-list">
+<ul class="edit-topic-list" id="supervisorList" sorted="false">
 	@foreach($topics as $topic)
 		<li class="topic" data-topic-id="{{ $topic->id }}" data-original-topic-name="{{ $topic->name }}">
 			<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
-			<button class="button edit-topic" type="submit">Edit</button>
+			<button class="button edit-topic">Edit</button>
 			<button class="button delete-topic button--danger">Delete</button>
 		</li>
 	@endforeach

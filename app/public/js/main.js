@@ -70,7 +70,8 @@
 __webpack_require__(1);
 __webpack_require__(3);
 __webpack_require__(4);
-module.exports = __webpack_require__(5);
+__webpack_require__(5);
+module.exports = __webpack_require__(6);
 
 
 /***/ }),
@@ -81,6 +82,8 @@ module.exports = __webpack_require__(5);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 $(function () {
@@ -186,7 +189,6 @@ $(function () {
 	$('body').append('<div class="underlay"></div>');
 
 	// Accessibility
-	// $('button').attr('tab-index', '-1');
 	$('.dropdown').attr('tabindex', '0');
 	$('.dropdown > button').attr('tabindex', '-1');
 	$('.dropdown .dropdown-content a').attr('tabindex', '0');
@@ -706,49 +708,84 @@ $(function () {
 
 	EditTopic.prototype.functions = {
 		editTopic: function editTopic() {
-			var response = confirm("Are you sure you want to change the topic name from \"" + this.originalName + "\" to \"" + this.topicNameInput.val() + "\"?");
-
-			if (response) {
-				this.topicNameInput.prop('disabled', true);
-				this.editButton.html('<div class="loader"></div>');
-				$('.loader', this.element).css('display', 'block');
-
-				$.ajax({
-					method: 'PATCH',
-					url: this.Urls_.DELETE_TOPIC,
-					context: this,
-					data: {
-						topic_id: this.topicId,
-						topic_name: this.topicNameInput.val()
-					}
-				}).done(function () {
-					this.topicNameInput.prop('disabled', false);
-					this.editButton.html('Edit');
-					this.originalName = this.topicNameInput.val();
-				});
-			} else {
-				this.topicNameInput.val(this.originalName);
+			var topic = this;
+			if (topic.originalName == topic.topicNameInput.val()) {
+				return;
 			}
+			$.confirm(_defineProperty({
+				title: 'Change Topic Name',
+				type: 'blue',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement: false,
+				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.topicNameInput.val() + '"</b>?',
+				buttons: {
+					confirm: {
+						btnClass: 'btn-blue',
+						action: function action() {
+							topic.topicNameInput.prop('disabled', true);
+							topic.editButton.html('<div class="loader"></div>');
+							$('.loader', topic.element).css('display', 'block');
+
+							$.ajax({
+								method: 'PATCH',
+								url: topic.Urls_.DELETE_TOPIC,
+								context: topic,
+								data: {
+									topic_id: topic.topicId,
+									topic_name: topic.topicNameInput.val()
+								}
+							}).done(function () {
+								topic.topicNameInput.prop('disabled', false);
+								topic.editButton.html('Edit');
+								topic.originalName = topic.topicNameInput.val();
+							});
+						}
+					},
+					cancel: function cancel() {
+						topic.topicNameInput.val(topic.originalName);
+					}
+				}
+			}, 'backgroundDismiss', function backgroundDismiss() {
+				topic.topicNameInput.val(topic.originalName);
+			}));
 		},
 
 		deleteTopic: function deleteTopic() {
-			var response = confirm("Are you sure you want to delete the topic \"" + this.originalName + "\"?");
-			if (response) {
-				this.topicNameInput.prop('disabled', true);
-				$.ajax({
-					method: 'DELETE',
-					url: this.Urls_.DELETE_TOPIC,
-					context: this,
-					data: {
-						topic_id: this.topicId
-					},
-					success: function success() {
-						this.element.hide(400, function () {
-							this.remove();
-						});
+			var topic = this;
+			$.confirm({
+				title: 'Delete',
+				type: 'red',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement: false,
+				content: 'Are you sure you want to delete <b>"' + topic.topicNameInput.val() + '"</b>?',
+				buttons: {
+					delete: {
+						btnClass: 'btn-red',
+						action: function action() {
+							topic.topicNameInput.prop('disabled', true);
+							$.ajax({
+								method: 'DELETE',
+								url: topic.Urls_.DELETE_TOPIC,
+								context: topic,
+								data: {
+									topic_id: topic.topicId
+								},
+								success: function success() {
+									topic.element.hide(400, function () {
+										topic.remove();
+									});
+								}
+							});
+						}
 					}
-				});
-			}
+				}
+			});
 		},
 
 		createEditTopicDOM: function createEditTopicDOM(topicId, originalName) {
@@ -1492,7 +1529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 54);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1519,7 +1556,7 @@ exports.default = function (instance, Constructor) {
 
 exports.__esModule = true;
 
-var _defineProperty = __webpack_require__(56);
+var _defineProperty = __webpack_require__(57);
 
 var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -1545,13 +1582,6 @@ exports.default = function () {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1559,7 +1589,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 exports.__esModule = true;
 
-var _typeof2 = __webpack_require__(42);
+var _typeof2 = __webpack_require__(43);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1574,23 +1604,7 @@ exports.default = function (self, call) {
 };
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var store      = __webpack_require__(32)('wks')
-  , uid        = __webpack_require__(21)
-  , Symbol     = __webpack_require__(6).Symbol
-  , USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function(name){
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-
-/***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1598,15 +1612,15 @@ $exports.store = store;
 
 exports.__esModule = true;
 
-var _setPrototypeOf = __webpack_require__(91);
+var _setPrototypeOf = __webpack_require__(92);
 
 var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
-var _create = __webpack_require__(95);
+var _create = __webpack_require__(96);
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = __webpack_require__(42);
+var _typeof2 = __webpack_require__(43);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1629,6 +1643,29 @@ exports.default = function (subClass, superClass) {
 };
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var store      = __webpack_require__(32)('wks')
+  , uid        = __webpack_require__(22)
+  , Symbol     = __webpack_require__(6).Symbol
+  , USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function(name){
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+
+/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -1642,7 +1679,7 @@ if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject       = __webpack_require__(13)
-  , IE8_DOM_DEFINE = __webpack_require__(40)
+  , IE8_DOM_DEFINE = __webpack_require__(41)
   , toPrimitive    = __webpack_require__(25)
   , dP             = Object.defineProperty;
 
@@ -1663,7 +1700,7 @@ exports.f = __webpack_require__(10) ? Object.defineProperty : function definePro
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(65)
+var IObject = __webpack_require__(66)
   , defined = __webpack_require__(27);
 module.exports = function(it){
   return IObject(defined(it));
@@ -1674,7 +1711,7 @@ module.exports = function(it){
 /***/ (function(module, exports, __webpack_require__) {
 
 var global    = __webpack_require__(6)
-  , core      = __webpack_require__(2)
+  , core      = __webpack_require__(4)
   , ctx       = __webpack_require__(24)
   , hide      = __webpack_require__(12)
   , PROTOTYPE = 'prototype';
@@ -1825,14 +1862,15 @@ module.exports = {};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.closest = undefined;
 
-var _Sensor = __webpack_require__(119);
+var _closest = __webpack_require__(110);
 
-var _Sensor2 = _interopRequireDefault(_Sensor);
+var _closest2 = _interopRequireDefault(_closest);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _Sensor2.default;
+exports.closest = _closest2.default;
 
 /***/ }),
 /* 19 */
@@ -1845,38 +1883,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _AbstractEvent = __webpack_require__(123);
+var _Sensor = __webpack_require__(121);
 
-var _AbstractEvent2 = _interopRequireDefault(_AbstractEvent);
+var _Sensor2 = _interopRequireDefault(_Sensor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _AbstractEvent2.default;
+exports.default = _Sensor2.default;
 
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = __webpack_require__(46)
-  , enumBugKeys = __webpack_require__(33);
-
-module.exports = Object.keys || function keys(O){
-  return $keys(O, enumBugKeys);
-};
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-/***/ }),
-/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1885,20 +1901,36 @@ module.exports = function(key){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.scroll = exports.closest = undefined;
 
-var _closest = __webpack_require__(109);
+var _AbstractEvent = __webpack_require__(125);
 
-var _closest2 = _interopRequireDefault(_closest);
-
-var _scroll = __webpack_require__(111);
-
-var _scroll2 = _interopRequireDefault(_scroll);
+var _AbstractEvent2 = _interopRequireDefault(_AbstractEvent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.closest = _closest2.default;
-exports.scroll = _scroll2.default;
+exports.default = _AbstractEvent2.default;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys       = __webpack_require__(47)
+  , enumBugKeys = __webpack_require__(33);
+
+module.exports = Object.keys || function keys(O){
+  return $keys(O, enumBugKeys);
+};
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
 
 /***/ }),
 /* 23 */
@@ -1911,7 +1943,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _SensorEvent = __webpack_require__(122);
+var _SensorEvent = __webpack_require__(124);
 
 Object.defineProperty(exports, 'SensorEvent', {
   enumerable: true,
@@ -1949,7 +1981,7 @@ Object.defineProperty(exports, 'DragPressureSensorEvent', {
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(59);
+var aFunction = __webpack_require__(60);
 module.exports = function(fn, that, length){
   aFunction(fn);
   if(that === undefined)return fn;
@@ -2019,7 +2051,7 @@ module.exports = true;
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject    = __webpack_require__(13)
-  , dPs         = __webpack_require__(64)
+  , dPs         = __webpack_require__(65)
   , enumBugKeys = __webpack_require__(33)
   , IE_PROTO    = __webpack_require__(31)('IE_PROTO')
   , Empty       = function(){ /* empty */ }
@@ -2028,13 +2060,13 @@ var anObject    = __webpack_require__(13)
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
 var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(41)('iframe')
+  var iframe = __webpack_require__(42)('iframe')
     , i      = enumBugKeys.length
     , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  __webpack_require__(68).appendChild(iframe);
+  __webpack_require__(69).appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -2075,7 +2107,7 @@ module.exports = function(it){
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(32)('keys')
-  , uid    = __webpack_require__(21);
+  , uid    = __webpack_require__(22);
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
@@ -2106,7 +2138,7 @@ module.exports = (
 
 var def = __webpack_require__(7).f
   , has = __webpack_require__(11)
-  , TAG = __webpack_require__(4)('toStringTag');
+  , TAG = __webpack_require__(5)('toStringTag');
 
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
@@ -2126,14 +2158,14 @@ module.exports = function(it){
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.f = __webpack_require__(4);
+exports.f = __webpack_require__(5);
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global         = __webpack_require__(6)
-  , core           = __webpack_require__(2)
+  , core           = __webpack_require__(4)
   , LIBRARY        = __webpack_require__(28)
   , wksExt         = __webpack_require__(36)
   , defineProperty = __webpack_require__(7).f;
@@ -2157,7 +2189,7 @@ var pIE            = __webpack_require__(38)
   , toIObject      = __webpack_require__(8)
   , toPrimitive    = __webpack_require__(25)
   , has            = __webpack_require__(11)
-  , IE8_DOM_DEFINE = __webpack_require__(40)
+  , IE8_DOM_DEFINE = __webpack_require__(41)
   , gOPD           = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(10) ? gOPD : function getOwnPropertyDescriptor(O, P){
@@ -2173,12 +2205,31 @@ exports.f = __webpack_require__(10) ? gOPD : function getOwnPropertyDescriptor(O
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(10) && !__webpack_require__(15)(function(){
-  return Object.defineProperty(__webpack_require__(41)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
+
+var _AbstractPlugin = __webpack_require__(115);
+
+var _AbstractPlugin2 = _interopRequireDefault(_AbstractPlugin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _AbstractPlugin2.default;
 
 /***/ }),
 /* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(10) && !__webpack_require__(15)(function(){
+  return Object.defineProperty(__webpack_require__(42)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(14)
@@ -2190,7 +2241,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2198,11 +2249,11 @@ module.exports = function(it){
 
 exports.__esModule = true;
 
-var _iterator = __webpack_require__(60);
+var _iterator = __webpack_require__(61);
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = __webpack_require__(73);
+var _symbol = __webpack_require__(74);
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -2217,15 +2268,15 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var $at  = __webpack_require__(62)(true);
+var $at  = __webpack_require__(63)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(44)(String, 'String', function(iterated){
+__webpack_require__(45)(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -2240,21 +2291,21 @@ __webpack_require__(44)(String, 'String', function(iterated){
 });
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var LIBRARY        = __webpack_require__(28)
   , $export        = __webpack_require__(9)
-  , redefine       = __webpack_require__(45)
+  , redefine       = __webpack_require__(46)
   , hide           = __webpack_require__(12)
   , has            = __webpack_require__(11)
   , Iterators      = __webpack_require__(17)
-  , $iterCreate    = __webpack_require__(63)
+  , $iterCreate    = __webpack_require__(64)
   , setToStringTag = __webpack_require__(34)
-  , getPrototypeOf = __webpack_require__(48)
-  , ITERATOR       = __webpack_require__(4)('iterator')
+  , getPrototypeOf = __webpack_require__(49)
+  , ITERATOR       = __webpack_require__(5)('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
   , KEYS           = 'keys'
@@ -2316,18 +2367,18 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(12);
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var has          = __webpack_require__(11)
   , toIObject    = __webpack_require__(8)
-  , arrayIndexOf = __webpack_require__(66)(false)
+  , arrayIndexOf = __webpack_require__(67)(false)
   , IE_PROTO     = __webpack_require__(31)('IE_PROTO');
 
 module.exports = function(object, names){
@@ -2344,7 +2395,7 @@ module.exports = function(object, names){
 };
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
@@ -2355,7 +2406,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
@@ -2373,17 +2424,17 @@ module.exports = Object.getPrototypeOf || function(O){
 };
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = __webpack_require__(46)
+var $keys      = __webpack_require__(47)
   , hiddenKeys = __webpack_require__(33).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
@@ -2391,12 +2442,12 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 };
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // most Object methods by ES6 should accept primitives
 var $export = __webpack_require__(9)
-  , core    = __webpack_require__(2)
+  , core    = __webpack_require__(4)
   , fails   = __webpack_require__(15);
 module.exports = function(KEY, exec){
   var fn  = (core.Object || {})[KEY] || Object[KEY]
@@ -2406,7 +2457,7 @@ module.exports = function(KEY, exec){
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2414,7 +2465,7 @@ module.exports = function(KEY, exec){
 
 exports.__esModule = true;
 
-var _from = __webpack_require__(100);
+var _from = __webpack_require__(101);
 
 var _from2 = _interopRequireDefault(_from);
 
@@ -2433,32 +2484,6 @@ exports.default = function (arr) {
 };
 
 /***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Accessibility = exports.defaultMirrorOption = exports.Mirror = undefined;
-
-var _Mirror = __webpack_require__(113);
-
-var _Mirror2 = _interopRequireDefault(_Mirror);
-
-var _Accessibility = __webpack_require__(116);
-
-var _Accessibility2 = _interopRequireDefault(_Accessibility);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.Mirror = _Mirror2.default;
-exports.defaultMirrorOption = _Mirror.defaultMirrorOption;
-exports.Accessibility = _Accessibility2.default;
-
-/***/ }),
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2468,8 +2493,40 @@ exports.Accessibility = _Accessibility2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Accessibility = exports.defaultAutoScrollOptions = exports.AutoScroll = exports.defaultMirrorOptions = exports.Mirror = undefined;
 
-var _Swappable = __webpack_require__(55);
+var _Mirror = __webpack_require__(112);
+
+var _Mirror2 = _interopRequireDefault(_Mirror);
+
+var _AutoScroll = __webpack_require__(116);
+
+var _AutoScroll2 = _interopRequireDefault(_AutoScroll);
+
+var _Accessibility = __webpack_require__(118);
+
+var _Accessibility2 = _interopRequireDefault(_Accessibility);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Mirror = _Mirror2.default;
+exports.defaultMirrorOptions = _Mirror.defaultMirrorOptions;
+exports.AutoScroll = _AutoScroll2.default;
+exports.defaultAutoScrollOptions = _AutoScroll.defaultAutoScrollOptions;
+exports.Accessibility = _Accessibility2.default;
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Swappable = __webpack_require__(56);
 
 var _Swappable2 = _interopRequireDefault(_Swappable);
 
@@ -2478,7 +2535,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _Swappable2.default;
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2496,23 +2553,23 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _get2 = __webpack_require__(84);
+var _get2 = __webpack_require__(85);
 
 var _get3 = _interopRequireDefault(_get2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _Draggable2 = __webpack_require__(98);
+var _Draggable2 = __webpack_require__(99);
 
 var _Draggable3 = _interopRequireDefault(_Draggable2);
 
-var _SwappableEvent = __webpack_require__(136);
+var _SwappableEvent = __webpack_require__(138);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2679,23 +2736,23 @@ function swap(source, over) {
 }
 
 /***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(57), __esModule: true };
-
-/***/ }),
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(58);
-var $Object = __webpack_require__(2).Object;
+module.exports = { "default": __webpack_require__(58), __esModule: true };
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(59);
+var $Object = __webpack_require__(4).Object;
 module.exports = function defineProperty(it, key, desc){
   return $Object.defineProperty(it, key, desc);
 };
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(9);
@@ -2703,7 +2760,7 @@ var $export = __webpack_require__(9);
 $export($export.S + $export.F * !__webpack_require__(10), 'Object', {defineProperty: __webpack_require__(7).f});
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 module.exports = function(it){
@@ -2712,21 +2769,21 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(61), __esModule: true };
-
-/***/ }),
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(43);
-__webpack_require__(69);
-module.exports = __webpack_require__(36).f('iterator');
+module.exports = { "default": __webpack_require__(62), __esModule: true };
 
 /***/ }),
 /* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(44);
+__webpack_require__(70);
+module.exports = __webpack_require__(36).f('iterator');
+
+/***/ }),
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toInteger = __webpack_require__(26)
@@ -2748,7 +2805,7 @@ module.exports = function(TO_STRING){
 };
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2759,7 +2816,7 @@ var create         = __webpack_require__(29)
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(12)(IteratorPrototype, __webpack_require__(4)('iterator'), function(){ return this; });
+__webpack_require__(12)(IteratorPrototype, __webpack_require__(5)('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -2767,12 +2824,12 @@ module.exports = function(Constructor, NAME, next){
 };
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP       = __webpack_require__(7)
   , anObject = __webpack_require__(13)
-  , getKeys  = __webpack_require__(20);
+  , getKeys  = __webpack_require__(21);
 
 module.exports = __webpack_require__(10) ? Object.defineProperties : function defineProperties(O, Properties){
   anObject(O);
@@ -2785,7 +2842,7 @@ module.exports = __webpack_require__(10) ? Object.defineProperties : function de
 };
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -2795,14 +2852,14 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 };
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = __webpack_require__(8)
-  , toLength  = __webpack_require__(47)
-  , toIndex   = __webpack_require__(67);
+  , toLength  = __webpack_require__(48)
+  , toIndex   = __webpack_require__(68);
 module.exports = function(IS_INCLUDES){
   return function($this, el, fromIndex){
     var O      = toIObject($this)
@@ -2821,7 +2878,7 @@ module.exports = function(IS_INCLUDES){
 };
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toInteger = __webpack_require__(26)
@@ -2833,20 +2890,20 @@ module.exports = function(index, length){
 };
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(6).document && document.documentElement;
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(70);
+__webpack_require__(71);
 var global        = __webpack_require__(6)
   , hide          = __webpack_require__(12)
   , Iterators     = __webpack_require__(17)
-  , TO_STRING_TAG = __webpack_require__(4)('toStringTag');
+  , TO_STRING_TAG = __webpack_require__(5)('toStringTag');
 
 for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
   var NAME       = collections[i]
@@ -2857,13 +2914,13 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 }
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var addToUnscopables = __webpack_require__(71)
-  , step             = __webpack_require__(72)
+var addToUnscopables = __webpack_require__(72)
+  , step             = __webpack_require__(73)
   , Iterators        = __webpack_require__(17)
   , toIObject        = __webpack_require__(8);
 
@@ -2871,7 +2928,7 @@ var addToUnscopables = __webpack_require__(71)
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(44)(Array, 'Array', function(iterated, kind){
+module.exports = __webpack_require__(45)(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -2897,13 +2954,13 @@ addToUnscopables('values');
 addToUnscopables('entries');
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 module.exports = function(){ /* empty */ };
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 module.exports = function(done, value){
@@ -2911,23 +2968,23 @@ module.exports = function(done, value){
 };
 
 /***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(74), __esModule: true };
-
-/***/ }),
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(75);
-__webpack_require__(81);
-__webpack_require__(82);
-__webpack_require__(83);
-module.exports = __webpack_require__(2).Symbol;
+module.exports = { "default": __webpack_require__(75), __esModule: true };
 
 /***/ }),
 /* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(76);
+__webpack_require__(82);
+__webpack_require__(83);
+__webpack_require__(84);
+module.exports = __webpack_require__(4).Symbol;
+
+/***/ }),
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2937,27 +2994,27 @@ var global         = __webpack_require__(6)
   , has            = __webpack_require__(11)
   , DESCRIPTORS    = __webpack_require__(10)
   , $export        = __webpack_require__(9)
-  , redefine       = __webpack_require__(45)
-  , META           = __webpack_require__(76).KEY
+  , redefine       = __webpack_require__(46)
+  , META           = __webpack_require__(77).KEY
   , $fails         = __webpack_require__(15)
   , shared         = __webpack_require__(32)
   , setToStringTag = __webpack_require__(34)
-  , uid            = __webpack_require__(21)
-  , wks            = __webpack_require__(4)
+  , uid            = __webpack_require__(22)
+  , wks            = __webpack_require__(5)
   , wksExt         = __webpack_require__(36)
   , wksDefine      = __webpack_require__(37)
-  , keyOf          = __webpack_require__(77)
-  , enumKeys       = __webpack_require__(78)
-  , isArray        = __webpack_require__(79)
+  , keyOf          = __webpack_require__(78)
+  , enumKeys       = __webpack_require__(79)
+  , isArray        = __webpack_require__(80)
   , anObject       = __webpack_require__(13)
   , toIObject      = __webpack_require__(8)
   , toPrimitive    = __webpack_require__(25)
   , createDesc     = __webpack_require__(16)
   , _create        = __webpack_require__(29)
-  , gOPNExt        = __webpack_require__(80)
+  , gOPNExt        = __webpack_require__(81)
   , $GOPD          = __webpack_require__(39)
   , $DP            = __webpack_require__(7)
-  , $keys          = __webpack_require__(20)
+  , $keys          = __webpack_require__(21)
   , gOPD           = $GOPD.f
   , dP             = $DP.f
   , gOPN           = gOPNExt.f
@@ -3080,9 +3137,9 @@ if(!USE_NATIVE){
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
-  __webpack_require__(50).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(51).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(38).f  = $propertyIsEnumerable;
-  __webpack_require__(49).f = $getOwnPropertySymbols;
+  __webpack_require__(50).f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !__webpack_require__(28)){
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -3168,10 +3225,10 @@ setToStringTag(Math, 'Math', true);
 setToStringTag(global.JSON, 'JSON', true);
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META     = __webpack_require__(21)('meta')
+var META     = __webpack_require__(22)('meta')
   , isObject = __webpack_require__(14)
   , has      = __webpack_require__(11)
   , setDesc  = __webpack_require__(7).f
@@ -3226,10 +3283,10 @@ var meta = module.exports = {
 };
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getKeys   = __webpack_require__(20)
+var getKeys   = __webpack_require__(21)
   , toIObject = __webpack_require__(8);
 module.exports = function(object, el){
   var O      = toIObject(object)
@@ -3241,12 +3298,12 @@ module.exports = function(object, el){
 };
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(20)
-  , gOPS    = __webpack_require__(49)
+var getKeys = __webpack_require__(21)
+  , gOPS    = __webpack_require__(50)
   , pIE     = __webpack_require__(38);
 module.exports = function(it){
   var result     = getKeys(it)
@@ -3261,7 +3318,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
@@ -3271,12 +3328,12 @@ module.exports = Array.isArray || function isArray(arg){
 };
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = __webpack_require__(8)
-  , gOPN      = __webpack_require__(50).f
+  , gOPN      = __webpack_require__(51).f
   , toString  = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -3296,25 +3353,25 @@ module.exports.f = function getOwnPropertyNames(it){
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(37)('asyncIterator');
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(37)('observable');
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3322,11 +3379,11 @@ __webpack_require__(37)('observable');
 
 exports.__esModule = true;
 
-var _getPrototypeOf = __webpack_require__(85);
+var _getPrototypeOf = __webpack_require__(86);
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _getOwnPropertyDescriptor = __webpack_require__(88);
+var _getOwnPropertyDescriptor = __webpack_require__(89);
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -3358,85 +3415,85 @@ exports.default = function get(object, property, receiver) {
 };
 
 /***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(86), __esModule: true };
-
-/***/ }),
 /* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(87);
-module.exports = __webpack_require__(2).Object.getPrototypeOf;
+module.exports = { "default": __webpack_require__(87), __esModule: true };
 
 /***/ }),
 /* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(88);
+module.exports = __webpack_require__(4).Object.getPrototypeOf;
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject        = __webpack_require__(35)
-  , $getPrototypeOf = __webpack_require__(48);
+  , $getPrototypeOf = __webpack_require__(49);
 
-__webpack_require__(51)('getPrototypeOf', function(){
+__webpack_require__(52)('getPrototypeOf', function(){
   return function getPrototypeOf(it){
     return $getPrototypeOf(toObject(it));
   };
 });
 
 /***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(89), __esModule: true };
-
-/***/ }),
 /* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(90);
-var $Object = __webpack_require__(2).Object;
+module.exports = { "default": __webpack_require__(90), __esModule: true };
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(91);
+var $Object = __webpack_require__(4).Object;
 module.exports = function getOwnPropertyDescriptor(it, key){
   return $Object.getOwnPropertyDescriptor(it, key);
 };
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
 var toIObject                 = __webpack_require__(8)
   , $getOwnPropertyDescriptor = __webpack_require__(39).f;
 
-__webpack_require__(51)('getOwnPropertyDescriptor', function(){
+__webpack_require__(52)('getOwnPropertyDescriptor', function(){
   return function getOwnPropertyDescriptor(it, key){
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
 });
 
 /***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(92), __esModule: true };
-
-/***/ }),
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(93);
-module.exports = __webpack_require__(2).Object.setPrototypeOf;
+module.exports = { "default": __webpack_require__(93), __esModule: true };
 
 /***/ }),
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(9);
-$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(94).set});
+__webpack_require__(94);
+module.exports = __webpack_require__(4).Object.setPrototypeOf;
 
 /***/ }),
 /* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__(9);
+$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(95).set});
+
+/***/ }),
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Works with __proto__ only. Old v8 can't work with null proto objects.
@@ -3466,52 +3523,28 @@ module.exports = {
 };
 
 /***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(96), __esModule: true };
-
-/***/ }),
 /* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(97);
-var $Object = __webpack_require__(2).Object;
-module.exports = function create(P, D){
-  return $Object.create(P, D);
-};
+module.exports = { "default": __webpack_require__(97), __esModule: true };
 
 /***/ }),
 /* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(9)
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: __webpack_require__(29)});
+__webpack_require__(98);
+var $Object = __webpack_require__(4).Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
 
 /***/ }),
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Mirror = exports.Accessibility = undefined;
-
-var _Draggable = __webpack_require__(99);
-
-var _Draggable2 = _interopRequireDefault(_Draggable);
-
-var _Plugins = __webpack_require__(53);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.Accessibility = _Plugins.Accessibility;
-exports.Mirror = _Plugins.Mirror;
-exports.default = _Draggable2.default;
+var $export = __webpack_require__(9)
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: __webpack_require__(29)});
 
 /***/ }),
 /* 99 */
@@ -3523,8 +3556,33 @@ exports.default = _Draggable2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Mirror = exports.Accessibility = undefined;
 
-var _toConsumableArray2 = __webpack_require__(52);
+var _Draggable = __webpack_require__(100);
+
+var _Draggable2 = _interopRequireDefault(_Draggable);
+
+var _Plugins = __webpack_require__(54);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Accessibility = _Plugins.Accessibility;
+exports.Mirror = _Plugins.Mirror;
+exports.default = _Draggable2.default;
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _toConsumableArray2 = __webpack_require__(53);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -3536,17 +3594,17 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _utils = __webpack_require__(22);
+var _utils = __webpack_require__(18);
 
-var _Plugins = __webpack_require__(53);
+var _Plugins = __webpack_require__(54);
 
-var _Sensors = __webpack_require__(118);
+var _Sensors = __webpack_require__(120);
 
-var _DraggableEvent = __webpack_require__(130);
+var _DraggableEvent = __webpack_require__(132);
 
-var _DragEvent = __webpack_require__(132);
+var _DragEvent = __webpack_require__(134);
 
-var _MirrorEvent = __webpack_require__(134);
+var _MirrorEvent = __webpack_require__(136);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3556,7 +3614,7 @@ var onDragStop = Symbol('onDragStop');
 var onDragPressure = Symbol('onDragPressure');
 var getAppendableContainer = Symbol('getAppendableContainer');
 
-var defaults = {
+var defaultOptions = exports.defaultOptions = {
   draggable: '.draggable-source',
   handle: null,
   delay: 100,
@@ -3571,6 +3629,7 @@ var defaults = {
     'body:dragging': 'draggable--is-dragging',
     'draggable:over': 'draggable--over',
     'container:over': 'draggable-container--over',
+    'source:original': 'draggable--original',
     mirror: 'draggable-mirror'
   }
 };
@@ -3608,7 +3667,7 @@ var Draggable = function () {
       throw new Error('Draggable containers are expected to be of type `NodeList`, `HTMLElement[]` or `HTMLElement`');
     }
 
-    this.options = Object.assign({}, defaults, options);
+    this.options = Object.assign({}, defaultOptions, options);
     this.callbacks = {};
 
     /**
@@ -3642,7 +3701,7 @@ var Draggable = function () {
     document.addEventListener('drag:stop', this[onDragStop], true);
     document.addEventListener('drag:pressure', this[onDragPressure], true);
 
-    this.addPlugin.apply(this, [_Plugins.Mirror, _Plugins.Accessibility].concat((0, _toConsumableArray3.default)(this.options.plugins)));
+    this.addPlugin.apply(this, [_Plugins.Mirror, _Plugins.Accessibility, _Plugins.AutoScroll].concat((0, _toConsumableArray3.default)(this.options.plugins)));
     this.addSensor.apply(this, [_Sensors.MouseSensor, _Sensors.TouchSensor].concat((0, _toConsumableArray3.default)(this.options.sensors)));
 
     var draggableInitializedEvent = new _DraggableEvent.DraggableInitializedEvent({
@@ -3658,13 +3717,24 @@ var Draggable = function () {
    */
 
 
+  /**
+   * Default plugins draggable uses
+   * @static
+   * @property {Object} Plugins
+   * @property {Mirror} Plugins.Mirror
+   * @property {Accessibility} Plugins.Accessibility
+   * @property {AutoScroll} Plugins.AutoScroll
+   * @type {Object}
+   */
+
+
   (0, _createClass3.default)(Draggable, [{
     key: 'destroy',
     value: function destroy() {
-      document.removeEventListener('drag:start', this.dragStart, true);
-      document.removeEventListener('drag:move', this.dragMove, true);
-      document.removeEventListener('drag:stop', this.dragStop, true);
-      document.removeEventListener('drag:pressure', this.dragPressure, true);
+      document.removeEventListener('drag:start', this[onDragStart], true);
+      document.removeEventListener('drag:move', this[onDragMove], true);
+      document.removeEventListener('drag:stop', this[onDragStop], true);
+      document.removeEventListener('drag:pressure', this[onDragPressure], true);
 
       var draggableDestroyEvent = new _DraggableEvent.DraggableDestroyEvent({
         draggable: this
@@ -3896,7 +3966,7 @@ var Draggable = function () {
   }, {
     key: 'getClassNameFor',
     value: function getClassNameFor(name) {
-      return this.options.classes[name] || defaults.classes[name];
+      return this.options.classes[name] || defaultOptions.classes[name];
     }
 
     /**
@@ -3911,6 +3981,25 @@ var Draggable = function () {
     }
 
     /**
+     * Returns draggable elements for a given container, excluding the mirror and
+     * original source element if present
+     * @param {HTMLElement} container
+     * @return {HTMLElement[]}
+     */
+
+  }, {
+    key: 'getDraggableElementsForContainer',
+    value: function getDraggableElementsForContainer(container) {
+      var _this3 = this;
+
+      var allDraggableElements = container.querySelectorAll(this.options.draggable);
+
+      return [].concat((0, _toConsumableArray3.default)(allDraggableElements)).filter(function (childElement) {
+        return childElement !== _this3.originalSource && childElement !== _this3.mirror;
+      });
+    }
+
+    /**
      * Drag start handler
      * @private
      * @param {Event} event - DOM Drag event
@@ -3919,6 +4008,8 @@ var Draggable = function () {
   }, {
     key: onDragStart,
     value: function value(event) {
+      var _this4 = this;
+
       var sensorEvent = getSensorEvent(event);
       var target = sensorEvent.target,
           container = sensorEvent.container,
@@ -3943,11 +4034,26 @@ var Draggable = function () {
         return;
       }
 
+      if (this.lastPlacedSource && this.lastPlacedContainer) {
+        clearTimeout(this.placedTimeoutID);
+        this.lastPlacedSource.classList.remove(this.getClassNameFor('source:placed'));
+        this.lastPlacedContainer.classList.remove(this.getClassNameFor('container:placed'));
+      }
+
       this.dragging = true;
 
       this.source = this.originalSource.cloneNode(true);
 
-      if (!isDragEvent(originalEvent)) {
+      var mirrorCreateEvent = new _MirrorEvent.MirrorCreateEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent: sensorEvent
+      });
+
+      this.trigger(mirrorCreateEvent);
+
+      if (!isDragEvent(originalEvent) && !mirrorCreateEvent.canceled()) {
         var appendableContainer = this[getAppendableContainer]({ source: this.originalSource });
         this.mirror = this.source.cloneNode(true);
 
@@ -3972,6 +4078,7 @@ var Draggable = function () {
         this.trigger(mirrorAttachedEvent);
       }
 
+      this.originalSource.classList.add(this.getClassNameFor('source:original'));
       this.originalSource.parentNode.insertBefore(this.source, this.originalSource);
 
       this.originalSource.style.display = 'none';
@@ -3979,18 +4086,6 @@ var Draggable = function () {
       this.sourceContainer.classList.add(this.getClassNameFor('container:dragging'));
       document.body.classList.add(this.getClassNameFor('body:dragging'));
       applyUserSelect(document.body, 'none');
-
-      if (this.mirror) {
-        var mirrorMoveEvent = new _MirrorEvent.MirrorMoveEvent({
-          source: this.source,
-          mirror: this.mirror,
-          originalSource: this.originalSource,
-          sourceContainer: container,
-          sensorEvent: sensorEvent
-        });
-
-        this.trigger(mirrorMoveEvent);
-      }
 
       var dragEvent = new _DragEvent.DragStartEvent({
         source: this.source,
@@ -4002,17 +4097,21 @@ var Draggable = function () {
 
       this.trigger(dragEvent);
 
-      if (!dragEvent.canceled()) {
-        return;
-      }
+      if (dragEvent.canceled()) {
+        this.dragging = false;
 
-      if (this.mirror) {
-        this.mirror.parentNode.removeChild(this.mirror);
-      }
+        if (this.mirror) {
+          this.mirror.parentNode.removeChild(this.mirror);
+        }
 
-      this.source.classList.remove(this.getClassNameFor('source:dragging'));
-      this.sourceContainer.classList.remove(this.getClassNameFor('container:dragging'));
-      document.body.classList.remove(this.getClassNameFor('body:dragging'));
+        this.source.classList.remove(this.getClassNameFor('source:dragging'));
+        this.sourceContainer.classList.remove(this.getClassNameFor('container:dragging'));
+        document.body.classList.remove(this.getClassNameFor('body:dragging'));
+      } else {
+        requestAnimationFrame(function () {
+          return _this4[onDragMove](event);
+        });
+      }
     }
 
     /**
@@ -4077,10 +4176,10 @@ var Draggable = function () {
           over: this.currentOver
         });
 
-        this.trigger(dragOutEvent);
-
         this.currentOver.classList.remove(this.getClassNameFor('draggable:over'));
         this.currentOver = null;
+
+        this.trigger(dragOutEvent);
       }
 
       if (isLeavingContainer) {
@@ -4093,10 +4192,10 @@ var Draggable = function () {
           overContainer: this.overContainer
         });
 
-        this.trigger(dragOutContainerEvent);
-
         this.currentOverContainer.classList.remove(this.getClassNameFor('container:over'));
         this.currentOverContainer = null;
+
+        this.trigger(dragOutContainerEvent);
       }
 
       if (isOverContainer) {
@@ -4111,9 +4210,9 @@ var Draggable = function () {
           overContainer: overContainer
         });
 
-        this.trigger(dragOverContainerEvent);
-
         this.currentOverContainer = overContainer;
+
+        this.trigger(dragOverContainerEvent);
       }
 
       if (isOverDraggable) {
@@ -4129,9 +4228,9 @@ var Draggable = function () {
           over: target
         });
 
-        this.trigger(dragOverEvent);
-
         this.currentOver = target;
+
+        this.trigger(dragOverEvent);
       }
     }
 
@@ -4144,7 +4243,7 @@ var Draggable = function () {
   }, {
     key: onDragStop,
     value: function value(event) {
-      var _this3 = this;
+      var _this5 = this;
 
       if (!this.dragging) {
         return;
@@ -4168,6 +4267,7 @@ var Draggable = function () {
       this.originalSource.style.display = '';
 
       this.source.classList.remove(this.getClassNameFor('source:dragging'));
+      this.originalSource.classList.remove(this.getClassNameFor('source:original'));
       this.originalSource.classList.add(this.getClassNameFor('source:placed'));
       this.sourceContainer.classList.add(this.getClassNameFor('container:placed'));
       this.sourceContainer.classList.remove(this.getClassNameFor('container:dragging'));
@@ -4197,17 +4297,20 @@ var Draggable = function () {
         }
       }
 
-      var lastSource = this.originalSource;
-      var lastSourceContainer = this.sourceContainer;
+      this.lastPlacedSource = this.originalSource;
+      this.lastPlacedContainer = this.sourceContainer;
 
-      setTimeout(function () {
-        if (lastSource) {
-          lastSource.classList.remove(_this3.getClassNameFor('source:placed'));
+      this.placedTimeoutID = setTimeout(function () {
+        if (_this5.lastPlacedSource) {
+          _this5.lastPlacedSource.classList.remove(_this5.getClassNameFor('source:placed'));
         }
 
-        if (lastSourceContainer) {
-          lastSourceContainer.classList.remove(_this3.getClassNameFor('container:placed'));
+        if (_this5.lastPlacedContainer) {
+          _this5.lastPlacedContainer.classList.remove(_this5.getClassNameFor('container:placed'));
         }
+
+        _this5.lastPlacedSource = null;
+        _this5.lastPlacedContainer = null;
       }, this.options.placedTimeout);
 
       this.source = null;
@@ -4265,13 +4368,14 @@ var Draggable = function () {
       } else if (typeof appendTo === 'function') {
         return appendTo(source);
       } else {
-        return document.body;
+        return source.parentNode;
       }
     }
   }]);
   return Draggable;
 }();
 
+Draggable.Plugins = { Mirror: _Plugins.Mirror, Accessibility: _Plugins.Accessibility, AutoScroll: _Plugins.AutoScroll };
 exports.default = Draggable;
 
 
@@ -4293,21 +4397,21 @@ function applyUserSelect(element, value) {
 }
 
 /***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(101), __esModule: true };
-
-/***/ }),
 /* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(43);
-__webpack_require__(102);
-module.exports = __webpack_require__(2).Array.from;
+module.exports = { "default": __webpack_require__(102), __esModule: true };
 
 /***/ }),
 /* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(44);
+__webpack_require__(103);
+module.exports = __webpack_require__(4).Array.from;
+
+/***/ }),
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4315,13 +4419,13 @@ module.exports = __webpack_require__(2).Array.from;
 var ctx            = __webpack_require__(24)
   , $export        = __webpack_require__(9)
   , toObject       = __webpack_require__(35)
-  , call           = __webpack_require__(103)
-  , isArrayIter    = __webpack_require__(104)
-  , toLength       = __webpack_require__(47)
-  , createProperty = __webpack_require__(105)
-  , getIterFn      = __webpack_require__(106);
+  , call           = __webpack_require__(104)
+  , isArrayIter    = __webpack_require__(105)
+  , toLength       = __webpack_require__(48)
+  , createProperty = __webpack_require__(106)
+  , getIterFn      = __webpack_require__(107);
 
-$export($export.S + $export.F * !__webpack_require__(108)(function(iter){ Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(109)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
     var O       = toObject(arrayLike)
@@ -4351,7 +4455,7 @@ $export($export.S + $export.F * !__webpack_require__(108)(function(iter){ Array.
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -4368,12 +4472,12 @@ module.exports = function(iterator, fn, value, entries){
 };
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
 var Iterators  = __webpack_require__(17)
-  , ITERATOR   = __webpack_require__(4)('iterator')
+  , ITERATOR   = __webpack_require__(5)('iterator')
   , ArrayProto = Array.prototype;
 
 module.exports = function(it){
@@ -4381,7 +4485,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4395,25 +4499,25 @@ module.exports = function(object, index, value){
 };
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof   = __webpack_require__(107)
-  , ITERATOR  = __webpack_require__(4)('iterator')
+var classof   = __webpack_require__(108)
+  , ITERATOR  = __webpack_require__(5)('iterator')
   , Iterators = __webpack_require__(17);
-module.exports = __webpack_require__(2).getIteratorMethod = function(it){
+module.exports = __webpack_require__(4).getIteratorMethod = function(it){
   if(it != undefined)return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
 };
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
 var cof = __webpack_require__(30)
-  , TAG = __webpack_require__(4)('toStringTag')
+  , TAG = __webpack_require__(5)('toStringTag')
   // ES3 wrong here
   , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 
@@ -4436,10 +4540,10 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR     = __webpack_require__(4)('iterator')
+var ITERATOR     = __webpack_require__(5)('iterator')
   , SAFE_CLOSING = false;
 
 try {
@@ -4462,25 +4566,6 @@ module.exports = function(exec, skipClosing){
 };
 
 /***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _closest = __webpack_require__(110);
-
-var _closest2 = _interopRequireDefault(_closest);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _closest2.default;
-
-/***/ }),
 /* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4491,7 +4576,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = __webpack_require__(52);
+var _closest = __webpack_require__(111);
+
+var _closest2 = _interopRequireDefault(_closest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _closest2.default;
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(53);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -4501,6 +4605,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var matchFunction = Element.prototype.matches || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector;
 
+/**
+ * Get the closest parent element of a given element that matches the given
+ * selector string or matching function
+ *
+ * @param {Element} element The child element to find a parent of
+ * @param {String|Function} selector The string or function to use to match
+ *     the parent element
+ * @return {Element|null}
+ */
 function closest(element, value) {
   if (!element) {
     return null;
@@ -4546,25 +4659,6 @@ function closest(element, value) {
 }
 
 /***/ }),
-/* 111 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _scroll = __webpack_require__(112);
-
-var _scroll2 = _interopRequireDefault(_scroll);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _scroll2.default;
-
-/***/ }),
 /* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4574,30 +4668,16 @@ exports.default = _scroll2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = scroll;
-var scrollAnimationFrame = void 0;
+exports.defaultMirrorOptions = undefined;
 
-function scroll(element, _ref) {
-  var clientX = _ref.clientX,
-      clientY = _ref.clientY,
-      speed = _ref.speed,
-      sensitivity = _ref.sensitivity;
+var _Mirror = __webpack_require__(113);
 
-  if (scrollAnimationFrame) {
-    cancelAnimationFrame(scrollAnimationFrame);
-  }
+var _Mirror2 = _interopRequireDefault(_Mirror);
 
-  function scrollFn() {
-    var rect = element.getBoundingClientRect();
-    var offsetY = (Math.abs(rect.bottom - clientY) <= sensitivity) - (Math.abs(rect.top - clientY) <= sensitivity);
-    var offsetX = (Math.abs(rect.right - clientX) <= sensitivity) - (Math.abs(rect.left - clientX) <= sensitivity);
-    element.scrollTop += offsetY * speed;
-    element.scrollLeft += offsetX * speed;
-    scrollAnimationFrame = requestAnimationFrame(scrollFn);
-  }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  scrollAnimationFrame = requestAnimationFrame(scrollFn);
-}
+exports.default = _Mirror2.default;
+exports.defaultMirrorOptions = _Mirror.defaultOptions;
 
 /***/ }),
 /* 113 */
@@ -4609,30 +4689,9 @@ function scroll(element, _ref) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.defaultMirrorOption = undefined;
-
-var _Mirror = __webpack_require__(114);
-
-var _Mirror2 = _interopRequireDefault(_Mirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _Mirror2.default;
-exports.defaultMirrorOption = _Mirror.defaultOptions;
-
-/***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.defaultOptions = undefined;
 
-var _objectWithoutProperties2 = __webpack_require__(115);
+var _objectWithoutProperties2 = __webpack_require__(114);
 
 var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 
@@ -4644,6 +4703,18 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(40);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultOptions = exports.defaultOptions = {
@@ -4652,15 +4723,19 @@ var defaultOptions = exports.defaultOptions = {
   yAxis: true
 };
 
-var Mirror = function () {
+var Mirror = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Mirror, _AbstractPlugin);
+
   function Mirror(draggable) {
     (0, _classCallCheck3.default)(this, Mirror);
 
-    this.draggable = draggable;
-    this.options = Object.assign({}, defaultOptions, this.getOptions());
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Mirror.__proto__ || Object.getPrototypeOf(Mirror)).call(this, draggable));
 
-    this.onMirrorCreated = this.onMirrorCreated.bind(this);
-    this.onMirrorMove = this.onMirrorMove.bind(this);
+    _this.options = Object.assign({}, defaultOptions, _this.getOptions());
+
+    _this.onMirrorCreated = _this.onMirrorCreated.bind(_this);
+    _this.onMirrorMove = _this.onMirrorMove.bind(_this);
+    return _this;
   }
 
   (0, _createClass3.default)(Mirror, [{
@@ -4681,7 +4756,7 @@ var Mirror = function () {
   }, {
     key: 'onMirrorCreated',
     value: function onMirrorCreated(_ref) {
-      var _this = this;
+      var _this2 = this;
 
       var mirror = _ref.mirror,
           source = _ref.source,
@@ -4695,9 +4770,9 @@ var Mirror = function () {
             initialY = _ref2.initialY,
             args = (0, _objectWithoutProperties3.default)(_ref2, ['mirrorOffset', 'initialX', 'initialY']);
 
-        _this.mirrorOffset = mirrorOffset;
-        _this.initialX = initialX;
-        _this.initialY = initialY;
+        _this2.mirrorOffset = mirrorOffset;
+        _this2.initialX = initialX;
+        _this2.initialY = initialY;
         return Object.assign({ mirrorOffset: mirrorOffset, initialX: initialX, initialY: initialY }, args);
       };
 
@@ -4732,7 +4807,7 @@ var Mirror = function () {
     }
   }]);
   return Mirror;
-}();
+}(_AbstractPlugin3.default);
 
 exports.default = Mirror;
 
@@ -4773,16 +4848,19 @@ function resetMirror(_ref6) {
     var offsetWidth = void 0;
 
     if (options.constrainDimensions) {
-      offsetHeight = source.offsetHeight;
-      offsetWidth = source.offsetWidth;
+      // Compute padding for source
+      offsetHeight = source.clientHeight;
+      offsetWidth = source.clientWidth;
     }
 
     mirror.style.position = 'fixed';
     mirror.style.pointerEvents = 'none';
     mirror.style.top = 0;
     mirror.style.left = 0;
+    mirror.style.margin = 0;
 
     if (options.constrainDimensions) {
+      // remove padding from dimensions
       mirror.style.height = offsetHeight + 'px';
       mirror.style.width = offsetWidth + 'px';
     }
@@ -4877,7 +4955,7 @@ function withPromise(callback) {
 }
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4898,26 +4976,7 @@ exports.default = function (obj, keys) {
 };
 
 /***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Accessibility = __webpack_require__(117);
-
-var _Accessibility2 = _interopRequireDefault(_Accessibility);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _Accessibility2.default;
-
-/***/ }),
-/* 117 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4937,6 +4996,409 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * All draggable plugins inherit from this class.
+ * @abstract
+ * @class AbstractPlugin
+ * @module AbstractPlugin
+ */
+var AbstractPlugin = function () {
+
+  /**
+   * AbstractPlugin constructor.
+   * @constructs AbstractPlugin
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function AbstractPlugin(draggable) {
+    (0, _classCallCheck3.default)(this, AbstractPlugin);
+
+
+    /**
+     * Draggable instance
+     * @property draggable
+     * @type {Draggable}
+     */
+    this.draggable = draggable;
+  }
+
+  /**
+   * Override to add listeners
+   * @abstract
+   */
+
+
+  (0, _createClass3.default)(AbstractPlugin, [{
+    key: 'attach',
+    value: function attach() {
+      throw new Error('Not Implemented');
+    }
+
+    /**
+     * Override to remove listeners
+     * @abstract
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      throw new Error('Not Implemented');
+    }
+  }]);
+  return AbstractPlugin;
+}();
+
+exports.default = AbstractPlugin;
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultAutoScrollOptions = undefined;
+
+var _AutoScroll = __webpack_require__(117);
+
+var _AutoScroll2 = _interopRequireDefault(_AutoScroll);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _AutoScroll2.default;
+exports.defaultAutoScrollOptions = _AutoScroll.defaultOptions;
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = exports.scroll = exports.onDragStop = exports.onDragMove = exports.onDragStart = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(40);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+var _utils = __webpack_require__(18);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onDragStart = exports.onDragStart = Symbol('onDragStart');
+var onDragMove = exports.onDragMove = Symbol('onDragMove');
+var onDragStop = exports.onDragStop = Symbol('onDragStop');
+var scroll = exports.scroll = Symbol('scroll');
+
+/**
+ * AutoScroll default options
+ * @property {Object} defaultOptions
+ * @property {Number} defaultOptions.speed
+ * @property {Number} defaultOptions.sensitivity
+ * @type {Object}
+ */
+var defaultOptions = exports.defaultOptions = {
+  speed: 10,
+  sensitivity: 30
+};
+
+/**
+ * AutoScroll plugin which scrolls the closest scrollable parent
+ * @class AutoScroll
+ * @module AutoScroll
+ */
+
+var AutoScroll = function (_AbstractPlugin) {
+  (0, _inherits3.default)(AutoScroll, _AbstractPlugin);
+
+  /**
+   * AutoScroll constructor.
+   * @constructs AutoScroll
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function AutoScroll(draggable) {
+    (0, _classCallCheck3.default)(this, AutoScroll);
+
+    /**
+     * AutoScroll options
+     * @property {Object} options
+     * @property {Number} options.speed
+     * @property {Number} options.sensitivity
+     * @type {Object}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (AutoScroll.__proto__ || Object.getPrototypeOf(AutoScroll)).call(this, draggable));
+
+    _this.options = Object.assign({}, defaultOptions, _this.getOptions());
+
+    /**
+     * Keeps current mouse position
+     * @property {Object} currentMousePosition
+     * @property {Number} currentMousePosition.clientX
+     * @property {Number} currentMousePosition.clientY
+     * @type {Object|null}
+     */
+    _this.currentMousePosition = null;
+
+    /**
+     * Scroll animation frame
+     * @property scrollAnimationFrame
+     * @type {Number|null}
+     */
+    _this.scrollAnimationFrame = null;
+
+    /**
+     * Closest scrollable element
+     * @property scrollableElement
+     * @type {HTMLElement|null}
+     */
+    _this.scrollableElement = null;
+
+    /**
+     * Animation frame looking for the closest scrollable element
+     * @property findScrollableElementFrame
+     * @type {Number|null}
+     */
+    _this.findScrollableElementFrame = null;
+
+    _this[onDragStart] = _this[onDragStart].bind(_this);
+    _this[onDragMove] = _this[onDragMove].bind(_this);
+    _this[onDragStop] = _this[onDragStop].bind(_this);
+    _this[scroll] = _this[scroll].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches plugins event listeners
+   */
+
+
+  (0, _createClass3.default)(AutoScroll, [{
+    key: 'attach',
+    value: function attach() {
+      this.draggable.on('drag:start', this[onDragStart]).on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]);
+    }
+
+    /**
+     * Detaches plugins event listeners
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.draggable.off('drag:start', this[onDragStart]).off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]);
+    }
+
+    /**
+     * Returns options passed through draggable
+     * @return {Object}
+     */
+
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.draggable.options.autoScroll || {};
+    }
+
+    /**
+     * Drag start handler. Finds closest scrollable parent in separate frame
+     * @private
+     */
+
+  }, {
+    key: onDragStart,
+    value: function value(dragEvent) {
+      var _this2 = this;
+
+      this.findScrollableElementFrame = requestAnimationFrame(function () {
+        _this2.scrollableElement = closestScrollableElement(dragEvent.source);
+      });
+    }
+
+    /**
+     * Drag move handler. Remembers mouse position and initiates scrolling
+     * @private
+     */
+
+  }, {
+    key: onDragMove,
+    value: function value(dragEvent) {
+      var _this3 = this;
+
+      this.findScrollableElementFrame = requestAnimationFrame(function () {
+        _this3.scrollableElement = closestScrollableElement(dragEvent.sensorEvent.target);
+      });
+
+      if (!this.scrollableElement) {
+        return;
+      }
+
+      var sensorEvent = dragEvent.sensorEvent;
+
+      this.currentMousePosition = {
+        clientX: sensorEvent.clientX,
+        clientY: sensorEvent.clientY
+      };
+
+      this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+    }
+
+    /**
+     * Drag stop handler. Cancels scroll animations and resets state
+     * @private
+     */
+
+  }, {
+    key: onDragStop,
+    value: function value() {
+      cancelAnimationFrame(this.scrollAnimationFrame);
+      cancelAnimationFrame(this.findScrollableElementFrame);
+
+      this.scrollableElement = null;
+      this.scrollAnimationFrame = null;
+      this.findScrollableElementFrame = null;
+      this.currentMousePosition = null;
+    }
+
+    /**
+     * Scroll function that does the heavylifting
+     * @private
+     */
+
+  }, {
+    key: scroll,
+    value: function value() {
+      if (!this.scrollableElement) {
+        return;
+      }
+
+      cancelAnimationFrame(this.scrollAnimationFrame);
+
+      var windowHeight = window.innerHeight;
+      var windowWidth = window.innerWidth;
+      var rect = this.scrollableElement.getBoundingClientRect();
+
+      var offsetY = (Math.abs(rect.bottom - this.currentMousePosition.clientY) <= this.options.sensitivity) - (Math.abs(rect.top - this.currentMousePosition.clientY) <= this.options.sensitivity);
+      var offsetX = (Math.abs(rect.right - this.currentMousePosition.clientX) <= this.options.sensitivity) - (Math.abs(rect.left - this.currentMousePosition.clientX) <= this.options.sensitivity);
+
+      if (!offsetX && !offsetY) {
+        offsetX = (windowWidth - this.currentMousePosition.clientX <= this.options.sensitivity) - (this.currentMousePosition.clientX <= this.options.sensitivity);
+        offsetY = (windowHeight - this.currentMousePosition.clientY <= this.options.sensitivity) - (this.currentMousePosition.clientY <= this.options.sensitivity);
+      }
+
+      this.scrollableElement.scrollTop += offsetY * this.options.speed;
+      this.scrollableElement.scrollLeft += offsetX * this.options.speed;
+
+      this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+    }
+  }]);
+  return AutoScroll;
+}(_AbstractPlugin3.default);
+
+/**
+ * Checks if element has overflow
+ * @param {HTMLElement} element
+ * @return {Boolean}
+ * @private
+ */
+
+
+exports.default = AutoScroll;
+function hasOverflow(element) {
+  var overflowRegex = /(auto|scroll)/;
+  var computedStyles = getComputedStyle(element, null);
+
+  var overflow = computedStyles.getPropertyValue('overflow') + computedStyles.getPropertyValue('overflow-y') + computedStyles.getPropertyValue('overflow-x');
+
+  return overflowRegex.test(overflow);
+}
+
+/**
+ * Finds closest scrollable element
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ * @private
+ */
+function closestScrollableElement(element) {
+  var scrollableElement = (0, _utils.closest)(element, function (currentElement) {
+    return hasOverflow(currentElement);
+  });
+
+  return scrollableElement || document.scrollingElement || document.documentElement || null;
+}
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Accessibility = __webpack_require__(119);
+
+var _Accessibility2 = _interopRequireDefault(_Accessibility);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Accessibility2.default;
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(40);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var ARIA_GRABBED = 'aria-grabbed';
 var ARIA_DROPEFFECT = 'aria-dropeffect';
 var TABINDEX = 'tabindex';
@@ -4947,7 +5409,8 @@ var TABINDEX = 'tabindex';
  * @module Accessibility
  */
 
-var Accessibility = function () {
+var Accessibility = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Accessibility, _AbstractPlugin);
 
   /**
    * Accessibility constructor.
@@ -4957,16 +5420,11 @@ var Accessibility = function () {
   function Accessibility(draggable) {
     (0, _classCallCheck3.default)(this, Accessibility);
 
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Accessibility.__proto__ || Object.getPrototypeOf(Accessibility)).call(this, draggable));
 
-    /**
-     * Draggable instance
-     * @property draggable
-     * @type {Draggable}
-     */
-    this.draggable = draggable;
-
-    this._onInit = this._onInit.bind(this);
-    this._onDestroy = this._onDestroy.bind(this);
+    _this._onInit = _this._onInit.bind(_this);
+    _this._onDestroy = _this._onDestroy.bind(_this);
+    return _this;
   }
 
   /**
@@ -5117,7 +5575,7 @@ var Accessibility = function () {
     }
   }]);
   return Accessibility;
-}();
+}(_AbstractPlugin3.default);
 
 exports.default = Accessibility;
 
@@ -5135,7 +5593,7 @@ function _onDragStop(_ref4) {
 }
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5146,23 +5604,23 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ForceTouchSensor = exports.DragSensor = exports.TouchSensor = exports.MouseSensor = exports.Sensor = undefined;
 
-var _Sensor = __webpack_require__(18);
+var _Sensor = __webpack_require__(19);
 
 var _Sensor2 = _interopRequireDefault(_Sensor);
 
-var _MouseSensor = __webpack_require__(120);
+var _MouseSensor = __webpack_require__(122);
 
 var _MouseSensor2 = _interopRequireDefault(_MouseSensor);
 
-var _TouchSensor = __webpack_require__(124);
+var _TouchSensor = __webpack_require__(126);
 
 var _TouchSensor2 = _interopRequireDefault(_TouchSensor);
 
-var _DragSensor = __webpack_require__(126);
+var _DragSensor = __webpack_require__(128);
 
 var _DragSensor2 = _interopRequireDefault(_DragSensor);
 
-var _ForceTouchSensor = __webpack_require__(128);
+var _ForceTouchSensor = __webpack_require__(130);
 
 var _ForceTouchSensor2 = _interopRequireDefault(_ForceTouchSensor);
 
@@ -5175,7 +5633,7 @@ exports.DragSensor = _DragSensor2.default;
 exports.ForceTouchSensor = _ForceTouchSensor2.default;
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5289,7 +5747,7 @@ var Sensor = function () {
 exports.default = Sensor;
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5299,7 +5757,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _MouseSensor = __webpack_require__(121);
+var _MouseSensor = __webpack_require__(123);
 
 var _MouseSensor2 = _interopRequireDefault(_MouseSensor);
 
@@ -5308,7 +5766,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _MouseSensor2.default;
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5326,17 +5784,17 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(22);
+var _utils = __webpack_require__(18);
 
-var _Sensor2 = __webpack_require__(18);
+var _Sensor2 = __webpack_require__(19);
 
 var _Sensor3 = _interopRequireDefault(_Sensor2);
 
@@ -5566,7 +6024,7 @@ function preventNativeDragStart(event) {
 }
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5585,15 +6043,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _AbstractEvent2 = __webpack_require__(19);
+var _AbstractEvent2 = __webpack_require__(20);
 
 var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
 
@@ -5781,7 +6239,7 @@ var DragPressureSensorEvent = exports.DragPressureSensorEvent = function (_Senso
 DragPressureSensorEvent.type = 'drag:pressure';
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5801,6 +6259,8 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var _canceled = Symbol('canceled');
+
 /**
  * All events fired by draggable inherit this class. You can call `cancel()` to
  * cancel a specific event or you can check if an event has been canceled by
@@ -5809,7 +6269,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @class AbstractEvent
  * @module AbstractEvent
  */
+
 var AbstractEvent = function () {
+
+  /**
+   * AbstractEvent constructor.
+   * @constructs AbstractEvent
+   * @param {object} data - Event data
+   */
+
 
   /**
    * Event type
@@ -5821,7 +6289,7 @@ var AbstractEvent = function () {
   function AbstractEvent(data) {
     (0, _classCallCheck3.default)(this, AbstractEvent);
 
-    this._canceled = false;
+    this[_canceled] = false;
     this.data = data;
   }
 
@@ -5850,7 +6318,7 @@ var AbstractEvent = function () {
      * @abstract
      */
     value: function cancel() {
-      this._canceled = true;
+      this[_canceled] = true;
     }
 
     /**
@@ -5862,7 +6330,7 @@ var AbstractEvent = function () {
   }, {
     key: 'canceled',
     value: function canceled() {
-      return Boolean(this._canceled);
+      return Boolean(this[_canceled]);
     }
   }, {
     key: 'type',
@@ -5890,7 +6358,7 @@ AbstractEvent.cancelable = false;
 exports.default = AbstractEvent;
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5900,7 +6368,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _TouchSensor = __webpack_require__(125);
+var _TouchSensor = __webpack_require__(127);
 
 var _TouchSensor2 = _interopRequireDefault(_TouchSensor);
 
@@ -5909,7 +6377,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _TouchSensor2.default;
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5927,17 +6395,17 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(22);
+var _utils = __webpack_require__(18);
 
-var _Sensor2 = __webpack_require__(18);
+var _Sensor2 = __webpack_require__(19);
 
 var _Sensor3 = _interopRequireDefault(_Sensor2);
 
@@ -6207,7 +6675,7 @@ function onContextMenu(event) {
 }
 
 /***/ }),
-/* 126 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6217,7 +6685,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DragSensor = __webpack_require__(127);
+var _DragSensor = __webpack_require__(129);
 
 var _DragSensor2 = _interopRequireDefault(_DragSensor);
 
@@ -6226,7 +6694,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _DragSensor2.default;
 
 /***/ }),
-/* 127 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6244,17 +6712,17 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(22);
+var _utils = __webpack_require__(18);
 
-var _Sensor2 = __webpack_require__(18);
+var _Sensor2 = __webpack_require__(19);
 
 var _Sensor3 = _interopRequireDefault(_Sensor2);
 
@@ -6553,7 +7021,7 @@ var DragSensor = function (_Sensor) {
 exports.default = DragSensor;
 
 /***/ }),
-/* 128 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6563,7 +7031,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ForceTouchSensor = __webpack_require__(129);
+var _ForceTouchSensor = __webpack_require__(131);
 
 var _ForceTouchSensor2 = _interopRequireDefault(_ForceTouchSensor);
 
@@ -6572,7 +7040,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _ForceTouchSensor2.default;
 
 /***/ }),
-/* 129 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6590,15 +7058,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _Sensor2 = __webpack_require__(18);
+var _Sensor2 = __webpack_require__(19);
 
 var _Sensor3 = _interopRequireDefault(_Sensor2);
 
@@ -6911,7 +7379,7 @@ var ForceTouchSensor = function (_Sensor) {
 exports.default = ForceTouchSensor;
 
 /***/ }),
-/* 130 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6921,7 +7389,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DraggableEvent = __webpack_require__(131);
+var _DraggableEvent = __webpack_require__(133);
 
 Object.defineProperty(exports, 'DraggableInitializedEvent', {
   enumerable: true,
@@ -6937,7 +7405,7 @@ Object.defineProperty(exports, 'DraggableDestroyEvent', {
 });
 
 /***/ }),
-/* 131 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6956,15 +7424,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _AbstractEvent2 = __webpack_require__(19);
+var _AbstractEvent2 = __webpack_require__(20);
 
 var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
 
@@ -7046,7 +7514,7 @@ var DraggableDestroyEvent = exports.DraggableDestroyEvent = function (_Draggable
 DraggableDestroyEvent.type = 'draggable:destroy';
 
 /***/ }),
-/* 132 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7056,7 +7524,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DragEvent = __webpack_require__(133);
+var _DragEvent = __webpack_require__(135);
 
 Object.defineProperty(exports, 'DragStartEvent', {
   enumerable: true,
@@ -7108,7 +7576,7 @@ Object.defineProperty(exports, 'DragPressureEvent', {
 });
 
 /***/ }),
-/* 133 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7127,15 +7595,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _AbstractEvent2 = __webpack_require__(19);
+var _AbstractEvent2 = __webpack_require__(20);
 
 var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
 
@@ -7521,7 +7989,7 @@ var DragStopEvent = exports.DragStopEvent = function (_DragEvent8) {
 DragStopEvent.type = 'drag:stop';
 
 /***/ }),
-/* 134 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7531,8 +7999,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _MirrorEvent = __webpack_require__(135);
+var _MirrorEvent = __webpack_require__(137);
 
+Object.defineProperty(exports, 'MirrorCreateEvent', {
+  enumerable: true,
+  get: function get() {
+    return _MirrorEvent.MirrorCreateEvent;
+  }
+});
 Object.defineProperty(exports, 'MirrorCreatedEvent', {
   enumerable: true,
   get: function get() {
@@ -7559,7 +8033,7 @@ Object.defineProperty(exports, 'MirrorDestroyEvent', {
 });
 
 /***/ }),
-/* 135 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7568,7 +8042,7 @@ Object.defineProperty(exports, 'MirrorDestroyEvent', {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MirrorDestroyEvent = exports.MirrorMoveEvent = exports.MirrorAttachedEvent = exports.MirrorCreatedEvent = exports.MirrorEvent = undefined;
+exports.MirrorDestroyEvent = exports.MirrorMoveEvent = exports.MirrorAttachedEvent = exports.MirrorCreatedEvent = exports.MirrorCreateEvent = exports.MirrorEvent = undefined;
 
 var _classCallCheck2 = __webpack_require__(0);
 
@@ -7578,15 +8052,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _AbstractEvent2 = __webpack_require__(19);
+var _AbstractEvent2 = __webpack_require__(20);
 
 var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
 
@@ -7645,19 +8119,6 @@ var MirrorEvent = exports.MirrorEvent = function (_AbstractEvent) {
     }
 
     /**
-     * Draggables mirror element
-     * @property mirror
-     * @type {HTMLElement}
-     * @readonly
-     */
-
-  }, {
-    key: 'mirror',
-    get: function get() {
-      return this.data.mirror;
-    }
-
-    /**
      * Draggables source container element
      * @property sourceContainer
      * @type {HTMLElement}
@@ -7704,6 +8165,25 @@ var MirrorEvent = exports.MirrorEvent = function (_AbstractEvent) {
 }(_AbstractEvent3.default);
 
 /**
+ * Mirror create event
+ * @class MirrorCreateEvent
+ * @module MirrorCreateEvent
+ * @extends MirrorEvent
+ */
+
+
+var MirrorCreateEvent = exports.MirrorCreateEvent = function (_MirrorEvent) {
+  (0, _inherits3.default)(MirrorCreateEvent, _MirrorEvent);
+
+  function MirrorCreateEvent() {
+    (0, _classCallCheck3.default)(this, MirrorCreateEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorCreateEvent.__proto__ || Object.getPrototypeOf(MirrorCreateEvent)).apply(this, arguments));
+  }
+
+  return MirrorCreateEvent;
+}(MirrorEvent);
+
+/**
  * Mirror created event
  * @class MirrorCreatedEvent
  * @module MirrorCreatedEvent
@@ -7711,14 +8191,30 @@ var MirrorEvent = exports.MirrorEvent = function (_AbstractEvent) {
  */
 
 
-var MirrorCreatedEvent = exports.MirrorCreatedEvent = function (_MirrorEvent) {
-  (0, _inherits3.default)(MirrorCreatedEvent, _MirrorEvent);
+MirrorCreateEvent.type = 'mirror:create';
+
+var MirrorCreatedEvent = exports.MirrorCreatedEvent = function (_MirrorEvent2) {
+  (0, _inherits3.default)(MirrorCreatedEvent, _MirrorEvent2);
 
   function MirrorCreatedEvent() {
     (0, _classCallCheck3.default)(this, MirrorCreatedEvent);
     return (0, _possibleConstructorReturn3.default)(this, (MirrorCreatedEvent.__proto__ || Object.getPrototypeOf(MirrorCreatedEvent)).apply(this, arguments));
   }
 
+  (0, _createClass3.default)(MirrorCreatedEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
   return MirrorCreatedEvent;
 }(MirrorEvent);
 
@@ -7732,14 +8228,28 @@ var MirrorCreatedEvent = exports.MirrorCreatedEvent = function (_MirrorEvent) {
 
 MirrorCreatedEvent.type = 'mirror:created';
 
-var MirrorAttachedEvent = exports.MirrorAttachedEvent = function (_MirrorEvent2) {
-  (0, _inherits3.default)(MirrorAttachedEvent, _MirrorEvent2);
+var MirrorAttachedEvent = exports.MirrorAttachedEvent = function (_MirrorEvent3) {
+  (0, _inherits3.default)(MirrorAttachedEvent, _MirrorEvent3);
 
   function MirrorAttachedEvent() {
     (0, _classCallCheck3.default)(this, MirrorAttachedEvent);
     return (0, _possibleConstructorReturn3.default)(this, (MirrorAttachedEvent.__proto__ || Object.getPrototypeOf(MirrorAttachedEvent)).apply(this, arguments));
   }
 
+  (0, _createClass3.default)(MirrorAttachedEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
   return MirrorAttachedEvent;
 }(MirrorEvent);
 
@@ -7753,14 +8263,28 @@ var MirrorAttachedEvent = exports.MirrorAttachedEvent = function (_MirrorEvent2)
 
 MirrorAttachedEvent.type = 'mirror:attached';
 
-var MirrorMoveEvent = exports.MirrorMoveEvent = function (_MirrorEvent3) {
-  (0, _inherits3.default)(MirrorMoveEvent, _MirrorEvent3);
+var MirrorMoveEvent = exports.MirrorMoveEvent = function (_MirrorEvent4) {
+  (0, _inherits3.default)(MirrorMoveEvent, _MirrorEvent4);
 
   function MirrorMoveEvent() {
     (0, _classCallCheck3.default)(this, MirrorMoveEvent);
     return (0, _possibleConstructorReturn3.default)(this, (MirrorMoveEvent.__proto__ || Object.getPrototypeOf(MirrorMoveEvent)).apply(this, arguments));
   }
 
+  (0, _createClass3.default)(MirrorMoveEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
   return MirrorMoveEvent;
 }(MirrorEvent);
 
@@ -7775,14 +8299,28 @@ var MirrorMoveEvent = exports.MirrorMoveEvent = function (_MirrorEvent3) {
 MirrorMoveEvent.type = 'mirror:move';
 MirrorMoveEvent.cancelable = true;
 
-var MirrorDestroyEvent = exports.MirrorDestroyEvent = function (_MirrorEvent4) {
-  (0, _inherits3.default)(MirrorDestroyEvent, _MirrorEvent4);
+var MirrorDestroyEvent = exports.MirrorDestroyEvent = function (_MirrorEvent5) {
+  (0, _inherits3.default)(MirrorDestroyEvent, _MirrorEvent5);
 
   function MirrorDestroyEvent() {
     (0, _classCallCheck3.default)(this, MirrorDestroyEvent);
     return (0, _possibleConstructorReturn3.default)(this, (MirrorDestroyEvent.__proto__ || Object.getPrototypeOf(MirrorDestroyEvent)).apply(this, arguments));
   }
 
+  (0, _createClass3.default)(MirrorDestroyEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
   return MirrorDestroyEvent;
 }(MirrorEvent);
 
@@ -7790,7 +8328,7 @@ MirrorDestroyEvent.type = 'mirror:destroy';
 MirrorDestroyEvent.cancelable = true;
 
 /***/ }),
-/* 136 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7800,7 +8338,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _SwappableEvent = __webpack_require__(137);
+var _SwappableEvent = __webpack_require__(139);
 
 Object.defineProperty(exports, 'SwappableStartEvent', {
   enumerable: true,
@@ -7828,7 +8366,7 @@ Object.defineProperty(exports, 'SwappableStopEvent', {
 });
 
 /***/ }),
-/* 137 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7847,15 +8385,15 @@ var _createClass2 = __webpack_require__(1);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(3);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(5);
+var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _AbstractEvent2 = __webpack_require__(19);
+var _AbstractEvent2 = __webpack_require__(20);
 
 var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
 
@@ -8039,6 +8577,12 @@ SwappableStopEvent.type = 'swappable:stop';
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

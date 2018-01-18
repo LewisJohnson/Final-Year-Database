@@ -17,6 +17,8 @@ mix.disableNotifications();
 
 mix.js('resources/assets/js/main.js', 'public/js');
 mix.js('resources/assets/js/sw.js', 'public/js');
+mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
+mix.less('resources/assets/jquery-confirm.less', 'public/css');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');

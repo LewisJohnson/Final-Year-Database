@@ -31,7 +31,7 @@
 
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/jquery-confirm.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery-confirm.css') }}">
 
 	@if(Cookie::get('highContrast') == "true")
 		<link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}">
@@ -43,7 +43,7 @@
 
 	<!-- Scripts -->
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-	<script src="{{ asset('js/jquery-confirm.min.js') }}"></script>
+	<script src="{{ asset('js/jquery-confirm.js') }}"></script>
 	<script src="{{ asset('js/main.js') }}" async></script>
 	{{-- <script src="{{ asset('js/sw.js') }}" async></script> --}}
 

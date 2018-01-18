@@ -87,15 +87,24 @@
 	display: flex;
 	flex-wrap: wrap;
 	padding: 0 !important;
-	.topic:nth-child(odd) {
-		margin-right: 59px;
-	}
+
 
 	.topic{
 		margin-bottom: 10px;
+		display: flex;
+		flex-direction: row;
+		width: 46.9%;
+
+		&.odd{
+			margin-right: 59px;
+		}
+		
+		* {
+			margin-right: 5px;
+		}
 
 		input{
-			width: 300px;
+			width: 100%;
 		}
 	}
 }

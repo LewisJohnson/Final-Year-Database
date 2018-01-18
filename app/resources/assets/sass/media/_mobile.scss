@@ -1,7 +1,7 @@
 @media screen and (min-width: 970px){
 	.mobile-nav-underlay{display: none !important;}
 }
-// todo: 970px
+
 @media screen and (max-width: 970px){
 	.main-content{
 		padding: 3rem 1rem;
@@ -43,6 +43,16 @@
 
 	nav.desktop{
 		display: none;
+	}
+
+	.edit-topic-list{
+		.topic{
+			width: 100%;
+		}
+		
+		.topic:nth-child(odd){
+			margin-right: 0;
+		}
 	}
 
 	.dialog{

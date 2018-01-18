@@ -101,7 +101,6 @@ function addTitleHeadersToList(ul) {
 $('body').append('<div class="underlay"></div>');
 
 // Accessibility
-// $('button').attr('tab-index', '-1');
 $('.dropdown').attr('tabindex', '0');
 $('.dropdown > button').attr('tabindex', '-1');
 $('.dropdown .dropdown-content a').attr('tabindex', '0');
@@ -622,49 +621,85 @@ EditTopic.prototype.Urls_ = {
 
 EditTopic.prototype.functions = {
 	editTopic: function() {
-		var response = confirm("Are you sure you want to change the topic name from \"" +  this.originalName +"\" to \"" +  this.topicNameInput.val() +"\"?");
-
-		if(response){
-			this.topicNameInput.prop('disabled', true);
-			this.editButton.html('<div class="loader"></div>');
-			$('.loader', this.element).css('display', 'block');
-
-			$.ajax({
-				method: 'PATCH',
-				url: this.Urls_.DELETE_TOPIC,
-				context: this,
-				data: {
-					topic_id: this.topicId,
-					topic_name : this.topicNameInput.val()
-				},
-			}).done(function(){
-				this.topicNameInput.prop('disabled', false);
-				this.editButton.html('Edit');
-				this.originalName = this.topicNameInput.val();
-			});
-		} else {
-			this.topicNameInput.val(this.originalName);
+		var topic = this;
+		if(topic.originalName == topic.topicNameInput.val()){
+			return;
 		}
+		$.confirm({
+			title: 'Change Topic Name',
+			type: 'blue',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			content: 'Are you sure you want to change the topic name from <b>"' +  topic.originalName + '"</b> to <b>"' +  topic.topicNameInput.val() +'"</b>?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-blue',
+					action: function(){
+						topic.topicNameInput.prop('disabled', true);
+						topic.editButton.html('<div class="loader"></div>');
+						$('.loader', topic.element).css('display', 'block');
+
+						$.ajax({
+							method: 'PATCH',
+							url: topic.Urls_.DELETE_TOPIC,
+							context: topic,
+							data: {
+								topic_id: topic.topicId,
+								topic_name : topic.topicNameInput.val()
+							},
+						}).done(function(){
+							topic.topicNameInput.prop('disabled', false);
+							topic.editButton.html('Edit');
+							topic.originalName = topic.topicNameInput.val();
+						});
+					}
+				},
+				cancel: function(){
+					topic.topicNameInput.val(topic.originalName);
+				}
+			},
+			backgroundDismiss: function(){
+				topic.topicNameInput.val(topic.originalName);
+			},
+		});
 	},
 
 	deleteTopic: function() {
-		var response = confirm("Are you sure you want to delete the topic \"" +  this.originalName +"\"?");
-		if(response){
-			this.topicNameInput.prop('disabled', true);
-			$.ajax({
-				method: 'DELETE',
-				url: this.Urls_.DELETE_TOPIC,
-				context: this,
-				data: {
-					topic_id: this.topicId,
-				},
-				success: function(){
-					this.element.hide(400, function() {
-						this.remove();
-					});
+		var topic = this;
+		$.confirm({
+			title: 'Delete',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			content: 'Are you sure you want to delete <b>"' +  topic.topicNameInput.val() + '"</b>?',
+			buttons: {
+				delete: {
+					btnClass: 'btn-red',
+					action: function(){
+						topic.topicNameInput.prop('disabled', true);
+						$.ajax({
+							method: 'DELETE',
+							url: topic.Urls_.DELETE_TOPIC,
+							context: topic,
+							data: {
+								topic_id: topic.topicId,
+							},
+							success: function(){
+								topic.element.hide(400, function() {
+									topic.remove();
+								});
+							}
+						});
+					}
 				}
-			});
-		}
+			}
+		});
 	},
 
 	createEditTopicDOM: function(topicId, originalName){

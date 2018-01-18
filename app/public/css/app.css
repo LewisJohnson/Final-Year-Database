@@ -212,7 +212,8 @@ button:focus {
   height: 36px;
   margin: 0;
   min-width: 64px;
-  padding: 0 16px;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   display: inline-block;
   font-size: 14px;
   font-weight: 500;
@@ -562,16 +563,28 @@ ul {
   padding: 0 !important;
 }
 
-.edit-topic-list .topic:nth-child(odd) {
+.edit-topic-list .topic {
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 46.9%;
+}
+
+.edit-topic-list .topic.odd {
   margin-right: 59px;
 }
 
-.edit-topic-list .topic {
-  margin-bottom: 10px;
+.edit-topic-list .topic * {
+  margin-right: 5px;
 }
 
 .edit-topic-list .topic input {
-  width: 300px;
+  width: 100%;
 }
 
 .project-card .title {
@@ -1636,6 +1649,14 @@ th:last-of-type {
 
   nav.desktop {
     display: none;
+  }
+
+  .edit-topic-list .topic {
+    width: 100%;
+  }
+
+  .edit-topic-list .topic:nth-child(odd) {
+    margin-right: 0;
   }
 
   .dialog {
