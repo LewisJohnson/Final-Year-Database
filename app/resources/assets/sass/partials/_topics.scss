@@ -73,7 +73,6 @@
 		cursor: -moz-grab;
 		cursor: -webkit-grab;
 		user-select: none;
-		@include transition--medium-cb();
 
 		&:active{
 			cursor: grabbing;

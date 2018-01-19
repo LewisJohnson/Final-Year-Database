@@ -1361,14 +1361,19 @@ $(".open-tab").on('click', function() {
 	var host = $(".content-host");
 
 	if(currentContent.attr("aria-hidden") == "true"){
-		host.html("");
+		host.html(currentContent.html());
+		
 		tabsContent.attr("aria-expanded", "false");
 		tabsContent.attr("aria-hidden", "true");
-		buttons.removeClass("button--accent");
 
-		host.html(currentContent.html());
+		buttons.removeClass("button--accent");
+		buttons.blur();
+
 		currentContent.attr("aria-expanded", "true");
 		currentContent.attr("aria-hidden", "false");
+
+		tabs.removeClass("selected");
+
 		$(this).addClass("button--accent");
 		// setCookie(content.data("cookie-name"), false, 365);
 	}
