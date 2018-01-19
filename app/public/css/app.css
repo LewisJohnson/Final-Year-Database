@@ -91,12 +91,9 @@ button {
   border: none;
   font-family: "Roboto", sans-serif;
   color: #757575;
-  -webkit-transition-duration: background-color 0.28s cubic-bezier(0.19, 0.49, 0.35, 0.76);
-          transition-duration: background-color 0.28s cubic-bezier(0.19, 0.49, 0.35, 0.76);
-}
-
-button:focus {
-  background: #e6e6e6;
+  outline: none;
+  -webkit-transition: 0.24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
+  transition: 0.24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
 }
 
 .form-field {
@@ -141,10 +138,6 @@ button:focus {
   -ms-flex-preferred-size: 0;
       flex-basis: 0;
   padding: 8px;
-}
-
-.vertical-select :first-child {
-  margin-top: 1rem;
 }
 
 .checkbox {
@@ -231,6 +224,11 @@ button:focus {
   text-align: center;
   line-height: 36px;
   vertical-align: middle;
+}
+
+.button:focus,
+button:focus {
+  background: #e6e6e6;
 }
 
 .button--svg {
@@ -324,6 +322,14 @@ button:focus {
 
 .button-group--horizontal > * {
   margin: 0 5px;
+}
+
+.button-group--horizontal :first-child {
+  margin-left: 0;
+}
+
+.button-group--horizontal :last-child {
+  margin-right: 0;
 }
 
 .button-group--strech > * {
@@ -867,7 +873,7 @@ nav.mobile {
 
 nav.mobile > div {
   width: 100%;
-  height: 83vh;
+  height: 92vh;
   overflow-y: auto;
 }
 
@@ -1286,15 +1292,14 @@ th:last-of-type {
   z-index: 2;
 }
 
-#header.mobile h1 {
-  line-height: 50px;
-  font-size: 100%;
-  text-align: right;
-}
-
 #header.mobile a {
-  margin: 0 0 0 auto;
+  line-height: 50px;
+  font-size: 5vw;
+  color: white;
+  font-weight: bold;
+  margin-left: auto;
   margin-right: 1rem;
+  text-align: right;
   text-decoration: none;
   display: inline-block;
 }
@@ -1304,14 +1309,10 @@ th:last-of-type {
 }
 
 .hamburger-list {
-  position: relative;
-  width: 40px;
-  height: 50px;
-  font-size: 24px;
   cursor: pointer;
   list-style: none;
   outline: none;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hamburger-line {
@@ -1427,9 +1428,9 @@ th:last-of-type {
 }
 
 .card ul.topics-list .topic {
-  background: black;
-  display: inline-block;
+  background: #323232;
   color: white;
+  display: inline-block;
   border: 1px solid black;
   border-radius: 2px;
   margin-right: 5px;
@@ -1437,7 +1438,7 @@ th:last-of-type {
 }
 
 .card ul.topics-list .topic.primary {
-  background: #ffd700;
+  background: gold;
   border-color: #e6c200;
   color: black;
 }
@@ -1447,6 +1448,10 @@ th:last-of-type {
   padding-left: 8px;
 }
 
+.card ul.topics-list .topic.primary:hover {
+  background: #ffdf33;
+}
+
 .card ul.topics-list .topic a,
 .card ul.topics-list .topic p {
   display: inline-block;
@@ -1454,6 +1459,10 @@ th:last-of-type {
   color: inherit;
   margin: 0;
   padding: 5px;
+}
+
+.card ul.topics-list .topic:hover {
+  background: #4c4b4b;
 }
 
 .card ul.topics-list .no-topics {
@@ -1480,7 +1489,6 @@ th:last-of-type {
 
 .topics-list.edit .topic-remove {
   display: inline-block;
-  background: none;
   color: white;
   padding: 5px;
   width: 30px;
@@ -1490,13 +1498,22 @@ th:last-of-type {
 }
 
 .topics-list.edit .topic {
+  cursor: move;
+  /* fallback if grab cursor is unsupported */
+  cursor: grab;
   cursor: -webkit-grab;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  outline: none;
+  -webkit-transition: 0.24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
+  transition: 0.24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
+}
+
+.topics-list.edit .topic:active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .topics-list.edit .topic:first-child.first {
@@ -1518,6 +1535,7 @@ th:last-of-type {
   outline: none;
   display: inline-block;
   width: auto;
+  border: none;
 }
 
 #debug {

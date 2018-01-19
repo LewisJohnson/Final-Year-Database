@@ -31,7 +31,7 @@
 				{{ $errors->first('username') }}
 			</p>
 
-			<div class="form-field">
+			<div class="footer footer--dark">
 				<button class="button button--raised button--accent" type="submit">LOG IN</button>
 			</div>
 		</form>

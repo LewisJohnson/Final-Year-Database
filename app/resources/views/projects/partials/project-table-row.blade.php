@@ -1,5 +1,5 @@
 @foreach($projects as $project)
-	<tr class="pointer" tabindex="0" @if($view == "transaction") onclick="window.location='{{ action('ProjectController@transactions', $project->id)}}';" @else onclick="window.location='{{ action('ProjectController@show', $project->id)}}';"@endif >
+	<tr class="pointer" tabindex="0" @if($view == "transaction") title="Browse transactions for {{ $project->title }}" onclick="window.location='{{ action('ProjectController@transactions', $project->id)}}';" @else onclick="window.location='{{ action('ProjectController@show', $project->id)}}';"@endif >
 		@if($project->getPrimaryTopic() != null)
 			<td>
 				<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
@@ -14,6 +14,10 @@
 			@if($project->supervisor)
 				<td>
 					<a href="{{ action('ProjectController@bySupervisor', $project->supervisor->id) }}">{{ $project->supervisor->user->getFullName() }}</a>
+				</td>
+			@else
+				<td>
+					<p>Error</p>
 				</td>
 			@endif
 		@endif

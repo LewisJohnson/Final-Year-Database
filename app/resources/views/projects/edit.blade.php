@@ -47,7 +47,7 @@
 						</li>
 					@endif
 				@endforeach
-				<input list="topicsDataList" style="border:none" type="text" name="name" id="addTopicInput">
+				<input list="topicsDataList" type="text" name="name" id="addTopicInput">
 				<div style="display: block" class="loader"></div>
 			</ul>
 			<div class="loader"></div>

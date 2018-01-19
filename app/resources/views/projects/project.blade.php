@@ -34,15 +34,9 @@
 	<ul class="topics-list">
 		@if (count($project->topics))
 			@foreach($project->topics as $topic)
-				@if($project->getPrimaryTopic())
-					<li style="display: none" class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
-						<p>{{$topic->name}}</p>
-					</li>
-				@else
-					<li style="display: none" class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
-						<p>{{$topic->name}}</p>
-					</li>
-				@endif
+				<li style="display: none" class="pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
+					<a title="Browse projects with the topic {{ $topic->name }}" href="{{ action('ProjectController@byTopic', $topic->id) }}">{{$topic->name}}</a>
+				</li>
 			@endforeach
 			<li>
 				<div class="loader loader--medium" style="display: block"></div>
@@ -67,7 +61,10 @@
 	</ul>
 </div>
 
-<div class="button-group button-group--horizontal">
+<div class="button-group button-group--horizontal ">
+
+	<a class="button button--raised" href="javascript:history.back()">Back</a>
+
 	{{-- STUDENT SELECT --}}
 	@if($user->isStudent())
 		@if($user->student->project_status == 'none')
@@ -90,7 +87,6 @@
 		@endif
 	@endif
 
-	<a class="button button--raised" href="javascript:history.back()">Back</a>
 </div>
 
 </div>
