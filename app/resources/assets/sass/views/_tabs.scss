@@ -2,7 +2,6 @@ ul.tab-container{
 	list-style: none;
 	padding: 0px !important;
 	display: flex;
-	overflow-x: scroll;
 }
 
 .tab{
@@ -18,11 +17,13 @@ ul.tab-container{
 }
 
 .mask{
-	position: absolute;
+	display: none;
+	position: relative;
+	float: right;
 	width: 100px;
-	height: 50px;
-	top: 30vh;
-	right: 7vw;
-	background: linear-gradient(to right, transparent 0%, white 60%);
+	height: 53px;
+	top: -45px;
+	right: -5px;
+	background: linear-gradient(to right, transparent 0%, white 100%);
 	pointer-events: none;
 }

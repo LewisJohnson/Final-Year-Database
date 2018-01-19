@@ -4,6 +4,9 @@
 
 @media screen and (max-width: 970px){
 
+	.mask{ display: block; }
+	ul.tab-container{ overflow-x: scroll; }
+
 	.table-action-header, .table-action{
 		display: none;
 	}
