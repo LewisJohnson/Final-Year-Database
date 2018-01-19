@@ -248,10 +248,14 @@ button{
 	:last-child{ margin-right: 0; }
 }
 
+.button-group--vertical{
+	> *{ margin: 10px 0; display: block;}
+	:first-child{ margin-top: 0; }
+	:last-child{ margin-bottom: 0; }
+}
+
 .button-group--strech{
-	> *{
-		flex: 1;
-	}
+	> *{ flex: 1; }
 }
 
 .help-block{

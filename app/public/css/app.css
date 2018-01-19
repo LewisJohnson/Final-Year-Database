@@ -332,6 +332,19 @@ button:focus {
   margin-right: 0;
 }
 
+.button-group--vertical > * {
+  margin: 10px 0;
+  display: block;
+}
+
+.button-group--vertical :first-child {
+  margin-top: 0;
+}
+
+.button-group--vertical :last-child {
+  margin-bottom: 0;
+}
+
 .button-group--strech > * {
   -webkit-box-flex: 1;
       -ms-flex: 1;

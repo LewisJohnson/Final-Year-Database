@@ -15,7 +15,7 @@ class Controller extends BaseController
 	// The amount of paginated items per page
 	public $paginationCount;
 	public $restoreTimeInMinutes;
-	private $user;
+	public $user;
 
 	public function __construct(){
 		$this->paginationCount = 25;

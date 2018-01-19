@@ -399,7 +399,7 @@ class ProjectController extends Controller{
 	 */
 	public function byTopic($id) {
 		if(Session::get("db_type") == "ug"){
-			$topic = TopicUg::where('id', $id)->first();
+			$topic = TopicUg::find($id);
 			$projects = ProjectUg::
 				join('project_topics_ug', 'project_topics_ug.project_id', '=', 'projects_ug.id')
 				->where('project_topics_ug.topic_id', '=', $id)
@@ -426,7 +426,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function bySupervisor($id) {
-		$supervisor = Supervisor::where('id', $id)->first();
+		$supervisor = Supervisor::find($id);
 
 		if(Session::get("db_type") == "ug"){
 			$projects = ProjectUg::where('supervisor_id', $supervisor->id)->get();

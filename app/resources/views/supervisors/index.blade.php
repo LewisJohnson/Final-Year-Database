@@ -13,8 +13,9 @@
 			@endif
 		</div>
 
-		<div class="actions">
-			<a class="button button--raised button--accent" href="/projects/create">New Project</a>
+		<div class="actions button-group--vertical">
+			<a class="button button--raised button--accent" title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
+			<a class="button button--raised button--accent" title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
 		</div>
 	</div>
 	<div class="supervisor hub">

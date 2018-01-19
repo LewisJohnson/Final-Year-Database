@@ -84,7 +84,8 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
 
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
-
+	Route::get('supervisor/transactions', 'SupervisorController@transactions');
+	
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');

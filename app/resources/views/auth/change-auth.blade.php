@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="footer footer--dark">
-				<button class="button button--raised button--accent" type="submit">CHANGE AUTHENTICATION</button>
+				<button onclick="window['Dialog'].showLoader();" class="button button--raised button--accent" type="submit">CHANGE AUTHENTICATION</button>
 			</div>
 		</form>
 	</div>

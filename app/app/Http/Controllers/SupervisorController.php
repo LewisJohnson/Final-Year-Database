@@ -21,6 +21,45 @@ class SupervisorController extends Controller{
 		$this->middleware('auth');
 	}
 
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(){
+		return view('supervisors.index');
+	}
+
+
+	/**
+	 * Displays transactions for projects owned by supervisor
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function transactions(){
+		$projects = Auth::user()->projects->pluck('id');
+
+		if(Session::get("db_type") == "ug"){
+			$transactions = TransactionUg::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
+		} elseif(Session::get("db_type") == "masters") {
+			$transactions = TransactionMasters::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
+		}
+
+		return view('supervisors.transactions')->with('transactions', $transactions);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		//
+	}
+
 	public function acceptStudent(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
@@ -83,59 +122,4 @@ class SupervisorController extends Controller{
 	public function acceptedStudentTable(){
 		return view('supervisors.partials.accepted-students-table');
 	}
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index(){
-		return view('supervisors.index');
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
 }

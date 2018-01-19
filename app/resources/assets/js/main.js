@@ -1243,6 +1243,7 @@ $("#loginForm").on('submit', function(e){
 		success:function(showDialog){
 			if(showDialog == "true"){
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideDialog();
+				
 				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.isClosable = false;
 				$(AjaxFunctions.prototype.Selectors_.CHANGE_AUTH_DIALOG)[0].dialog.showDialog();
 			} else {

@@ -51,9 +51,9 @@ class Supervisor extends User{
 		if($includeDeleted){
 			$proj->withTrashed();
 		}
-
 		return $proj->get();
 	}
+
 	public function getProjectOffers(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
