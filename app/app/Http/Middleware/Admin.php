@@ -17,6 +17,8 @@ class Admin
 		if (Auth::check() && Auth::user()->isAdmin()){
 			return $next($request);
 		}
-		return redirect('/');
+		
+		// We don't need students knowing the route exists 
+		abort(404);
 	}
 }

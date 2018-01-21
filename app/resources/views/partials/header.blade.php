@@ -21,7 +21,7 @@
 				<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a>
 			</div>
 		</li>
-		@if(strpos(Session::get("auth_type"), 'supervisor') !== false)
+		@if(Session::get('auth_level') == 'supervisor')
 			<li class="nav-button">
 				<a href="{{ action('SupervisorController@index') }}" title="Supervisor options">Supervisor</a>
 			</li>

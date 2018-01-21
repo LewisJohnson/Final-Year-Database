@@ -2,6 +2,7 @@
 namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Closure;
 
 class SupervisorOrSuperior
@@ -17,6 +18,8 @@ class SupervisorOrSuperior
 		if (Auth::check() && Auth::user()->isSupervisorOrSuperior()){
 			return $next($request);
 		}
-		return redirect('/');
+
+		// We don't need students knowing the route exists 
+		abort(404);
 	}
 }

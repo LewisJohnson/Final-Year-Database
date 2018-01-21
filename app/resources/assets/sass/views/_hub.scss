@@ -39,11 +39,12 @@
 }
 
 .hub .section{
-	width: calc(50% - 7px);
+	width: calc(50% - 12px);
 	border: 1px solid $form-border-color;
-	margin-top: 7px;
-	margin-bottom: 7px;
+	margin: 6px;
+	
 	border-radius: 3px;
+	overflow: hidden;
 
 	.header{
 		color: #707070;

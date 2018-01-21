@@ -1,4 +1,4 @@
-@if(strpos(Session::get("auth_type"), 'admin') !== false)
+@if(Session::get('auth_level') == 'admin')
 	<li class="nav-button dropdown">
 		<a href="/admin" title="Administrator Options">Administrator</a>
 		@include('svg.arrow-down')

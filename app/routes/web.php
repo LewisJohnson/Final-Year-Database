@@ -11,9 +11,10 @@
 |
 | 1. Web Routes (Accessible by any request)
 | 2. Admin Routes (UG and Msc Admin)
-| 3. Supervisor And Admin Routes (UG/Msc Admin/Supervisor)
-| 4. Student Routes (UG and Msc Students)
-| 5. Authenticated User Routes (Anyone who is logged in)
+| 3. Supervisor And Admin Routes
+| 4. Supervisor Routes
+| 5. Student Routes (UG and Msc Students)
+| 6. Authenticated User Routes (Anyone who is logged in)
 |
 */
 
@@ -81,9 +82,19 @@ Route::group(['middleware' => ['web', 'admin']], function() {
    3. SUPERVISOR AND ADMIN ROUTES
    ============================== */
 Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
-
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
+	
+	// Student Report
+	Route::get('reports/student', 'StudentController@report');
+});
+
+/* =================
+   5. SUPERVISOR ROUTES
+   ================= */
+Route::group(['middleware' => ['web', 'supervisor']], function() {
+
+	// Project Transaction
 	Route::get('supervisor/transactions', 'SupervisorController@transactions');
 	
 	// Supervisor
@@ -91,16 +102,10 @@ Route::group(['middleware' => ['web', 'supervisorOrSuperior']], function() {
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
-
-	// Student Report
-	Route::get('reports/student', 'StudentController@report');
-
-	// Change Authenticaion
-	Route::post('authenticaion-change', 'Auth\AuthController@change');
 });
 
 /* =================
-   4. STUDENT ROUTES
+   5. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'student']], function() {
 	Route::patch('projects/{id}/restore', 'ProjectController@restore');
@@ -116,7 +121,7 @@ Route::group(['middleware' => ['web', 'student']], function() {
 
 
 /* ============================
-   5. AUTHENTICATED USER ROUTES
+   6. AUTHENTICATED USER ROUTES
    ============================ */
 Route::group(['middleware' => ['auth']], function() {
 
@@ -149,6 +154,8 @@ Route::group(['middleware' => ['auth']], function() {
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 
+	// Change Authenticaion
+	Route::post('authenticaion-change', 'Auth\AuthController@change');
 	Route::get('showChangeAuthDialog', function (){
 		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
 	});

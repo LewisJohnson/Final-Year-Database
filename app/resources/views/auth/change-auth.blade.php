@@ -9,8 +9,12 @@
 			{{ csrf_field() }}
 			<div class="form-field">
 				<select class="text" name="auth_type">
-					<option selected value="admin_ug">Undergraduate Admin</option>
+					<option value="admin_system">System Admin</option>
+					<option value="admin_department">Department Admin</option>
+
+					<option value="admin_ug">Undergraduate Admin</option>
 					<option value="supervisor_ug">Undergraduate Supervisor</option>
+
 					<option value="admin_masters">Masters Admin</option>
 					<option value="supervisor_masters">Masters Supervisor</option>
 				</select>

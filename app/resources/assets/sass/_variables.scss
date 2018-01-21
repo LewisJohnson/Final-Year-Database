@@ -51,13 +51,12 @@ $error-border-color: darken($error-bg, 5%);
 /* NOTIFICATION */
 $notification-bg: #ececec;
 $notification-error-bg: #ff0033;
+$notification-warning-bg: #ffcc00;
 $notification-success-bg: #00b724;
+$notification-animation-duration: 5s;
+$notification-fullscreen: false; // True | false
 
-// Panels
-$panel-default-heading-bg: #fff;
-
-
-// Topics
+/* TOPICS */
 $topic-bg: #323232;
 $topic-color: white;
 $topic-primary-bg: gold;
