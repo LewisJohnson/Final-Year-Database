@@ -2,16 +2,17 @@
 @section('content')
 
 @section('scripts')
-	<script src="{{ asset('js/views/supervisor.js') }}"></script>
+	<script src="{{ asset('js/pagination/user-agent-pagination.js') }}"></script>
+
 @endsection
 
 @php
 if(empty($_GET["unqiue"])){ $_GET["unqiue"] = 0;}
 @endphp
 
-<div class="centered width-800">
+<div class="centered width-1200">
 	<h1>User Agent Strings</h1>
-	<h3>An overview of user agent strings of everyone who has visited the index page.</h3>
+	<h3>An overview of user agent strings.</h3>
 
 	<div class="checkbox" style="margin-top: 15px;">
 		<input class="checkbox-input" id="show-fv-only" type="checkbox"
@@ -28,7 +29,7 @@ if(empty($_GET["unqiue"])){ $_GET["unqiue"] = 0;}
 		<thead>
 			<tr>
 				<th>User Agent</th>
-				<th></th>
+				<th>Referrer</th>
 			</tr>
 		</thead>
 		<tbody>

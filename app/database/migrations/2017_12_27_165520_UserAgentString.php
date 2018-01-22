@@ -15,6 +15,7 @@ class UserAgentString extends Migration
 		Schema::create('user_agent_strings', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->text('user_agent');
+			$table->text('referer');
 			$table->boolean('first_visit');
 		});
 	}

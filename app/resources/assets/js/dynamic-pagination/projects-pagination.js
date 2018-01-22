@@ -11,7 +11,7 @@ var projects_pageNumber = 2,
 			if(!projects_endOfTable && !projects_awaitingResponse){
 				$(".loader.projects").show();
 				projects_awaitingResponse = true;
-				var ajaxUrl = "/projects?partial=true?page=" + projects_pageNumber;
+				var ajaxUrl = "/projects?page=" + projects_pageNumber;
 				$.ajax({
 					type : 'GET',
 					url: ajaxUrl,

@@ -61,7 +61,7 @@ class ProjectController extends Controller{
 			->where('status', 'on-offer')
 			->where('student_proposed_project', 0);
 
-		if($request->query("partial")){
+		if($request->query("page")){
 			return view('projects.partials.project-table-row')
 				->with('projects', $projects->paginate($this->paginationCount))
 				->with('view', 'index');
