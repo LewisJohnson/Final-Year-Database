@@ -6,7 +6,7 @@
 <h1>Report by Student</h1>
 @if(Session::get('db_type') == 'ug')
 	<h5>There are a total of <b>{{ count(SussexProjects\StudentUg::get()) }}</b> undergraduate students.</h5>
-@else
+@elseif(Session::get('db_type') == 'masters')
 	<h5>There are a total of <b>{{ count(SussexProjects\StudentMasters::get()) }}</b> masters students.</h5>
 @endif
 
@@ -32,7 +32,7 @@
 				@foreach(SussexProjects\StudentUg::Where('project_status', $status)->get() as $student)
 					@include ('partials.student-edit', array('student'=> $student))
 				@endforeach
-			@else
+			@elseif(Session::get('db_type') == 'masters')
 				@foreach(SussexProjects\StudentMasters::Where('project_status', $status)->get() as $student)
 					@include ('partials.student-edit', array('student'=> $student))
 				@endforeach

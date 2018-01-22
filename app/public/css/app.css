@@ -1176,6 +1176,10 @@ ul.tab-container {
   padding-left: 2rem;
 }
 
+.content-host h2 {
+  margin: 1rem 0 !important;
+}
+
 .mask {
   display: none;
   position: relative;
@@ -1723,6 +1727,17 @@ th:last-of-type {
 
 .card ul {
   padding-left: 40px;
+}
+
+.card .footer {
+  margin: -1rem;
+  margin-top: 20px;
+  padding: 5px;
+  background: rgba(158, 158, 158, 0.2);
+}
+
+.card .footer p {
+  display: inline;
 }
 
 .card-slim-content p {

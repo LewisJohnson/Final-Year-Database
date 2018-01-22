@@ -6,7 +6,6 @@ ul.tab-container{
 
 .tab{
 	display: inline-block;
-
 	.content{ display: none; }
 }
 
@@ -14,6 +13,8 @@ ul.tab-container{
 	ul{
 		padding-left: 2rem;
 	}
+
+	h2 {margin: 1rem 0 !important;}
 }
 
 .mask{

@@ -14,16 +14,16 @@ class AuthController extends Controller{
 			abort(404);
 		}
 
-		if(request('auth_type') == 'superivsor_ug'){
+		if(request('auth_type') == 'supervisor_ug'){
 			Session::put('auth_type', 'ug'); //ug, masters, department, system
 			Session::put('db_type', 'ug');
-			Session::put('auth_level', 'superivsor');
+			Session::put('auth_level', 'supervisor');
 		}
 
-		if(request('auth_type') == 'superivsor_masters'){
+		if(request('auth_type') == 'supervisor_masters'){
 			Session::put('auth_type', 'masters'); //ug, masters, department, system
 			Session::put('db_type', 'masters');
-			Session::put('auth_level', 'superivsor');
+			Session::put('auth_level', 'supervisor');
 		}
 
 		if(request('auth_type') == 'admin_ug'){

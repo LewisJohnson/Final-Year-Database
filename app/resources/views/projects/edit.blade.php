@@ -1,8 +1,13 @@
 @extends('layouts.app')
 @section ('content')
+
+@section('scripts')
+	<script src="{{ asset('js/views/supervisor.js') }}"></script>
+@endsection
+
 @if(Session::get('db_type') == 'ug')
 	{!! SussexProjects\TopicUg::getDatalist() !!}
-@else
+@elseif(Session::get('db_type') == 'masters')
 	{!! SussexProjects\TopicMasters::getDatalist() !!}
 @endif
 

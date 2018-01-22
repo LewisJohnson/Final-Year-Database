@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section ('content')
+@section('scripts')
+	<script src="{{ asset('js/views/supervisor.js') }}"></script>
+@endsection
 @php($user = Auth::user())
 <div class="centered width-1000 hub-container">
 	<div class="header">

@@ -1,5 +1,5 @@
 let mix = require('laravel-mix');
-// require('babel-polyfill'); for ie 10
+var webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -15,10 +15,28 @@ let mix = require('laravel-mix');
 mix.disableNotifications();
 // mix.sourceMaps();
 
+
+new webpack.ProvidePlugin({
+  $: 'jquery',
+  jQuery: 'jquery'
+})
+
+// JAVASCRIPT
+mix.js('resources/assets/js/jquery-3.2.1.js', 'public/js');
 mix.js('resources/assets/js/main.js', 'public/js');
-mix.js('resources/assets/js/sw.js', 'public/js');
+mix.scripts('resources/assets/js/helpers.js', 'public/js/helpers.js');
 mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
-mix.less('resources/assets/jquery-confirm.less', 'public/css');
+
+// JS | VIEWS
+mix.js('resources/assets/js/views/help.js', 'public/js/views');
+mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
+
+// JS | PAGINATION
+mix.js('resources/assets/js/dynamic-pagination/projects-pagination.js', 'public/js/pagination');
+mix.js('resources/assets/js/dynamic-pagination/user-agent-pagination.js', 'public/js/pagination');
+
+// STYLE
+mix.less('resources/assets/sass/jquery-confirm.less', 'public/css');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');

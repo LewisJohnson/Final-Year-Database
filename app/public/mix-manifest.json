@@ -1,9 +1,14 @@
 {
-    "/js/main.js": "/js/main.js",
+    "/js/jquery-3.2.1.js": "/js/jquery-3.2.1.js",
     "/css/jquery-confirm.css": "/css/jquery-confirm.css",
     "/css/app.css": "/css/app.css",
     "/css/accessible-contrast.css": "/css/accessible-contrast.css",
     "/css/accessible-font.css": "/css/accessible-font.css",
-    "/js/sw.js": "/js/sw.js",
-    "/js/jquery-confirm.js": "/js/jquery-confirm.js"
+    "/js/views/supervisor.js": "/js/views/supervisor.js",
+    "/js/views/help.js": "/js/views/help.js",
+    "/js/main.js": "/js/main.js",
+    "/js/jquery-confirm.js": "/js/jquery-confirm.js",
+    "/js/pagination/user-agent-pagination.js": "/js/pagination/user-agent-pagination.js",
+    "/js/pagination/projects-pagination.js": "/js/pagination/projects-pagination.js",
+    "/js/helpers.js": "/js/helpers.js"
 }

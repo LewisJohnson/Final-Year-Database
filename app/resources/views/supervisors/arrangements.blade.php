@@ -22,7 +22,7 @@
 				<label for="take_students_ug" >Take Undergraduate Students</label>
 			</div>
 		</div>
-    @else
+    @elseif(Session::get('db_type') == 'masters')
 		<div class="form-field">
 			<label class="hover-label" for="description" >Masters Project Load</label>
 			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_masters }}"></input>

@@ -110,5 +110,82 @@ return [
 		<li>About - shows information about the devlopment of the system</li>
 	</ul>',
 
+	// HELP TAB 4
+	'help_tab_4' => 'Cookies',
+	'help_tab_4_content' =>
+	'
+	<p>To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.</p>
+	<h3>What are cookies?</h3>
+	<p>A cookie is a small text file that a website saves on your computer or mobile device when you visit the site. 
+	It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</p>
+	<h3>How do we use cookies?</h3>
+	<p>A number of our pages use cookies to remember:
+	your display preferences, such as contrast colour settings or font size
+	if you have agreed (or not) to our use of cookies on this site
+	Also, some videos embedded in our pages use a cookie to anonymously gather statistics on how you got there and what videos you visited.
+	Enabling these cookies is not strictly necessary for the website to work but it will provide you with a better browsing experience. You can delete or block these cookies, but if you do that some features of this site may not work as intended.
+	The cookie-related information is not used to identify you personally and the pattern data is fully under our control. These cookies are not used for any purpose other than those described here.</p>
+	
+	<table class="data-table">
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Name</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Accessibility</td>
+				<td>highContrast</td>
+				<td>Determines if high contrast is enabled</td>
+			</tr>
+			<tr>
+				<td>Accessibility</td>
+				<td>largeFont</td>
+				<td>Determines if large font is enabled.</td>
+			</tr>
+			<tr>
+				<td>Security</td>
+				<td>XSRF-TOKEN</td>
+				<td>This cookie helps prevent malicious activity.</td>
+			</tr>
+			<tr>
+				<td>Security</td>
+				<td>..._session</td>
+				<td>Your unique session identifier.</td>
+			</tr>
+			<tr>
+				<td>Analytics</td>
+				<td>vb</td>
+				<td>Determines if the user has visited before.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>cht</td>
+				<td>The current tab selected in the help page.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>fp</td>
+				<td><b>Students only</b> - A list of your favorited projects.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>hide-accepted</td>
+				<td><b>Supervisors only</b> - Determines if the tab "Accepted Students" supervisor tab is hidden.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>hide-offers</td>
+				<td><b>Supervisors only</b> - Determines if the tab "Offers" supervisor tab is hidden.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>hide-projects</td>
+				<td><b>Supervisors only</b> - Determines if the tab "Projects" supervisor tab is hidden.</td>
+			</tr>
+		</tbody>
+	</table>',
 ];
 

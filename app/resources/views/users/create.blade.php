@@ -74,7 +74,7 @@
 	<div id="student-form">
 		@if(Session::get('db_type') == 'ug')
 		<p>You are creating an undergraduate student.</p>
-		@else
+		@elseif(Session::get('db_type') == 'masters')
 		<p>You are creating a masters student.</p>
 		@endif
 		<div class="form-field">

@@ -1,27 +1,23 @@
-import Swappable from '@shopify/draggable/lib/swappable';
-
-$(function() {
-"use strict";
 
 /* FILE STRUCTURE
 
-1. AJAX Setup and Cookies
-2. Helper Functions
+1. AJAX Setup
 3. HTML Modifications
 4. Components
 	4.1 Mobile Menu
 	4.2 Dialog / Modal
 	4.3 Data Table
-	4.4 Project Topics [Supervisor]
 	4.5 Forms / AJAX Functions
 	4.6 Edit Topics [Admin]
 	4.7 Menu
 5. Second Marker
 6. Dynamic Pagination
-7. Supervisor
 8. Other
 9. Initialise Everything
 */
+
+;$(function() {
+"use strict";
 
 /* ================
 	1. AJAX Setup
@@ -31,70 +27,6 @@ $.ajaxSetup({
 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 	}
 });
-
-/* ======================
-	2. Helpers Functions
-   ====================== */
-function removeAllShadowClasses(element){
-	$(element).removeClass (function (index, className) {
-		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
-	});
-}
-
-function sortUnorderedList(ul) {
-	var listitems = ul.children('li').get();
-
-	listitems.sort(function(a, b) {
-		return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
-	})
-
-	$.each(listitems, function(idx, itm) { ul.append(itm); });
-}
-
-
-function addAlphaHeadersToList(ul) {
-	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');;
-
-	for (var i = 0; i < listitems.length; i++) {
-		var firstChar = $(listitems[i]).text().replace(/\s/g, '').charAt(0).toUpperCase();
-
-		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
-			continue;
-		}
-		var prevFirstChar = $(listitems[i - 1]).text().replace(/\s/g, '').charAt(0).toUpperCase();
-		if(firstChar != prevFirstChar){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
-		}
-	}
-}
-
-function addTitleHeadersToList(ul) {
-	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');;
-
-	for (var i = 0; i < listitems.length; i++) {
-		var t = $(listitems[i]).text();
-		var nameTitle = /[^[, ]*]*/.exec(t)[0].toUpperCase().replace(/\s/g, '');
-
-		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
-			continue;
-		}
-
-		var pt = $(listitems[i - 1]).text();
-		var prevNameTitle = /[^[, ]*]*/.exec(pt)[0].toUpperCase().replace(/\s/g, '');
-
-		if(nameTitle != prevNameTitle){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
-		}
-	}
-}
 
 /* ========================
 	3. HTML Modifications
@@ -375,10 +307,6 @@ DataTable.prototype.init = function () {
 	$(this.checkboxes).each(function(i) {
 		$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
 	});
-
-	$(this.headers).each(function(i) {
-		$(this).css("cursor", "pointer");
-	});
 };
 
 DataTable.prototype.initAll = function () {
@@ -386,144 +314,6 @@ DataTable.prototype.initAll = function () {
 		this.dataTable = new DataTable(this);
 	});
 };
-
-/* =================================
-	4.4 Project Topics [Supervisor]
-   ================================= */
-
-/**
-* Class constructor for project topics.
-*
-* @param {HTMLElement} element The element that will be upgraded.
-*/
-var ProjectTopics =  function ProjectTopics() {};
-window['ProjectTopics'] = ProjectTopics;
-
-ProjectTopics.prototype.CssClasses_ = {
-	DATA_TABLE: 'data-table',
-	IS_SELECTED: 'is-selected'
-};
-
-ProjectTopics.prototype.Selectors_ = {
-	ADD_TOPIC_INPUT: '#addTopicInput',
-	NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
-};
-
-ProjectTopics.prototype.Keys_ = {
-	SPACE: 32,
-	ENTER: 13,
-	COMMA: 45
-};
-
-var projectTopics = new ProjectTopics();
-
-ProjectTopics.prototype.functions = {
-	addTopicToProject: function (projectId, topicName) {
-		$('.loader').show(0);
-		var ajaxUrl = "/projects/topic-add";
-		$.ajax({
-			type: "POST",
-			url: ajaxUrl,
-			data: {
-				topic_name: topicName,
-				project_id: projectId
-			},
-			success: function(data){
-				data = JSON.parse(data);
-				$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
-
-				if($(".topics-list.edit li.topic:last").length > 0){
-					$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
-				} else {
-					$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
-				}
-			}
-		}).done(function(data){
-			$('body').append(data);
-			$('.loader').hide(0);
-		});
-	},
-
-	removeTopicFromProject: function (projectId, topicId) {
-		$('.loader').show(0);
-		var ajaxUrl = "/projects/topic-remove";
-		$.ajax({
-			type: "DELETE",
-			url: ajaxUrl,
-			data: {
-				topic_id : topicId,
-				project_id: projectId
-			},
-			success: function(){
-				$('.topics-list.edit li.topic').each(function(i, obj) {
-					if($(this).data('topic-id') == topicId){
-						$(this).remove();
-					}
-				});
-			},
-		}).done(function(){
-			$('.loader').hide(0);
-		});
-	},
-
-	updateProjectPrimaryTopic: function (projectId, topicId) {
-		$('.loader').show(0);
-		var ajaxUrl = "/projects/topic-update-primary";
-		$.ajax({
-			type: "PATCH",
-			url: ajaxUrl,
-			data: {
-				topic_id : topicId,
-				project_id: projectId
-			},
-			success: function(){
-				$('#editProjectForm').attr('data-project-id', topicId);
-				$('.topics-list.edit li.topic').each(function(i, obj) {
-					if($(this).data('topic-id') == topicId){
-						$(this).addClass("first");
-					} else {
-						$(this).removeClass("first");
-					}
-				});
-			},
-		}).done(function(){
-			$('.loader').hide(0);
-		});
-	},
-};
-
-const swappable = new Swappable(document.querySelectorAll('.topics-list.edit .topic'), {
-	draggable: '.topic',
-});
-
-swappable.on('swappable:swapped', function(){
-	var projectId = $('#editProjectForm').data('project-id');
-	var originalPrimaryTopicId = $('#editProjectForm').data('primary-topic-id');
-	var topicId = $(".topics-list.edit li:first-child").data('topic-id');
-
-	if(topicId != originalPrimaryTopicId){
-		projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
-	}
-});
-
-// Add new topic
-$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function(e) {
-	if (e.which == projectTopics.Keys_.ENTER) {
-		var projectId = $("#editProjectForm").data('project-id');
-		projectTopics.functions.addTopicToProject(projectId, $(this).val());
-	}
-});
-
-// Remove topic
-$('.topics-list.edit').on('click', '.topic .topic-remove', function(){
-	var projectId = $("#editProjectForm").data('project-id');
-	var topicId = $(this).parent('li').data('topic-id');
-	projectTopics.functions.removeTopicFromProject(projectId, topicId);
-});
-
-$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
-	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
-});
 
 /* ============================
 	4.5 Forms / AJAX Functions
@@ -949,265 +739,6 @@ Marker.prototype.initAll = function(){
 	window['Marker'] = new Marker();
 }
 
-/* =========================
-	6. Dynamic Pagination
-   ========================= */
-if($('#project-table').hasClass("index")){
-	var projects_pageNumber = 2,
-		projects_endOfTable = false,
-		projects_awaitingResponse = false;
-
-	$(window).scroll(function() {
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
-			if(!projects_endOfTable && !projects_awaitingResponse){
-				$(".loader.projects").show();
-				projects_awaitingResponse = true;
-				var urlPath = "/projects?partial=true?page=" + projects_pageNumber;
-				$.ajax({
-					type : 'GET',
-					url: urlPath,
-					success : function(data){
-						$(".loader.projects").hide();
-						if(data.length == 0){
-							projects_endOfTable = true;
-							$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
-						}else{
-							$('#project-table tbody').append($(data));
-							window.history.replaceState("", "", "/projects?page=" + projects_pageNumber);
-						}
-						projects_pageNumber += 1;
-					},
-					error: function(data){
-						$('#project-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
-						projects_awaitingResponse = false;
-						$(".loader.projects").hide();
-					}
-				}).done(function(data){
-					projects_awaitingResponse = false;
-					$(".loader.projects").hide();
-				});
-			} else {
-				$(".loader.projects").hide();
-			}
-		}
-	});
-}
-
-
-
-if($('#user-agent-table').length > 0){
-	var agents_pageNumber = 2,
-		agents_endOfTable = false,
-		agents_awaitingResponse = false;
-
-	$(window).scroll(function() {
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
-			if(!agents_endOfTable && !agents_awaitingResponse){
-				$(".loader.user-agent").show();
-				agents_awaitingResponse = true;
-
-				if($('#show-fv-only').prop('checked')){
-					var urlPath = "/system/user-agent?partial=true?unqiue=1?page=" + agents_pageNumber;
-				} else {
-					var urlPath = "/system/user-agent?partial=true?page=" + agents_pageNumber;
-				}
-				$.ajax({
-					type : 'GET',
-					url: urlPath,
-					success : function(data){
-						$(".loader.user-agent").hide();
-
-						if(data.length == 0){
-							agents_endOfTable = true;
-							$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
-						}else{
-							$('#user-agent-table tbody').append($(data));
-							window.history.replaceState("", "", "/system/user-agent?page=" + agents_pageNumber);
-						}
-
-						agents_pageNumber += 1;
-					},
-					error: function(data){
-						$('#user-agent-table').after('<p style="margin:1rem auto;text-align:center;color:#e00;">There\'s a problem reaching the server.</p>');
-						agents_awaitingResponse = false;
-					}
-				}).done(function(data){
-					agents_awaitingResponse = false;
-					$(".loader.user-agent").hide();
-				});
-			} else {
-				$(".loader.user-agent").hide();
-			}
-		}
-	});
-}
-
-/* ======================
-	 7. SUPERVISOR
-   ====================== */
-
-// Accept or Reject Student
-$('.supervisor-table .offer-action').on('click', function() {
-	var actionButton = $(this);
-	var actionType = actionButton.data('action-type');
-	var tableRow = actionButton.parents().eq(1);
-	var student_id = tableRow.data('student-id');
-
-	actionButton.html('<div class="loader"></div>');
-	$('.loader', actionButton).css('display', 'block');
-
-	if(actionType === "accept"){
-		$("#supervisor-accepted-students-table").html('<div class="loader loader--x-large"></div>');
-		$('.loader', '#supervisor-accepted-students-table').css('display', 'block');
-
-		var ajaxUrl = '/supervisor/student-accept';
-	} else if (actionType === "reject"){
-		var ajaxUrl = '/supervisor/student-reject';
-	}
-
-	if(ajaxUrl == null){
-		console.log("Invalid supervisor action.");
-		return;
-	}
-
-	$.ajax({
-		method: 'POST',
-		url: ajaxUrl,
-		data: {
-			student_id : student_id
-		},
-		success: function(data){
-			tableRow.hide(400, function() {
-				tableRow.remove();
-			});
-			if(actionType === "accept"){
-				showNotification('', 'Student has been accepted.');
-				$.ajax({
-					method: 'GET',
-					url: '/supervisor/accepted-students-table',
-					success: function(data){
-						$("#supervisor-accepted-students-table").html(data);
-					},
-					error: function() {
-						actionButton.html(actionType);
-					}
-				});
-			} else if (actionType === "reject"){
-				showNotification('', 'Student has been rejected.');
-			}
-		},
-		error: function() {
-			actionButton.html(actionType);
-		}
-	});
-});
-
-
-$('.supervisor-table').on('submit', 'form.delete-project', function(e) {
-	e.preventDefault();
-	var form = $(this);
-	var projectName = form.data('project-title');
-
-	$.confirm({
-		title: 'Delete',
-		type: 'red',
-		icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
-		theme: 'modern',
-		escapeKey: true,
-		backgroundDismiss: true,
-		animateFromElement : false,
-		content: 'Are you sure you want to delete <b>' + projectName + '</b>?',
-		buttons: {
-			confirm: {
-				btnClass: 'btn-red',
-				action: function(){
-					$.ajax({
-						url: form.prop('action'),
-						type:'DELETE',
-						success:function(row){
-							form.parent().parent().replaceWith(row);
-						}
-					});
-				}
-			},
-			cancel: {},
-		}
-	});
-});
-
-$('.supervisor-table').on('submit', 'form.restore-project', function(e) {
-	e.preventDefault();
-	var form = $(this);
-	var projectName = form.data('project-title');
-
-	$.confirm({
-		title: 'Restore',
-		type: 'green',
-		icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3M12,8V13L16.28,15.54L17,14.33L13.5,12.25V8H12Z" /></svg></div>',
-		theme: 'modern',
-		escapeKey: true,
-		backgroundDismiss: true,
-		animateFromElement : false,
-		content: 'Are you sure you want to restore <b>' + projectName + '</b>?',
-		buttons: {
-			confirm: {
-				btnClass: 'btn-green',
-				action: function(){
-					$.ajax({
-						url: form.prop('action'),
-						type:'PATCH',
-						success:function(row){
-							form.parent().parent().replaceWith(row);
-						}
-					});
-				}
-			},
-			cancel: {},
-		}
-	});
-});
-
-$('#student-edit-list').find('.checkbox input').on('change', function() {
-	var status = $(this).parents().eq(3).data('status');
-	var emailString = "mailto:";
-	var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
-	var emailButtonselector = ".email-selected." + status;
-	$(checkboxSelector).each(function() {
-		if($(this).is(":checked")) {
-			emailString += $(this).parent().parent().data('email');
-			emailString += ",";
-		}
-	});
-	$(emailButtonselector).prop('href', emailString);
-});
-
-$('.edit-student-list .email-selected').on('click', function(e) {
-	if($(this).prop('href') === 'mailto:'){
-		alert("You haven't selected anyone.");
-		e.preventDefault();
-	}
-});
-
-$('.expand').on('click', function(e) {
-	var content = $(this).parents().eq(1).find('.content');
-
-	if(content.attr("aria-expanded") == "true"){
-		$(this).parent().removeClass("active");
-		$(this).find("svg").css("transform", "rotateZ(0deg)");
-		content.hide(200);
-		content.attr("aria-expanded", "false");
-		setCookie(content.data("cookie-name"), true, 365);
-
-	} else {
-		$(this).parent().addClass("active");
-		$(this).find("svg").css("transform", "rotateZ(180deg)");
-		content.show(200);
-		content.attr("aria-expanded", "true");
-		setCookie(content.data("cookie-name"), false, 365);
-	}
-});
-
-
 /* ======================
 	 8. OTHER
    ====================== */
@@ -1352,34 +883,6 @@ $('#create-form-access-select').on('change', function(){
 	}
 });
 
-// Used for the help page
-$(".open-tab").on('click', function() {
-	var currentTab = $(this).parent();
-	var currentContent = currentTab.find(".content");
-	var tabs = $(".tab-container li");
-	var tabsContent = tabs.find(".content");
-	var buttons = tabs.find("button");
-	var host = $(".content-host");
-
-	if(currentContent.attr("aria-hidden") == "true"){
-		host.html(currentContent.html());
-		
-		tabsContent.attr("aria-expanded", "false");
-		tabsContent.attr("aria-hidden", "true");
-
-		buttons.removeClass("button--accent");
-		buttons.blur();
-
-		currentContent.attr("aria-expanded", "true");
-		currentContent.attr("aria-hidden", "false");
-
-		tabs.removeClass("selected");
-
-		$(this).addClass("button--accent");
-		// setCookie(content.data("cookie-name"), false, 365);
-	}
-});
-
 $(".favourite-container").on('click', function() {
 	var svgContainer = $(this);
 	var svg = svgContainer.find('svg');
@@ -1436,6 +939,7 @@ $('nav.mobile .sub-dropdown').on('click', function(){
 		content.show(250);
 	}
 });
+
 /* ===============
 	9. Initialise
    =============== */
@@ -1456,36 +960,3 @@ if($('.project-card').length > 0){
 $(document).ajaxError(function( event, request, settings ) {
 	showNotification('error', 'Something went wrong with that request.');
 });
-
-function showNotification(type, message){
-	var notification = $('.notification');
-	notification.addClass(type);
-	$(notification).html("<p>" + message + "</p>");
-	notification.show();
-
-	setTimeout(function() {
-		notification.hide(0);
-	}, 3000);
-}
-
-function setCookie(cname, cvalue, exdays) {
-	var d = new Date();
-	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-	var expires = "expires="+d.toUTCString();
-	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-	var name = cname + "=";
-	var ca = document.cookie.split(';');
-	for(var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) == ' ') {
-			c = c.substring(1);
-		}
-		if (c.indexOf(name) == 0) {
-			return c.substring(name.length, c.length);
-		}
-	}
-	return '';
-}

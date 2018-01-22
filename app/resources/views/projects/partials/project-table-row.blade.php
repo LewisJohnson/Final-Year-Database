@@ -9,6 +9,7 @@
 		@endif
 
 		<td>{{ $project->title }}</td>
+		{{-- <td>{{ $project->description }}</td> --}}
 		<td @if($view != "supervisor") class="mobile--hidden" @endif style="@if($view == "supervisor") text-align: left; @endif">{{ $project->skills }}</td>
 		@if($view != "supervisor")
 			@if($project->supervisor)

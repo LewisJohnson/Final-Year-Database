@@ -42,11 +42,11 @@
 	@endif
 
 	<!-- Scripts -->
-	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
-	<script src="{{ asset('js/jquery-confirm.js') }}"></script>
-	<script src="{{ asset('js/main.js') }}" async></script>
-	{{-- <script src="{{ asset('js/sw.js') }}" async></script> --}}
-
+	{{-- ONLY CHANGE THE ORDER IF YOU KNOW WHAT YOU'RE DOING --}}
+	<script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
+	<script src="{{ asset('js/jquery-confirm.js') }}" async></script>
+	<script src="{{ asset('js/helpers.js') }}"></script>
 	@yield('scripts')
+	<script src="{{ asset('js/main.js') }}" async></script>
 
 </head>
