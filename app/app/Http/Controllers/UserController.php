@@ -4,6 +4,7 @@ namespace SussexProjects\Http\Controllers;
 use SussexProjects\User;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
+use SussexProjects\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use DB;
@@ -72,18 +73,33 @@ class UserController extends Controller{
 		return redirect('/');
 	}
 
-
-
-
 	/**
 	 * Display the specified resource.
 	 *
 	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(User $user)
-	{
+	public function show(User $user){
 		return view('users.show', compact('user'));
+	}
+
+
+
+	public function showEdit(User $user){
+		if(Session::get("db_type") == "ug"){
+			$students = StudentUg::all();
+
+		} elseif(Session::get("db_type") == "masters") {
+			$students = StudentMasters::all();
+		}
+
+		$supervisors = Supervisor::all();
+		$staff = User::Where('access_type', 'staff')->get();
+
+		return view('users.index')
+		->with('supervisors', $supervisors->sortBy('title'))
+		->with('staff', $staff)
+		->with('students', $students);
 	}
 
 	/**
@@ -92,21 +108,42 @@ class UserController extends Controller{
 	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(User $user)
-	{
-		return view('users.edit');
+	public function edit($id){
+		$editUser = User::find($id);
+		return view('users.edit')->with('editUser', $editUser);
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, User $user)
-	{
-		//
+	public function update($request){
+		dd($request);
+		// todo: add form validation
+		$result = DB::Transaction(function($id) use ($id){
+			if(Session::get("db_type") == "ug"){
+				$project = ProjectUg::findOrFail($id);
+				$transaction = new TransactionUg;
+			} elseif(Session::get("db_type") == "masters") {
+				$project = ProjectMasters::findOrFail($id);
+				$transaction = new TransactionMasters;
+			}
+			$project->update(request(['title', 'description', 'skills', 'status']));
+			$transaction->fill(array(
+				'transaction_type' =>'updated',
+				'project_id' => $project->id,
+				'supervisor_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+			$transaction->save();
+			session()->flash('message', '"'.$project->title.'" has been updated.');
+			session()->flash('message_type', 'success');
+			return redirect()->action('ProjectController@show', $project);
+		});
+
+		return $result;
 	}
 
 	/**
@@ -115,8 +152,7 @@ class UserController extends Controller{
 	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(User $user)
-	{
+	public function destroy(User $user){
 		//
 	}
 }

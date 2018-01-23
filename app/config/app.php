@@ -14,7 +14,7 @@ return [
 	|
 	*/
 
-	'authorisation_access' => 'strict',
+	'authorisation_access' => 'lax',
 
 	/*
 	|--------------------------------------------------------------------------

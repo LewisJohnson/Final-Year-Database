@@ -64,8 +64,11 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::get('system/user-agent', 'AdminController@userAgent');
 
 	Route::post('users', 'UserController@store');
+	Route::delete('users', 'UserController@delete');
 	Route::get('users/create', 'UserController@create');
-	Route::get('users/edit/{id}', 'UserController@edit');
+	Route::get('users/edit', 'UserController@showEdit');
+	Route::get('users/{id}/edit', 'UserController@edit');
+	Route::patch('users/{id}/edit', 'UserController@update');
 
 	// Topic routes
 	Route::post('topics', 'TopicController@store');

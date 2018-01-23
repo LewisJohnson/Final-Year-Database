@@ -15,8 +15,10 @@
 <body>
 	@if($user = Auth::user())
 		@include ('partials.header')
+		@include ('auth.change-auth')
 	@else
 		@include ('partials.header-guest')
+		@include ('auth.login')
 	@endif
 
 	<div class="main-content">
@@ -24,12 +26,7 @@
 	</div>
 
 	@include ('partials.message')
-	@include ('auth.login')
-	@include ('auth.change-auth')
 </body>
-@include ('partials.footer')
 
-@if (App::isLocal())
-	@include ('partials.debug')
-@endif
+@include ('partials.footer')
 </html>

@@ -29,7 +29,8 @@ var projects_pageNumber = 2,
 					projects_awaitingResponse = false;
 					$(".loader.projects").hide();
 				});
-			} else {
+			}
+			if(projects_endOfTable){
 				$(".loader.projects").hide();
 			}
 		}
