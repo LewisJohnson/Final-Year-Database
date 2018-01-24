@@ -63,10 +63,10 @@ class SupervisorController extends Controller{
 	public function acceptStudent(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::find(request('student_id'));
+				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
 			} else {
-				$student = StudentMasters::find(request('student_id'));
+				$student = StudentMasters::findOrFail(request('student_id'));
 				$transaction = new TransactionMasters;
 			}
 
@@ -90,10 +90,10 @@ class SupervisorController extends Controller{
 	public function rejectStudent(Request $request){
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::find(request('student_id'));
+				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
 			} else {
-				$student = StudentMasters::find(request('student_id'));
+				$student = StudentMasters::findOrFail(request('student_id'));
 				$transaction = new TransactionMasters;
 			}
 

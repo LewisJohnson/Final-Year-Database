@@ -109,7 +109,7 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id){
-		$editUser = User::find($id);
+		$editUser = User::findOrFail($id);
 		return view('users.edit')->with('editUser', $editUser);
 	}
 

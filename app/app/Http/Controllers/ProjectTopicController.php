@@ -19,7 +19,7 @@ class ProjectTopicController extends Controller{
 	}
 
 	public function index(ProjectTopic $projectTopic){
-		return ProjectTopic::find($projectTopic);
+		return ProjectTopic::findOrFail($projectTopic);
 	}
 
 	// This logic is handeled in the ProjectController

@@ -79,7 +79,12 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		$project = Session::get("db_type") == "ug" ? ProjectUg::find($id) : ProjectMasters::find($id);
+
+		if(Session::get("db_type") == "ug"){
+			$project = ProjectUg::find($id);
+		} elseif(Session::get("db_type") == "masters") {
+			$project = ProjectMasters::find($id);
+		}
 
 		$view = "SupervisorProject";
 		$student_name = "a student";
@@ -158,15 +163,15 @@ class ProjectController extends Controller{
 
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$topic = TopicUg::find(request('topic_id'));
-				$project = ProjectUg::find(request('project_id'));
+				$topic = TopicUg::findOrFail(request('topic_id'));
+				$project = ProjectUg::findOrFail(request('project_id'));
 
 				ProjectTopicUg::where('project_id', $project->id)
 					->where('topic_id', $topic->id)
 					->delete();
 			} else {
-				$topic = TopicMasters::find(request('topic_id'));
-				$project = ProjectMasters::find(request('project_id'));
+				$topic = TopicMasters::findOrFail(request('topic_id'));
+				$project = ProjectMasters::findOrFail(request('project_id'));
 
 				ProjectTopicMasters::where('project_id', $project->id)
 					->where('topic_id', $topic->id)
@@ -181,8 +186,8 @@ class ProjectController extends Controller{
 
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
-				$topic = TopicUg::find(request('topic_id'));
-				$project = ProjectUg::find(request('project_id'));
+				$topic = TopicUg::findOrFail(request('topic_id'));
+				$project = ProjectUg::findOrFail(request('project_id'));
 
 				// Clear primary
 				ProjectTopicUg::where('project_id', $project->id)->update(['primary' => 0]);
