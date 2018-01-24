@@ -16,7 +16,7 @@
 	@endif
 
 	@if($view == "topic")
-		<h1>Project Topic</h1>
+		<h1>Projects by Topic</h1>
 		<h3>Projects with the topic "{{ $topic->name }}"</h3>
 	@endif
 

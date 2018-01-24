@@ -113,6 +113,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ======================== */
 	$('body').append('<div class="underlay"></div>');
 
+	if ($('.show--scroll-to-top').length > 0) {
+		$('.main-content').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
+	}
+
 	// Accessibility
 	$('.dropdown').attr('tabindex', '0');
 	$('.dropdown > button').attr('tabindex', '-1');
@@ -815,6 +819,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	/* ======================
  	 8. OTHER
     ====================== */
+
+	$('.scroll-to-top').on('click', function (e) {
+		$('html, body').animate({
+			scrollTop: 0
+		}, 600);
+	});
 
 	$('.show-more').on('click', function (e) {
 		$(this).hide();

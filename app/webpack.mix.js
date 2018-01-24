@@ -30,6 +30,7 @@ mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
 // JS | VIEWS
 mix.js('resources/assets/js/views/help.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
+mix.js('resources/assets/js/views/supervisor-report.js', 'public/js/views');
 
 // JS | PAGINATION
 mix.js('resources/assets/js/dynamic-pagination/projects-pagination.js', 'public/js/pagination');

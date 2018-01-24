@@ -5,11 +5,11 @@ class TopicUg extends Topic{
 	public $table = 'topics_ug';
 
 	public function projects(){
-		return $this->belongsToMany(ProjectUg::class, ProjectTopicUg::class)->withPivot('primary');
+		return $this->belongsToMany(ProjectUg::class, 'project_topics_ug', 'topic_id', 'project_id')->withPivot('primary');
 	}
 
-	public function amountOfProjectsOnOffer(){
-		return ProjectTopicUg::where('topic_id', $this->id)->count();
+	public function amountOfProjects(){
+		return $this->belongsToMany(ProjectUg::class, 'project_topics_ug', 'topic_id', 'project_id')->count();
 	}
 
 	public static function getDatalist(){

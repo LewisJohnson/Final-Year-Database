@@ -8,7 +8,7 @@ class TopicMasters extends Topic{
 		return $this->belongsToMany(ProjectMasters::class, ProjectTopicMasters::class)->withPivot('primary');
 	}
 
-	public function amountOfProjectsOnOffer(){
+	public function amountOfProjects(){
 		return ProjectTopicMasters::where('topic_id', $this->id)->count();
 	}
 

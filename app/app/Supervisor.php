@@ -162,6 +162,18 @@ class Supervisor extends User{
 
 		return $studentProposedProjects;
 	}
+
+	public static function getDatalist(){
+		$supervisors = Supervisor::all();
+
+		$rtnString = '<datalist id="supervisor-datalist">';
+		foreach ($supervisors as $supervisor) {
+			$rtnString .= '<option value="'. $supervisor->user->getFullName().'">';
+		}
+		$rtnString .= '</datalist>';
+
+		return $rtnString;
+	}
 }
 
 

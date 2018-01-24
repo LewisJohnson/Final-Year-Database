@@ -5,6 +5,7 @@
     "/css/accessible-contrast.css": "/css/accessible-contrast.css",
     "/css/accessible-font.css": "/css/accessible-font.css",
     "/js/views/supervisor.js": "/js/views/supervisor.js",
+    "/js/views/supervisor-report.js": "/js/views/supervisor-report.js",
     "/js/views/help.js": "/js/views/help.js",
     "/js/main.js": "/js/main.js",
     "/js/jquery-confirm.js": "/js/jquery-confirm.js",

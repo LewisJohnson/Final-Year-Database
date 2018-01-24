@@ -49,12 +49,6 @@ button{
 		min-height: 36px;
 		height: 150px;
 	}
-
-	&.has-error{
-		input{
-			border: solid 1px rgba(255, 0, 0, 0.40);
-		}
-	}
 }
 
 .vertical-select{

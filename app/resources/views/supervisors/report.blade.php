@@ -1,13 +1,14 @@
 @extends('layouts.app')
-@section ('content')
-
-<div class="centered width-1000">
+@section('scripts')
+	<script src="{{ asset('js/views/supervisor-report.js') }}"></script>
+@endsection
+@section('content')
+<div class="centered width-1000 show--scroll-to-top">
 	<h1>Report by Supervisor</h1>
+	@include('supervisors.partials.supervisor-search')
 	<div style="overflow: auto;">
 		@foreach($supervisors as $supervisor)
-			@php($iter = 0)
-			<table class="shadow-2dp table--dark-head full-detail">
-				{{-- HEADER --}}
+			<table class="shadow-2dp table--dark-head full-detail" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>
@@ -31,8 +32,8 @@
 					</tr>
 				</thead>
 
-				{{-- SUPERVISOR PROJECTS --}}
 				<tbody>
+					{{-- SUPERVISOR PROJECTS --}}
 					@foreach($supervisor->getProjectsByStatus('on-offer') as $project)
 						<tr>
 							<td>@if($loop->iteration == 1)Projects ({{count($supervisor->user->projects)}})@endif</td>
@@ -75,6 +76,7 @@
 						</tr>
 					@endif
 
+					{{-- PROJECT PROPOSALS --}}
 					@foreach($supervisor->getProjectProposals() as $project)
 						<tr>
 							<td>@if($loop->iteration == 1)Student Proposals ({{count($supervisor->getProjectProposals())}})@endif</td>

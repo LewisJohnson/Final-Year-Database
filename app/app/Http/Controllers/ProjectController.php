@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use SussexProjects\ProjectTopicUg;
-use SussexProjects\ProjectTopicMasters;
-use SussexProjects\Project;
-use SussexProjects\ProjectUg;
-use SussexProjects\ProjectMasters;
 use SussexProjects\TopicUg;
 use SussexProjects\TopicMasters;
+use SussexProjects\Project;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectTopicUg;
+use SussexProjects\ProjectTopicMasters;
+use SussexProjects\ProjectMasters;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\TransactionUg;
@@ -113,11 +113,6 @@ class ProjectController extends Controller{
 	 */
 	public function addTopic(Request $request){
 
-		if(!Auth::user()->isSupervisorOrSuperior()){
-			Log::error('Someone who is not a supervsior tried to create a project.');
-			return redirect('/');
-		}
-
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::where('name', request('topic_name'))->first();
@@ -161,11 +156,6 @@ class ProjectController extends Controller{
 	 */
 	public function removeTopic(Request $request){
 
-		if(!Auth::user()->isSupervisorOrSuperior()){
-			Log::error('Someone who is not a supervsior tried to create a project.');
-			return redirect('/');
-		}
-
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::find(request('topic_id'));
@@ -188,11 +178,6 @@ class ProjectController extends Controller{
 	}
 
 	public function updatePrimaryTopic(Request $request){
-
-		if(!Auth::user()->isSupervisorOrSuperior()){
-			Log::error('Someone who is not a supervsior tried to create a project.');
-			return redirect('/');
-		}
 
 		$result = DB::transaction(function ($request) use ($request) {
 			if(Session::get("db_type") == "ug"){
@@ -236,11 +221,6 @@ class ProjectController extends Controller{
 			'skills' => 'required|max:255',
 			'status' => 'required',
 		]);
-
-		if(!Auth::user()->isSupervisorOrSuperior()){
-			Log::error('Someone who is not a supervsior tried to create a project.');
-			return redirect('/');
-		}
 
 		$result = DB::transaction(function ($request) use ($request) {
 			// Creat project
@@ -342,10 +322,10 @@ class ProjectController extends Controller{
 			$deleteTime = Carbon::now()->addMinutes($this->restoreTimeInMinutes);
 
 			if(Session::get("db_type") == "ug"){
-				$project = ProjectUg::find($id);
+				$project = ProjectUg::findOrFail($id);
 				// $transaction = new TransactionUg;
 			} else {
-				$project = ProjectMasters::find($id);
+				$project = ProjectMasters::findOrFail($id);
 				// $transaction = new TransactionMasters;
 			}
 
@@ -391,30 +371,31 @@ class ProjectController extends Controller{
 		return view('supervisors.partials.project-row')->with('project', $restoredProject);
 	}
 
+
 	/**
-	 * Display the projects with by supervisors.
+	 * Display a listing of the resource.
 	 *
-	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
+	public function showTopics(){
+		if(Session::get("db_type") == "ug"){
+			$topics = TopicUg::all();
+		} elseif(Session::get("db_type") == "masters") {
+			$topics = TopicMasters::all();
+		}
+
+		return view('topics.index')->with('topics', $topics);
+	}
+
 	public function byTopic($id) {
 		if(Session::get("db_type") == "ug"){
-			$topic = TopicUg::find($id);
-			$projects = ProjectUg::
-				join('project_topics_ug', 'project_topics_ug.project_id', '=', 'projects_ug.id')
-				->where('project_topics_ug.topic_id', '=', $id)
-				->where('projects_ug.status', '=', 'on-offer')
-				->get();
+			$topic = TopicUg::findOrFail($id);
+
 		} elseif(Session::get("db_type") == "masters") {
-			$topic = TopicMasters::where('id', $id)->first();
-			$projects = ProjectMasters::
-				join('project_topics_masters', 'project_topics_masters.project_id', '=', 'projects_masters.id')
-				->where('project_topics_masters.topic_id', '=', $id)
-				->where('projects_masters.status', '=', 'on-offer')
-				->get();
+			$topic = TopicMasters::findOrFail($id);
 		}
 		return view('projects.index')
-			->with('projects', $projects)
+			->with('projects', $topic->projects->where('status', 'on-offer'))
 			->with('topic', $topic)
 			->with('view', 'topic');
 	}
@@ -426,7 +407,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function bySupervisor($id) {
-		$supervisor = Supervisor::find($id);
+		$supervisor = Supervisor::findOrFail($id);
 
 		if(Session::get("db_type") == "ug"){
 			$projects = ProjectUg::where('supervisor_id', $supervisor->id)->get();
@@ -440,9 +421,11 @@ class ProjectController extends Controller{
 	}
 
 	public function transactions($id){
-		$transactions = Session::get("db_type") == "ug" ?
-			TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get() :
-			TransactionMasters::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
+		if(Session::get("db_type") == "ug"){
+			$transactions = TransactionUg::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
+		} elseif(Session::get("db_type") == "masters") {
+			$transactions = TransactionMasters::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
+		}
 
 		return view('admin.transactions')->with('transactions', $transactions);
 	}
@@ -455,16 +438,6 @@ class ProjectController extends Controller{
 	public function showSupervisors() {
 		$supervisor = Supervisor::all();
 		return view('projects.supervisors')->with('supervisors', $supervisor);
-	}
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function showTopics(){
-		$topics = Session::get("db_type") == "ug" ? TopicUg::all() : TopicMasters::all();
-		return view('topics.index', compact('topics'));
 	}
 
 	public function search(Request $request) {
