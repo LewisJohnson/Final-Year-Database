@@ -8,3 +8,11 @@
 		</svg>
 	</button>
 </div>
+
+<div class="button-group button-group--horizontal">
+	@if(isset($_GET["excludeClosedToOffer"]))
+		<a class="chip" href="{{ action('SupervisorController@report') }}">Closed to Offers</a>
+	@else
+		<a class="chip active" href="{{ action('SupervisorController@report', 'excludeClosedToOffer=true') }}">Closed to Offers</a>
+	@endif
+</div>

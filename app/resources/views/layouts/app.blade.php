@@ -15,11 +15,11 @@
 <body>
 	@if($user = Auth::user())
 		@include ('partials.header')
-		@include ('auth.change-auth')
 	@else
 		@include ('partials.header-guest')
 		@include ('auth.login')
 	@endif
+		@include ('auth.change-auth')
 
 	<div class="main-content">
 		@yield('content')

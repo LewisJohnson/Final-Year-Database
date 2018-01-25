@@ -5,7 +5,7 @@
 	</div>
 
 	<div class="content">
-		<form id="loginForm" class="form form--flex" role="form" method="POST" action="{{ route('login') }}">
+		<form id="loginForm" class="form form--flex" role="form" method="POST" action="/login">
 			{{ csrf_field() }}
 
 			<div id="login-username" class="form-field">

@@ -8,8 +8,8 @@ class TopicUg extends Topic{
 		return $this->belongsToMany(ProjectUg::class, 'project_topics_ug', 'topic_id', 'project_id')->withPivot('primary');
 	}
 
-	public function amountOfProjects(){
-		return $this->belongsToMany(ProjectUg::class, 'project_topics_ug', 'topic_id', 'project_id')->count();
+	public function projectsOnOffer(){
+		$this->projects->where('status', 'on-offer');
 	}
 
 	public static function getDatalist(){

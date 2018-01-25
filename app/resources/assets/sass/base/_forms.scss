@@ -259,3 +259,15 @@ button{
 	color: red;
 	font-weight: 900;
 }
+
+.chip{
+	padding: 6px 12px;
+	background: #efefef;
+	border-radius: 90px;
+	text-decoration: none;
+
+	&.active{
+		background: $accent;
+		color: white;
+	}
+}

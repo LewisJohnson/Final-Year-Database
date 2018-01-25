@@ -22,8 +22,14 @@
 			</div>
 		</li>
 		@if(Session::get('auth_level') == 'supervisor')
-			<li class="nav-button">
+			<li class="nav-button dropdown">
 				<a href="{{ action('SupervisorController@index') }}" title="Supervisor options">Supervisor</a>
+				@include('svg.arrow-down')
+				<div class="dropdown-content shadow-2dp">
+					<a title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
+					<a title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
+					<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+				</div>				
 			</li>
 		@endif
 

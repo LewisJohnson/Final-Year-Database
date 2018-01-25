@@ -55,13 +55,42 @@ class AdminController extends Controller{
 		}
 	}
 
-	public function amendSupervisorArrangements(){
+	public function showAmendSupervisorArrangements(){
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
-		->with('supervisors', $supervisors);;
+		->with('supervisors', $supervisors);
 	}
 
-	public function amendTopics(){
+
+	public function amendSupervisorArrangements(Request $request){
+
+		$request->validate([
+			'project_load' => 'bail|required|numeric',
+		]);
+		foreach ($request->all() as $key => $value) {
+			if (strpos($key, 'supervisor-') === 0) {
+				preg_match('/\d+/', $key, $id);
+
+				if(is_null($id[0])){ continue; }
+
+				$supervisor = Supervisor::findOrFail($id[0]);
+
+				if(Session::get("db_type") == "ug"){
+					$supervisor->project_load_ug = $request->project_load;
+					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
+				} elseif(Session::get("db_type") == "masters") {
+					$supervisor->project_load_masters = $request->project_load;
+					$supervisor->take_students_masters = isset($request->take_students) ? true : false;
+				}
+				$supervisor->save();
+			}
+		}
+		$supervisors = Supervisor::all();
+		return view('admin.arrangements')
+		->with('supervisors', $supervisors);
+	}
+
+	public function showAmendTopics(){
 
 		if(Session::get("db_type") == "ug"){
 			$topics = TopicUg::all();
@@ -95,7 +124,7 @@ class AdminController extends Controller{
 		return view('admin.archive');
 	}
 
-	public function showAssignMarker(){
+	public function showAssignMarker(Request $request){
 		$supervisors = Supervisor::all();
 
 		if(Session::get("db_type") == "ug"){
@@ -105,14 +134,27 @@ class AdminController extends Controller{
 			$students = StudentMasters::all();
 		}
 
+		$sorted = $students->sortBy(function ($student, $key, $request) use ($request) {
+			if($request->query("sort") == "firstname"){
+				return $student->user->first_name;
+			} elseif($request->query("sort") == "lastname"){
+				return $student->user->last_name;
+			}
+		});
+
 		return view('admin.assign-marker')
 		->with('supervisors', $supervisors)
-		->with('students', $students);
+		->with('students', $sorted);
 	}
 
 	public function loginAs($id){
-		$user = User::find($id);
+		$user = User::findOrFail($id);
 		Auth::login($user);
+		
+		// Redirect
+		session()->flash('message', 'You have logged in as '.$user->getFullName());
+		session()->flash('message_type', 'success');
+
 		return redirect('/');
 	}
 

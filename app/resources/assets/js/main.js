@@ -16,6 +16,16 @@
 9. Initialise Everything
 */
 
+var config = {
+	showScrollToTopButtonOffset: 50,
+	slowAnimation: 400,
+	mediumAnimation: 300,
+	fastAnimation: 200,
+	superFastAnimation: 100,
+	showAjaxRequestFailNotification: true
+}
+
+
 ;$(function() {
 "use strict";
 
@@ -44,9 +54,9 @@ $('.dropdown .dropdown-content a').attr('tabindex', '0');
 
 // Makes primary topic first
 $('.topics-list').prepend($('.first'));
-$('.topics-list .loader').hide(200);
-$('.topics-list li').first().fadeIn(200, function showNext() {
-	$(this).next( ".topics-list li" ).fadeIn(200, showNext);
+$('.topics-list .loader').hide(config.fastAnimation);
+$('.topics-list li').first().fadeIn(config.fastAnimation, function showNext() {
+	$(this).next( ".topics-list li" ).fadeIn(config.fastAnimation, showNext);
 });
 
 $('.order-list-js').each(function() {
@@ -483,7 +493,7 @@ EditTopic.prototype.functions = {
 								topic_id: topic.topicId,
 							},
 							success: function(){
-								topic.element.hide(400, function() {
+								topic.element.hide(config.slowAnimation, function() {
 									topic.remove();
 								});
 							}
@@ -747,6 +757,14 @@ Marker.prototype.initAll = function(){
 	 8. OTHER
    ====================== */
 
+$(window).scroll(function(){
+	if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
+		$('.scroll-to-top').fadeIn();
+	} else {
+		$('.scroll-to-top').fadeOut();
+	}
+});
+
 $('.scroll-to-top').on('click',  function(e) {
 	$('html, body').animate({
 		scrollTop: 0
@@ -832,8 +850,8 @@ $('#show-raw-table-data').on('click', function() {
 		$('table.full-detail').css('position', 'absolute');
 		$('table.raw-detail').css('position', 'absolute');
 
-		$('table.full-detail').fadeOut(200);
-		$('table.raw-detail').fadeIn(200, function(){
+		$('table.full-detail').fadeOut(config.fastAnimation);
+		$('table.raw-detail').fadeIn(config.fastAnimation, function(){
 			$(this).css('position', 'relative');
 		});
 	} else {
@@ -841,8 +859,8 @@ $('#show-raw-table-data').on('click', function() {
 		$('table.full-detail').css('position', 'absolute');
 		$('table.raw-detail').css('position', 'absolute');
 
-		$('table.raw-detail').fadeOut(200);
-		$('table.full-detail').fadeIn(200, function(){
+		$('table.raw-detail').fadeOut(config.fastAnimation);
+		$('table.full-detail').fadeIn(config.fastAnimation, function(){
 			$(this).css('position', 'relative');
 		});
 	}
@@ -924,7 +942,7 @@ $(".favourite-container").on('click', function() {
 			}
 		}
 	}).done(function(data){
-		svg.fadeIn(200);
+		svg.fadeIn(config.fastAnimation);
 		$('.loader', svgContainer).hide(0);
 	});
 });
@@ -939,14 +957,14 @@ $('nav.mobile .sub-dropdown').on('click', function(){
 
 		dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
 		dropdown.removeClass("active");
-		content.hide(250);
+		content.hide(config.mediumAnimation);
 	} else {
 		dropdown.attr("aria-expanded", true);
 		content.attr("aria-hidden", false);
 
 		dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
 		dropdown.addClass("active");
-		content.show(250);
+		content.show(config.mediumAnimation);
 	}
 });
 
@@ -968,5 +986,7 @@ if($('.project-card').length > 0){
 });
 
 $(document).ajaxError(function( event, request, settings ) {
-	showNotification('error', 'Something went wrong with that request.');
+	if(config.showAjaxRequestFailNotification){
+		showNotification('error', 'Something went wrong with that request.');
+	}
 });

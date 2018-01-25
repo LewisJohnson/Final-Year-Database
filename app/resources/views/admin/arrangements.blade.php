@@ -1,73 +1,70 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered width-1200">
-<h1>Supervisors</h1>
-<h3>@lang_sess("select_supervisor_arragments")</h3>
-<div class="arrangements-container">
-<table class="data-table data-table--selectable shadow-2dp">
-	<thead>
-	<tr>
-		<th>
-			<div class="checkbox">
-				<input class="checkbox-input master-checkbox" id="arrangements" type="checkbox">
-				<label for="arrangements" name="arrangements"></label>
-			</div>
-		</th>
-		<th>Name</th>
-		<th>Username</th>
-		<th>Access Type</th>
-		<th>Project Load</th>
-		<th>Take Students</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach($supervisors as $supervisor)
-		<tr>
-			<td>
-				<div class="checkbox checkbox--row">
-					<input class="checkbox-input" id="supervisor-{{ $supervisor->id }}" type="checkbox">
-					<label for="supervisor-{{ $supervisor->id }}" name="supervisor-{{ $supervisor->id }}"></label>
+	<h1>Amend Supervisor Arrangements</h1>
+	<h3>@lang_sess("select_supervisor_arragments")</h3>
+	<form action="{{ action('AdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
+		<div class="arrangements-container">
+			<table class="data-table data-table--selectable shadow-2dp">
+				<thead>
+					<tr>
+						<th>
+							<div class="checkbox">
+								<input class="checkbox-input master-checkbox" id="arrangements" type="checkbox">
+								<label for="arrangements"></label>
+							</div>
+						</th>
+						<th>Name</th>
+						<th>Username</th>
+						<th>Access Type</th>
+						<th>Project Load</th>
+						<th>Take Students</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($supervisors as $supervisor)
+						<tr >
+							<td>
+								<div class="checkbox checkbox--row">
+									<input class="checkbox-input" id="supervisor-{{ $supervisor->id }}" type="checkbox" name="supervisor-{{ $supervisor->id }}">
+									<label for="supervisor-{{ $supervisor->id }}"></label>
+								</div>
+							</td>
+
+							<td>{{ $supervisor->user->getFullName() }}</td>
+							<td>{{ $supervisor->user->username }}</td>
+							<td>{{ ucfirst($supervisor->user->access_type) }}</td>
+							@if(Session::get("db_type") == "ug")
+								<td>{{ $supervisor->project_load_ug }}</td>
+								<td>{{ $supervisor->take_students_ug ? 'Yes' : 'No' }}</td>
+							@elseif(Session::get("db_type") == "masters")
+								<td>{{ $supervisor->project_load_masters }}</td>
+								<td>{{ $supervisor->take_students_masters ? 'Yes' : 'No' }}</td>
+							@endif
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+
+			<div class="side-content card">
+				{{ csrf_field() }}
+				<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
+
+				<div class="form-field">
+					<label for="project_load">Project Load</label>
+					<input required type="number" name="project_load" id="project_load">
 				</div>
-			</td>
-			<td>{{ $supervisor->user->getFullName() }}</td>
-			<td>{{ $supervisor->user->username }}</td>
-			<td>{{ $supervisor->user->access_type }}</td>
-			@if(Session::get("db_type") == "ug")
-				<td>{{ $supervisor->project_load_ug }}</td>
-				<td>{{ $supervisor->take_students_ug }}</td>
-			@else
-				<td>{{ $supervisor->project_load_masters }}</td>
-				<td>{{ $supervisor->take_students_masters }}</td>
-			@endif
-		</tr>
-	@endforeach
-	</tbody>
-</table>
-<form class="card form form--flex" action="" method="POST" accept-charset="utf-8">
-	{{ csrf_field() }}
-	<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
 
-	<div class="form-field">
-		<label for="project_load">Project Load</label>
-		<input type="number" name="project_load" id="project_load">
-	</div>
-
-	<div class="form-field">
-		<div class="checkbox">
-			<input id="take_students" name="take_students" type="checkbox">
-			<label for="take_students">Take Students</label>
+				<div class="form-field">
+					<div class="checkbox">
+						<input id="take_students" name="take_students" type="checkbox" checked>
+						<label for="take_students">Take Students</label>
+					</div>
+				</div>
+				{{ method_field('PATCH') }}
+				<input type="submit" class="button button--raised button--accent">
+			</div>
 		</div>
-	</div>
-	<div>
-		<input type="submit" class="button button--raised button--accent" name="save" value="Save">
-	</div>
-</form>
-</div>
+	</form>
 </div>
 @endsection
-{{--
-	<li style="padding: 0;">
-		<a style="display: flex; width: 100%; padding: 10px;" href="{{ action('AdminController@supervisorArrangements', $supervisor->id)}}">
-			<p>{{ $supervisor->user->getFullName() }}</p>
-		<a>
-	</li> --}}

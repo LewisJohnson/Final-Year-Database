@@ -12,10 +12,11 @@
 		</thead>
 		<tbody>
 		@foreach($topics as $topic)
-			@if($topic->amountOfProjects() > 0)
+			@php($amountOfProjects = count($topic->projects->where('status', 'on-offer')))
+			@if($amountOfProjects > 0)
 				<tr tabindex="0" class="pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}';">
 					<td>{{ $topic->name }}</td>
-					<td>{{ $topic->amountOfProjects() }}</td>
+					<td>{{ $amountOfProjects }}</td>
 				</tr>
 			@endif
 		@endforeach

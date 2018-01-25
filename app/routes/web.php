@@ -24,16 +24,16 @@
 Route::group(['middleware' => ['web']], function() {
 
 	Route::get('authenticaion-change', 'Auth\AuthController@show');
-
 	// Login Routes
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
 	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
 	// Root Routes
-	Route::get('/', 'HomeController@index');
 	Route::get('index', 'HomeController@index');
 	Route::get('home', 'HomeController@index');
+	Route::get('/', 'HomeController@index');
+	
 	Route::get('information', 'HomeController@information');
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
@@ -46,12 +46,14 @@ Route::group(['middleware' => ['web', 'admin']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
-	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
+	
+	Route::get('admin/supervisor-arrangements-amend', 'AdminController@showAmendSupervisorArrangements');
+	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
 	Route::get('admin/marker-assign', 'AdminController@showAssignMarker');
 	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
-	Route::get('admin/topics-amend', 'AdminController@amendTopics');
+	Route::get('admin/topics-amend', 'AdminController@ShowAmendTopics');
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 	Route::get('admin/archive', 'AdminController@archive');

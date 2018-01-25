@@ -221,14 +221,19 @@
 
 .arrangements-container{
 	display: flex;
+
 	table{
 		width: 65%;
 		margin: 0;
 	}
 
-	form{
+	.side-content{
+		position: sticky;
+		top: 70px;
 		width: 30%;
-		margin: auto;
+		height: 100%;
+		margin: 0 auto;
+		background: white;
 	}
 }
 

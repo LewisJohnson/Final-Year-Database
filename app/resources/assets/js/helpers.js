@@ -51,7 +51,7 @@ function sortUnorderedList(ul) {
 
 function addAlphaHeadersToList(ul) {
 	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');;
+	var links = $('#' + ul.attr('id') + '-links');
 
 	for (var i = 0; i < listitems.length; i++) {
 		var firstChar = $(listitems[i]).text().replace(/\s/g, '').charAt(0).toUpperCase();
@@ -71,7 +71,7 @@ function addAlphaHeadersToList(ul) {
 
 function addTitleHeadersToList(ul) {
 	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');;
+	var links = $('#' + ul.attr('id') + '-links');
 
 	for (var i = 0; i < listitems.length; i++) {
 		var t = $(listitems[i]).text();

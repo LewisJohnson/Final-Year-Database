@@ -16,7 +16,7 @@ class User extends Migration
 			$table->increments('id');
 			$table->string('first_name', 128);
 			$table->string('last_name', 128);
-			$table->string('username', 32)->unique();;
+			$table->string('username', 32)->unique();
 			$table->string('password', 128);
 			$table->enum('access_type', ['student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_department', 'admin_system']);
 			$table->string('email', 128)->unique();

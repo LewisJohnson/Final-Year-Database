@@ -36,7 +36,7 @@
 					{{-- SUPERVISOR PROJECTS --}}
 					@foreach($supervisor->getProjectsByStatus('on-offer') as $project)
 						<tr>
-							<td>@if($loop->iteration == 1)Projects ({{count($supervisor->user->projects)}})@endif</td>
+							<td>@if($loop->iteration == 1)<a href="{{ action('ProjectController@bySupervisor', $supervisor->id)}}">Projects ({{count($supervisor->user->projects)}})</a>@endif</td>
 							<td><a href="{{ action('ProjectController@show' ,$project->id) }}">{{ $project->title }}</a></td>
 							<td>{{ucfirst(str_replace('-', ' ', $project->status))}}</td>
 						</tr>

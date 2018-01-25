@@ -16,16 +16,16 @@
 				</tr>
 			</thead>
 			<tbody>
-			@foreach($students as $student)
-				@if($student->project != null)
-					@if($student->project->marker == null)
-						<tr class="pointer" tabindex="0" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
-							<td>{{ $student->user->getFullName() }}</td>
-							<td>{{ $student->project->title }}</td>
-						</tr>
+				@foreach($students as $student)
+					@if(!is_null($student->project))
+						@if(is_null($student->project->marker) && !is_null($student->project->supervisor))
+							<tr class="pointer" tabindex="0" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
+								<td>{{ $student->user->getFullName() }}</td>
+								<td>{{ $student->project->title }}</td>
+							</tr>
+						@endif
 					@endif
-				@endif
-			@endforeach
+				@endforeach
 			</tbody>
 		</table>
 	</div>
@@ -83,7 +83,10 @@
 		<p id="project-title"></p>
 		<p id="project-description"></p>
 
-		<button id="submitAssignMarker" type="button" class="button button--raised button--accent">ASSIGN MARKER</button>
+		<div class="footer footer--dark">
+			<button id="submitAssignMarker" type="button" class="button button--raised button--accent">ASSIGN MARKER</button>
+		</div>
+		
 	</div>
 </div>
 @endsection

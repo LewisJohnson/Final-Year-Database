@@ -389,7 +389,7 @@ class ProjectController extends Controller{
 			$topics = TopicMasters::all();
 		}
 
-		return view('topics.index')->with('topics', $topics);
+		return view('projects.topics')->with('topics', $topics);
 	}
 
 	public function byTopic($id) {
@@ -399,6 +399,7 @@ class ProjectController extends Controller{
 		} elseif(Session::get("db_type") == "masters") {
 			$topic = TopicMasters::findOrFail($id);
 		}
+		
 		return view('projects.index')
 			->with('projects', $topic->projects->where('status', 'on-offer'))
 			->with('topic', $topic)

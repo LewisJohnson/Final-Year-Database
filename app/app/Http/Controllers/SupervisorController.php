@@ -114,8 +114,13 @@ class SupervisorController extends Controller{
 		return $result;
 	}
 
-	public function report(){
-		$supervisors = Supervisor::all();
+	public function report(Request $request){
+			$supervisors = Supervisor::all();
+		
+		if($request->query("excludeClosedToOffer") == "true"){
+			$supervisors = $supervisors->where('take_students_ug', 1);
+		} else {
+		}
 		return view('supervisors.report')->with("supervisors", $supervisors);
 	}
 
