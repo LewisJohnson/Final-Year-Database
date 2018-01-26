@@ -447,7 +447,8 @@ class ProjectController extends Controller{
 	}
 
 	public function search(Request $request) {
-		$searchterm = request("searchTerm");
+
+		$searchterm = $request->query("searchTerm");
 		// $sBySuprv = isset($_GET['supervisor']) ? true : false;
 		// $sByTopic = isset($_GET['topic']) ? true : false;
 

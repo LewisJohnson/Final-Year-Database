@@ -1,7 +1,7 @@
 <?php
-
 namespace SussexProjects\Http\Middleware;
 
+use Illuminate\Support\Facades\Auth;
 use Closure;
 
 class Student
@@ -17,6 +17,7 @@ class Student
 		if (Auth::check() && Auth::user()->isStudent()){
 			return $next($request);
 		}
-		return redirect('/');
+
+		abort(404);
 	}
 }

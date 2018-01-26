@@ -156,6 +156,7 @@ ul.dot-menu{
 	border-radius: 2px;
 	z-index: 1;
 	text-align: left;
+	list-style: none;
 
 	.dot-menu__item{
 		.dot-menu__action {
@@ -180,6 +181,10 @@ ul.dot-menu{
 		&:active{
 			background: #e0e0e0;
 		}
+	}
+
+	.dot-menu__item--padded{
+		padding: 8px;
 	}
 
 	.dot-menu__item--form{

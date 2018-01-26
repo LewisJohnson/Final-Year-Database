@@ -149,8 +149,9 @@ button {
   cursor: pointer;
   color: #757575;
   font-size: 16px;
-  display: inline-block;
+  display: inline;
   margin-bottom: 0;
+  width: 100%;
 }
 
 .checkbox label:before,
@@ -236,6 +237,12 @@ button:focus {
   display: inherit;
   height: auto;
   color: #757575;
+}
+
+.button--svg p {
+  display: inline;
+  position: relative;
+  top: -10px;
 }
 
 .button--raised {
@@ -328,6 +335,13 @@ button:focus {
 
 .button-group--horizontal :last-child {
   margin-right: 0;
+}
+
+.button-group--vertical {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .button-group--vertical > * {
@@ -670,6 +684,7 @@ ul.dot-menu {
   border-radius: 2px;
   z-index: 1;
   text-align: left;
+  list-style: none;
 }
 
 ul.dot-menu .dot-menu__item .dot-menu__action {
@@ -691,6 +706,10 @@ ul.dot-menu .dot-menu__item:hover {
 
 ul.dot-menu .dot-menu__item:active {
   background: #e0e0e0;
+}
+
+ul.dot-menu .dot-menu__item--padded {
+  padding: 8px;
 }
 
 ul.dot-menu .dot-menu__item--form .icon {
@@ -1396,8 +1415,8 @@ th:last-of-type {
   font-weight: 600;
   opacity: 0;
   z-index: 100;
-  -webkit-animation: flash-message 5s;
-          animation: flash-message 5s;
+  -webkit-animation: flash-message 3s;
+          animation: flash-message 3s;
   -webkit-box-shadow: 0px -3px 9px 1px rgba(0, 0, 0, 0.17);
           box-shadow: 0px -3px 9px 1px rgba(0, 0, 0, 0.17);
   -webkit-font-smoothing: antialiased;
@@ -5503,6 +5522,10 @@ th:last-of-type {
     width: auto;
     height: auto;
     top: auto;
+  }
+
+  ul.dot-menu .dot-menu__item--padded {
+    padding: 16px;
   }
 
   #assign-dialog .arrow p {

@@ -2,7 +2,6 @@
 namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Closure;
 
 class SupervisorOrSuperior

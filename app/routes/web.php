@@ -113,8 +113,6 @@ Route::group(['middleware' => ['web', 'supervisor']], function() {
    5. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'student']], function() {
-	Route::patch('projects/{id}/restore', 'ProjectController@restore');
-
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
@@ -130,6 +128,7 @@ Route::group(['middleware' => ['web', 'student']], function() {
    ============================ */
 Route::group(['middleware' => ['auth']], function() {
 
+
 	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
@@ -139,6 +138,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::delete('projects/{id}/delete', 'ProjectController@destroy');
 	Route::patch('projects/{id}/edit', 'ProjectController@update');
 	Route::get('projects/{id}/edit', 'ProjectController@edit');
+	Route::patch('projects/{id}/restore', 'ProjectController@restore');
 
 	// Projects by Supervisor
 	Route::get('projects/by-supervisor', 'ProjectController@showSupervisors');

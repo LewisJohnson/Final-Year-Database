@@ -151,5 +151,8 @@
 	</div>
 </nav>
 
+{{-- Underlays --}}
 <div class="mobile-nav-underlay"></div>
+<div class="underlay"></div>
+
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>

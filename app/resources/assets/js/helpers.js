@@ -2,13 +2,18 @@
 
 function showNotification(type, message){
 	var notification = $('.notification');
-	notification.addClass(type);
+	notification.removeClass();
+
+	notification.addClass('notification ' + type);
 	$(notification).html("<p>" + message + "</p>");
+
 	notification.show();
+
+	var animDuration = notification.css("animation-duration").toString().replace(/s/g, '') * 1000;
 
 	setTimeout(function() {
 		notification.hide(0);
-	}, 3000);
+	}, animDuration);
 }
 
 function setCookie(cname, cvalue, exdays) {

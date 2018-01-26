@@ -23,7 +23,12 @@
 		}
 	}
 
-
+	ul.dot-menu{
+		.dot-menu__item--padded{
+			padding: 16px;
+		}
+	}
+	
 	#assign-dialog{
 		.arrow{
 			p{ font-size: 12vw;}

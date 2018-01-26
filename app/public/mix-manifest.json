@@ -11,5 +11,6 @@
     "/js/jquery-confirm.js": "/js/jquery-confirm.js",
     "/js/pagination/user-agent-pagination.js": "/js/pagination/user-agent-pagination.js",
     "/js/pagination/projects-pagination.js": "/js/pagination/projects-pagination.js",
-    "/js/helpers.js": "/js/helpers.js"
+    "/js/helpers.js": "/js/helpers.js",
+    "/js/config.js": "/js/config.js"
 }

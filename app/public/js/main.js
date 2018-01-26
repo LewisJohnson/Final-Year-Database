@@ -60,20 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(8);
-
-
-/***/ }),
-
-/***/ 8:
+/***/ 10:
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -95,14 +87,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 9. Initialise Everything
 */
 
-var config = {
-	showScrollToTopButtonOffset: 50,
-	slowAnimation: 400,
-	mediumAnimation: 300,
-	fastAnimation: 200,
-	superFastAnimation: 100,
-	showAjaxRequestFailNotification: true
-};$(function () {
+;$(function () {
 	"use strict";
 
 	/* ================
@@ -118,7 +103,6 @@ var config = {
 	/* ========================
  	3. HTML Modifications
     ======================== */
-	$('body').append('<div class="underlay"></div>');
 
 	if ($('.show--scroll-to-top').length > 0) {
 		$('.main-content').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
@@ -405,6 +389,134 @@ var config = {
 		});
 	};
 
+	/* ================
+ 	4.3 Column Toggle Table
+    ================ */
+
+	/**
+ * Class constructor for data tables.
+ *
+ * @param {HTMLElement} element The element that will be upgraded.
+ */
+	var ColumnToggleTable = function ColumnToggleTable(element) {
+		this.element = $(element);
+		this.head = $(element).find('thead tr');
+		this.headers = $(element).find('thead tr th');
+		this.bodyRows = $(element).find('tbody tr');
+		this.selectorMenu = null;
+		this.selectorButton = null;
+		this.init();
+	};
+
+	window['ColumnToggleTable'] = ColumnToggleTable;
+
+	ColumnToggleTable.prototype.CssClasses_ = {
+		DATA_TABLE: 'data-table',
+		IS_SELECTED: 'is-selected'
+	};
+
+	ColumnToggleTable.prototype.Selectors_ = {
+		TOGGLE_TABLE: '.table-column-toggle'
+	};
+
+	ColumnToggleTable.prototype.HtmlSnippets_ = {
+		COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="margin-top: 2rem;">Columns</button>',
+		COLUMN_SELECTOR_MENU: '<ul class="dot-menu"></ul>'
+	};
+
+	ColumnToggleTable.prototype.functions = {
+
+		toggleColumn: function toggleColumn(columnIndex, table, checked) {
+			if (checked) {
+				table.head.children().eq(columnIndex).removeAttr('hidden');
+				table.head.children().eq(columnIndex).show();
+			} else {
+				table.head.children().eq(columnIndex).attr('hidden', "true");
+				table.head.children().eq(columnIndex).hide();
+			}
+
+			table.bodyRows.each(function () {
+				if (checked) {
+					$(this).children().eq(columnIndex).show();
+				} else {
+					$(this).children().eq(columnIndex).hide();
+				}
+			});
+		},
+
+		refresh: function refresh(table) {
+			table.bodyRows = table.element.find('tbody tr');
+
+			var hideIndices = [];
+
+			table.headers.each(function () {
+				if ($(this).attr('hidden')) {
+					hideIndices.push($(this).index());
+				}
+			});
+
+			table.bodyRows.each(function () {
+				for (var i = 0; i < hideIndices.length; i++) {
+					$(this).children().eq(hideIndices[i]).hide();
+				}
+			});
+		},
+
+		refreshAll: function refreshAll() {
+			$(ColumnToggleTable.prototype.Selectors_.TOGGLE_TABLE).each(function () {
+				ColumnToggleTable.prototype.functions.refresh(this.ColumnToggleTable);
+			});
+		}
+	};
+
+	ColumnToggleTable.prototype.init = function () {
+
+		if (!this.element.attr('id')) {
+			console.log("ColumnToggleTable requires the table to have an unique ID.");
+			return;
+		}
+
+		var toggleTable = this;
+		var columnSelectorButton = $(this.HtmlSnippets_.COLUMN_SELECTOR_BUTTON);
+		var columnSelectorMenu = $(this.HtmlSnippets_.COLUMN_SELECTOR_MENU);
+
+		this.element.before(columnSelectorButton);
+		columnSelectorButton.after(columnSelectorMenu);
+
+		var columnSelectorButtonDotMenuId = 'ColumnToggleTable-' + toggleTable.element.attr('id');
+		columnSelectorButton.attr('id', columnSelectorButtonDotMenuId);
+		columnSelectorMenu.attr('id', columnSelectorButtonDotMenuId + '-menu');
+
+		this.selectorButton = columnSelectorButton;
+		this.selectorMenu = columnSelectorMenu;
+
+		this.selectorMenu.find('ul').data("table", toggleTable.element.attr('id'));
+
+		this.headers.each(function () {
+			var checked = $(this).data("default") ? "checked" : "";
+			$(this).data('visible', $(this).data("default"));
+
+			columnSelectorMenu.append('\
+			<li class="dot-menu__item dot-menu__item--padded"> \
+				<div class="checkbox"> \
+					<input class="column-toggle" id="column-' + $(this).text() + '" type="checkbox" ' + checked + '> \
+					<label for="column-' + $(this).text() + '">' + $(this).text() + '</label> \
+				</div> \
+			</li>');
+		});
+
+		$('.column-toggle').on('change', function () {
+			var index = $('.column-toggle').index(this);
+			ColumnToggleTable.prototype.functions.toggleColumn(index, toggleTable, $(this).prop('checked'));
+		});
+	};
+
+	ColumnToggleTable.prototype.initAll = function () {
+		$(this.Selectors_.TOGGLE_TABLE).each(function () {
+			this.ColumnToggleTable = new ColumnToggleTable(this);
+		});
+	};
+
 	/* ============================
  	4.5 Forms / AJAX Functions
     ============================ */
@@ -632,21 +744,17 @@ var config = {
 		if (this.menu.hasClass(this.CssClasses_.BOTTOM_LEFT)) {
 			this.menu.css('top', buttonRect.bottom);
 			this.menu.css('left', buttonRect.right - this.button.css('width'));
-		}
-
-		if (this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)) {
+		} else if (this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)) {
 			this.menu.css('top', buttonRect.bottom);
 			this.menu.css('left', buttonRect.left - 120);
-		}
-
-		if (this.menu.hasClass(this.CssClasses_.TOP_LEFT)) {
+		} else if (this.menu.hasClass(this.CssClasses_.TOP_LEFT)) {
 			this.menu.css('top', buttonRect.top - 150);
 			this.menu.css('left', buttonRect.right - this.button.css('width'));
-		}
-
-		if (this.menu.hasClass(this.CssClasses_.TOP_RIGHT)) {
+		} else if (this.menu.hasClass(this.CssClasses_.TOP_RIGHT)) {
 			this.menu.css('top', buttonRect.top - 150);
 			this.menu.css('left', buttonRect.left - 120);
+		} else {
+			this.menu.css('top', buttonRect.bottom);
 		}
 	};
 
@@ -687,8 +795,11 @@ var config = {
 		});
 
 		$(document).on('click', function (e) {
-			if (!$(e.target).is(dotMenu.menu) || !$(e.target).is(dotMenu.button)) {
-				DotMenu.prototype.hide.bind(dotMenu)();
+			var target = $(e.target);
+			if (!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
+				if (!$.contains($(dotMenu.menu)[0], e.target)) {
+					DotMenu.prototype.hide.bind(dotMenu)();
+				}
 			}
 		});
 	};
@@ -768,8 +879,8 @@ var config = {
 		$("#supervisor-name").text(supervisorName);
 		$("#marker-name").text(markerName);
 
-		$("#project-title").html('<b>Title: </b>' + project["title"]);
-		$("#project-description").html('<b>Description: </b>' + project["description"]);
+		$("#project-title").html('<b>Title: </b>' + project['title']);
+		$("#project-description").html('<b>Description: </b>' + project['description']);
 
 		$("#assign-dialog")[0].dialog.showDialog();
 	};
@@ -784,7 +895,7 @@ var config = {
 
 		$("#assign-dialog")[0].dialog.showLoader();
 
-		var projectId = marker.selectedStudent.data('project')["id"];
+		var projectId = marker.selectedStudent.data('project')['id'];
 		var studentId = marker.selectedStudent.data('student-id');
 		var markerId = marker.selectedSupervisor.data('marker-id');
 
@@ -861,13 +972,23 @@ var config = {
 		$('.project').addClass('expand');
 	});
 
-	$('#project-search-form').on('submit', function (e) {
-		var pt = $("#project-table");
-		removeAllShadowClasses(pt);
-		pt.css('border', 'none');
-		pt.html('<div class="loader loader--x-large"></div>');
-		$('.loader', pt).css('display', 'block');
-		$(this).hide();
+	$("#share-project-form").on('submit', function (e) {
+		e.preventDefault();
+
+		$.ajax({
+			url: $(this).prop('action'),
+			type: 'PATCH',
+			data: $(this).serialize(),
+			success: function success(response) {
+				response = JSON.parse(response);
+				if (response.share_project) {
+					showNotification('success', 'Your name is being shared with other students.');
+				} else {
+					showNotification('', 'You are no longer sharing your name with other students.');
+				}
+				$('#share_project').prop('checked', response.share_project);
+			}
+		});
 	});
 
 	$("#loginForm").on('submit', function (e) {
@@ -1053,6 +1174,7 @@ var config = {
 	MobileMenu.prototype.initAll();
 	Dialog.prototype.initAll();
 	DataTable.prototype.initAll();
+	ColumnToggleTable.prototype.initAll();
 	EditTopic.prototype.initAll();
 	Marker.prototype.initAll();
 	DotMenu.prototype.initAll();
@@ -1069,6 +1191,14 @@ $(document).ajaxError(function (event, request, settings) {
 		showNotification('error', 'Something went wrong with that request.');
 	}
 });
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(10);
+
 
 /***/ })
 

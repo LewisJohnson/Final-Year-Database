@@ -32,22 +32,20 @@
 		<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
 	@endif
 
-	<table id="project-table" class="data-table table--dark-head shadow-2dp {{$view}}">
+	<table id="project-table" class="data-table table--dark-head table-column-toggle shadow-2dp {{ $view }}">
 		<thead>
 			<tr>
-				<th>Topic</th>
-				<th>Title</th>
-				{{-- todo: add table customisation (hide/show all columns) --}}
-				{{-- <th>Description</th> --}}
-				<th @if($view != "supervisor") class="mobile--hidden" @endif style="@if($view == "supervisor") text-align: left; @endif">Skills</th>
-				@if($view != "supervisor")
-					<th>Supervisor</th>
-				@endif
+				<th data-default="true" >Topic</th>
+				<th data-default="true" >Title</th>
+				<th data-default="false" hidden>Description</th>
+				<th data-default="true" >Skills</th>
+				<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
+	
 			</tr>
 		</thead>
 
 		<tbody>
-			@include('projects.partials.project-table-row')
+			@include('projects.partials.full-project-table-row')
 		</tbody>
 	</table>
 

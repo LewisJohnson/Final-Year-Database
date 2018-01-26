@@ -16,6 +16,10 @@ class UserAgentStringCollector{
 	 */
 	public function handle($request, Closure $next){
 
+		if(!config('app.collect_user_agent')){
+			return $next($request);
+		}
+
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 			// Don't collect AJAX requests
 			return $next($request);
@@ -25,9 +29,9 @@ class UserAgentStringCollector{
 		$userAgentString->user_agent = $request->header('User-Agent');
 
 		if(isset($_SERVER["HTTP_REFERER"])){
-			$ref = mb_convert_encoding($_SERVER["HTTP_REFERER"];, ‘UTF-8′, ‘UTF-8′);
-			$ref = htmlentities($ref, ENT_QUOTES, ‘UTF-8′);
-			$userAgentString->referrer = $ref
+			$ref = mb_convert_encoding($_SERVER["HTTP_REFERER"], 'UTF-8', 'UTF-8');
+			$ref = htmlentities($ref, ENT_QUOTES, 'UTF-8');
+			$userAgentString->referrer = $ref;
 		}
 
 		if(empty(Cookie::get('vb'))){

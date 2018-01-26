@@ -23,9 +23,12 @@ new webpack.ProvidePlugin({
 
 // JAVASCRIPT
 mix.js('resources/assets/js/jquery-3.2.1.js', 'public/js');
+mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
+
 mix.js('resources/assets/js/main.js', 'public/js');
 mix.scripts('resources/assets/js/helpers.js', 'public/js/helpers.js');
-mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
+mix.scripts('resources/assets/js/config.js', 'public/js/config.js');
+
 
 // JS | VIEWS
 mix.js('resources/assets/js/views/help.js', 'public/js/views');

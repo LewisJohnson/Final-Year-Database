@@ -145,16 +145,9 @@ class StudentController extends Controller{
 
 	public function shareProject(Request $request){
 		$student = Auth::user()->student;
-		$student->share_project = isset($_POST['share_project']);
+		$student->share_project = isset($request->share_project);
 		$student->save();
-
-		if($student->share_project){
-			session()->flash('message', 'Your name is now visible to other students.');
-		} else {
-			session()->flash('message', 'Your name is now hidden from other students.');
-		}
-		session()->flash('message_type', 'success');
-		return redirect('/');
+		return json_encode(array('share_project' => $student->share_project));
 	}
 
 	public function selectProject(Request $request){

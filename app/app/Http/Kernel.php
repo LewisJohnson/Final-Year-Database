@@ -34,8 +34,8 @@ class Kernel extends HttpKernel
 			\Illuminate\Session\Middleware\StartSession::class,
 			\Illuminate\Session\Middleware\AuthenticateSession::class,
 			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-			\SussexProjects\Http\Middleware\VerifyCsrfToken::class,
 			\Illuminate\Routing\Middleware\SubstituteBindings::class,
+			\SussexProjects\Http\Middleware\VerifyCsrfToken::class,
 		],
 
 		'api' => [
@@ -61,6 +61,6 @@ class Kernel extends HttpKernel
 		'admin' => \SussexProjects\Http\Middleware\Admin::class,
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
 		'supervisorOrSuperior' => \SussexProjects\Http\Middleware\SupervisorOrSuperior::class,
-		'student' => \SussexProjects\Http\Middleware\SupervisorOrSuperior::class,
+		'student' => \SussexProjects\Http\Middleware\Student::class,
 	];
 }

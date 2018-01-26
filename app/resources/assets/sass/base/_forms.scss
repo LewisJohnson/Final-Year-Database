@@ -75,9 +75,9 @@ button{
 		cursor: pointer;
 		color: #757575;
 		font-size: 16px;
-		display: inline-block;
+		display: inline;
 		margin-bottom: 0;
-
+		width: 100%;
 		&:before,
 		&:after {
 			content: "";
@@ -163,6 +163,12 @@ button{
 	display: inherit;
 	height: auto;
 	color: $input-color;
+
+	p{
+		display: inline;
+		position: relative;
+		top: -10px;
+	}
 }
 
 .button--raised{
@@ -243,6 +249,7 @@ button{
 }
 
 .button-group--vertical{
+	flex-direction: column;
 	> *{ margin: 10px 0; display: block;}
 	:first-child{ margin-top: 0; }
 	:last-child{ margin-bottom: 0; }

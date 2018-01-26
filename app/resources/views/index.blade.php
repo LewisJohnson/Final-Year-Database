@@ -53,12 +53,11 @@
 		<div class="card card--margin-vertical">
 			<h2>Options</h2>
 			<p>You may hide your name from other students.</p>
-			<form id="share-project-form" class="form form--flex" action="{{ url('/students/project-share') }}" method="POST" accept-charset="utf-8">
-				{{csrf_field()}}
-				{{ method_field('PATCH') }}
+			<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareProject') }}" method="POST" accept-charset="utf-8">
+				{{ csrf_field() }}
 				<div class="form-field">
 					<div class="checkbox">
-						<input onclick="event.preventDefault();document.getElementById('share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if($user->student->share_project) checked @endif >
+						<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if($user->student->share_project) checked @endif >
 						<label for="share_project">Share name</label>
 					</div>
 				</div>

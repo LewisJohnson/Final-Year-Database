@@ -22,6 +22,7 @@ var projects_pageNumber = 2,
 							$('#project-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
 						}else{
 							$('#project-table tbody').append($(data));
+							window["ColumnToggleTable"].prototype.functions.refreshAll();
 						}
 						projects_pageNumber++;
 					}
