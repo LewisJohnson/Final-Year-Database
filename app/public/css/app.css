@@ -357,6 +357,18 @@ button:focus {
   font-weight: 900;
 }
 
+.chip {
+  padding: 6px 12px;
+  background: #efefef;
+  border-radius: 90px;
+  text-decoration: none;
+}
+
+.chip.active {
+  background: #183670;
+  color: white;
+}
+
 footer {
   position: absolute;
   right: 0;
@@ -5141,168 +5153,6 @@ th:last-of-type {
           animation-name: slideOutUp;
 }
 
-@media screen and (min-width: 970px) {
-  .mobile-nav-underlay {
-    display: none !important;
-  }
-}
-
-@media screen and (max-width: 970px) {
-  .mask {
-    display: block;
-  }
-
-  ul.tab-container {
-    overflow-x: scroll;
-  }
-
-  .table-action-header,
-  .table-action {
-    display: none;
-  }
-
-  .table-mobile-menu-header,
-  .table-mobile-menu {
-    display: table-cell;
-  }
-
-  .main-content {
-    padding: 3rem 1rem;
-    padding-bottom: 20vh;
-    overflow-x: scroll;
-  }
-
-  .section-container {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-  }
-
-  .section-container .section {
-    width: 100%;
-    margin: 7px auto !important;
-  }
-
-  .hub {
-    width: 100%;
-  }
-
-  .hub .section {
-    width: 100%;
-    margin: 7px auto !important;
-  }
-
-  .hub-container > .header {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-  }
-
-  .hub-container > .header .title {
-    display: inline-block;
-    -webkit-box-flex: 1;
-        -ms-flex: 1 0 70%;
-            flex: 1 0 70%;
-  }
-
-  .hub-container > .header .svg-container {
-    display: inline-block;
-    -webkit-box-flex: 1;
-        -ms-flex: 1 0 10%;
-            flex: 1 0 10%;
-  }
-
-  .hub-container > .header .actions {
-    margin-top: 1rem;
-  }
-
-  .mobile--hidden {
-    visibility: hidden;
-    display: none;
-  }
-
-  #header.mobile {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-  }
-
-  nav.mobile {
-    display: block;
-  }
-
-  #header.desktop {
-    display: none;
-  }
-
-  nav.desktop {
-    display: none;
-  }
-
-  .edit-topic-list .topic {
-    width: 100%;
-  }
-
-  .edit-topic-list .topic:nth-child(odd) {
-    margin-right: 0;
-  }
-
-  .dialog {
-    left: 2vw;
-    right: 2vw;
-  }
-
-  .search-filter-container.active {
-    max-height: 170px;
-  }
-
-  .search-filter li {
-    display: block;
-    margin: 0 0 1rem 0;
-  }
-
-  /* HELPERS */
-
-  .alpha-header {
-    top: 40px;
-  }
-
-  th,
-  td {
-    padding: 8px;
-  }
-
-  td:first-of-type,
-  th:first-of-type {
-    padding-left: 8px;
-  }
-
-  td:last-of-type,
-  th:last-of-type {
-    padding-right: 8px;
-    text-align: right;
-  }
-
-  footer {
-    height: auto;
-  }
-
-  footer .footer-right,
-  footer .footer-left {
-    position: relative;
-  }
-
-  footer .footer-right a,
-  footer .footer-right p,
-  footer .footer-left a,
-  footer .footer-left p {
-    padding: 5px;
-  }
-
-  footer .footer-right .seperator,
-  footer .footer-left .seperator {
-    display: none;
-  }
-}
-
 .fake-input {
   cursor: text;
 }
@@ -5328,6 +5178,7 @@ th:last-of-type {
   position: fixed;
   bottom: 2vh;
   right: 2vw;
+  display: none;
 }
 
 .has-error input {
@@ -5554,9 +5405,14 @@ th:last-of-type {
   margin: 0;
 }
 
-.arrangements-container form {
+.arrangements-container .side-content {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 70px;
   width: 30%;
-  margin: auto;
+  height: 100%;
+  margin: 0 auto;
+  background: white;
 }
 
 .transition--slow {
@@ -5620,6 +5476,191 @@ th:last-of-type {
   100% {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
+  }
+}
+
+@media screen and (min-width: 970px) {
+  .mobile-nav-underlay {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 970px) {
+  .arrangements-container {
+    overflow-x: scroll;
+  }
+
+  .arrangements-container table {
+    width: 100%;
+  }
+
+  .arrangements-container .side-content {
+    position: fixed;
+    bottom: 0;
+    right: 5%;
+    margin-bottom: 5%;
+    z-index: 99;
+    width: auto;
+    height: auto;
+    top: auto;
+  }
+
+  #assign-dialog .arrow p {
+    font-size: 12vw;
+  }
+
+  .mask {
+    display: block;
+  }
+
+  ul.tab-container {
+    overflow-x: scroll;
+  }
+
+  .table-action-header,
+  .table-action {
+    display: none;
+  }
+
+  .table-mobile-menu-header,
+  .table-mobile-menu {
+    display: table-cell;
+  }
+
+  .main-content {
+    padding: 3rem 1rem;
+    padding-bottom: 20vh;
+    overflow-x: scroll;
+  }
+
+  .section-container {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+
+  .section-container .section {
+    width: 100%;
+    margin: 7px auto !important;
+  }
+
+  .hub {
+    width: 100%;
+  }
+
+  .hub .section {
+    width: 100%;
+    margin: 7px auto !important;
+  }
+
+  .hub-container > .header {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+
+  .hub-container > .header .title {
+    display: inline-block;
+    -webkit-box-flex: 1;
+        -ms-flex: 1 0 70%;
+            flex: 1 0 70%;
+  }
+
+  .hub-container > .header .svg-container {
+    display: inline-block;
+    -webkit-box-flex: 1;
+        -ms-flex: 1 0 10%;
+            flex: 1 0 10%;
+  }
+
+  .hub-container > .header .actions {
+    margin-top: 1rem;
+  }
+
+  .mobile--hidden {
+    visibility: hidden;
+    display: none;
+  }
+
+  #header.mobile {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  nav.mobile {
+    display: block;
+  }
+
+  #header.desktop {
+    display: none;
+  }
+
+  nav.desktop {
+    display: none;
+  }
+
+  .edit-topic-list .topic {
+    width: 100%;
+  }
+
+  .edit-topic-list .topic:nth-child(odd) {
+    margin-right: 0;
+  }
+
+  .dialog {
+    left: 2vw;
+    right: 2vw;
+  }
+
+  .search-filter-container.active {
+    max-height: 170px;
+  }
+
+  .search-filter li {
+    display: block;
+    margin: 0 0 1rem 0;
+  }
+
+  /* HELPERS */
+
+  .alpha-header {
+    top: 40px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+
+  td:first-of-type,
+  th:first-of-type {
+    padding-left: 8px;
+  }
+
+  td:last-of-type,
+  th:last-of-type {
+    padding-right: 8px;
+    text-align: right;
+  }
+
+  footer {
+    height: auto;
+  }
+
+  footer .footer-right,
+  footer .footer-left {
+    position: relative;
+  }
+
+  footer .footer-right a,
+  footer .footer-right p,
+  footer .footer-left a,
+  footer .footer-left p {
+    padding: 5px;
+  }
+
+  footer .footer-right .seperator,
+  footer .footer-left .seperator {
+    display: none;
   }
 }
 

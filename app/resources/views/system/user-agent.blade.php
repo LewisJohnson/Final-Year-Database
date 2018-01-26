@@ -6,23 +6,17 @@
 
 @endsection
 
-@php
-if(empty($_GET["unqiue"])){ $_GET["unqiue"] = 0;}
-@endphp
-
 <div class="centered width-1200">
 	<h1>User Agent Strings</h1>
 	<h3>An overview of user agent strings.</h3>
 
-	<div class="checkbox" style="margin-top: 15px;">
-		<input class="checkbox-input" id="show-fv-only" type="checkbox"
-			@if($_GET["unqiue"] == 1)
-				checked data-goto="{{ action('AdminController@userAgent', "unqiue=0")}}"
-				@else
-				data-goto="{{ action('AdminController@userAgent', "unqiue=1")}}"
-			@endif
-			>
-		<label for="show-fv-only">Show first visits only</label>
+
+	<div class="button-group button-group--horizontal button-group--links">
+		@if(isset($_GET["unique"]))
+			<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgent')}}">Only first visits</a>
+		@else
+			<a class="chip active external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgent', 'unique=true') }}">Only first visits</a>
+		@endif
 	</div>
 
 	<table id="user-agent-table" class="data-table shadow-2dp" style="text-align: left">

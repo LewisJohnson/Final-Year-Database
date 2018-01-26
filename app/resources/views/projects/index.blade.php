@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section ('content')
-<div class="centered width-1200">
+<div class="centered width-1200 show--scroll-to-top">
 
 	@if($view == "index")
 		<h1>Projects</h1>
@@ -27,6 +27,8 @@
 
 	{{-- We have search results--}}
 	@if($view == "search")
+		<h1>Project Search</h1>
+		@include('partials.search')
 		<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
 	@endif
 

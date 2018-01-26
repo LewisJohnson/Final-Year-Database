@@ -5,8 +5,17 @@
 @section('content')
 <div class="centered width-1000 show--scroll-to-top">
 	<h1>Report by Supervisor</h1>
+
 	@include('supervisors.partials.supervisor-search')
-	<div style="overflow: auto;">
+	<div class="button-group button-group--horizontal button-group--links">
+		@if(isset($_GET["excludeClosedToOffer"]))
+			<a class="chip external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report') }}">Closed to Offers</a>
+		@else
+			<a class="chip active external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report', 'excludeClosedToOffer=true') }}">Closed to Offers</a>
+		@endif
+	</div>
+	
+	<div id="supervisor-report" style="overflow: auto;">
 		@foreach($supervisors as $supervisor)
 			<table class="shadow-2dp table--dark-head full-detail" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>

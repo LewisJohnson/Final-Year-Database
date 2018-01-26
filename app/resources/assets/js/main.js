@@ -771,13 +771,25 @@ $('.scroll-to-top').on('click',  function(e) {
 	}, 600);
 });
 
+// External links give an illusion of AJAX
+$('.external-link').on('click',  function(e) {
+
+	$(this).removeClass('active');
+	var elemToHideSelector = $($(this).data('element-to-hide-selector'));
+	var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
+
+	elemToHideSelector.hide();
+	elemToReplace.hide();
+	elemToReplace.after('<div id="content-replaced-container" class="loader loader--x-large"></div>');
+
+	$('#content-replaced-container').css('display', 'block');
+
+});
+
+// Used on the student index page
 $('.show-more').on('click',  function(e) {
 	$(this).hide();
 	$('.project').addClass('expand');
-});
-
-$('#show-fv-only').on('change',  function(e) {
-	window.location.href = $(this).data("goto");
 });
 
 $('#project-search-form').on('submit',  function(e) {
