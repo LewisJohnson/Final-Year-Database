@@ -2,6 +2,12 @@
 
 return [
 
+	// Can be relative from app/public/.. or absolute
+	// e.g. /images/sussex-logo.jpg
+	// e.g. http://www.sussex.ac.uk/assets/media/images/site/cyclone/logos/logo.png
+	'header_logo_url' => '/images/logo.png',
+	'header_background' => '#1D4289;',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Authorisation Access 

@@ -1,7 +1,11 @@
 <header id="header" class="desktop">
+	<div class="toolbar">
+		<div class="right button-group--horizontal">
+			<button class="button button--raised login-button" data-activator="true" data-dialog="login">Login</button>
+		</div>
+	</div>
 	<img class="logo" src="/images/sussex-logo.jpg">
 	<h1>@lang("messages.homepage_main_header")</h1>
-	<button class="button button--raised login-button" data-activator="true" data-dialog="login">Login</button>
 </header>
 
 <nav class="desktop">

@@ -1,11 +1,22 @@
-<header id="header" class="desktop">
-	<img class="logo" src="/images/sussex-logo.jpg">
-	<h1>@lang_sess("homepage_main_header")</h1>
+<header id="header" class="desktop" style="background: {{ config('app.header_background') }}">
+	<div class="toolbar">
+		<p>@lang_sess("toolbar_text")</p>
+		<div class="right button-group--horizontal">
+			<button title="Log out" class="logout-button button button--raised" onclick="$('#logout-form').submit();">Logout</a>
+			@if($user->isSupervisorOrSuperior())
+				<button title="Change Authentication" class="button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
+			@endif
+		</div>
+	</div>
 
-	<button title="Log out" class="logout-button button button--raised" onclick="document.getElementById('logout-form').submit();">Logout</a>
-	@if($user->isSupervisorOrSuperior())
-		<button title="Change Authentication" class="change-auth-button button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
-	@endif
+{{-- 	<video muted id="video_bg" class="video" autoplay loop controls>
+		<source src="/graduation.webm" type="video/webm">
+	</video> --}}
+
+	<div class="main">
+		<img class="logo" src="{{ config('app.header_logo_url') }}">
+		<h1>@lang_sess("homepage_main_header")</h1>
+	</div>
 </header>
 
 <nav class="desktop">

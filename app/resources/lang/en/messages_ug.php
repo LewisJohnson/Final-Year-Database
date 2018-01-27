@@ -35,6 +35,7 @@ return [
 
 	/* 4. HEADER */
 	'homepage_main_header' => 'Informatics Final Year Projects',
+	'toolbar_text' => 'Undergraduate',
 
 	// Help links are shown in the help->links dropdown, you may add up to 20 help links.
 	'help_link_1' => 'For Students and Supervisors',

@@ -230,6 +230,12 @@ button:focus {
   background: #e6e6e6;
 }
 
+.button--small {
+  padding: 0 8px;
+  height: 18px;
+  line-height: 18px;
+}
+
 .button--svg {
   min-width: 0;
   padding: 0;
@@ -246,21 +252,21 @@ button:focus {
 }
 
 .button--raised {
-  background: rgba(158, 158, 158, 0.2);
+  background: #ececec;
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .button--raised:hover {
-  background: rgba(133, 132, 132, 0.4);
+  background: #d3d2d2;
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.16);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.16);
 }
 
 .button--raised:active {
-  background: rgba(158, 158, 158, 0.4);
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background: #b9b9b9;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.4), 0 1px 5px 0 rgba(0, 0, 0, 0.32);
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.4), 0 1px 5px 0 rgba(0, 0, 0, 0.32);
 }
 
 .button--danger {
@@ -1331,18 +1337,42 @@ th:last-of-type {
 }
 
 #header.desktop {
-  height: 200px;
+  padding: 5px;
 }
 
-#header.desktop .logo {
+#header.desktop .main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+#header.desktop .main .logo {
+  height: 100px;
+}
+
+#header.desktop .main h1 {
+  line-height: 100px;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
+  margin: 0 auto;
+  width: 98%;
 }
 
-#header.desktop h1 {
-  line-height: 200px;
+#header.desktop .toolbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#header.desktop .toolbar p {
+  margin: 0;
+  color: white;
+  line-height: 36px;
+  margin-left: 10px;
+}
+
+#header.desktop .toolbar .right {
+  margin-left: auto;
 }
 
 #header.mobile {
@@ -1390,19 +1420,6 @@ th:last-of-type {
 
 .hamburger-line--short {
   width: 20px;
-}
-
-.login-button,
-.logout-button,
-.change-auth-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: white;
-}
-
-.change-auth-button {
-  right: 110px;
 }
 
 .notification {

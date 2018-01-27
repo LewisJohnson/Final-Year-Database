@@ -156,6 +156,12 @@ button{
 	background: #e6e6e6;
 }
 
+.button--small{
+	padding: 0 8px;
+	height: 18px;
+	line-height: 18px;
+}
+
 .button--svg{
 	min-width: 0;
 	padding: 0;
@@ -172,18 +178,18 @@ button{
 }
 
 .button--raised{
-	background: rgba(158,158,158,.2);
+	background: rgb(236, 236, 236);
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
 .button--raised:hover{
-	background: darken(rgba(158,158,158,.4), 10%);
+	background: darken(rgb(236, 236, 236), 10%);
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.16);
 }
 
 .button--raised:active{
-	background: rgba(158,158,158,.4);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+	background: darken(rgb(236, 236, 236), 20%);
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.28), 0 3px 1px -2px rgba(0,0,0,.4), 0 1px 5px 0 rgba(0,0,0,.32);
 }
 
 .button--danger{

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section ('content')
 <div class="centered width-1200 show--scroll-to-top">
-
 	@if($view == "index")
 		<h1>Projects</h1>
 		@include('partials.search')
