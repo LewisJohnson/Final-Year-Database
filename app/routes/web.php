@@ -149,7 +149,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::get('projects/by-topic/{id}', 'ProjectController@byTopic');
 
 	// Project search
-	Route::post('projects/search', 'ProjectController@search');
+	Route::get('projects/search', 'ProjectController@search');
 
 	// Project edit topic routes
 	Route::post('projects/topic-add', 'ProjectController@addTopic');

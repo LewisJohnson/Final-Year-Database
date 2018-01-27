@@ -20,8 +20,13 @@ class UserAgentStringCollector{
 			return $next($request);
 		}
 
+		// Don't collect AJAX requests
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-			// Don't collect AJAX requests
+			return $next($request);
+		}
+
+		// Only collect GET requests
+		if($_SERVER['REQUEST_METHOD'] !== 'GET'){
 			return $next($request);
 		}
 

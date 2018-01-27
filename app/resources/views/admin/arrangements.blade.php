@@ -4,6 +4,8 @@
 	<h1>Amend Supervisor Arrangements</h1>
 	<h3>@lang_sess("select_supervisor_arragments")</h3>
 	<form action="{{ action('AdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
+		{{ csrf_field() }}
+		{{ method_field('PATCH') }}
 		<div class="arrangements-container">
 			<table class="data-table data-table--selectable shadow-2dp">
 				<thead>
@@ -23,7 +25,7 @@
 				</thead>
 				<tbody>
 					@foreach($supervisors as $supervisor)
-						<tr >
+						<tr class="pointer" onclick="$('#supervisor-{{ $supervisor->id }}').click();">
 							<td>
 								<div class="checkbox checkbox--row">
 									<input class="checkbox-input" id="supervisor-{{ $supervisor->id }}" type="checkbox" name="supervisor-{{ $supervisor->id }}">
@@ -47,12 +49,10 @@
 			</table>
 
 			<div class="side-content card">
-				{{ csrf_field() }}
-				<div id="login-loader" class="loader" style="width: 75px; height: 75px;"></div>
-
-				<div class="form-field">
+				<h3>Arragments</h3>
+				<div class="form-field" title="Leave project load blank to keep current project loads.">
 					<label for="project_load">Project Load</label>
-					<input required type="number" name="project_load" id="project_load">
+					<input type="number" name="project_load" id="project_load">
 				</div>
 
 				<div class="form-field">
@@ -61,7 +61,7 @@
 						<label for="take_students">Take Students</label>
 					</div>
 				</div>
-				{{ method_field('PATCH') }}
+				
 				<input type="submit" class="button button--raised button--accent">
 			</div>
 		</div>

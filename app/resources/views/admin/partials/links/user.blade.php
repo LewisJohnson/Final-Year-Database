@@ -20,7 +20,7 @@
 	<li>
 		<a class="icon" href="/admin/supervisor-arrangements-amend">
 			@include('svg.account-settings')
-			<p>Edit Supervisors Arrangements</p>
+			<p>Amend Supervisors Arrangements</p>
 		</a>
 	</li>
 	<li>

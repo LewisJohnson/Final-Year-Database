@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="card card--margin-vertical">
-			<h2>Project</h2>
+			<h2>Your Project</h2>
 			<p><b>Status:</b> {{ $user->student->getStatusString() }}</p>
 			@if($user->student->project_status != 'none')
 				@include ('partials.project-preview', array('project'=> $user->student->project))
@@ -52,7 +52,7 @@
 
 		<div class="card card--margin-vertical">
 			<h2>Options</h2>
-			<p>You may hide your name from other students.</p>
+			<p>You may hide your name from other students in the supervisor report.</p>
 			<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareProject') }}" method="POST" accept-charset="utf-8">
 				{{ csrf_field() }}
 				<div class="form-field">

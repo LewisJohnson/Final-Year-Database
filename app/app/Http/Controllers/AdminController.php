@@ -64,9 +64,12 @@ class AdminController extends Controller{
 
 	public function amendSupervisorArrangements(Request $request){
 
-		$request->validate([
-			'project_load' => 'bail|required|numeric',
-		]);
+		if(isset($request->project_load)){
+			$request->validate([
+				'project_load' => 'numeric',
+			]);
+		};
+
 		foreach ($request->all() as $key => $value) {
 			if (strpos($key, 'supervisor-') === 0) {
 				preg_match('/\d+/', $key, $id);
@@ -76,10 +79,16 @@ class AdminController extends Controller{
 				$supervisor = Supervisor::findOrFail($id[0]);
 
 				if(Session::get("db_type") == "ug"){
-					$supervisor->project_load_ug = $request->project_load;
+					if(isset($request->project_load)){
+						$supervisor->project_load_ug = $request->project_load;
+					}
+
 					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
 				} elseif(Session::get("db_type") == "masters") {
-					$supervisor->project_load_masters = $request->project_load;
+					if(isset($request->project_load)){
+						$supervisor->project_load_masters = $request->project_load;
+					}
+
 					$supervisor->take_students_masters = isset($request->take_students) ? true : false;
 				}
 				$supervisor->save();

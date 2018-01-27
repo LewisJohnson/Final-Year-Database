@@ -1,4 +1,4 @@
-<form id="project-search-form" action="/projects/search" class="form form--flex" role="form" method="POST" accept-charset="utf-8">
+<form id="project-search-form" action="/projects/search" class="form form--flex" role="form" method="GET" accept-charset="utf-8">
 	{{ csrf_field() }}
 	<div class="search-container shadow-4dp">
 		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm"  placeholder="Search...">

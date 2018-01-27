@@ -28,17 +28,17 @@
 	{{-- We have search results--}}
 	@if($view == "search")
 		<h1>Project Search</h1>
+		<h3> We found <em>{{count($projects)}}</em> projects with the term "{{ $searchTerm }}".</h3>
 		@include('partials.search')
-		<p> We found <b>{{count($projects)}}</b> projects with the term "<b>{{ $searchTerm }}</b>".</p>
 	@endif
 
 	<table id="project-table" class="data-table table--dark-head table-column-toggle shadow-2dp {{ $view }}">
 		<thead>
 			<tr>
-				<th data-default="true" >Topic</th>
-				<th data-default="true" >Title</th>
+				<th data-default="true">Topic</th>
+				<th data-default="true">Title</th>
 				<th data-default="false" hidden>Description</th>
-				<th data-default="true" >Skills</th>
+				<th data-default="true">Skills</th>
 				<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
 	
 			</tr>
