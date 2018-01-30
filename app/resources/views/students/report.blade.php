@@ -26,7 +26,7 @@
 		@if(count($sortedStudents) > 0)
 			<div class="section horizontal" data-status= "{{ $status }}">
 					<h3>{{ ucfirst($status) }}</h3>
-					<table class="data-table {{ $status }}  full-detail shadow-2dp" id="student-edit-list">
+					<table class="data-table email-table {{ $status }} shadow-2dp">
 						<thead>
 							<tr>
 								<th>
@@ -46,7 +46,7 @@
 						</tbody>
 					</table>
 					<div class="button-group button-group--horizontal">
-						<button class="button button--raised email-selected {{ $status }}" type="">Email Selected</button>
+						<a class="button button--raised email-selected {{ $status }}" href="mailto:">Email Selected</a>
 					</div>
 				</div>
 			@else

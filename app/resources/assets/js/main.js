@@ -874,10 +874,10 @@ Marker.prototype.initAll = function(){
 	 8. OTHER
    ====================== */
 
-$('#student-edit-list').find('.checkbox input').on('change', function() {
+$('.email-table').find('.checkbox input').on('change', function() {
 	var status = $(this).parents().eq(3).data('status');
 	var emailString = "mailto:";
-	var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+	var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 	var emailButtonselector = ".email-selected." + status;
 	$(checkboxSelector).each(function() {
 		if($(this).is(":checked")) {
