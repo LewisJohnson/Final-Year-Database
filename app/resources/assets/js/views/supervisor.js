@@ -164,7 +164,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		}
 
 		if(ajaxUrl == null){
-			console.log("Invalid supervisor action.");
+			console.error("Invalid supervisor action.");
 			return;
 		}
 
@@ -262,27 +262,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 				cancel: {},
 			}
 		});
-	});
-
-	$('#student-edit-list').find('.checkbox input').on('change', function() {
-		var status = $(this).parents().eq(3).data('status');
-		var emailString = "mailto:";
-		var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
-		var emailButtonselector = ".email-selected." + status;
-		$(checkboxSelector).each(function() {
-			if($(this).is(":checked")) {
-				emailString += $(this).parent().parent().data('email');
-				emailString += ",";
-			}
-		});
-		$(emailButtonselector).prop('href', emailString);
-	});
-
-	$('.edit-student-list .email-selected').on('click', function(e) {
-		if($(this).prop('href') === 'mailto:'){
-			alert("You haven't selected anyone.");
-			e.preventDefault();
-		}
 	});
 
 	$('.expand').on('click', function(e) {

@@ -32,7 +32,7 @@
 			<li class="hamburger-line hamburger-line--short"></li>
 		</ul>
 	</div>
-	<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang("messages.homepage_main_header")</h1></a>
+	<a href="{{ action('HomeController@index') }}" title="Home">@lang("messages.homepage_main_header")</a>
 </header>
 
 <nav class="mobile" aria-hidden="true" aria-expanded="false">

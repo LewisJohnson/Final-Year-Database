@@ -938,6 +938,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  	 8. OTHER
     ====================== */
 
+	$('#student-edit-list').find('.checkbox input').on('change', function () {
+		var status = $(this).parents().eq(3).data('status');
+		var emailString = "mailto:";
+		var checkboxSelector = '#student-edit-list.' + status + ' .checkbox input';
+		var emailButtonselector = ".email-selected." + status;
+		$(checkboxSelector).each(function () {
+			if ($(this).is(":checked")) {
+				emailString += $(this).parent().parent().data('email');
+				emailString += ",";
+			}
+		});
+		$(emailButtonselector).prop('href', emailString);
+	});
+
+	$('.email-selected').on('click', function (e) {
+		if ($(this).prop('href') === 'mailto:' || $(this).prop('href') === null) {
+			alert("You haven't selected anyone.");
+			e.preventDefault();
+		}
+	});
+
 	$(window).scroll(function () {
 		if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
 			$('.scroll-to-top').fadeIn();

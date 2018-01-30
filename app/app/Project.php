@@ -22,6 +22,11 @@ class Project extends Model{
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}
 
+	// I know statues is not a real word
+	public static function getAllStatuses(){
+		return ['none', 'proposed', 'selected', 'accepted'];
+	}
+
 	public function isOwnedByUser(){
 		if(Auth::user()){
 			if(Auth::user()->isSupervisorOrSuperior()){

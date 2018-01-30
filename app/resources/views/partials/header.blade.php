@@ -40,7 +40,7 @@
 					<a title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
 					<a title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
 					<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
-				</div>				
+				</div>
 			</li>
 		@endif
 
@@ -80,7 +80,7 @@
 			<li class="hamburger-line hamburger-line--short"></li>
 		</ul>
 	</div>
-	<a href="{{ action('HomeController@index') }}" title="Home">@lang_sess("homepage_main_header")</a>
+	<a href="{{ action('HomeController@index') }}" title="Home"><@lang_sess("homepage_main_header")</a>
 </header>
 
 <nav class="mobile shadow-8dp" aria-hidden="true">
