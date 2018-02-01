@@ -1,4 +1,4 @@
-<div class="project-preview">
+<div class="project-preview project-preview--student">
 	<div class="project">
 		<h1 class="title">{{ $project->title }}</h1>
 		{{-- <h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2> --}}
@@ -15,7 +15,7 @@
 							<p>{{$topic->name}}</p>
 						</li>
 					@else
-						<li style="display: none" class="pointer topic" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+						<li style="display: none" class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 							<p>{{$topic->name}}</p>
 						</li>
 					@endif

@@ -4,7 +4,7 @@
 	var submitButton = $("#supervisor-report-search-button");
 	var input = $("#supervisor-report-search-input");
 
-	$(submitButton).on('click', function() {
+	$(submitButton).on("click", function() {
 		scrollToSupervisor();
 	});
 
@@ -16,16 +16,18 @@
 
 	function scrollToSupervisor(){
 		var supervisor = $('#' +  input.val().replace(/[\s.]+/g, ''));
+
 		if(supervisor.length < 1){
-			showNotification('error', 'Supervisor "' + input.val() + '" can not be found.');
+			showNotification("error", "Supervisor \"' + input.val() + '\" can not be found.");
 		} else {
-		supervisor.removeClass('animated shake');
-			$('html, body').animate({ 
+			supervisor.removeClass("animated shake");
+			$("html, body").animate({ 
 				scrollTop: supervisor.offset().top - 50 }, 600, 
 				function() {
-					supervisor.addClass('animated shake');
+					supervisor.addClass("animated shake");
 			});
 		}
+		
 		input.val("");
 	}
 });

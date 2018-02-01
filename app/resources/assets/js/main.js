@@ -11,7 +11,6 @@
 	4.6 Edit Topics [Admin]
 	4.7 Menu
 5. Second Marker
-6. Dynamic Pagination
 8. Other
 9. Initialise Everything
 */
@@ -900,23 +899,8 @@ $('.email-selected').on('click', function(e) {
 	}
 });
 
-$(window).scroll(function(){
-	if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
-		$('.scroll-to-top').fadeIn();
-	} else {
-		$('.scroll-to-top').fadeOut();
-	}
-});
-
-$('.scroll-to-top').on('click', function(e) {
-	$('html, body').animate({
-		scrollTop: 0
-	}, 600);
-});
-
 // External links give an illusion of AJAX
 $('.external-link').on('click',  function(e) {
-
 	$(this).removeClass('active');
 	var elemToHideSelector = $($(this).data('element-to-hide-selector'));
 	var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
@@ -929,11 +913,6 @@ $('.external-link').on('click',  function(e) {
 });
 
 // Used on the student index page
-$('.show-more').on('click',  function(e) {
-	$(this).hide();
-	$('.project').addClass('expand');
-});
-
 $("#share-project-form").on('submit', function(e){
 	e.preventDefault();
 

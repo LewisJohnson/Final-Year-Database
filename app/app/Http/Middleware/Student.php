@@ -4,8 +4,7 @@ namespace SussexProjects\Http\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class Student
-{
+class Student{
 	/**
 	 * Handle an incoming request.
 	 *

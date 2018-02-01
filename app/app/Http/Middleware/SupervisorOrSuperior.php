@@ -1,11 +1,11 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class SupervisorOrSuperior
-{
+class SupervisorOrSuperior{
 	/**
 	 * Handle an incoming request.
 	 *

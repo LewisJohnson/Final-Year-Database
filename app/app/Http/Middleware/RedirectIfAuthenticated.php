@@ -4,8 +4,7 @@ namespace SussexProjects\Http\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class RedirectIfAuthenticated
-{
+class RedirectIfAuthenticated{
 	/**
 	 * Handle an incoming request.
 	 *

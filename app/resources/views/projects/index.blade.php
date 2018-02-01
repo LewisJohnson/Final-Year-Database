@@ -1,12 +1,18 @@
 @extends('layouts.app')
 @section ('content')
+
+@section('scripts')
+	<script src="{{ asset('js/views/project-preview.js') }}"></script>
+
+	@if($view == "index")
+		<script src="{{ asset('js/pagination/projects-pagination.js') }}"></script>
+	@endif
+@endsection
+
 <div class="centered width-1200 show--scroll-to-top">
 	@if($view == "index")
 		<h1>Projects</h1>
-		@include('partials.search')
-		@section('scripts')
-			<script src="{{ asset('js/pagination/projects-pagination.js') }}"></script>
-		@endsection
+		@include('projects.partials.search')
 	@endif
 
 	@if($view == "supervisor")
@@ -28,26 +34,27 @@
 	@if($view == "search")
 		<h1>Project Search</h1>
 		<h3> We found <em>{{count($projects)}}</em> projects with the term "{{ $searchTerm }}".</h3>
-		@include('partials.search')
+		@include('projects.partials.search')
 	@endif
 
-	<table id="project-table" class="data-table table--dark-head table-column-toggle shadow-2dp {{ $view }}">
-		<thead>
-			<tr>
-				<th data-default="true">Topic</th>
-				<th data-default="true">Title</th>
-				<th data-default="false" hidden>Description</th>
-				<th data-default="true">Skills</th>
-				<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
-	
-			</tr>
-		</thead>
+	<div class="table-responsive">
+		<table id="project-table" class="data-table table--dark-head table-column-toggle shadow-2dp {{ $view }}">
+			<thead>
+				<tr>
+					<th data-default="true">Topic</th>
+					<th data-default="true">Title</th>
+					<th data-default="false" hidden>Short Description</th>
+					<th data-default="false" hidden>Full Description</th>
+					<th data-default="true">Skills</th>
+					<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
+				</tr>
+			</thead>
 
-		<tbody>
-			@include('projects.partials.full-project-table-row')
-		</tbody>
-	</table>
-
+			<tbody>
+				@include('projects.partials.full-project-table-row')
+			</tbody>
+		</table>
+	</div>
 	<div style="margin: 1rem auto" class="loader loader--medium projects"></div>
 </div>
 @endsection

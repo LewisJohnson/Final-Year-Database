@@ -4,7 +4,8 @@ var config = {
 	mediumAnimation : 300,
 	fastAnimation : 200,
 	superFastAnimation : 100,
-	showAjaxRequestFailNotification : true
+	showAjaxRequestFailNotification : true,
+	tapHeldTime: 500
 }
 
 window["config"] = config;

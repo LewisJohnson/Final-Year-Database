@@ -1,9 +1,20 @@
 .project-preview{
-	padding: 1rem;
 	overflow: hidden;
+	
+	.project{
+		@include transition--medium-cb();
+		overflow: hidden;
+
+		.title{
+			margin-top: 0;
+		}
+	}
+}
+
+.project-preview.project-preview--student{
+	padding: 1rem;
 
 	.project{
-		transition: 0.5s all;
 		max-height: 8rem;
 		overflow: hidden;
 		box-shadow: 0px 16px 11px -11px rgba(0, 0, 0, 0.1);

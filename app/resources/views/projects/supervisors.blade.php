@@ -1,7 +1,9 @@
 @extends('layouts.app')
+
 @section('scripts')
 	<script src="{{ asset('js/views/supervisor-report.js') }}"></script>
 @endsection
+
 @section('content')
 <div class="centered width-800">
 	<h1>Projects by Supervisor</h1>

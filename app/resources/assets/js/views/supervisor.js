@@ -13,7 +13,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	* @param {HTMLElement} element The element that will be upgraded.
 	*/
 	var ProjectTopics =  function ProjectTopics() {};
-	window['ProjectTopics'] = ProjectTopics;
+	window["ProjectTopics"] = ProjectTopics;
 
 	ProjectTopics.prototype.CssClasses_ = {
 		DATA_TABLE: 'data-table',
@@ -61,7 +61,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		},
 
 		removeTopicFromProject: function (projectId, topicId) {
-			$('.loader').show(0);
+			$(".loader").show(0);
 			var ajaxUrl = "/projects/topic-remove";
 			$.ajax({
 				type: "DELETE",
@@ -71,19 +71,19 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					project_id: projectId
 				},
 				success: function(){
-					$('.topics-list.edit li.topic').each(function(i, obj) {
-						if($(this).data('topic-id') == topicId){
+					$(".topics-list.edit li.topic").each(function(i, obj) {
+						if($(this).data("topic-id") == topicId){
 							$(this).remove();
 						}
 					});
 				},
 			}).done(function(){
-				$('.loader').hide(0);
+				$(".loader").hide(0);
 			});
 		},
 
 		updateProjectPrimaryTopic: function (projectId, topicId) {
-			$('.loader').show(0);
+			$(".loader").show(0);
 			var ajaxUrl = "/projects/topic-update-primary";
 			$.ajax({
 				type: "PATCH",
@@ -93,9 +93,9 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					project_id: projectId
 				},
 				success: function(){
-					$('#editProjectForm').attr('data-project-id', topicId);
-					$('.topics-list.edit li.topic').each(function(i, obj) {
-						if($(this).data('topic-id') == topicId){
+					$("#editProjectForm").attr("data-project-id", topicId);
+					$(".topics-list.edit li.topic").each(function(i, obj) {
+						if($(this).data("topic-id") == topicId){
 							$(this).addClass("first");
 						} else {
 							$(this).removeClass("first");
@@ -103,13 +103,13 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					});
 				},
 			}).done(function(){
-				$('.loader').hide(0);
+				$(".loader").hide(0);
 			});
 		},
 	};
 
-	const swappable = new Swappable(document.querySelectorAll('.topics-list.edit'), {
-		draggable: '.topic',
+	const swappable = new Swappable(document.querySelectorAll(".topics-list.edit"), {
+		draggable: ".topic",
 	});
 
 	window["swappable"] = swappable;

@@ -46,30 +46,30 @@ class ProjectController extends Controller{
 
 		if(Session::get("db_type") == "ug"){
 			$projects = ProjectUg::
-			select('projects_ug.*', 'supervisors.take_students_ug')
-			->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_ug', true);
+				select('projects_ug.*', 'supervisors.take_students_ug')
+				->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
+				->where('supervisors.take_students_ug', true);
 		} elseif(Session::get("db_type") == "masters") {
 			$projects = ProjectMasters::
-			select('projects_masters.*', 'supervisors.take_students_masters')
-			->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_masters', true);
+				select('projects_masters.*', 'supervisors.take_students_masters')
+				->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
+				->where('supervisors.take_students_masters', true);
 		}
 
-		$projects->
-			whereNotNull('supervisor_id')
+		$projects->whereNotNull('supervisor_id')
 			->where('status', 'on-offer')
 			->where('student_proposed_project', 0);
 
 		if($request->query("page")){
-			return view('projects.partials.project-table-row')
-				->with('projects', $projects->paginate($this->paginationCount))
-				->with('view', 'index');
-		} else {
-			return view('projects.index')
+			return view('projects.partials.full-project-table-row')
 				->with('projects', $projects->paginate($this->paginationCount))
 				->with('view', 'index');
 		}
+
+		return view('projects.index')
+			->with('projects', $projects->paginate($this->paginationCount))
+			->with('view', 'index');
+		
 	}
 
 	/**
@@ -78,7 +78,10 @@ class ProjectController extends Controller{
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
+	public function show(Request $request, $id) {
+
+		$view = "SupervisorProject";
+		$student_name = "a student";
 
 		if(Session::get("db_type") == "ug"){
 			$project = ProjectUg::find($id);
@@ -86,13 +89,18 @@ class ProjectController extends Controller{
 			$project = ProjectMasters::find($id);
 		}
 
-		$view = "SupervisorProject";
-		$student_name = "a student";
 		if($project->student_proposed_project){
 			$view = "StudentProject";
 			if($project->student->share_project || Auth::user()->isSupervisorOrSuperior()){
 				$student_name = $project->student->user->getFullName();
 			}
+		}
+
+		if($request->query("preview") == "true"){
+			return view('projects.partials.project-preview')
+				->with('project', $project)
+				->with('student_name', $student_name)
+				->with('view', $view);
 		}
 
 		return view('projects.project')
@@ -447,41 +455,40 @@ class ProjectController extends Controller{
 	}
 
 	public function search(Request $request) {
+		
+		/* SELECT CONDITIONS
+			Select if supervisor take_students is true
+			Select if on-offer
+			Select if NOT archived
+			select if NOT student proposed
+		*/
 
-		$searchterm = $request->query("searchTerm");
-		// $sBySuprv = isset($_GET['supervisor']) ? true : false;
-		// $sByTopic = isset($_GET['topic']) ? true : false;
-
+		$searchterm = $request->get("searchTerm");
+		
 		if(Session::get("db_type") == "ug"){
-			$project_db = "projects_ug.";
-			$projects = ProjectUg::
-			select('projects_ug.*', 'supervisors.take_students_ug')
-			->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_ug', true);
+			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
+				->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
+				->where('supervisors.take_students_ug', true);
+
 		} elseif(Session::get("db_type") == "masters") {
-			$project_db = "projects_masters.";
-			$projects = ProjectMasters::
-			select('projects_masters.*', 'supervisors.take_students_masters')
-			->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_masters', true);
+			$projects = ProjectMasters::select('projects_masters.*', 'supervisors.take_students_masters')
+				->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
+				->where('supervisors.take_students_masters', true);
 		}
 
-		if(isset($_POST['title'])){
-			$projects->where($project_db."title", "LIKE", '%'.$searchterm.'%');
+		if($request->get("title") !== null){
+			$projects->orWhere("title", "LIKE", '%'.$searchterm.'%');
 		}
 
-		if(isset($_POST['skills'])){
+		if($request->get("skills") !== null){
 			$projects->orWhere("skills", "LIKE", '%'.$searchterm.'%');
 		}
 
-		if(isset($_POST['description'])){
+		if($request->get("description") !== null){
 			$projects->orWhere("description", "LIKE", '%'.$searchterm.'%');
 		}
 
-		// if($supervisor){
-		// 	// $query->orWhere("supervisor", "LIKE",'%'.$searchterm.'%');
-		// }
-
+		dd($projects);
 		// Send Query to DB
 		$projects = $projects->get();
 
@@ -499,8 +506,8 @@ class ProjectController extends Controller{
 				->with('searchTerm', $searchterm);
 
 		} else {
-			session()->flash('message', 'We couldn\'t find anything for "' . $searchterm . '".');
-			return $this->index();
+			session()->flash("warning", "We couldn\'t find anything for \"' . $searchterm . '\".");
+			return redirect('/projects');
 		}
 	}
 }

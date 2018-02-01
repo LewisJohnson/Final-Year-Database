@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Closure;
 use Session;
 
-class Supervisor
-{
+class Supervisor{
 	/**
 	 * Handle an incoming request.
 	 *

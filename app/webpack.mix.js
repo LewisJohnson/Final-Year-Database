@@ -13,27 +13,27 @@ var webpack = require('webpack');
  */
 
 mix.disableNotifications();
-// mix.sourceMaps();
-
+mix.sourceMaps();
 
 new webpack.ProvidePlugin({
   $: 'jquery',
   jQuery: 'jquery'
-})
+});
 
 // JAVASCRIPT
 mix.js('resources/assets/js/jquery-3.2.1.js', 'public/js');
+mix.js('resources/assets/js/jquery-taphold.js', 'public/js');
 mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
 
 mix.js('resources/assets/js/main.js', 'public/js');
 mix.scripts('resources/assets/js/helpers.js', 'public/js/helpers.js');
 mix.scripts('resources/assets/js/config.js', 'public/js/config.js');
 
-
 // JS | VIEWS
 mix.js('resources/assets/js/views/help.js', 'public/js/views');
-mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
+mix.js('resources/assets/js/views/project-preview.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor-report.js', 'public/js/views');
+mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
 
 // JS | PAGINATION
 mix.js('resources/assets/js/dynamic-pagination/projects-pagination.js', 'public/js/pagination');

@@ -1,6 +1,7 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Db;
 use SussexProjects\UserAgentString;
@@ -15,7 +16,6 @@ class UserAgentStringCollector{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-
 		if(!config('app.collect_user_agent')){
 			return $next($request);
 		}

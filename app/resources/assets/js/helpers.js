@@ -1,4 +1,14 @@
+
+/* ================
+	POLYFILL
+   ================ */
+
 // require("babel-polyfill");
+"use strict";
+
+/* ================
+	HELPERS
+   ================ */
 
 function showNotification(type, message){
 	var notification = $('.notification');
@@ -97,3 +107,28 @@ function addTitleHeadersToList(ul) {
 		}
 	}
 }
+
+/* ================
+	JQUERY HELPERS
+   ================ */
+
+$(function() {
+	$(window).scroll(function(){
+		if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
+			$('.scroll-to-top').fadeIn();
+		} else {
+			$('.scroll-to-top').fadeOut();
+		}
+	});
+
+	$('.scroll-to-top').on('click', function(e) {
+		$('html, body').animate({
+			scrollTop: 0
+		}, 600);
+	});
+
+	$('.show-more').on('click',  function(e) {
+		$(this).hide();
+		$('.project').addClass('expand');
+	});
+});
