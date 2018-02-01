@@ -46,7 +46,7 @@
 					@foreach($supervisor->getProjectsByStatus('on-offer') as $project)
 						<tr>
 							<td>@if($loop->iteration == 1)<a href="{{ action('ProjectController@bySupervisor', $supervisor->id)}}">Projects ({{count($supervisor->user->projects)}})</a>@endif</td>
-							<td><a href="{{ action('ProjectController@show' ,$project->id) }}">{{ $project->title }}</a></td>
+							<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
 							<td>{{ucfirst(str_replace('-', ' ', $project->status))}}</td>
 						</tr>
 					@endforeach
@@ -56,7 +56,7 @@
 						@foreach($supervisor->getAcceptedStudents() as $project)
 								<tr>
 									<td>@if($loop->iteration == 1)Accepted Projects ({{ count($supervisor->getAcceptedStudents()) }})@endif</td>
-									<td>{{ $project->title }}</td>
+									<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
 									<td>{{ $project->student_name }}</td>
 								</tr>
 						@endforeach
@@ -73,7 +73,7 @@
 						@foreach($supervisor->getProjectOffers() as $project)
 							<tr>
 								<td>@if($loop->iteration == 1)Awaiting Approval ({{count($supervisor->getProjectOffers())}})@endif</td>
-								<td>{{ $project->title }}</td>
+								<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
 								<td>{{ $project->student_name }}</td>
 							</tr>
 						@endforeach
@@ -89,7 +89,7 @@
 					@foreach($supervisor->getProjectProposals() as $project)
 						<tr>
 							<td>@if($loop->iteration == 1)Student Proposals ({{count($supervisor->getProjectProposals())}})@endif</td>
-							<td>{{ $project->title }}</td>
+							<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
 							<td>{{ $project->student_name }}</td>
 						</tr>
 					@endforeach

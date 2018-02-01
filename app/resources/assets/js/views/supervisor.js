@@ -108,9 +108,11 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		},
 	};
 
-	const swappable = new Swappable(document.querySelectorAll('.topics-list.edit .topic'), {
+	const swappable = new Swappable(document.querySelectorAll('.topics-list.edit'), {
 		draggable: '.topic',
 	});
+
+	window["swappable"] = swappable;
 
 	swappable.on('swappable:swapped', function(){
 		var projectId = $('#editProjectForm').data('project-id');

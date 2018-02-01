@@ -874,18 +874,23 @@ Marker.prototype.initAll = function(){
 	 8. OTHER
    ====================== */
 
-$('.email-table').find('.checkbox input').on('change', function() {
-	var status = $(this).parents().eq(3).data('status');
-	var emailString = "mailto:";
-	var checkboxSelector = '.email-table.' + status + ' .checkbox input';
-	var emailButtonselector = ".email-selected." + status;
-	$(checkboxSelector).each(function() {
-		if($(this).is(":checked")) {
-			emailString += $(this).parent().parent().data('email');
-			emailString += ",";
-		}
-	});
-	$(emailButtonselector).prop('href', emailString);
+$('.email-table .checkbox input').on('change', function() {
+
+	var select = function(dom){
+		var status = dom.parents().eq(4).data('status');
+		var emailString = "mailto:";
+		var checkboxSelector = '.email-table.' + status + ' .checkbox input';
+		var emailButtonselector = ".email-selected." + status;
+
+		$(checkboxSelector).each(function(index, value) {
+			if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
+				emailString += $(value).data('email');
+				emailString += ",";
+			}
+		});
+		$(emailButtonselector).prop('href', emailString);
+	};
+	setTimeout(2000, select($(this)));
 });
 
 $('.email-selected').on('click', function(e) {

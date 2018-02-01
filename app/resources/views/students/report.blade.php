@@ -2,7 +2,6 @@
 @section('content')
 
 <div class="centered width-1600">
-
 	<div id="report-header">
 		<h1>Report by Student</h1>
 
@@ -24,9 +23,9 @@
 			$sortedStudents = $students->sortBy(function ($student, $key) { return $student->user->last_name; });
 		@endphp
 		@if(count($sortedStudents) > 0)
-			<div class="section horizontal" data-status= "{{ $status }}">
+			<div class="section horizontal">
 					<h3>{{ ucfirst($status) }}</h3>
-					<table class="data-table email-table {{ $status }} shadow-2dp">
+					<table class="data-table email-table {{ $status }} shadow-2dp" data-status="{{ $status }}">
 						<thead>
 							<tr>
 								<th>

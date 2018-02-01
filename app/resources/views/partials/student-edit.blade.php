@@ -1,7 +1,7 @@
-<tr class="student-edit-item" data-email="{{ $student->user->email }}">
+<tr class="student-edit-item">
 	<td>
 		<div class="checkbox">
-			<input class="checkbox-input" id="student-{{ $student->user->id }}" type="checkbox">
+			<input class="checkbox-input" id="student-{{ $student->user->id }}" data-email="{{ $student->user->email }}" type="checkbox">
 			<label for="student-{{ $student->user->id }}" name="student-{{ $student->user->id }}"></label>
 		</div>
 	</td>
