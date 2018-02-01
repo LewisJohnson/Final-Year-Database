@@ -49,7 +49,17 @@ $('.topics-list li').first().fadeIn(config.fastAnimation, function showNext() {
 
 $('.order-list-js').each(function() {
 	var list = $(this);
-	sortUnorderedList(list);
+	// sortUnorderedList(list);
+
+	if(list.hasClass('last-name-header-list-js')){
+		if(!list.attr('id')){
+			console.error('A unique id is required.');
+			return;
+		}
+
+		list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
+		addLastNameHeadersToList(list);
+	}
 
 	if(list.hasClass('alpha-header-list-js')){
 		if(!list.attr('id')){

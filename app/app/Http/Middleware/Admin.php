@@ -4,7 +4,7 @@ namespace SussexProjects\Http\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class Admin extends Middleware{
+class Admin{
 	/**
 	 * Handle an incoming request.
 	 *

@@ -64,6 +64,34 @@ function sortUnorderedList(ul) {
 	$.each(listitems, function(idx, itm) { ul.append(itm); });
 }
 
+function addLastNameHeadersToList(ul) {
+
+	var listitems = ul.children('li').get();
+	var links = $('#' + ul.attr('id') + '-links');
+
+	for (var i = 0; i < listitems.length; i++) {
+
+		var name = $(listitems[i]).text();
+		var nameSplit = name.toUpperCase().split(" ");
+		var firstCharOflastName = nameSplit[nameSplit.length - 1].charAt(0);
+
+		if(i == 0){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+			continue;
+		}
+
+		var prevName = $(listitems[i - 1]).text();
+		var prevNameSplit = prevName.toUpperCase().split(" ");
+		var prevfirstCharOflastName = prevNameSplit[prevNameSplit.length - 1].charAt(0);
+
+		if(firstCharOflastName != prevfirstCharOflastName){
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+		}
+	}
+}
+
 function addAlphaHeadersToList(ul) {
 	var listitems = ul.children('li').get();
 	var links = $('#' + ul.attr('id') + '-links');

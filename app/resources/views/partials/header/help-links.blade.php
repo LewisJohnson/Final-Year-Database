@@ -1,4 +1,6 @@
-@php($localePrefix = Session::get('db_type') == 'ug' ?  "messages_ug" : "messages_masters")
+@php
+	$localePrefix = Session::get('db_type') == 'ug' ?  "messages_ug" : "messages_masters";
+@endphp
 
 @if(Lang::has($localePrefix.".help_link_1"))
 	@if($platform == "mobile")

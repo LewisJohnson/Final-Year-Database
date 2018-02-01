@@ -22,7 +22,12 @@ class StudentController extends Controller{
 	}
 
 	public function report(){
-		return view('students.report');
+		if(Session::get("db_type") == "ug"){
+			$studentCount = count(StudentUg::all());
+		} elseif(Session::get("db_type") == "masters") {
+			$studentCount = count(StudentMasters::all());
+		}
+		return view('students.report')->with('studentCount', $studentCount);
 	}
 
 	public function addFavouriteProject(Request $request){
@@ -63,7 +68,6 @@ class StudentController extends Controller{
 		}
 
 		Cookie::queue('fp', serialize($favProjects), 525600);
-
 		return;
 	}
 

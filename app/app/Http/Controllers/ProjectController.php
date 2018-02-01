@@ -464,20 +464,23 @@ class ProjectController extends Controller{
 		*/
 
 		$searchterm = $request->get("searchTerm");
-		
+
 		if(Session::get("db_type") == "ug"){
-			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
+			$project_db = "projects_ug.";
+			$projects = ProjectUg::
+			select('projects_ug.*', 'supervisors.take_students_ug')
 				->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
 				->where('supervisors.take_students_ug', true);
-
 		} elseif(Session::get("db_type") == "masters") {
-			$projects = ProjectMasters::select('projects_masters.*', 'supervisors.take_students_masters')
+			$project_db = "projects_masters.";
+			$projects = ProjectMasters::
+			select('projects_masters.*', 'supervisors.take_students_masters')
 				->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
 				->where('supervisors.take_students_masters', true);
 		}
 
 		if($request->get("title") !== null){
-			$projects->orWhere("title", "LIKE", '%'.$searchterm.'%');
+			$projects->where($project_db."title", "LIKE", '%'.$searchterm.'%');
 		}
 
 		if($request->get("skills") !== null){
@@ -488,8 +491,6 @@ class ProjectController extends Controller{
 			$projects->orWhere("description", "LIKE", '%'.$searchterm.'%');
 		}
 
-		dd($projects);
-		// Send Query to DB
 		$projects = $projects->get();
 
 		if (count($projects) === 1) {

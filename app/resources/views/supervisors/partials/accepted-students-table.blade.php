@@ -1,4 +1,3 @@
-@php($user = Auth::user())
 <table class="data-table" id="supervisor-accepted-students-table">
 	@if (count($user->supervisor->getAcceptedStudents()))
 	<thead>

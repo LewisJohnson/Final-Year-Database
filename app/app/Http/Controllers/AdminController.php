@@ -58,12 +58,11 @@ class AdminController extends Controller{
 	public function showAmendSupervisorArrangements(){
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
-		->with('supervisors', $supervisors);
+			->with('supervisors', $supervisors);
 	}
 
 
 	public function amendSupervisorArrangements(Request $request){
-
 		if(isset($request->project_load)){
 			$request->validate([
 				'project_load' => 'numeric',
@@ -82,13 +81,11 @@ class AdminController extends Controller{
 					if(isset($request->project_load)){
 						$supervisor->project_load_ug = $request->project_load;
 					}
-
 					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
 				} elseif(Session::get("db_type") == "masters") {
 					if(isset($request->project_load)){
 						$supervisor->project_load_masters = $request->project_load;
 					}
-
 					$supervisor->take_students_masters = isset($request->take_students) ? true : false;
 				}
 				$supervisor->save();
@@ -96,7 +93,7 @@ class AdminController extends Controller{
 		}
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
-		->with('supervisors', $supervisors);
+			->with('supervisors', $supervisors);
 	}
 
 	public function showAmendTopics(){
@@ -121,12 +118,25 @@ class AdminController extends Controller{
 		}
 
 		$supervisors = Supervisor::all();
-		$staff = User::Where('access_type', 'staff')->get();
+		$staffUsers = User::Where('access_type', 'staff')->get();
+
+		$students = $students->sortBy(function ($student, $key) {
+			return $student->user->last_name;
+		});
+
+		$supervisors = $supervisors->sortBy(function ($supervisor, $key) {
+			return $supervisor->user->last_name;
+		});
+
+		$staffUsers = $staffUsers->sortBy(function ($staff, $key) {
+			return $staff->last_name;
+		});
 
 		return view('admin.login-as')
-		->with('supervisors', $supervisors->sortBy('title'))
-		->with('staff', $staff)
-		->with('students', $students);
+		// ->with('supervisors', $supervisors->sortBy('title'))
+			->with('supervisors', $supervisors)
+			->with('staff', $staffUsers)
+			->with('students', $students);
 	}
 
 	public function archive(){
@@ -143,7 +153,7 @@ class AdminController extends Controller{
 			$students = StudentMasters::all();
 		}
 
-		$sorted = $students->sortBy(function ($student, $key, $request) use ($request) {
+		$sorted = $students->sortBy(function ($student, $key) use ($request) {
 			if($request->query("sort") == "firstname"){
 				return $student->user->first_name;
 			} elseif($request->query("sort") == "lastname"){
@@ -152,8 +162,8 @@ class AdminController extends Controller{
 		});
 
 		return view('admin.assign-marker')
-		->with('supervisors', $supervisors)
-		->with('students', $sorted);
+			->with('supervisors', $supervisors)
+			->with('students', $sorted);
 	}
 
 	public function loginAs($id){

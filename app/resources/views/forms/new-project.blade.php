@@ -1,5 +1,3 @@
-@php ($user = Auth::user())
-
 <form class="form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="/students/project-propose" @elseif($user_type == "supervisor") action="/projects" @endif>
 	{{ csrf_field() }}
 	@if($user_type == "supervisor")
