@@ -1,15 +1,8 @@
-
-/* ================
-	POLYFILL
-   ================ */
-
-// require("babel-polyfill");
 "use strict";
 
 /* ================
 	HELPERS
    ================ */
-
 function showNotification(type, message){
 	var notification = $('.notification');
 	notification.removeClass();
@@ -149,14 +142,15 @@ $(function() {
 		}
 	});
 
-	$('.scroll-to-top').on('click', function(e) {
+	$("body").on("click", ".scroll-to-top", function(e) {
 		$('html, body').animate({
 			scrollTop: 0
-		}, 600);
+		}, config.scrollToTopDuration);
 	});
 
-	$('.show-more').on('click',  function(e) {
+	$("body").on("click", ".show-more",  function(e) {
 		$(this).hide();
 		$('.project').addClass('expand');
 	});
+
 });

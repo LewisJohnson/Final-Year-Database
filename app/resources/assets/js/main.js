@@ -891,8 +891,8 @@ Marker.prototype.initAll = function(){
 	 8. OTHER
    ====================== */
 
-$('.email-table .checkbox input').on('change', function() {
 
+$("body").on("change", ".email-table .checkbox input", function() {
 	var select = function(dom){
 		var status = dom.parents().eq(4).data('status');
 		var emailString = "mailto:";
@@ -910,7 +910,7 @@ $('.email-table .checkbox input').on('change', function() {
 	setTimeout(2000, select($(this)));
 });
 
-$('.email-selected').on('click', function(e) {
+$("body").on("click", ".email-selected", function(e) {
 	if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
 		alert("You haven't selected anyone.");
 		e.preventDefault();
@@ -918,7 +918,7 @@ $('.email-selected').on('click', function(e) {
 });
 
 // External links give an illusion of AJAX
-$('.external-link').on('click',  function(e) {
+$("body").on("click", ".external-link",  function(e) {
 	$(this).removeClass('active');
 	var elemToHideSelector = $($(this).data('element-to-hide-selector'));
 	var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
