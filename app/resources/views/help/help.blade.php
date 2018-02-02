@@ -7,7 +7,7 @@
 	<h1>Help</h1>
 
 	@if($user = Auth::user())
-		<h3>Need a helping hand {{ $user->first_name }}? Here you can find help relevant to you.</h3>
+		<h3>Need a helping hand {{ Auth::user()->first_name }}? Here you can find help relevant to you.</h3>
 	@else
 		<h3>Need a helping hand? Here you can find help relevant to you.</h3>
 	@endif
@@ -26,7 +26,7 @@
 			@endfor
 
 			@if($user = Auth::user())
-				@if($user->isSupervisorOrSuperior())
+				@if(Auth::user()->isSupervisorOrSuperior())
 					<li class="tab" data-tab-name="@lang('help.help_tab_supervisor')">
 						<button class="button open-tab">@lang("help.help_tab_supervisor")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
@@ -36,7 +36,7 @@
 					</li>
 				@endif
 
-				@if($user->isAdmin())
+				@if(Auth::user()->isAdmin())
 					<li class="tab" data-tab-name="@lang('help.help_tab_admin')">
 						<button class="button open-tab">@lang("help.help_tab_admin")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">

@@ -11,7 +11,7 @@
 	<div class="content" data-cookie-name="hide-projects" @if(!empty($_COOKIE["hide-projects"])) @if($_COOKIE["hide-projects"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 		<div style="overflow: auto;">
 			<table class="data-table supervisor-table">
-				@if(count($user->supervisor->getProjectsOrderByStatus(true)))
+				@if(count(Auth::user()->supervisor->getProjectsOrderByStatus(true)))
 					<thead>
 						<tr>
 							<th>Title</th>
@@ -24,7 +24,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($user->supervisor->getProjectsOrderByStatus(true) as $project)
+						@foreach(Auth::user()->supervisor->getProjectsOrderByStatus(true) as $project)
 							@if ($project->trashed())
 								@if(\Carbon\Carbon::now()->gt($project->destroy_at))
 									@include('supervisors.partials.queued-for-deletion-project-row', $project)

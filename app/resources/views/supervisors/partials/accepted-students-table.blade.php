@@ -1,5 +1,5 @@
 <table class="data-table" id="supervisor-accepted-students-table">
-	@if (count($user->supervisor->getAcceptedStudents()))
+	@if (count(Auth::user()->supervisor->getAcceptedStudents()))
 	<thead>
 		<tr>
 			<th>
@@ -15,7 +15,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($user->supervisor->getAcceptedStudents() as $project)
+		@foreach(Auth::user()->supervisor->getAcceptedStudents() as $project)
 			<tr>
 				<td>
 					<div class="checkbox">

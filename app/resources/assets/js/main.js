@@ -358,8 +358,8 @@ ColumnToggleTable.prototype.Selectors_ = {
 };
 
 ColumnToggleTable.prototype.HtmlSnippets_ = {
-	COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="margin-top: 2rem;">Columns</button>',
-	COLUMN_SELECTOR_MENU: '<ul class="dot-menu"></ul>'
+	COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
+	COLUMN_SELECTOR_MENU: '<ul class="dot-menu dot-menu--bottom-left"></ul>'
 };
 
 ColumnToggleTable.prototype.functions = {
@@ -661,6 +661,7 @@ EditTopic.prototype.initAll = function () {
 var DotMenu = function Menu(element) {
 	this.button = $(element);
 	this.menu = null;
+	this.isTableDotMenu = false;
 	this.init();
 };
 
@@ -677,6 +678,7 @@ DotMenu.prototype.CssClasses_ = {
 	BOTTOM_RIGHT: 'dot-menu--bottom-right',
 	TOP_LEFT: 'dot-menu--top-left',
 	TOP_RIGHT: 'dot-menu--top-right',
+	TABLE_DOT_MENU: 'dot-menu--table'
 };
 
 DotMenu.prototype.positionMenu = function(){
@@ -684,18 +686,23 @@ DotMenu.prototype.positionMenu = function(){
 
 	if(this.menu.hasClass(this.CssClasses_.BOTTOM_LEFT)){
 		this.menu.css('top', buttonRect.bottom);
-		this.menu.css('left', buttonRect.right  - this.button.css('width'));
+		this.menu.css('left', buttonRect.left - parseInt(this.button.css('width'), 10));
+		this.menu.css('transform-origin', 'top right');
 	} else if(this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)){
 		this.menu.css('top', buttonRect.bottom);
 		this.menu.css('left', buttonRect.left - 120);
+		this.menu.css('transform-origin', 'top left');
 	} else if(this.menu.hasClass(this.CssClasses_.TOP_LEFT)){
 		this.menu.css('top', buttonRect.top - 150);
-		this.menu.css('left', buttonRect.right  - this.button.css('width'));
+		this.menu.css('left', buttonRect.right - parseInt(this.button.css('width'), 10));
+		this.menu.css('transform-origin', 'bottom right');
 	} else if(this.menu.hasClass(this.CssClasses_.TOP_RIGHT)){
 		this.menu.css('top', buttonRect.top - 150);
 		this.menu.css('left', buttonRect.left - 120);
+		this.menu.css('transform-origin', 'bottom left');
 	} else {
 		this.menu.css('top', buttonRect.bottom);
+		this.menu.css('transform-origin', 'top');
 	}
 }
 
@@ -723,19 +730,20 @@ DotMenu.prototype.init = function () {
 	var menuId = $(this.button).attr('id') + '-menu';
 
 	this.menu = $('#' + menuId);
+	this.isTableDotMenu = this.menu.hasClass(DotMenu.prototype.CssClasses_.TABLE_DOT_MENU);
 
 	this.button.on('click', function(e) {
 		e.stopPropagation();
 		DotMenu.prototype.toggle.bind(dotMenu)();
 	});
 
-	$(document).on('scroll', function (e) {
+	$(document).on('scroll', function(e) {
 		if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
 			DotMenu.prototype.positionMenu.bind(dotMenu)();
 		}
 	});
 
-	$(document).on('click', function (e) {
+	$(document).on('click', function(e) {
 		var target = $(e.target);
 		if(!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
 			if(!$.contains($(dotMenu.menu)[0], e.target)){
@@ -745,7 +753,7 @@ DotMenu.prototype.init = function () {
 	});
 };
 
-DotMenu.prototype.initAll = function () {
+DotMenu.prototype.initAll = function() {
 	$(this.Selectors_.ACTIVATOR).each(function() {
 		this.DotMenu = new DotMenu(this);
 	});

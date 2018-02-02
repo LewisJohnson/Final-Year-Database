@@ -3,9 +3,9 @@
 
 <div class="centered width-800">
 @if($user = Auth::user())
-	<h1>Welcome, {{ $user->first_name }}.</h1>
+	<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 
-	@if($user->isSupervisorOrSuperior())
+	@if(Auth::user()->isSupervisorOrSuperior())
 		<div class="card card--margin-vertical">
 			<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
 			<p>@lang("messages_supervisor.homepage_introduction_body")</p>
@@ -13,7 +13,7 @@
 			<p>@lang("messages_supervisor.homepage_overview_body")</p>
 		</div>
 	@endif
-	@if($user->isStudent())
+	@if(Auth::user()->isStudent())
 		<div class="card card--margin-vertical">
 			<h2>@lang_sess("homepage_introduction_header")</h2>
 			<p>@lang_sess("homepage_introduction_body")</p>
@@ -23,15 +23,15 @@
 
 		<div class="card card--margin-vertical">
 			<h2>Your Project</h2>
-			<p><b>Status:</b> {{ $user->student->getStatusString() }}</p>
-			@if($user->student->project_status != 'none')
-				@include ('projects.partials.student-project-preview', array('project'=> $user->student->project))
+			<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
+			@if(Auth::user()->student->project_status != 'none')
+				@include ('projects.partials.student-project-preview', array('project'=> Auth::user()->student->project))
 			@endif
 		</div>
 
 		<div class="card card--margin-vertical" style="border: 1px solid gold; background: rgba(255, 215, 0, 0.5)">
 			<h2>Favourite Projects</h2>
-			@if($projects = $user->student->getFavouriteProjects())
+			@if($projects = Auth::user()->student->getFavouriteProjects())
 				<table id="project-table" class="data-table table--dark-head">
 					<thead>
 						<tr>
@@ -57,7 +57,7 @@
 				{{ csrf_field() }}
 				<div class="form-field">
 					<div class="checkbox">
-						<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if($user->student->share_project) checked @endif >
+						<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if(Auth::user()->student->share_project) checked @endif >
 						<label for="share_project">Share name</label>
 					</div>
 				</div>

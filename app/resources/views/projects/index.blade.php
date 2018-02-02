@@ -38,7 +38,7 @@
 	@endif
 
 	<div class="table-responsive">
-		<table id="project-table" class="data-table table--dark-head table-column-toggle shadow-2dp {{ $view }}">
+		<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }}">
 			<thead>
 				<tr>
 					<th data-default="true">Topic</th>

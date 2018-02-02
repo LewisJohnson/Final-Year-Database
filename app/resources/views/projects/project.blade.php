@@ -7,9 +7,9 @@
 	@endif
 
 	<div class="card project-card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
-		@if($user->isStudent())
+		@if(Auth::user()->isStudent())
 			<div class="favourite-container pointer">
-				<svg viewBox="0 0 24 24" height="30" width="30" @if($user->student->isFavouriteProject($project->id)) class="favourite" @endif>
+				<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>
 					<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 				</svg>
 				<div class="loader"></div>
@@ -63,8 +63,8 @@
 	<div class="button-group button-group--horizontal ">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 		{{-- STUDENT SELECT --}}
-		@if($user->isStudent())
-			@if($user->student->project_status == 'none')
+		@if(Auth::user()->isStudent())
+			@if(Auth::user()->student->project_status == 'none')
 				<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
 					{{ csrf_field() }}
 					{{ method_field('PATCH') }}
@@ -79,7 +79,7 @@
 		@if($project->isOwnedByUser())
 			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
-			@if($user->isSupervisorOrSuperior())
+			@if(Auth::user()->isSupervisorOrSuperior())
 				<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
 			@endif
 		@endif

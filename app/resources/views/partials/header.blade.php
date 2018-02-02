@@ -3,7 +3,7 @@
 		<p>@lang_sess("toolbar_text")</p>
 		<div class="right button-group--horizontal">
 			<button title="Log out" class="logout-button button button--raised" onclick="$('#logout-form').submit();">Logout</a>
-			@if($user->isSupervisorOrSuperior())
+			@if(Auth::user()->isSupervisorOrSuperior())
 				<button title="Change Authentication" class="button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
 			@endif
 		</div>
@@ -46,7 +46,7 @@
 
 		@include("partials.header.admin-dropdown")
 
-		@if($user->isStudent())
+		@if(Auth::user()->isStudent())
 			<li class="nav-button dropdown">
 				<button >Student</button>
 				@include('svg.arrow-down')
@@ -116,7 +116,7 @@
 				<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">By Topic</a>
 			</li>
 
-			@if($user->isStudent())
+			@if(Auth::user()->isStudent())
 			<li class="dropdown">
 				<h3>Student</h3>
 				<div class="svg-container pointer">
@@ -154,7 +154,7 @@
 					@include('svg.logout')
 				</button>
 
-				@if($user->isSupervisorOrSuperior())
+				@if(Auth::user()->isSupervisorOrSuperior())
 					<button title="Change Authenticaion" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
 				@endif
 			</li>

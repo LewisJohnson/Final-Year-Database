@@ -1,4 +1,4 @@
-<div class="section @if(count($user->supervisor->getAcceptedStudents()) || count($user->supervisor->getProjectOffers()))section--full-width @endif shadow-2dp">
+<div class="section @if(count(Auth::user()->supervisor->getAcceptedStudents()) || count(Auth::user()->supervisor->getProjectOffers()))section--full-width @endif shadow-2dp">
 	<div class="header">
 		@include('svg.tag')
 		<h2>Offers</h2>
@@ -12,7 +12,7 @@
 		<h5>Projects Selected</h5>
 		<div style="overflow: auto;">
 		<table class="data-table supervisor-table">
-			@if (count($user->supervisor->getProjectOffers()))
+			@if (count(Auth::user()->supervisor->getProjectOffers()))
 			<thead>
 				<tr>
 					<th>
@@ -28,7 +28,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($user->supervisor->getProjectOffers() as $project)
+				@foreach(Auth::user()->supervisor->getProjectOffers() as $project)
 					<tr data-student-id="{{ $project->student_id }}" data-project-id="{{ $project->id }}">
 						<td>
 							<div class="checkbox">
@@ -53,7 +53,7 @@
 		<h5>Students Proposals</h5>
 		<div style="overflow: auto;">
 		<table class="data-table supervisor-table">
-			@if (count($user->supervisor->getProjectProposals()))
+			@if (count(Auth::user()->supervisor->getProjectProposals()))
 			<thead>
 				<tr>
 					<th>
@@ -69,7 +69,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($user->supervisor->getProjectProposals() as $project)
+				@foreach(Auth::user()->supervisor->getProjectProposals() as $project)
 					<tr data-student-id="{{ $project->student_id }}" data-project-id="{{ $project->id }}">
 						<td>
 							<div class="checkbox">
@@ -91,7 +91,7 @@
 			@endif
 		</table>
 		</div>
-		@if (count($user->supervisor->getProjectProposals()))
+		@if (count(Auth::user()->supervisor->getProjectProposals()))
 			<div class="button-group">
 				<button class="button button--raised" type="">Email Selected</button>
 				<button class="button button--raised" type="">Accept Selected</button>

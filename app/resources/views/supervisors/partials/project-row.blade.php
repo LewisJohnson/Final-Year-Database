@@ -31,7 +31,7 @@
 			@include('svg.dots-vertical')
 		</button>
 
-		<ul tabindex="0" class="dot-menu dot-menu--top-right icon-list" id="menu-actions-{{ $project->id }}-menu">
+		<ul tabindex="0" class="dot-menu dot-menu--table dot-menu--top-right icon-list" id="menu-actions-{{ $project->id }}-menu">
 			<li class="dot-menu__item">
 				<a class="dot-menu__action icon" href="{{ action('ProjectController@edit', $project->id) }}" title="Edit {{ $project->title }}">
 					@include('svg.pencil')

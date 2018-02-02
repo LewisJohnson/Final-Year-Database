@@ -42,7 +42,7 @@
 <ul>
 	@foreach(SussexProjects\User::Where('access_type', 'admin')->get() as $user)
 		<li>
-			<a href="{{ action('AdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
+			<a href="{{ action('AdminController@loginAs', Auth::user()->id) }}">{{ Auth::user()->getFullName() }}</a>
 		</li>
 	@endforeach
 </ul>

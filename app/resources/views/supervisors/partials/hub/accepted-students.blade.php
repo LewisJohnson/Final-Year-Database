@@ -1,4 +1,4 @@
-<div class="section @if (count($user->supervisor->getAcceptedStudents()) || count($user->supervisor->getProjectOffers()))section--full-width @endif shadow-2dp">
+<div class="section @if (count(Auth::user()->supervisor->getAcceptedStudents()) || count(Auth::user()->supervisor->getProjectOffers()))section--full-width @endif shadow-2dp">
 	<div class="header">
 		@include('svg.check-circle')
 		<h2>Accepted Students</h2>
@@ -12,7 +12,7 @@
 		<div style="overflow-x: auto;">
 			@include ('supervisors.partials.accepted-students-table')
 		</div>
-		@if (count($user->supervisor->getAcceptedStudents()))
+		@if (count(Auth::user()->supervisor->getAcceptedStudents()))
 			<div class="button-group">
 				<button class="button button--raised" type="">Email Selected</button>
 			</div>
