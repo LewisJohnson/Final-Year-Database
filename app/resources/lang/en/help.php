@@ -152,13 +152,19 @@ return [
 			</tr>
 			<tr>
 				<td>Security</td>
-				<td>..._session</td>
+				<td>[APP_NAME]_session</td>
 				<td>Your unique session identifier.</td>
 			</tr>
 			<tr>
 				<td>Analytics</td>
 				<td>vb</td>
 				<td>Determines if the user has visited before.</td>
+			</tr>
+			
+			<tr>
+				<td>Usability</td>
+				<td>rwc-[TYPE]</td>
+				<td>Used to remember your form values, so you don\'t have to.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
@@ -188,4 +194,3 @@ return [
 		</tbody>
 	</table>',
 ];
-

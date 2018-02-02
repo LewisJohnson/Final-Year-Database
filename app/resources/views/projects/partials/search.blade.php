@@ -1,7 +1,7 @@
 <form id="project-search-form" class="form form--flex" action="{{ action('ProjectController@search') }}" role="form" method="GET" accept-charset="utf-8">
 	{{ csrf_field() }}
 	<div class="search-container shadow-4dp">
-		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm" placeholder="Search...">
+		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm" placeholder="Search..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>
 
 		<button class="svg button--dark external-link" type="submit" data-element-to-replace-with-loader-selector="#project-search-form" data-element-to-hide-selector=".table-responsive">
 			<svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -19,26 +19,26 @@
 			<ul class="search-filter">
 				<li>
 					<div class="checkbox">
-						<input id="topic" type="checkbox" name="topic" checked>
-						<label for="topic">Topics</label>
+						<input class="remember-with-cookie" id="search-title-checkbox" type="checkbox" name="filter[]" value="title" checked>
+						<label for="search-title-checkbox">Title</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input id="title" name="title" type="checkbox" checked>
-						<label for="title">Title</label>
+						<input class="remember-with-cookie" id="search-description-checkbox" type="checkbox" name="filter[]" value="description" checked>
+						<label for="search-description-checkbox">Description</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input id="description" name="description" type="checkbox" checked>
-						<label for="description">Description</label>
+						<input class="remember-with-cookie" id="search-skills-checkbox" type="checkbox" name="filter[]" value="skills" checked>
+						<label for="search-skills-checkbox">Skills</label>
 					</div>
 				</li>
-				<li>
+				<li title="Results may take some time.">
 					<div class="checkbox">
-						<input id="skills" type="checkbox" name="skills" checked>
-						<label for="skills">Skills</label>
+						<input class="remember-with-cookie" id="search-topics-checkbox" type="checkbox" name="filter[]" value="topics">
+						<label for="search-topics-checkbox">Topics</label>
 					</div>
 				</li>
 			</ul>

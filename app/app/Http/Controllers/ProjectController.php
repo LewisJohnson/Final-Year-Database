@@ -463,52 +463,118 @@ class ProjectController extends Controller{
 			select if NOT student proposed
 		*/
 
-		$searchterm = $request->get("searchTerm");
+		$searchTerm = $request->get("searchTerm");
+		$filters = $request->get("filter");
+		$selectedFilters = "";
+		$filteredAtLeastOnce = false;
+		$filteredByTopics = false;
+
+		if(is_null($request->get("searchTerm")) || is_null($request->get("filter"))){
+			session()->flash("message", "Sorry, something went wrong with that request.");
+			session()->flash('message_type', 'error');
+			return redirect('/projects');
+		}
+
+		foreach ($filters as $selected) {		
+			if ($selected !== end($filters)){
+				$selectedFilters .= $selected;
+				$selectedFilters .= ", ";
+			} else {
+				$selectedFilters = substr($selectedFilters, 0, -2);
+				if(count($filters) > 1){
+					$selectedFilters .= " and ";
+				}
+
+				$selectedFilters .= $selected;
+			}
+		}
+
+		session()->flash('search_filters', $selectedFilters);
 
 		if(Session::get("db_type") == "ug"){
-			$project_db = "projects_ug.";
-			$projects = ProjectUg::
-			select('projects_ug.*', 'supervisors.take_students_ug')
-				->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-				->where('supervisors.take_students_ug', true);
+			$sessionDbPrefix = "projects_ug.";
+			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
+								->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
+								->where('supervisors.take_students_ug', true);
 		} elseif(Session::get("db_type") == "masters") {
-			$project_db = "projects_masters.";
-			$projects = ProjectMasters::
-			select('projects_masters.*', 'supervisors.take_students_masters')
-				->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
-				->where('supervisors.take_students_masters', true);
+			$sessionDbPrefix = "projects_masters.";
+			$projects = ProjectMasters::select('projects_masters.*', 'supervisors.take_students_masters')
+									->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
+									->where('supervisors.take_students_masters', true);
 		}
 
-		if($request->get("title") !== null){
-			$projects->where($project_db."title", "LIKE", '%'.$searchterm.'%');
+		if(in_array("title", $filters)){
+			$filteredAtLeastOnce = true;
+
+			if(count($filters) == 1){
+				$projects->where($sessionDbPrefix."title", "LIKE", '%'.$searchTerm.'%');
+			} else {
+				$projects->orWhere($sessionDbPrefix."title", "LIKE", '%'.$searchTerm.'%');
+			}
 		}
 
-		if($request->get("skills") !== null){
-			$projects->orWhere("skills", "LIKE", '%'.$searchterm.'%');
+		if(in_array("skills", $filters)){
+			$filteredAtLeastOnce = true;
+
+			if(count($filters) == 1){
+				$projects->where("skills", "LIKE", '%'.$searchTerm.'%');
+			} else {
+				$projects->orWhere("skills", "LIKE", '%'.$searchTerm.'%');
+			}
 		}
 
-		if($request->get("description") !== null){
-			$projects->orWhere("description", "LIKE", '%'.$searchterm.'%');
+		if(in_array("description", $filters)){
+			$filteredAtLeastOnce = true;
+
+			if(count($filters) == 1){
+				$projects->where("description", "LIKE", '%'.$searchTerm.'%');
+			} else {
+				$projects->orWhere("description", "LIKE", ' %'.$searchTerm.'% ');
+			}
 		}
 
 		$projects = $projects->get();
 
-		if (count($projects) === 1) {
-			$project = $projects[0];
-			session()->flash('message', 'We only found this project.');
+		if(in_array("topics", $filters)){
+			$filteredAtLeastOnce = true;
+			$filteredByTopics = true;
+
+			$projects = $projects->filter(function ($loopProject, $key) use ($searchTerm) {
+				foreach ($loopProject->topics as $key => $topic) {
+					if(strcasecmp($topic->name, $searchTerm) == 0){
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+
+
+		if(!$filteredAtLeastOnce || count($projects) == 0){
+			session()->flash("message", "We couldn't find anything for \"".$searchTerm."\".");
+			session()->flash('message_type', 'warning');
+			return redirect('/projects');
+		}
+
+		if (count($projects) == 1) {
+			if($filteredByTopics){
+				$project = $projects->first();
+			} else {
+				$project = $projects[0];
+			}
+			session()->flash('message', "We only found one project, it's this one.");
 
 			return view('projects.project')
+				->with('view', 'SupervisorProject')
 				->with('project', $project);
 
-		} else if (count($projects) > 1) {
+		}
+
+		if (count($projects) > 1) {
 			return view('projects.index')
 				->with('projects', $projects)
 				->with('view', 'search')
-				->with('searchTerm', $searchterm);
-
-		} else {
-			session()->flash("warning", "We couldn\'t find anything for \"' . $searchterm . '\".");
-			return redirect('/projects');
+				->with('searchTerm', $searchTerm);
 		}
 	}
 }

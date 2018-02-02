@@ -94,12 +94,24 @@ class UserController extends Controller{
 		}
 
 		$supervisors = Supervisor::all();
-		$staff = User::Where('access_type', 'staff')->get();
+		$staffUsers = User::Where('access_type', 'staff')->get();
 
-		return view('users.index')
-		->with('supervisors', $supervisors->sortBy('title'))
-		->with('staff', $staff)
-		->with('students', $students);
+		$students = $students->sortBy(function ($student, $key) {
+			return $student->user->last_name;
+		});
+
+		$supervisors = $supervisors->sortBy(function ($supervisor, $key) {
+			return $supervisor->user->last_name;
+		});
+
+		$staffUsers = $staffUsers->sortBy(function ($staff, $key) {
+			return $staff->last_name;
+		});
+
+		return view('users.edit-users')
+			->with('supervisors', $supervisors)
+			->with('staff', $staffUsers)
+			->with('students', $students);
 	}
 
 	/**

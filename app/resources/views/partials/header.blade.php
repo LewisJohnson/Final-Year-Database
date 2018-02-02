@@ -9,7 +9,7 @@
 		</div>
 	</div>
 
-{{-- 	<video muted id="video_bg" class="video" autoplay loop controls>
+{{-- 	<video muted id="video_bg" class="video" autoplay loop>
 		<source src="/graduation.webm" type="video/webm">
 	</video> --}}
 

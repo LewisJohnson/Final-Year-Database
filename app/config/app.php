@@ -8,6 +8,10 @@ return [
 	'header_logo_url' => '/images/logo.png',
 	'header_background' => '#1D4289;',
 
+
+	'footer_rainbow' => true,
+	'footer_accessibilty_buttons' => true,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Authorisation Access 
@@ -22,7 +26,6 @@ return [
 
 	'authorisation_access' => 'warn',
 
-
 	/*
 	|--------------------------------------------------------------------------
 	| Collect User Agent
@@ -32,6 +35,7 @@ return [
 	|
 	*/
 	'collect_user_agent' => true,
+	'collect_referrer' => true,
 
 	/*
 	|--------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 	</li>
 	<li>
 		<a class="icon" href="/admin/topics-amend">
-			@include('svg.pencil')
+			@include('svg.spanner')
 			<p>Edit Topics</p>
 		</a>
 	</li>
@@ -19,8 +19,8 @@
 	</li>
 	<li>
 		<a class="icon" href="/system/user-agent">
-			@include('svg.pencil')
-			<p>User Agent Strings Overview</p>
+			@include('svg.FILE')
+			<p>User Agent Strings</p>
 		</a>
 	</li>
 </ul>

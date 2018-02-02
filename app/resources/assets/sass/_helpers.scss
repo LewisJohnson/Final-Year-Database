@@ -74,8 +74,6 @@ ul.dot-menu{
 	}
 }
 
-
-
 .section-container{
 	display: flex;
 
@@ -83,6 +81,9 @@ ul.dot-menu{
 		margin: 0 1rem;
 		flex-grow: 1;
 	}
+	
+	:first-child{ margin-left: 0; }
+	:last-child{ margin-right: 0; }
 }
 
 .section-user-selector{

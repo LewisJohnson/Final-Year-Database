@@ -1,7 +1,7 @@
 ;$(function() {
 	"use strict";
 
-	$("#project-table .project-row").bind("taphold", function(e) {
+	$("body").on("taphold", "#project-table .project-row", function(e) {
 		var projectId = $(this).data("project-id");
 		var ajaxUrl = $(this).data("preview-url");
 

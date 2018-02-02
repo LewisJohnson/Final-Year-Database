@@ -2,7 +2,7 @@
 
 /* ================
 	HELPERS
-   ================ */
+	 ================ */
 function showNotification(type, message){
 	var notification = $('.notification');
 	notification.removeClass();
@@ -17,28 +17,6 @@ function showNotification(type, message){
 	setTimeout(function() {
 		notification.hide(0);
 	}, animDuration);
-}
-
-function setCookie(cname, cvalue, exdays) {
-	var d = new Date();
-	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-	var expires = "expires="+d.toUTCString();
-	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-	var name = cname + "=";
-	var ca = document.cookie.split(';');
-	for(var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) == ' ') {
-			c = c.substring(1);
-		}
-		if (c.indexOf(name) == 0) {
-			return c.substring(name.length, c.length);
-		}
-	}
-	return '';
 }
 
 function removeAllShadowClasses(element){
@@ -129,6 +107,68 @@ function addTitleHeadersToList(ul) {
 	}
 }
 
+function setCookie(cname, cvalue, exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires="+d.toUTCString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return '';
+}
+
+function formCookie(inputType){
+	var checkboxValues = {};
+
+	$(".remember-with-cookie:"+inputType).each(function(){
+		checkboxValues[this.id] = this.checked;
+	});
+
+	
+}
+
+function rememberFormValues(inputType){
+	var checkboxValues = {};
+
+	$(".remember-with-cookie:"+inputType).each(function(){
+		checkboxValues[this.id] = this.checked;
+	});
+
+	if (typeof(Storage) !== "undefined") {
+		sessionStorage.setItem('rwc-'+inputType, JSON.stringify(checkboxValues));
+	} else {
+		// HTML < 5 fallback
+		setCookie('rwc-'+inputType, JSON.stringify(checkboxValues), 365);
+	}
+}
+
+function repopulateCheckboxes(){
+	if (typeof(Storage) !== "undefined") {
+		var checkboxValues = JSON.parse(sessionStorage.getItem('rwc-checkbox'));
+	} else {
+		var checkboxValues = JSON.parse(getCookie('rwc-checkbox'));
+	}
+
+	if(checkboxValues){
+		Object.keys(checkboxValues).forEach(function(element) {
+			var checked = checkboxValues[element];
+			$("#" + element).prop('checked', checked);
+		});
+	}
+}
+
 /* ================
 	JQUERY HELPERS
    ================ */
@@ -174,4 +214,10 @@ $(function() {
 			});
 		}
 	});
+
+	$('.remember-with-cookie:checkbox').on('change', function() {
+		rememberFormValues("checkbox");
+	});
+
+	repopulateCheckboxes();
 });
