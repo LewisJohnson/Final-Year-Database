@@ -51,6 +51,25 @@ button{
 	}
 }
 
+.form-field.form-field--flex{
+	display: flex;
+	flex-flow: row;
+
+	:last-child{
+		margin-left: auto;
+	}
+}
+
+.form-field.form-field--toggle{
+	cursor: pointer;
+	outline: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+	.switch-label{
+		top: -2.5px;
+	}
+}
+
 .vertical-select{
 	display: flex;
 	overflow: auto;
@@ -127,6 +146,19 @@ button{
 }
 
 /* The switch - the box around the slider */
+
+.switch-label{
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	padding-right: 8px;
+	top: -5.5px;
+	white-space: pre;
+	user-select: none;
+	font-size: 16px;
+	cursor: pointer;
+}
+
 .toggle {
 	position: relative;
 	display: inline-block;
@@ -148,15 +180,6 @@ button{
 		transform: translateX(18px);
 		background: $accent;
 		opacity: 1;
-	}
-
-	.switch-label{
-		display: inline-block;
-		position: relative;
-		left: 50px;
-		top: -2.5px;
-		white-space: pre;
-		user-select: none;
 	}
 
 	.slider {
@@ -185,8 +208,6 @@ button{
 	}
 }
 
-
-
 .button{
 	background: none;
 	border: none;
@@ -196,6 +217,7 @@ button{
 	position: relative;
 	height: 36px;
 	margin: 0;
+	white-space: pre;
 	min-width: 64px;
 	box-sizing: content-box;
 	display: inline-block;

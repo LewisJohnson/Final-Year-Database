@@ -23,6 +23,45 @@
 	}
 }
 
+%config-message {
+	padding: 8px 16px;
+	margin: 5px 0;
+	font-weight: 500;
+	border-radius: 3px;
+	font-size: 14px;
+	color: white;
+	position: relative;
+
+	p, b {
+		color: inherit;
+		margin: 0;
+		display: inline;
+	}
+
+	.text-icon + p{
+		padding-left: 35px;
+	}
+
+	.text-icon{
+		position: absolute;
+		font-size: 20px;
+		top: 2px;
+		left: 10px;
+		width: 30px;
+		text-align: center;
+	}
+}
+
+.config-tip{
+	@extend %config-message;
+	background: #64B5F6;
+}
+
+.config-danger{
+	@extend %config-message;
+	background: #f4645f;
+}
+
 ul.dot-menu{
 	display: none;
 	white-space: nowrap;

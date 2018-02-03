@@ -193,6 +193,16 @@ $(function() {
 		$('.project').addClass('expand');
 	});
 
+	$("body").on("click", ".switch-label.switch-label--toggle",  function(e) {
+		var id = "#" + $(this).attr('for');
+		$(id).click();
+	});
+
+	$("body").on("click", ".form-field--toggle",  function(e) {
+		$(this).find('input:checkbox').click();
+	});
+	
+
 	$('#show-raw-table-data').on('click', function() {
 		if($(this).prop('checked')){
 			$('table.raw-detail').css('width', $('table.full-detail').css('width'));

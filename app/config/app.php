@@ -1,42 +1,5 @@
 <?php
-
 return [
-
-	// Can be relative from app/public/.. or absolute
-	// e.g. /images/sussex-logo.jpg
-	// e.g. http://www.sussex.ac.uk/assets/media/images/site/cyclone/logos/logo.png
-	'header_logo_url' => '/images/logo.png',
-	'header_background' => '#1D4289;',
-
-
-	'footer_rainbow' => true,
-	'footer_accessibilty_buttons' => true,
-
-	/*
-	|--------------------------------------------------------------------------
-	| Authorisation Access 
-	|--------------------------------------------------------------------------
-	|
-	| Determins if an admin is allowed to access supervisor routes without
-	| chanign authorisation
-	|
-	| Available Settings: "lax", "warn", "strict"
-	|
-	*/
-
-	'authorisation_access' => 'warn',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Collect User Agent
-	|--------------------------------------------------------------------------
-	|
-	| Determins if user agent strings are collected.
-	|
-	*/
-	'collect_user_agent' => true,
-	'collect_referrer' => false,
-
 	/*
 	|--------------------------------------------------------------------------
 	| Application Name
@@ -48,7 +11,7 @@ return [
 	|
 	*/
 
-	'name' => env('APP_NAME', 'Informatics Final Year Database'),
+	'name' => env('APP_NAME'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -61,7 +24,7 @@ return [
 	|
 	*/
 
-	'env' => env('APP_ENV', 'development'),
+	'env' => env('APP_ENV'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -74,7 +37,7 @@ return [
 	|
 	*/
 
-	'debug' => env('APP_DEBUG', true),
+	'debug' => env('APP_DEBUG'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -87,7 +50,7 @@ return [
 	|
 	*/
 
-	'url' => env('APP_URL', 'http://localhost'),
+	'url' => env('APP_URL'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -156,9 +119,9 @@ return [
 	|
 	*/
 
-	'log' => env('APP_LOG', 'single'),
+	'log' => env('APP_LOG'),
 
-	'log_level' => env('APP_LOG_LEVEL', 'debug'),
+	'log_level' => env('APP_LOG_LEVEL'),
 
 	/*
 	|--------------------------------------------------------------------------

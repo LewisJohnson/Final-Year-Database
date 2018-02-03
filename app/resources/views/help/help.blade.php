@@ -12,7 +12,7 @@
 		<h3>Need a helping hand? Here you can find help relevant to you.</h3>
 	@endif
 
-	<div class="card card--margin-vertical">
+	<div class="card tab-card card--margin-vertical">
 		<ul class="tab-container" data-help-footer="true" data-cookie-name="cht">
 			@for ($i = 1; $i <= 20; $i++)
 				@if(Lang::has("help.help_tab_".$i))
@@ -47,7 +47,7 @@
 					</li>
 				@endif
 			@endif
-
+			<li style="width: 100%; height: 100%; background: rgba(0,0,0,0.01)"></li>
 		</ul>
 
 		<div class="mask"></div>

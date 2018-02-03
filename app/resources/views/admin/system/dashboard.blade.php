@@ -6,31 +6,60 @@
 <div class="centered width-1000">
 	<h1>System Dashboard</h1>
 	<h3>Adjust system parameters.</h3>
-
 	<div class="admin hub">
-		<div class="card card--margin-vertical tab-card--horizontal">
-			<ul class="tab-container tab-container--vertical" data-help-footer="false" data-cookie-name="cadt">
-				<li class="tab selected" data-tab-name="system">
-					<button class="button open-tab">System</button>
+		<div class="card card--margin-vertical tab-card">
+			<ul class="tab-container" data-help-footer="false" data-cookie-name="cadt">
+				<li class="tab" data-tab-name="Configuration">
+					<button class="button open-tab">Configuration</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
-						<h2>System</h2>
-						<form class="form" role="form" method="POST" action"/d">
-							<div class="form-field">
-								<label class="toggle">
-									<input type="checkbox">
-									<span class="slider"></span>
-									<span class="switch-label">Debug Mode</span>
-								</label>
+						<div class="dashboard-section">
+							<h2>Enviroment</h2>
+							<p>To configure enviroment variables, edit the <b>.env</b> file in the <b>root</b> directory. A server restart is required for changes to take effect.</p>
+							<div class="config-danger">
+								<p class="text-icon">&#9888;&#65039;</p>
+								<p><b>Be careful!</b> You might break something making the website unusable.</p>
+							</div>
+						</div>
+
+						<div class="dashboard-section">
+							<h2>Laravel</h2>
+							<p>To configure Lavavel (Server) variables, edit any <b>config\*.php</b> file. A server restart <em>might be</em> required for changes to take effect.</p>
+						</div>
+
+						<div class="dashboard-section">
+							<h2>System</h2>
+							<p>To manually configure system variables, edit the <b>config\config.json</b>, otherwise use the system dashboard. Changes will take effect immediately.</p>
+						</div>
+
+						<div class="dashboard-section">
+							<h2>Style</h2>
+							<p>To configure style variables, edit <b>resources\assets\sass\_variables.scss</b>.
+								The SCSS\SASS bundle will have to be recompiled for changes to take effect.
+								To do this, run this command in the <b>root</b> directory.</p>
+							<code>npm run production</code>
+						</div>
+
+						<div class="dashboard-section">
+							<h2>JavaScript</h2>
+							<p>To configure JavaScript variables, edit <b>resources\assets\config.js</b>.
+								You will have to re-bundle the JavaScript files with Webpack for changes to take effect.
+								To do this, run this command in the <b>root</b> directory.</p>
+
+							<code>npm run production</code>
+
+							<h3>Hotfix</h3>
+							<p>If you want to apply a hotfix (Apply changes without having to re-bundle JavaScript), you may edit the <b>\public\js\config.js</b> file.</p>
+
+							<div class="config-tip">
+								<p class="text-icon">&#128161;</p>
+								<p>Hotfix changes will be overwritten when Webpack is re-bundled.</p>
 							</div>
 
-							<div class="form-field">
-								<label for="access_type">Application Environment</label>
-								<select name="access_type" name="access_type">
-									<option value="student">Production</option>
-									<option value="staff">Development</option>
-								</select>
+							<div class="config-danger">
+								<p class="text-icon">&#9888;&#65039;</p>
+								<p><b>Be careful!</b> You might break something making the website unusable.</p>
 							</div>
-						</form>
+						</div>
 					</div>
 				</li>
 
@@ -38,7 +67,7 @@
 					<button class="button open-tab">Authentication</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Authentication</h2>
-						<form class="form" role="form" method="POST" action"/d">
+						<form class="form" role="form" method="POST" action="/d">
 							<label for="access_type">Authorisation Access</label>
 							<select name="access_type" name="access_type">
 								<option value="student">Strict</option>
@@ -53,20 +82,20 @@
 					<button class="button open-tab">User Agent</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>User Agent</h2>
-						<form class="form form--flex" role="form" method="POST" action"/d">
-							<div class="form-field">
+						<form class="form form--flex" role="form" method="POST" action="/d">
+							<div class="form-field form-field--flex form-field--toggle">
+								<p class="switch-label" for="userAgentToggle">Collect user agent strings</p>
 								<label class="toggle">
-									<input type="checkbox">
+									<input id="userAgentToggle" type="checkbox">
 									<span class="slider"></span>
-									<span class="switch-label">Collect user agent strings</span>
 								</label>
 							</div>
 
-							<div class="form-field">
+							<div class="form-field form-field--flex form-field--toggle">
+								<p class="switch-label" for="referrerToggle">Collect referrer url</p>
 								<label class="toggle">
-									<input type="checkbox">
+									<input id="referrerToggle" type="checkbox">
 									<span class="slider"></span>
-									<span class="switch-label">Collect referrer url</span>
 								</label>
 							</div>
 						</form>
@@ -77,7 +106,7 @@
 					<button class="button open-tab">Header</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Header</h2>
-						<form class="form form--flex" role="form" method="POST" action"/d">
+						<form class="form form--flex" role="form" method="POST" action="/d">
 							<div class="form-field">
 								<label for="title">Logo</label>
 								<input id="title" type="text" name="title">
@@ -95,25 +124,27 @@
 					<button class="button open-tab">Footer</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Footer</h2>
-						<form class="form form--flex" role="form" method="POST" action"/d">
-							<div class="form-field">
+						<form class="form" role="form" method="POST" action="/">
+							<div class="form-field form-field--flex form-field--toggle">
+								<p class="switch-label" for="accButtonsToggle">Show accessibilty buttons</p>
 								<label class="toggle">
-									<input type="checkbox">
+									<input id="accButtonsToggle" type="checkbox">
 									<span class="slider"></span>
-									<span class="switch-label">Show rainbow</span>
 								</label>
 							</div>
 
-							<div class="form-field">
+							<div class="form-field form-field--flex form-field--toggle">
+								<p class="switch-label" for="rainbowToggle">Show rainbow</p>
 								<label class="toggle">
-									<input type="checkbox">
+									<input id="rainbowToggle" type="checkbox">
 									<span class="slider"></span>
-									<span class="switch-label">Show accessibilty buttons</span>
 								</label>
 							</div>
 						</form>
 					</div>
 				</li>
+
+				<li style="width: 100%; height: 100%; background: rgba(0,0,0,0.01)"></li>
 			</ul>
 
 			<div class="content-host">

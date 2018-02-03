@@ -15,6 +15,12 @@ html {
 	box-sizing: border-box;
 }
 
+code{
+	background: rgba(0, 0, 0, 0.03);
+	padding: 5px;
+	display: inline-block;
+}
+
 *, *:before, *:after {
 	box-sizing: inherit;
 }

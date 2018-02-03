@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web']], function() {
    =============== */
 Route::group(['middleware' => ['admin.system']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
-	
+	Route::post('admin/dashboard/system', 'AdminController@parameters');
 });
 
 /* ===============

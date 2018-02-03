@@ -5,19 +5,13 @@ ul.tab-container{
 	flex-direction: row;
 }
 
-ul.tab-container--vertical{
-	flex-direction: column;
-	height: 100%;
-	margin-right: 25px;
-
-	button.button{
-		text-align: left;
+.tab-card{
+	overflow: hidden;
+	.content-host{
+		h2 { margin: 1rem 0; }
+		ul{ padding-left: 2rem;}
+		select { width: 100%; }
 	}
-}
-
-.tab-card--horizontal{
-	display: flex;
-	flex-direction: row;
 }
 
 .tab{
@@ -25,12 +19,13 @@ ul.tab-container--vertical{
 	.content{ display: none; }
 }
 
-.content-host{
-	ul{
-		padding-left: 2rem;
-	}
+.dashboard-section{
+	padding: 5px 0;
+	border-bottom: 1px solid $form-border-color;
 
-	h2 {margin: 1rem 0 !important;}
+	> {
+		p:first-of-type {margin-top: 0;}
+	}
 }
 
 .mask{

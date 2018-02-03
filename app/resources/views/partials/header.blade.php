@@ -2,7 +2,8 @@
 	<div class="toolbar">
 		<p>@lang_sess("toolbar_text")</p>
 		<div class="right button-group--horizontal">
-			<button title="Log out" class="logout-button button button--raised" onclick="$('#logout-form').submit();">Logout</a>
+			<button title="Log out" class="logout-button button button--raised" onclick="$('#logout-form').submit();">Logout</button>
+				
 			@if(Auth::user()->isSupervisorOrSuperior())
 				<button title="Change Authentication" class="button button--raised" data-activator="true" data-dialog="change-auth">Authentication</button>
 			@endif
@@ -48,7 +49,7 @@
 
 		@if(Auth::user()->isStudent())
 			<li class="nav-button dropdown">
-				<button >Student</button>
+				<button>Student</button>
 				@include('svg.arrow-down')
 				<div class="dropdown-content shadow-2dp">
 					<a href="{{ action('StudentController@showProposeProject') }}">Propose Project</a>
@@ -62,10 +63,10 @@
 			@include('svg.arrow-down')
 
 			<div class="dropdown-content shadow-2dp">
-				@include('partials.header.help-links', ['platform' => 'desktop'])
-				<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
 				<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
+				<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
 				<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+				@include('partials.header.help-links', ['platform' => 'desktop'])
 			</div>
 		</li>
 	</ul>
