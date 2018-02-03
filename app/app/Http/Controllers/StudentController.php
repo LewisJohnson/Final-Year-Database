@@ -89,7 +89,7 @@ class StudentController extends Controller{
 	public function proposeProject(Request $request){
 		// todo: check mode year
 		try {
-			DB::transaction(function ($request) use ($request) {
+			DB::transaction(function() use ($request) {
 				$student = Auth::user()->student;
 
 				// Student has already selected a project
@@ -157,7 +157,7 @@ class StudentController extends Controller{
 	public function selectProject(Request $request){
 		// todo: check mode selection date before selecting project
 		try {
-			DB::transaction(function ($request) use ($request) {
+			DB::transaction(function() use ($request) {
 				$student = Auth::user()->student;
 
 				// Student has already selected a project
@@ -201,7 +201,7 @@ class StudentController extends Controller{
 
 	public function updateMarker(Request $request) {
 		//todo: make sure user is authorized to perform this action
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail(request('project_id'));
 				$student = StudentUg::findOrFail(request('student_id'));

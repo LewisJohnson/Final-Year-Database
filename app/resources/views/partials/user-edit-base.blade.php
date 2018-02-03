@@ -1,20 +1,20 @@
 <div class="form-field">
-	<label class="hover-label" for="first_name">First Name</label>
+	<label  for="first_name">First Name</label>
 	<input maxlength="255" type="text" name="first_name" id="first_name">
 </div>
 
 <div class="form-field">
-	<label class="hover-label" for="last_name">Last Name</label>
+	<label  for="last_name">Last Name</label>
 	<input maxlength="255" type="text" name="last_name" id="last_name">
 </div>
 
 <div class="form-field">
-	<label class="hover-label" for="username">Username</label>
+	<label  for="username">Username</label>
 	<input maxlength="255" type="text" name="username" id="username">
 </div>
 
 <div class="form-field">
-	<label class="hover-label" for="email">Email</label>
+	<label  for="email">Email</label>
 	<input maxlength="255" type="email" name="email" id="email">
 </div>
 
@@ -30,6 +30,6 @@
 
 </select>
 <div class="form-field">
-	<label class="hover-label" for="resetPassword">Reset Password</label>
+	<label  for="resetPassword">Reset Password</label>
 	<input type="checkbox" name="resetPassword">
 </div>

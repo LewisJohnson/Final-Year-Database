@@ -18,7 +18,7 @@ class User extends Migration
 			$table->string('last_name', 128);
 			$table->string('username', 32)->unique();
 			$table->string('password', 128);
-			$table->enum('access_type', ['student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_department', 'admin_system']);
+			$table->enum('access_type', ['student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system']);
 			$table->string('email', 128)->unique();
 			$table->dateTimeTz('last_login')->nullable(true);
 			$table->rememberToken();

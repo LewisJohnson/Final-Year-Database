@@ -32,7 +32,7 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			$user = User::create([
 				'username' => $request['username'],
 				'first_name' => $request['first_name'],
@@ -96,15 +96,15 @@ class UserController extends Controller{
 		$supervisors = Supervisor::all();
 		$staffUsers = User::Where('access_type', 'staff')->get();
 
-		$students = $students->sortBy(function ($student, $key) {
+		$students = $students->sortBy(function($student, $key) {
 			return $student->user->last_name;
 		});
 
-		$supervisors = $supervisors->sortBy(function ($supervisor, $key) {
+		$supervisors = $supervisors->sortBy(function($supervisor, $key) {
 			return $supervisor->user->last_name;
 		});
 
-		$staffUsers = $staffUsers->sortBy(function ($staff, $key) {
+		$staffUsers = $staffUsers->sortBy(function($staff, $key) {
 			return $staff->last_name;
 		});
 

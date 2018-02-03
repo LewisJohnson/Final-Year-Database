@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('scripts')
-	<script src="{{ asset('js/views/help.js') }}"></script>
+	<script src="{{ asset('js/views/tab-view.js') }}"></script>
 @endsection
 @section ('content')
 <div class="centered width-1000">
@@ -11,13 +11,14 @@
 	@else
 		<h3>Need a helping hand? Here you can find help relevant to you.</h3>
 	@endif
+
 	<div class="card card--margin-vertical">
-		<ul class="tab-container">
+		<ul class="tab-container" data-help-footer="true" data-cookie-name="cht">
 			@for ($i = 1; $i <= 20; $i++)
 				@if(Lang::has("help.help_tab_".$i))
-					<li class="tab @if($i == 1) selected @endif" data-tab-name="@lang('help.help_tab_'.$i)">
-						<button class="button open-tab @if($i == 1) button--accent @endif">@lang("help.help_tab_".$i)</button>
-						<div class="content" @if($i == 1) aria-expanded="true" aria-hidden="false" @else aria-expanded="false" aria-hidden="true" @endif>
+					<li class="tab" data-tab-name="@lang('help.help_tab_'.$i)">
+						<button class="button open-tab">@lang("help.help_tab_".$i)</button>
+						<div class="content" aria-expanded="false" aria-hidden="true" >
 							<h2>@lang("help.help_tab_".$i)</h2>
 							@lang("help.help_tab_".$i."_content")
 						</div>
@@ -51,10 +52,7 @@
 
 		<div class="mask"></div>
 		<div class="content-host">
-			<div class="content">
-				<h2>@lang("help.help_tab_1")</h2>
-				@lang("help.help_tab_1_content")
-			</div>
+			<div class="content"></div>
 		</div>
 	</div>
 </div>

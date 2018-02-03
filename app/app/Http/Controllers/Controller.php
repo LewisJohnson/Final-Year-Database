@@ -20,7 +20,7 @@ class Controller extends BaseController
 	public function __construct(){
 		$this->paginationCount = 25;
 		$this->restoreTimeInMinutes = 60;
-		$this->middleware(function ($request, $next) {
+		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			view()->share('user', $this->user);
 			return $next($request);

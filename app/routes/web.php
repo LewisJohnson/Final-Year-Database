@@ -43,6 +43,14 @@ Route::group(['middleware' => ['web']], function() {
 /* ===============
    2. ADMIN ROUTES
    =============== */
+Route::group(['middleware' => ['admin.system']], function() {
+	Route::get('admin/dashboard', 'AdminController@dashboard');
+	
+});
+
+/* ===============
+   2. ADMIN ROUTES
+   =============== */
 Route::group(['middleware' => ['admin']], function() {
 	Route::get('admin', 'AdminController@index');
 

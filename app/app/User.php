@@ -40,8 +40,11 @@ class User extends Authenticatable{
 	public function isAdmin(){
 		return $this->access_type == "admin_ug" ||
 		$this->access_type == "admin_masters" ||
-		$this->access_type == "admin_department" ||
 		$this->access_type == "admin_system";
+	}
+
+	public function isSystemAdmin(){
+		return $this->access_type == "admin_system";
 	}
 
 	public function isSupervisor(){
@@ -52,7 +55,6 @@ class User extends Authenticatable{
 		return $this->access_type == "supervisor" ||
 		$this->access_type == "admin_ug" ||
 		$this->access_type == "admin_masters" ||
-		$this->access_type == "admin_department" ||
 		$this->access_type == "admin_system";
 	}
 

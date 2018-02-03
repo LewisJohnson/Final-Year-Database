@@ -38,11 +38,6 @@ class AuthController extends Controller{
 			Session::put('auth_level', 'admin');
 		}
 
-		if(request('auth_type') == 'admin_department'){
-			Session::put('auth_type', 'department');
-			Session::put('auth_level', 'admin');
-		}
-
 		if(request('auth_type') == 'admin_system'){
 			Session::put('auth_type', 'system');
 			Session::put('auth_level', 'admin');

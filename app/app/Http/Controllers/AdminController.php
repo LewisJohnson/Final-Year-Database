@@ -38,6 +38,10 @@ class AdminController extends Controller{
 		return view('admin.import');
 	}
 
+	public function dashboard(){
+		return view('admin.system.dashboard');
+	}
+
 	public function userAgent(Request $request){
 		if($request->query("unique") == "1"){
 			$userAgents = UserAgentString::where('first_visit', 1);
@@ -120,15 +124,15 @@ class AdminController extends Controller{
 		$supervisors = Supervisor::all();
 		$staffUsers = User::Where('access_type', 'staff')->get();
 
-		$students = $students->sortBy(function ($student, $key) {
+		$students = $students->sortBy(function($student, $key) {
 			return $student->user->last_name;
 		});
 
-		$supervisors = $supervisors->sortBy(function ($supervisor, $key) {
+		$supervisors = $supervisors->sortBy(function($supervisor, $key) {
 			return $supervisor->user->last_name;
 		});
 
-		$staffUsers = $staffUsers->sortBy(function ($staff, $key) {
+		$staffUsers = $staffUsers->sortBy(function($staff, $key) {
 			return $staff->last_name;
 		});
 
@@ -153,7 +157,7 @@ class AdminController extends Controller{
 			$students = StudentMasters::all();
 		}
 
-		$sorted = $students->sortBy(function ($student, $key) use ($request) {
+		$sorted = $students->sortBy(function($student, $key) use ($request) {
 			if($request->query("sort") == "firstname"){
 				return $student->user->first_name;
 			} elseif($request->query("sort") == "lastname"){

@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
 		Schema::defaultStringLength(191);
 		View::share('user', Auth::user());
 
-		Blade::directive('lang_sess', function ($key) {
+		Blade::directive('lang_sess', function($key) {
 			$key = trim($key, '"');
 
 			if(Session::get("db_type") == "ug"){
@@ -32,7 +32,9 @@ class AppServiceProvider extends ServiceProvider
 				return "<?php echo Lang::get($key); ?>";
 			}
 
-			return "#{INVALID USE OF SESSION STRING}";
+			if(App::debug()){
+				return "#{INVALID USE OF SESSION STRING}";
+			}
 		});
 	}
 

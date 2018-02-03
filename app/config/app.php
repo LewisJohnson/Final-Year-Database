@@ -35,7 +35,7 @@ return [
 	|
 	*/
 	'collect_user_agent' => true,
-	'collect_referrer' => true,
+	'collect_referrer' => false,
 
 	/*
 	|--------------------------------------------------------------------------

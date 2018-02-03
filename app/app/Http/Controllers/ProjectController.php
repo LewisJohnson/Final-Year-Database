@@ -126,7 +126,7 @@ class ProjectController extends Controller{
 	 */
 	public function addTopic(Request $request){
 
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::where('name', request('topic_name'))->first();
 				$project = ProjectUg::findOrFail(request('project_id'));
@@ -169,7 +169,7 @@ class ProjectController extends Controller{
 	 */
 	public function removeTopic(Request $request){
 
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::findOrFail(request('topic_id'));
 				$project = ProjectUg::findOrFail(request('project_id'));
@@ -192,7 +192,7 @@ class ProjectController extends Controller{
 
 	public function updatePrimaryTopic(Request $request){
 
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::findOrFail(request('topic_id'));
 				$project = ProjectUg::findOrFail(request('project_id'));
@@ -235,7 +235,7 @@ class ProjectController extends Controller{
 			'status' => 'required',
 		]);
 
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			// Creat project
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
@@ -299,7 +299,7 @@ class ProjectController extends Controller{
 	 */
 	public function update($id) {
 		// todo: add form validation
-		$result = DB::Transaction(function($id) use ($id){
+		$result = DB::Transaction(function() use ($id){
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail($id);
 				$transaction = new TransactionUg;
@@ -331,7 +331,7 @@ class ProjectController extends Controller{
 	 */
 	public function destroy($id) {
 
-		$softDeletedproject = DB::Transaction(function($id) use ($id){
+		$softDeletedproject = DB::Transaction(function() use ($id){
 			$deleteTime = Carbon::now()->addMinutes($this->restoreTimeInMinutes);
 
 			if(Session::get("db_type") == "ug"){
@@ -370,7 +370,7 @@ class ProjectController extends Controller{
 	 */
 	public function restore($id) {
 
-		$restoredProject = DB::Transaction(function($id) use ($id){
+		$restoredProject = DB::Transaction(function() use ($id){
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::withTrashed()->where('id', $id)->first();
 			} else {
@@ -539,7 +539,7 @@ class ProjectController extends Controller{
 			$filteredAtLeastOnce = true;
 			$filteredByTopics = true;
 
-			$projects = $projects->filter(function ($loopProject, $key) use ($searchTerm) {
+			$projects = $projects->filter(function($loopProject, $key) use ($searchTerm) {
 				foreach ($loopProject->topics as $key => $topic) {
 					if(strcasecmp($topic->name, $searchTerm) == 0){
 						return true;

@@ -30,7 +30,7 @@ mix.scripts('resources/assets/js/helpers.js', 'public/js/helpers.js');
 mix.scripts('resources/assets/js/config.js', 'public/js/config.js');
 
 // JS | VIEWS
-mix.js('resources/assets/js/views/help.js', 'public/js/views');
+mix.js('resources/assets/js/views/tab-view.js', 'public/js/views');
 mix.js('resources/assets/js/views/project-preview.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor-report.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
@@ -45,4 +45,4 @@ mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');
 
-mix.browserSync({proxy: 'localhost:8000', notify: false});
+// mix.browserSync({proxy: 'localhost:8000', notify: false});

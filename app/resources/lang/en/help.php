@@ -60,7 +60,7 @@ return [
 				<br><br>
 				As the system runs on the department’s web servers it has been written using available technologies such as PHP and MySQL.
 				<br><br>
-				It has been produced in 2017/2018 as a final year project by <a href=\'http://www.lewisdavidjohnson.com\'>Lewis Johnson</a> under the supervision of Bernhard Reus.',
+				It has been produced in 2017/2018 as a final year project by <a href="http://www.lewisdavidjohnson.com">Lewis Johnson</a> under the supervision of Bernhard Reus.',
 
 	/*
 	| 4. Help Tabs
@@ -116,7 +116,7 @@ return [
 	'
 	<p>To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.</p>
 	<h3>What are cookies?</h3>
-	<p>A cookie is a small text file that a website saves on your computer or mobile device when you visit the site. 
+	<p>A cookie is a small text file that a website saves on your computer or mobile device when you visit the site.
 	It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</p>
 	<h3>How do we use cookies?</h3>
 	<p>A number of our pages use cookies to remember:
@@ -125,7 +125,7 @@ return [
 	Also, some videos embedded in our pages use a cookie to anonymously gather statistics on how you got there and what videos you visited.
 	Enabling these cookies is not strictly necessary for the website to work but it will provide you with a better browsing experience. You can delete or block these cookies, but if you do that some features of this site may not work as intended.
 	The cookie-related information is not used to identify you personally and the pattern data is fully under our control. These cookies are not used for any purpose other than those described here.</p>
-	
+
 	<table class="data-table">
 		<thead>
 			<tr>
@@ -158,9 +158,9 @@ return [
 			<tr>
 				<td>Analytics</td>
 				<td>vb</td>
-				<td>Determines if the user has visited before.</td>
+				<td>Determines if you\'ve been here before.</td>
 			</tr>
-			
+
 			<tr>
 				<td>Usability</td>
 				<td>rwc-[TYPE]</td>
@@ -190,6 +190,11 @@ return [
 				<td>Usability</td>
 				<td>hide-projects</td>
 				<td><b>Supervisors only</b> - Determines if the tab "Projects" supervisor tab is hidden.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>cadt</td>
+				<td><b>System admins only</b> - The current tab selected in the admin dashboard.</td>
 			</tr>
 		</tbody>
 	</table>',

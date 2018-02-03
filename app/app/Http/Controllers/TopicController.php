@@ -28,7 +28,7 @@ class TopicController extends Controller{
 	 */
 	public function store(Request $request){
 		//todo: add topic created transaction to DB
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::create(['name' => $request->topic_name]);
 				$transaction = new TransactionUg;
@@ -59,7 +59,7 @@ class TopicController extends Controller{
 	public function update(Request $request){
 		// todo: add topic updated transaction to DB
 		// Problem with the topic update transaction is that the new name will be used, because it's linked to the Id.
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::findOrFail($request->topic_id);
 				// $transaction = new TransactionUg;
@@ -90,7 +90,7 @@ class TopicController extends Controller{
 	 */
 	public function destroy(Request $request){
 		//todo: add topic destroyed transaction to DB
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$projectTopic = ProjectTopicUg::where('topic_id', $request->topic_id);
 				$topic = TopicUg::findOrFail($request->topic_id);

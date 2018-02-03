@@ -21,7 +21,7 @@ class LoginController extends Controller
 
 	use AuthenticatesUsers;
 
-	protected $username = 'username';
+    public function username(){ return 'username'; }
 
 	/**
 	 * Create a new controller instance.

@@ -23,7 +23,12 @@
 		<thead>
 			<tr>
 				<th>User Agent</th>
-				<th>Referrer</th>
+
+				@if(config('app.collect_referrer'))
+					<th>Referrer</th>
+				@else
+					<td></td>
+				@endif
 			</tr>
 		</thead>
 		<tbody>

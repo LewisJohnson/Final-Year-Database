@@ -5,7 +5,7 @@
 				<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
 			</td>
 		@else
-			<td>No Topic</td>
+			<td>-</td>
 		@endif
 
 		<td>{{ $project->title }}</td>

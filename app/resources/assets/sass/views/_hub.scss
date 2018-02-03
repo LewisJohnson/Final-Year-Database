@@ -71,6 +71,11 @@
 	.svg-container {
 		display: inline;
 		margin-right: 14px;
+
+		svg{
+			width: 25px;
+			height: auto;
+		}
 	}
 
 	.icon-list{

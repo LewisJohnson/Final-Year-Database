@@ -7,13 +7,13 @@
 	{{ csrf_field() }}
 
 	<div class="form-field">
-		<label class="hover-label" for="title">Title</label>
+		<label  for="title">Title</label>
 		<input maxlength="255" type="text" name="title" id="title" value="{{ $supervisor->title }}" required>
 	</div>
 
 	@if(Session::get('db_type') == 'ug')
 		<div class="form-field">
-			<label class="hover-label" for="description" >Undergraduate Project Load</label>
+			<label  for="description" >Undergraduate Project Load</label>
 			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_ug }}"></input>
 		</div>
 		<div class="form-field">
@@ -24,7 +24,7 @@
 		</div>
     @elseif(Session::get('db_type') == 'masters')
 		<div class="form-field">
-			<label class="hover-label" for="description" >Masters Project Load</label>
+			<label  for="description" >Masters Project Load</label>
 			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_masters }}"></input>
 		</div>
 		<div class="form-field">

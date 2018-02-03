@@ -2,6 +2,22 @@ ul.tab-container{
 	list-style: none;
 	padding: 0px !important;
 	display: flex;
+	flex-direction: row;
+}
+
+ul.tab-container--vertical{
+	flex-direction: column;
+	height: 100%;
+	margin-right: 25px;
+
+	button.button{
+		text-align: left;
+	}
+}
+
+.tab-card--horizontal{
+	display: flex;
+	flex-direction: row;
 }
 
 .tab{

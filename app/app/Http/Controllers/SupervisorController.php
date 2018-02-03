@@ -61,7 +61,7 @@ class SupervisorController extends Controller{
 	}
 
 	public function acceptStudent(Request $request){
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
@@ -88,7 +88,7 @@ class SupervisorController extends Controller{
 	}
 
 	public function rejectStudent(Request $request){
-		$result = DB::transaction(function ($request) use ($request) {
+		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
