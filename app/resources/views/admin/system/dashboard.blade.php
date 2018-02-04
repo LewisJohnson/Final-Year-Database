@@ -87,7 +87,6 @@
 									<option @if($type == config_json("system.authorisation_access.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
 								@endforeach
 							</select>
-
 							<div class="form-field form-field--flex">
 								<button class="button button--raised button--accent" type="submit">Save</button>
 							</div>
@@ -135,15 +134,26 @@
 						<h2>Header</h2>
 						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
 							{{ csrf_field() }}
-							<div class="form-field">
-								<label for="title">Logo</label>
-								<input id="title" type="text" name="title">
-							</div>
 
 							<div class="form-field">
-								<label for="title">Background</label>
-								<input id="title" type="text" name="title">
+								<label for="header_logo_url">Logo URL</label>
+								<label class="description">{{ config_json("header.logo_url.description") }}</label>
+								<input type="text" name="header_logo_url" id="header_logo_url" value="{{ config_json("header.logo_url.value") }}">
 							</div>
+							<input type="hidden" name="header_logo_url-json" value="header.logo_url">
+
+							<div class="form-field">
+								<label for="header_background">Background</label>
+								<label class="description">{{ config_json("header.background.description") }}</label>
+								<label class="description"> Accepted types:
+									@foreach(config_json("header.background.type") as $type)
+										<span>{{ $type }}@if(!$loop->last), @endif</span>
+									@endforeach
+								</label>
+								<input type="text" name="header_background" id="header_background" value="{{ config_json("header.background.value") }}">
+							</div>
+
+							<input type="hidden" name="header_background-json" value="header.background">
 
 							<div class="form-field form-field--flex">
 								<button class="button button--raised button--accent" type="submit">Save</button>

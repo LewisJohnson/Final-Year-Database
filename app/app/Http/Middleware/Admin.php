@@ -16,11 +16,11 @@ class Admin{
 	public function handle($request, Closure $next){
 
 		if (Auth::check() && Auth::user()->isSupervisorOrSuperior()){
-			if(config('app.authorisation_access') == "strict" && Session::get('auth_level') != "admin"){
+			if(config_json('system.authorisation_access.value') === "strict" && Session::get('auth_level') != "admin"){
 				abort(403, 'Forbidden action. Change your authentication before accessing this page.');
 			}
 
-			if(config('app.authorisation_access') == "warn" && Session::get('auth_level') != "admin"){
+			if(config_json('system.authorisation_access.value') === "warn" && Session::get('auth_level') != "admin"){
 				session()->flash('message', 'Your access level is currently set to '.Session::get('auth_level').'. Change authentication to admin to remove this warning.');
 				session()->flash('message_type', 'warning');
 			}

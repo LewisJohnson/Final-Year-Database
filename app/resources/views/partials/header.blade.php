@@ -1,4 +1,4 @@
-<header id="header" class="desktop" style="background: {{ config('app.header_background') }}">
+<header id="header" class="desktop" style="background: {{ config_json('header.background.value') }}">
 	<div class="toolbar">
 		<p>@lang_sess("toolbar_text")</p>
 		<div class="right button-group--horizontal">
@@ -15,7 +15,7 @@
 	</video> --}}
 
 	<div class="main">
-		<img class="logo" src="{{ config('app.header_logo_url') }}">
+		<img class="logo" src="{{ config_json('header.logo_url.value') }}">
 		<h1>@lang_sess("homepage_main_header")</h1>
 	</div>
 </header>

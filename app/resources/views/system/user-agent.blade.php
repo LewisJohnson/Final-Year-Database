@@ -24,10 +24,10 @@
 			<tr>
 				<th>User Agent</th>
 
-				@if(config('app.collect_referrer'))
+				@if(config_json('user_agent.collect_referrer.value'))
 					<th>Referrer</th>
 				@else
-					<td></td>
+					<th></th>
 				@endif
 			</tr>
 		</thead>

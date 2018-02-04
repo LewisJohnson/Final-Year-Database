@@ -32,7 +32,7 @@ if (! function_exists('config_json')) {
 				$code .= "['$level']";
 			}
 
-			if(preg_match('/(true|false|[\\d]+)/', $value) > 0){ 
+			if(preg_match('/^(true|false|[\\d]+)/', $value) > 0){ 
 				$code .= "['value'] = ".$value;
 			} else{
 				$code .= "['value'] = '".$value."'";
