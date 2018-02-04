@@ -5,12 +5,13 @@
 @endsection
 <div class="centered width-1000">
 	<h1>System Dashboard</h1>
-	<h3>Adjust system parameters.</h3>
+	<h3>Configure system variables and parameters.</h3>
+
 	<div class="admin hub">
-		<div class="card card--margin-vertical tab-card">
+		<div class="card tab-card">
 			<ul class="tab-container" data-help-footer="false" data-cookie-name="cadt">
-				<li class="tab" data-tab-name="Configuration">
-					<button class="button open-tab">Configuration</button>
+				<li class="tab" data-tab-name="System">
+					<button class="button open-tab">System</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<div class="dashboard-section">
 							<h2>Enviroment</h2>
@@ -67,13 +68,23 @@
 					<button class="button open-tab">Authentication</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Authentication</h2>
-						<form class="form" role="form" method="POST" action="/d">
+						<form class="form" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+							{{ csrf_field() }}
+
 							<label for="access_type">Authorisation Access</label>
-							<select name="access_type" name="access_type">
-								<option value="student">Strict</option>
-								<option value="staff">Lax</option>
-								<option selected value="supervisor">Warn</option>
+							<label class="description">{{ env_json("system.authorisation_access.description") }}</label>
+							
+							<input type="hidden" name="access_type-json" value="system.authorisation_access">
+							<select name="access_type" id="access_type">
+								@foreach(env_json("system.authorisation_access.type") as $type)
+									<option @if($type == env_json("system.authorisation_access.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
+								@endforeach
 							</select>
+
+
+							<div class="form-field form-field--flex form-field--toggle">
+								<button class="button button--raised button--accent" type="submit">Save</button>
+							</div>
 						</form>
 					</div>
 				</li>
@@ -83,6 +94,7 @@
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>User Agent</h2>
 						<form class="form form--flex" role="form" method="POST" action="/d">
+							{{ csrf_field() }}
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="userAgentToggle">Collect user agent strings</p>
 								<label class="toggle">
@@ -107,6 +119,7 @@
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Header</h2>
 						<form class="form form--flex" role="form" method="POST" action="/d">
+							{{ csrf_field() }}
 							<div class="form-field">
 								<label for="title">Logo</label>
 								<input id="title" type="text" name="title">
@@ -125,6 +138,7 @@
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Footer</h2>
 						<form class="form" role="form" method="POST" action="/">
+							{{ csrf_field() }}
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="accButtonsToggle">Show accessibilty buttons</p>
 								<label class="toggle">

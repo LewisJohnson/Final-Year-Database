@@ -30,8 +30,13 @@ class AdminController extends Controller{
 		return view('admin.index');
 	}
 
-	public function parameters(){
-		return view('admin.parameters');
+	public function configure(Request $request){
+		foreach ($request->all() as $key => $value) {
+			if(substr($key, -4, 4) != "json"){
+				env_json($request[$key."-json"], $value);
+			}
+		}
+		return view('admin.system.dashboard');
 	}
 
 	public function importStudents(){

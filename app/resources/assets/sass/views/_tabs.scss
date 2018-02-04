@@ -7,10 +7,20 @@ ul.tab-container{
 
 .tab-card{
 	overflow: hidden;
+
 	.content-host{
 		h2 { margin: 1rem 0; }
 		ul{ padding-left: 2rem;}
 		select { width: 100%; }
+	}
+
+	.description{
+		font-size: 14px;
+		color: #b5b5b5;
+	}
+
+	button[type="submit"]{
+		margin-top: 1.2rem;
 	}
 }
 

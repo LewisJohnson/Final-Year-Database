@@ -7,15 +7,12 @@
 		flex-wrap: wrap;
 		padding: 0;
 
-		> {
-			h2:first-of-type {margin-top: 0 ;}
-		}
-
 		.content-host{ 
 			padding: 1rem;
 			flex-grow: 1;
 			border-left: 1px solid $form-border-color;
 			flex: 0 0 80%;
+			h2:first-of-type {margin-top: 0 ;}
 		}
 
 		ul.tab-container{
