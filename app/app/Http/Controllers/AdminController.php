@@ -29,6 +29,7 @@ class AdminController extends Controller{
 	public function configure(Request $request){
 		foreach ($request->all() as $key => $value) {
 			if (substr($key, -4, 4) != "json") {
+				config_json($request[$key . "-json"], $value);
 			}
 		}
 		return redirect(url('admin/dashboard'));
