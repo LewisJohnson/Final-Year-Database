@@ -5,7 +5,7 @@
 	</div>
 
 	<div class="content">
-		<form id="authForm" class="form form--flex" role="form" method="POST" action="/authenticaion-change">
+		<form id="authForm" class="form form--flex" role="form" method="POST" action="/authentication-change">
 			{{ csrf_field() }}
 			<div class="form-field">
 				<select class="text" name="auth_type">

@@ -1,7 +1,7 @@
 <?php
 
-if (! function_exists('env_json')) {
-	function env_json($key = null, $value = null) {
+if (! function_exists('config_json')) {
+	function config_json($key = null, $value = null) {
 		$config = json_decode(Storage::disk('local')->get(config("app.config_dir")), true);
 
 		if($key === null){

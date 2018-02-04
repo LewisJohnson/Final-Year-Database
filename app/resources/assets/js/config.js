@@ -1,9 +1,11 @@
 var config = {
+	// Animations
 	slowAnimation: 400,
 	mediumAnimation: 300,
 	fastAnimation: 200,
 	superFastAnimation: 100,
 
+	mobileWidth: 970,
 	showHelpFooter: true,
 	
 	animateTabHeight: true,

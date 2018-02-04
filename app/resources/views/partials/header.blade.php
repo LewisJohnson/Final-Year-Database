@@ -156,7 +156,7 @@
 				</button>
 
 				@if(Auth::user()->isSupervisorOrSuperior())
-					<button title="Change Authenticaion" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
+					<button title="Change Authentication" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
 				@endif
 			</li>
 		</ul>

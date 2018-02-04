@@ -24,7 +24,7 @@ use Illuminate\Http\Request;
    ============= */
 Route::group(['middleware' => ['web']], function() {
 
-	Route::get('authenticaion-change', 'Auth\AuthController@show');
+	Route::get('authentication-change', 'Auth\AuthController@show');
 	// Login Routes
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
@@ -168,8 +168,8 @@ Route::group(['middleware' => ['auth']], function() {
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 
-	// Change Authenticaion
-	Route::post('authenticaion-change', 'Auth\AuthController@change');
+	// Change Authentication
+	Route::post('authentication-change', 'Auth\AuthController@change');
 	Route::get('showChangeAuthDialog', function (){
 		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
 	});

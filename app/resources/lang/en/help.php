@@ -19,14 +19,14 @@ return [
 	/* 1. SUPERVISOR HELP TAB */
 	'help_tab_supervisor' => 'Supervisor',
 	'help_tab_supervisor_content' =>
-	'<p>A user logged in with supervisor (or administrator) permissions will have the Supervisor Options menu displayed, this will make the following available: </p>
+	'<p>A user logged in with supervisor (or administrator) permissions will have the Supervisor Options menu displayed,this will make the following available: </p>
 	<ul>
 		<li>Propose a project allows the supervisor to add a new project.</li>
 		<li>Add project topic allows the supervisor to create a new category of project topic.</li>
 		<li>List all supervisors, their load and what/whom they supervise.</li>
 		<li>Browse transactions related to their own projects.</li>
 		<li>List all students and what projects they have selected.</li>
-		<li>A supervisor or administrator can choose to opt-in or opt-out of emails refering to transcations on their projects.</li>
+		<li>A supervisor or administrator can choose to opt-in or opt-out of emails referring to transactions on their projects.</li>
 	</ul>',
 
 	/* 2. ADMIN HELP TAB */
@@ -46,7 +46,7 @@ return [
 		<li>Amend Topics - amend or delete project topics.</li>
 		<li>End of Year Archive - archive old data at the end of an academic year.</li>
 		<li>Import New Students - Imports an XML file of new students.</li>
-		<li>A supervisor or administrator can choose to opt-in or opt-out of emails refering to transcations on their projects.</li>
+		<li>A supervisor or administrator can choose to opt-in or opt-out of emails referring to transactions on their projects.</li>
 	</ul>
 	<p>Data resetting options are also available whilst the system is under development</p>',
 
@@ -54,7 +54,7 @@ return [
 	'about' =>
 	'This software manages project selection and allocation for final year and masters students in the Informatics Department at the University of Sussex.
 				<br><br>
-				Final year projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavours to match student and supervisor requirements. Supervisors can propose projects that students can accept and, additionally, students can propose their own projects either generally or to a specific supervisor.
+				Final year projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavors to match student and supervisor requirements. Supervisors can propose projects that students can accept and, additionally, students can propose their own projects either generally or to a specific supervisor.
 				<br><br>
 				The current system had not been maintained for several years and was in need of updating. This update took the form of adding new functionality and a general overhaul of both look and feel. The updating of capabilities due to advances in software and browser technologies has also been addressed.
 				<br><br>
@@ -74,7 +74,8 @@ return [
 
 	// HELP TAB 1 *REQUIRED*
 	'help_tab_1' => 'Log in',
-	'help_tab_1_content' => '<p>Once you receive an email from the project convenor, you will be able to log in to the database. If there is a problem logging in, please contact the administrator.</p>',
+	'help_tab_1_content' => '<p>Once you receive an email from the project conveyor, you will be able to log in to the database.
+	If there is a problem logging in, please contact the administrator.</p>',
 
 	// HELP TAB 2
 	'help_tab_2' => 'Browse',
@@ -96,7 +97,7 @@ return [
 		<li>Propose a Project gives the student the ability to propose a project to either a specific supervisor or generally to any supervisor.</li>
 	 	<li>List all supervisors, their load and what/whom they supervise.</li>
 		<li>List all students and what projects they have selected.</li>
-		<li>Withdraw and edit a proposed project. The corresponding buttons can be found on the student\'s home page just below the project descritpion.</li>
+		<li>Withdraw and edit a proposed project. The corresponding buttons can be found on the student\'s home page just below the project description.</li>
 		<li>Note that a project selected from a specific supervisor\'s list can\'t be withdrawn. In this case the student needs to ask the supervisor to reject the selection to release the student.</li>
 	</ul>',
 
@@ -107,7 +108,7 @@ return [
 	<ul>
 		<li>System Help - displays this screen</li>
 		<li>General Information - displays the public home page</li>
-		<li>About - shows information about the devlopment of the system</li>
+		<li>About - shows information about the development of the system</li>
 	</ul>',
 
 	// HELP TAB 4
@@ -115,16 +116,13 @@ return [
 	'help_tab_4_content' =>
 	'
 	<p>To make this site work properly, we sometimes place small data files called cookies on your device. Most big websites do this too.</p>
+
 	<h3>What are cookies?</h3>
 	<p>A cookie is a small text file that a website saves on your computer or mobile device when you visit the site.
-	It enables the website to remember your actions and preferences (such as login, language, font size and other display preferences) over a period of time, so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</p>
+	It enables the website to remember your actions and preferences (such as login, font size and other display preferences) over a period of time,
+	so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</p>
+	
 	<h3>How do we use cookies?</h3>
-	<p>A number of our pages use cookies to remember:
-	your display preferences, such as contrast colour settings or font size
-	if you have agreed (or not) to our use of cookies on this site
-	Also, some videos embedded in our pages use a cookie to anonymously gather statistics on how you got there and what videos you visited.
-	Enabling these cookies is not strictly necessary for the website to work but it will provide you with a better browsing experience. You can delete or block these cookies, but if you do that some features of this site may not work as intended.
-	The cookie-related information is not used to identify you personally and the pattern data is fully under our control. These cookies are not used for any purpose other than those described here.</p>
 
 	<table class="data-table">
 		<thead>
@@ -158,23 +156,12 @@ return [
 			<tr>
 				<td>Analytics</td>
 				<td>vb</td>
-				<td>Determines if you\'ve been here before.</td>
-			</tr>
-
-			<tr>
-				<td>Usability</td>
-				<td>rwc-[TYPE]</td>
-				<td>Used to remember your form values, so you don\'t have to.</td>
-			</tr>
-			<tr>
-				<td>Usability</td>
-				<td>cht</td>
-				<td>The current tab selected in the help page.</td>
+				<td>Determines if you have visited before.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>fp</td>
-				<td><b>Students only</b> - A list of your favorited projects.</td>
+				<td><b>Students only</b> - A list of your favorite projects.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
@@ -191,11 +178,39 @@ return [
 				<td>hide-projects</td>
 				<td><b>Supervisors only</b> - Determines if the tab "Projects" supervisor tab is hidden.</td>
 			</tr>
+		</tbody>
+	</table>
+
+	<h3>Session Storage</h3>
+	<p>Session storage is a way of storing information on your device for a short amount of time.
+	These little tokens will be cleared as soon as you close your browser.
+	If your browser does not support session storage, we will store these values as cookies instead.</p>
+
+	<table class="data-table">
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Name</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Usability</td>
+				<td>rwc-[TYPE]</td>
+				<td>Used to remember your form values, so you don\'t have to.</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>cht</td>
+				<td>The current tab selected in the help page.</td>
+			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>cadt</td>
-				<td><b>System admins only</b> - The current tab selected in the admin dashboard.</td>
+				<td><b>System administrators only</b> - The current tab selected in the administrator dashboard.</td>
 			</tr>
 		</tbody>
-	</table>',
+	</table>
+	',
 ];

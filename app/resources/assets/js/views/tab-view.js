@@ -37,7 +37,7 @@
 			}
 
 			if(config.animateTabHeight){
-				if(tabCard.hasClass("card--margin-vertical")){
+				if($(window).width() <= config.mobileWidth){
 					var newTabHeight = tabCard.outerHeight(false);
 				} else{
 					var newTabHeight = tabCard.height();
@@ -45,16 +45,14 @@
 				
 				tabCard.css('height', previousHeight);
 
-				tabCard.animate({
-						height: newTabHeight
-					}, config.mediumAnimation, 'linear', function(){
-						tabCard.css('height', 'auto');
-						if(tabCard.hasClass("card--margin-vertical")){
-							previousHeight = tabCard.outerHeight(false);
-						} else{
-							previousHeight = tabCard.height();
-						}
-				});	
+				tabCard.animate({ height: newTabHeight }, config.mediumAnimation, 'linear', function(){
+					tabCard.css('height', 'auto');
+					if($(window).width() <= config.mobileWidth){
+						previousHeight = tabCard.outerHeight(false);
+					} else{
+						previousHeight = tabCard.height();
+					}
+				});
 			}
 
 			tabsContent.attr("aria-expanded", "false");
@@ -70,13 +68,50 @@
 
 			$(this).addClass("button--accent");
 
-			// Make this session storage
-			setCookie(tabContainer.data("cookie-name"), currentTab.data("tab-name"), 365);
+			if (typeof(Storage) !== "undefined") {
+				sessionStorage.setItem(tabContainer.data("cookie-name"), currentTab.data("tab-name"));
+			} else {
+				// Cookie fallback
+				setCookie(tabContainer.data("cookie-name"), currentTab.data("tab-name"), 365);
+			}
 
 			firstTabSelected = false;
 			previousTab = currentTab;
 		}
 	});
 
-	$(".open-tab").first().click();
+	restoreOldTabFromStorage(tabContainer, tabs);
 });
+
+function restoreOldTabFromStorage(tabContainer, tabs){
+	if (typeof(Storage) !== "undefined") {
+		// Check session storage first
+		var oldSelectedTab = sessionStorage.getItem(tabContainer.data("cookie-name"));
+	}
+
+	if(oldSelectedTab == null){
+		// Fallback to see if cookie is set
+		if(getCookie(tabContainer.data("cookie-name")) !== null){
+			var oldSelectedTab = getCookie(tabContainer.data("cookie-name"));
+		}
+	}
+
+	if(oldSelectedTab == null){
+		// No session or cookie
+		$(".open-tab").first().click();
+	}
+	
+	var tabClicked = false;
+	tabs.each(function(){
+		if($(this).data("tab-name") === oldSelectedTab){
+			$(this).find('> button').click();
+			tabClicked = true;
+			return;
+		}
+	});
+	
+	// Tab name not found, could be different authentication
+	if(!tabClicked){
+		$(".open-tab").first().click();
+	}
+}

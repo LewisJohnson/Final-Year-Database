@@ -1,3 +1,11 @@
+{{-- ===============================================================
+	NOTICE: You MUST use boolean checkbox values.
+			Failure to do so will result in a broken POST request.
+
+			<input type="checkbox" class="boolean-checkbox">
+
+	================================================================ --}}
+
 @extends('layouts.app')
 @section('content')
 @section('scripts')
@@ -14,8 +22,8 @@
 					<button class="button open-tab">System</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<div class="dashboard-section">
-							<h2>Enviroment</h2>
-							<p>To configure enviroment variables, edit the <b>.env</b> file in the <b>root</b> directory. A server restart is required for changes to take effect.</p>
+							<h2>Environment</h2>
+							<p>To configure environment variables, edit the <b>.env</b> file in the <b>root</b> directory. A server restart is required for changes to take effect.</p>
 							<div class="config-danger">
 								<p class="text-icon">&#9888;&#65039;</p>
 								<p><b>Be careful!</b> You might break something making the website unusable.</p>
@@ -29,7 +37,7 @@
 
 						<div class="dashboard-section">
 							<h2>System</h2>
-							<p>To manually configure system variables, edit the <b>config\config.json</b>, otherwise use the system dashboard. Changes will take effect immediately.</p>
+							<p>To manually configure system variables, edit the <b>storage\app\config\config.json</b>, otherwise use the system dashboard. Changes will take effect immediately.</p>
 						</div>
 
 						<div class="dashboard-section">
@@ -64,7 +72,7 @@
 					</div>
 				</li>
 
-				<li class="tab" data-tab-name="authentication">
+				<li class="tab" data-tab-name="Authentication">
 					<button class="button open-tab">Authentication</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Authentication</h2>
@@ -72,17 +80,15 @@
 							{{ csrf_field() }}
 
 							<label for="access_type">Authorisation Access</label>
-							<label class="description">{{ env_json("system.authorisation_access.description") }}</label>
-							
+							<label class="description">{{ config_json("system.authorisation_access.description") }}</label>
 							<input type="hidden" name="access_type-json" value="system.authorisation_access">
 							<select name="access_type" id="access_type">
-								@foreach(env_json("system.authorisation_access.type") as $type)
-									<option @if($type == env_json("system.authorisation_access.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
+								@foreach(config_json("system.authorisation_access.type") as $type)
+									<option @if($type == config_json("system.authorisation_access.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
 								@endforeach
 							</select>
 
-
-							<div class="form-field form-field--flex form-field--toggle">
+							<div class="form-field form-field--flex">
 								<button class="button button--raised button--accent" type="submit">Save</button>
 							</div>
 						</form>
@@ -93,22 +99,31 @@
 					<button class="button open-tab">User Agent</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>User Agent</h2>
-						<form class="form form--flex" role="form" method="POST" action="/d">
+						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
 							{{ csrf_field() }}
+
 							<div class="form-field form-field--flex form-field--toggle">
-								<p class="switch-label" for="userAgentToggle">Collect user agent strings</p>
+								<p class="switch-label" for="user_agent">Collect user agent strings</p>
 								<label class="toggle">
-									<input id="userAgentToggle" type="checkbox">
+									<input type="checkbox" name="coolect_user_agent" id="coolect_user_agent"class="boolean-checkbox" @if(config_json('user_agent.collect_user_agent.value')) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
+							<label class="description">{{ config_json("user_agent.collect_user_agent.description") }}</label>
+							<input type="hidden" name="coolect_user_agent-json" value="user_agent.collect_user_agent">
 
 							<div class="form-field form-field--flex form-field--toggle">
-								<p class="switch-label" for="referrerToggle">Collect referrer url</p>
+								<p class="switch-label" for="collect_referrer">Collect referrer url</p>
 								<label class="toggle">
-									<input id="referrerToggle" type="checkbox">
+									<input type="checkbox" name="collect_referrer" id="collect_referrer" class="boolean-checkbox" @if(config_json('user_agent.collect_referrer.value')) checked @endif>
 									<span class="slider"></span>
 								</label>
+							</div>
+							<label class="description">{{ config_json("user_agent.collect_referrer.description") }}</label>
+							<input type="hidden" name="collect_referrer-json" value="user_agent.collect_referrer">
+
+							<div class="form-field form-field--flex">
+								<button class="button button--raised button--accent" type="submit">Save</button>
 							</div>
 						</form>
 					</div>
@@ -118,7 +133,7 @@
 					<button class="button open-tab">Header</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Header</h2>
-						<form class="form form--flex" role="form" method="POST" action="/d">
+						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
 							{{ csrf_field() }}
 							<div class="form-field">
 								<label for="title">Logo</label>
@@ -129,6 +144,10 @@
 								<label for="title">Background</label>
 								<input id="title" type="text" name="title">
 							</div>
+
+							<div class="form-field form-field--flex">
+								<button class="button button--raised button--accent" type="submit">Save</button>
+							</div>
 						</form>
 					</div>
 				</li>
@@ -137,22 +156,31 @@
 					<button class="button open-tab">Footer</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Footer</h2>
-						<form class="form" role="form" method="POST" action="/">
+						<form class="form" role="form" method="POST" action="{{ action('AdminController@configure') }}">
 							{{ csrf_field() }}
+
 							<div class="form-field form-field--flex form-field--toggle">
-								<p class="switch-label" for="accButtonsToggle">Show accessibilty buttons</p>
+								<p class="switch-label" for="accessibilty_buttons">Show accessibilty buttons</p>
 								<label class="toggle">
-									<input id="accButtonsToggle" type="checkbox">
+									<input type="checkbox" name="accessibilty_buttons" id="accessibilty_buttons" class="boolean-checkbox" @if(config_json("footer.accessibilty_buttons.value")) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-
+							<label class="description">{{ config_json("footer.accessibilty_buttons.description") }}</label>
+							<input type="hidden" name="accessibilty_buttons-json" value="footer.accessibilty_buttons">
+							
 							<div class="form-field form-field--flex form-field--toggle">
-								<p class="switch-label" for="rainbowToggle">Show rainbow</p>
+								<p class="switch-label" for="footer_rainbow">Show rainbow</p>
 								<label class="toggle">
-									<input id="rainbowToggle" type="checkbox">
+									<input type="checkbox" name="footer_rainbow" id="footer_rainbow" class="boolean-checkbox" @if(config_json("footer.rainbow.value")) checked @endif>
 									<span class="slider"></span>
 								</label>
+							</div>
+							<label class="description">{{ config_json("footer.rainbow.description") }}</label>
+							<input type="hidden" name="footer_rainbow-json" value="footer.rainbow">
+
+							<div class="form-field form-field--flex">
+								<button type="submit" class="button button--raised button--accent">Save</button>
 							</div>
 						</form>
 					</div>

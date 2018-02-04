@@ -126,7 +126,7 @@ function getCookie(cname) {
 			return c.substring(name.length, c.length);
 		}
 	}
-	return '';
+	return null;
 }
 
 function formCookie(inputType){
@@ -135,8 +135,6 @@ function formCookie(inputType){
 	$(".remember-with-cookie:"+inputType).each(function(){
 		checkboxValues[this.id] = this.checked;
 	});
-
-	
 }
 
 function rememberFormValues(inputType){
@@ -149,19 +147,25 @@ function rememberFormValues(inputType){
 	if (typeof(Storage) !== "undefined") {
 		sessionStorage.setItem('rwc-'+inputType, JSON.stringify(checkboxValues));
 	} else {
-		// HTML < 5 fallback
+		// Cookie fallback
 		setCookie('rwc-'+inputType, JSON.stringify(checkboxValues), 365);
 	}
 }
 
 function repopulateCheckboxes(){
 	if (typeof(Storage) !== "undefined") {
+		// Check session storage first
 		var checkboxValues = JSON.parse(sessionStorage.getItem('rwc-checkbox'));
-	} else {
-		var checkboxValues = JSON.parse(getCookie('rwc-checkbox'));
+	} 
+
+	if(checkboxValues == null){
+		// Fallback to see if cookie is set
+		if(getCookie('rwc-checkbox') != null){
+			var checkboxValues = JSON.parse(getCookie('rwc-checkbox'));
+		}
 	}
 
-	if(checkboxValues){
+	if(checkboxValues != null){
 		Object.keys(checkboxValues).forEach(function(element) {
 			var checked = checkboxValues[element];
 			$("#" + element).prop('checked', checked);
@@ -171,7 +175,7 @@ function repopulateCheckboxes(){
 
 /* ================
 	JQUERY HELPERS
-   ================ */
+	 ================ */
 
 $(function() {
 	$(window).scroll(function(){
@@ -199,9 +203,24 @@ $(function() {
 	});
 
 	$("body").on("click", ".form-field--toggle",  function(e) {
+		if($(e.target).hasClass("toggle") || $(e.target).parent().hasClass("toggle")){
+			return;
+		}
+		
 		$(this).find('input:checkbox').click();
 	});
 	
+	$(".boolean-checkbox").each(function() {
+		$(this).parent().parent().after('<input type="hidden" name="' + $(this).attr("name") + '" value="' + $(this).is(':checked') +'" />');
+	});
+
+	$("body").on("click", ".boolean-checkbox",  function(e) {
+		if($(this).is(':checked')) {
+			$(this).parent().parent().next().val("true");
+		} else {
+			$(this).parent().parent().next().val("false");
+		}
+	});
 
 	$('#show-raw-table-data').on('click', function() {
 		if($(this).prop('checked')){

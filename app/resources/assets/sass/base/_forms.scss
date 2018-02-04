@@ -51,6 +51,11 @@ button{
 	}
 }
 
+.form-field + .description, .form-field + * + .description {
+	position: relative;
+	top: -1.3rem;
+}
+
 .form-field.form-field--flex{
 	display: flex;
 	flex-flow: row;
