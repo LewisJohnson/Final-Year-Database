@@ -15,12 +15,16 @@ class Supervisor{
 	 */
 	public function handle($request, Closure $next){
 		if (Auth::check() && Auth::user()->isSupervisorOrSuperior()){
+			if(Session::get('auth_type') === "system"){
+				abort(403, 'Forbidden action. Change your authentication before accessing this page.');
+			}
+
 			if(config_json('system.authorisation_access.value') === "strict" && Session::get('auth_level') != "supervisor"){
 				abort(403, 'Forbidden action. Change your authentication before accessing this page.');
 			}
 
 			if(config_json('system.authorisation_access.value') === "warn" && Session::get('auth_level') != "supervisor"){
-				session()->flash('message', 'Your access level is currently set to admin. Change authentication to supervisor to remove this warning.');
+				session()->flash('message', 'Your access level is currently set to administrator. Change authentication to supervisor to remove this warning.');
 				session()->flash('message_type', 'warning');
 			}
 
