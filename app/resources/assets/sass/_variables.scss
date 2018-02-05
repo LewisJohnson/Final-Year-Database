@@ -1,3 +1,11 @@
+/* BRAND */
+$brand-primary: #1D4289;
+$accent: darken($brand-primary, 6%);
+$accent-info: #8eb4cb;
+$accent-success: #2ab27b;
+$accent-warning: #cbb956;
+$accent-danger: #bf5329;
+
 /* TYPOGRAPHY */
 $font-family-sans-serif: "Roboto", sans-serif;
 $font-size-base: 16px;
@@ -11,13 +19,9 @@ $h1-color: darken($h2-color, 3%);
 
 $list-text-color: #515151;
 
-/* BRAND */
-$brand-primary: #1D4289;
-$accent: darken($brand-primary, 6%);
-$accent-info: #8eb4cb;
-$accent-success: #2ab27b;
-$accent-warning: #cbb956;
-$accent-danger: #bf5329;
+/* NAV & HEADER */
+$header-background: $brand-primary;
+$nav-background: darken($brand-primary, 3%);
 
 /* DIALOG */
 $underlay-background: rgba(0, 0, 0, 0.4);

@@ -30,9 +30,7 @@ th, td {
 }
 
 tr{
-	transition-duration: .28s;
-	transition-timing-function: cubic-bezier(0.4,0,0.2,1);
-	transition-property: background-color;
+	transition: background-color .28s cubic-bezier(0.4,0,0.2,1);
 }
 
 tr[disabled]{
@@ -40,7 +38,6 @@ tr[disabled]{
 	color: darken(#f4f4f4, 20%);
 	cursor: default;
 }
-
 
 tbody tr:hover:not([disabled]), 
 tbody tr:focus:not([disabled]), 

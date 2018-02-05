@@ -1,68 +1,49 @@
 header{
 	width: 100%;
-	background: $brand-primary;
-
-	h1{
-		color: white;
-		margin: 0;
-	}
+	background: $header-background;
 }
 
 header{
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	z-index: 3;
 	padding-right: 10px;
+	@include transition--medium();
 
-	.main{
-		display: flex;
-		flex-direction: row;
-
-		> a { 
-			text-decoration: none;
-			display: block;
-			margin-left: auto;
-			h1{
-				font-size: 120%;
-				line-height: 50px;
-			}
-		}
-
-		.logo-container{
-			display: none;
-			position: absolute;
-			width: calc(100% - 20px);
-			text-align: center;
-
-			.logo{
-				position: absolute;
-				top: 0;
-				text-align: center;
-				height: 50px;
-				margin: 0 auto;
-			}
+	> a { 
+		text-decoration: none;
+		display: block;
+		margin-left: auto;
+		h1{
+			color: white;
+			margin: 0;
+			font-size: 120%;
+			line-height: 45px;
+			@include transition--medium();
 		}
 	}
 
-	.toolbar{
-		display: none;
-		flex-direction: row;
-
-		p{
-			margin: 0;
-			color: white;
-			line-height: 36px;
-			margin-left: 10px;
-		}
-		
-		.right{
-			margin-left: auto;
-		}
+	.logo{
+		@include transition--medium();
+		position: relative;
+		visibility: hidden;
+		height: 45px;
+		left: -50px;
+		overflow: hidden;
+		max-width: 0px;
 	}
 }
 
 .hamburger-container{
-	padding: 1rem;
+	max-width: 50px;
+	overflow: hidden;
+	visibility: visible;
+	@include transition--medium();
 }
 
 .hamburger-list{
+	padding: 1rem;
 	cursor: pointer;
 	list-style: none;
 	outline: none;
@@ -74,7 +55,6 @@ header{
 	width: 24px;
 	height: 2px;
 	background: white;
-	transition: all 0.3s;
 	margin-bottom: 5px;
 }
 

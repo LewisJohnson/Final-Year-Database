@@ -170,14 +170,14 @@
 							{{ csrf_field() }}
 
 							<div class="form-field form-field--flex form-field--toggle">
-								<p class="switch-label" for="accessibilty_buttons">Show accessibilty buttons</p>
+								<p class="switch-label" for="accessibility_buttons">Show accessibility buttons</p>
 								<label class="toggle">
-									<input type="checkbox" name="accessibilty_buttons" id="accessibilty_buttons" class="boolean-checkbox" @if(config_json("footer.accessibilty_buttons.value")) checked @endif>
+									<input type="checkbox" name="accessibility_buttons" id="accessibility_buttons" class="boolean-checkbox" @if(config_json("footer.accessibility_buttons.value")) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-							<label class="description">{{ config_json("footer.accessibilty_buttons.description") }}</label>
-							<input type="hidden" name="accessibilty_buttons-json" value="footer.accessibilty_buttons">
+							<label class="description">{{ config_json("footer.accessibility_buttons.description") }}</label>
+							<input type="hidden" name="accessibility_buttons-json" value="footer.accessibility_buttons">
 							
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="footer_rainbow">Show rainbow</p>

@@ -13,11 +13,11 @@ if (! function_exists('config_json')) {
 		}
 
 		if(isset($key) && isset($value)){
+			$key .= ".value";
 
-			$config = data_set($config, $key);
+			data_set($config, $key, $value);
 
 			Storage::disk('local')->put(config("app.config_dir"), json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
-
 			return;
 		}
 	}

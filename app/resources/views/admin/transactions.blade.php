@@ -4,13 +4,13 @@
 <div class="centered width-1400">
 	<h1>Transactions</h1>
 
-	<div style="">
+	<div class="table-responsive">
 		<div class="checkbox" style="margin-top: 15px;">
 			<input class="checkbox-input" id="show-raw-table-data" type="checkbox">
 			<label for="show-raw-table-data">Show Raw Data</label>
 		</div>
 
-		<table class="data-table shadow-2dp full-detail">
+		<table class="data-table table-column-toggle shadow-2dp full-detail">
 			<thead>
 				<tr>
 					<th>Id</th>

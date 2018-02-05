@@ -22,7 +22,16 @@ nav{
 }
 
 nav.desktop{
-	display: none;
+	position: relative;
+	background: $nav-background;
+	padding: 0px 10px;
+	@include transition--slow-cb();
+	visibility: hidden;
+	max-height: 0;
+	overflow: hidden;
+
+	z-index: 2;
+
 	> ul {
 		display: flex;
 		flex-direction: row;
@@ -69,7 +78,6 @@ nav.desktop{
 
 .dropdown{
 	overflow: hidden;
-	min-height: 50px;
 	display: inline-block;
 
 	a, svg {
@@ -86,7 +94,7 @@ nav.desktop{
 		background: #f9f9f9;
 		z-index: 1;
 		transform-origin: top left;
-		top: 42px;
+		top: 51px;
 		line-height: normal;
 
 		svg{
@@ -136,7 +144,7 @@ nav.mobile{
 
 	> div {
 		width: 100%;
-		height: 92vh;
+		height: calc(100vh - 60px);
 		overflow-y: auto;
 	}
 

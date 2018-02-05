@@ -1,3 +1,5 @@
+*.map
+
 #################
 ## Eclipse
 #################
@@ -216,6 +218,3 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 app/.phpintel/
-
-app/public/
-public/

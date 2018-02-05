@@ -26,5 +26,6 @@ code{
 }
 
 .main-content{
+	@include transition--medium();
 	padding: 3rem 0;
 }

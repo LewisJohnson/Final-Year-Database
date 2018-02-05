@@ -1,5 +1,5 @@
 <footer>
-	@if(config("app.footer_accessibilty_buttons"))
+	@if(config_json("footer.accessibility_buttons.value"))
 		<div class="footer-left">
 			@if(Cookie::get('largeFont') == "true")
 				<a href="{{ action('HomeController@index', 'largeFont=false')}}">Regular Font</a>

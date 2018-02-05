@@ -3,22 +3,32 @@
 
 	// Header & Navigation
 	nav.mobile{ display: none; }
-	nav.desktop{ display: block; }
-	.hamburger-container{ display: none;}
+
+	nav.desktop{
+		visibility: visible;
+		max-height: 50px;
+	}
+
+	.hamburger-container{
+		visibility: hidden;
+		max-width: 0;
+	}
 
 	header{
 		padding: 5px 10px;
-		.main{
-			.logo-container{ display: block; }
-			> a { 
-				h1{
-					font-size: 140%;
-				}
+
+		.logo{
+			visibility: visible;
+			left: 0px;
+			max-width: 50px;
+		}
+
+		> a { 
+			h1{
+				font-size: 140%;
 			}
 		}
 	}
-
-
 
 	// Tab
 	.card.tab-card{
@@ -102,8 +112,7 @@
 	}
 
 	.main-content{
-		padding: 3rem 1rem;
-		padding-bottom: 20vh;
+		padding: 0 1rem;
 		overflow-x: scroll;
 	}
 

@@ -29,6 +29,13 @@ class AdminController extends Controller{
 	public function configure(Request $request){
 		foreach ($request->all() as $key => $value) {
 			if (substr($key, -4, 4) != "json") {
+
+				if($value === "true"){
+					$value = true;
+				}
+				if($value === "false"){
+					$value = false;
+				}
 				config_json($request[$key . "-json"], $value);
 			}
 		}
