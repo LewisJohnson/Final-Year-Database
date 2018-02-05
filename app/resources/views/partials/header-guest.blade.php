@@ -1,4 +1,4 @@
-<header id="header" class="desktop">
+<header class="header desktop">
 	<div class="toolbar">
 		<div class="right button-group--horizontal">
 			<button class="button button--raised login-button" data-activator="true" data-dialog="login">Login</button>
@@ -24,7 +24,7 @@
 	</ul>
 </nav>
 
-<header id="header" class="mobile">
+<header class="header mobile">
 	<div class="hamburger-container" role="button">
 		<ul class="hamburger-list">
 			<li class="hamburger-line hamburger-line--short"></li>

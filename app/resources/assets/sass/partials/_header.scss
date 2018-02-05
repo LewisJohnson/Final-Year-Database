@@ -1,35 +1,49 @@
-#header{
+.header{
 	width: 100%;
 	background: $brand-primary;
 
 	h1{
 		color: white;
-		text-align: center;
 		margin: 0;
 	}
 }
 
-#header.desktop{
-	padding: 5px;
+.header.desktop{
+	padding: 5px 10px;
 
 	.main{
 		display: flex;
-		margin-bottom: 1rem;
+		flex-direction: row;
 
-		.logo{
-			height: 100px;
+		> a { 
+			text-decoration: none;
+			display: block;
+			margin-left: auto;
+			h1{
+				font-size: 140%;
+				line-height: 50px;
+			}
 		}
 
-		h1{
-			line-height: 100px;
+		.logo-container{
 			position: absolute;
+			width: calc(100% - 20px);
+			text-align: center;
+		}
+
+		.logo{
+			position: absolute;
+			top: 0;
+			text-align: center;
+			height: 50px;
 			margin: 0 auto;
-			width: 98%;
 		}
 	}
 
 	.toolbar{
-		display: flex;
+		display: none;
+		flex-direction: row;
+
 		p{
 			margin: 0;
 			color: white;
@@ -43,7 +57,7 @@
 	}
 }
 
-#header.mobile{
+.header.mobile{
 	display: none;
 	height: 50px;
 	position: fixed;

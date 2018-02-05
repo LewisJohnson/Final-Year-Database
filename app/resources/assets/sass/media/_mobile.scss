@@ -38,7 +38,6 @@
 }
 
 @media screen and (max-width: 970px){
-
 	.arrangements-container {
 		overflow-x: scroll;
 		
@@ -128,8 +127,7 @@
 		display: none;
 	}
 
-
-	#header.mobile{
+	.header.mobile{
 		display: flex;
 	}
 
@@ -137,7 +135,7 @@
 		display: block;
 	}
 
-	#header.desktop{
+	.header.desktop{
 		display: none;
 	}
 

@@ -8,36 +8,14 @@ if (! function_exists('config_json')) {
 			return $config;
 		}
 
-		if(preg_match('/^[a-zA-Z.]+/', $key) != 1){ 
-			return; 
-		}
-
 		if($value === null){
-			$exp = explode(".", $key);
-			$code = '$config';
-
-			foreach ($exp as $level) {
-				$code .= "['$level']";
-			}
-			eval("\$result = $code;");
-			return $result;
+			return data_get($config, $key);
 		}
 
 		if(isset($key) && isset($value)){
 
-			$exp = explode(".", $key);
-			$code = '$config';
+			$config = data_set($config, $key);
 
-			foreach ($exp as $level) {
-				$code .= "['$level']";
-			}
-
-			if(preg_match('/^(true|false|[\\d]+)/', $value) > 0){ 
-				$code .= "['value'] = ".$value;
-			} else{
-				$code .= "['value'] = '".$value."'";
-			}
-			eval($code.";");
 			Storage::disk('local')->put(config("app.config_dir"), json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
 
 			return;

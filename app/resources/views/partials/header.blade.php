@@ -1,6 +1,5 @@
-<header id="header" class="desktop" style="background: {{ config_json('header.background.value') }}">
+<header class="header desktop" style="background: {{ config_json('header.background.value') }}">
 	<div class="toolbar">
-		<p>@lang_sess("toolbar_text")</p>
 		<div class="right button-group--horizontal">
 			<button title="Log out" class="logout-button button button--raised" onclick="$('#logout-form').submit();">Logout</button>
 				
@@ -10,70 +9,19 @@
 		</div>
 	</div>
 
-{{-- 	<video muted id="video_bg" class="video" autoplay loop>
-		<source src="/graduation.webm" type="video/webm">
-	</video> --}}
-
 	<div class="main">
-		<img class="logo" src="{{ config_json('header.logo_url.value') }}">
-		<h1>@lang_sess("homepage_main_header")</h1>
+		<div class="logo-container">
+			<img class="logo" src="{{ config_json('header.logo_url.value') }}">
+		</div>
+		
+		@include('partials.header.navigation')
+
+		<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang_sess("homepage_main_header")</h1></a>
 	</div>
 </header>
 
-<nav class="desktop">
-	<ul>
-		{{-- <li class="nav-button"><img class="logo" src="/images/sussex-logo-no-text.png" style="width: 50px; height: 50px;"></li> --}}
-		<li class="nav-button"><a href="{{ action('HomeController@index') }}" title="">Home</a></li>
-		<li class="nav-button dropdown">
-			<button>Browse</button>
-			@include('svg.arrow-down')
-			<div class="dropdown-content shadow-2dp">
-				<a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a>
-				<a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a>
-				<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a>
-			</div>
-		</li>
-		@if(Session::get('auth_level') == 'supervisor')
-			<li class="nav-button dropdown">
-				<a href="{{ action('SupervisorController@index') }}" title="Supervisor options">Supervisor</a>
-				@include('svg.arrow-down')
-				<div class="dropdown-content shadow-2dp">
-					<a title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
-					<a title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
-					<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
-				</div>
-			</li>
-		@endif
-
-		@include("partials.header.admin-dropdown")
-
-		@if(Auth::user()->isStudent())
-			<li class="nav-button dropdown">
-				<button>Student</button>
-				@include('svg.arrow-down')
-				<div class="dropdown-content shadow-2dp">
-					<a href="{{ action('StudentController@showProposeProject') }}">Propose Project</a>
-					<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
-				</div>
-			</li>
-		@endif
-
-		<li class="nav-button dropdown">
-			<button>Help</button>
-			@include('svg.arrow-down')
-
-			<div class="dropdown-content shadow-2dp">
-				<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
-				<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-				<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
-				@include('partials.header.help-links', ['platform' => 'desktop'])
-			</div>
-		</li>
-	</ul>
-</nav>
-
 {{-- MOBILE --}}
-<header id="header" class="mobile">
+<header class="header mobile">
 	<div class="hamburger-container" role="button">
 		<ul class="hamburger-list">
 			<li class="hamburger-line hamburger-line--short"></li>
