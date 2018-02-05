@@ -1,6 +1,26 @@
 @media screen and (min-width: 970px){
 	.mobile-nav-underlay{display: none !important;}
 
+	// Header & Navigation
+	nav.mobile{ display: none; }
+	nav.desktop{ display: block; }
+	.hamburger-container{ display: none;}
+
+	header{
+		padding: 5px 10px;
+		.main{
+			.logo-container{ display: block; }
+			> a { 
+				h1{
+					font-size: 140%;
+				}
+			}
+		}
+	}
+
+
+
+	// Tab
 	.card.tab-card{
 		display: flex;
 		flex-direction: row;
@@ -122,24 +142,9 @@
 			}
 		}
 	}
+
 	.mobile--hidden{
 		visibility: hidden;
-		display: none;
-	}
-
-	.header.mobile{
-		display: flex;
-	}
-
-	nav.mobile{
-		display: block;
-	}
-
-	.header.desktop{
-		display: none;
-	}
-
-	nav.desktop{
 		display: none;
 	}
 

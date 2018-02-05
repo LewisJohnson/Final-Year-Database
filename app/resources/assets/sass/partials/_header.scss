@@ -1,4 +1,4 @@
-.header{
+header{
 	width: 100%;
 	background: $brand-primary;
 
@@ -8,8 +8,8 @@
 	}
 }
 
-.header.desktop{
-	padding: 5px 10px;
+header{
+	padding-right: 10px;
 
 	.main{
 		display: flex;
@@ -20,23 +20,24 @@
 			display: block;
 			margin-left: auto;
 			h1{
-				font-size: 140%;
+				font-size: 120%;
 				line-height: 50px;
 			}
 		}
 
 		.logo-container{
+			display: none;
 			position: absolute;
 			width: calc(100% - 20px);
 			text-align: center;
-		}
 
-		.logo{
-			position: absolute;
-			top: 0;
-			text-align: center;
-			height: 50px;
-			margin: 0 auto;
+			.logo{
+				position: absolute;
+				top: 0;
+				text-align: center;
+				height: 50px;
+				margin: 0 auto;
+			}
 		}
 	}
 
@@ -54,28 +55,6 @@
 		.right{
 			margin-left: auto;
 		}
-	}
-}
-
-.header.mobile{
-	display: none;
-	height: 50px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 2;
-
-	a{
-		line-height: 50px;
-		font-size: 22px;
-		color: white;
-		font-weight: bold;
-		margin-left: auto;
-		margin-right: 1rem;
-		text-align: right;
-		text-decoration: none;
-		display: inline-block;
-		overflow: hidden;
 	}
 }
 

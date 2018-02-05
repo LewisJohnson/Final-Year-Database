@@ -3,7 +3,7 @@
 @endphp
 
 @if(Lang::has($localePrefix.".help_link_1"))
-	@if($platform == "mobile")
+	@if($platform === "mobile")
 		{{-- MOBILE --}}
 		<li class="nav-button">
 			<div class="sub-dropdown" tab-index="0">
