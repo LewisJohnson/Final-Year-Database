@@ -23,8 +23,6 @@ use Illuminate\Http\Request;
    1. WEB ROUTES
    ============= */
 Route::group(['middleware' => ['web']], function() {
-
-	Route::get('authentication-change', 'Auth\AuthController@show');
 	// Login Routes
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
@@ -136,8 +134,6 @@ Route::group(['middleware' => ['student']], function() {
    6. AUTHENTICATED USER ROUTES
    ============================ */
 Route::group(['middleware' => ['auth']], function() {
-
-
 	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
@@ -167,10 +163,4 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
-
-	// Change Authentication
-	Route::post('authentication-change', 'Auth\AuthController@change');
-	Route::get('showChangeAuthDialog', function (){
-		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
-	});
 });
