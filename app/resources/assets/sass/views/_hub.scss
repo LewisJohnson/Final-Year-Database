@@ -42,7 +42,7 @@
 	width: calc(50% - 12px);
 	border: 1px solid $form-border-color;
 	margin: 6px;
-	
+
 	border-radius: 3px;
 	overflow: hidden;
 
@@ -132,7 +132,7 @@
 		&.odd{
 			margin-right: 59px;
 		}
-		
+
 		* {
 			margin-right: 5px;
 		}
@@ -141,6 +141,10 @@
 			width: 100%;
 		}
 	}
+}
+
+.table-action{
+	padding: 0 !important;
 }
 
 .table-action, .table-mobile-menu{

@@ -1,4 +1,4 @@
-nav{
+ nav{
 	ul{
 		list-style: none;
 	}
@@ -28,8 +28,6 @@ nav.desktop{
 	@include transition--slow-cb();
 	visibility: hidden;
 	max-height: 0;
-	overflow: hidden;
-
 	z-index: 2;
 
 	> ul {
@@ -52,7 +50,7 @@ nav.desktop{
 			display: block;
 			cursor: pointer;
 			min-width: 100%;
-		
+
 			> .dropdown-content{
 				min-height: 100%;
 				height: auto;

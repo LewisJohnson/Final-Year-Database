@@ -34,7 +34,7 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('index', 'HomeController@index');
 	Route::get('home', 'HomeController@index');
 	Route::get('/', 'HomeController@index');
-	
+
 	Route::get('information', 'HomeController@information');
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
@@ -55,7 +55,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
-	
+
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@showAmendSupervisorArrangements');
 	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
@@ -98,7 +98,7 @@ Route::group(['middleware' => ['admin']], function() {
 Route::group(['middleware' => ['supervisorOrSuperior']], function() {
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
-	
+
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
 });
@@ -110,7 +110,7 @@ Route::group(['middleware' => ['supervisor']], function() {
 
 	// Project Transaction
 	Route::get('supervisor/transactions', 'SupervisorController@transactions');
-	
+
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
@@ -171,6 +171,12 @@ Route::group(['middleware' => ['auth']], function() {
 	// Change Authentication
 	Route::post('authentication-change', 'Auth\AuthController@change');
 	Route::get('showChangeAuthDialog', function (){
+		if(Auth::user()->isStudent()){
+			Session::put('auth_type', Auth::user()->studentType()); //ug, masters, department, system
+			Session::put('db_type', Auth::user()->studentType());
+			Session::put('auth_level', 'student');
+		}
+
 		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
 	});
 });

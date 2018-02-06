@@ -49,7 +49,6 @@
 			</table>
 
 			<div class="side-content card">
-				<h3>Arragments</h3>
 				<div class="form-field" title="Leave project load blank to keep current project loads.">
 					<label for="project_load">Project Load</label>
 					<input type="number" name="project_load" id="project_load">
@@ -61,7 +60,7 @@
 						<label for="take_students">Take Students</label>
 					</div>
 				</div>
-				
+
 				<input type="submit" class="button button--raised button--accent">
 			</div>
 		</div>
