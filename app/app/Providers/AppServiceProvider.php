@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 				return "<?php echo Lang::get($key); ?>";
 			}
 
-			if(App::debug()){
+			if(config('app.debug')){
 				return "#{INVALID USE OF SESSION STRING}";
 			}
 		});

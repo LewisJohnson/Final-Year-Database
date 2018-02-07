@@ -1,39 +1,39 @@
-<header class="header desktop">
-	<div class="toolbar">
-		<div class="right button-group--horizontal">
-			<button class="button button--raised login-button" data-activator="true" data-dialog="login">Login</button>
+<div class="header-container">
+	<header style="background: {{ config_json('header.background.value') }}">
+		<div class="logo-container">
+			<img class="logo" src="{{ config_json('header.logo_url.value') }}">
 		</div>
-	</div>
-	<img class="logo" src="/images/sussex-logo.jpg">
-	<h1>@lang("messages.homepage_main_header")</h1>
-</header>
+			
+		<div class="hamburger-container" role="button">
+			<ul class="hamburger-list">
+				<li class="hamburger-line hamburger-line--short"></li>
+				<li class="hamburger-line"></li>
+				<li class="hamburger-line hamburger-line--short"></li>
+			</ul>
+		</div>
 
-<nav class="desktop">
-	<ul>
-		<li class="nav-button"><a href="{{ action('HomeController@index') }}" title="">Home</a></li>
-		<li class="nav-button dropdown">
-			<button>Help</button>
-			@include('svg.arrow-down')
+		<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang("messages.homepage_main_header")</h1></a>
+	</header>
 
-			<div class="dropdown-content shadow-2dp">
-				<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-				<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
-				<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
-			</div>
-		</li>
-	</ul>
-</nav>
+	<nav class="desktop">
+		<ul>
+			<li class="nav-button"><a href="{{ action('HomeController@index') }}" title="Home">Home</a></li>
+			<li class="nav-button dropdown">
+				<button>Help</button>
+				@include('svg.arrow-down')
 
-<header class="header mobile">
-	<div class="hamburger-container" role="button">
-		<ul class="hamburger-list">
-			<li class="hamburger-line hamburger-line--short"></li>
-			<li class="hamburger-line"></li>
-			<li class="hamburger-line hamburger-line--short"></li>
+				<div class="dropdown-content shadow-2dp">
+					<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
+					<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
+					<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+				</div>
+			</li>
+			<li class="nav-button" style="margin-left: auto">
+				<button class="login-button" data-activator="true" data-dialog="login">Login</button>
+			</li>
 		</ul>
-	</div>
-	<a href="{{ action('HomeController@index') }}" title="Home">@lang("messages.homepage_main_header")</a>
-</header>
+	</nav>
+</div>
 
 <nav class="mobile" aria-hidden="true" aria-expanded="false">
 	<div>

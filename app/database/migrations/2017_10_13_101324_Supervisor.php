@@ -22,7 +22,6 @@ class Supervisor extends Migration
 			$table->boolean('take_students_ug');
 			$table->boolean('accept_email_masters');
 			$table->boolean('accept_email_ug');
-			$table->unsignedBigInteger('marker_id')->nullable('true');
 		});
 	}
 

@@ -28,8 +28,6 @@ nav.desktop{
 	@include transition--slow-cb();
 	visibility: hidden;
 	max-height: 0;
-	overflow: hidden;
-
 	z-index: 2;
 
 	> ul {
@@ -94,7 +92,7 @@ nav.desktop{
 		background: #f9f9f9;
 		z-index: 1;
 		transform-origin: top left;
-		top: 51px;
+		top: 50px;
 		line-height: normal;
 
 		svg{

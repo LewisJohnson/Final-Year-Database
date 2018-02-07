@@ -2,7 +2,7 @@
 	<nav class="mobile shadow-8dp" aria-hidden="true">
 		<div>
 			<ul>
-				@if(Session::get('auth_level') === 'supervisor' && Session::get('auth_type') !== 'system')
+				@if(Auth::user()->isSupervisor())
 				<li class="nav-button">
 					<a class="icon" href="/supervisor" title="Supervisor">
 						@include('svg.shield')
@@ -11,7 +11,7 @@
 				</li>
 				@endif
 
-				@if(Session::get('auth_level') === 'admin' && Session::get('auth_type') !== 'system')
+				@if(Auth::user()->isSupervisor())
 				<li class="nav-button">
 					<a class="icon" href="/admin" title="Administrator">
 						@include('svg.shield')
@@ -70,10 +70,6 @@
 					<button class="logout" title="Log out" onclick="document.getElementById('logout-form').submit();">
 						@include('svg.logout')
 					</button>
-
-					@if(Auth::user()->isSupervisorOrSuperior())
-					<button title="Change Authentication" class="button button--raised button--accent" data-activator="true" data-dialog="change-auth">Authentication</button>
-					@endif
 				</li>
 			</ul>
 		</div>
@@ -126,13 +122,6 @@
 					<a href="{{ action('StudentController@showProposeProject') }}">Propose Project</a>
 					<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 				</div>
-			</li>
-			@endif
-
-
-			@if(Auth::user()->isSupervisorOrSuperior())
-			<li class="nav-button" style="margin-left: auto;">
-				<button title="Change Authentication" data-activator="true" data-dialog="change-auth">Authentication</button>
 			</li>
 			@endif
 

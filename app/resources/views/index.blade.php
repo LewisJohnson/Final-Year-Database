@@ -4,8 +4,9 @@
 <div class="centered width-800">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
+		<p>Your privileges are {{ $user->getPrettyPrivilegesString() }}</p>
 
-		@if(Auth::user()->isSupervisorOrSuperior())
+		@if(Auth::user()->isSupervisor())
 			<div class="card card--margin-vertical">
 				<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
 				<p>@lang("messages_supervisor.homepage_introduction_body")</p>
@@ -13,6 +14,7 @@
 				<p>@lang("messages_supervisor.homepage_overview_body")</p>
 			</div>
 		@endif
+
 		@if(Auth::user()->isStudent())
 			<div class="card card--margin-vertical">
 				<h2>@lang_sess("homepage_introduction_header")</h2>
@@ -20,7 +22,29 @@
 				<h2>@lang_sess("homepage_overview_header")</h2>
 				<p>@lang_sess("homepage_overview_body")</p>
 			</div>
+		@endif
 
+		@if(Auth::user()->isSupervisor())
+		<div class="card-container card--margin-vertical">
+			<div class="card card--half">
+				<h2>Undergraduate Supervisor</h2>
+				<p>Project Load: {{ Auth::user()->supervisor->project_load_ug }}</p>
+				@include('svg.file')
+				<p>Accept students: {{ Auth::user()->supervisor->take_students_ug ? "Yes" : "No" }}</p>
+				@include('svg.school')
+				<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Undergraduate Supervisor Hub</a>
+			</div>
+
+			<div class="card card--half">
+				<h2>Masters Supervisor</h2>
+				<p>Project Load: {{ Auth::user()->supervisor->project_load_masters }}</p>
+				<p>Accept students: {{ Auth::user()->supervisor->project_load_masters ? "Yes" : "No" }}</p>
+				<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Masters Supervisor Hub</a>
+			</div>
+		</div>
+		@endif
+
+{{-- 		@if(Auth::user()->isStudent())
 			<div class="card card--margin-vertical">
 				<h2>Your Project</h2>
 				<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
@@ -63,7 +87,8 @@
 					</div>
 				</form>
 			</div>
-		@endif
+			@endif
+		@endif --}}
 	@else
 		<h1>Welcome.</h1>
 		<div class="card card--margin-vertical">

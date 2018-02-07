@@ -4,7 +4,8 @@
 	padding: 1rem;
 	word-wrap: break-word;
 	width: 100%;
-	
+
+	border-radius: 2px;
 	h2 {
 		margin-top: 5px;
 	}
@@ -20,6 +21,24 @@
 		background: rgba(158,158,158,.2);
 		p{ display: inline}
 	}
+}
+
+.card--half{
+	width: 48%;
+	border-top: 2px solid #1d4289;
+	&:nth-child(odd){
+		margin-right: auto;
+	}
+
+	&:nth-child(even){
+		margin-left: auto;
+	}
+}
+
+.card-container{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
 .card-slim-content{

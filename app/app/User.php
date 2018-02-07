@@ -30,41 +30,44 @@ class User extends Authenticatable{
 	];
 
 	public function isUgAdmin(){
-		return $this->access_type === "admin_ug";
+		return in_array("admin_ug", $this->getPrivileges());
 	}
 
 	public function isMastersAdmin(){
-		return $this->access_type === "admin_masters";
-	}
-
-	public function isAdmin(){
-		return $this->access_type == "admin_ug" ||
-		$this->access_type == "admin_masters";
+		return in_array("admin_masters", $this->getPrivileges());
 	}
 
 	public function isSystemAdmin(){
-		return $this->access_type == "admin_system";
+		return in_array("admin_system", $this->getPrivileges());
 	}
 
 	public function isSupervisor(){
-		return $this->access_type === "supervisor";
-	}
-
-	public function isSupervisorOrSuperior(){
-		return $this->access_type == "supervisor" ||
-		$this->access_type == "admin_ug" ||
-		$this->access_type == "admin_masters" ||
-		$this->access_type == "admin_system";
+		return in_array("supervisor", $this->getPrivileges());
 	}
 
 	public function isStudent(){
-		if($this->access_type != "student"){
-			return false;
-		}
-
-		return !is_null($this->student);
+		return in_array("student", $this->getPrivileges());
 	}
 
+	public function getPrettyPrivilegesString(){
+		$returnString = "";
+		$priv = $this->getPrivileges();
+		$lastElement = end($priv);
+
+		foreach ($priv as $key => $value) {
+			$returnString.=$value;
+
+			if($value != $lastElement){
+				$returnString.=", ";
+			}
+		}
+
+		return $returnString;
+	}
+
+	public function getPrivileges(){
+		return explode(',', $this->privileges);
+	}
 
 	public function studentType(){
 		if($this->hasOne(StudentUg::class, 'id')->exists()){
