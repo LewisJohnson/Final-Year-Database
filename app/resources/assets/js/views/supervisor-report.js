@@ -21,13 +21,14 @@
 			showNotification("error", "Supervisor \"' + input.val() + '\" can not be found.");
 		} else {
 			supervisor.removeClass("animated shake");
-			$("html, body").animate({ 
-				scrollTop: supervisor.offset().top - 50 }, 600, 
+			$("html, body").animate({
+				scrollTop: supervisor.offset().top - 150 }, 600,
 				function() {
 					supervisor.addClass("animated shake");
+					supervisor.focus();
 			});
 		}
-		
+
 		input.val("");
 	}
 });

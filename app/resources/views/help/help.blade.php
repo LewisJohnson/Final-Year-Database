@@ -26,7 +26,7 @@
 				@endif
 			@endfor
 
-			@if($user = Auth::user())
+			@if(Auth::check())
 				@if(Auth::user()->isSupervisorOrSuperior())
 					<li class="tab" data-tab-name="@lang('help.help_tab_supervisor')">
 						<button class="button open-tab">@lang("help.help_tab_supervisor")</button>
@@ -50,7 +50,7 @@
 			<li style="width: 100%; height: 100%; background: rgba(0,0,0,0.01)"></li>
 		</ul>
 
-		<div class="mask"></div>
+		{{-- <div class="mask"></div> --}}
 		<div class="content-host">
 			<div class="content"></div>
 		</div>

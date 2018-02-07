@@ -23,7 +23,7 @@
 			max-width: 50px;
 		}
 
-		> a { 
+		> a {
 			h1{
 				font-size: 140%;
 			}
@@ -37,7 +37,8 @@
 		flex-wrap: wrap;
 		padding: 0;
 
-		.content-host{ 
+		.content-host{
+			overflow: hidden;
 			padding: 1rem;
 			flex-grow: 1;
 			border-left: 1px solid $form-border-color;
@@ -70,7 +71,7 @@
 @media screen and (max-width: 970px){
 	.arrangements-container {
 		overflow-x: scroll;
-		
+
 		table {
 			width: 100%;
 		}
@@ -92,7 +93,7 @@
 			padding: 16px;
 		}
 	}
-	
+
 	#assign-dialog{
 		.arrow{
 			p{ font-size: 12vw;}
@@ -100,7 +101,7 @@
 	}
 
 	.mask{ display: block; }
-	
+
 	ul.tab-container{ overflow-x: scroll; }
 
 	.table-action-header, .table-action{
@@ -161,7 +162,7 @@
 		.topic{
 			width: 100%;
 		}
-		
+
 		.topic:nth-child(odd){
 			margin-right: 0;
 		}

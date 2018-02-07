@@ -14,7 +14,7 @@
 			@endif
 		</div>
 	@endif
-	
+
 	<div class="footer-right">
 		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
