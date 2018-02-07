@@ -59,9 +59,8 @@ class Kernel extends HttpKernel
 		'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
 		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 		'admin.system' => \SussexProjects\Http\Middleware\SystemAdmin::class,
-		'admin' => \SussexProjects\Http\Middleware\Admin::class,
+		'admin.project' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
-		'supervisorOrSuperior' => \SussexProjects\Http\Middleware\SupervisorOrSuperior::class,
 		'student' => \SussexProjects\Http\Middleware\Student::class,
 	];
 }

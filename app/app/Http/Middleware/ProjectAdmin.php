@@ -1,11 +1,11 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Closure;
+use Session;
 
-class SupervisorOrSuperior{
+class ProjectAdmin{
 	/**
 	 * Handle an incoming request.
 	 *
@@ -14,11 +14,11 @@ class SupervisorOrSuperior{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (Auth::check() && Auth::user()->isSupervisorOrSuperior()){
+		if (Auth::check() && Auth::user()->isProjectAdmin()){
 			return $next($request);
 		}
 
-		// We don't need students knowing the route exists 
+		// We don't need students knowing the route exists
 		abort(404);
 	}
 }

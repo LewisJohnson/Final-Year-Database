@@ -480,7 +480,6 @@
 		SEARCH_FILTER_CONTAINER: '.search-filter-container',
 		SEARCH_FILTER_BUTTON: '#search-filter-button',
 		LOG_IN_DIALOG: '.login.dialog',
-		CHANGE_AUTH_DIALOG: '.change-auth.dialog'
 	};
 
 	AjaxFunctions.prototype.Keys_ = {

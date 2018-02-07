@@ -72,28 +72,6 @@
 					</div>
 				</li>
 
-				<li class="tab" data-tab-name="Authentication">
-					<button class="button open-tab">Authentication</button>
-					<div class="content" aria-expanded="false" aria-hidden="true">
-						<h2>Authentication</h2>
-						<form class="form" role="form" method="POST" action="{{ action('AdminController@configure') }}">
-							{{ csrf_field() }}
-
-							<label for="access_type">Authorisation Access</label>
-							<label class="description">{{ config_json("system.authorisation_access.description") }}</label>
-							<input type="hidden" name="access_type-json" value="system.authorisation_access">
-							<select name="access_type" id="access_type">
-								@foreach(config_json("system.authorisation_access.type") as $type)
-									<option @if($type == config_json("system.authorisation_access.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
-								@endforeach
-							</select>
-							<div class="form-field form-field--flex">
-								<button class="button button--raised button--accent" type="submit">Save</button>
-							</div>
-						</form>
-					</div>
-				</li>
-
 				<li class="tab" data-tab-name="User Agent">
 					<button class="button open-tab">User Agent</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
@@ -178,7 +156,7 @@
 							</div>
 							<label class="description">{{ config_json("footer.accessibility_buttons.description") }}</label>
 							<input type="hidden" name="accessibility_buttons-json" value="footer.accessibility_buttons">
-							
+
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="footer_rainbow">Show rainbow</p>
 								<label class="toggle">

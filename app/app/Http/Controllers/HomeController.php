@@ -3,6 +3,7 @@ namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller{
 
@@ -39,5 +40,18 @@ class HomeController extends Controller{
 
 	public function noJs(Request $request){
 		return view('no-js');
+	}
+
+	public function seenCookieBanner(){
+		Cookie::queue('cookie-banner-seen', "true", 525600);
+	}
+
+	public function setDatabaseType(Request $request){
+		if($request->db_type === "ug" || $request->db_type === "masters"){
+			Session::put('db_type', $request->db_type);
+			return redirect()->action('HomeController@index');
+		}
+
+		return abort(400, "Invalid Request.");
 	}
 }

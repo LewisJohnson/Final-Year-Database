@@ -1,9 +1,11 @@
 <div class="header-container">
+	@include('partials.cookie-banner')
 	<header style="background: {{ config_json('header.background.value') }}">
+
 		<div class="logo-container">
-			<img class="logo" src="{{ config_json('header.logo_url.value') }}">
+			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ config_json("header.logo_url.value") }}')"></a>
 		</div>
-			
+
 		<div class="hamburger-container" role="button">
 			<ul class="hamburger-list">
 				<li class="hamburger-line hamburger-line--short"></li>

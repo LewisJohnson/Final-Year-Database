@@ -24,7 +24,8 @@
 }
 
 .card--half{
-	width: 48%;
+	margin-bottom: 2%;
+	width: 100%;
 	border-top: 2px solid #1d4289;
 	&:nth-child(odd){
 		margin-right: auto;

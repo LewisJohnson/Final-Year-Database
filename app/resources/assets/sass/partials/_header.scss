@@ -14,7 +14,7 @@ header{
 	padding-right: 10px;
 	@include transition--medium();
 
-	> a { 
+	> a {
 		text-decoration: none;
 		display: block;
 		margin-left: auto;
@@ -27,14 +27,25 @@ header{
 		}
 	}
 
-	.logo{
-		@include transition--medium();
+	.logo-container{
 		position: relative;
 		visibility: hidden;
+		@include transition--medium();
 		height: 45px;
 		left: -50px;
 		overflow: hidden;
 		max-width: 0px;
+		width: 50px;
+		height: 50px;
+
+		.logo{
+			display: block;
+			background-position: 50%;
+			background-repeat: no-repeat;
+			background-size: cover;
+			height: 100%;
+			width: 100%;
+		}
 	}
 }
 

@@ -121,7 +121,7 @@ return [
 	<p>A cookie is a small text file that a website saves on your computer or mobile device when you visit the site.
 	It enables the website to remember your actions and preferences (such as login, font size and other display preferences) over a period of time,
 	so you don’t have to keep re-entering them whenever you come back to the site or browse from one page to another.</p>
-	
+
 	<h3>How do we use cookies?</h3>
 
 	<table class="data-table">
@@ -157,6 +157,11 @@ return [
 				<td>Analytics</td>
 				<td>vb</td>
 				<td>Determines if you have visited before.</td>
+			</tr>
+			<tr>
+				<td>Analytics</td>
+				<td>seen-cookie-banner</td>
+				<td>Determines if you have acknowledged the cookie banner.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>

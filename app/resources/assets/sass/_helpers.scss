@@ -29,7 +29,6 @@
 	font-weight: 500;
 	border-radius: 3px;
 	font-size: 14px;
-	color: white;
 	position: relative;
 
 	p, b {
@@ -54,12 +53,14 @@
 
 .config-tip{
 	@extend %config-message;
-	background: #64B5F6;
+	background: $accent-tip-background;
+	color: $accent-tip-text-color;
 }
 
 .config-danger{
 	@extend %config-message;
-	background: #f4645f;
+	background: $accent-danger-background;
+	color: $accent-danger-text-color;
 }
 
 ul.dot-menu{
@@ -120,7 +121,7 @@ ul.dot-menu{
 		margin: 0 1rem;
 		flex-grow: 1;
 	}
-	
+
 	:first-child{ margin-left: 0; }
 	:last-child{ margin-right: 0; }
 }

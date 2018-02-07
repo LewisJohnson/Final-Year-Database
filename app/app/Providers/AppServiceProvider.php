@@ -23,18 +23,8 @@ class AppServiceProvider extends ServiceProvider
 
 		Blade::directive('lang_sess', function($key) {
 			$key = trim($key, '"');
-
-			if(Session::get("db_type") == "ug"){
-				$key = '"messages_ug.'.$key.'"';
-				return "<?php echo Lang::get($key); ?>";
-			} elseif (Session::get("db_type") == "masters") {
-				$key = '"messages_masters.'.$key.'"';
-				return "<?php echo Lang::get($key); ?>";
-			}
-
-			if(config('app.debug')){
-				return "#{INVALID USE OF SESSION STRING}";
-			}
+			$key = '"messages_'.Session::get("db_type").'.'.$key.'"';
+			return "<?php echo Lang::get($key); ?>";
 		});
 	}
 

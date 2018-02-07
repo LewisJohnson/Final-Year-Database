@@ -2,9 +2,18 @@
 $brand-primary: #1D4289;
 $accent: darken($brand-primary, 6%);
 $accent-info: #8eb4cb;
-$accent-success: #2ab27b;
-$accent-warning: #cbb956;
-$accent-danger: #bf5329;
+
+$accent-success-background: #2ab27b;
+$accent-success-text-color: white;
+
+$accent-warning-background: #cbb956;
+$accent-warning-text-color: white;
+
+$accent-danger-background: #d9534f;
+$accent-danger-text-color: white;
+
+$accent-tip-background: #64B5F6;
+$accent-tip-text-color: white;
 
 /* TYPOGRAPHY */
 $font-family-sans-serif: "Roboto", sans-serif;

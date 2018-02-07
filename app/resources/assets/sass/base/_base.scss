@@ -29,3 +29,32 @@ code{
 	@include transition--medium();
 	padding: 3rem 0;
 }
+
+.flex{
+	display: flex;
+}
+
+.flex--row{
+	flex-direction: row;
+}
+
+.flex--col{
+	flex-direction: column;
+}
+
+.cookie-banner{
+	padding: 1rem;
+	background: black;
+
+	a, button{
+		color: white;
+	}
+
+	a{
+		padding-right: 1rem;
+	}
+
+	button{
+		margin-left: auto;
+	}
+}

@@ -21,7 +21,6 @@ class Project extends Migration
 			$table->string('author_programme', 255);
 			$table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
 			$table->unsignedBigInteger('supervisor_id')->nullable(true);
-			$table->unsignedBigInteger('marker_id')->nullable(true);
 			$table->unsignedBigInteger('student_id')->nullable(true);
 			$table->boolean('student_proposed_project')->default(0);
 			$table->timestampsTz();
@@ -37,7 +36,6 @@ class Project extends Migration
 			$table->string('author_programme', 255);
 			$table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
 			$table->unsignedBigInteger('supervisor_id')->nullable(true);
-			$table->unsignedBigInteger('marker_id')->nullable(true);
 			$table->unsignedBigInteger('student_id')->nullable(true);
 			$table->boolean('student_proposed_project')->default(0);
 			$table->timestampsTz();

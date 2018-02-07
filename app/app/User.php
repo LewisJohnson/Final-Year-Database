@@ -29,6 +29,10 @@ class User extends Authenticatable{
 		'password', 'remember_token',
 	];
 
+	public function isProjectAdmin(){
+		return $this->isUgAdmin() || $this->isMastersAdmin();
+	}
+
 	public function isUgAdmin(){
 		return in_array("admin_ug", $this->getPrivileges());
 	}
@@ -51,15 +55,38 @@ class User extends Authenticatable{
 
 	public function getPrettyPrivilegesString(){
 		$returnString = "";
-		$priv = $this->getPrivileges();
-		$lastElement = end($priv);
+		$privileges = $this->getPrivileges();
+		$count = count($privileges);
+		$indx = 1;
 
-		foreach ($priv as $key => $value) {
-			$returnString.=$value;
+		// This is because of how privileges are stored in the db
+		// 1. administrator_system
+		// 2. administrator system
+		// 3. ['administrator', 'system']
+		// 4. ['system', 'administrator']
+		// 5. system administrator
+		foreach ($privileges as $key => $value) {
+			$value = str_replace('admin', 'administrator', $value);
+			$value = str_replace('_ug', '_undergraduate', $value);
+			$value = str_replace('_', ' ', $value);
 
-			if($value != $lastElement){
-				$returnString.=", ";
+			$words = explode(' ', $value);
+			$words = array_reverse($words);
+			$words = implode(" ",$words);
+
+			if($count == 1){
+				$returnString.=$words;
+				break;
 			}
+
+			if($indx != $count){
+				$returnString.=$words;
+				$returnString.=", ";
+			} else {
+				$returnString.="and ";
+				$returnString.=$words;
+			}
+			$indx++;
 		}
 
 		return $returnString;
@@ -100,7 +127,7 @@ class User extends Authenticatable{
 	}
 
 	public function getFullName(){
-		if($this->isSupervisorOrSuperior()){
+		if($this->isSupervisor()){
 			$format = '%s %s %s';
 			return sprintf($format, $this->supervisor->title, $this->first_name, $this->last_name);
 		} else {

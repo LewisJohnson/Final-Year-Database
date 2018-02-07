@@ -15,11 +15,8 @@ class SystemAdmin
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-
 		if (Auth::check() && Auth::user()->isSystemAdmin()){
-			if(Session::get('auth_level') == "admin" && Session::get('auth_type') == "system"){
 				return $next($request);
-			}
 		}
 
 		abort(404);

@@ -29,7 +29,7 @@ class Project extends Model{
 
 	public function isOwnedByUser(){
 		if(Auth::user()){
-			if(Auth::user()->isSupervisorOrSuperior()){
+			if(Auth::user()->isSupervisor()){
 				if($this->student_proposed_project){
 					return false;
 				} else{

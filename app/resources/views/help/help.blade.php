@@ -27,7 +27,7 @@
 			@endfor
 
 			@if(Auth::check())
-				@if(Auth::user()->isSupervisorOrSuperior())
+				@if(Auth::user()->isSupervisor())
 					<li class="tab" data-tab-name="@lang('help.help_tab_supervisor')">
 						<button class="button open-tab">@lang("help.help_tab_supervisor")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
@@ -37,7 +37,7 @@
 					</li>
 				@endif
 
-				@if(Auth::user()->isAdmin())
+				@if(Auth::user()->isProjectAdmin())
 					<li class="tab" data-tab-name="@lang('help.help_tab_admin')">
 						<button class="button open-tab">@lang("help.help_tab_admin")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">

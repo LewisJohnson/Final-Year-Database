@@ -17,7 +17,7 @@
 	header{
 		padding: 5px 10px;
 
-		.logo{
+		.logo-container{
 			visibility: visible;
 			left: 0px;
 			max-width: 50px;
@@ -28,6 +28,10 @@
 				font-size: 140%;
 			}
 		}
+	}
+
+	.card--half{
+		width: 49%;
 	}
 
 	// Tab

@@ -13,7 +13,7 @@ return [
 	| any other location as required by the application or its packages.
 	|
 	*/
-	'name' => env('APP_NAME'),
+	'name' => env('APP_NAME', 'NAME NOT SET'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'env' => env('APP_ENV'),
+	'env' => env('APP_ENV', 'production'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
 	|
 	*/
 
-	'debug' => env('APP_DEBUG'),
+	'debug' => env('APP_DEBUG', false),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
 	|
 	*/
 
-	'url' => env('APP_URL'),
+	'url' => env('APP_URL', '/'),
 
 	/*
 	|--------------------------------------------------------------------------

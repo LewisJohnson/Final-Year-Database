@@ -79,7 +79,7 @@
 		@if($project->isOwnedByUser())
 			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
-			@if(Auth::user()->isSupervisorOrSuperior())
+			@if(Auth::user()->isSupervisor())
 				<a class="button button--raised" href="{{ action('ProjectController@transactions', $project->id) }}">Browse Transactions</a>
 			@endif
 		@endif

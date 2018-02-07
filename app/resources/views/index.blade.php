@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-800">
+<div class="centered width-1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
-		<p>Your privileges are {{ $user->getPrettyPrivilegesString() }}</p>
+		<p>Your privileges are {{ $user->getPrettyPrivilegesString() }}.</p>
 
 		@if(Auth::user()->isSupervisor())
 			<div class="card card--margin-vertical">
@@ -24,27 +24,53 @@
 			</div>
 		@endif
 
-		@if(Auth::user()->isSupervisor())
 		<div class="card-container card--margin-vertical">
-			<div class="card card--half">
-				<h2>Undergraduate Supervisor</h2>
-				<p>Project Load: {{ Auth::user()->supervisor->project_load_ug }}</p>
-				@include('svg.file')
-				<p>Accept students: {{ Auth::user()->supervisor->take_students_ug ? "Yes" : "No" }}</p>
-				@include('svg.school')
-				<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Undergraduate Supervisor Hub</a>
-			</div>
+			@if(Auth::user()->isSupervisor())
+				<div class="card card--half">
+					<h2>Undergraduate Supervisor</h2>
+					<p>Project Load: {{ Auth::user()->supervisor->project_load_ug }}</p>
+					<p>Accepted students: {{ count(Auth::user()->supervisor->getAcceptedStudents("ug")) }} </p>
+					<p>Accept students: {{ Auth::user()->supervisor->take_students_ug ? "Yes" : "No" }}</p>
+					<p>Accept emails: {{ Auth::user()->supervisor->accept_email_ug ? "Yes" : "No" }}</p>
+					<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Undergraduate Supervisor Hub</a>
+				</div>
 
-			<div class="card card--half">
-				<h2>Masters Supervisor</h2>
-				<p>Project Load: {{ Auth::user()->supervisor->project_load_masters }}</p>
-				<p>Accept students: {{ Auth::user()->supervisor->project_load_masters ? "Yes" : "No" }}</p>
-				<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Masters Supervisor Hub</a>
-			</div>
+				<div class="card card--half">
+					<h2>Masters Supervisor</h2>
+					<p>Project Load: {{ Auth::user()->supervisor->project_load_masters }}</p>
+					<p>Accepted students: {{ count(Auth::user()->supervisor->getAcceptedStudents("masters")) }} </p>
+					<p>Accept students: {{ Auth::user()->supervisor->project_load_masters ? "Yes" : "No" }}</p>
+					<p>Accept emails: {{ Auth::user()->supervisor->accept_email_masters ? "Yes" : "No" }}</p>
+					<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Masters Supervisor Hub</a>
+				</div>
+			@endif
+
+			@if(Auth::user()->isUgAdmin())
+				<div class="card card--half">
+					<h2>Undergraduate Administrator</h2>
+					<p>{{ Auth::user()->first_name }}, you are an undergraduate administrator. Take a look at the hub to see what actions you can perform.</p>
+					<a class="button button--raised" href="{{ action('AdminController@index') }}">Undergraduate Administrator Hub</a>
+				</div>
+			@endif
+
+			@if(Auth::user()->isMastersAdmin())
+				<div class="card card--half">
+					<h2>Masters Administrator</h2>
+					<p>{{ Auth::user()->first_name }}, you are a masters administrator. Take a look at the hub to see what actions you can perform.</p>
+					<a class="button button--raised" href="{{ action('AdminController@index') }}">Masters Administrator Hub</a>
+				</div>
+			@endif
+
+			@if(Auth::user()->isSystemAdmin())
+				<div class="card card--half">
+					<h2>System Administrator</h2>
+					<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see what actions you can perform.</p>
+					<a class="button button--raised" href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
+				</div>
+			@endif
 		</div>
-		@endif
 
-{{-- 		@if(Auth::user()->isStudent())
+		@if(Auth::user()->isStudent())
 			<div class="card card--margin-vertical">
 				<h2>Your Project</h2>
 				<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
@@ -87,8 +113,7 @@
 					</div>
 				</form>
 			</div>
-			@endif
-		@endif --}}
+		@endif
 	@else
 		<h1>Welcome.</h1>
 		<div class="card card--margin-vertical">

@@ -11,11 +11,12 @@ use Illuminate\Http\Request;
 | language lines according to your application's requirements.
 |
 | 1. Web Routes (Accessible by any request)
-| 2. Admin Routes (UG and Msc Admin)
-| 3. Supervisor And Admin Routes
-| 4. Supervisor Routes
-| 5. Student Routes (UG and Msc Students)
-| 6. Authenticated User Routes (Anyone who is logged in)
+| 2. System Admin Routes
+| 3. Project Admin Routes
+| 4. All admins and supervisor Routes
+| 5. Supervisor Routes
+| 6. Student Routes (UG and Msc Students)
+| 7. Authenticated User Routes (Anyone who is logged in)
 |
 */
 
@@ -33,23 +34,31 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('home', 'HomeController@index');
 	Route::get('/', 'HomeController@index');
 
+	// Help Routes
 	Route::get('information', 'HomeController@information');
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
+
+	// Cookie
+	Route::post('seen-cookie-banner', 'HomeController@seenCookieBanner');
+
+	// Teapot
+	Route::get('teapot', function(){ abort(418); });
 });
 
 /* ===============
-   2. ADMIN ROUTES
+   2. SYSTEM ADMIN ROUTES
    =============== */
 Route::group(['middleware' => ['admin.system']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
 	Route::post('admin/dashboard/system', 'AdminController@configure');
+	Route::get('system/user-agent', 'AdminController@userAgent');
 });
 
 /* ===============
-   2. ADMIN ROUTES
+   3. PROJECT ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['admin']], function() {
+Route::group(['middleware' => ['admin.project']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
@@ -70,8 +79,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('admin/transactions', 'TransactionController@index');
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
-	Route::get('system/user-agent', 'AdminController@userAgent');
-
 	Route::post('users', 'UserController@store');
 	Route::delete('users', 'UserController@delete');
 	Route::get('users/create', 'UserController@create');
@@ -91,14 +98,16 @@ Route::group(['middleware' => ['admin']], function() {
 });
 
 /* ==============================
-   3. SUPERVISOR AND ADMIN ROUTES
+   4. SUPERVISOR AND ADMIN ROUTES
    ============================== */
-Route::group(['middleware' => ['supervisorOrSuperior']], function() {
+Route::group(['middleware' => ['supervisor', 'admin.project', 'admin.system']], function() {
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
+
+	Route::post('database-type', 'HomeController@setDatabaseType');
 });
 
 /* =================
@@ -117,7 +126,7 @@ Route::group(['middleware' => ['supervisor']], function() {
 });
 
 /* =================
-   5. STUDENT ROUTES
+   6. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['student']], function() {
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
@@ -131,7 +140,7 @@ Route::group(['middleware' => ['student']], function() {
 
 
 /* ============================
-   6. AUTHENTICATED USER ROUTES
+   7. AUTHENTICATED USER ROUTES
    ============================ */
 Route::group(['middleware' => ['auth']], function() {
 	// Project
@@ -163,19 +172,4 @@ Route::group(['middleware' => ['auth']], function() {
 
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
-<<<<<<< HEAD
-=======
-
-	// Change Authentication
-	Route::post('authentication-change', 'Auth\AuthController@change');
-	Route::get('showChangeAuthDialog', function (){
-		if(Auth::user()->isStudent()){
-			Session::put('auth_type', Auth::user()->studentType()); //ug, masters, department, system
-			Session::put('db_type', Auth::user()->studentType());
-			Session::put('auth_level', 'student');
-		}
-
-		return Auth::user()->isSupervisorOrSuperior() ? "true" : "false";
-	});
->>>>>>> origin/master
 });

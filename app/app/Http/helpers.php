@@ -17,7 +17,7 @@ if (! function_exists('config_json')) {
 
 			data_set($config, $key, $value);
 
-			Storage::disk('local')->put(config("app.config_dir"), json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
+			Storage::disk('local')->put(config("app.config_dir"), json_encode($config, JSON_PRETTY_PRINT ));
 			return;
 		}
 	}

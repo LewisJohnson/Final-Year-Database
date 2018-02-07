@@ -35,7 +35,6 @@ button{
 	@include transition--medium-cb();
 }
 
-
 .form-field {
 	margin-bottom: 1.2rem;
 
@@ -282,24 +281,38 @@ button{
 }
 
 .button--danger{
-	color: $accent-danger;
+	background: $accent-danger-background;
+	color: $accent-danger-text-color;
 
 	svg{
-		fill: $accent-danger !important;
+		fill: $accent-danger-text-color !important;
+	}
+
+	&:hover{
+		background: saturate($accent-danger-background, 20%);
 	}
 }
 
 .button--success{
-	color: $accent-success;
+	background: $accent-success-background;
+	color: $accent-success-text-color;
 
-		svg{
-		fill: $accent-success !important;
+	svg{
+		fill: $accent-success-text-color !important;
+	}
+
+	&:hover{
+		background: lighten(saturate($accent-success-background, 20%), 10%);
 	}
 }
 
 .button--accent{
 	color: white;
 	background: $accent;
+
+	&:hover{
+		background: lighten(saturate($accent, 20%), 10%);
+	}
 }
 
 .button--dark{

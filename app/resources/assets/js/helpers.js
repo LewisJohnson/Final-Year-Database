@@ -156,7 +156,7 @@ function repopulateCheckboxes(){
 	if (typeof(Storage) !== "undefined") {
 		// Check session storage first
 		var checkboxValues = JSON.parse(sessionStorage.getItem('rwc-checkbox'));
-	} 
+	}
 
 	if(checkboxValues == null){
 		// Fallback to see if cookie is set
@@ -192,24 +192,46 @@ $(function() {
 		}, config.scrollToTopDuration);
 	});
 
+	// Student home page project preview
 	$("body").on("click", ".show-more",  function(e) {
 		$(this).hide();
 		$('.project').addClass('expand');
 	});
 
+	// Toggle label flips toggle
 	$("body").on("click", ".switch-label.switch-label--toggle",  function(e) {
 		var id = "#" + $(this).attr('for');
 		$(id).click();
 	});
 
+
+	// Checkbox form toggle
 	$("body").on("click", ".form-field--toggle",  function(e) {
 		if($(e.target).hasClass("toggle") || $(e.target).parent().hasClass("toggle")){
 			return;
 		}
-		
+
 		$(this).find('input:checkbox').click();
 	});
-	
+
+	// Cookie Banner
+	$(".cookie-banner").on("click", "button",  function(e) {
+		$.ajax({method: 'POST', url: '/seen-cookie-banner'});
+		$(this).parent().hide(config.mediumAnimation);
+	});
+
+	$(".db-type-form").on("submit",  function(e) {
+		$.ajax({
+				method: 'POST',
+				url: $(this).prop('action'),
+				data: $(this).serialize()
+
+		}).done(function(){
+			location.reload();
+		});
+	});
+
+
 	$(".boolean-checkbox").each(function() {
 		$(this).parent().parent().after('<input type="hidden" name="' + $(this).attr("name") + '" value="' + $(this).is(':checked') +'" />');
 	});

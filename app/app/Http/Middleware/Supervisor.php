@@ -14,24 +14,11 @@ class Supervisor{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (Auth::check() && Auth::user()->isSupervisorOrSuperior()){
-			if(Session::get('auth_type') === "system"){
-				abort(403, 'Forbidden action. Change your authentication before accessing this page.');
-			}
-
-			if(config_json('system.authorisation_access.value') === "strict" && Session::get('auth_level') != "supervisor"){
-				abort(403, 'Forbidden action. Change your authentication before accessing this page.');
-			}
-
-			if(config_json('system.authorisation_access.value') === "warn" && Session::get('auth_level') != "supervisor"){
-				session()->flash('message', 'Your access level is currently set to administrator. Change authentication to supervisor to remove this warning.');
-				session()->flash('message_type', 'warning');
-			}
-
+		if (Auth::check() && Auth::user()->isSupervisor()){
 			return $next($request);
 		}
-		
-		// We don't need students knowing the route exists 
+
+		// We don't need students knowing the route exists
 		abort(404);
 	}
 }

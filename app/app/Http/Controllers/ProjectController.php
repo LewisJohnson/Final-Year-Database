@@ -69,7 +69,7 @@ class ProjectController extends Controller{
 		return view('projects.index')
 			->with('projects', $projects->paginate($this->paginationCount))
 			->with('view', 'index');
-		
+
 	}
 
 	/**
@@ -91,7 +91,7 @@ class ProjectController extends Controller{
 
 		if($project->student_proposed_project){
 			$view = "StudentProject";
-			if($project->student->share_project || Auth::user()->isSupervisorOrSuperior()){
+			if($project->student->share_project || Auth::user()->isSupervisor()){
 				$student_name = $project->student->user->getFullName();
 			}
 		}
@@ -407,7 +407,7 @@ class ProjectController extends Controller{
 		} elseif(Session::get("db_type") == "masters") {
 			$topic = TopicMasters::findOrFail($id);
 		}
-		
+
 		return view('projects.index')
 			->with('projects', $topic->projects->where('status', 'on-offer'))
 			->with('topic', $topic)
@@ -455,7 +455,7 @@ class ProjectController extends Controller{
 	}
 
 	public function search(Request $request) {
-		
+
 		/* SELECT CONDITIONS
 			Select if supervisor take_students is true
 			Select if on-offer
@@ -475,7 +475,7 @@ class ProjectController extends Controller{
 			return redirect('/projects');
 		}
 
-		foreach ($filters as $selected) {		
+		foreach ($filters as $selected) {
 			if ($selected !== end($filters)){
 				$selectedFilters .= $selected;
 				$selectedFilters .= ", ";

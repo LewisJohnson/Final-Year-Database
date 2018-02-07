@@ -17,10 +17,4 @@
 			<p>Change Global Parameters</p>
 		</a>
 	</li>
-	<li>
-		<a class="icon" href="/system/user-agent">
-			@include('svg.FILE')
-			<p>User Agent Strings</p>
-		</a>
-	</li>
 </ul>

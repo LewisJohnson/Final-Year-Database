@@ -1,4 +1,4 @@
-<div class="section @if (count(Auth::user()->supervisor->getAcceptedStudents()) || count(Auth::user()->supervisor->getProjectOffers()))section--full-width @endif shadow-2dp">
+<div class="section section--full-width shadow-2dp">
 	<div class="header">
 		@include('svg.check-circle')
 		<h2>Accepted Students</h2>
