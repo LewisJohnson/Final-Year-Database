@@ -62,21 +62,33 @@
 
 	<div class="form-field">
 		<label for="access_type" >Access Type</label>
-		<select id="create-form-access-select" size="4" class="vertical-select" name="access_type" name="access_type">
-			<option id="student-option" selected="selected" value="student">Student</option>
+		<select id="create-form-access-select" size="8" class="vertical-select" name="access_type" required>
+
+			<option value="staff">Guest</option>
 			<option value="staff">Staff</option>
 			<option id="supervisor-option" value="supervisor">Supervisor</option>
-			<option id="admin-option" value="admin">Administrator</option>
+
+			@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
+				<option value="admin_system">Masters administrator</option>
+				<option class="new-user-student" value="student">Masters Student</option>
+			@endif
+
+			@if(Auth::user()->isSystemAdmin() || Auth::user()->isUgAdmin())
+				<option value="admin_system">Undergraduate administrator</option>
+				<option class="new-user-student" value="student">Undergraduate Student</option>
+			@endif
+
+			@if(Auth::user()->isSystemAdmin())
+				<option value="admin_system">System administrator</option>
+			@endif
 		</select>
 	</div>
 
 	{{-- STUDENT FORM --}}
 	<div id="student-form">
-		@if(Session::get('db_type') == 'ug')
-		<p>You are creating an undergraduate student.</p>
-		@elseif(Session::get('db_type') == 'masters')
-		<p>You are creating a masters student.</p>
-		@endif
+
+		<p>You are creating a @lang_sess("full_name") student.</p>
+
 		<div class="form-field">
 			<label for="programme" >Programme</label>
 			<input id="programme" type="text" name="programme">
@@ -109,11 +121,6 @@
 			<label for="take_students" >Take Students</label>
 			<input id="take_students" type="checkbox" name="take_students">
 		</div>
-	</div>
-
-	{{-- ADMIN FORM --}}
-	<div id="admin-form">
-		<h2>ARE YOU SURE YOU WANT TO CREATE ANOTHER ADMINISTRATOR?</h2>
 	</div>
 
 	<div class="form-field">

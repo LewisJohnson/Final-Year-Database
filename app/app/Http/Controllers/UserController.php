@@ -12,8 +12,8 @@ use Session;
 
 class UserController extends Controller{
 
-	public function __construct(){ 
-		$this->middleware('auth'); 
+	public function __construct(){
+		$this->middleware('auth');
 	}
 
 	/**
@@ -83,8 +83,6 @@ class UserController extends Controller{
 		return view('users.show', compact('user'));
 	}
 
-
-
 	public function showEdit(User $user){
 		if(Session::get("db_type") == "ug"){
 			$students = StudentUg::all();
@@ -131,10 +129,10 @@ class UserController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update($request){
+	public function update($request, $id){
 		dd($request);
 		// todo: add form validation
-		$result = DB::Transaction(function($id) use ($id){
+		$result = DB::Transaction(function() use ($id){
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail($id);
 				$transaction = new TransactionUg;

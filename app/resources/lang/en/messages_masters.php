@@ -21,6 +21,8 @@ return [
 	'select_supervisor_arragments' => 'Select a supervisor to amend their masters arrangements.',
 	'admin_hub_title' => 'Masters Administrator Hub',
 	'supervisor_hub_title' => 'Masters Supervisor Hub',
+	'full_name' => 'masters',
+	'abbreviated_name' => 'msc',
 
 	/* 2. HOMEPAGE */
 	'homepage_introduction_header' => 'Overview',

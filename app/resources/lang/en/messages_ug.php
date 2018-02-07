@@ -21,6 +21,8 @@ return [
 	'select_supervisor_arragments' => 'Select a supervisor to amend their undergraduate arrangements.',
 	'admin_hub_title' => 'Undergraduate Administrator Hub',
 	'supervisor_hub_title' => 'Undergraduate Supervisor Hub',
+	'full_name' => 'undergraduate',
+	'abbreviated_name' => 'ug',
 
 	/* 2. HOMEPAGE */
 	'homepage_introduction_header' => 'Welcome to the home of Final Year Projects in Informatics',

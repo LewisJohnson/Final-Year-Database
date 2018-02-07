@@ -740,6 +740,12 @@
 			}
 		});
 
+		$(window).on('resize', function(e) {
+			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
+				DotMenu.prototype.positionMenu.bind(dotMenu)();
+			}
+		});
+
 		$(document).on('click', function(e) {
 			var target = $(e.target);
 			if(!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
@@ -987,12 +993,11 @@
 
 	// NEW USER
 	// put this stuff in an array
-	$('#admin-form').hide();
 	$('#supervisor-form').hide();
 	$('#student-form').show();
 
 	$('#create-form-access-select').on('change', function(){
-		if($('#student-option').is(":selected")) {
+		if($('.new-user-student').is(":selected")) {
 			$('#student-form').show();
 		} else {
 			$('#student-form').hide();
@@ -1001,11 +1006,6 @@
 			$('#supervisor-form').show();
 		} else {
 			$('#supervisor-form').hide();
-		}
-		if($('#admin-option').is(":selected")) {
-			$('#admin-form').show();
-		} else {
-			$('#admin-form').hide();
 		}
 	});
 

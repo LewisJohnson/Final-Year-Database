@@ -22,7 +22,9 @@ class AppServiceProvider extends ServiceProvider
 		View::share('user', Auth::user());
 
 		Blade::directive('lang_sess', function($key) {
-			$key = trim($key, '"');
+			$key = str_replace('"', '',$key);
+			$key = str_replace('\'', '',$key);
+
 			$key = '"messages_'.Session::get("db_type").'.'.$key.'"';
 			return "<?php echo Lang::get($key); ?>";
 		});

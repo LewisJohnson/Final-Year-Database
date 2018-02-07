@@ -50,7 +50,6 @@ nav.desktop{
 			display: block;
 			cursor: pointer;
 			min-width: 100%;
-
 			> .dropdown-content{
 				min-height: 100%;
 				height: auto;
@@ -77,7 +76,6 @@ nav.desktop{
 .dropdown{
 	overflow: hidden;
 	display: inline-block;
-
 	a, svg {
 		vertical-align: middle;
 	}
@@ -110,6 +108,10 @@ nav.desktop{
 				background: $accent;
 				color: white;
 			}
+		}
+
+		> div{
+			padding: 6.2px 16px;
 		}
 	}
 }
