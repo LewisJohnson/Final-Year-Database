@@ -106,12 +106,7 @@ Route::group(['middleware' => ['admin.project']], function() {
    ================================== */
 
 Route::group(['middleware' => ['admin.project', 'admin.system']], function() {
-	Route::get('users', 'UserController@index');
-	Route::get('users/create', 'UserController@create');
-	Route::post('users', 'UserController@store'); 
-	Route::get('users/{user}/edit', 'UserController@edit');
-	Route::patch('users/{user}', 'UserController@update');
-	Route::delete('users/{user}', 'UserController@destroy');
+	Route::resource('users', 'UserController');
 });
 
 /* ==============================

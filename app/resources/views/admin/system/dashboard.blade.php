@@ -79,6 +79,7 @@
 						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
 							{{ csrf_field() }}
 
+							<label for="names">Names</label>
 							<label class="description">{{ config_json("display.names.description") }}</label>
 							<input type="hidden" name="names-json" value="display.names">
 							<select name="names" id="names">
