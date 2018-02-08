@@ -47,11 +47,15 @@ class HomeController extends Controller{
 	}
 
 	public function setDatabaseType(Request $request){
-		if($request->db_type === "ug" || $request->db_type === "masters"){
-			Session::put('db_type', $request->db_type);
+		if($request->db_type == "ug"){
+			Session::put("db_type", "ug");
 			return redirect()->action('HomeController@index');
 		}
 
+		if($request->db_type == "masters"){
+			Session::put("db_type", "masters");
+			return redirect()->action('HomeController@index');
+		}
 		return abort(400, "Invalid Request.");
 	}
 }

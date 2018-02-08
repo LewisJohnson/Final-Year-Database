@@ -996,18 +996,18 @@
 	$('#supervisor-form').hide();
 	$('#student-form').show();
 
-	$('#create-form-access-select').on('change', function(){
-		if($('.new-user-student').is(":selected")) {
-			$('#student-form').show();
-		} else {
-			$('#student-form').hide();
-		}
-		if($('#supervisor-option').is(":selected")) {
-			$('#supervisor-form').show();
-		} else {
-			$('#supervisor-form').hide();
-		}
-	});
+	// $('#create-form-access-select').on('change', function(){
+	// 	if($('.new-user-student').is(":selected")) {
+	// 		$('#student-form').show();
+	// 	} else {
+	// 		$('#student-form').hide();
+	// 	}
+	// 	if($('#supervisor-option').is(":selected")) {
+	// 		$('#supervisor-form').show();
+	// 	} else {
+	// 		$('#supervisor-form').hide();
+	// 	}
+	// });
 
 	$(".favourite-container").on('click', function() {
 		var svgContainer = $(this);

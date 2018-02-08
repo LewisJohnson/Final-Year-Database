@@ -97,14 +97,14 @@ button{
 	cursor: pointer;
 
 	label {
+		display: inline;
+		width: 100%;
 		cursor: pointer;
 		color: #757575;
 		font-size: 16px;
-		display: inline;
 		margin-bottom: 0;
-		width: 100%;
-		&:before,
-		&:after {
+
+		&:before, &:after {
 			content: "";
 			position: absolute;
 			left: 0;
@@ -349,6 +349,8 @@ button{
 
 	button {
 		margin: 0 5px;
+		overflow: unset;
+		min-width: auto;
 	}
 }
 
@@ -363,10 +365,6 @@ button{
 	> *{ margin: 10px 0; display: block;}
 	:first-child{ margin-top: 0; }
 	:last-child{ margin-bottom: 0; }
-}
-
-.button-group--strech{
-	> *{ flex: 1; }
 }
 
 .help-block{

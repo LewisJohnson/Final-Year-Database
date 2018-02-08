@@ -5,15 +5,46 @@ use SussexProjects\User;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\Supervisor;
+use SussexProjects\Http\Requests\StoreUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use DB;
-use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller{
 
-	public function __construct(){
-		$this->middleware('auth');
+	public function __construct(){ $this->middleware('auth'); }
+
+	public function index(){
+		if(Session::get("db_type") == "ug"){
+			$students = StudentUg::all();
+
+		} elseif(Session::get("db_type") == "masters") {
+			$students = StudentMasters::all();
+		}
+
+		$supervisors = Supervisor::all();
+		$staffUsers = User::Where('access_type', 'staff')->get();
+
+		$students = $students->sortBy(function($student, $key) {
+			return $student->user->last_name;
+		});
+
+		$supervisors = $supervisors->sortBy(function($supervisor, $key) {
+			return $supervisor->user->last_name;
+		});
+
+		$staffUsers = $staffUsers->sortBy(function($staff, $key) {
+			return $staff->last_name;
+		});
+
+		return view('users.edit-users')
+			->with('supervisors', $supervisors)
+			->with('staff', $staffUsers)
+			->with('students', $students);
 	}
 
 	/**
@@ -28,16 +59,22 @@ class UserController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  StoreUser  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request){
+	public function store(StoreUser $request){
+		// todo: add form validation
+
+		if(!$this->checkPrivilegeConditions($request->privileges)){
+			return;
+		}
+
+
 		$result = DB::transaction(function() use ($request) {
 			$user = User::create([
 				'username' => $request['username'],
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
-				'access_type' => $request['access_type'],
 				'email' => $request['email'],
 				'password' => bcrypt($request['password']),
 			]);
@@ -83,42 +120,13 @@ class UserController extends Controller{
 		return view('users.show', compact('user'));
 	}
 
-	public function showEdit(User $user){
-		if(Session::get("db_type") == "ug"){
-			$students = StudentUg::all();
-
-		} elseif(Session::get("db_type") == "masters") {
-			$students = StudentMasters::all();
-		}
-
-		$supervisors = Supervisor::all();
-		$staffUsers = User::Where('access_type', 'staff')->get();
-
-		$students = $students->sortBy(function($student, $key) {
-			return $student->user->last_name;
-		});
-
-		$supervisors = $supervisors->sortBy(function($supervisor, $key) {
-			return $supervisor->user->last_name;
-		});
-
-		$staffUsers = $staffUsers->sortBy(function($staff, $key) {
-			return $staff->last_name;
-		});
-
-		return view('users.edit-users')
-			->with('supervisors', $supervisors)
-			->with('staff', $staffUsers)
-			->with('students', $students);
-	}
-
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  \SussexProjects\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id){
+	public function edit(User $user){
 		$editUser = User::findOrFail($id);
 		return view('users.edit')->with('editUser', $editUser);
 	}
@@ -131,29 +139,71 @@ class UserController extends Controller{
 	 */
 	public function update($request, $id){
 		dd($request);
-		// todo: add form validation
-		$result = DB::Transaction(function() use ($id){
-			if(Session::get("db_type") == "ug"){
-				$project = ProjectUg::findOrFail($id);
-				$transaction = new TransactionUg;
-			} elseif(Session::get("db_type") == "masters") {
-				$project = ProjectMasters::findOrFail($id);
-				$transaction = new TransactionMasters;
-			}
-			$project->update(request(['title', 'description', 'skills', 'status']));
-			$transaction->fill(array(
-				'transaction_type' =>'updated',
-				'project_id' => $project->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
-			$transaction->save();
-			session()->flash('message', '"'.$project->title.'" has been updated.');
-			session()->flash('message_type', 'success');
-			return redirect()->action('ProjectController@show', $project);
-		});
 
 		return $result;
+	}
+
+	public static function checkPrivilegeConditions($privileges){
+		$amountOfPrivileges = count($privileges);
+		$amountOfAdminPrivileges = 0;
+		$amountOfStudentPrivileges = 0;
+
+		if(in_array("admin_ug", $privileges)){ $amountOfAdminPrivileges++; }
+		if(in_array("admin_masters", $privileges)){ $amountOfAdminPrivileges++; }
+		if(in_array("admin_system", $privileges)){ $amountOfAdminPrivileges++; }
+
+		if(in_array("student_ug", $privileges)){ $amountOfStudentPrivileges++; }
+		if(in_array("student_masters", $privileges)){ $amountOfStudentPrivileges++; }
+
+		if(in_array("guest", $privileges) && $amountOfPrivileges > 1){
+			// Guest is a unique privilege
+			$error = ValidationException::withMessages([ "privileges" => ["Guest is a unique privilege."]]);
+			throw $error;
+		}
+
+		if(in_array("staff", $privileges) && $amountOfPrivileges > 1){
+			// Staff is a unique privilege
+			$error = ValidationException::withMessages([ "privileges" => ["Staff is a unique privilege."]]);
+			throw $error;
+		}
+
+		if($amountOfStudentPrivileges > 0 && $amountOfAdminPrivileges > 0){
+			// User can't be student and an admin
+			$error = ValidationException::withMessages([ "privileges" => ["Privileges student and administrator are not compatible."]]);
+			throw $error;
+		}
+
+		if($amountOfStudentPrivileges > 0 && in_array("supervisor", $privileges)){
+			// User can't be student and a supervisor
+			$error = ValidationException::withMessages([ "privileges" => ["Privileges student and supervisor are not compatible."]]);
+			throw $error;
+		}
+
+		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isMastersAdmin()){
+			if(in_array("admin_masters", $privileges) || in_array("student_masters", $privileges)){
+				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
+				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a masters administrator or student."]]);
+				throw $error;
+			}
+		}
+
+		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isUgAdmin()){
+			if(in_array("admin_ug", $privileges) || in_array("student_ug", $privileges)){
+				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
+				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create an undergraduate administrator or student"]]);
+				throw $error;
+			}
+		}
+
+		if(!Auth::user()->isSystemAdmin()){
+			if(in_array("admin_system", $privileges)){
+				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
+				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a system administrator."]]);
+				throw $error;
+			}
+		}
+
+		return "";
 	}
 
 	/**

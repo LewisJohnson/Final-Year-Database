@@ -42,6 +42,14 @@ code{
 	flex-direction: column;
 }
 
+.flex--strech{
+	> *{ flex: 1; }
+}
+
+.flex--wrap{
+	flex-wrap: wrap;
+}
+
 .cookie-banner{
 	padding: 1rem;
 	background: black;

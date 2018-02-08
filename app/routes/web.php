@@ -11,13 +11,24 @@ use Illuminate\Http\Request;
 | language lines according to your application's requirements.
 |
 | 1. Web Routes (Accessible by any request)
-| 2. System Admin Routes
-| 3. Project Admin Routes
-| 4. All admins and supervisor Routes
-| 5. Supervisor Routes
-| 6. Student Routes (UG and Msc Students)
-| 7. Authenticated User Routes (Anyone who is logged in)
+| 2. System admin routes
+| 3. Project admin routes
+| 4. Project and system admin routes
+| 5. Project admin and system admin and supervisor routes
+| 6. Supervisor routes
+| 7. Student routes
+| 8. Authenticated User routes (Anyone who is logged in)
 |
+| Please follow the CRUD convention 
+| Verb		URI						Action		Route Name
+| -------------------------------------------------------------
+| GET		/photos					index		photos.index
+| GET		/photos/create			create		photos.create
+| POST		/photos					store		photos.store
+| GET		/photos/{photo}			show		photos.show
+| GET		/photos/{photo}/edit	edit		photos.edit
+| PUT/PATCH	/photos/{photo}			update		photos.update
+| DELETE	/photos/{photo}			destroy		photos.destroy
 */
 
 /* =============
@@ -79,13 +90,6 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::get('admin/transactions', 'TransactionController@index');
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
-	Route::post('users', 'UserController@store');
-	Route::delete('users', 'UserController@delete');
-	Route::get('users/create', 'UserController@create');
-	Route::get('users/edit', 'UserController@showEdit');
-	Route::get('users/{id}/edit', 'UserController@edit');
-	Route::patch('users/{id}/edit', 'UserController@update');
-
 	// Topic routes
 	Route::post('topics', 'TopicController@store');
 	Route::patch('topics', 'TopicController@update');
@@ -97,8 +101,21 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::post('students', 'StudentController@store');
 });
 
+/* ===================================
+   4. PROJECT AND SYSTEM ADMIN ROUTES
+   ================================== */
+
+Route::group(['middleware' => ['admin.project', 'admin.system']], function() {
+	Route::get('users', 'UserController@index');
+	Route::get('users/create', 'UserController@create');
+	Route::post('users', 'UserController@store'); 
+	Route::get('users/{user}/edit', 'UserController@edit');
+	Route::patch('users/{user}', 'UserController@update');
+	Route::delete('users/{user}', 'UserController@destroy');
+});
+
 /* ==============================
-   4. SUPERVISOR AND ADMIN ROUTES
+   5. SUPERVISOR AND ADMIN ROUTES
    ============================== */
 Route::group(['middleware' => ['supervisor', 'admin.project', 'admin.system']], function() {
 	// Project Transaction
@@ -111,7 +128,7 @@ Route::group(['middleware' => ['supervisor', 'admin.project', 'admin.system']], 
 });
 
 /* =================
-   5. SUPERVISOR ROUTES
+   6. SUPERVISOR ROUTES
    ================= */
 Route::group(['middleware' => ['supervisor']], function() {
 
@@ -126,7 +143,7 @@ Route::group(['middleware' => ['supervisor']], function() {
 });
 
 /* =================
-   6. STUDENT ROUTES
+   7. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['student']], function() {
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
@@ -140,7 +157,7 @@ Route::group(['middleware' => ['student']], function() {
 
 
 /* ============================
-   7. AUTHENTICATED USER ROUTES
+   8. AUTHENTICATED USER ROUTES
    ============================ */
 Route::group(['middleware' => ['auth']], function() {
 	// Project

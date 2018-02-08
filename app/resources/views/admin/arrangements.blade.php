@@ -27,7 +27,7 @@
 					@foreach($supervisors as $supervisor)
 						<tr class="pointer" onclick="$('#supervisor-{{ $supervisor->id }}').click();">
 							<td>
-								<div class="checkbox checkbox--row">
+								<div class="checkbox">
 									<input class="checkbox-input" id="supervisor-{{ $supervisor->id }}" type="checkbox" name="supervisor-{{ $supervisor->id }}">
 									<label for="supervisor-{{ $supervisor->id }}"></label>
 								</div>

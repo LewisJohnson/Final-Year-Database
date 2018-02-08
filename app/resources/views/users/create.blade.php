@@ -1,28 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="centered width-800 card">
+<div class="centered width-600 card">
 <h1>Add New User</h1>
 <form class="form form--flex" role="form" method="POST" action="/users">
 	{{ csrf_field() }}
 	<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
 		<label for="username" >Username</label>
-			<input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
-			@if ($errors->has('username'))
-				<span class="help-block">
-					<strong>{{ $errors->first('username') }}</strong>
-				</span>
-			@endif
+		<input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
+
+		@if($errors->has('username'))
+			<span class="help-block">
+				<strong>{{ $errors->first('username') }}</strong>
+			</span>
+		@endif
 	</div>
 
 	<div class="form-field{{ $errors->has('password') ? ' has-error' : '' }}">
 		<label for="password" >Password</label>
-			<input id="password" type="password" class="form-control" name="password" required>
-			@if ($errors->has('password'))
-				<span class="help-block">
-					<strong>{{ $errors->first('password') }}</strong>
-				</span>
-			@endif
+		<input id="password" type="password" class="form-control" name="password" required>
+
+		@if($errors->has('password'))
+			<span class="help-block">
+				<strong>{{ $errors->first('password') }}</strong>
+			</span>
+		@endif
 	</div>
 
 	<div class="form-field">
@@ -32,56 +34,97 @@
 
 	<div class="form-field{{ $errors->has('first_name') ? ' has-error' : '' }}">
 		<label for="first_name" >First Name</label>
-			<input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required autofocus>
-			@if ($errors->has('first_name'))
-				<span class="help-block">
-					<strong>{{ $errors->first('first_name') }}</strong>
-				</span>
-			@endif
+		<input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required>
+
+		@if($errors->has('first_name'))
+			<span class="help-block">
+				<strong>{{ $errors->first('first_name') }}</strong>
+			</span>
+		@endif
 	</div>
 
 	<div class="form-field{{ $errors->has('last_name') ? ' has-error' : '' }}">
 		<label for="last_name" >Last Name</label>
-			<input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required autofocus>
-			@if ($errors->has('last_name'))
-				<span class="help-block">
-					<strong>{{ $errors->first('last_name') }}</strong>
-				</span>
-			@endif
+		<input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
+
+		@if($errors->has('last_name'))
+			<span class="help-block">
+				<strong>{{ $errors->first('last_name') }}</strong>
+			</span>
+		@endif
 	</div>
 
 	<div class="form-field{{ $errors->has('email') ? ' has-error' : '' }}">
 		<label for="email" >E-Mail Address</label>
 		<input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-		@if ($errors->has('email'))
+
+		@if($errors->has('email'))
 			<span class="help-block">
 				<strong>{{ $errors->first('email') }}</strong>
 			</span>
 		@endif
 	</div>
 
-	<div class="form-field">
-		<label for="access_type" >Access Type</label>
-		<select id="create-form-access-select" size="8" class="vertical-select" name="access_type" required>
+	<div class="form-field{{ $errors->has('privileges') ? ' has-error' : '' }}">
+		<label>Privileges</label>
 
-			<option value="staff">Guest</option>
-			<option value="staff">Staff</option>
-			<option id="supervisor-option" value="supervisor">Supervisor</option>
+		@if($errors->has('privileges'))
+			<span class="help-block">
+				<strong>{{ $errors->first('privileges') }}</strong>
+			</span>
+		@endif
 
-			@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
-				<option value="admin_system">Masters administrator</option>
-				<option class="new-user-student" value="student">Masters Student</option>
-			@endif
+		<div>
+			<div class="button-group flex--strech">
+				<div class="checkbox">
+					<input type="checkbox" id="privileges-guest" name="privileges[]" value="guest" class="checkbox-input">
+					<label for="privileges-guest">Guest</label>
+				</div>
+				<div class="checkbox">
+					<input type="checkbox" id="privileges-staff" name="privileges[]" value="staff" class="checkbox-input">
+					<label for="privileges-staff">Staff</label>
+				</div>
+				<div class="checkbox">
+					<input type="checkbox" id="privileges-supervisor" name="privileges[]" value="supervisor" class="checkbox-input">
+					<label for="privileges-supervisor">Supervisor</label>
+				</div>
+			</div>
 
-			@if(Auth::user()->isSystemAdmin() || Auth::user()->isUgAdmin())
-				<option value="admin_system">Undergraduate administrator</option>
-				<option class="new-user-student" value="student">Undergraduate Student</option>
-			@endif
+			<div class="button-group flex--strech">
+				@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-admin-masters" name="privileges[]" value="admin_masters" class="checkbox-input">
+						<label for="privileges-admin-masters">Masters administrator</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-student-masters" name="privileges[]" value="student_masters" class="checkbox-input">
+						<label for="privileges-student-masters">Masters student</label>
+					</div>
+				@endif
+			</div>
 
-			@if(Auth::user()->isSystemAdmin())
-				<option value="admin_system">System administrator</option>
-			@endif
-		</select>
+			<div class="button-group flex--strech">
+				@if(Auth::user()->isSystemAdmin() || Auth::user()->isUgAdmin())
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-admin-ug" name="privileges[]" value="admin_ug" class="checkbox-input">
+						<label for="privileges-admin-ug">Undergraduate administrator</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-student-ug" name="privileges[]" value="student_ug" class="checkbox-input">
+						<label for="privileges-student-ug">Undergraduate student</label>
+					</div>
+				@endif
+			</div>
+
+			<div class="button-group flex--strech">
+				@if(Auth::user()->isSystemAdmin())
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input">
+						<label for="privileges-admin-system">System administrator</label>
+					</div>
+				@endif
+			</div>
+		</div>
 	</div>
 
 	{{-- STUDENT FORM --}}

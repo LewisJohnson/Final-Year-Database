@@ -72,6 +72,28 @@
 					</div>
 				</li>
 
+				<li class="tab" data-tab-name="Display">
+					<button class="button open-tab">Display</button>
+					<div class="content" aria-expanded="false" aria-hidden="true">
+						<h2>Display</h2>
+						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+							{{ csrf_field() }}
+
+							<label class="description">{{ config_json("display.names.description") }}</label>
+							<input type="hidden" name="names-json" value="display.names">
+							<select name="names" id="names">
+								@foreach(config_json("display.names.type") as $type)
+									<option @if($type == config_json("display.names.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
+								@endforeach
+							</select>
+
+							<div class="form-field form-field--flex">
+								<button class="button button--raised button--accent" type="submit">Save</button>
+							</div>
+						</form>
+					</div>
+				</li>
+
 				<li class="tab" data-tab-name="User Agent">
 					<button class="button open-tab">User Agent</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">

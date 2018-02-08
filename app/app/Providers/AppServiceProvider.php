@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
 		Blade::directive('lang_sess', function($key) {
 			$key = str_replace('"', '',$key);
 			$key = str_replace('\'', '',$key);
-
 			$key = '"messages_'.Session::get("db_type").'.'.$key.'"';
 			return "<?php echo Lang::get($key); ?>";
 		});

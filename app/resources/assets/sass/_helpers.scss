@@ -18,7 +18,7 @@
 }
 
 .has-error{
-	input{
+	> div, > input{
 		border: solid 1px rgba(255, 0, 0, 0.40);
 	}
 }
@@ -176,12 +176,15 @@ ul.dot-menu{
 }
 
 .svg-container {
-	display: inline;
+	display: inline-block;
 	margin-right: 6px;
+	max-width: 30px;
+	max-height: 30px;
 	svg{
+		width: 100%;
+		height: 100%;
+		vertical-align: middle;
 		fill: currentColor;
-		width: 30px;
-		height: 30px;
 		transition: 0.18s all cubic-bezier(0.4, 0, 0.54, 1.46);
 	}
 }

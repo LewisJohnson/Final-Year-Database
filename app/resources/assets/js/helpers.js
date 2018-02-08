@@ -222,12 +222,11 @@ $(function() {
 
 	$(".db-type-form").on("submit",  function(e) {
 		$.ajax({
-				method: 'POST',
-				url: $(this).prop('action'),
-				data: $(this).serialize()
-
+			method: 'POST',
+			url: $(this).prop('action'),
+			data: $(this).serialize()
 		}).done(function(){
-			location.reload();
+			location.reload(true);
 		});
 	});
 

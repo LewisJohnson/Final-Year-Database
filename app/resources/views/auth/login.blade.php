@@ -11,7 +11,7 @@
 			<div id="login-username" class="form-field">
 				<label for="username">Username</label>
 				{{-- todo: Remove value="admin_ug" --}}
-				<input value="admin_ug" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+				<input value="lj234" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 			</div>
 
 			<div class="form-field">
