@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width-1200">
+<div class="centered width--1200">
 <h1>Assign a Second Marker</h1>
 <h3>Select a student, then select a supervisor.</h3>
 <p>Only students with a project accepted will be displayed.<br>If a project already has a 2nd marker, it will not be displayed.</p>

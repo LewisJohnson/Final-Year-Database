@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section ('content')
-<div class="centered width-800">
+<div class="centered width--800">
 <h2>Help</h2>
 <div id="TabbedPanels1" class="TabbedPanels">
 <ul class="TabbedPanelsTabGroup">

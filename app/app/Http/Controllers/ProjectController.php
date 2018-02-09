@@ -79,7 +79,6 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, $id) {
-
 		$view = "SupervisorProject";
 		$student_name = "a student";
 
@@ -209,8 +208,7 @@ class ProjectController extends Controller{
 				$topic = TopicMasters::where('id', request('topic_id'))->first();
 				$project = ProjectMasters::where('id', request('project_id'))->first();
 
-				ProjectTopicMasters::
-					where('project_id', $project->id)
+				ProjectTopicMasters::where('project_id', $project->id)
 					->where('topic_id', $topic->id)
 					->delete();
 			}
@@ -236,13 +234,13 @@ class ProjectController extends Controller{
 		]);
 
 		$result = DB::transaction(function() use ($request) {
-			// Creat project
+			// todo: uncomment transaction
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
-				$transaction = new TransactionUg;
+				// $transaction = new TransactionUg;
 			} elseif(Session::get("db_type") == "masters") {
 				$project = new ProjectMasters;
-				$transaction = new TransactionMasters;
+				// $transaction = new TransactionMasters;
 			}
 
 			$project->fill(array(
@@ -256,14 +254,14 @@ class ProjectController extends Controller{
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
 
-			$transaction->fill(array(
-				'transaction_type' =>'created',
-				'project_id' => $project->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
+			// $transaction->fill(array(
+			// 	'transaction_type' =>'created',
+			// 	'project_id' => $project->id,
+			// 	'supervisor_id' => Auth::user()->supervisor->id,
+			// 	'transaction_date' => new Carbon
+			// ));
 
-			$transaction->save();
+			// $transaction->save();
 
 			// Redirect
 			session()->flash('message', '"'.$project->title.'" has been created.');

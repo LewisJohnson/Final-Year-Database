@@ -294,14 +294,14 @@ ul.dot-menu{
 .loader--large{ width: 75px; height: 75px; }
 .loader--x-large{ width: 100px; height: 100px; }
 
-.width-200{ max-width: 200px; }
-.width-400{ max-width: 400px; }
-.width-600{ max-width: 600px; }
-.width-800{ max-width: 800px; }
-.width-1000{ max-width: 1000px; }
-.width-1200{ max-width: 1200px; }
-.width-1400{ max-width: 1400px; }
-.width-1600{ max-width: 1600px; }
+.width--200{ max-width: 200px; }
+.width--400{ max-width: 400px; }
+.width--600{ max-width: 600px; }
+.width--800{ max-width: 800px; }
+.width--1000{ max-width: 1000px; }
+.width--1200{ max-width: 1200px; }
+.width--1400{ max-width: 1400px; }
+.width--1600{ max-width: 1600px; }
 
 .transition--slow { @include transition--slow(); }
 .transition--slow:focus { outline: none; }

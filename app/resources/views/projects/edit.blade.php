@@ -11,7 +11,7 @@
 	{!! SussexProjects\TopicMasters::getDatalist() !!}
 @endif
 
-<div class="centered width-800">
+<div class="centered width--800">
 	<h1>You are editing "{{ $project->title }}".</h1>
 
 	<div class="card card--margin-vertical">

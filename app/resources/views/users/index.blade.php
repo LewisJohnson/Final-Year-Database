@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-1200">
+<div class="centered width--1200">
 
 	@if($view === "edit")
 		<h1>Edit Users</h1>

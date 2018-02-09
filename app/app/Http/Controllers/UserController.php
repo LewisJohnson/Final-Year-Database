@@ -107,7 +107,7 @@ class UserController extends Controller{
 
 		session()->flash('message', 'User was created.');
 		session()->flash('message_type', 'success');
-		return redirect('/');
+		return redirect()->action('HomeController@index');
 	}
 
 	/**

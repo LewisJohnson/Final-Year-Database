@@ -9,7 +9,7 @@
 	@endif
 @endsection
 
-<div class="centered width-1200 show--scroll-to-top">
+<div class="centered width--1200 show--scroll-to-top">
 	@if($view == "index")
 		<h1>Projects</h1>
 		@include('projects.partials.search')

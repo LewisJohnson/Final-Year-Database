@@ -5,12 +5,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Session;
 use Auth;
-class User extends Authenticatable{
 
+class User extends Authenticatable{
 	use Notifiable;
 	public $timestamps = false;
 	
-	protected $dates = ['last_login'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -20,11 +19,32 @@ class User extends Authenticatable{
 	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password'];
 
 	/**
+	 * The attributes that are not mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $guarded = [];
+
+	/**
+	 * The attributes that should are dates.
+	 *
+	 * @var array
+	 */
+	protected $dates = ['last_login'];
+
+	/**
 	 * The attributes that should be hidden for arrays.
 	 *
 	 * @var array
 	 */
 	protected $hidden = [ 'password', 'remember_token'];
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = true;
 
 	public function isGuest(){
 		return in_array("guest", $this->getPrivileges());

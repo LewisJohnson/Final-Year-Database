@@ -184,7 +184,7 @@ class AdminController extends Controller{
 		session()->flash('message', 'You have logged in as ' . $user->getFullName());
 		session()->flash('message_type', 'success');
 
-		return redirect('/');
+		return redirect()->action('HomeController@index');
 	}
 
 	public function export(Request $request){

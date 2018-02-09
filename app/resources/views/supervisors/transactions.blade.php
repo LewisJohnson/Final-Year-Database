@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width-1400">
+<div class="centered width--1400">
 <h1>Transactions</h1>
 <h3>Showing all transactions related to your projects.</h3>
 <div>

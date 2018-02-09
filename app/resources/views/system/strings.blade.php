@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width-1600">
+<div class="centered width--1600">
 <h1>Language Strings</h1>
 
 <div class="section-container">

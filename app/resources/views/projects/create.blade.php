@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section ('content')
 
-<div class="centered width-800">
+<div class="centered width--800">
 	<div class="card">
 		<h1>Create New Project</h1>
 		@include('forms.new-project', ['user_type' => 'supervisor'])

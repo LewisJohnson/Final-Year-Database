@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-1200">
+<div class="centered width--1200">
 	<h1>Login As Another User</h1>
 	<p>Select a user to log in as. This will bypassing authentication.</p>
 

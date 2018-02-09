@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section ('content')
-<div class="centered width-800">
+<div class="centered width--800">
 	<h1>Projects by Topic</h1>
 	<h3>Select a topic to browse related projects.</h3>
 	<table class="data-table shadow-2dp">

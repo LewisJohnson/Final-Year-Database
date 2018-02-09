@@ -11,7 +11,7 @@
 @section('scripts')
 	<script src="{{ asset('js/views/tab-view.js') }}"></script>
 @endsection
-<div class="centered width-1000">
+<div class="centered width--1000">
 	<h1>System Dashboard</h1>
 	<h3>Configure system variables and parameters.</h3>
 

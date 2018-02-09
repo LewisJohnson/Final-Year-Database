@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-1400">
+<div class="centered width--1400">
 	<h1>Transactions</h1>
 
 	<div class="table-responsive">

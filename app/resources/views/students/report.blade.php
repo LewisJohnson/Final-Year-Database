@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-1600">
+<div class="centered width--1600">
 	<div id="report-header">
 		<h1>Report by Student</h1>
 		<h3>There are a total of <b>{{ $studentCount }}</b> masters students.</h3>

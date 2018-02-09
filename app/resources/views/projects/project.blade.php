@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width-800">
+<div class="centered width--800">
 	@if($project->archived)
 		<h1>This project is archived.</h1>
 	@endif

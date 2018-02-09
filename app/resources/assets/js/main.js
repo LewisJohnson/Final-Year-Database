@@ -955,15 +955,15 @@
 			url: $(this).prop('action'),
 			type:'POST',
 			data: $(this).serialize(),
-			success:function(showDialog){
-				location.reload();
+			success:function(){ 
+				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).hide();
+				location.reload(true);
 			},
 			error: function (data) {
-				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showDialog();
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
 
 				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
-				$('.form-field', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
+				$('#login-username', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
 				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data["responseJSON"]["errors"]["username"][0]);
 			}
 		});

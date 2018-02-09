@@ -1,5 +1,4 @@
 <?php
-
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,15 +7,50 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class Project extends Model{
-	use SoftDeletes;
-	protected $table = null;
-	protected $primaryKey = 'id';
 
-	// Mass fillable items
+	use SoftDeletes;
+	// use Traits\Uuids;
+
+	protected $table = null;
+
+	public $timestamps = true;
+
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = ['title', 'description', 'skills', 'status', 'author_programme'];
+
+	/**
+	 * The attributes that are not mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $guarded = ['supervisor', 'destroy_at', 'deleted_at'];
-	protected $hidden = ['supervisor', 'created_at', 'updated_at'];
+
+	/**
+	 * The attributes that should are dates.
+	 *
+	 * @var array
+	 */
 	protected $dates = ['created_at'. 'updated_at', 'destroy_at', 'deleted_at'];
+
+	/**
+	 * The attributes that should be hidden for arrays.
+	 *
+	 * @var array
+	 */
+	protected $hidden = ['supervisor', 'created_at', 'updated_at'];
+	
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	// public $incrementing = false;
+
 
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');

@@ -21,7 +21,7 @@ class LoginController extends Controller
 
 	use AuthenticatesUsers;
 
-    public function username(){ return 'username'; }
+	public function username(){ return 'username'; }
 
 	/**
 	 * Create a new controller instance.
@@ -30,9 +30,5 @@ class LoginController extends Controller
 	 */
 	public function __construct(){
 		$this->middleware('guest')->except('logout');
-	}
-
-	protected function redirectTo(){
-		return '/showChangeAuthDialog';
 	}
 }

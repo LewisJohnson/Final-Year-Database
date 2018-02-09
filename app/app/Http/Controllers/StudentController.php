@@ -96,7 +96,7 @@ class StudentController extends Controller{
 				if($student->project_id != null){
 					session()->flash('message', 'You have already selected a project.');
 					session()->flash('message_type', 'danger');
-					return redirect('/');
+					return redirect()->action('HomeController@index');
 				}
 
 				if(Session::get("db_type") == "ug"){
@@ -164,7 +164,7 @@ class StudentController extends Controller{
 				if($student->project_id != null){
 					session()->flash('message', 'You have already selected a project.');
 					session()->flash('message_type', 'danger');
-					return redirect('/');
+					return redirect()->action('HomeController@index');
 				}
 
 				if(Session::get("db_type") == "ug"){

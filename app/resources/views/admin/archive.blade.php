@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered card width-1000">
+<div class="centered card width--1000">
 	<h1>End of Year Archive</h1>
 	<p>The end of year archive will do the following in a single transaction;</p>
 

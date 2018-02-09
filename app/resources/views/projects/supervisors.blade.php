@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="centered width-800">
+<div class="centered width--800">
 	<h1>Projects by Supervisor</h1>
 	<h3>Select a supervisor to see their projects.</h3>
 	@include('supervisors.partials.supervisor-search')

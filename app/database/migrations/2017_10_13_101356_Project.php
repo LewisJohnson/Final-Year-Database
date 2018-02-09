@@ -15,6 +15,7 @@ class Project extends Migration
 	{
 		Schema::create('projects_ug', function (Blueprint $table) {
 			$table->increments('id');
+			// $table->uuid('id');
 			$table->string('title', 255);
 			$table->mediumText('description');
 			$table->string('skills', 255);
@@ -26,10 +27,12 @@ class Project extends Migration
 			$table->timestampsTz();
 			$table->softDeletesTz();
 			$table->timestampTz('destroy_at')->nullable(true);
+			// $table->primary('id');
 		});
 
 		Schema::create('projects_masters', function (Blueprint $table) {
 			$table->increments('id');
+			// $table->uuid('id');
 			$table->string('title', 255);
 			$table->mediumText('description');
 			$table->string('skills', 255);
@@ -41,6 +44,7 @@ class Project extends Migration
 			$table->timestampsTz();
 			$table->softDeletesTz();
 			$table->timestampTz('destroy_at')->nullable(true);
+			// $table->primary('id');
 		});
 	}
 

@@ -1,7 +1,7 @@
 @extends('layouts.error')
 @section('content')
 
-<div class="centered width-800 flex flex--row pointer tea-error">
+<div class="centered width--800 flex flex--row pointer tea-error">
 	@include('svg.teapot')
 	<div class="tea"></div>
 	<div class="tea-fill"></div>

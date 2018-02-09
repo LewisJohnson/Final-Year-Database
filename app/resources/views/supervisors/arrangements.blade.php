@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width-800 card">
+<div class="centered width--800 card">
 <h1>Edit Supervisor Arrangments</h1>
 <h2><b>Supervisor:</b> {{ $supervisor->user->getFullName() }}</h2>
 <form class="form form--flex" role="form" method="POST" action="/projects">

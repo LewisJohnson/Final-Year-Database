@@ -19,7 +19,7 @@
 		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
 		@if(Auth::check())
-			<p>@lang_sess("footer_maintainer_text")</p>
+			<p>{{ lang_sess("footer_maintainer_text") }}</p>
 		@else
 			<p>@lang("messages.footer_maintainer_text")</p>
 		@endif

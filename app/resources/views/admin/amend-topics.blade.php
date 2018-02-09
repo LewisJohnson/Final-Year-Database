@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered card width-1000">
+<div class="centered card width--1000">
 	<h1>Amend {{ ucfirst(lang_sess("full_name")) }} Topics</h1>
 	<h3>Add Topic</h3>
 	<div>

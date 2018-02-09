@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section ('content')
 
-<div class="centered width-800">
+<div class="centered width--800">
 	
 	<div class="card">
 		<h1>Purpose Project</h1>
