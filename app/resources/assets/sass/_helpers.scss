@@ -277,6 +277,12 @@ ul.dot-menu{
 	background: $underlay-background;
 }
 
+
+// Tea
+.tea{ width: 10px; position: absolute; background: sandybrown; border-radius: 1% 1000% 200% 200%; display: none;}
+.tea-fill{ width: 100vw; left: 0; bottom: 0; position: absolute; background: sandybrown; }
+.teapot-anim{ animation: teapot 1s forwards; }
+
 .centered{ margin: 0 auto; }
 .pointer{ cursor: pointer; }
 .fake-input{ cursor: text; }
@@ -299,19 +305,13 @@ ul.dot-menu{
 
 .transition--slow { @include transition--slow(); }
 .transition--slow:focus { outline: none; }
-
 .transition--medium { @include transition--medium(); }
 .transition--medium:focus { outline: none; }
-
 .transition--fast { @include transition--fast(); }
 .transition--fast:focus { outline: none; }
 
-@keyframes spin {
-	from { transform: rotate(0deg); }
-	to { transform: rotate(360deg); }
-}
+@keyframes spin { from{ transform: rotate(0deg); } to{ transform: rotate(360deg); }}
+@keyframes showDotMenu { from{ transform: scale3d(0.8, 0.8, 1); } to{ transform: scale3d(1, 1, 1); }}
 
-@keyframes showDotMenu {
-	from { transform: scale3d(0.8, 0.8, 1); }
-	to { transform: scale3d(1, 1, 1); }
-}
+@keyframes teapot { from{ transform: rotateZ(0deg); } to{ transform: rotateZ(25deg); }}
+@keyframes teafill { from{ height: 0; } to{ height: calc(100% - 250px); }}

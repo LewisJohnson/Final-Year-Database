@@ -1,5 +1,9 @@
 <head>
-	<title>Final Year Project Database</title>
+	@if(isset($exception))
+		<title>Error {{ $exception->getStatusCode() }} ({{ $exception->getMessage() }})</title>
+	@else
+		<title>@lang("messages.official_name") - @yield('title')</title>
+	@endif
 
 	<!-- Meta -->
 	<meta charset="utf-8">

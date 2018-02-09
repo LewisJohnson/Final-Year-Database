@@ -54,7 +54,7 @@ Route::group(['middleware' => ['web']], function() {
 	Route::post('seen-cookie-banner', 'HomeController@seenCookieBanner');
 
 	// Teapot
-	Route::get('teapot', function(){ abort(418); });
+	Route::get('teapot', function(){ abort(418, "I'm a teapot"); });
 });
 
 /* ===============

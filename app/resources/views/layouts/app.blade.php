@@ -13,8 +13,6 @@
 			@include('auth.login')
 		@endif
 
-		@include('auth.change-auth')
-
 		<div class="main-content">
 			@yield('content')
 		</div>
