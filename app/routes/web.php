@@ -81,8 +81,10 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
 	Route::get('admin/topics-amend', 'AdminController@ShowAmendTopics');
+
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
+	
 	Route::get('admin/archive', 'AdminController@archive');
 	Route::get('admin/export', 'AdminController@export');
 	Route::get('admin/parameters', 'AdminController@parameters');
@@ -105,14 +107,14 @@ Route::group(['middleware' => ['admin.project']], function() {
    4. PROJECT AND SYSTEM ADMIN ROUTES
    ================================== */
 
-Route::group(['middleware' => ['admin.project', 'admin.system']], function() {
+Route::group(['middleware' => ['admin']], function() {
 	Route::resource('users', 'UserController');
 });
 
 /* ==============================
    5. SUPERVISOR AND ADMIN ROUTES
    ============================== */
-Route::group(['middleware' => ['supervisor', 'admin.project', 'admin.system']], function() {
+Route::group(['middleware' => ['supervisor.admin']], function() {
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 

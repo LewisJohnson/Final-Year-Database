@@ -12,7 +12,7 @@
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="/users/edit">
+		<a class="icon" href="{{ action('UserController@index', 'view=edit') }}">
 			@include('svg.account-edit')
 			<p>Edit User</p>
 		</a>

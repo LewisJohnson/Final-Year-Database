@@ -993,8 +993,8 @@
 
 	// NEW USER
 	// put this stuff in an array
-	$('#supervisor-form').hide();
-	$('#student-form').show();
+	// $('#supervisor-form').hide();
+	// $('#student-form').show();
 
 	// $('#create-form-access-select').on('change', function(){
 	// 	if($('.new-user-student').is(":selected")) {

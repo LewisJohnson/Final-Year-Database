@@ -129,22 +129,22 @@
 
 			<li class="nav-button dropdown" style="margin-left: auto;">
 				<button>Mode</button>
-					@include('svg.arrow-down')
-					<div class="dropdown-content shadow-2dp">
-						<form class="db-type-form" action="{{ action('HomeController@setDatabaseType') }}" method="POST" accept-charset="utf-8">
-							{{ csrf_field() }}
-							<input type="hidden" name="db_type" value="ug">
-							<button  type="submit" style="width: 100%;">Undergraduate</button>
-						</form>
+				@include('svg.arrow-down')
+				<div class="dropdown-content shadow-2dp">
+					<form class="db-type-form" action="{{ action('HomeController@setDatabaseType') }}" method="POST" accept-charset="utf-8">
+						{{ csrf_field() }}
+						<input type="hidden" name="db_type" value="ug">
+						<button  type="submit" style="width: 100%;">Undergraduate</button>
+					</form>
 
-						<form class="db-type-form" action="{{ action('HomeController@setDatabaseType') }}" method="POST" accept-charset="utf-8">
-							{{ csrf_field() }}
-							<input type="hidden" name="db_type" value="masters">
-							<button type="submit" style="width: 100%;">Masters</button>
-						</form>
-					</div>
-				</li>
+					<form class="db-type-form" action="{{ action('HomeController@setDatabaseType') }}" method="POST" accept-charset="utf-8">
+						{{ csrf_field() }}
+						<input type="hidden" name="db_type" value="masters">
+						<button type="submit" style="width: 100%;">Masters</button>
+					</form>
+				</div>
 			</li>
+			
 
 			<li class="nav-button">
 				<button title="Log out" onclick="$('#logout-form').submit();">Logout</button>

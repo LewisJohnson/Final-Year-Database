@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="centered card width-1000">
-	<h1>Amend Topics</h1>
+	<h1>Amend {{ ucfirst(lang_sess("full_name")) }} Topics</h1>
 	<h3>Add Topic</h3>
 	<div>
 		<form id="new-topic-form" class="form form--flex form--flex-row" action="/topics/" method="POST" accept-charset="utf-8">

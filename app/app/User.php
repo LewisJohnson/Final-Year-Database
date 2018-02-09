@@ -9,6 +9,7 @@ class User extends Authenticatable{
 
 	use Notifiable;
 	public $timestamps = false;
+	
 	protected $dates = ['last_login'];
 
 	/**
@@ -16,21 +17,28 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = [
-		'username', 'first_name', 'last_name', 'email', 'password', 'access_type'
-	];
+	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
 	 *
 	 * @var array
 	 */
-	protected $hidden = [
-		'password', 'remember_token',
-	];
+	protected $hidden = [ 'password', 'remember_token'];
 
-	public function isProjectAdmin(){
-		return $this->isUgAdmin() || $this->isMastersAdmin();
+	public function isGuest(){
+		return in_array("guest", $this->getPrivileges());
+	}
+	public function isStaff(){
+		return in_array("staff", $this->getPrivileges());
+	}
+
+	public function isStudent(){
+		return in_array("student", $this->getPrivileges());
+	}
+
+	public function isSupervisor(){
+		return in_array("supervisor", $this->getPrivileges());
 	}
 
 	public function isUgAdmin(){
@@ -41,16 +49,12 @@ class User extends Authenticatable{
 		return in_array("admin_masters", $this->getPrivileges());
 	}
 
+	public function isProjectAdmin(){
+		return $this->isUgAdmin() || $this->isMastersAdmin();
+	}
+
 	public function isSystemAdmin(){
 		return in_array("admin_system", $this->getPrivileges());
-	}
-
-	public function isSupervisor(){
-		return in_array("supervisor", $this->getPrivileges());
-	}
-
-	public function isStudent(){
-		return in_array("student", $this->getPrivileges());
 	}
 
 	public function getPrettyPrivilegesString(){

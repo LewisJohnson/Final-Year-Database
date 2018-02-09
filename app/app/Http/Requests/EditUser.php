@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use SussexProjects\Http\Controllers\UserController;
 
-class StoreUser extends FormRequest
+class EditUser extends FormRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -27,13 +27,12 @@ class StoreUser extends FormRequest
 	 */
 	public function rules(){
 		return [
-			'username' => 'required|unique:users,username|max:32',
+			'username' => 'required|max:32',
 			'first_name' => 'required|max:128',
 			'last_name' => 'required|max:128',
-			'email' => 'required|unique:users,email|max:128',
-			'password' => 'required|confirmed',
+			'email' => 'required|max:128',
 			'privileges' => 'required',
-
+			
 			'title' => 'max:6',
 			'project_load_ug' => 'min:0|max:255',
 			'project_load_masters' => 'min:0|max:255',

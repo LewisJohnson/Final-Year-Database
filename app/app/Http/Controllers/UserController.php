@@ -18,16 +18,15 @@ class UserController extends Controller{
 
 	public function __construct(){ $this->middleware('auth'); }
 
-	public function index(){
+	public function index(Request $request){
 		if(Session::get("db_type") == "ug"){
 			$students = StudentUg::all();
-
 		} elseif(Session::get("db_type") == "masters") {
 			$students = StudentMasters::all();
 		}
 
 		$supervisors = Supervisor::all();
-		$staffUsers = User::Where('access_type', 'staff')->get();
+		$staffUsers = User::Where('privileges', 'staff')->get();
 
 		$students = $students->sortBy(function($student, $key) {
 			return $student->user->last_name;
@@ -41,10 +40,11 @@ class UserController extends Controller{
 			return $staff->last_name;
 		});
 
-		return view('users.edit-users')
+		return view('users.index')
 			->with('supervisors', $supervisors)
 			->with('staff', $staffUsers)
-			->with('students', $students);
+			->with('students', $students)
+			->with('view', $request->query("view"));
 	}
 
 	/**
@@ -127,8 +127,7 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(User $user){
-		$editUser = User::findOrFail($id);
-		return view('users.edit')->with('editUser', $editUser);
+		return view('users.edit')->with('user', $user);
 	}
 
 	/**
@@ -137,10 +136,9 @@ class UserController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update($request, $id){
+	public function update(StoreUser $user){
 		dd($request);
-
-		return $result;
+		return "null";
 	}
 
 	public static function checkPrivilegeConditions($privileges){

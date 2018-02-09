@@ -22,3 +22,13 @@ if (! function_exists('config_json')) {
 		}
 	}
 }
+
+if (! function_exists('lang_sess')) {
+	function lang_sess($key = null, $value = null) {;
+		$key = str_replace('"', '',$key);
+		$key = str_replace('\'', '',$key);
+
+		$key = 'messages_'.Session::get("db_type").'.'.$key;
+		return Lang::get($key);
+	}
+}

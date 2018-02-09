@@ -50,6 +50,7 @@ nav.desktop{
 			display: block;
 			cursor: pointer;
 			min-width: 100%;
+
 			> .dropdown-content{
 				min-height: 100%;
 				height: auto;
@@ -63,12 +64,12 @@ nav.desktop{
 					padding-left: 12px;
 				}
 			}
-		}
 
-		.sub-dropdown:hover .dropdown-content {
-			display: block;
-			transform-origin: left;
-			animation: subDropdownAnim 0.1s ease;
+			&:hover .dropdown-content {
+				display: block;
+				transform-origin: left;
+				animation: subDropdownAnim 0.1s ease;
+			}
 		}
 	}
 }
@@ -78,6 +79,7 @@ nav.desktop{
 	display: inline-block;
 	a, svg {
 		vertical-align: middle;
+		
 	}
 
 	> .svg-container{
@@ -93,10 +95,6 @@ nav.desktop{
 		top: 50px;
 		line-height: normal;
 
-		svg{
-			transition: none;
-		}
-
 		> a, > div, > button, > form > button{
 			display: block;
 			padding: 12px 16px;
@@ -104,7 +102,6 @@ nav.desktop{
 			color: $text-color;
 
 			li:hover, &:hover, > li:focus, &:focus{
-				@include transition--medium();
 				background: $accent;
 				color: white;
 			}
@@ -140,7 +137,7 @@ nav.mobile{
 	z-index: 10;
 	top: 0;
 	transform: translateX(-75vw);
-	@include transition--medium();
+	@include transition--medium-cb();
 
 	> div {
 		width: 100%;
@@ -188,7 +185,7 @@ nav.mobile{
 			color: inherit;
 
 			&:hover, &:focus{
-				@include transition--medium();
+				
 				background: $accent;
 				color: white;
 			}
@@ -205,7 +202,6 @@ nav.mobile{
 				display: none;
 
 				>:hover, >:focus{
-					@include transition--medium();
 					background: $accent;
 					color: white;
 				}
@@ -240,7 +236,7 @@ nav.mobile.is-visible{
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 5;
-	@include transition--slow();
+	@include transition--medium();
 }
 
 .mobile-nav-underlay.is-visible{
@@ -249,21 +245,11 @@ nav.mobile.is-visible{
 }
 
 @keyframes dropdownAnim {
-	0% {
-		transform: scale3d(0.2, 0.2, 1);
-	}
-
-	100% {
-		transform: scale3d(1, 1, 1);
-	}
+	0% { transform: scale3d(0.2, 0.2, 1); }
+	100% { transform: scale3d(1, 1, 1); }
 }
 
 @keyframes subDropdownAnim {
-	0% {
-		transform: scale3d(0.9, 1, 1);
-	}
-
-	100% {
-		transform: scale3d(1, 1, 1);
-	}
+	0% { transform: scale3d(0.9, 1, 1); }
+	100% { transform: scale3d(1, 1, 1); }
 }
