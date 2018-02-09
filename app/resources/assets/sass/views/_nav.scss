@@ -137,7 +137,7 @@ nav.mobile{
 	z-index: 10;
 	top: 0;
 	transform: translateX(-75vw);
-	@include transition--medium-cb();
+	@include transition--medium-quad();
 
 	> div {
 		width: 100%;
@@ -200,7 +200,6 @@ nav.mobile{
 
 			.dropdown-content{
 				display: none;
-
 				>:hover, >:focus{
 					background: $accent;
 					color: white;
@@ -236,7 +235,7 @@ nav.mobile.is-visible{
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 5;
-	@include transition--medium();
+	@include transition--medium-quad();
 }
 
 .mobile-nav-underlay.is-visible{

@@ -10,7 +10,7 @@
 			<form class="form form--flex" role="form" method="POST" action="/login">
 				{{ csrf_field() }}
 
-				<div id="login-username" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
+			<div id="login-username" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
 					<label for="username">Username</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
 					{{-- todo: Remove value="admin_ug" --}}

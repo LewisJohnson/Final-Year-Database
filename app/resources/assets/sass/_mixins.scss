@@ -42,31 +42,14 @@
 				0 11px 15px -7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity),
 				0 24px 38px  3px rgba(0, 0, 0, $shadow-key-umbra-opacity);
 }
+@mixin transition--slow() { outline: none; transition: .48s all ease-out;}
+@mixin transition--medium() { outline: none; transition: .24s all ease-out;}
+@mixin transition--fast() { outline: none; transition: .12s all ease-out;}
 
-@mixin transition--fast() {
-	transition: .12s all ease-out;
-}
+@mixin transition--slow-cb() { outline: none; transition: .48s all cubic-bezier(0.19, 0.49, 0.35, 0.76);}
+@mixin transition--medium-cb() { outline: none; transition: .24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);}
+@mixin transition--fast-cb() { outline: none; transition: .12s all cubic-bezier(0.19, 0.49, 0.35, 0.76);}
 
-@mixin transition--medium() {
-	outline: none;
-	transition: .24s all ease-out;
-}
-
-@mixin transition--slow() {
-	outline: none;
-	transition: .48s all ease-out;
-}
-
-@mixin transition--fast-cb() {
-	transition: .12s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
-}
-
-@mixin transition--medium-cb() {
-	outline: none;
-	transition: .24s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
-}
-
-@mixin transition--slow-cb() {
-	outline: none;
-	transition: .48s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
-}
+@mixin transition--slow-quad() { outline: none; transition: .48s all cubic-bezier(0.25, 0.46, 0.45, 0.94);}
+@mixin transition--medium-quad() { outline: none; transition: .24s all cubic-bezier(0.25, 0.46, 0.45, 0.94);}
+@mixin transition--fast-quad() { outline: none; transition: .12s all cubic-bezier(0.25, 0.46, 0.45, 0.94);}
