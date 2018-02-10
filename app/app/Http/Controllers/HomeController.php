@@ -38,6 +38,16 @@ class HomeController extends Controller{
 		return view('help.about');
 	}
 
+	public function snippet(Request $request){
+		$snippetName = $request->query('snippet');
+		
+		if(preg_match('/^[a-z-]*$/', $snippetName)){
+			return view('snippets.'.$snippetName);
+		}
+
+		abort(404);
+	}
+
 	public function noJs(Request $request){
 		return view('no-js');
 	}

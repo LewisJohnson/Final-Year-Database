@@ -6,77 +6,124 @@
 	var tabs = tabContainer.find("li.tab");
 	var tabsContent = tabs.find(".content");
 	var buttons = tabs.find("> button");
-	var host = $(".content-host");
+	var contentHost = $(".content-host");
 	var firstTabSelected = true;
 	var helpTabShown = false;
 	var previousTab = null;
+	var previousTabIndex = null;
 	var previousHeight = null;
+	var helpFooterSnippet = null;
+
+	// Get help footer snippet using ajax
+	$.ajax({
+		url: 'snippet?snippet=card-help-footer',
+		type:'GET',
+		success:function(result){ 
+			helpFooterSnippet = result;
+		},
+	});
 
 	$(".open-tab").on('click', function() {
 		var currentTab = $(this).parent();
 		var currentContent = currentTab.find(".content");
 
 		if(currentContent.attr("aria-hidden") == "true"){
+			if(previousTab !== null){ 
+				contentHost.removeClass().addClass('content-host');
 
-			if(previousTab !== null){ host.find(".content").appendTo(previousTab); }
-
-			host.html("");
-			currentContent.appendTo(host);
-
-			if(tabContainer.data("help-footer") && !firstTabSelected && !helpTabShown && config.showHelpFooter){
-				tabCard.append('\
-					<div class="footer"> \
-						<div class="svg-container"> \
-							<svg viewBox="0 0 24 24" style="width: 20px; height: 20px;"> \
-								<path d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" /> \
-							</svg> \
-						</div> \
-						<p><b>Still need help?</b>&ensp;If you still need help, try contacting an administrator to see if they can sort it.</p> \
-					</div>');
-				helpTabShown = true;
-			}
-
-			if(config.animateTabHeight){
 				if($(window).width() <= config.mobileWidth){
-					var newTabHeight = tabCard.outerHeight(false);
-				} else{
-					var newTabHeight = tabCard.height();
-				}
-				
-				tabCard.css('height', previousHeight);
-
-				tabCard.animate({ height: newTabHeight }, config.mediumAnimation, 'linear', function(){
-					tabCard.css('height', 'auto');
-					if($(window).width() <= config.mobileWidth){
-						previousHeight = tabCard.outerHeight(false);
-					} else{
-						previousHeight = tabCard.height();
+					if(currentTab.index() > previousTab.index()){
+						contentHost.addClass('slideOutLeft animated quick');
+					} else {
+						contentHost.addClass('slideOutRight animated quick');
 					}
-				});
-			}
+				} else {
+					if(currentTab.index() > previousTab.index()){
+						contentHost.addClass('slideOutUp animated quick');
+					} else {
+						contentHost.addClass('slideOutDown animated quick');
+					}
+				}
+			}	
 
-			tabsContent.attr("aria-expanded", "false");
-			tabsContent.attr("aria-hidden", "true");
+			setTimeout(function() {
+				contentHost.find(".content").appendTo(previousTab);
+				contentHost.html("");
+				currentContent.appendTo(contentHost);
+				contentHost.removeClass().addClass('content-host');
 
-			buttons.removeClass("button--accent");
-			buttons.blur();
+				if($(window).width() <= config.mobileWidth){
+					if(currentTab.index() > previousTabIndex){
+						contentHost.addClass('slideInRight animated quick');
+					} else {
+						contentHost.addClass('slideInLeft animated quick');
+					}
+				} else {
+					if(currentTab.index() > previousTabIndex){
+						contentHost.addClass('slideInUp animated quick');
+					} else {
+						contentHost.addClass('slideInDown animated quick');
+					}
+				}
 
-			currentContent.attr("aria-expanded", "true");
-			currentContent.attr("aria-hidden", "false");
+				if(config.animateTabHeight){
+					if($(window).width() <= config.mobileWidth){
+						var newTabHeight = tabCard.outerHeight(false);
+					} else{
+						var newTabHeight = tabCard.height();
+					}
+					
+					tabCard.css('height', previousHeight);
 
-			tabs.removeClass("selected");
+					tabCard.animate({ height: newTabHeight }, config.mediumAnimation, 'linear', function(){
+						tabCard.css('height', 'auto');
+						if($(window).width() <= config.mobileWidth){
+							previousHeight = tabCard.outerHeight(false);
+						} else{
+							previousHeight = tabCard.height();
+						}
+					});
+				}
 
-			$(this).addClass("button--accent");
+				tabsContent.attr("aria-expanded", "false");
+				tabsContent.attr("aria-hidden", "true");
 
-			if (typeof(Storage) !== "undefined") {
-				sessionStorage.setItem(tabContainer.data("cookie-name"), currentTab.data("tab-name"));
-			} else {
-				// Cookie fallback
-				setCookie(tabContainer.data("cookie-name"), currentTab.data("tab-name"), 365);
-			}
+				// Remove accent and blur (unfocus) all other buttons
+				buttons.removeClass("button--accent");
+				buttons.blur();
 
-			firstTabSelected = false;
-			previousTab = currentTab;
+				// ARIA
+				currentContent.attr("aria-expanded", "true");
+				currentContent.attr("aria-hidden", "false");
+
+				tabs.removeClass("selected");
+
+				$(this).addClass("button--accent");
+
+				// If settings allow footer
+				if(tabContainer.data("help-footer") && config.showHelpFooter){
+					// If not the first tab and tab not already shown
+					if(!firstTabSelected && !helpTabShown){
+						// If AJAX request was successful
+						if(helpFooterSnippet != null){
+							tabCard.append(helpFooterSnippet);
+							helpTabShown = true;
+						}
+					}
+				}
+
+				if (typeof(Storage) !== "undefined") {
+					sessionStorage.setItem(tabContainer.data("cookie-name"), currentTab.data("tab-name"));
+				} else {
+					// Cookie fallback
+					setCookie(tabContainer.data("cookie-name"), currentTab.data("tab-name"), 365);
+				}
+
+				firstTabSelected = false;
+				previousTab = currentTab;
+				previousTabIndex = previousTab.index();
+			}.bind(this), 100);
+			
 		}
 	});
 

@@ -4,22 +4,31 @@
 	padding: 1rem;
 	word-wrap: break-word;
 	width: 100%;
-
 	border-radius: 2px;
-	h2 {
-		margin-top: 5px;
-	}
 
-	ul{
-		padding-left: 40px;
-	}
+	h2 { margin-top: 5px; }
+	ul{ padding-left: 40px;}
 
 	.footer{
 		margin: -1rem;
 		margin-top: 20px;
 		padding: 5px;
-		background: rgba(158,158,158,.2);
-		p{ display: inline}
+		border-top: 1px solid rgba(0, 0, 0, 0.12);
+		background: rgb(245, 245, 245);
+		position: relative;
+		z-index: 1;
+		color: $text-color;
+
+		.svg-container{
+			max-height: auto; 
+			max-width: 16px; 
+			margin: 0;
+		}
+
+		p{
+			display: inline-block; 
+			margin: 0; 
+		}
 	}
 }
 

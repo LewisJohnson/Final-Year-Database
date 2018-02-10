@@ -8,8 +8,8 @@
  * Copyright (c) 2017 Daniel Eden
  */
 
-.animated { animation-duration: 1s;
-	animation-fill-mode: both; }
+.animated { animation-duration: 1s; animation-fill-mode: both; }
+.animated.quick { animation-duration: 0.25s; animation-fill-mode: both; }
 
 .animated.infinite { animation-iteration-count: infinite; }
 

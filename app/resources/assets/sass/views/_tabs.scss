@@ -9,7 +9,6 @@ ul.tab-container{
 	overflow: hidden;
 
 	.content-host{
-		overflow: scroll;
 		width: 100%;
 		h2 { margin: 1rem 0; }
 		ul{ padding-left: 2rem;}
@@ -50,4 +49,8 @@ ul.tab-container{
 	right: -5px;
 	background: linear-gradient(to right, transparent 0%, white 100%);
 	pointer-events: none;
+}
+
+@keyframes tabContentUp{
+	
 }

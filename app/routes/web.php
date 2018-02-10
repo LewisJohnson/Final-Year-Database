@@ -50,6 +50,8 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
 
+	Route::get('snippet', 'HomeController@snippet');
+	
 	// Cookie
 	Route::post('seen-cookie-banner', 'HomeController@seenCookieBanner');
 

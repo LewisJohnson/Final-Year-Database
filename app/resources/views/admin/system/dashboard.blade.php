@@ -196,8 +196,6 @@
 						</form>
 					</div>
 				</li>
-
-				<li style="width: 100%; height: 100%; background: rgba(0,0,0,0.01)"></li>
 			</ul>
 
 			<div class="content-host">
