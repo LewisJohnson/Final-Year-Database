@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class User extends Migration
-{
+class User extends Migration{
 	/**
 	 * Run the migrations.
 	 *
@@ -18,6 +17,7 @@ class User extends Migration
 			$table->string('last_name', 128);
 			$table->string('username', 32)->unique();
 			$table->string('password', 128);
+			$table->string('programme');
 			$table->string('email', 128)->unique();
 			$table->dateTimeTz('last_login')->nullable(true);
 			$table->rememberToken();

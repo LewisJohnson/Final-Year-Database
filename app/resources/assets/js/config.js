@@ -1,14 +1,16 @@
 var config = {
 	// Animations
-	slowAnimation: 400,
-	mediumAnimation: 300,
-	fastAnimation: 200,
-	superFastAnimation: 100,
+	animtions: {
+		slow: 400,
+		medium: 300,
+		fast: 200,
+		superFast: 100,
+	},
 
 	mobileWidth: 970,
 	showHelpFooter: true,
 	
-	animateTabHeight: true,
+	fancyAnimations: true,
 
 	showScrollToTopButtonOffset: 50,
 	scrollToTopDuration: 600,

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width--1000">
+<div class="centered animate-cards width--1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 		<p>Your privileges are {{ $user->getPrettyPrivilegesString() }}.</p>
@@ -82,33 +82,25 @@
 			<div class="card card--margin-vertical" style="border: 1px solid gold; background: rgba(255, 215, 0, 0.5)">
 				<h2>Favourite Projects</h2>
 				@if($projects = Auth::user()->student->getFavouriteProjects())
-					<table id="project-table" class="data-table table--dark-head">
-						<thead>
-							<tr>
-								<th>Topic</th>
-								<th>Project Title</th>
-								<th class="mobile--hidden">Skills</th>
-								<th>Supervisor</th>
-							</tr>
-						</thead>
-						<tbody>
-							@include('projects.partials.project-table-row', ['view' => 'index'])
-						</tbody>
-					</table>
+					@foreach($projects as $project)
+						<a href="{{ action('ProjectController@show', $project->id)}}">
+							{{ $project->title }}
+						</a>
+					@endforeach
 				@else
-					<p title="Simple press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
+					<p title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
 				@endif
 			</div>
 
 			<div class="card card--margin-vertical">
 				<h2>Options</h2>
 				<p>You may hide your name from other students in the supervisor report.</p>
-				<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareProject') }}" method="POST" accept-charset="utf-8">
+				<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
 					{{ csrf_field() }}
 					<div class="form-field">
 						<div class="checkbox">
-							<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_project" id="share_project" @if(Auth::user()->student->share_project) checked @endif >
-							<label for="share_project">Share name</label>
+							<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
+							<label for="share_name">Share name</label>
 						</div>
 					</div>
 				</form>

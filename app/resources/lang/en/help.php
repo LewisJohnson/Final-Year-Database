@@ -165,8 +165,8 @@ return [
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>fp</td>
-				<td><b>Students only</b> - A list of your favorite projects.</td>
+				<td>favourite_projects</td>
+				<td><b>Students only</b> - A list of your favourite projects.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>

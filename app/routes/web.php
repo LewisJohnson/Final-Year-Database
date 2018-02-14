@@ -148,7 +148,8 @@ Route::group(['middleware' => ['student']], function() {
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
-	Route::patch('students/project-share', 'StudentController@shareProject');
+	
+	Route::patch('students/share-name', 'StudentController@shareName');
 
 	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
 	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');

@@ -57,8 +57,7 @@ class ProjectController extends Controller{
 		}
 
 		$projects->whereNotNull('supervisor_id')
-			->where('status', 'on-offer')
-			->where('student_proposed_project', 0);
+			->where('status', 'on-offer');
 
 		if($request->query("page")){
 			return view('projects.partials.full-project-table-row')
@@ -88,9 +87,9 @@ class ProjectController extends Controller{
 			$project = ProjectMasters::find($id);
 		}
 
-		if($project->student_proposed_project){
+		if($project->status === "student-proposed"){
 			$view = "StudentProject";
-			if($project->student->share_project || Auth::user()->isSupervisor()){
+			if($project->student->share_name || Auth::user()->isSupervisor()){
 				$student_name = $project->student->user->getFullName();
 			}
 		}
@@ -237,10 +236,10 @@ class ProjectController extends Controller{
 			// todo: uncomment transaction
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
-				// $transaction = new TransactionUg;
+				$transaction = new TransactionUg;
 			} elseif(Session::get("db_type") == "masters") {
 				$project = new ProjectMasters;
-				// $transaction = new TransactionMasters;
+				$transaction = new TransactionMasters;
 			}
 
 			$project->fill(array(
@@ -254,14 +253,14 @@ class ProjectController extends Controller{
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
 
-			// $transaction->fill(array(
-			// 	'transaction_type' =>'created',
-			// 	'project_id' => $project->id,
-			// 	'supervisor_id' => Auth::user()->supervisor->id,
-			// 	'transaction_date' => new Carbon
-			// ));
+			$transaction->fill(array(
+				'transaction_type' =>'created',
+				'project_id' => $project->id,
+				'supervisor_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
 
-			// $transaction->save();
+			$transaction->save();
 
 			// Redirect
 			session()->flash('message', '"'.$project->title.'" has been created.');
@@ -501,6 +500,8 @@ class ProjectController extends Controller{
 									->where('supervisors.take_students_masters', true);
 		}
 
+
+		// Title filter
 		if(in_array("title", $filters)){
 			$filteredAtLeastOnce = true;
 
@@ -511,6 +512,7 @@ class ProjectController extends Controller{
 			}
 		}
 
+		// Skills filter
 		if(in_array("skills", $filters)){
 			$filteredAtLeastOnce = true;
 
@@ -521,6 +523,7 @@ class ProjectController extends Controller{
 			}
 		}
 
+		// Description filter
 		if(in_array("description", $filters)){
 			$filteredAtLeastOnce = true;
 
@@ -532,7 +535,6 @@ class ProjectController extends Controller{
 		}
 
 		$projects = $projects->get();
-
 		if(in_array("topics", $filters)){
 			$filteredAtLeastOnce = true;
 			$filteredByTopics = true;
@@ -546,7 +548,6 @@ class ProjectController extends Controller{
 				return false;
 			});
 		}
-
 
 		if(!$filteredAtLeastOnce || count($projects) == 0){
 			session()->flash("message", "We couldn't find anything for \"".$searchTerm."\".");

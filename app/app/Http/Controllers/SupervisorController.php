@@ -4,8 +4,8 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use SussexProjects\Supervisor;
-use SussexProjects\ProjectsUg;
-use SussexProjects\ProjectsMasters;
+use SussexProjects\ProjectUg;
+use SussexProjects\ProjectMasters;
 use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\TransactionUg;
@@ -61,13 +61,40 @@ class SupervisorController extends Controller{
 	}
 
 	public function acceptStudent(Request $request){
+		$this->validate(request(), [
+			'student_id' => 'required',
+			'project_id' => 'required',
+		]);
+
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::findOrFail(request('student_id'));
+				$project = ProjectUg::findOrFail(request('project_id'));
 				$transaction = new TransactionUg;
 			} else {
 				$student = StudentMasters::findOrFail(request('student_id'));
+				$project = ProjectMasters::findOrFail(request('project_id'));
 				$transaction = new TransactionMasters;
+			}
+
+			if(Session::get("db_type") == "ug"){
+				$acceptedStudent = StudentUg::where('project_id', $project->id)->where('project_status', 'accepted')->get();
+				$selectedStudent = StudentUg::where('project_id', $project->id)->where('project_status', 'selected')->get();
+			} else {
+				$acceptedStudent = StudentMasters::where('project_id', $project->id)->where('project_status', 'accepted')->get();
+				$selectedStudent = StudentMasters::where('project_id', $project->id)->where('project_status', 'selected')->get();
+			}
+
+			if($project->id != $student->project_id){
+				die(json_encode(array('successful' => false, 'message' => 'Project ID and student project ID do not match up')));
+			}
+
+			if(count($acceptedStudent) != 0){
+				die(json_encode(array('successful' => false, 'message' => 'This project has already been allocated to another student')));
+			}
+
+			if(count($selectedStudent) > 1){
+				die(json_encode(array('successful' => false, 'message' => 'You must reject all other students before accepting a student')));
 			}
 
 			$student->project_status = 'accepted';
@@ -84,7 +111,7 @@ class SupervisorController extends Controller{
 			$transaction->save();
 		});
 
-		return $result;
+		return json_encode(array('successful' => true, 'message' => 'Student accepted'));
 	}
 
 	public function rejectStudent(Request $request){
@@ -111,7 +138,7 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		return $result;
+		return json_encode(array('successful' => true, 'message' => 'Student rejected'));
 	}
 
 	public function report(Request $request){

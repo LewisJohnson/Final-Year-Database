@@ -57,12 +57,12 @@ class Student extends Model{
 	}
 
 	public function isFavouriteProject($id){
-		if(empty(Cookie::get('fp'))){
+		if(empty(Cookie::get('favourite_projects'))){
 			return false;
 		}
 
-		if(Cookie::get('fp') != "none"){
-			$favProjects = unserialize(Cookie::get('fp'));
+		if(Cookie::get('favourite_projects') != "null"){
+			$favProjects = unserialize(Cookie::get('favourite_projects'));
 
 			if (($key = array_search($id, $favProjects)) !== false) {
 				return true;
@@ -72,13 +72,13 @@ class Student extends Model{
 	}
 
 	public function getFavouriteProjects(){
-		if(Cookie::get('fp') == "none" || Cookie::get('fp') == "a:0:{}" || empty(Cookie::get('fp'))){
+		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
 			return null;
 		} else {
 			if(Session::get("db_type") == "ug"){
-				$projects = ProjectUg::whereIn('id', unserialize(Cookie::get('fp')))->get();
+				$projects = ProjectUg::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
 			} elseif(Session::get("db_type") == "masters") {
-				$projects = ProjectMasters::whereIn('id', unserialize(Cookie::get('fp')))->get();
+				$projects = ProjectMasters::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
 			}
 		}
 		return $projects;

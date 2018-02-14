@@ -57,7 +57,7 @@ class Supervisor extends User{
 	public function getProjectOffers(){
 		if(Session::get("db_type") == "ug"){
 			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_name as student_share')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('projects_ug.status', '!=', 'student-proposed')
@@ -66,7 +66,7 @@ class Supervisor extends User{
 				->get();
 		} elseif(Session::get("db_type") == "masters") {
 			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('projects_masters.status', '!=', 'student-proposed')
@@ -93,7 +93,7 @@ class Supervisor extends User{
 		}
 		if($db_type == "ug"){
 			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_project as student_share', 'students_ug.marker_id as marker')
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_name as student_share', 'students_ug.marker_id as marker')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('students_ug.project_status', '=', 'accepted')
@@ -101,7 +101,7 @@ class Supervisor extends User{
 				->get();
 		} elseif($db_type == "masters") {
 			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share', 'students_masters.marker_id as marker')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share', 'students_masters.marker_id as marker')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('students_masters.project_status', '=', 'accepted')
@@ -132,21 +132,19 @@ class Supervisor extends User{
 	public function getProjectProposals(){
 		if(Session::get("db_type") == "ug"){
 			$studentProposedProjects = ProjectUg::
-				select('projects_ug.*', 'students_ug.id as student_id', 'students_ug.share_project as student_share')
+				select('projects_ug.*', 'students_ug.id as student_id', 'students_ug.share_name as student_share')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('projects_ug.status', '=', 'student-proposed')
-				->where('projects_ug.student_proposed_project', '=', '1')
 				->where('students_ug.project_status', '=', 'proposed')
 				->whereNotNull('students_ug.project_id')
 				->get();
 		} elseif(Session::get("db_type") == "masters") {
 			$studentProposedProjects = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_project as student_share')
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('projects_masters.status', '=', 'student-proposed')
-				->where('projects_masters.student_proposed_project', '=', '1')
 				->where('students_masters.project_status', '=', 'proposed')
 				->whereNotNull('students_masters.project_id')
 				->get();

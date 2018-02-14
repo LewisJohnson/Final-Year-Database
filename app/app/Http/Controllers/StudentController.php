@@ -37,11 +37,11 @@ class StudentController extends Controller{
 			$project = ProjectMasters::findOrFail(request('project_id'));
 		}
 
-		if(Cookie::get('fp') == "none" || Cookie::get('fp') == "a:0:{}" || empty(Cookie::get('fp'))){
-			Cookie::queue('fp', serialize(array($project->id)), 525600);
+		if(Cookie::get('favourite_projects') === "null" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
+			Cookie::queue('favourite_projects', serialize(array($project->id)), 525600);
 		} else {
 			$projectInCookie = false;
-			$favProjects = unserialize(Cookie::get('fp'));
+			$favProjects = unserialize(Cookie::get('favourite_projects'));
 
 			if (($key = array_search($project->id, $favProjects)) !== false) {
 				$projectInCookie = true;
@@ -49,7 +49,7 @@ class StudentController extends Controller{
 
 			if(!$projectInCookie){
 				$favProjects[] = $project->id;
-				Cookie::queue('fp', serialize($favProjects), 525600);
+				Cookie::queue('favourite_projects', serialize($favProjects), 525600);
 			}
 		}
 		return;
@@ -62,12 +62,12 @@ class StudentController extends Controller{
 			$project = ProjectMasters::findOrFail(request('project_id'));
 		}
 
-		$favProjects = unserialize(Cookie::get('fp'));
+		$favProjects = unserialize(Cookie::get('favourite_projects'));
 		if (($key = array_search($project->id, $favProjects)) !== false) {
 			unset($favProjects[$key]);
 		}
 
-		Cookie::queue('fp', serialize($favProjects), 525600);
+		Cookie::queue('favourite_projects', serialize($favProjects), 525600);
 		return;
 	}
 
@@ -111,11 +111,10 @@ class StudentController extends Controller{
 
 				$project->supervisor_id = request('supervisor_id');
 				$project->student_id = Auth::user()->student->id;
-				$project->student_proposed_project = true;
 				$project->fill(array(
 					'title' => request('title'),
 					'description' => request('description'),
-					'status' => request('status'),
+					'status' => "student-proposed",
 					'skills' => request('skills'),
 					'author_programme' => 'Computer Science'
 				));
@@ -147,11 +146,11 @@ class StudentController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
-	public function shareProject(Request $request){
+	public function shareName(Request $request){
 		$student = Auth::user()->student;
-		$student->share_project = isset($request->share_project);
+		$student->share_name = isset($request->share_name);
 		$student->save();
-		return json_encode(array('share_project' => $student->share_project));
+		return json_encode(array('share_name' => $student->share_name));
 	}
 
 	public function selectProject(Request $request){

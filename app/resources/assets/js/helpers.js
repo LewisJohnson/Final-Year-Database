@@ -217,7 +217,7 @@ $(function() {
 	// Cookie Banner
 	$(".cookie-banner").on("click", "button",  function(e) {
 		$.ajax({method: 'POST', url: '/seen-cookie-banner'});
-		$(this).parent().hide(config.mediumAnimation);
+		$(this).parent().hide(config.animtions.medium);
 	});
 
 	$(".db-type-form").on("submit",  function(e) {
@@ -249,8 +249,8 @@ $(function() {
 			$('table.full-detail').css('position', 'absolute');
 			$('table.raw-detail').css('position', 'absolute');
 
-			$('table.full-detail').fadeOut(config.fastAnimation);
-			$('table.raw-detail').fadeIn(config.fastAnimation, function(){
+			$('table.full-detail').fadeOut(config.animtions.fast);
+			$('table.raw-detail').fadeIn(config.animtions.fast, function(){
 				$(this).css('position', 'relative');
 			});
 		} else {
@@ -258,8 +258,8 @@ $(function() {
 			$('table.full-detail').css('position', 'absolute');
 			$('table.raw-detail').css('position', 'absolute');
 
-			$('table.raw-detail').fadeOut(config.fastAnimation);
-			$('table.full-detail').fadeIn(config.fastAnimation, function(){
+			$('table.raw-detail').fadeOut(config.animtions.fast);
+			$('table.full-detail').fadeIn(config.animtions.fast, function(){
 				$(this).css('position', 'relative');
 			});
 		}

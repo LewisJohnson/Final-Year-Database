@@ -104,11 +104,12 @@
 
 			@if(Auth::user()->isSupervisor())
 				<li class="nav-button dropdown">
-					<a href="{{ action('SupervisorController@index') }}" title="Supervisor options">Supervisor</a>
+					<a href="{{ action('SupervisorController@index') }}" title="Supervisor hub">Supervisor</a>
 					@include('svg.arrow-down')
 					<div class="dropdown-content shadow-2dp">
-						<a title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
-						<a title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
+						<a href="{{ action('SupervisorController@index') }}" title="Supervisor hub">Supervisor Hub</a>
+						<a href="{{ action('ProjectController@create') }}" title="Create new project">New Project</a>
+						<a href="{{ action('SupervisorController@transactions') }}" title="Browse all transactions for your projects">Transactions</a>
 						<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 					</div>
 				</li>

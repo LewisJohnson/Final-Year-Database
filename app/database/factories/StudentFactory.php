@@ -20,7 +20,6 @@ $factory->define(SussexProjects\StudentUg::class, function (Faker $faker) use ($
 	return [
 		'id' => $studentIncrement->current(),
 		'registration_number' => $faker->numberBetween(10000000,99999999),
-		'programme' => 'CompSci',
 		'project_status' => $project_status,
 		'project_id' => $project_id,
 		'share_project' => $faker->boolean($chanceOfGettingTrue = 70)

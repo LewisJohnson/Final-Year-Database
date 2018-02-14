@@ -151,15 +151,11 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		var actionButton = $(this);
 		var actionType = actionButton.data('action-type');
 		var tableRow = actionButton.parents().eq(1);
-		var student_id = tableRow.data('student-id');
 
 		actionButton.html('<div class="loader"></div>');
 		$('.loader', actionButton).css('display', 'block');
 
 		if(actionType === "accept"){
-			$("#supervisor-accepted-students-table").html('<div class="loader loader--x-large"></div>');
-			$('.loader', '#supervisor-accepted-students-table').css('display', 'block');
-
 			var ajaxUrl = '/supervisor/student-accept';
 		} else if (actionType === "reject"){
 			var ajaxUrl = '/supervisor/student-reject';
@@ -174,34 +170,38 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			method: 'POST',
 			url: ajaxUrl,
 			data: {
-				student_id : student_id
+				project_id : tableRow.data('project-id'),
+				student_id : tableRow.data('student-id')
 			},
-			success: function(data){
-				tableRow.hide(400, function() {
-					tableRow.remove();
-				});
-				if(actionType === "accept"){
-					showNotification('', 'Student has been accepted.');
-					$.ajax({
-						method: 'GET',
-						url: '/supervisor/accepted-students-table',
-						success: function(data){
-							$("#supervisor-accepted-students-table").html(data);
-						},
-						error: function() {
-							actionButton.html(actionType);
-						}
-					});
-				} else if (actionType === "reject"){
-					showNotification('', 'Student has been rejected.');
+			success: function(response){
+				var response = JSON.parse(response);
+
+				if(response.successful){
+					tableRow.hide(400, function() { tableRow.remove(); });
+					
+					if(actionType === "accept"){
+						showNotification('success', 'Student has been accepted.');
+						updateAcceptedStudentsTable();
+					} else if (actionType === "reject"){
+						showNotification('', 'Student has been rejected.');
+					}
+				} else {
+					showNotification('error', response.message);
+					actionButton.html(actionType);
 				}
-			},
-			error: function() {
-				actionButton.html(actionType);
 			}
 		});
 	});
 
+	function updateAcceptedStudentsTable(){
+		$.ajax({
+			method: 'GET',
+			url: '/supervisor/accepted-students-table',
+			success: function(data){
+				$("#supervisor-accepted-students-table").html(data);
+			}
+		});
+	}
 	$('.supervisor-table').on('submit', 'form.delete-project', function(e) {
 		e.preventDefault();
 		var form = $(this);

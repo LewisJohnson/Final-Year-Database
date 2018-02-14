@@ -58,22 +58,14 @@ class Project extends Model{
 
 	// I know statues is not a real word
 	public static function getAllStatuses(){
-		return ['none', 'proposed', 'selected', 'accepted'];
+		return ['none', 'student-proposed', 'selected', 'accepted'];
 	}
 
 	public function isOwnedByUser(){
-		if(Auth::user()){
-			if(Auth::user()->isSupervisor()){
-				if($this->student_proposed_project){
-					return false;
-				} else{
-					return $this->supervisor_id === Auth::user()->supervisor->id;
-				}
-			}
-			if(Auth::user()->isStudent()){
-				return $this->student_id === Auth::user()->student->id;
-			}
+		if(Auth::user()->isSupervisor()){
+			return $this->supervisor_id === Auth::user()->supervisor->id;
+		} elseif(Auth::user()->isStudent()){
+			return $this->student_id === Auth::user()->student->id;
 		}
 	}
-
 }

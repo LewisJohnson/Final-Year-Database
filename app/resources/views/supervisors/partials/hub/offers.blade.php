@@ -38,8 +38,18 @@
 						</td>
 						<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
 						<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-						<td><button class="offer-action button button--success" data-action-type="accept">Accept</button></td>
-						<td><button class="offer-action button button--danger" data-action-type="reject">Reject</button></td>
+
+						<td class="table-action">
+							<a class="button button--svg offer-action button--danger-text" title="Reject {{ $project->student_name }} for {{ $project->title }}" data-action-type="reject">
+								@include('svg.close-circle-outline')
+							</a>
+						</td>
+						
+						<td class="table-action">
+							<a class="button button--svg offer-action button--success-text" title="Accept {{ $project->student_name }} for {{ $project->title }}" data-action-type="accept">
+								@include('svg.check-circle-outline')
+							</a>
+						</td>
 					</tr>
 				@endforeach
 			</tbody>

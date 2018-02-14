@@ -66,7 +66,7 @@
 					}
 				}
 
-				if(config.animateTabHeight){
+				if(config.fancyAnimations){
 					if($(window).width() <= config.mobileWidth){
 						var newTabHeight = tabCard.outerHeight(false);
 					} else{
@@ -75,7 +75,7 @@
 					
 					tabCard.css('height', previousHeight);
 
-					tabCard.animate({ height: newTabHeight }, config.mediumAnimation, 'linear', function(){
+					tabCard.animate({ height: newTabHeight }, config.animtions.medium, 'linear', function(){
 						tabCard.css('height', 'auto');
 						if($(window).width() <= config.mobileWidth){
 							previousHeight = tabCard.outerHeight(false);

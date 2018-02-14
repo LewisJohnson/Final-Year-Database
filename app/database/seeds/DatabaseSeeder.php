@@ -3,14 +3,14 @@
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 
-class DatabaseSeeder extends Seeder
-{
+class DatabaseSeeder extends Seeder{
 	/**
 	 * Run the database seeds.
 	 *
 	 * @return void
 	 */
 	public function run(){
+		// 'guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system'
 		// Admin: 1 [id 1 & 2]
 		// Supervisors: 40 [id 3 - 43]
 		// Students: 300 [id 44 - 344] (150 UG, 150 MSc)

@@ -43,9 +43,9 @@
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('.topics-list .loader').hide(config.fastAnimation);
-	$('.topics-list li').first().fadeIn(config.fastAnimation, function showNext() {
-		$(this).next( ".topics-list li" ).fadeIn(config.fastAnimation, showNext);
+	$('.topics-list .loader').fadeOut(config.animtions.superFast);
+	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNext() {
+		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNext);
 	});
 
 	$('.order-list-js').each(function() {
@@ -618,7 +618,7 @@
 									topic_id: topic.topicId,
 								},
 								success: function(){
-									topic.element.hide(config.slowAnimation, function() {
+									topic.element.hide(config.animtions.slow, function() {
 										topic.remove();
 									});
 								}
@@ -901,7 +901,7 @@
 			});
 			$(emailButtonselector).prop('href', emailString);
 		};
-		setTimeout(2000, select($(this)));
+		setTimeout(select($(this)), 2000);
 	});
 
 	$("body").on("click", ".email-selected", function(e) {
@@ -935,12 +935,12 @@
 			data: $(this).serialize(),
 			success:function(response){
 				response = JSON.parse(response);
-				if(response.share_project){
+				if(response.share_name){
 					showNotification('success', 'Your name is being shared with other students.');
 				} else {
 					showNotification('', 'You are no longer sharing your name with other students.');
 				}
-				$('#share_project').prop('checked', response.share_project);
+				$('#share_name').prop('checked', response.share_name);
 			},
 		});
 	});
@@ -1040,7 +1040,7 @@
 				}
 			}
 		}).done(function(data){
-			svg.fadeIn(config.fastAnimation);
+			svg.fadeIn(config.animtions.fast);
 			$('.loader', svgContainer).hide(0);
 		});
 	});
@@ -1055,14 +1055,14 @@
 
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
 			dropdown.removeClass("active");
-			content.hide(config.mediumAnimation);
+			content.hide(config.animtions.medium);
 		} else {
 			dropdown.attr("aria-expanded", true);
 			content.attr("aria-hidden", false);
 
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
 			dropdown.addClass("active");
-			content.show(config.mediumAnimation);
+			content.show(config.animtions.medium);
 		}
 	});
 
@@ -1082,6 +1082,19 @@
 		window['project'] = $('.project-card');
 	}
 
+	$('.animate-cards .card').css("opacity", 0);
+
+	var delay = 0;
+	$('.animate-cards .card').each(function(index, value) {
+		delay += 200;
+		setTimeout(function(){
+			$(this).animate({
+				opacity: 1
+			},400);
+
+			$(this).addClass("slideInUp animated");
+		}.bind(this), delay);
+	});
 });
 
 $(document).ajaxError(function( event, request, settings ) {

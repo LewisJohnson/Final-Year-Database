@@ -6,20 +6,20 @@ $userIncrement = userIncrement();
 $factory->define(SussexProjects\User::class, function (Faker $faker) use ($userIncrement) {
 	$username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(100,99999);
 	$userIncrement->next();
-	$access_type = "student";
+	$privileges = "student";
 
 	if($userIncrement->current() == 1){
-		$username = 'admin_ug';
-		$access_type = "admin_ug";
+		$username = "admin";
+		$privileges = "admin_system, admin_ug, admin_masters";
 	}
 
 	if($userIncrement->current() == 2){
-		$username = 'admin_masters';
-		$access_type = "admin_masters";
+		$username = "admin_projects";
+		$privileges = "admin_ug, admin_masters";
 	}
 
 	if($userIncrement->current() >= 3 && $userIncrement->current() <= 43){
-		$access_type = "supervisor";
+		$privileges = "supervisor";
 	}
 
 	return [
@@ -27,7 +27,8 @@ $factory->define(SussexProjects\User::class, function (Faker $faker) use ($userI
 		'last_name' => $faker->lastName,
 		'username' => $username,
 		'password' => bcrypt('password'),
-		'access_type' => $access_type,
+		'privileges' => $privileges,
+		'programme' => 'Computer Science',
 		'email' => $username.'@susx.ac.uk'
 	];
 });

@@ -23,6 +23,15 @@ class HomeController extends Controller{
 			Cookie::queue('highContrast', "false", 525600);
 		}
 
+		preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+		if(count($matches)<2){
+			preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
+		}
+
+		if (count($matches)>1){
+			//Then we're using IE
+			return view('help.ie');
+		}
 		return view('index');
 	}
 
@@ -46,10 +55,6 @@ class HomeController extends Controller{
 		}
 
 		abort(404);
-	}
-
-	public function noJs(Request $request){
-		return view('no-js');
 	}
 
 	public function seenCookieBanner(){

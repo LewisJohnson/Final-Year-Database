@@ -270,51 +270,43 @@ button{
 .button--raised{
 	background: rgb(236, 236, 236);
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-}
 
-.button--raised:hover{
-	background: darken(rgb(236, 236, 236), 10%);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.16);
-}
+	&:hover{
+		background: darken(rgb(236, 236, 236), 10%);
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.16);
+	}
 
-.button--raised:active{
-	background: darken(rgb(236, 236, 236), 20%);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,.28), 0 3px 1px -2px rgba(0,0,0,.4), 0 1px 5px 0 rgba(0,0,0,.32);
+	&:active{
+		background: darken(rgb(236, 236, 236), 20%);
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,.28), 0 3px 1px -2px rgba(0,0,0,.4), 0 1px 5px 0 rgba(0,0,0,.32);
+	}
 }
 
 .button--danger{
-	background: $accent-danger-background;
 	color: $accent-danger-text-color;
+	background: $accent-danger-background;
 
-	svg{
-		fill: $accent-danger-text-color !important;
-	}
-
-	&:hover{
-		background: saturate($accent-danger-background, 20%);
-	}
+	svg{ fill: $accent-danger-text-color !important; }
+	&:hover{ background: saturate($accent-danger-background, 20%); }
+	&-text{ color: $accent-danger-background; }
 }
 
 .button--success{
-	background: $accent-success-background;
 	color: $accent-success-text-color;
+	background: $accent-success-background;
 
-	svg{
-		fill: $accent-success-text-color !important;
-	}
-
-	&:hover{
-		background: lighten(saturate($accent-success-background, 20%), 10%);
-	}
+	svg{ fill: $accent-success-text-color !important;}
+	&:hover{ background: lighten(saturate($accent-success-background, 20%), 10%); }
+	&-text{ color: $accent-success-background; }
 }
 
 .button--accent{
 	color: white;
 	background: $accent;
 
-	&:hover{
-		background: lighten(saturate($accent, 20%), 10%);
-	}
+	svg{ fill: $accent !important;}
+	&:hover{ background: lighten(saturate($accent, 20%), 10%); }
+	&-text{ color: $accent; }
 }
 
 .button--dark{
@@ -324,10 +316,6 @@ button{
 	border-bottom: 1px solid $form-border-color;
 	outline: none;
 	background: rgba(0, 0, 0, 0.02);
-}
-
-.button--accent-text{
-	color: $accent;
 }
 
 .button--unpadded{

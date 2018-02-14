@@ -16,20 +16,18 @@ class Student extends Migration
 		Schema::create('students_ug', function (Blueprint $table) {
 			$table->unsignedBigInteger('id')->unique();
 			$table->unsignedInteger('registration_number');
-			$table->string('programme');
 			$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
 			$table->unsignedBigInteger('project_id')->nullable(true);
-			$table->boolean('share_project')->default(0);
+			$table->boolean('share_name')->default(0);
 			$table->unsignedBigInteger('marker_id')->nullable(true);
 		});
 
 		Schema::create('students_masters', function (Blueprint $table) {
 			$table->unsignedBigInteger('id')->unique();
 			$table->unsignedInteger('registration_number');
-			$table->string('programme');
 			$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
 			$table->unsignedBigInteger('project_id')->nullable(true);
-			$table->boolean('share_project')->default(0);
+			$table->boolean('share_name')->default(0);
 			$table->unsignedBigInteger('marker_id')->nullable(true);
 		});
 	}
