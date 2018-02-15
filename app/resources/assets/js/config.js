@@ -1,3 +1,5 @@
+"use strict";
+
 var config = {
 	// Animations
 	animtions: {
@@ -9,14 +11,10 @@ var config = {
 
 	mobileWidth: 970,
 	showHelpFooter: true,
-	
 	fancyAnimations: true,
-
 	showScrollToTopButtonOffset: 50,
 	scrollToTopDuration: 600,
-
 	showAjaxRequestFailNotification: true,
-
 	tapHeldTime: 500
 }
 

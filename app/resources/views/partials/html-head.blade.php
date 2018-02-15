@@ -37,23 +37,15 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery-confirm.css') }}">
 
-	@if(Cookie::get('highContrast') == "true")
-		<link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}">
-	@endif
-
-	@if(Cookie::get('largeFont') == "true")
-		<link rel="stylesheet" href="{{ asset('css/accessible-font.css') }}">
-	@endif
+	<!-- Accessibility Style -->
+	@if(Cookie::get('highContrast') === "true") <link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}"> @endif
+	@if(Cookie::get('largeFont') === "true") <link rel="stylesheet" href="{{ asset('css/accessible-font.css') }}"> @endif
 
 	<!-- Scripts -->
 	{{-- ONLY CHANGE THE ORDER IF YOU KNOW WHAT YOU'RE DOING --}}
-	<script src="{{ asset('js/config.js') }}"></script>
-
-	<script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
-	<script src="{{ asset('js/jquery-confirm.js') }}" async></script>
-	<script src="{{ asset('js/jquery-taphold.js') }}"></script>
-
 	<script src="{{ asset('js/helpers.js') }}"></script>
+	<script src="{{ asset('js/jquery-bundle.js') }}"></script>
+	<script src="{{ asset('js/jquery-helpers.js') }}"></script>
 	
 	@yield('scripts')
 	<script src="{{ asset('js/main.js') }}" async></script>

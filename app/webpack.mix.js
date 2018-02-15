@@ -1,6 +1,5 @@
 let mix = require('laravel-mix');
 var webpack = require('webpack');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -14,20 +13,22 @@ var webpack = require('webpack');
 
 mix.disableNotifications();
 mix.sourceMaps();
-
-new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery'
-});
+new webpack.ProvidePlugin({ $: 'jquery', Query: 'jquery' });
 
 // JAVASCRIPT
-mix.js('resources/assets/js/jquery-3.2.1.js', 'public/js');
-mix.js('resources/assets/js/jquery-taphold.js', 'public/js');
-mix.js('resources/assets/js/jquery-confirm.js', 'public/js');
+mix.js([
+	'resources/assets/js/jquery-3.2.1.js',
+	'resources/assets/js/jquery-taphold.js',
+	'resources/assets/js/jquery-confirm.js'
+], 'public/js/jquery-bundle.js');
+
+mix.scripts([
+	'resources/assets/js/config.js',
+	'resources/assets/js/helpers.js'
+], 'public/js/helpers.js');
 
 mix.js('resources/assets/js/main.js', 'public/js');
-mix.scripts('resources/assets/js/helpers.js', 'public/js/helpers.js');
-mix.scripts('resources/assets/js/config.js', 'public/js/config.js');
+mix.js('resources/assets/js/jquery-helpers.js', 'public/js/jquery-helpers.js');
 
 // JS | VIEWS
 mix.js('resources/assets/js/views/tab-view.js', 'public/js/views');

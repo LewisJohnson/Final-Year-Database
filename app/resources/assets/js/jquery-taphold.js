@@ -1,8 +1,3 @@
-// @author Rich Adams <rich@richadams.me>
-
-// Implements a tap and hold functionality. If you click/tap and release, it will trigger a normal
-// click event. But if you click/tap and hold for 1s (default), it will trigger a taphold event instead.
-
 ;(function($)
 {
 	// Default options
