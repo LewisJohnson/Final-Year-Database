@@ -15,12 +15,10 @@ class Supervisor extends User{
 	 *
 	 * @var array
 	 */
-	protected $fillable = [
-		'id', 'title', 'contact_type', 'project_load', 'take_students'
-	];
+	protected $fillable = [ 'id', 'title', 'contact_type', 'project_load', 'take_students' ];
 
 	public function user(){
-		return $this->hasOne(User::class, 'id');
+		return $this->hasOne(User::class);
 	}
 
 	public function getProjectsByStatus($status){

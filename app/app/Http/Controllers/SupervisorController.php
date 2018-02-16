@@ -66,7 +66,7 @@ class SupervisorController extends Controller{
 			'project_id' => 'required',
 		]);
 
-		$result = DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::findOrFail(request('student_id'));
 				$project = ProjectUg::findOrFail(request('project_id'));
@@ -101,10 +101,11 @@ class SupervisorController extends Controller{
 			$student->save();
 
 			$transaction->fill(array(
-				'transaction_type' =>'accepted',
-				'project_id' => $student->project_id,
-				'student_id' => $student->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
+				'type' =>'project',
+				'action' =>'accepted',
+				'project' => $student->project_id,
+				'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 
@@ -115,7 +116,7 @@ class SupervisorController extends Controller{
 	}
 
 	public function rejectStudent(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
@@ -125,10 +126,39 @@ class SupervisorController extends Controller{
 			}
 
 			$transaction->fill(array(
-				'transaction_type' =>'rejected',
-				'project_id' => $student->project_id,
-				'student_id' => $student->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
+				'type' =>'project',
+				'action' =>'rejected',
+				'project' => $student->project_id,
+				'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+			$transaction->save();
+
+			$student->project_id = null;
+			$student->project_status = 'none';
+			$student->save();
+		});
+
+		return json_encode(array('successful' => true, 'message' => 'Student rejected'));
+	}
+
+	public function undo(Request $request){
+		DB::transaction(function() use ($request) {
+			if(Session::get("db_type") == "ug"){
+				$student = StudentUg::findOrFail(request('student_id'));
+				$transaction = new TransactionUg;
+			} else {
+				$student = StudentMasters::findOrFail(request('student_id'));
+				$transaction = new TransactionMasters;
+			}
+
+			$transaction->fill(array(
+				'type' =>'project',
+				'action' =>'undo',
+				'project' => $student->project_id,
+				'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 			$transaction->save();

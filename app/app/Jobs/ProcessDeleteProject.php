@@ -52,7 +52,7 @@ class ProcessDeleteProject implements ShouldQueue{
 		// }
 
 		// $transaction->fill(array(
-		// 	'transaction_type' =>'deleted',
+		// 	'action' =>'deleted',
 		// 	'project_id' => $id,
 		// 	'supervisor_id' => Auth::user()->supervisor->id,
 		// 	'transaction_date' => new Carbon

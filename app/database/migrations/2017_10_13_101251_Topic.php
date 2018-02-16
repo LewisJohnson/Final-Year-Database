@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -11,15 +10,12 @@ class Topic extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('topics_ug', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('name')->unique();
-		});
-
-		Schema::create('topics_masters', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('name')->unique();
-		});
+		foreach (department_sections() as $key => $value) {
+			Schema::create('topics_'.$value, function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('name')->unique();
+			});
+		}
 	}
 
 	/**

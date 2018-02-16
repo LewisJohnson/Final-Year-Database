@@ -38,9 +38,9 @@ import '../js/components';
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('.topics-list .loader').fadeOut(config.animtions.superFast);
-	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNext() {
-		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNext);
+	$('.topics-list .loader').fadeOut(0);
+	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNextTopic() {
+		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNextTopic);
 	});
 
 	$('.order-list-js').each(function() {

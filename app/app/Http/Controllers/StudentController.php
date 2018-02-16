@@ -115,17 +115,17 @@ class StudentController extends Controller{
 					'title' => request('title'),
 					'description' => request('description'),
 					'status' => "student-proposed",
-					'skills' => request('skills'),
-					'author_programme' => 'Computer Science'
+					'skills' => request('skills')
 				));
 
 				$project->save();
 
 				$transaction->fill(array(
-					'transaction_type' =>'proposed',
-					'project_id' => $project->id,
-					'student_id' => Auth::user()->student->id,
-					'supervisor_id' => $supervisor->id,
+					'type' =>'project',
+					'action' =>'proposed',
+					'project' => $project->id,
+					'student' => Auth::user()->student->id,
+					'supervisor' => $supervisor->id,
 					'transaction_date' => new Carbon
 				));
 
@@ -179,10 +179,11 @@ class StudentController extends Controller{
 				$student->save();
 
 				$transaction->fill(array(
-					'transaction_type' =>'selected',
-					'project_id' => request('project_id'),
-					'student_id' => Auth::user()->student->id,
-					'supervisor_id' => $project->supervisor->id,
+					'type' =>'project',
+					'action' =>'selected',
+					'project' => request('project_id'),
+					'student' => Auth::user()->student->id,
+					'supervisor' => $project->supervisor->id,
 					'transaction_date' => new Carbon
 				));
 
@@ -214,12 +215,13 @@ class StudentController extends Controller{
 			$marker = Supervisor::findOrFail(request('marker_id'));
 
 			$transaction->fill(array(
-				'transaction_type' => 'marker-assigned',
-				'project_id' => $project->id,
-				'student_id' => $student->id,
-				'supervisor_id' => $project->supervisor_id,
-				'marker_id' => $marker->id,
-				'admin_id' => Auth::user()->supervisor->id,
+				'type' =>'project',
+				'action' => 'marker-assigned',
+				'project' => $project->id,
+				'student' => $student->id,
+				'supervisor' => $project->supervisor_id,
+				'marker' => $marker->id,
+				'admin' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 			$transaction->save();

@@ -10,6 +10,7 @@
 |	1. Mobile Menu
 |	2. Dialog / Modal
 |	3. Data Table
+|	4. Column Toggle Table
 |	5. Forms / AJAX Functions
 |	6. Edit Topics [Admin]
 |	7. Menu
@@ -18,8 +19,6 @@
 "use strict";
 
 ;$(function() {
-
-
 	/* ==================
 		 1. Mobile Menu
 	   ================== */
@@ -262,7 +261,7 @@
 	};
 
 	/* ========================
-		3 Column Toggle Table
+		4. Column Toggle Table
 	   ======================== */
 
 	/**

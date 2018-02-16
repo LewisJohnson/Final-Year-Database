@@ -148,7 +148,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	/* ========
 		OTHER
 	=========== */
-	$('.supervisor-table .offer-action').on('click', function() {
+	$('.supervisor-table').on('click', '.offer-action', function() {
 		var actionButton = $(this);
 		var actionType = actionButton.data('action-type');
 		var tableRow = actionButton.parents().eq(1);
@@ -194,15 +194,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		});
 	});
 
-	function updateAcceptedStudentsTable(){
-		$.ajax({
-			method: 'GET',
-			url: '/supervisor/accepted-students-table',
-			success: function(data){
-				$("#supervisor-accepted-students-table").html(data);
-			}
-		});
-	}
 	$('.supervisor-table').on('submit', 'form.delete-project', function(e) {
 		e.preventDefault();
 		var form = $(this);
@@ -285,4 +276,58 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			setCookie(content.data("cookie-name"), false, 365);
 		}
 	});
+
+	$('#supervisor-accepted-students-table').on('click', '.supervisor-undo-accept', function(e) {
+		var tableRow = $(this);
+		var studentName = tableRow.data('student-name');
+		var projectTitle = tableRow.data('project-title');
+
+		$.confirm({
+			title: 'Undo Project Selection',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			content: 'Are you sure you want to un-accept <b>' + studentName + '</b> for <b>' + projectTitle + '</b> ?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function(){
+						$.ajax({
+							method: 'PATCH',
+							url: '/supervisor/undo',
+							data: {
+								project_id : tableRow.data('project-id'),
+								student_id : tableRow.data('student-id')
+							},
+							success:function(response){
+								var response = JSON.parse(response);
+								if(response.successful){
+									tableRow.hide(400, function() { tableRow.remove(); });
+									showNotification('success', 'Undo successful.');
+									updateAcceptedStudentsTable();
+								} else {
+									showNotification('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: {},
+			}
+		});
+	});
+	
+	function updateAcceptedStudentsTable(){
+		$.ajax({
+			method: 'GET',
+			url: '/supervisor/accepted-students-table',
+			success: function(data){
+				$("#supervisor-accepted-students-table").html(data);
+			}
+		});
+	}
+
 });

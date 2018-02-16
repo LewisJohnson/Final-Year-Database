@@ -1,38 +1,28 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionsTable extends Migration
-{
+class CreateTransactionsTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('transactions_ug', function (Blueprint $table) {
-			$table->increments('id');
-			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
-			$table->unsignedBigInteger('project_id')->nullable('true');
-			$table->unsignedBigInteger('student_id')->nullable('true');
-			$table->unsignedBigInteger('supervisor_id')->nullable('true');
-			$table->unsignedBigInteger('topic_id')->nullable('true');
-			$table->unsignedBigInteger('admin_id')->nullable('true');
-			$table->dateTimeTz('transaction_date');
-		});
-
-		Schema::create('transactions_masters', function (Blueprint $table) {
-			$table->increments('id');
-			$table->enum('transaction_type', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
-			$table->unsignedBigInteger('project_id')->nullable('true');
-			$table->unsignedBigInteger('student_id')->nullable('true');
-			$table->unsignedBigInteger('supervisor_id')->nullable('true');
-			$table->unsignedBigInteger('topic_id')->nullable('true');
-			$table->unsignedBigInteger('admin_id')->nullable('true');
-			$table->dateTimeTz('transaction_date');
-		});
+		foreach (department_sections() as $key => $value) {
+			Schema::create('transactions_'.$value, function (Blueprint $table) {
+				$table->increments('id');
+				$table->enum('type', ['topic', 'project', 'student', 'marker']);
+				$table->enum('action', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
+				$table->string('project')->nullable('true');
+				$table->string('student')->nullable('true');
+				$table->string('supervisor')->nullable('true');
+				$table->string('topic')->nullable('true');
+				$table->string('admin')->nullable('true');
+				$table->dateTimeTz('transaction_date');
+			});
+		}
 	}
 
 	/**
@@ -41,7 +31,8 @@ class CreateTransactionsTable extends Migration
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('transactions_ug');
-		Schema::dropIfExists('transactions_masters');
+		foreach (department_sections() as $key => $value) {
+			Schema::dropIfExists('transactions_'.$value);
+		}
 	}
 }

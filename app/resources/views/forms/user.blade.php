@@ -73,7 +73,7 @@
 	@include('forms.partials.error-block', ['name' => 'privileges'])
 
 	<div>
-		<div class="button-group flex--strech">
+		<div class="button-group flex--stretch-children">
 			<div class="checkbox">
 				<input type="checkbox" id="privileges-guest" name="privileges[]" value="guest" class="checkbox-input" @if($user->isGuest()) checked @endif>
 				<label for="privileges-guest">Guest</label>
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<div class="button-group flex--strech">
+		<div class="button-group flex--stretch-children">
 			@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
 				<div class="checkbox">
 					<input type="checkbox" id="privileges-admin-masters" name="privileges[]" value="admin_masters" class="checkbox-input" @if($user->isMastersAdmin()) checked @endif>
@@ -101,7 +101,7 @@
 			@endif
 		</div>
 
-		<div class="button-group flex--strech">
+		<div class="button-group flex--stretch-children">
 			@if(Auth::user()->isSystemAdmin() || Auth::user()->isUgAdmin())
 				<div class="checkbox">
 					<input type="checkbox" id="privileges-admin-ug" name="privileges[]" value="admin_ug" class="checkbox-input" @if($user->isUgAdmin()) checked @endif>
@@ -114,7 +114,7 @@
 			@endif
 		</div>
 
-		<div class="button-group flex--strech">
+		<div class="button-group flex--stretch-children">
 			@if(Auth::user()->isSystemAdmin())
 				<div class="checkbox">
 					<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input" @if($user->isSystemAdmin()) checked @endif>
@@ -152,7 +152,7 @@
 	</div>
 
 	<label>Emails</label>
-	<div class="button-group flex--strech">
+	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
 			<div class="checkbox">
 				<input type="checkbox" id="email-masters" name="accept_email_masters" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->accept_email_masters) checked @endif>
@@ -169,7 +169,7 @@
 	</div>
 
 	<label>Take students</label>
-	<div class="button-group flex--strech">
+	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
 			<div class="checkbox">
 				<input type="checkbox" id="email-masters" name="take_students_masters" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->take_students_masters) checked @endif>
@@ -186,7 +186,7 @@
 	</div>
 
 	<label>Project Load</label>
-	<div class="button-group flex--strech">
+	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isMastersAdmin())
 			<div class="form-field">
 				<label for="project_load_masters">Masters project load</label>

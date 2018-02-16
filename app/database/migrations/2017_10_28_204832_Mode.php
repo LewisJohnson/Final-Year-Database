@@ -1,28 +1,22 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Mode extends Migration
-{
+class Mode extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('mode_ug', function (Blueprint $table) {
-			$table->smallInteger('project_year')->unique();
-			$table->dateTimeTz('start_date');
-			$table->string('mode');
-		});
-
-		Schema::create('mode_masters', function (Blueprint $table) {
-			$table->smallInteger('project_year')->unique();
-			$table->dateTimeTz('start_date');
-			$table->string('mode');
-		});
+		foreach (department_sections() as $key => $value) {
+			Schema::create('mode_'.$value, function (Blueprint $table) {
+				$table->smallInteger('project_year')->unique();
+				$table->dateTimeTz('start_date');
+				$table->string('mode');
+			});
+		}
 	}
 
 	/**
@@ -30,8 +24,9 @@ class Mode extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		//
+	public function down(){
+		foreach (department_sections() as $key => $value) {
+			Schema::dropIfExists('mode_'.$value);
+		}
 	}
 }

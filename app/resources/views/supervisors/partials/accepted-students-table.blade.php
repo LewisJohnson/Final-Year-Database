@@ -10,7 +10,7 @@
 			</th>
 			<th>Student Name</th>
 			<th>Second Marker</th>
-			<th>Project</th>
+			<th>Project Title</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -29,8 +29,13 @@
 				@else
 					<td>-</td>
 				@endif
-				<td><a class="project-link" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-				<td><button class="button button--raised undo" data-student_id="{{ $project->student_id }}" data-project_id="{{ $project->id }}">Undo</button></td>
+				<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+
+				<td class="table-action">
+					<a class="button button--svg button--danger-text supervisor-undo-accept" title="Un-accept {{ $project->student_name }} for {{ $project->title }}" data-student-id="{{ $project->student_id }}" data-student-name="{{ $project->student_name }}" data-project-title="{{ $project->title }}">
+						@include('svg.undo')
+					</a>
+				</td>
 			</tr>
 		@endforeach
 	</tbody>

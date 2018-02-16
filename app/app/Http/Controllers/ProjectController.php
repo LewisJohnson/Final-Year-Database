@@ -233,7 +233,6 @@ class ProjectController extends Controller{
 		]);
 
 		$result = DB::transaction(function() use ($request) {
-			// todo: uncomment transaction
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
 				$transaction = new TransactionUg;
@@ -249,14 +248,14 @@ class ProjectController extends Controller{
 				'skills' => request('skills')
 			));
 
-			$project->author_programme = 'Computer Science';
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
 
 			$transaction->fill(array(
-				'transaction_type' =>'created',
-				'project_id' => $project->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
+				'type' =>'project',
+				'action' =>'created',
+				'project' => $project->id,
+				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 
@@ -306,9 +305,10 @@ class ProjectController extends Controller{
 			}
 			$project->update(request(['title', 'description', 'skills', 'status']));
 			$transaction->fill(array(
-				'transaction_type' =>'updated',
-				'project_id' => $project->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
+				'type' =>'project',
+				'action' =>'updated',
+				'project' => $project->id,
+				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 			$transaction->save();
@@ -340,7 +340,8 @@ class ProjectController extends Controller{
 			}
 
 			// $transaction->fill(array(
-			// 	'transaction_type' =>'deleted',
+			//	'type' =>'project',
+			// 	'action' =>'deleted',
 			// 	'project_id' => $id,
 			// 	'supervisor_id' => Auth::user()->supervisor->id,
 			// 	'transaction_date' => new Carbon

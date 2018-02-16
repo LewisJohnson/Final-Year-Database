@@ -1,35 +1,25 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Student extends Migration
-{
+class Student extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-		Schema::create('students_ug', function (Blueprint $table) {
-			$table->unsignedBigInteger('id')->unique();
-			$table->unsignedInteger('registration_number');
-			$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-			$table->unsignedBigInteger('project_id')->nullable(true);
-			$table->boolean('share_name')->default(0);
-			$table->unsignedBigInteger('marker_id')->nullable(true);
-		});
-
-		Schema::create('students_masters', function (Blueprint $table) {
-			$table->unsignedBigInteger('id')->unique();
-			$table->unsignedInteger('registration_number');
-			$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-			$table->unsignedBigInteger('project_id')->nullable(true);
-			$table->boolean('share_name')->default(0);
-			$table->unsignedBigInteger('marker_id')->nullable(true);
-		});
+	public function up(){
+		foreach (department_sections() as $key => $value) {
+			Schema::create('students_'.$value, function (Blueprint $table) {
+				$table->unsignedBigInteger('id')->unique();
+				$table->string('registration_number');
+				$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
+				$table->unsignedBigInteger('project_id')->nullable(true);
+				$table->boolean('share_name')->default(1);
+				$table->unsignedBigInteger('marker_id')->nullable(true);
+			});
+		}
 	}
 
 	/**
@@ -37,9 +27,9 @@ class Student extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::dropIfExists('students_ug');
-		Schema::dropIfExists('students_masters');
+	public function down(){
+		foreach (department_sections() as $key => $value) {
+			Schema::dropIfExists('students_'.$value);
+		}
 	}
 }

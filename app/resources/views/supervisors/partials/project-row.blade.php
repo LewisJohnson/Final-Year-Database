@@ -1,5 +1,5 @@
 <tr>
-	<td><a href="{{ action('ProjectController@show', $project->id) }}" class="project-link">{{ $project->title }}</a></td>
+	<td><a href="{{ action('ProjectController@show', $project->id) }}" class="flex--stretch">{{ $project->title }}</a></td>
 	@if($project->getPrimaryTopic() != null)
 		<td>
 			<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>

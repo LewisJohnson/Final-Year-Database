@@ -42,7 +42,11 @@ code{
 	flex-direction: column;
 }
 
-.flex--strech{
+.flex--stretch-children{
+	> *{ flex: 1; }
+}
+
+.flex--stretch{
 	> *{ flex: 1; }
 }
 

@@ -137,8 +137,11 @@ Route::group(['middleware' => ['supervisor']], function() {
 	// Supervisor
 	Route::get('supervisor', 'SupervisorController@index');
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
+
+	// Project offers
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
+	Route::patch('supervisor/undo', 'SupervisorController@undo');
 });
 
 /* =================

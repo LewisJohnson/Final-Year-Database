@@ -14,7 +14,7 @@
 		</div>
 		@if (count(Auth::user()->supervisor->getAcceptedStudents()))
 			<div class="button-group">
-				<button class="button button--raised" type="">Email Selected</button>
+				<button class="button button--raised" type="button">Email Selected</button>
 			</div>
 		@endif
 	</div>

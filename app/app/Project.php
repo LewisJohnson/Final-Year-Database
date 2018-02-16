@@ -20,7 +20,7 @@ class Project extends Model{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['title', 'description', 'skills', 'status', 'author_programme'];
+	protected $fillable = ['title', 'description', 'skills', 'status'];
 
 	/**
 	 * The attributes that are not mass assignable.
