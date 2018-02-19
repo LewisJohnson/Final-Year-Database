@@ -139,11 +139,7 @@ class User extends Authenticatable{
 	}
 
 	public function supervisor(){
-		try{
-			return $this->hasOne(Supervisor::class, 'id');
-		} catch(Exception $e){
-			dd("dd");
-		}
+		return $this->hasOne(Supervisor::class, 'id');
 	}
 
 	public function projects(){

@@ -50,8 +50,7 @@ class Project extends Model{
 	 * @var bool
 	 */
 	// public $incrementing = false;
-
-
+	
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}

@@ -18,7 +18,7 @@ class Supervisor extends User{
 	protected $fillable = [ 'id', 'title', 'contact_type', 'project_load', 'take_students' ];
 
 	public function user(){
-		return $this->hasOne(User::class);
+		return $this->hasOne(User::class, 'id');
 	}
 
 	public function getProjectsByStatus($status){

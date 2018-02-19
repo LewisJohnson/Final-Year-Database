@@ -52,7 +52,9 @@
 			</thead>
 
 			<tbody>
-				@include('projects.partials.full-project-table-row')
+				@foreach($projects as $project)
+					@include('projects.partials.project-table-row')
+				@endforeach
 			</tbody>
 		</table>
 	</div>

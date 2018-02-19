@@ -17,17 +17,17 @@ class DatabaseSeeder extends Seeder{
 		// Projects: 600 (300 UG, 300 MSc)
 
 		// First 100 students select projects 1 - 100
-		factory(SussexProjects\User::class, 344)->create();
-		factory(SussexProjects\Supervisor::class, 40)->create();
+		// factory(SussexProjects\User::class, 344)->create();
+		// factory(SussexProjects\Supervisor::class, 40)->create();
 
-		factory(SussexProjects\StudentUg::class, 150)->create();
-		factory(SussexProjects\StudentMasters::class, 150)->create();
+		// factory(SussexProjects\StudentUg::class, 150)->create();
+		// factory(SussexProjects\StudentMasters::class, 150)->create();
 
 		factory(SussexProjects\ProjectUg::class, 300)->create();
-		factory(SussexProjects\ProjectMasters::class, 300)->create();
+		// factory(SussexProjects\ProjectMasters::class, 300)->create();
 
-		factory(SussexProjects\TopicUg::class, 53)->create();
-		factory(SussexProjects\TopicMasters::class, 53)->create();
+		// factory(SussexProjects\TopicUg::class, 53)->create();
+		// factory(SussexProjects\TopicMasters::class, 53)->create();
 	}
 }
 

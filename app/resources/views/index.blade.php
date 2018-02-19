@@ -79,14 +79,14 @@
 				@endif
 			</div>
 
-			<div class="card card--margin-vertical" style="border: 1px solid gold; background: rgba(255, 215, 0, 0.5)">
+			<div class="card card--margin-vertical">
 				<h2>Favourite Projects</h2>
 				@if($projects = Auth::user()->student->getFavouriteProjects())
-					@foreach($projects as $project)
-						<a href="{{ action('ProjectController@show', $project->id)}}">
-							{{ $project->title }}
-						</a>
-					@endforeach
+					<div class="favourite-projects flex flex--row flex--wrap">
+						@foreach($projects as $project)
+							<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+						@endforeach	
+					</div>
 				@else
 					<p title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
 				@endif

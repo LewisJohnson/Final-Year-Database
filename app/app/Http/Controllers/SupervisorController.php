@@ -37,14 +37,15 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function transactions(){
-		$projects = Auth::user()->projects->pluck('id');
+		// $projects = Auth::user()->projects->pluck('id');
 
-		if(Session::get("db_type") == "ug"){
-			$transactions = TransactionUg::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
-		} elseif(Session::get("db_type") == "masters") {
-			$transactions = TransactionMasters::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
-		}
+		// if(Session::get("db_type") == "ug"){
+		// 	$transactions = TransactionUg::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
+		// } elseif(Session::get("db_type") == "masters") {
+		// 	$transactions = TransactionMasters::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
+		// }
 
+		$transactions = [];
 		return view('supervisors.transactions')->with('transactions', $transactions);
 	}
 

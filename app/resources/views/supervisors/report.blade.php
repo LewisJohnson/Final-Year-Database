@@ -19,7 +19,7 @@
 	
 	<div id="supervisor-report" style="overflow: auto;">
 		@foreach($supervisors as $supervisor)
-			<table class="shadow-2dp table--dark-head full-detail" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
+			<table class="shadow-2dp table--dark-head " id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>

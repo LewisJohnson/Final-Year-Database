@@ -30,29 +30,14 @@ code{
 	padding: 3rem 0;
 }
 
-.flex{
-	display: flex;
-}
+.flex{ display: flex; }
+.flex--row{ flex-direction: row; }
+.flex--col{ flex-direction: column; }
+.flex--stretch{ flex: 1; }
+.flex--wrap{ flex-wrap: wrap; }
 
-.flex--row{
-	flex-direction: row;
-}
+.flex--stretch-children{ > *{ flex: 1; }}
 
-.flex--col{
-	flex-direction: column;
-}
-
-.flex--stretch-children{
-	> *{ flex: 1; }
-}
-
-.flex--stretch{
-	> *{ flex: 1; }
-}
-
-.flex--wrap{
-	flex-wrap: wrap;
-}
 
 .cookie-banner{
 	padding: 1rem;
