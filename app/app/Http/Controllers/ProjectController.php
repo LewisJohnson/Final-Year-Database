@@ -1,6 +1,7 @@
 <?php
 namespace SussexProjects\Http\Controllers;
 
+use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Input;
@@ -24,6 +25,12 @@ use SussexProjects\Supervisor;
 use SussexProjects\Jobs\ProcessDeleteProject;
 
 class ProjectController extends Controller{
+
+	private $descriptionPurifyConfig = [
+		'Core.CollectErrors' => true,
+		'Attr.ID.HTML5' => true,
+		'HTML.TargetBlank' => true,
+		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6'];
 
 	public function __construct(){
 		$this->middleware('auth');
@@ -107,14 +114,6 @@ class ProjectController extends Controller{
 			->with('view', $view);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create(){
-		return view('projects.create');
-	}
 
 	/**
 	 * Adds a topic to a project.
@@ -166,7 +165,6 @@ class ProjectController extends Controller{
 	 * @return string topic name
 	 */
 	public function removeTopic(Request $request){
-
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::findOrFail(request('topic_id'));
@@ -217,6 +215,15 @@ class ProjectController extends Controller{
 	}
 
 	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create(){
+		return view('projects.create');
+	}
+
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -231,7 +238,7 @@ class ProjectController extends Controller{
 			'skills' => 'required|max:255',
 			'status' => 'required',
 		]);
-
+		
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
@@ -241,9 +248,11 @@ class ProjectController extends Controller{
 				$transaction = new TransactionMasters;
 			}
 
+			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
+			
 			$project->fill(array(
 				'title' => request('title'),
-				'description' => request('description'),
+				'description' => $clean_html,
 				'status' => request('status'),
 				'skills' => request('skills')
 			));
@@ -303,7 +312,16 @@ class ProjectController extends Controller{
 				$project = ProjectMasters::findOrFail($id);
 				$transaction = new TransactionMasters;
 			}
-			$project->update(request(['title', 'description', 'skills', 'status']));
+
+			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
+
+			$project->update([
+				'title' => request('title'),
+				'description' => $clean_html,
+				'status' => request('status'),
+				'skills' => request('skills')
+			]);
+
 			$transaction->fill(array(
 				'type' =>'project',
 				'action' =>'updated',
@@ -311,6 +329,7 @@ class ProjectController extends Controller{
 				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
+
 			$transaction->save();
 			session()->flash('message', '"'.$project->title.'" has been updated.');
 			session()->flash('message_type', 'success');

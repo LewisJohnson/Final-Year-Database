@@ -24,7 +24,9 @@
 		@endif
 
 		<h3>Description</h3>
-		<p>{{ $project->description }}</p>
+		<div>
+			<p>{!! html_entity_decode($project->description) !!}</p>
+		</div>
 
 		<h3>Skills</h3>
 		<p>{{ $project->skills }}</p>

@@ -278,6 +278,11 @@ ul.dot-menu{
 }
 
 
+.html-editor--top-buttons{
+	label { font-size: 12px; }
+	.html{ margin-left: auto; }
+}
+
 // Tea
 .tea{ width: 10px; position: absolute; background: sandybrown; border-radius: 1% 1000% 200% 200%; display: none;}
 .tea-fill{ width: 100vw; left: 0; bottom: 0; position: absolute; background: sandybrown; }

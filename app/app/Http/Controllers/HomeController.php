@@ -49,7 +49,6 @@ class HomeController extends Controller{
 
 	public function snippet(Request $request){
 		$snippetName = $request->query('snippet');
-		
 		if(preg_match('/^[a-z-]*$/', $snippetName)){
 			return view('snippets.'.$snippetName);
 		}

@@ -261,6 +261,44 @@ import '../js/components';
 		}
 	});
 
+
+	$('.html-editor').each(function(index, value){
+
+		$.ajax({
+			url: '/snippet?snippet=html-editor-toolbar',
+			type:'GET',
+			success:function(result){ 
+				$('.html-editor--input').after(result);
+			},
+		});
+
+		var buttonsHtml = "<div class='html-editor--top-buttons flex'><button class='html' type='button'>HTML</button><button class='preview' type='button'>PREVIEW</button></div>";
+		var previewHtml = "<div class='html-editor--preview-container'><div class='html-editor--preview'></div></div>";
+
+		$('.html-editor--input').before(buttonsHtml);
+		$('.html-editor').after(previewHtml);
+		
+		$('.html-editor--preview-container').hide();
+		$('.html-editor--preview').html($('.html-editor--input').val());	
+	});
+
+	$('.html-editor--input').on('change', function(){
+		$('.html-editor--preview').html($(this).val());	
+	});
+
+	$('.html-editor--top-buttons .html').on('click', function(){
+		$('.html-editor--input').show();
+		$('.html-editor--toolbar').show();
+		$('.html-editor--preview-container').hide();
+	});
+
+	$('.html-editor--top-buttons .preview').on('click', function(){
+		$('.html-editor--input').hide();
+		$('.html-editor--toolbar').hide();
+		$('.html-editor--preview-container').show();
+	});
+	
+
 	/* ===============
 		9. Initialise
 	   =============== */
