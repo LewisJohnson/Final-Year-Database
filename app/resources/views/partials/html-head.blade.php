@@ -8,11 +8,11 @@
 	<!-- Meta -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<link rel="icon" sizes="192x192" href="icon.png">
+	{{-- <link rel="icon" sizes="192x192" href="icon.png"> --}}
 
-	<!-- Web App -->
+{{-- 	<!-- Web App -->
 	<meta name="theme-color" content="@lang('web-app.theme_color')">
 	<link rel="manifest" href="/manifest.json">
 
@@ -28,7 +28,7 @@
 	<meta name="msapplication-square70x70logo" content="icon_smalltile.png">
 	<meta name="msapplication-square150x150logo" content="icon_mediumtile.png">
 	<meta name="msapplication-square310x310logo" content="icon_largetile.png">
-	<meta name="msapplication-wide310x150logo" content="icon_widetile.png">
+	<meta name="msapplication-wide310x150logo" content="icon_widetile.png"> --}}
 
 	<!-- Fonts -->
 	@yield('fonts')

@@ -34,7 +34,6 @@ function sortUnorderedList(ul) {
 }
 
 function addLastNameHeadersToList(ul) {
-
 	var listitems = ul.children('li').get();
 	var links = $('#' + ul.attr('id') + '-links');
 
@@ -169,4 +168,56 @@ function repopulateCheckboxes(){
 			$("#" + element).prop('checked', checked);
 		});
 	}
+}
+
+/*
+* From http://web.archive.org/web/20110102112946/http://www.scottklarr.com/topic/425/how-to-insert-text-into-a-textarea-where-the-cursor-is/
+* Posted On Oct 11, 2008 at 10:16 pm
+* Can not find an author to credit
+*/
+
+function insertAtCaret(areaId, text) {
+	var txtarea = document.getElementById(areaId);
+	if (!txtarea || !text) { return; }
+
+	var scrollPos = txtarea.scrollTop;
+	var strPos = txtarea.selectionStart;
+	var front = (txtarea.value).substring(0, strPos);
+	var back = (txtarea.value).substring(strPos, txtarea.value.length);
+
+	txtarea.value = front + text + back;
+	strPos = strPos + text.length;
+	txtarea.selectionStart = strPos;
+	txtarea.selectionEnd = strPos;
+	$(txtarea).trigger("change");
+	txtarea.focus();
+
+	txtarea.scrollTop = scrollPos;
+}
+
+function wrapTextWithTag(areaId, tag) {
+	var txtarea = document.getElementById(areaId);
+	if (!txtarea || !tag) { return; }
+
+	var scrollPos = txtarea.scrollTop;
+	var frontTag = "<" + tag + ">";
+	var backTag = "</" + tag + ">";
+
+	var strPos = txtarea.selectionStart + frontTag.length;
+	var endPos = txtarea.selectionEnd + backTag.length - 1;
+
+
+	var start = txtarea.value.substring(0, txtarea.selectionStart);
+	var end = txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
+	var selection = txtarea.value.substring(txtarea.selectionStart, txtarea.selectionEnd)
+	txtarea.value = start + frontTag + selection + backTag + end;
+
+	$(txtarea).trigger("change");
+
+	// txtarea.selectionEnd
+	txtarea.focus();
+
+	txtarea.selectionStart = strPos;
+	txtarea.selectionEnd = endPos;
+	txtarea.scrollTop = scrollPos;
 }

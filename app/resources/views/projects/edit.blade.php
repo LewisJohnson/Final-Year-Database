@@ -14,7 +14,7 @@
 <div class="centered width--800">
 	<h1>You are editing "{{ $project->title }}".</h1>
 
-	<div class="card card--margin-vertical">
+	<div class="card project-card card--margin-vertical">
 		<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
@@ -27,7 +27,7 @@
 			<div class="form-field">
 				<label for="description">Description</label>
 				<div class="html-editor">
-					<textarea class="html-editor--input" maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
+					<textarea id="html-editor--input" class="html-editor--input" maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
 				</div>
 			</div>
 

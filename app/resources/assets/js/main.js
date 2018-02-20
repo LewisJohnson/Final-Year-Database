@@ -299,6 +299,70 @@ import '../js/components';
 	});
 	
 
+	// Toggle label flips toggle
+	$(".html-editor").on("click", ".html-editor--toolbar li button",  function(e) {
+		switch($(this).data('type')){
+			case "linebreak":
+				insertAtCaret('html-editor--input', '<br>');
+				break;
+
+			case "ol":
+				insertAtCaret('html-editor--input', '\n<ol>\n\t<li>Item 1</li>\n\t<li>Item 2</li>\n\t<li>Item 3</li>\n</ol>');
+				break;
+				
+			case "ul":
+				insertAtCaret('html-editor--input', '\n<ul>\n\t<li>Item x</li>\n\t<li>Item y</li>\n\t<li>Item z</li>\n</ul>');
+				break;
+				
+			case "bold":
+				wrapTextWithTag('html-editor--input', 'b');
+				break;
+				
+			case "italic":
+				wrapTextWithTag('html-editor--input', 'i');
+				break;
+				
+			case "underline":
+				wrapTextWithTag('html-editor--input', 'u');
+				break;
+				
+			case "img":
+				var inputUrl = prompt("Enter the image URL", "https://www.");
+				var inputAlt = prompt("Enter alt text", "Image of Sussex campus");
+				insertAtCaret('html-editor--input', '<img alt="' + inputAlt + '" src="' + inputUrl + '">');
+				break;
+				
+			case "link":
+				var inputUrl = prompt("Enter the URL", "https://www.");
+				var inputText = prompt("Enter display text", "Sussex");
+				insertAtCaret('html-editor--input', '<a href="' + inputUrl + '">' + inputText + '</a>');
+				break;
+				
+			case "code":
+				wrapTextWithTag('html-editor--input', 'code');
+				break;
+				
+			case "pre":
+				wrapTextWithTag('html-editor--input', 'pre');
+				break;
+				
+			case "info":
+				$.dialog({
+					theme: 'material',
+					escapeKey: true,
+					animateFromElement : false,
+					backgroundDismiss: true,
+					title: 'HTML Editor Info',
+					content: 'All HTML 5 elements are valid for the description field, excluding; <br><br> <ul><li>Script tags</li><li>Heading tags</li></ul>',
+				});
+				break;
+		}
+	});	
+	
+
+
+
+
 	/* ===============
 		9. Initialise
 	   =============== */

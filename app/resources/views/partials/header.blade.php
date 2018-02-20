@@ -5,7 +5,7 @@
 			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ config_json("header.logo_url.value") }}')"></a>
 		</div>
 
-		<div class="hamburger-container" role="button">
+		<div class="hamburger-container" role="button" aria-label="Toggles the mobile navigation menu.">
 			<ul class="hamburger-list">
 				<li class="hamburger-line hamburger-line--short"></li>
 				<li class="hamburger-line"></li>
