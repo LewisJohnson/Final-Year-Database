@@ -95,7 +95,6 @@ class Supervisor extends User{
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('students_ug.project_status', '=', 'accepted')
-				->whereNotNull('students_ug.project_id')
 				->get();
 		} elseif($db_type == "masters") {
 			$offers = ProjectMasters::
@@ -103,7 +102,6 @@ class Supervisor extends User{
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
 				->where('students_masters.project_status', '=', 'accepted')
-				->whereNotNull('students_masters.project_id')
 				->get();
 		}
 

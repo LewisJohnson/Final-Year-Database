@@ -1,8 +1,14 @@
 <ul class="icon-list">
 	<li>
-		<a class="icon" href="/admin/marker-assign">
+		<a class="icon" href="{{ action('AdminController@assignMarkerManual') }}">
 			@include('svg.account-multiple-plus')
-			<p>Assign Second Marker</p>
+			<p>Manual Assign Second Marker</p>
+		</a>
+	</li>
+	<li>
+		<a class="icon" href="{{ action('AdminController@assignMarkerAutomatic') }}">
+			@include('svg.account-multiple-plus')
+			<p>Automatic Assign Second Marker</p>
 		</a>
 	</li>
 	<li>

@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 | 7. Student routes
 | 8. Authenticated User routes (Anyone who is logged in)
 |
-| Please follow the CRUD convention 
+| Please follow the CRUD convention
 | Verb		URI						Action		Route Name
 | -------------------------------------------------------------
 | GET		/photos					index		photos.index
@@ -51,7 +51,7 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('help', 'HomeController@help');
 
 	Route::get('snippet', 'HomeController@snippet');
-	
+
 	// Cookie
 	Route::post('seen-cookie-banner', 'HomeController@seenCookieBanner');
 
@@ -79,14 +79,17 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@showAmendSupervisorArrangements');
 	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
-	Route::get('admin/marker-assign', 'AdminController@showAssignMarker');
+	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManual');
+	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomatic');
+	Route::get('admin/marker-assign-automatic-table', 'AdminController@assignMarkerAutomaticTable');
+
 	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
 	Route::get('admin/topics-amend', 'AdminController@ShowAmendTopics');
 
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
-	
+
 	Route::get('admin/archive', 'AdminController@archive');
 	Route::get('admin/export', 'AdminController@export');
 	Route::get('admin/parameters', 'AdminController@parameters');
@@ -151,7 +154,7 @@ Route::group(['middleware' => ['student']], function() {
 	Route::get('students/project-propose', 'StudentController@showProposeProject');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
-	
+
 	Route::patch('students/share-name', 'StudentController@shareName');
 
 	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');

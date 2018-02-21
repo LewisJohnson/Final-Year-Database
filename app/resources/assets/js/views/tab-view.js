@@ -16,9 +16,9 @@
 
 	// Get help footer snippet using ajax
 	$.ajax({
-		url: 'snippet?snippet=card-help-footer',
+		url: '/snippet?snippet=card-help-footer',
 		type:'GET',
-		success:function(result){ 
+		success:function(result){
 			helpFooterSnippet = result;
 		},
 	});
@@ -28,7 +28,7 @@
 		var currentContent = currentTab.find(".content");
 
 		if(currentContent.attr("aria-hidden") == "true"){
-			if(previousTab !== null){ 
+			if(previousTab !== null){
 				contentHost.removeClass().addClass('content-host');
 
 				if($(window).width() <= config.mobileWidth){
@@ -44,7 +44,7 @@
 						contentHost.addClass('slideOutDown animated quick');
 					}
 				}
-			}	
+			}
 
 			setTimeout(function() {
 				contentHost.find(".content").appendTo(previousTab);
@@ -72,7 +72,7 @@
 					} else{
 						var newTabHeight = tabCard.height();
 					}
-					
+
 					tabCard.css('height', previousHeight);
 
 					tabCard.animate({ height: newTabHeight }, config.animtions.medium, 'linear', function(){
@@ -123,7 +123,7 @@
 				previousTab = currentTab;
 				previousTabIndex = previousTab.index();
 			}.bind(this), 100);
-			
+
 		}
 	});
 
@@ -147,7 +147,7 @@ function restoreOldTabFromStorage(tabContainer, tabs){
 		// No session or cookie
 		$(".open-tab").first().click();
 	}
-	
+
 	var tabClicked = false;
 	tabs.each(function(){
 		if($(this).data("tab-name") === oldSelectedTab){
@@ -156,7 +156,7 @@ function restoreOldTabFromStorage(tabContainer, tabs){
 			return;
 		}
 	});
-	
+
 	// Tab name not found, could be different authentication
 	if(!tabClicked){
 		$(".open-tab").first().click();

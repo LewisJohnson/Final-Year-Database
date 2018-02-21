@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\StudentMasters;
 use SussexProjects\StudentUg;
+use SussexProjects\ProjectMasters;
+use SussexProjects\ProjectUg;
 use SussexProjects\Supervisor;
 use SussexProjects\TopicMasters;
 use SussexProjects\TopicUg;
@@ -153,7 +155,7 @@ class AdminController extends Controller{
 		return view('admin.archive');
 	}
 
-	public function showAssignMarker(Request $request){
+	public function assignMarkerManual(Request $request){
 		$supervisors = Supervisor::all();
 
 		if (Session::get("db_type") == "ug") {
@@ -171,10 +173,64 @@ class AdminController extends Controller{
 			}
 		});
 
-		return view('admin.assign-marker')
+		return view('admin.assign-marker-manual')
 			->with('supervisors', $supervisors)
 			->with('students', $sorted);
 	}
+
+	public function assignMarkerAutomatic(Request $request){
+		return view('admin.assign-marker-automatic');
+	}
+
+	public function assignMarkerAutomaticTable(Request $request){
+		$supervisors = Supervisor::all();
+
+		if (Session::get("db_type") == "ug") {
+			$students = StudentUg::all();
+			$project_count = ProjectUg::count();
+
+		} elseif (Session::get("db_type") == "masters") {
+			$students = StudentMasters::all();
+			$project_count = ProjectMasters::count();
+		}
+
+		$sorted = $students->sortBy(function ($student, $key) use ($request) {
+			if ($request->query("sort") == "firstname") {
+				return $student->user->first_name;
+			} elseif ($request->query("sort") == "lastname") {
+				return $student->user->last_name;
+			}
+		});
+
+		$supervisorLoadTotal = 0;
+		foreach ($supervisors as $key => $supervisor) {
+			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
+
+			if(Session::get('db_type') == 'ug'){
+				$supervisor->project_load = $supervisor->project_load_ug;
+				$supervisor->target_load = ($supervisor->project_load_ug * 2) - $supervisor->accepted_student_count;
+			} elseif(Session::get('db_type') == 'masters'){
+				$supervisor->project_load = $supervisor->project_load_masters;
+				$supervisor->target_load = ($supervisor->project_load_masters * 2) - $supervisor->accepted_student_count;
+			}
+
+			$supervisorLoadTotal += $supervisor->project_load;
+
+			// No negative values
+			if($supervisor->target_load < 0){
+				$supervisor->target_load = 0;
+			}
+		}
+
+		if($project_count > $supervisorLoadTotal){
+			die(json_encode(array('successful' => false, 'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($project_count - $supervisorLoadTotal).'</b>.')));
+		}
+
+		$view = view('admin.partials.automatic-second-marker-assignment-table')->with('supervisors', $supervisors)->with('students', $sorted);
+		die(json_encode(array('successful' => true, 'html' => $view->render())));
+	}
+
+
 
 	public function loginAs($id){
 		$user = User::findOrFail($id);
