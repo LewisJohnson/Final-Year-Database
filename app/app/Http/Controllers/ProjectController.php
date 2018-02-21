@@ -238,7 +238,7 @@ class ProjectController extends Controller{
 			'skills' => 'required|max:255',
 			'status' => 'required',
 		]);
-		
+
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$project = new ProjectUg;
@@ -249,7 +249,7 @@ class ProjectController extends Controller{
 			}
 
 			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
-			
+
 			$project->fill(array(
 				'title' => request('title'),
 				'description' => $clean_html,
@@ -348,57 +348,27 @@ class ProjectController extends Controller{
 	public function destroy($id) {
 
 		$softDeletedproject = DB::Transaction(function() use ($id){
-			$deleteTime = Carbon::now()->addMinutes($this->restoreTimeInMinutes);
-
 			if(Session::get("db_type") == "ug"){
 				$project = ProjectUg::findOrFail($id);
-				// $transaction = new TransactionUg;
+				$transaction = new TransactionUg;
 			} else {
 				$project = ProjectMasters::findOrFail($id);
-				// $transaction = new TransactionMasters;
+				$transaction = new TransactionMasters;
 			}
 
-			// $transaction->fill(array(
-			//	'type' =>'project',
-			// 	'action' =>'deleted',
-			// 	'project_id' => $id,
-			// 	'supervisor_id' => Auth::user()->supervisor->id,
-			// 	'transaction_date' => new Carbon
-			// ));
+			$transaction->fill(array(
+				'type' =>'project',
+				'action' =>'deleted',
+				'project_id' => $id,
+				'supervisor_id' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
 
-			// ProcessDeleteProject::dispatch($project, $transaction)->delay($deleteTime);
-			ProcessDeleteProject::dispatch($project, null)->delay($deleteTime);
-
-			// This is a soft delete
-			$project->destroy_at = $deleteTime;
-			$project->save();
 			$project->delete();
 			return $project;
 		});
 
 		return view('supervisors.partials.restore-project-row')->with('project', $softDeletedproject);
-	}
-
-	/**
-	 * Restore the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function restore($id) {
-
-		$restoredProject = DB::Transaction(function() use ($id){
-			if(Session::get("db_type") == "ug"){
-				$project = ProjectUg::withTrashed()->where('id', $id)->first();
-			} else {
-				$project = ProjectMasters::withTrashed()->where('id', $id)->first();
-			}
-
-			$project->restore();
-			return $project;
-		});
-
-		return view('supervisors.partials.project-row')->with('project', $restoredProject);
 	}
 
 

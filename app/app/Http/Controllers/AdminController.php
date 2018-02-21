@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use SussexProjects\StudentMasters;
 use SussexProjects\StudentUg;
 use SussexProjects\ProjectMasters;
@@ -109,7 +110,6 @@ class AdminController extends Controller{
 	}
 
 	public function showAmendTopics(){
-
 		if (Session::get("db_type") == "ug") {
 			$topics = TopicUg::all();
 
@@ -182,27 +182,21 @@ class AdminController extends Controller{
 		return view('admin.assign-marker-automatic');
 	}
 
-	public function assignMarkerAutomaticTable(Request $request){
+	public function setupAutomaticSecondMarkerAssignment(){
 		$supervisors = Supervisor::all();
+		$supervisorLoadTotal = 0;
+		$maxTargetLoad = 0;
+		$slack = 0;
 
 		if (Session::get("db_type") == "ug") {
-			$students = StudentUg::all();
-			$project_count = ProjectUg::count();
+			$studentCount = StudentUg::count();
+			$projectCount = ProjectUg::count();
 
 		} elseif (Session::get("db_type") == "masters") {
-			$students = StudentMasters::all();
-			$project_count = ProjectMasters::count();
+			$studentCount = StudentMasters::count();
+			$projectCount = ProjectMasters::count();
 		}
 
-		$sorted = $students->sortBy(function ($student, $key) use ($request) {
-			if ($request->query("sort") == "firstname") {
-				return $student->user->first_name;
-			} elseif ($request->query("sort") == "lastname") {
-				return $student->user->last_name;
-			}
-		});
-
-		$supervisorLoadTotal = 0;
 		foreach ($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 
@@ -220,24 +214,95 @@ class AdminController extends Controller{
 			if($supervisor->target_load < 0){
 				$supervisor->target_load = 0;
 			}
+
+			// Determine who has max target load
+			if($supervisor->target_load >= $maxTargetLoad){
+				 $maxTargetLoad = $supervisor->target_load;
+			}
+
+			// Determine lazy score
+			if($supervisor->target_load > 0){
+				$supervisor->lazy_score = ($maxTargetLoad / $supervisor->target_load);
+			} else {
+				$supervisor->lazy_score = 0;
+			}
 		}
 
-		if($project_count > $supervisorLoadTotal){
-			die(json_encode(array('successful' => false, 'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($project_count - $supervisorLoadTotal).'</b>.')));
+		$slack = $maxTargetLoad / $studentCount;
+
+		if($projectCount > $supervisorLoadTotal){
+			die(json_encode(array('successful' => false, 'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.')));
 		}
 
-		$view = view('admin.partials.automatic-second-marker-assignment-table')->with('supervisors', $supervisors)->with('students', $sorted);
+		return ['slack' => $slack, 'supervisors' => $supervisors];
+	}
+
+	public function calculateSecondMarkers(){
+		if (Session::get("db_type") == "ug") {
+			DB::table('students_ug')->update(array('marker_id' => null));
+		} elseif (Session::get("db_type") == "masters") {
+			DB::table('students_masters')->update(array('marker_id' => null));
+		}
+
+		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
+
+		// Assignment derived from slack
+		foreach ($assignmentSetup["supervisors"] as $key => $supervisor) {
+			if($supervisor->target_load == 0){ break; }
+
+			$studentsAssignedToThisSupervisor = 0;
+			while($studentsAssignedToThisSupervisor < $assignmentSetup["slack"]){
+				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
+
+				if(is_null($studentToAssign)){
+					die(json_encode(array('successful' => false, 'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.')));
+				}else{
+					$studentToAssign->marker_id = $supervisor->id;
+					$studentToAssign->save();
+					$studentsAssignedToThisSupervisor++;
+				}
+			}
+		}
+
+		// Assign remaining students taking lazy score in to consideration
+		// Assignment derived from slack
+		while(StudentController::getStudentWithoutSecondMarker()){
+			$studentToAssign = StudentController::getStudentWithoutSecondMarker();
+			$laziestSupervisor = null;
+
+			// No more students left to assign
+			if($studentToAssign == null){ break; }
+
+			// foreach ($assignmentSetup["supervisors"] as $key => $supervisor) {
+			// 	if($supervisor->target_load == 0){ break; }
+			// }
+			// todo: this;
+			$studentToAssign->marker_id = 1;
+			$studentToAssign->save();
+		}
+
+
+		die($this->assignMarkerReportTable());
+	}
+
+	public function assignMarkerAutomaticTable(){
+		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
+		$view = view('admin.partials.automatic-second-marker-assignment-table')->with('supervisors', $assignmentSetup["supervisors"])->with('slack', $assignmentSetup["slack"]);
 		die(json_encode(array('successful' => true, 'html' => $view->render())));
 	}
 
-
+	public function assignMarkerReportTable(){
+		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
+		$view = view('admin.partials.assignment-report-table')->with('supervisors', $assignmentSetup["supervisors"]);
+		die(json_encode(array('successful' => true, 'html' => $view->render())));
+	}
 
 	public function loginAs($id){
 		$user = User::findOrFail($id);
 		Auth::login($user);
 
 		// Redirect
-		session()->flash('message', 'You have logged in as ' . $user->getFullName());
+		session()->flash('message', 'You have logged in as '.$user->getFullName());
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('HomeController@index');

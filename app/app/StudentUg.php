@@ -7,7 +7,7 @@ class StudentUg extends Student{
 	public function user(){
 		return $this->hasOne(User::class, 'id');
 	}
-	
+
 	public function project(){
 		return $this->hasOne(ProjectUg::class, 'id', 'project_id');
 	}

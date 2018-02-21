@@ -169,7 +169,7 @@ class StudentController extends Controller{
 				if(Session::get("db_type") == "ug"){
 					$project = ProjectUg::findOrFail(request('project_id'));
 					$transaction = new TransactionUg;
-				} else {
+				} elseif(Session::get("db_type") == "masters") {
 					$project = ProjectMasters::findOrFail(request('project_id'));
 					$transaction = new TransactionMasters;
 				}
@@ -206,7 +206,7 @@ class StudentController extends Controller{
 				$project = ProjectUg::findOrFail(request('project_id'));
 				$student = StudentUg::findOrFail(request('student_id'));
 				$transaction = new TransactionUg;
-			} else {
+			} elseif(Session::get("db_type") == "masters") {
 				$project = ProjectMasters::findOrFail(request('project_id'));
 				$student = StudentMasters::findOrFail(request('student_id'));
 				$transaction = new TransactionMasters;
@@ -241,5 +241,18 @@ class StudentController extends Controller{
 	public function destroy($id)
 	{
 		//
+	}
+
+	/**
+	 * Returns the first student in the DB without a second marker.
+	 *
+	 * @return Student
+	 */
+	public static function getStudentWithoutSecondMarker(){
+		if(Session::get("db_type") == "ug"){
+			return $student = StudentUg::whereNull('marker_id')->first();
+		} elseif(Session::get("db_type") == "masters") {
+			return $student = StudentMasters::whereNull('marker_id')->first();
+		}
 	}
 }

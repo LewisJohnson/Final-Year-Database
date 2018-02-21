@@ -35,21 +35,18 @@ class Supervisor extends User{
 		}
 	}
 
-	public function getProjectsOrderByStatus($includeDeleted = false){
+	public function getProjectsOrderByStatus(){
 		if(Session::get("db_type") == "ug"){
 			$proj =  ProjectUg::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
-			->whereNull('student_id');
+			->whereNull('student_id')
+			->get();
 		} elseif(Session::get("db_type") == "masters") {
 			$proj = ProjectMasters::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
-			->whereNull('student_id');
+			->whereNull('student_id')
+			->get();
 		}
-
-		if($includeDeleted){
-			$proj->withTrashed();
-		}
-		return $proj->get();
 	}
 
 	public function getProjectOffers(){
@@ -89,15 +86,16 @@ class Supervisor extends User{
 		if(is_null($db_type)){
 			$db_type = Session::get("db_type");
 		}
+
 		if($db_type == "ug"){
-			$offers = ProjectUg::
+			$acceptedStudents = ProjectUg::
 				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_name as student_share', 'students_ug.marker_id as marker')
 				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
 				->where('projects_ug.supervisor_id', $this->id)
 				->where('students_ug.project_status', '=', 'accepted')
 				->get();
 		} elseif($db_type == "masters") {
-			$offers = ProjectMasters::
+			$acceptedStudents = ProjectMasters::
 				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share', 'students_masters.marker_id as marker')
 				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
 				->where('projects_masters.supervisor_id', $this->id)
@@ -105,7 +103,7 @@ class Supervisor extends User{
 				->get();
 		}
 
-		foreach ($offers as $key => $value) {
+		foreach ($acceptedStudents as $key => $value) {
 			if($db_type == "ug"){
 				$student = StudentUg::findOrFail($value->student_id);
 			} elseif($db_type == "masters") {
@@ -118,11 +116,44 @@ class Supervisor extends User{
 				$value->student_name = "Hidden";
 			}
 
-			// dd($student->marker_id);
-			$value->marker = Supervisor::where('id', $value->marker)->first();
+			$value->marker = Supervisor::find($value->marker);
 			$value->student_email = $student->user->email;
 		}
-		return $offers;
+		return $acceptedStudents;
+	}
+
+	public function getSupervisingStudents($db_type = null){
+		if(is_null($db_type)){
+			$db_type = Session::get("db_type");
+		}
+
+		if($db_type == "ug"){
+			$supervisingStudents = ProjectUg::
+				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_name as student_share', 'students_ug.marker_id as marker')
+				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
+				->where('students_ug.marker_id', $this->id)
+				->get();
+		} elseif($db_type == "masters") {
+			$supervisingStudents = ProjectMasters::
+				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share', 'students_masters.marker_id as marker')
+				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
+				->where('students_masters.marker_id', $this->id)
+				->get();
+		}
+
+		foreach ($supervisingStudents as $key => $value) {
+			if($db_type == "ug"){
+				$student = StudentUg::findOrFail($value->student_id);
+			} elseif($db_type == "masters") {
+				$student = StudentMasters::findOrFail($value->student_id);
+			}
+
+			$value->student_name = $student->user->getFullName();
+
+			$value->marker = Supervisor::find($value->marker);
+			$value->student_email = $student->user->email;
+		}
+		return $supervisingStudents;
 	}
 
 	public function getProjectProposals(){

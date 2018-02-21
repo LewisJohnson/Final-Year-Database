@@ -82,6 +82,8 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManual');
 	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomatic');
 	Route::get('admin/marker-assign-automatic-table', 'AdminController@assignMarkerAutomaticTable');
+	Route::get('admin/marker-assign-report-table', 'AdminController@assignMarkerReportTable');
+	Route::post('admin/marker-calculate', 'AdminController@calculateSecondMarkers');
 
 	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
