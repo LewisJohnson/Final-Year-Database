@@ -3,6 +3,8 @@ namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use SussexProjects\ProjectTopicMasters;
 use SussexProjects\ProjectTopicUg;
 use SussexProjects\Topic;
@@ -11,9 +13,13 @@ use SussexProjects\TopicMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\ProjectTopic;
-use Session;
-use DB;
 
+/**
+ * The topic controller.
+ *
+ * Handles all functions related to topics.
+ * 
+*/
 class TopicController extends Controller{
 
 	public function __construct(){

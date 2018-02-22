@@ -2,14 +2,31 @@
 namespace SussexProjects;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Session;
-use Auth;
 
+/**
+ * The user model.
+ * 
+ * @see SussexProjects\Http\Controllers\UserController
+*/
 class User extends Authenticatable{
 	use Notifiable;
-	public $timestamps = false;
 	
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
+	protected $table = null;
+
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
+	public $timestamps = false;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -23,10 +40,10 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $guarded = [];
+	protected $guarded = ['id'];
 
 	/**
-	 * The attributes that should are dates.
+	 * The columns to be parsed as dates.
 	 *
 	 * @var array
 	 */
@@ -46,37 +63,85 @@ class User extends Authenticatable{
 	 */
 	public $incrementing = true;
 
+
+	/**
+	 * Indicates if authenticated used is a guest.
+	 *
+	 * @return boolean
+	 */
 	public function isGuest(){
 		return in_array("guest", $this->getPrivileges());
 	}
+
+	/**
+	 * Indicates if authenticated used is a staff member.
+	 *
+	 * @return boolean
+	 */
 	public function isStaff(){
 		return in_array("staff", $this->getPrivileges());
 	}
 
+	/**
+	 * Indicates if authenticated used is a student.
+	 *
+	 * @return boolean
+	 */
 	public function isStudent(){
 		return in_array("student", $this->getPrivileges());
 	}
 
+	/**
+	 * Indicates if authenticated used is a supervisor.
+	 *
+	 * @return boolean
+	 */
 	public function isSupervisor(){
 		return in_array("supervisor", $this->getPrivileges());
 	}
 
+	/**
+	 * Indicates if authenticated used is a undergraduate project administrator.
+	 *
+	 * @return boolean
+	 */
 	public function isUgAdmin(){
 		return in_array("admin_ug", $this->getPrivileges());
 	}
 
+	/**
+	 * Indicates if authenticated used is a masters project administrator.
+	 *
+	 * @return boolean
+	 */
 	public function isMastersAdmin(){
 		return in_array("admin_masters", $this->getPrivileges());
 	}
 
+	/**
+	 * Indicates if authenticated used is a project administrator.
+	 *
+	 * @return boolean
+	 */
 	public function isProjectAdmin(){
 		return $this->isUgAdmin() || $this->isMastersAdmin();
 	}
 
+	/**
+	 * Indicates if authenticated used is a system administrator.
+	 *
+	 * @return boolean
+	 */
 	public function isSystemAdmin(){
 		return in_array("admin_system", $this->getPrivileges());
 	}
 
+
+	/**
+	 * Returns authenticated users privileges as a pretty string.
+	 *
+	 * @return string
+	 */
 	public function getPrettyPrivilegesString(){
 		$returnString = "";
 		$privileges = $this->getPrivileges();
@@ -116,10 +181,22 @@ class User extends Authenticatable{
 		return $returnString;
 	}
 
+
+	/**
+	 * Returns authenticated users privileges as a a PHP array.
+	 *
+	 * @return string[]
+	 */
 	public function getPrivileges(){
 		return explode(',', $this->privileges);
 	}
 
+
+	/**
+	 * Returns student type (undergraduate or postgraduate).
+	 *
+	 * @return string
+	 */
 	public function studentType(){
 		if($this->hasOne(StudentUg::class, 'id')->exists()){
 			return "ug";
@@ -130,6 +207,11 @@ class User extends Authenticatable{
 		return null;
 	}
 
+	/**
+	 * Returns the student related to this user.
+	 *
+	 * @return Student
+	*/
 	public function student(){
 		if(Session::get("db_type") == "ug"){
 			return $this->hasOne(StudentUg::class, 'id');
@@ -138,10 +220,21 @@ class User extends Authenticatable{
 		}
 	}
 
+	/**
+	 * Returns the supervisor related to this user.
+	 *
+	 * @return Supervisor
+	*/
 	public function supervisor(){
 		return $this->hasOne(Supervisor::class, 'id');
 	}
 
+
+	/**
+	 * Returns all projects related to this user.
+	 *
+	 * @return Project
+	*/
 	public function projects(){
 		if(Session::get("db_type") == "ug"){
 			return $this->hasMany(ProjectUg::class, 'supervisor_id');
@@ -150,6 +243,13 @@ class User extends Authenticatable{
 		}
 	}
 
+	/**
+	 * Returns authenticated user's full name.
+	 *
+	 * Includes title is user is a supervisor.
+	 * 
+	 * @return string
+	*/
 	public function getFullName(){
 		if($this->isSupervisor()){
 			$format = '%s %s %s';

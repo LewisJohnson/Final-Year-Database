@@ -1,7 +1,9 @@
 <?php
-
 namespace SussexProjects\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use SussexProjects\ProjectTopicMasters;
 use SussexProjects\ProjectTopicUg;
 use SussexProjects\TopicMasters;
@@ -9,9 +11,15 @@ use SussexProjects\TopicUg;
 use SussexProjects\ProjectTopic;
 use SussexProjects\Project;
 use SussexProjects\Topic;
-use DB;
-use Session;
-use Illuminate\Support\Carbon;
+
+/**
+ * The project topic controller.
+ *
+ * Most functions you might expect to find here will be found in ProjectController.
+ * 
+ * @see ProjectController
+ * 
+*/
 class ProjectTopicController extends Controller{
 
 	public function __construct(){
@@ -21,7 +29,5 @@ class ProjectTopicController extends Controller{
 	public function index(ProjectTopic $projectTopic){
 		return ProjectTopic::findOrFail($projectTopic);
 	}
-
-	// This logic is handeled in the ProjectController
 }
 

@@ -1,8 +1,18 @@
 <?php
-
 namespace SussexProjects;
 
+/**
+ * The masters project model.
+ * 
+ * @see SussexProjects\Http\Controllers\ProjectController
+*/
 class ProjectMasters extends Project{
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
 	protected $table = 'projects_masters';
 
     public function topics(){

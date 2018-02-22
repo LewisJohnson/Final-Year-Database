@@ -65,7 +65,7 @@ Route::group(['middleware' => ['web']], function() {
 Route::group(['middleware' => ['admin.system']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
 	Route::post('admin/dashboard/system', 'AdminController@configure');
-	Route::get('system/user-agent', 'AdminController@userAgent');
+	Route::get('system/user-agent', 'AdminController@userAgentView');
 });
 
 /* ===============
@@ -79,13 +79,13 @@ Route::group(['middleware' => ['admin.project']], function() {
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
 	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
-	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManual');
-	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomatic');
+	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManualView');
+	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomaticView');
 	Route::get('admin/marker-assign-automatic-table', 'AdminController@assignMarkerAutomaticTable');
 	Route::get('admin/marker-assign-report-table', 'AdminController@assignMarkerReportTable');
 	Route::post('admin/marker-calculate', 'AdminController@calculateSecondMarkers');
 
-	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
+	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
 
 	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
 
@@ -155,7 +155,7 @@ Route::group(['middleware' => ['supervisor']], function() {
    7. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['student']], function() {
-	Route::get('students/project-propose', 'StudentController@showProposeProject');
+	Route::get('students/project-propose', 'StudentController@proposeProjectView');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
 

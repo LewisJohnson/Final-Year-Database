@@ -18,26 +18,55 @@ use SussexProjects\TransactionUg;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
-class AdminController extends Controller{
 
+/**
+ * The admin controller.
+ *
+ * Methods in this controller are used for project and system administrators.
+ * 
+ * @see SussexProjects\User
+*/
+class AdminController extends Controller{
 	public function __construct(){
 		$this->middleware('auth');
 		$this->paginationCount = 100;
 	}
 
+	/**
+	 * The administrator hub view.
+	 *
+	 * @return \Illuminate\Http\Response
+	*/
 	public function index(){
 		return view('admin.index');
 	}
 
+	/**
+	 * The import students view.
+	 *
+	 * @return \Illuminate\Http\Response
+	*/
 	public function importStudents(){
 		return view('admin.import');
 	}
 
+	/**
+	 * The system administrator dashboard view.
+	 *
+	 * @return \Illuminate\Http\Response
+	*/
 	public function dashboard(){
 		return view('admin.system.dashboard');
 	}
 
-	public function userAgent(Request $request){
+
+	/**
+	 * The user agent string view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function userAgentView(Request $request){
 		if ($request->query("unique") == "1") {
 			$userAgents = UserAgentString::where('first_visit', 1);
 		} else {
@@ -56,7 +85,6 @@ class AdminController extends Controller{
 	public function configure(Request $request){
 		foreach ($request->all() as $key => $value) {
 			if (substr($key, -4, 4) != "json") {
-
 				// This is to convert strings to PHP booleans
 				if($value === "true"){ $value = true; }
 				if($value === "false"){ $value = false; }
@@ -67,12 +95,25 @@ class AdminController extends Controller{
 		return redirect(url('admin/dashboard'));
 	}
 
-	public function amendSupervisorArrangementsView(){
+	/**
+	 * The amend supervisor arrangements view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * 
+	 * @return \Illuminate\Http\Response
+	*/
+	public function amendSupervisorArrangementsView(Request $request){
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
 			->with('supervisors', $supervisors);
 	}
 
+	/**
+	 * The amend supervisor arrangements view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
 	public function amendSupervisorArrangements(Request $request){
 		if (isset($request->project_load)) {
 			$request->validate([
@@ -107,7 +148,14 @@ class AdminController extends Controller{
 			->with('supervisors', $supervisors);
 	}
 
-	public function amendTopicsView(){
+
+	/**
+	 * The amend topics view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function amendTopicsView(Request $request){
 		if (Session::get("db_type") == "ug") {
 			$topics = TopicUg::all();
 		} elseif (Session::get("db_type") == "masters") {
@@ -118,7 +166,13 @@ class AdminController extends Controller{
 			->with('topics', $topics);
 	}
 
-	public function loginAsView(){
+	/**
+	 * The log-in as another user view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function loginAsView(Request $request){
 		if (Session::get("db_type") == "ug") {
 			$students = StudentUg::all();
 		} elseif (Session::get("db_type") == "masters") {
@@ -147,14 +201,50 @@ class AdminController extends Controller{
 			->with('students', $students);
 	}
 
+	/**
+	 * Log-in the currently authenticated user as another user.
+	 *	
+	 * @param string $id User ID
+	 * @return \Illuminate\Http\Response
+	*/
+	public function loginAs($id){
+		$user = User::findOrFail($id);
+		Auth::login($user);
+
+		// Redirect
+		session()->flash('message', 'You have logged in as '.$user->getFullName());
+		session()->flash('message_type', 'success');
+
+		return redirect()->action('HomeController@index');
+	}
+
 	/* =====================
 		ARCHIVE
 	   =====================*/
-	public function archiveView(){
+
+	/**
+	 * The end of year archive view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function archiveView(Request $request){
 		return view('admin.archive');
 	}
 
-	public function archive(){
+	/**
+	 * Runs the end of year archive script
+	 *	
+	 * - Adds This student was undertaken by [STUDENT NAME]” to project description.
+	 * - Set all projects status to archived.
+	 * - Empty the student tables.
+	 * - Empty the transaction tables.
+	 * - Remove all students from the user table.
+	 * 
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function archive(Request $request){
 		DB::transaction(function() {
 			if (Session::get("db_type") == "ug") {
 				$projects = ProjectUg::all();
@@ -183,11 +273,17 @@ class AdminController extends Controller{
 		return response()->json(array('successful' => true));
 	}
 
-
 	/* =====================
 		SECOND MARKER
 	   =====================*/
-	public function assignMarkerManual(Request $request){
+
+	/**
+	 * The manual assign second marker view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function assignMarkerManualView(Request $request){
 		$supervisors = Supervisor::all();
 
 		if (Session::get("db_type") == "ug") {
@@ -197,9 +293,9 @@ class AdminController extends Controller{
 		}
 
 		$sorted = $students->sortBy(function ($student, $key) use ($request) {
-			if ($request->query("sort") == "firstname") {
+			if ($request->query("sort") === "firstname") {
 				return $student->user->first_name;
-			} elseif ($request->query("sort") == "lastname") {
+			} elseif ($request->query("sort") === "lastname") {
 				return $student->user->last_name;
 			}
 		});
@@ -209,10 +305,21 @@ class AdminController extends Controller{
 			->with('students', $sorted);
 	}
 
-	public function assignMarkerAutomatic(Request $request){
+	/**
+	 * The automatic (Algorithmic) assign second marker view.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function assignMarkerAutomaticView(Request $request){
 		return view('admin.assign-marker-automatic');
 	}
 
+	/**
+	 * Returns all the needed parameters for the automatic second marker assignment algorithm.
+	 *	
+	 * @return object[] slack, supervisors
+	*/
 	public function setupAutomaticSecondMarkerAssignment(){
 		$supervisors = Supervisor::all();
 		$supervisorLoadTotal = 0;
@@ -268,7 +375,13 @@ class AdminController extends Controller{
 		return ['slack' => $slack, 'supervisors' => $supervisors];
 	}
 
-	public function calculateSecondMarkers(){
+	/**
+	 * The actual action of assigning second markers to students.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response A HTML report of assigned markers 
+	*/
+	public function calculateSecondMarkers(Request $request){
 		if (Session::get("db_type") == "ug") {
 			DB::table('students_ug')->update(array('marker_id' => null));
 		} elseif (Session::get("db_type") == "masters") {
@@ -312,11 +425,16 @@ class AdminController extends Controller{
 			$studentToAssign->save();
 		}
 
-
-		die($this->assignMarkerReportTable());
+		return $this->assignMarkerReportTable();
 	}
 
-	public function assignMarkerAutomaticTable(){
+	/**
+	 * An overview of each automatically assigned second supervisor.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function assignMarkerAutomaticTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.automatic-second-marker-assignment-table')
@@ -326,7 +444,14 @@ class AdminController extends Controller{
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 
-	public function assignMarkerReportTable(){
+
+	/**
+	 * An overview of each supervisor and which students they are second supervisor to.
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function assignMarkerReportTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.assignment-report-table')
@@ -335,17 +460,13 @@ class AdminController extends Controller{
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 
-	public function loginAs($id){
-		$user = User::findOrFail($id);
-		Auth::login($user);
 
-		// Redirect
-		session()->flash('message', 'You have logged in as '.$user->getFullName());
-		session()->flash('message_type', 'success');
-
-		return redirect()->action('HomeController@index');
-	}
-
+	/**
+	 * Exports tables to a local file and is downloaded on the client machine.
+	 *	
+	 * @param \Illuminate\Http\Request $request Table name abbreviated
+	 * @return \Illuminate\Http\Response JSON
+	*/
 	public function export(Request $request){
 		//todo: change to a temp file
 		if ($request->query("db") == "tran_ug") {

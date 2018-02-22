@@ -6,12 +6,47 @@ use SussexProjects\Project;
 use SussexProjects\Topic;
 use Session;
 
+/**
+ * The masters project topic model.
+ * 
+ * @see SussexProjects\Http\Controllers\ProjectTopic
+*/
 class ProjectTopic extends Model{
 	
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
+	protected $table = null;
+
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
 	public $timestamps = false;
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
 	public $incrementing = false;
 	
-	protected $table = null;
 	protected $primaryKey = ['project_id', 'topic_id'];
+	
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = ['project_id', 'topic_id'];
+
+	/**
+	 * The attributes that are not mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $guarded = ['id'];
 }

@@ -1,7 +1,17 @@
 <?php
 namespace SussexProjects;
 
+/**
+ * The undergraduate project model.
+ * 
+ * @see SussexProjects\Http\Controllers\ProjectController
+*/
 class ProjectUg extends Project{
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
 	protected $table = 'projects_ug';
 
 	public function topics(){

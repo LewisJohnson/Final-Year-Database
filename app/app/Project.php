@@ -6,13 +6,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * The project model.
+ * 
+ * @see SussexProjects\Http\Controllers\ProjectController
+*/
 class Project extends Model{
+	
+	use Traits\Uuids;
 
-	use SoftDeletes;
-	// use Traits\Uuids;
-
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
 	protected $table = null;
 
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
 	public $timestamps = true;
 
 	/**
@@ -27,14 +41,14 @@ class Project extends Model{
 	 *
 	 * @var array
 	 */
-	protected $guarded = ['supervisor', 'destroy_at', 'deleted_at'];
+	protected $guarded = ['supervisor', 'deleted_at'];
 
 	/**
 	 * The attributes that should are dates.
 	 *
 	 * @var array
 	 */
-	protected $dates = ['created_at'. 'updated_at', 'destroy_at', 'deleted_at'];
+	protected $dates = ['created_at'. 'updated_at', 'deleted_at'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -49,17 +63,26 @@ class Project extends Model{
 	 *
 	 * @var bool
 	 */
-	// public $incrementing = false;
+	public $incrementing = false;
 	
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}
 
-	// I know statues is not a real word
+	/**
+	 * A list of all potential project statues.
+	 *
+	 * @return string[] An array of all statues'.
+	*/
 	public static function getAllStatuses(){
 		return ['none', 'student-proposed', 'selected', 'accepted'];
 	}
 
+	/**
+	 * Determines if this project is owned by the current authenticated used.
+	 *
+	 * @return boolean
+	*/
 	public function isOwnedByUser(){
 		if(Auth::user()->isSupervisor()){
 			return $this->supervisor_id === Auth::user()->supervisor->id;

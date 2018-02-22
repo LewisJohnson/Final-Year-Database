@@ -6,8 +6,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * The supervisor model.
+ * 
+ * @see SussexProjects\Http\Controllers\SupervisorController
+*/
 class Supervisor extends User{
 
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
 	public $timestamps = false;
 
 	/**
@@ -17,6 +27,11 @@ class Supervisor extends User{
 	 */
 	protected $fillable = [ 'id', 'title', 'contact_type', 'project_load', 'take_students' ];
 
+	/**
+	 * Returns the user related to this supervisor.
+	 *
+	 * @return User
+	 */
 	public function user(){
 		return $this->hasOne(User::class, 'id');
 	}

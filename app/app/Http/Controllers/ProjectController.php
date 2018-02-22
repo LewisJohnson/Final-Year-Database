@@ -22,25 +22,43 @@ use SussexProjects\StudentMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\Supervisor;
-use SussexProjects\Jobs\ProcessDeleteProject;
 
+/**
+ * The project controller.
+ *
+ * Handles all functions related to projects.
+ * 
+*/
 class ProjectController extends Controller{
 
+	/**
+	 * The HTML purifier configuration used for the project description.
+	 *
+	 * @see http://htmlpurifier.org/live/configdoc/plain.html HTML purifier configuration documentation.
+	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
+	 * @var string[] ~HTML purifier configuration
+	*/
 	private $descriptionPurifyConfig = [
 		'Core.CollectErrors' => true,
 		'Attr.ID.HTML5' => true,
 		'HTML.TargetBlank' => true,
-		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6'];
+		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6'
+	];
 
 	public function __construct(){
 		$this->middleware('auth');
 		$this->paginationCount = 25;
-		$this->restoreTimeInMinutes = 1;
 	}
 
 	/**
 	 * Display a listing of the resource.
 	 *
+	 * SELECT CONDITIONS
+	 * - Select if supervisor take_students is true
+	 * - Select if on-offer
+	 * - Select if NOT archived
+	 * - select if NOT student proposed
+	 * 
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
@@ -81,12 +99,14 @@ class ProjectController extends Controller{
 	/**
 	 * Display the specified resource.
 	 *
+	 * @param \Illuminate\Http\Request $request
 	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * 
+	 * @return \Illuminate\Http\Response The project view
 	 */
 	public function show(Request $request, $id) {
 		$view = "SupervisorProject";
-		$student_name = "a student";
+		$studentName = "a student";
 
 		if(Session::get("db_type") == "ug"){
 			$project = ProjectUg::find($id);
@@ -97,20 +117,20 @@ class ProjectController extends Controller{
 		if($project->status === "student-proposed"){
 			$view = "StudentProject";
 			if($project->student->share_name || Auth::user()->isSupervisor()){
-				$student_name = $project->student->user->getFullName();
+				$studentName = $project->student->user->getFullName();
 			}
 		}
 
-		if($request->query("preview") == "true"){
+		if($request->query("preview") === "true"){
 			return view('projects.partials.project-preview')
 				->with('project', $project)
-				->with('student_name', $student_name)
+				->with('student_name', $studentName)
 				->with('view', $view);
 		}
 
 		return view('projects.project')
 			->with('project', $project)
-			->with('student_name', $student_name)
+			->with('student_name', $studentName)
 			->with('view', $view);
 	}
 
@@ -119,7 +139,7 @@ class ProjectController extends Controller{
 	 * Adds a topic to a project.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @return string topic name
+	 * @return string The newly added topic's name
 	 */
 	public function addTopic(Request $request){
 
@@ -159,10 +179,10 @@ class ProjectController extends Controller{
 	}
 
 	/**
-	 * Removes a topic from a project.
+	 * Removes a topic to a project.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @return string topic name
+	 * @return \Illuminate\Http\Response
 	 */
 	public function removeTopic(Request $request){
 		$result = DB::transaction(function() use ($request) {
@@ -186,8 +206,13 @@ class ProjectController extends Controller{
 		return $result;
 	}
 
+	/**
+	 * Updates the projects primary topic
+	 *
+	 * @param  \Illuminate\Http\Request $request Contains new primary project ID
+	 * @return \Illuminate\Http\Response
+	 */
 	public function updatePrimaryTopic(Request $request){
-
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
 				$topic = TopicUg::findOrFail(request('topic_id'));
@@ -441,6 +466,12 @@ class ProjectController extends Controller{
 		return view('projects.supervisors')->with('supervisors', $supervisor);
 	}
 
+	/**
+	 * Searches through projects.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response Mixed object types
+	 */
 	public function search(Request $request) {
 
 		/* SELECT CONDITIONS

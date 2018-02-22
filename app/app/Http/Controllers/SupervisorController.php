@@ -1,8 +1,12 @@
 <?php
 namespace SussexProjects\Http\Controllers;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SussexProjects\Supervisor;
 use SussexProjects\ProjectUg;
 use SussexProjects\ProjectMasters;
@@ -10,11 +14,13 @@ use SussexProjects\StudentUg;
 use SussexProjects\StudentMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
-use Illuminate\Support\Carbon;
-use Session;
-use DB;
-use Auth;
 
+/**
+ * The supervisor controller.
+ *
+ * Handles all functions related to supervisors.
+ * 
+*/
 class SupervisorController extends Controller{
 
 	public function __construct(){
@@ -30,6 +36,39 @@ class SupervisorController extends Controller{
 		return view('supervisors.index');
 	}
 
+	/**
+	 * The supervisor report.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function report(Request $request){
+		$supervisors = Supervisor::all();
+
+		if($request->query("excludeClosedToOffer") === "true"){
+			if(Session::get("db_type") == "ug"){
+				$supervisors = $supervisors->filter(function ($supervisor, $key) {
+					return $supervisor->take_students_ug;
+				});
+			} else {
+				$supervisors = $supervisors->filter(function ($supervisor, $key) {
+					return $supervisor->take_students_masters;
+				});
+			}
+		}
+
+		return view('supervisors.report')->with("supervisors", $supervisors);
+	}
+
+	/**
+	 * A table of all accepted students.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function acceptedStudentTable(){
+		return view('supervisors.partials.accepted-students-table');
+	}
 
 	/**
 	 * Displays transactions for projects owned by supervisor
@@ -61,6 +100,12 @@ class SupervisorController extends Controller{
 		//
 	}
 
+	/**
+	 * Accepts a student for their selected project.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response JSON
+	 */
 	public function acceptStudent(Request $request){
 		$this->validate(request(), [
 			'student_id' => 'required',
@@ -116,6 +161,12 @@ class SupervisorController extends Controller{
 		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
 	}
 
+	/**
+	 * Rejects a student for their selected project.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response JSON
+	 */
 	public function rejectStudent(Request $request){
 		DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
@@ -144,6 +195,13 @@ class SupervisorController extends Controller{
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}
 
+
+	/**
+	 * Undoes an accepted student.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response JSON
+	 */
 	public function undo(Request $request){
 		DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){
@@ -171,27 +229,5 @@ class SupervisorController extends Controller{
 
 		$message = $student->user->getFullName()." is no longer accepted.";
 		return response()->json(array('successful' => true, 'message' => $message));
-	}
-
-	public function report(Request $request){
-		$supervisors = Supervisor::all();
-
-		if($request->query("excludeClosedToOffer") === "true"){
-			if(Session::get("db_type") == "ug"){
-				$supervisors = $supervisors->filter(function ($supervisor, $key) {
-					return $supervisor->take_students_ug;
-				});
-			} else {
-				$supervisors = $supervisors->filter(function ($supervisor, $key) {
-					return $supervisor->take_students_masters;
-				});
-			}
-		}
-
-		return view('supervisors.report')->with("supervisors", $supervisors);
-	}
-
-	public function acceptedStudentTable(){
-		return view('supervisors.partials.accepted-students-table');
 	}
 }

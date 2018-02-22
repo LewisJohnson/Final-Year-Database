@@ -4,6 +4,7 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use SussexProjects\StudentUg;
@@ -13,14 +14,26 @@ use SussexProjects\ProjectMasters;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\Supervisor;
-use Auth;
 
+/**
+ * The student controller.
+ *
+ * Methods in this controller are used for project and system administrators.
+ * 
+ * @see SussexProjects\StudentUg Undergraduate students
+ * @see SussexProjects\StudentMasters Postgraduate students
+*/
 class StudentController extends Controller{
 
 	public function __construct(){
 		$this->middleware('auth');
 	}
 
+	/**
+	 * The student report view.
+	 *
+	 * @return \Illuminate\Http\Response
+	*/
 	public function report(){
 		if(Session::get("db_type") == "ug"){
 			$studentCount = count(StudentUg::all());
@@ -30,6 +43,12 @@ class StudentController extends Controller{
 		return view('students.report')->with('studentCount', $studentCount);
 	}
 
+	/**
+	 * Adds project to favourite projects.
+	 *	
+	 * @param \Illuminate\Http\Request $request includes project to add
+	 * @return \Illuminate\Http\Response
+	*/
 	public function addFavouriteProject(Request $request){
 		if(Session::get("db_type") == "ug"){
 			$project = ProjectUg::findOrFail(request('project_id'));
@@ -55,6 +74,12 @@ class StudentController extends Controller{
 		return;
 	}
 
+	/**
+	 * Removes project to favourite projects.
+	 *	
+	 * @param \Illuminate\Http\Request $request includes project to remove
+	 * @return \Illuminate\Http\Response
+	*/
 	public function removeFavouriteProject(Request $request){
 		if(Session::get("db_type") == "ug"){
 			$project = ProjectUg::findOrFail(request('project_id'));
@@ -82,10 +107,21 @@ class StudentController extends Controller{
 		//
 	}
 
-	public function showProposeProject(){
+	/**
+	 * The student propose a project view (Form).
+	 *	
+	 * @return \Illuminate\Http\Response
+	*/
+	public function proposeProjectView(){
 		return view("students.propose-project");
 	}
 
+	/**
+	 * Adds student proposed project to the database
+	 *	
+	 * @param \Illuminate\Http\Request $request Student proposed project
+	 * @return \Illuminate\Http\Response
+	*/
 	public function proposeProject(Request $request){
 		// todo: check mode year
 		try {
@@ -146,6 +182,12 @@ class StudentController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
+	/**
+	 * Updates the students share name to other students preference.
+	 *	
+	 * @param \Illuminate\Http\Request
+	 * @return \Illuminate\Http\Response
+	*/
 	public function shareName(Request $request){
 		$student = Auth::user()->student;
 		$student->share_name = isset($request->share_name);
@@ -153,6 +195,14 @@ class StudentController extends Controller{
 		return response()->json(array('share_name' => $student->share_name)); 
 	}
 
+	/**
+	 * Selects the requested project.
+	 *
+	 * The student will now have to wait to be approved or rejected.
+	 *  	
+	 * @param \Illuminate\Http\Request $request Included project ID
+	 * @return \Illuminate\Http\Response Home page
+	*/
 	public function selectProject(Request $request){
 		// todo: check mode selection date before selecting project
 		try {
@@ -199,7 +249,14 @@ class StudentController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
-	public function updateMarker(Request $request) {
+
+	/**
+	 * Updates the students second marker
+	 *	
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function updateSecondMarker(Request $request) {
 		//todo: make sure user is authorized to perform this action
 		$result = DB::transaction(function() use ($request) {
 			if(Session::get("db_type") == "ug"){

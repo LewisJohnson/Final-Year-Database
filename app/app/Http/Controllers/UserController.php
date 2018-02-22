@@ -14,10 +14,25 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * The user controller.
+ *
+ * Handles all functions related to users.
+ * 
+*/
 class UserController extends Controller{
 
-	public function __construct(){ $this->middleware('auth'); }
+	public function __construct(){ 
+		$this->middleware('auth'); 
+	}
 
+
+	/**
+	 * A list of all users in the system.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index(Request $request){
 		if(Session::get("db_type") == "ug"){
 			$students = StudentUg::all();
@@ -68,7 +83,6 @@ class UserController extends Controller{
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return;
 		}
-
 
 		$result = DB::transaction(function() use ($request) {
 			$user = User::create([
@@ -141,6 +155,30 @@ class UserController extends Controller{
 		return "null";
 	}
 
+
+	/**
+	 * Checks multiple privilege conditions.
+	 *
+	 * First, checks whether or not the $privileges array confirms to the rules.
+	 * Second, checks whether or not the currently authenticated used has sufficient privileges to perform action.
+	 * 
+	 * This method throws an exception if a condition fails.
+	 * 
+	 * **RULES**
+	 * - Guest is a unique privilege
+	 * - Staff is a unique privilege
+	 * - User can NOT be student and an admin
+	 * - User can NOT be student and a supervisor
+	 * 
+	 * **AUTHENTICATION RULES**
+	 * - Undergraduate administrator can create guest, staff, student_ug and admin_ug.
+	 * - Masters administrator can create guest, staff, student_masters and admin_masters.
+	 * - System administrator can create all types of users.
+	 * - Only administrators can create users.
+	 * 
+	 * @param  string[]  $privileges
+	 * @return boolean Returns true if all conditions passed
+	 */
 	public static function checkPrivilegeConditions($privileges){
 		$amountOfPrivileges = count($privileges);
 		$amountOfAdminPrivileges = 0;
@@ -166,20 +204,19 @@ class UserController extends Controller{
 		}
 
 		if($amountOfStudentPrivileges > 0 && $amountOfAdminPrivileges > 0){
-			// User can't be student and an admin
+			// User can NOT be student and an admin
 			$error = ValidationException::withMessages([ "privileges" => ["Privileges student and administrator are not compatible."]]);
 			throw $error;
 		}
 
 		if($amountOfStudentPrivileges > 0 && in_array("supervisor", $privileges)){
-			// User can't be student and a supervisor
+			// User can NOT be student and a supervisor
 			$error = ValidationException::withMessages([ "privileges" => ["Privileges student and supervisor are not compatible."]]);
 			throw $error;
 		}
 
 		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isMastersAdmin()){
 			if(in_array("admin_masters", $privileges) || in_array("student_masters", $privileges)){
-				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
 				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a masters administrator or student."]]);
 				throw $error;
 			}
@@ -187,7 +224,6 @@ class UserController extends Controller{
 
 		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isUgAdmin()){
 			if(in_array("admin_ug", $privileges) || in_array("student_ug", $privileges)){
-				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
 				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create an undergraduate administrator or student"]]);
 				throw $error;
 			}
@@ -195,13 +231,12 @@ class UserController extends Controller{
 
 		if(!Auth::user()->isSystemAdmin()){
 			if(in_array("admin_system", $privileges)){
-				// Log::alert('Illegal activity detected.', ['user' => json_encode(Auth::user(), JSON_PRETTY_PRINT)]);
 				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a system administrator."]]);
 				throw $error;
 			}
 		}
 
-		return "";
+		return true;
 	}
 
 	/**

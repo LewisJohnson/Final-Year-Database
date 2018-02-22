@@ -5,8 +5,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
 
+/**
+ * The student model.
+ * 
+ * @see SussexProjects\Http\Controllers\StudentController
+*/
 class Student extends Model{
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @var string
+	 */
 	protected $table = null;
+	
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
 	public $timestamps = false;
 
 	/**
@@ -15,6 +32,8 @@ class Student extends Model{
 	 * @var array
 	 */
 	protected $fillable = ['id', 'registration_number', 'programme', 'marker_id'];
+
+
 
 	public function getStatusString(){
 		$return = '';

@@ -5,8 +5,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
+
+/**
+ * The home controller.
+ *
+ * Handles all index based routes and pages.
+ * Also handles cookie banner and database type.
+ * 
+*/
 class HomeController extends Controller{
 
+	/**
+	 * Displays the home page.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index(Request $request){
 		if($request->query("largeFont") == "true"){
 			Cookie::queue('largeFont', "true", 525600);
@@ -35,18 +49,45 @@ class HomeController extends Controller{
 		return view('index');
 	}
 
+	/**
+	 * Displays the help page.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function help(Request $request){
 		return view('help.help');
 	}
 
+	/**
+	 * Displays the general information page.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function information(Request $request){
 		return view('help.information');
 	}
 
+	/**
+	 * Displays the about page.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function about(Request $request){
 		return view('help.about');
 	}
 
+
+	/**
+	 * Gets a rendered HTML snippet.
+	 * 
+	 * Snippets must be in the view/snippets directory. 
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function snippet(Request $request){
 		$snippetName = $request->query('snippet');
 		if(preg_match('/^[a-z-]*$/', $snippetName)){
@@ -56,10 +97,24 @@ class HomeController extends Controller{
 		abort(404);
 	}
 
+	/**
+	 * Tells the server the user has acknowledge the cookie banner.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function seenCookieBanner(){
 		Cookie::queue('cookie-banner-seen', "true", 525600);
 	}
 
+	/**
+	 * Sets the database type.
+	 * 
+	 * Undergraduate or postgraduate database.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function setDatabaseType(Request $request){
 		if($request->db_type == "ug"){
 			Session::put("db_type", "ug");

@@ -1,20 +1,30 @@
 <?php
 namespace SussexProjects\Http\Controllers;
 
-use Session;
+use Illuminate\Support\Facades\Session;
 use SussexProjects\TransactionUg;
 use SussexProjects\TransactionMasters;
 use SussexProjects\ProjectUg;
 use SussexProjects\ProjectMasters;
 
+/**
+ * The transaction controller.
+ *
+ * Handles most functions related to transactions.
+ * 
+*/
 class TransactionController extends Controller{
 
 	public function __construct(){
 		$this->middleware('admin');
 	}
 
+	/**
+	 * A list of all transactions sorted by transaction time.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index(){
-		// This is by time
 		$transactions = Session::get("db_type") == "ug" ?
 			TransactionUg::orderBy('transaction_date', 'desc')->get() :
 			TransactionMasters::orderBy('transaction_date', 'desc')->get();
@@ -22,6 +32,13 @@ class TransactionController extends Controller{
 		return view('admin.transactions')->with('transactions', $transactions);
 	}
 
+	/**
+	 * A list of all projects with transaction.
+	 * 
+	 * The user then selects a project to view it's transactions.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 	public function byProject(){
 		if(Session::get("db_type") == "ug"){
 			$projects = ProjectUg::all();
