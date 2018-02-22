@@ -29,22 +29,6 @@ class AdminController extends Controller{
 		return view('admin.index');
 	}
 
-	public function configure(Request $request){
-		foreach ($request->all() as $key => $value) {
-			if (substr($key, -4, 4) != "json") {
-
-				if($value === "true"){
-					$value = true;
-				}
-				if($value === "false"){
-					$value = false;
-				}
-				config_json($request[$key . "-json"], $value);
-			}
-		}
-		return redirect(url('admin/dashboard'));
-	}
-
 	public function importStudents(){
 		return view('admin.import');
 	}
@@ -69,7 +53,21 @@ class AdminController extends Controller{
 		}
 	}
 
-	public function showAmendSupervisorArrangements(){
+	public function configure(Request $request){
+		foreach ($request->all() as $key => $value) {
+			if (substr($key, -4, 4) != "json") {
+
+				// This is to convert strings to PHP booleans
+				if($value === "true"){ $value = true; }
+				if($value === "false"){ $value = false; }
+
+				config_json($request[$key . "-json"], $value);
+			}
+		}
+		return redirect(url('admin/dashboard'));
+	}
+
+	public function amendSupervisorArrangementsView(){
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
 			->with('supervisors', $supervisors);
@@ -109,10 +107,9 @@ class AdminController extends Controller{
 			->with('supervisors', $supervisors);
 	}
 
-	public function showAmendTopics(){
+	public function amendTopicsView(){
 		if (Session::get("db_type") == "ug") {
 			$topics = TopicUg::all();
-
 		} elseif (Session::get("db_type") == "masters") {
 			$topics = TopicMasters::all();
 		}
@@ -124,7 +121,6 @@ class AdminController extends Controller{
 	public function loginAsView(){
 		if (Session::get("db_type") == "ug") {
 			$students = StudentUg::all();
-
 		} elseif (Session::get("db_type") == "masters") {
 			$students = StudentMasters::all();
 		}
@@ -151,16 +147,51 @@ class AdminController extends Controller{
 			->with('students', $students);
 	}
 
-	public function archive(){
+	/* =====================
+		ARCHIVE
+	   =====================*/
+	public function archiveView(){
 		return view('admin.archive');
 	}
 
+	public function archive(){
+		DB::transaction(function() {
+			if (Session::get("db_type") == "ug") {
+				$projects = ProjectUg::all();
+			} elseif (Session::get("db_type") == "masters") {
+				$projects = ProjectMasters::all();
+			}
+
+			foreach ($projects as $key => $project) {
+
+				if($project->getAcceptStudent() != null){
+					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptStudent()->user->getFullName().")";
+				}
+
+				$project->status = 'archived';
+				$project->save();
+			}
+
+			if (Session::get("db_type") == "ug") {
+				DB::table('students_ug')->delete();
+			} elseif (Session::get("db_type") == "masters") {
+				DB::table('students_masters')->delete();
+			}
+
+		});
+
+		return response()->json(array('successful' => true));
+	}
+
+
+	/* =====================
+		SECOND MARKER
+	   =====================*/
 	public function assignMarkerManual(Request $request){
 		$supervisors = Supervisor::all();
 
 		if (Session::get("db_type") == "ug") {
 			$students = StudentUg::all();
-
 		} elseif (Session::get("db_type") == "masters") {
 			$students = StudentMasters::all();
 		}
@@ -231,7 +262,7 @@ class AdminController extends Controller{
 		$slack = $maxTargetLoad / $studentCount;
 
 		if($projectCount > $supervisorLoadTotal){
-			die(json_encode(array('successful' => false, 'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.')));
+			return response()->json(array('successful' => false, 'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.'));
 		}
 
 		return ['slack' => $slack, 'supervisors' => $supervisors];
@@ -255,7 +286,7 @@ class AdminController extends Controller{
 				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
 
 				if(is_null($studentToAssign)){
-					die(json_encode(array('successful' => false, 'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.')));
+					return response()->json(array('successful' => false, 'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.'));
 				}else{
 					$studentToAssign->marker_id = $supervisor->id;
 					$studentToAssign->save();
@@ -287,14 +318,21 @@ class AdminController extends Controller{
 
 	public function assignMarkerAutomaticTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-		$view = view('admin.partials.automatic-second-marker-assignment-table')->with('supervisors', $assignmentSetup["supervisors"])->with('slack', $assignmentSetup["slack"]);
-		die(json_encode(array('successful' => true, 'html' => $view->render())));
+
+		$view = view('admin.partials.automatic-second-marker-assignment-table')
+		->with('supervisors', $assignmentSetup["supervisors"])
+		->with('slack', $assignmentSetup["slack"]);
+
+		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 
 	public function assignMarkerReportTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-		$view = view('admin.partials.assignment-report-table')->with('supervisors', $assignmentSetup["supervisors"]);
-		die(json_encode(array('successful' => true, 'html' => $view->render())));
+
+		$view = view('admin.partials.assignment-report-table')
+		->with('supervisors', $assignmentSetup["supervisors"]);
+
+		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 
 	public function loginAs($id){

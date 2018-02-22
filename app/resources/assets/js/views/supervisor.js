@@ -45,18 +45,17 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					topic_name: topicName,
 					project_id: projectId
 				},
-				success: function(data){
-					data = JSON.parse(data);
+				success: function(response){
 					$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
 
 					if($(".topics-list.edit li.topic:last").length > 0){
-						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
 					} else {
-						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + data["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + data["name"] + '</p></li>');
+						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
 					}
 				}
-			}).done(function(data){
-				$('body').append(data);
+			}).done(function(response){
+				$('body').append(response);
 				$('.loader').hide(0);
 			});
 		},
@@ -144,7 +143,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
 	});
 
-
 	/* ========
 		OTHER
 	=========== */
@@ -175,8 +173,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 				student_id : tableRow.data('student-id')
 			},
 			success: function(response){
-				var response = JSON.parse(response);
-
 				if(response.successful){
 					tableRow.hide(400, function() { tableRow.remove(); });
 					
@@ -303,7 +299,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 								student_id : tableRow.data('student-id')
 							},
 							success:function(response){
-								var response = JSON.parse(response);
 								if(response.successful){
 									tableRow.hide(400, function() { tableRow.remove(); });
 									showNotification('success', 'Undo successful.');

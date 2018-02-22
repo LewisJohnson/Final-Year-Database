@@ -10,7 +10,11 @@ class ProjectMasters extends Project{
     }
 
 	public function student(){
-		return $this->belongsTo(StudentMasters::class);
+		return $this->belongsTo(StudentMasters::class, 'id', 'student_id');
+	}
+	
+	public function undertakenStudent(){
+		return $this->belongsTo(StudentMasters::class, 'project_id', 'id');
 	}
 
 	public function getPrimaryTopic(){
@@ -25,7 +29,7 @@ class ProjectMasters extends Project{
 		return StudentMasters::where('project_id', $this->id)->where('project_status', 'selected')->get();
 	}
 
-	public function getStudentsWithThisProjectAccepted(){
-		return StudentMasters::where('project_id', $this->id)->where('project_status', 'accepted')->get();
+	public function getAcceptStudent(){
+		return StudentMasters::where('project_id', $this->id)->where('project_status', 'accepted')->first();
 	}
 }

@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
+@section('scripts')
+	<script src="{{ asset('js/views/admin.js') }}"></script>
+@endsection
 
-<div class="centered card width--1000">
+<div class="centered card width--1000 eoya-container">
 	<h1>End of Year Archive</h1>
 	<p>The end of year archive will do the following in a single transaction;</p>
 
@@ -35,8 +38,10 @@
 	</div>
 
 	<hr>
-	<form action="/admin/archive" method="GET" accept-charset="utf-8">
-		<button type="submit" class="button button--raised button--danger">Archive</button>
+
+	<form id="endOfYearArchive" action="{{ action('AdminController@archive')}}" method="POST" accept-charset="utf-8">
+		{{ csrf_field() }}
+		<button title="Start archiving" type="submit" class="button button--raised button--danger">Archive</button>
 	</form>
 
 </div>

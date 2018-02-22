@@ -33,8 +33,9 @@ mix.js('resources/assets/js/jquery-helpers.js', 'public/js/jquery-helpers.js');
 // JS | VIEWS
 mix.js('resources/assets/js/views/tab-view.js', 'public/js/views');
 mix.js('resources/assets/js/views/project-preview.js', 'public/js/views');
-mix.js('resources/assets/js/views/supervisor-report.js', 'public/js/views');
+mix.js('resources/assets/js/views/admin.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
+mix.js('resources/assets/js/views/supervisor-report.js', 'public/js/views');
 mix.js('resources/assets/js/views/marker-assign.js', 'public/js/views');
 
 // JS | PAGINATION

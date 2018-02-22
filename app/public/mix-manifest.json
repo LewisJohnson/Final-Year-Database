@@ -10,6 +10,7 @@
     "/js/views/supervisor-report.js": "/js/views/supervisor-report.js",
     "/js/views/project-preview.js": "/js/views/project-preview.js",
     "/js/views/marker-assign.js": "/js/views/marker-assign.js",
+    "/js/views/admin.js": "/js/views/admin.js",
     "/js/jquery-helpers.js": "/js/jquery-helpers.js",
     "/js/pagination/user-agent-pagination.js": "/js/pagination/user-agent-pagination.js",
     "/js/pagination/projects-pagination.js": "/js/pagination/projects-pagination.js",

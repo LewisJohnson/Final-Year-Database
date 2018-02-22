@@ -8,8 +8,9 @@ class ProjectUg extends Project{
 		return $this->belongsToMany(TopicUg::class, 'project_topics_ug', 'project_id', 'topic_id')->withPivot('primary');
 	}
 
+	// Student proposed project
 	public function student(){
-		return $this->belongsTo(StudentUg::class);
+		return $this->belongsTo(StudentUg::class, 'id', 'student_id');
 	}
 
 	public function getPrimaryTopic(){
@@ -24,7 +25,7 @@ class ProjectUg extends Project{
 		return StudentUg::where('project_id', $this->id)->where('project_status', 'selected')->get();
 	}
 
-	public function getStudentsWithThisProjectAccepted(){
-		return StudentUg::where('project_id', $this->id)->where('project_status', 'accepted')->get();
+	public function getAcceptStudent(){
+		return StudentUg::where('project_id', $this->id)->where('project_status', 'accepted')->first();
 	}
 }

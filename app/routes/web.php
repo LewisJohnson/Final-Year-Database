@@ -76,7 +76,7 @@ Route::group(['middleware' => ['admin.project']], function() {
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
 
-	Route::get('admin/supervisor-arrangements-amend', 'AdminController@showAmendSupervisorArrangements');
+	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
 	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
 	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManual');
@@ -87,12 +87,14 @@ Route::group(['middleware' => ['admin.project']], function() {
 
 	Route::patch('admin/marker-assign', 'StudentController@updateMarker');
 
-	Route::get('admin/topics-amend', 'AdminController@ShowAmendTopics');
+	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
 
 	Route::get('admin/login-as', 'AdminController@loginAsView');
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 
-	Route::get('admin/archive', 'AdminController@archive');
+	Route::get('admin/archive', 'AdminController@archiveView');
+	Route::post('admin/archive', 'AdminController@archive');
+
 	Route::get('admin/export', 'AdminController@export');
 	Route::get('admin/parameters', 'AdminController@parameters');
 
