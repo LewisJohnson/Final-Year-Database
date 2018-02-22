@@ -87,15 +87,15 @@ class SupervisorController extends Controller{
 			}
 
 			if($project->id != $student->project_id){
-				die(json_encode(array('successful' => false, 'message' => 'Project ID and student project ID do not match up')));
+				return response()->json(array('successful' => false, 'message' => 'Project ID and student project ID do not match up'));
 			}
 
 			if(count($acceptedStudent) != 0){
-				die(json_encode(array('successful' => false, 'message' => 'This project has already been allocated to another student')));
+				return response()->json(array('successful' => false, 'message' => 'This project has already been allocated to another student'));
 			}
 
 			if(count($selectedStudent) > 1){
-				die(json_encode(array('successful' => false, 'message' => 'You must reject all other students before accepting a student')));
+				return response()->json(array('successful' => false, 'message' => 'You must reject all other students before accepting a student'));
 			}
 
 			$student->project_status = 'accepted';
@@ -113,7 +113,7 @@ class SupervisorController extends Controller{
 			$transaction->save();
 		});
 
-		return json_encode(array('successful' => true, 'message' => 'Student accepted'));
+		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
 	}
 
 	public function rejectStudent(Request $request){
@@ -141,7 +141,7 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		return json_encode(array('successful' => true, 'message' => 'Student rejected'));
+		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}
 
 	public function undo(Request $request){
@@ -169,7 +169,8 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		return json_encode(array('successful' => true, 'message' => 'Student rejected'));
+		$message = $student->user->getFullName()." is no longer accepted.";
+		return response()->json(array('successful' => true, 'message' => $message));
 	}
 
 	public function report(Request $request){

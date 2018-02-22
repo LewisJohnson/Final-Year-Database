@@ -2,8 +2,7 @@
 @section('content')
 <div class="centered width--1200">
 <h1>Assign a Second Marker</h1>
-<h3>Select a student, then select a supervisor.</h3>
-<p>Only students with a project accepted will be displayed.<br>If a project already has a 2nd marker, it will not be displayed.</p>
+<h3>Select a student, then select a supervisor to be their second marker.</h3>
 <div class="section-container">
 
 	{{-- STUDENTS --}}
@@ -13,17 +12,25 @@
 				<tr>
 					<th>Student</th>
 					<th>Project Title</th>
+					<th>Status</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($students as $student)
 					@if(!is_null($student->project))
-						@if(is_null($student->project->marker) && !is_null($student->project->supervisor))
-							<tr class="pointer" tabindex="0" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
+						@if(!is_null($student->project->supervisor))
+							<tr class="pointer" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}" data-project="{{ $student->project->toJson() }}">
 								<td>{{ $student->user->getFullName() }}</td>
 								<td>{{ $student->project->title }}</td>
+								<td>{{ $student->project_status }}</td>
 							</tr>
 						@endif
+					@else
+						<tr class="pointer" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->user->getFullName() }}">
+							<td>{{ $student->user->getFullName() }}</td>
+							<td>-</td>
+							<td>None</td>
+						</tr>
 					@endif
 				@endforeach
 			</tbody>
@@ -36,16 +43,20 @@
 			<thead>
 				<tr>
 					<th>Supervisor</th>
+					<th>Load</th>
 				</tr>
 			</thead>
 			<tbody>
-			@foreach($supervisors as $supervisor)
-				@if(count($supervisor->getProjectsByStatus('on-offer')) > 0)
+				@foreach($supervisors as $supervisor)
 					<tr class="pointer" tabindex="0" data-marker-id="{{ $supervisor->id }}" data-marker-name="{{ $supervisor->user->getFullName() }}" disabled>
 						<td>{{ $supervisor->user->getFullName() }}</td>
+						@if(Session::get("db_type") == "ug")
+							<td>{{ $supervisor->project_load_ug }}</td>
+						@elseif(Session::get("db_type") == "masters")
+							<td>{{ $supervisor->project_load_masters }}</td>
+						@endif
 					</tr>
-				@endif
-			@endforeach
+				@endforeach
 			</tbody>
 		</table>
 	</div>

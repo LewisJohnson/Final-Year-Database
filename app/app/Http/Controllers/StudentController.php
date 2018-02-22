@@ -150,7 +150,7 @@ class StudentController extends Controller{
 		$student = Auth::user()->student;
 		$student->share_name = isset($request->share_name);
 		$student->save();
-		return json_encode(array('share_name' => $student->share_name));
+		return response()->json(array('share_name' => $student->share_name)); 
 	}
 
 	public function selectProject(Request $request){
