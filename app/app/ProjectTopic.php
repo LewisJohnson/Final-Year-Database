@@ -12,7 +12,8 @@ use SussexProjects\Topic;
  * @see SussexProjects\Http\Controllers\ProjectTopic
 */
 class ProjectTopic extends Model{
-	
+	use Traits\Uuids;
+
 	/**
 	 * The table to retrieve data from.
 	 *

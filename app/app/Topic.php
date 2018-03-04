@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
  * @see SussexProjects\Http\Controllers\topicController
 */
 class Topic extends Model{
-	public $primaryKey = 'id';
+	use Traits\Uuids;
 
 	/**
 	 * The table to retrieve data from.

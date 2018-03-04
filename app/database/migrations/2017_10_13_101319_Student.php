@@ -13,12 +13,13 @@ class Student extends Migration{
 		foreach (departments() as $key => $department) {
 			foreach (department_sections() as $key => $section) {
 				Schema::create($department.'_students_'.$section, function (Blueprint $table) {
-					$table->unsignedBigInteger('id')->unique();
+					$table->uuid('id')->unique();
 					$table->string('registration_number');
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-					$table->unsignedBigInteger('project_id')->nullable(true);
+					$table->uuid('project_id')->nullable(true);
 					$table->boolean('share_name')->default(1);
-					$table->unsignedBigInteger('marker_id')->nullable(true);
+					$table->uuid('marker_id')->nullable(true);
+					$table->primary('id');
 				});
 			}
 		}

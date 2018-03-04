@@ -12,7 +12,7 @@ class User extends Migration{
 	public function up(){
 		foreach (departments() as $key => $department) {
 			Schema::create($department.'_users', function (Blueprint $table) {
-				$table->increments('id');
+				$table->uuid('id')->unique();
 				$table->string('first_name', 128);
 				$table->string('last_name', 128);
 				$table->string('username', 32)->unique();
@@ -21,6 +21,7 @@ class User extends Migration{
 				$table->string('email', 128)->unique();
 				$table->dateTimeTz('last_login')->nullable(true);
 				$table->rememberToken();
+				$table->primary('id');
 			});
 
 			$dbname = $department.'_users';

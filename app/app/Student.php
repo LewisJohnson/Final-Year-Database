@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Cookie;
  * @see SussexProjects\Http\Controllers\StudentController
 */
 class Student extends Model{
-
+	use Traits\Uuids;
+	
 	/**
 	 * The table to retrieve data from.
 	 *
@@ -68,7 +69,7 @@ class Student extends Model{
 				$return = 'You haven\'t selected a project.';
 				break;
 			case 'selected':
-				$return = 'You\'re awating supervisor approval.';
+				$return = 'You\'re awaiting supervisor approval.';
 				break;
 			case 'proposed':
 				$return = 'You haven\'t selected a project.';

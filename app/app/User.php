@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @see SussexProjects\Http\Controllers\UserController
 */
 class User extends Authenticatable{
+	use Traits\Uuids;
 	use Notifiable;
 	
 	/**

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Session;
  * @see SussexProjects\Http\Controllers\ProjectController
 */
 class Project extends Model{
-	
 	use Traits\Uuids;
 
 	/**

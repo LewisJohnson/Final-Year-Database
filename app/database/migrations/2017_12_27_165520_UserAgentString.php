@@ -13,10 +13,11 @@ class UserAgentString extends Migration
 	public function up(){
 		foreach (departments() as $key => $department) {
 			Schema::create($department.'_user_agent_strings', function (Blueprint $table) {
-				$table->bigIncrements('id');
+				$table->uuid('id');
 				$table->text('user_agent');
 				$table->text('referrer')->nullable(true);
 				$table->boolean('first_visit');
+				$table->primary('id');
 			});
 		}
 	}

@@ -5,11 +5,7 @@
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>
 @endsection
 
-@if(Session::get('db_type') == 'ug')
-	{!! SussexProjects\TopicUg::getDatalist() !!}
-@elseif(Session::get('db_type') == 'masters')
-	{!! SussexProjects\TopicMasters::getDatalist() !!}
-@endif
+{!! SussexProjects\Topic::getDatalist() !!}
 
 <div class="centered width--800">
 	<h1>You are editing "{{ $project->title }}".</h1>

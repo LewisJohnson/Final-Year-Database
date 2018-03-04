@@ -2,6 +2,7 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 /**
  * The transaction model.
@@ -9,7 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @see SussexProjects\Http\Controllers\TransactionController
 */
 class Transaction extends Model{
-
+	use Traits\Uuids;
+	
 	/**
 	 * The table to retrieve data from.
 	 *

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 */
 
 class UserAgentString extends Model{
-
+	use Traits\Uuids;
 
 	/**
 	 * The table to retrieve data from.

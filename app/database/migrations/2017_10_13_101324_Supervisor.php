@@ -12,7 +12,7 @@ class Supervisor extends Migration{
 	public function up(){
 		foreach (departments() as $key => $department) {
 			Schema::create($department.'_supervisors', function (Blueprint $table) {
-				$table->unsignedBigInteger('id')->unique();
+				$table->uuid('id')->unique();
 				$table->string('title', 6);
 				$table->unsignedTinyInteger('project_load_masters');
 				$table->unsignedTinyInteger('project_load_ug');
@@ -20,6 +20,7 @@ class Supervisor extends Migration{
 				$table->boolean('take_students_ug');
 				$table->boolean('accept_email_masters');
 				$table->boolean('accept_email_ug');
+				$table->primary('id');
 			});
 		}
 	}

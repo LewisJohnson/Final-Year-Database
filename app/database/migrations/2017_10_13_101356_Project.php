@@ -21,8 +21,6 @@ class Project extends Migration{
 					$table->unsignedBigInteger('supervisor_id')->nullable(true);
 					$table->unsignedBigInteger('student_id')->nullable(true);
 					$table->timestampsTz();
-					$table->softDeletesTz();
-					$table->timestampTz('destroy_at')->nullable(true);
 					$table->primary('id');
 				});
 			}

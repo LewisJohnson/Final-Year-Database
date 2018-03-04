@@ -134,7 +134,7 @@ class ProjectController extends Controller{
 
 			// If topic isn't in the relevant topic database, create a new one.
 			if(count($topic) == 0){
-				$topic = new TopicUg;
+				$topic = new Topic;
 				$topic->name = request('topic_name');
 				$topic->save();
 			}

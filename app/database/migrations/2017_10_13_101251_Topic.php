@@ -13,8 +13,9 @@ class Topic extends Migration{
 		foreach (departments() as $key => $department) {
 			foreach (department_sections() as $key => $section) {
 				Schema::create($department.'_topics_'.$section, function (Blueprint $table) {
-					$table->increments('id');
+					$table->uuid('id');
 					$table->string('name')->unique();
+					$table->primary('id');
 				});
 			}
 		}

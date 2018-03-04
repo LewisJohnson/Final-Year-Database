@@ -13,8 +13,8 @@ class ProjectTopic extends Migration{
 		foreach (departments() as $key => $department) {
 			foreach (department_sections() as $key => $section) {
 				Schema::create($department.'_project_topics_'.$section, function (Blueprint $table) {
-					$table->unsignedBigInteger('project_id');
-					$table->unsignedBigInteger('topic_id');
+					$table->uuid('project_id');
+					$table->uuid('topic_id');
 					$table->boolean('primary')->default(0);
 					$table->primary(['project_id', 'topic_id']);
 				});
