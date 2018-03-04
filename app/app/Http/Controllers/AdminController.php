@@ -131,11 +131,11 @@ class AdminController extends Controller{
 						$supervisor->project_load_ug = $request->project_load;
 					}
 					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
-				} elseif (Session::get("db_type") == "masters") {
+				} elseif (Session::get("db_type") == "pg") {
 					if (isset($request->project_load)) {
-						$supervisor->project_load_masters = $request->project_load;
+						$supervisor->project_load_pg = $request->project_load;
 					}
-					$supervisor->take_students_masters = isset($request->take_students) ? true : false;
+					$supervisor->take_students_pg = isset($request->take_students) ? true : false;
 				}
 				$supervisor->save();
 			}
@@ -247,8 +247,8 @@ class AdminController extends Controller{
 
 			if (Session::get("db_type") == "ug") {
 				DB::table(Session::get("department").'_students_ug')->delete();
-			} elseif (Session::get("db_type") == "masters") {
-				DB::table(Session::get("department").'_students_masters')->delete();
+			} elseif (Session::get("db_type") == "pg") {
+				DB::table(Session::get("department").'_students_pg')->delete();
 			}
 
 		});
@@ -312,9 +312,9 @@ class AdminController extends Controller{
 			if(Session::get('db_type') == 'ug'){
 				$supervisor->project_load = $supervisor->project_load_ug;
 				$supervisor->target_load = ($supervisor->project_load_ug * 2) - $supervisor->accepted_student_count;
-			} elseif(Session::get('db_type') == 'masters'){
-				$supervisor->project_load = $supervisor->project_load_masters;
-				$supervisor->target_load = ($supervisor->project_load_masters * 2) - $supervisor->accepted_student_count;
+			} elseif(Session::get('db_type') == 'pg'){
+				$supervisor->project_load = $supervisor->project_load_pg;
+				$supervisor->target_load = ($supervisor->project_load_pg * 2) - $supervisor->accepted_student_count;
 			}
 
 			$supervisorLoadTotal += $supervisor->project_load;
@@ -355,8 +355,8 @@ class AdminController extends Controller{
 	public function calculateSecondMarkers(Request $request){
 		if (Session::get("db_type") == "ug") {
 			DB::table(Session::get("department").'_students_ug')->update(array('marker_id' => null));
-		} elseif (Session::get("db_type") == "masters") {
-			DB::table(Session::get("department").'_students_masters')->update(array('marker_id' => null));
+		} elseif (Session::get("db_type") == "pg") {
+			DB::table(Session::get("department").'_students_pg')->update(array('marker_id' => null));
 		}
 
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
@@ -447,8 +447,8 @@ class AdminController extends Controller{
 			fclose($handle);
 		}
 
-		if ($request->query("db") == "tran_masters") {
-			$filename = "transactions-masters [" . Carbon::now()->toDateString() . "].json";
+		if ($request->query("db") == "tran_pg") {
+			$filename = "transactions-pg [" . Carbon::now()->toDateString() . "].json";
 			$handle = fopen($filename, 'w+');
 			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
 			fclose($handle);

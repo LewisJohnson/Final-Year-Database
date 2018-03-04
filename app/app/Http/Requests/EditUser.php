@@ -35,7 +35,7 @@ class EditUser extends FormRequest
 			
 			'title' => 'max:6',
 			'project_load_ug' => 'min:0|max:255',
-			'project_load_masters' => 'min:0|max:255',
+			'project_load_pg' => 'min:0|max:255',
 		];
 	}
 

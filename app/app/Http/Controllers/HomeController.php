@@ -121,8 +121,8 @@ class HomeController extends Controller{
 			return redirect()->action('HomeController@index');
 		}
 
-		if($request->db_type == "masters"){
-			Session::put("db_type", "masters");
+		if($request->db_type == "pg"){
+			Session::put("db_type", "pg");
 			return redirect()->action('HomeController@index');
 		}
 		return abort(400, "Invalid Request.");

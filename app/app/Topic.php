@@ -51,7 +51,7 @@ class Topic extends Model{
 	 * 
 	 * Includes primary project pivot.
 	 *
-	 * @return ProjectMasters
+	 * @return Project
 	*/
 	public function projects(){
 		return $this->belongsToMany(Project::class, null, 'topic_id', 'project_id')->withPivot('primary');
@@ -60,7 +60,7 @@ class Topic extends Model{
 	/**
 	 * Returns all projects related to this topic which are on-offer to students.
 	 *
-	 * @return ProjectMasters
+	 * @return Project
 	*/
 	public function projectsOnOffer(){
 		$this->projects->where('status', 'on-offer');

@@ -53,8 +53,8 @@ class Supervisor extends User{
 	public function takeStudents(){
 		if(Session::get("db_type") == "ug"){
 			return $this->take_students_ug;
-		} elseif(Session::get("db_type") == "masters") {
-			return $this->take_students_masters;
+		} elseif(Session::get("db_type") == "pg") {
+			return $this->take_students_pg;
 		}
 	}
 

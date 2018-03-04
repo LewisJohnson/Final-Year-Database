@@ -49,7 +49,7 @@ class SupervisorController extends Controller{
 				});
 			} else {
 				$supervisors = $supervisors->filter(function ($supervisor, $key) {
-					return $supervisor->take_students_masters;
+					return $supervisor->take_students_pg;
 				});
 			}
 		}
@@ -74,12 +74,7 @@ class SupervisorController extends Controller{
 	 */
 	public function transactions(){
 		// $projects = Auth::user()->projects->pluck('id');
-
-		// if(Session::get("db_type") == "ug"){
-		// 	$transactions = TransactionUg::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
-		// } elseif(Session::get("db_type") == "masters") {
-		// 	$transactions = TransactionMasters::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
-		// }
+		// 	$transactions = Transaction::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
 
 		$transactions = [];
 		return view('supervisors.transactions')->with('transactions', $transactions);

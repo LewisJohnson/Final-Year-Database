@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('config_json')) {
+if (!function_exists('config_json')){
 	function config_json($key = null, $value = null) {
 		$config = json_decode(Storage::disk('local')->get(config("app.config_dir")), true);
 
@@ -23,8 +23,8 @@ if (!function_exists('config_json')) {
 	}
 }
 
-if (!function_exists('lang_sess')) {
-	function lang_sess($key = null, $value = null) {;
+if (!function_exists('lang_sess')){
+	function lang_sess($key = null, $value = null){
 		$key = str_replace('"', '',$key);
 		$key = str_replace('\'', '',$key);
 
@@ -33,14 +33,14 @@ if (!function_exists('lang_sess')) {
 	}
 }
 
-if (!function_exists('department_sections')) {
-	function department_sections() {;
-		return ['ug', 'masters'];
+if (!function_exists('department_sections')){
+	function department_sections() {
+		return ['ug', 'pg'];
 	}
 }
 
-if (!function_exists('departments')) {
-	function departments() {;
+if (!function_exists('departments')){
+	function departments() {
 		return ['informatics', 'engineering'];
 	}
 }

@@ -53,7 +53,7 @@
 				</div>
 			@endif
 
-			@if(Auth::user()->isMastersAdmin())
+			@if(Auth::user()->isPgAdmin())
 				<div class="card card--half">
 					<h2>Masters Administrator</h2>
 					<p>{{ Auth::user()->first_name }}, you are a masters administrator. Take a look at the hub to see what actions you can perform.</p>

@@ -121,8 +121,8 @@ class User extends Authenticatable{
 	 *
 	 * @return boolean
 	 */
-	public function isMastersAdmin(){
-		return in_array("admin_masters", $this->getPrivileges());
+	public function isPgAdmin(){
+		return in_array("admin_pg", $this->getPrivileges());
 	}
 
 	/**
@@ -131,7 +131,7 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isProjectAdmin(){
-		return $this->isUgAdmin() || $this->isMastersAdmin();
+		return $this->isUgAdmin() || $this->isPgAdmin();
 	}
 
 	/**
@@ -205,11 +205,12 @@ class User extends Authenticatable{
 	 * @return string
 	 */
 	public function studentType(){
+		dd($this->student);
 		if($this->hasOne(StudentUg::class, 'id')->exists()){
 			return "ug";
 		}
 		if($this->hasOne(StudentMasters::class, 'id')->exists()){
-			return "masters";
+			return "pg";
 		}
 		return null;
 	}
@@ -220,11 +221,7 @@ class User extends Authenticatable{
 	 * @return Student
 	*/
 	public function student(){
-		if(Session::get("db_type") == "ug"){
-			return $this->hasOne(StudentUg::class, 'id');
-		} elseif(Session::get("db_type") == "masters"){
-			return $this->hasOne(StudentMasters::class, 'id');
-		}
+		return $this->hasOne(Student::class, 'id');
 	}
 
 	/**

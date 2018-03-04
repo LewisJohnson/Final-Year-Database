@@ -1,4 +1,4 @@
-@if(Cookie::get('cookie-banner-seen') !== "true")
+@if($_COOKIE['cookie-banner-seen'] !== "true")
 	<div class="cookie-banner flex flex--row">
 
 		<div style="color: white; width: 30px;">

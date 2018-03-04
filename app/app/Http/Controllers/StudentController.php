@@ -17,8 +17,7 @@ use SussexProjects\Supervisor;
  *
  * Methods in this controller are used for project and system administrators.
  * 
- * @see SussexProjects\StudentUg Undergraduate students
- * @see SussexProjects\StudentMasters Postgraduate students
+ * @see SussexProjects\Student
 */
 class StudentController extends Controller{
 

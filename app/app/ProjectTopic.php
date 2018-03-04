@@ -7,7 +7,7 @@ use SussexProjects\Project;
 use SussexProjects\Topic;
 
 /**
- * The masters project topic model.
+ * The project topic model.
  * 
  * @see SussexProjects\Http\Controllers\ProjectTopic
 */

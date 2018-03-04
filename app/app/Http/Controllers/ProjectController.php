@@ -437,11 +437,11 @@ class ProjectController extends Controller{
 			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
 								->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
 								->where('supervisors.take_students_ug', true);
-		} elseif(Session::get("db_type") == "masters") {
-			$sessionDbPrefix = "projects_masters.";
-			$projects = ProjectMasters::select('projects_masters.*', 'supervisors.take_students_masters')
-									->join('supervisors', 'projects_masters.supervisor_id', '=', 'supervisors.id')
-									->where('supervisors.take_students_masters', true);
+		} elseif(Session::get("db_type") == "pg") {
+			$sessionDbPrefix = "projects_pg.";
+			$projects = ProjectMasters::select('projects_pg.*', 'supervisors.take_students_pg')
+									->join('supervisors', 'projects_pg.supervisor_id', '=', 'supervisors.id')
+									->where('supervisors.take_students_pg', true);
 		}
 
 
@@ -483,8 +483,8 @@ class ProjectController extends Controller{
 			$filteredAtLeastOnce = true;
 			$filteredByTopics = true;
 
-			$projects = $projects->filter(function($loopProject, $key) use ($searchTerm) {
-				foreach ($loopProject->topics as $key => $topic) {
+			$projects = $projects->filter(function($project, $key) use ($searchTerm) {
+				foreach ($project->topics as $key => $topic) {
 					if(strcasecmp($topic->name, $searchTerm) == 0){
 						return true;
 					}

@@ -157,7 +157,7 @@ class UserController extends Controller{
 	 * 
 	 * **AUTHENTICATION RULES**
 	 * - Undergraduate administrator can create guest, staff, student_ug and admin_ug.
-	 * - Masters administrator can create guest, staff, student_masters and admin_masters.
+	 * - Masters administrator can create guest, staff, student_pg and admin_pg.
 	 * - System administrator can create all types of users.
 	 * - Only administrators can create users.
 	 * 
@@ -170,11 +170,11 @@ class UserController extends Controller{
 		$amountOfStudentPrivileges = 0;
 
 		if(in_array("admin_ug", $privileges)){ $amountOfAdminPrivileges++; }
-		if(in_array("admin_masters", $privileges)){ $amountOfAdminPrivileges++; }
+		if(in_array("admin_pg", $privileges)){ $amountOfAdminPrivileges++; }
 		if(in_array("admin_system", $privileges)){ $amountOfAdminPrivileges++; }
 
 		if(in_array("student_ug", $privileges)){ $amountOfStudentPrivileges++; }
-		if(in_array("student_masters", $privileges)){ $amountOfStudentPrivileges++; }
+		if(in_array("student_pg", $privileges)){ $amountOfStudentPrivileges++; }
 
 		if(in_array("guest", $privileges) && $amountOfPrivileges > 1){
 			// Guest is a unique privilege
@@ -200,9 +200,9 @@ class UserController extends Controller{
 			throw $error;
 		}
 
-		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isMastersAdmin()){
-			if(in_array("admin_masters", $privileges) || in_array("student_masters", $privileges)){
-				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a masters administrator or student."]]);
+		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isPgAdmin()){
+			if(in_array("admin_pg", $privileges) || in_array("student_pg", $privileges)){
+				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a postgraduate administrator or student."]]);
 				throw $error;
 			}
 		}

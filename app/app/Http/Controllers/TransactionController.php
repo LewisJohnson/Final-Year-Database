@@ -23,10 +23,7 @@ class TransactionController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		$transactions = Session::get("db_type") == "ug" ?
-			TransactionUg::orderBy('transaction_date', 'desc')->get() :
-			TransactionMasters::orderBy('transaction_date', 'desc')->get();
-
+		Transaction::orderBy('transaction_date', 'desc')->get();
 		return view('admin.transactions')->with('transactions', $transactions);
 	}
 
@@ -38,11 +35,7 @@ class TransactionController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function byProject(){
-		if(Session::get("db_type") == "ug"){
-			$projects = ProjectUg::all();
-		} elseif(Session::get("db_type") == "masters") {
-			$projects = ProjectMasters::all();
-		}
+		$projects = Project::all();
 		return view('projects.index')
 			->with('projects', $projects)
 			->with('view', 'transaction');
