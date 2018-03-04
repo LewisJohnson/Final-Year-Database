@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SussexProjects\Supervisor;
-use SussexProjects\ProjectUg;
-use SussexProjects\ProjectMasters;
-use SussexProjects\StudentUg;
-use SussexProjects\StudentMasters;
-use SussexProjects\TransactionUg;
-use SussexProjects\TransactionMasters;
+use SussexProjects\Project;
+use SussexProjects\Student;
+use SussexProjects\Transaction;
 
 /**
  * The supervisor controller.
@@ -113,23 +110,12 @@ class SupervisorController extends Controller{
 		]);
 
 		DB::transaction(function() use ($request) {
-			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::findOrFail(request('student_id'));
-				$project = ProjectUg::findOrFail(request('project_id'));
-				$transaction = new TransactionUg;
-			} else {
-				$student = StudentMasters::findOrFail(request('student_id'));
-				$project = ProjectMasters::findOrFail(request('project_id'));
-				$transaction = new TransactionMasters;
-			}
+			$student = Student::findOrFail(request('student_id'));
+			$project = Project::findOrFail(request('project_id'));
+			$transaction = new Transaction;
 
-			if(Session::get("db_type") == "ug"){
-				$acceptedStudent = StudentUg::where('project_id', $project->id)->where('project_status', 'accepted')->get();
-				$selectedStudent = StudentUg::where('project_id', $project->id)->where('project_status', 'selected')->get();
-			} else {
-				$acceptedStudent = StudentMasters::where('project_id', $project->id)->where('project_status', 'accepted')->get();
-				$selectedStudent = StudentMasters::where('project_id', $project->id)->where('project_status', 'selected')->get();
-			}
+			$acceptedStudent = Student::where('project_id', $project->id)->where('project_status', 'accepted')->get();
+			$selectedStudent = Student::where('project_id', $project->id)->where('project_status', 'selected')->get();
 
 			if($project->id != $student->project_id){
 				return response()->json(array('successful' => false, 'message' => 'Project ID and student project ID do not match up'));
@@ -169,13 +155,8 @@ class SupervisorController extends Controller{
 	 */
 	public function rejectStudent(Request $request){
 		DB::transaction(function() use ($request) {
-			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::findOrFail(request('student_id'));
-				$transaction = new TransactionUg;
-			} else {
-				$student = StudentMasters::findOrFail(request('student_id'));
-				$transaction = new TransactionMasters;
-			}
+			$student = Student::findOrFail(request('student_id'));
+			$transaction = new Transaction;
 
 			$transaction->fill(array(
 				'type' =>'project',
@@ -204,13 +185,8 @@ class SupervisorController extends Controller{
 	 */
 	public function undo(Request $request){
 		DB::transaction(function() use ($request) {
-			if(Session::get("db_type") == "ug"){
-				$student = StudentUg::findOrFail(request('student_id'));
-				$transaction = new TransactionUg;
-			} else {
-				$student = StudentMasters::findOrFail(request('student_id'));
-				$transaction = new TransactionMasters;
-			}
+			$student = Student::findOrFail(request('student_id'));
+			$transaction = new Transaction;
 
 			$transaction->fill(array(
 				'type' =>'project',

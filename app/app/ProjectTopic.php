@@ -2,9 +2,9 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 use SussexProjects\Project;
 use SussexProjects\Topic;
-use Session;
 
 /**
  * The masters project topic model.
@@ -16,9 +16,15 @@ class ProjectTopic extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	protected $table = null;
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_project_topics_'.Session::get('db_type');
+		} else {
+			return 'UNSET';
+		}
+	}
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -33,6 +39,7 @@ class ProjectTopic extends Model{
 	 * @var bool
 	 */
 	public $incrementing = false;
+	
 	
 	protected $primaryKey = ['project_id', 'topic_id'];
 	

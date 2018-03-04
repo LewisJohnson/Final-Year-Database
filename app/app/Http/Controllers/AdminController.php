@@ -7,14 +7,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use SussexProjects\StudentMasters;
-use SussexProjects\StudentUg;
-use SussexProjects\ProjectMasters;
-use SussexProjects\ProjectUg;
+use SussexProjects\Student;
+use SussexProjects\Project;
 use SussexProjects\Supervisor;
-use SussexProjects\TopicMasters;
-use SussexProjects\TopicUg;
-use SussexProjects\TransactionUg;
+use SussexProjects\Topic;
+use SussexProjects\Transaction;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
@@ -156,12 +153,7 @@ class AdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function amendTopicsView(Request $request){
-		if (Session::get("db_type") == "ug") {
-			$topics = TopicUg::all();
-		} elseif (Session::get("db_type") == "masters") {
-			$topics = TopicMasters::all();
-		}
-
+		$topics = Topic::all();
 		return view('admin.amend-topics')
 			->with('topics', $topics);
 	}
@@ -173,12 +165,7 @@ class AdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function loginAsView(Request $request){
-		if (Session::get("db_type") == "ug") {
-			$students = StudentUg::all();
-		} elseif (Session::get("db_type") == "masters") {
-			$students = StudentMasters::all();
-		}
-
+		$students = Student::all();
 		$supervisors = Supervisor::all();
 		$staffUsers = User::Where('access_type', 'staff')->get();
 
@@ -246,11 +233,7 @@ class AdminController extends Controller{
 	*/
 	public function archive(Request $request){
 		DB::transaction(function() {
-			if (Session::get("db_type") == "ug") {
-				$projects = ProjectUg::all();
-			} elseif (Session::get("db_type") == "masters") {
-				$projects = ProjectMasters::all();
-			}
+			$projects = Project::all();
 
 			foreach ($projects as $key => $project) {
 
@@ -263,9 +246,9 @@ class AdminController extends Controller{
 			}
 
 			if (Session::get("db_type") == "ug") {
-				DB::table('students_ug')->delete();
+				DB::table(Session::get("department").'_students_ug')->delete();
 			} elseif (Session::get("db_type") == "masters") {
-				DB::table('students_masters')->delete();
+				DB::table(Session::get("department").'_students_masters')->delete();
 			}
 
 		});
@@ -285,12 +268,7 @@ class AdminController extends Controller{
 	*/
 	public function assignMarkerManualView(Request $request){
 		$supervisors = Supervisor::all();
-
-		if (Session::get("db_type") == "ug") {
-			$students = StudentUg::all();
-		} elseif (Session::get("db_type") == "masters") {
-			$students = StudentMasters::all();
-		}
+		$students = Student::all();
 
 		$sorted = $students->sortBy(function ($student, $key) use ($request) {
 			if ($request->query("sort") === "firstname") {
@@ -325,15 +303,8 @@ class AdminController extends Controller{
 		$supervisorLoadTotal = 0;
 		$maxTargetLoad = 0;
 		$slack = 0;
-
-		if (Session::get("db_type") == "ug") {
-			$studentCount = StudentUg::count();
-			$projectCount = ProjectUg::count();
-
-		} elseif (Session::get("db_type") == "masters") {
-			$studentCount = StudentMasters::count();
-			$projectCount = ProjectMasters::count();
-		}
+		$studentCount = Student::count();
+		$projectCount = Project::count();
 
 		foreach ($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
@@ -383,9 +354,9 @@ class AdminController extends Controller{
 	*/
 	public function calculateSecondMarkers(Request $request){
 		if (Session::get("db_type") == "ug") {
-			DB::table('students_ug')->update(array('marker_id' => null));
+			DB::table(Session::get("department").'_students_ug')->update(array('marker_id' => null));
 		} elseif (Session::get("db_type") == "masters") {
-			DB::table('students_masters')->update(array('marker_id' => null));
+			DB::table(Session::get("department").'_students_masters')->update(array('marker_id' => null));
 		}
 
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
@@ -438,8 +409,8 @@ class AdminController extends Controller{
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.automatic-second-marker-assignment-table')
-		->with('supervisors', $assignmentSetup["supervisors"])
-		->with('slack', $assignmentSetup["slack"]);
+			->with('supervisors', $assignmentSetup["supervisors"])
+			->with('slack', $assignmentSetup["slack"]);
 
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
@@ -455,7 +426,7 @@ class AdminController extends Controller{
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.assignment-report-table')
-		->with('supervisors', $assignmentSetup["supervisors"]);
+			->with('supervisors', $assignmentSetup["supervisors"]);
 
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}

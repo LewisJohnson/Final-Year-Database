@@ -7,12 +7,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
-use SussexProjects\StudentUg;
-use SussexProjects\StudentMasters;
-use SussexProjects\ProjectUg;
-use SussexProjects\ProjectMasters;
-use SussexProjects\TransactionUg;
-use SussexProjects\TransactionMasters;
+use SussexProjects\Student;
+use SussexProjects\Project;
+use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
 
 /**
@@ -35,12 +32,7 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function report(){
-		if(Session::get("db_type") == "ug"){
-			$studentCount = count(StudentUg::all());
-		} elseif(Session::get("db_type") == "masters") {
-			$studentCount = count(StudentMasters::all());
-		}
-		return view('students.report')->with('studentCount', $studentCount);
+		return view('students.report')->with('studentCount', Student::count());
 	}
 
 	/**
@@ -50,11 +42,7 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function addFavouriteProject(Request $request){
-		if(Session::get("db_type") == "ug"){
-			$project = ProjectUg::findOrFail(request('project_id'));
-		} elseif(Session::get("db_type") == "masters") {
-			$project = ProjectMasters::findOrFail(request('project_id'));
-		}
+		$project = Project::findOrFail(request('project_id'));
 
 		if(Cookie::get('favourite_projects') === "null" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
 			Cookie::queue('favourite_projects', serialize(array($project->id)), 525600);
@@ -81,13 +69,9 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function removeFavouriteProject(Request $request){
-		if(Session::get("db_type") == "ug"){
-			$project = ProjectUg::findOrFail(request('project_id'));
-		} elseif(Session::get("db_type") == "masters") {
-			$project = ProjectMasters::findOrFail(request('project_id'));
-		}
-
+		$project = Project::findOrFail(request('project_id'));
 		$favProjects = unserialize(Cookie::get('favourite_projects'));
+
 		if (($key = array_search($project->id, $favProjects)) !== false) {
 			unset($favProjects[$key]);
 		}
@@ -135,14 +119,8 @@ class StudentController extends Controller{
 					return redirect()->action('HomeController@index');
 				}
 
-				if(Session::get("db_type") == "ug"){
-					$project = new ProjectUg;
-					$transaction = new TransactionUg;
-				} elseif(Session::get("db_type") == "masters") {
-					$project = new ProjectMasters;
-					$transaction = new TransactionMasters;
-				}
-
+				$project = new Project;
+				$transaction = new Transaction;
 				$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
 				$project->supervisor_id = request('supervisor_id');
@@ -216,13 +194,8 @@ class StudentController extends Controller{
 					return redirect()->action('HomeController@index');
 				}
 
-				if(Session::get("db_type") == "ug"){
-					$project = ProjectUg::findOrFail(request('project_id'));
-					$transaction = new TransactionUg;
-				} elseif(Session::get("db_type") == "masters") {
-					$project = ProjectMasters::findOrFail(request('project_id'));
-					$transaction = new TransactionMasters;
-				}
+				$project = Project::findOrFail(request('project_id'));
+				$transaction = new Transaction;
 
 				$student->project_id = $project->id;
 				$student->project_status = 'selected';
@@ -259,16 +232,10 @@ class StudentController extends Controller{
 	public function updateSecondMarker(Request $request) {
 		//todo: make sure user is authorized to perform this action
 		$result = DB::transaction(function() use ($request) {
-			if(Session::get("db_type") == "ug"){
-				$project = ProjectUg::findOrFail(request('project_id'));
-				$student = StudentUg::findOrFail(request('student_id'));
-				$transaction = new TransactionUg;
-			} elseif(Session::get("db_type") == "masters") {
-				$project = ProjectMasters::findOrFail(request('project_id'));
-				$student = StudentMasters::findOrFail(request('student_id'));
-				$transaction = new TransactionMasters;
-			}
-
+			
+			$project = Project::findOrFail(request('project_id'));
+			$student = Student::findOrFail(request('student_id'));
+			$transaction = new Transaction;
 			$marker = Supervisor::findOrFail(request('marker_id'));
 
 			$transaction->fill(array(
@@ -281,11 +248,12 @@ class StudentController extends Controller{
 				'admin' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
-			$transaction->save();
 
+			$transaction->save();
 			$student->marker_id = $marker->id;
 			$student->save();
 		});
+
 		return $result;
 	}
 
@@ -306,10 +274,6 @@ class StudentController extends Controller{
 	 * @return Student
 	 */
 	public static function getStudentWithoutSecondMarker(){
-		if(Session::get("db_type") == "ug"){
-			return $student = StudentUg::whereNull('marker_id')->first();
-		} elseif(Session::get("db_type") == "masters") {
-			return $student = StudentMasters::whereNull('marker_id')->first();
-		}
+		return $student = Student::whereNull('marker_id')->first();
 	}
 }

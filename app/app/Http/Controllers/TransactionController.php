@@ -2,10 +2,8 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
-use SussexProjects\TransactionUg;
-use SussexProjects\TransactionMasters;
-use SussexProjects\ProjectUg;
-use SussexProjects\ProjectMasters;
+use SussexProjects\Transaction;
+use SussexProjects\Project;
 
 /**
  * The transaction controller.

@@ -1,11 +1,6 @@
 <?php
 namespace SussexProjects\Http\Controllers;
 
-use SussexProjects\User;
-use SussexProjects\StudentUg;
-use SussexProjects\StudentMasters;
-use SussexProjects\Supervisor;
-use SussexProjects\Http\Requests\StoreUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +8,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use SussexProjects\User;
+use SussexProjects\Student;
+use SussexProjects\Supervisor;
+use SussexProjects\Http\Requests\StoreUser;
 
 /**
  * The user controller.
@@ -33,12 +32,7 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
-		if(Session::get("db_type") == "ug"){
-			$students = StudentUg::all();
-		} elseif(Session::get("db_type") == "masters") {
-			$students = StudentMasters::all();
-		}
-
+		$students = Student::all();
 		$supervisors = Supervisor::all();
 		$staffUsers = User::Where('privileges', 'staff')->get();
 
@@ -93,19 +87,11 @@ class UserController extends Controller{
 			]);
 
 			if($user->access_type == "student"){
-				if(Session::get("db_type") == "ug"){
-					StudentUg::create([
-						'id' => $user->id,
-						'registration_number' => $request['registration_number'],
-						'programme' => $request['programme']
-					]);
-				} else {
-					StudentMasters::create([
-						'id' => $user->id,
-						'registration_number' => $request['registration_number'],
-						'programme' => $request['programme']
-					]);
-				}
+				Student::create([
+					'id' => $user->id,
+					'registration_number' => $request['registration_number'],
+					'programme' => $request['programme']
+				]);
 			} else if ($user->access_type == "supervisor"){
 				dd("Not implemented yet.");
 				// Supervisor::create([

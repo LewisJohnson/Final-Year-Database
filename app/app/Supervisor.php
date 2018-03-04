@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Auth;
 class Supervisor extends User{
 
 	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_supervisors';
+		} else {
+			return 'UNSET';
+		}
+	}
+
+	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
@@ -36,62 +49,57 @@ class Supervisor extends User{
 		return $this->hasOne(User::class, 'id');
 	}
 
-	public function getProjectsByStatus($status){
+	public function takeStudents(){
 		if(Session::get("db_type") == "ug"){
-			return ProjectUg::where("supervisor_id", $this->id)
-			->whereNull('student_id')
-			->where("status", "=", $status)
-			->get();
+			return $this->take_students_ug;
 		} elseif(Session::get("db_type") == "masters") {
-			return ProjectMasters::where("supervisor_id", $this->id)
+			return $this->take_students_masters;
+		}
+	}
+
+	public function getProjectsByStatus($status){
+		return Project::where("supervisor_id", $this->id)
 			->whereNull('student_id')
 			->where("status", "=", $status)
 			->get();
-		}
 	}
 
 	public function getProjectsOrderByStatus(){
-		if(Session::get("db_type") == "ug"){
-			$proj =  ProjectUg::where("supervisor_id", $this->id)
+		$proj = Project::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
 			->whereNull('student_id')
 			->get();
-		} elseif(Session::get("db_type") == "masters") {
-			$proj = ProjectMasters::where("supervisor_id", $this->id)
-			->orderBy('status', 'asc')
-			->whereNull('student_id')
-			->get();
-		}
 	}
 
 	public function getProjectOffers(){
-		if(Session::get("db_type") == "ug"){
-			$offers = ProjectUg::
-				select('projects_ug.id','projects_ug.title', 'students_ug.id as student_id', 'students_ug.share_name as student_share')
-				->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
-				->where('projects_ug.supervisor_id', $this->id)
-				->where('projects_ug.status', '!=', 'student-proposed')
-				->where('students_ug.project_status', '=', 'selected')
-				->whereNotNull('students_ug.project_id')
-				->get();
-		} elseif(Session::get("db_type") == "masters") {
-			$offers = ProjectMasters::
-				select('projects_masters.id','projects_masters.title', 'students_masters.id as student_id', 'students_masters.share_name as student_share')
-				->join('students_masters', 'students_masters.project_id', '=', 'projects_masters.id')
-				->where('projects_masters.supervisor_id', $this->id)
-				->where('projects_masters.status', '!=', 'student-proposed')
-				->where('students_masters.project_status', '=', 'selected')
-				->whereNotNull('students_masters.project_id')
-				->get();
-		}
+		$students = Student::all();
+
+
+		$offers = $students->filter(function($student, $key) {
+			//$this->id may be wrong
+			if($student->project->supervisor_id == $this->id){
+				
+			}
+		});
+
+		$offers = Project::
+			select('id','title', 'students_ug.id as student_id', 'students_ug.share_name as student_share')
+			->join('students_ug', 'students_ug.project_id', '=', 'projects_ug.id')
+			->where('projects_ug.supervisor_id', $this->id)
+			->where('projects_ug.status', '!=', 'student-proposed')
+			->where('students_ug.project_status', '=', 'selected')
+			->whereNotNull('students_ug.project_id')
+			->get();
 
 		foreach ($offers as $key => $value) {
-			$student = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
+			$student = DB::table(Session::get("department").'_users')->select('first_name', 'last_name', 'email')->where('id', $value->student_id)->first();
+			
 			if($value->student_share || Auth::user()->isSupervisor()){
 				$value->student_name = $student->first_name." ".$student->last_name;
 			} else {
-				$value->student_name = "Hidden";
+				$value->student_name = "A student";
 			}
+
 			$value->student_email = $student->email;
 		}
 		return $offers;

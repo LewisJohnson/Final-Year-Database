@@ -194,11 +194,11 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	Route::get('projects/{id}', 'ProjectController@show');
-	Route::delete('projects/{id}/delete', 'ProjectController@destroy');
-	Route::patch('projects/{id}/edit', 'ProjectController@update');
-	Route::get('projects/{id}/edit', 'ProjectController@edit');
-	Route::patch('projects/{id}/restore', 'ProjectController@restore');
+	Route::get('projects/{guid}', 'ProjectController@show');
+	Route::delete('projects/{guid}/delete', 'ProjectController@destroy');
+	Route::patch('projects/{guid}/edit', 'ProjectController@update');
+	Route::get('projects/{guid}/edit', 'ProjectController@edit');
+	Route::patch('projects/{guid}/restore', 'ProjectController@restore');
 
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');

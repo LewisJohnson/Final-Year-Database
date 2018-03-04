@@ -11,6 +11,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserAgentString extends Model{
 
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_user_agent_strings';
+		} else {
+			return 'UNSET';
+		}
+	}
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *

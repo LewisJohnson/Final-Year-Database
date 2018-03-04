@@ -4,13 +4,9 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
-use SussexProjects\ProjectTopicMasters;
-use SussexProjects\ProjectTopicUg;
-use SussexProjects\TopicMasters;
-use SussexProjects\TopicUg;
-use SussexProjects\ProjectTopic;
 use SussexProjects\Project;
 use SussexProjects\Topic;
+use SussexProjects\ProjectTopic;
 
 /**
  * The project topic controller.

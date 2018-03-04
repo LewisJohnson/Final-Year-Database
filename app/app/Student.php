@@ -15,9 +15,15 @@ class Student extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	protected $table = null;
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_students_'.Session::get('db_type');
+		} else {
+			return 'UNSET';
+		}
+	}
 	
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -32,6 +38,28 @@ class Student extends Model{
 	 * @var array
 	 */
 	protected $fillable = ['id', 'registration_number', 'programme', 'marker_id'];
+
+	/**
+	 * Returns the user related to this student.
+	 *
+	 * @return User
+	 */
+	public function user(){
+		return $this->hasOne(User::class, 'id');
+	}
+
+	/**
+	 * Returns the project this student has selected.
+	 *
+	 * @return Project
+	 */
+	public function project(){
+		return $this->hasOne(Project::class, 'id', 'project_id');
+	}
+
+	public function marker(){
+		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
+	}
 
 	public function getStatusString(){
 		$return = '';
@@ -54,11 +82,7 @@ class Student extends Model{
 
 	public static function getMailtoStringByProjectStatus($status){
 		$return = 'mailto:';
-		if(Session::get("db_type") == "ug"){
-			$students = StudentUg::Where('project_status', $status)->get();
-		} else {
-			$students = StudentMasters::Where('project_status', $status)->get();
-		}
+		$students = Student::Where('project_status', $status)->get();
 
 		foreach ($students as $key => $student) {
 			$return .= $student->user->email;
@@ -66,10 +90,6 @@ class Student extends Model{
 		}
 
 		return $return;
-	}
-
-	public function marker(){
-		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
 	public function isFavouriteProject($id){
@@ -91,11 +111,7 @@ class Student extends Model{
 		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
 			return null;
 		} else {
-			if(Session::get("db_type") == "ug"){
-				$projects = ProjectUg::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
-			} elseif(Session::get("db_type") == "masters") {
-				$projects = ProjectMasters::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
-			}
+			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
 		}
 		return $projects;
 	}

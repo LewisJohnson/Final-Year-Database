@@ -2,7 +2,6 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -18,9 +17,15 @@ class Project extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	protected $table = null;
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_projects_'.Session::get('db_type');
+		} else {
+			return 'UNSET';
+		}
+	}
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -56,7 +61,6 @@ class Project extends Model{
 	 * @var array
 	 */
 	protected $hidden = ['supervisor', 'created_at', 'updated_at'];
-	
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
@@ -64,7 +68,33 @@ class Project extends Model{
 	 * @var bool
 	 */
 	public $incrementing = false;
-	
+
+	public function topics(){
+		$projectTopic = new ProjectTopic;
+		return $this->belongsToMany(Topic::class, $projectTopic->getTable(), 'project_id', 'topic_id')->withPivot('primary');
+	}
+
+	// Student proposed project
+	public function student(){
+		return $this->belongsTo(Student::class, 'id', 'student_id');
+	}
+
+	public function getPrimaryTopic(){
+		foreach ($this->topics as $key => $value) {
+			if($value->pivot->primary){
+				return $value;
+			}
+		}
+	}
+
+	public function getStudentsWithThisProjectSelected(){
+		return Student::where('project_id', $this->id)->where('project_status', 'selected')->get();
+	}
+
+	public function getAcceptStudent(){
+		return Student::where('project_id', $this->id)->where('project_status', 'accepted')->first();
+	}
+
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}
