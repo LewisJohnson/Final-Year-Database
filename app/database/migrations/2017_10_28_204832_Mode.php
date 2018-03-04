@@ -10,12 +10,14 @@ class Mode extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('mode_'.$value, function (Blueprint $table) {
-				$table->smallInteger('project_year')->unique();
-				$table->dateTimeTz('start_date');
-				$table->string('mode');
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_mode_'.$section, function (Blueprint $table) {
+					$table->smallInteger('project_year')->unique();
+					$table->dateTimeTz('start_date');
+					$table->string('mode');
+				});
+			}
 		}
 	}
 
@@ -25,8 +27,10 @@ class Mode extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (department_sections() as $key => $value) {
-			Schema::dropIfExists('mode_'.$value);
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_mode_'.$section);
+			}
 		}
 	}
 }

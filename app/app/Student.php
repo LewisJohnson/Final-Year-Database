@@ -33,8 +33,6 @@ class Student extends Model{
 	 */
 	protected $fillable = ['id', 'registration_number', 'programme', 'marker_id'];
 
-
-
 	public function getStatusString(){
 		$return = '';
 		switch($this->project_status) {

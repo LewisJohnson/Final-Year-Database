@@ -1,12 +1,10 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
-use Auth;
 use Closure;
 use Session;
 
-class SystemAdmin
-{
+class CheckDepartmentSet{
 	/**
 	 * Handle an incoming request.
 	 *
@@ -15,10 +13,14 @@ class SystemAdmin
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (Auth::check() && Auth::user()->isSystemAdmin()){
+		if(Session::get("department") !== null){
 			return $next($request);
+		} else {
+			if($request->path() !== 'set-department'){
+				return redirect('set-department');
+			} else {
+				return $next($request);
+			}
 		}
-
-		abort(404);
 	}
 }

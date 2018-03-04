@@ -129,7 +129,7 @@
 @if($type === "new")
 	<div id="student-form">
 		<h3>Student</h3>
-		<p>You are creating a @lang_sess("full_name") student.</p>
+		<p>You are creating a {{ lang_sess('full_name') }} student.</p>
 		<div class="form-field">
 			<label for="programme">Programme</label>
 			<input id="programme" type="text" name="programme">

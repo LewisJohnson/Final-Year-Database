@@ -10,19 +10,22 @@ class User extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('users', function (Blueprint $table) {
-			$table->increments('id');
-			$table->string('first_name', 128);
-			$table->string('last_name', 128);
-			$table->string('username', 32)->unique();
-			$table->string('password', 128);
-			$table->string('programme');
-			$table->string('email', 128)->unique();
-			$table->dateTimeTz('last_login')->nullable(true);
-			$table->rememberToken();
-		});
+		foreach (departments() as $key => $department) {
+			Schema::create($department.'_users', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('first_name', 128);
+				$table->string('last_name', 128);
+				$table->string('username', 32)->unique();
+				$table->string('password', 128);
+				$table->string('programme');
+				$table->string('email', 128)->unique();
+				$table->dateTimeTz('last_login')->nullable(true);
+				$table->rememberToken();
+			});
 
-		DB::statement("ALTER TABLE `users` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system') NOT NULL DEFAULT 'guest' AFTER `id`;");
+			$dbname = $department.'_users';
+			DB::statement("ALTER TABLE `".$dbname."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system') NOT NULL DEFAULT 'guest' AFTER `id`;");
+		}
 	}
 
 	/**

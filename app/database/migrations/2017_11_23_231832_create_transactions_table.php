@@ -10,18 +10,20 @@ class CreateTransactionsTable extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('transactions_'.$value, function (Blueprint $table) {
-				$table->increments('id');
-				$table->enum('type', ['topic', 'project', 'student', 'marker']);
-				$table->enum('action', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
-				$table->string('project')->nullable('true');
-				$table->string('student')->nullable('true');
-				$table->string('supervisor')->nullable('true');
-				$table->string('topic')->nullable('true');
-				$table->string('admin')->nullable('true');
-				$table->dateTimeTz('transaction_date');
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_transactions_'.$section, function (Blueprint $table) {
+					$table->increments('id');
+					$table->enum('type', ['topic', 'project', 'student', 'marker']);
+					$table->enum('action', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
+					$table->string('project')->nullable('true');
+					$table->string('student')->nullable('true');
+					$table->string('supervisor')->nullable('true');
+					$table->string('topic')->nullable('true');
+					$table->string('admin')->nullable('true');
+					$table->dateTimeTz('transaction_date');
+				});
+			}
 		}
 	}
 
@@ -31,8 +33,10 @@ class CreateTransactionsTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (department_sections() as $key => $value) {
-			Schema::dropIfExists('transactions_'.$value);
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_transactions_'.$section);
+			}
 		}
 	}
 }

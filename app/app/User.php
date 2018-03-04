@@ -17,9 +17,15 @@ class User extends Authenticatable{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	protected $table = null;
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_users';
+		} else {
+			return 'UNSET';
+		}
+	}
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.

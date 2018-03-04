@@ -4,7 +4,7 @@
 <div class="centered animate-cards width--1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
-		<p>Your privileges are {{ $user->getPrettyPrivilegesString() }}.</p>
+		<p>Your privileges are {{ Auth::user()->getPrettyPrivilegesString() }}.</p>
 
 		@if(Auth::user()->isSupervisor())
 			<div class="card card--margin-vertical">
@@ -17,10 +17,10 @@
 
 		@if(Auth::user()->isStudent())
 			<div class="card card--margin-vertical">
-				<h2>@lang_sess("homepage_introduction_header")</h2>
-				<p>@lang_sess("homepage_introduction_body")</p>
-				<h2>@lang_sess("homepage_overview_header")</h2>
-				<p>@lang_sess("homepage_overview_body")</p>
+				<h2>{{ lang_sess('homepage_introduction_header') }}</h2>
+				<p>{{ lang_sess('homepage_introduction_body') }}</p>
+				<h2>{{ lang_sess('homepage_overview_header') }}</h2>
+				<p>{{ lang_sess('homepage_overview_body') }}</p>
 			</div>
 		@endif
 
@@ -112,7 +112,7 @@
 			<h2>@lang("messages.homepage_introduction_header")</h2>
 			<p>@lang("messages.homepage_introduction_body")</p>
 			<h2>@lang("messages.homepage_overview_header")</h2>
-			@lang("messages.homepage_overview_body")
+			<p>@lang("messages.homepage_overview_body")</p>
 		</div>
 	@endif
 </div>

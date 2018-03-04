@@ -10,16 +10,18 @@ class Supervisor extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('supervisors', function (Blueprint $table) {
-			$table->unsignedBigInteger('id')->unique();
-			$table->string('title', 6);
-			$table->unsignedTinyInteger('project_load_masters');
-			$table->unsignedTinyInteger('project_load_ug');
-			$table->boolean('take_students_masters');
-			$table->boolean('take_students_ug');
-			$table->boolean('accept_email_masters');
-			$table->boolean('accept_email_ug');
-		});
+		foreach (departments() as $key => $department) {
+			Schema::create($department.'_supervisors', function (Blueprint $table) {
+				$table->unsignedBigInteger('id')->unique();
+				$table->string('title', 6);
+				$table->unsignedTinyInteger('project_load_masters');
+				$table->unsignedTinyInteger('project_load_ug');
+				$table->boolean('take_students_masters');
+				$table->boolean('take_students_ug');
+				$table->boolean('accept_email_masters');
+				$table->boolean('accept_email_ug');
+			});
+		}
 	}
 
 	/**
@@ -28,6 +30,8 @@ class Supervisor extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('supervisors');
+		foreach (departments() as $key => $department) {
+			Schema::dropIfExists($department.'_supervisors');
+		}
 	}
 }

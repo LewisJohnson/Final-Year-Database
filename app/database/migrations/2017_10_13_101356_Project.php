@@ -10,21 +10,22 @@ class Project extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('projects_'.$value, function (Blueprint $table) {
-				// $table->increments('id');
-				$table->uuid('id');
-				$table->string('title', 255);
-				$table->mediumText('description');
-				$table->string('skills', 255);
-				$table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
-				$table->unsignedBigInteger('supervisor_id')->nullable(true);
-				$table->unsignedBigInteger('student_id')->nullable(true);
-				$table->timestampsTz();
-				$table->softDeletesTz();
-				$table->timestampTz('destroy_at')->nullable(true);
-				$table->primary('id');
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_projects_'.$section, function (Blueprint $table) {
+					$table->uuid('id');
+					$table->string('title', 255);
+					$table->mediumText('description');
+					$table->string('skills', 255);
+					$table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
+					$table->unsignedBigInteger('supervisor_id')->nullable(true);
+					$table->unsignedBigInteger('student_id')->nullable(true);
+					$table->timestampsTz();
+					$table->softDeletesTz();
+					$table->timestampTz('destroy_at')->nullable(true);
+					$table->primary('id');
+				});
+			}
 		}
 	}
 
@@ -34,8 +35,10 @@ class Project extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (department_sections() as $key => $value) {
-			Schema::dropIfExists('projects_'.$value);
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_projects_'.$section);
+			}
 		}
 	}
 }

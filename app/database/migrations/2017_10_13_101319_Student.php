@@ -10,15 +10,17 @@ class Student extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('students_'.$value, function (Blueprint $table) {
-				$table->unsignedBigInteger('id')->unique();
-				$table->string('registration_number');
-				$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-				$table->unsignedBigInteger('project_id')->nullable(true);
-				$table->boolean('share_name')->default(1);
-				$table->unsignedBigInteger('marker_id')->nullable(true);
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_students_'.$section, function (Blueprint $table) {
+					$table->unsignedBigInteger('id')->unique();
+					$table->string('registration_number');
+					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
+					$table->unsignedBigInteger('project_id')->nullable(true);
+					$table->boolean('share_name')->default(1);
+					$table->unsignedBigInteger('marker_id')->nullable(true);
+				});
+			}
 		}
 	}
 
@@ -28,8 +30,10 @@ class Student extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (department_sections() as $key => $value) {
-			Schema::dropIfExists('students_'.$value);
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_students_'.$section);
+			}
 		}
 	}
 }

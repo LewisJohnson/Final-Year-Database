@@ -68,9 +68,11 @@
 					</div>
 				</div>
 
-				<p class="help-block" style="display:none">
-					{{ $errors->first('username') }}
-				</p>
+				@if(isset($errors))
+					<p class="help-block">
+						{{ $errors->first('username') }}
+					</p>
+				@endif
 
 				<div class="footer footer--dark">
 					<button class="button button--raised button--accent" type="submit">LOG IN</button>

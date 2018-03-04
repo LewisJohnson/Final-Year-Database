@@ -34,7 +34,7 @@ use Illuminate\Http\Request;
 /* =============
    1. WEB ROUTES
    ============= */
-Route::group(['middleware' => ['web']], function() {
+Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	// Login Routes
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
@@ -44,6 +44,9 @@ Route::group(['middleware' => ['web']], function() {
 	Route::get('index', 'HomeController@index');
 	Route::get('home', 'HomeController@index');
 	Route::get('/', 'HomeController@index');
+
+	Route::get('set-department', 'HomeController@setDepartmentView');
+	Route::post('set-department', 'HomeController@setDepartment');
 
 	// Help Routes
 	Route::get('information', 'HomeController@information');

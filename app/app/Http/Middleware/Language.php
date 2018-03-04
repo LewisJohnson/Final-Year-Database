@@ -1,12 +1,14 @@
 <?php
 namespace SussexProjects\Http\Middleware;
 
-use Auth;
 use Closure;
 use Session;
+use App;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Application;
 
-class SystemAdmin
-{
+class Language {
+
 	/**
 	 * Handle an incoming request.
 	 *
@@ -15,10 +17,9 @@ class SystemAdmin
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (Auth::check() && Auth::user()->isSystemAdmin()){
-			return $next($request);
+		if(Session::has('department')){
+			App::setLocale(Session::get('department'));
 		}
-
-		abort(404);
+		return $next($request);
 	}
 }

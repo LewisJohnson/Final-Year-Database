@@ -25,8 +25,13 @@
 		@endif
 	</div>
 
+
+	<div class="flex--full">
+		<p>Selected the wrong department?</p> <a href="/set-depart	ment">Click here to change</a>
+	</div>
+
 	@if(config_json("footer.rainbow.value"))
-		<div class="rainbow">
+		<div class="flex--full rainbow">
 			<div></div>
 			<div></div>
 			<div></div>

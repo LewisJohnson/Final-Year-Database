@@ -4,7 +4,7 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\App;
 
 /**
  * The home controller.
@@ -126,5 +126,34 @@ class HomeController extends Controller{
 			return redirect()->action('HomeController@index');
 		}
 		return abort(400, "Invalid Request.");
+	}
+
+
+	/**
+	 * Sets the department type.
+	 * 
+	 * e.g. Informatics or engineering.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function setDepartmentView(Request $request){
+		return view('set-department');
+	}
+
+	/**
+	 * Sets the department type.
+	 * 
+	 * e.g. Informatics or engineering.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function setDepartment(Request $request){
+		if(in_array($request->department, departments())){
+			Session::put("department", $request->department);
+		}
+
+		return redirect()->action('HomeController@index');
 	}
 }

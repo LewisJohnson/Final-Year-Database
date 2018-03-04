@@ -38,3 +38,9 @@ if (!function_exists('department_sections')) {
 		return ['ug', 'masters'];
 	}
 }
+
+if (!function_exists('departments')) {
+	function departments() {;
+		return ['informatics', 'engineering'];
+	}
+}

@@ -1,5 +1,4 @@
 <?php
-
 namespace SussexProjects\Listeners;
 
 use Illuminate\Auth\Events\Login;
@@ -9,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
+
 class SuccessfulLogin
 {
 	/**
@@ -16,10 +16,7 @@ class SuccessfulLogin
 	 *
 	 * @return void
 	 */
-	public function __construct()
-	{
-		//
-	}
+	public function __construct(){}
 
 	/**
 	 * Handle the event.
@@ -28,8 +25,6 @@ class SuccessfulLogin
 	 * @return void
 	 */
 	public function handle(Login $event){
-		Session::start();
-
 		if($event->user->isStudent()){
 			Session::put('db_type', $event->user->studentType());
 
@@ -40,8 +35,6 @@ class SuccessfulLogin
 			// Just as a default
 			Session::put('db_type', 'ug');
 		}
-
-
 
 		$event->user->last_login = new Carbon;
 		$event->user->save();

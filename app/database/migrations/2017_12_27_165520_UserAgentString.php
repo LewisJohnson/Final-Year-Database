@@ -11,12 +11,14 @@ class UserAgentString extends Migration
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('user_agent_strings', function (Blueprint $table) {
-			$table->bigIncrements('id');
-			$table->text('user_agent');
-			$table->text('referrer')->nullable(true);
-			$table->boolean('first_visit');
-		});
+		foreach (departments() as $key => $department) {
+			Schema::create($department.'_user_agent_strings', function (Blueprint $table) {
+				$table->bigIncrements('id');
+				$table->text('user_agent');
+				$table->text('referrer')->nullable(true);
+				$table->boolean('first_visit');
+			});
+		}
 	}
 
 	/**
@@ -25,6 +27,8 @@ class UserAgentString extends Migration
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('user_agent_strings');
+		foreach (departments() as $key => $department) {
+			Schema::dropIfExists($department.'_user_agent_strings');
+		}
 	}
 }

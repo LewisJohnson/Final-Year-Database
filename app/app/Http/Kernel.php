@@ -16,8 +16,8 @@ class Kernel extends HttpKernel
 	protected $middleware = [
 		\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
 		\Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-		\SussexProjects\Http\Middleware\TrimStrings::class,
 		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+		\SussexProjects\Http\Middleware\TrimStrings::class,
 		\SussexProjects\Http\Middleware\TrustProxies::class,
 		\SussexProjects\Http\Middleware\UserAgentStringCollector::class,
 	];
@@ -29,13 +29,14 @@ class Kernel extends HttpKernel
 	 */
 	protected $middlewareGroups = [
 		'web' => [
-			\SussexProjects\Http\Middleware\EncryptCookies::class,
 			\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
 			\Illuminate\Session\Middleware\StartSession::class,
 			\Illuminate\Session\Middleware\AuthenticateSession::class,
 			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
 			\Illuminate\Routing\Middleware\SubstituteBindings::class,
+			\SussexProjects\Http\Middleware\EncryptCookies::class,
 			\SussexProjects\Http\Middleware\VerifyCsrfToken::class,
+			\SussexProjects\Http\Middleware\Language::class
 		],
 
 		'api' => [
@@ -52,17 +53,18 @@ class Kernel extends HttpKernel
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-		'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
 		// 'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+		// 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+		'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
 		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
 		'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
-		// 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 		'admin' => \SussexProjects\Http\Middleware\Admin::class,
 		'admin.system' => \SussexProjects\Http\Middleware\SystemAdmin::class,
 		'admin.project' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
 		'supervisor.admin' => \SussexProjects\Http\Middleware\SupervisorOrAdmin::class,
 		'student' => \SussexProjects\Http\Middleware\Student::class,
+		'checkDepartment' => \SussexProjects\Http\Middleware\CheckDepartmentSet::class,
 	];
 }

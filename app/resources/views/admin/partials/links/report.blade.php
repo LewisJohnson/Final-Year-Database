@@ -1,12 +1,12 @@
 <ul class="icon-list">
 	<li>
-		<a class="icon" href="/reports/student">
+		<a class="icon" href="{{ action('StudentController@report') }}">
 			@include('svg.school')
 			<p>Report by Student</p>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="/reports/supervisor">
+		<a class="icon" href="{{ action('SupervisorController@report') }}">
 			@include('svg.shield')
 			<p>Report by Supervisor</p>
 		</a>

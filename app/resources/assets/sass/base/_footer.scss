@@ -1,6 +1,6 @@
 footer{
 	position: absolute;
-	bottom: 0;
+	bottom: -50px;
 	left: 0;
 	right: 0;
 	display: flex;
@@ -9,32 +9,23 @@ footer{
 	background: $accent;
 	font-size: 12px;
 
-	.footer-left, .footer-right{
-		padding: 0 10px;
-		a, p{
-			@include transition--medium();
-			color: white;
-			display: inline-block;
-			margin: 0;
-		}
+	a, p{
+		@include transition--medium();
+		color: white;
+		display: inline-block;
+		margin: 0;
 	}
 
-	.footer-left{
-		margin-right: auto;
-		padding: 5px;
-	}
-
-	.footer-right{
-		margin-left: auto;
-		padding: 5px;
-	}
+	> div{ padding: 5px; }
+	.footer-left{ margin-right: auto; }
+	.footer-right{ margin-left: auto; }
 
 	.rainbow{
-		flex: 0 1 100%;
 		display: flex;
 		flex-direction: row;
 		width: 100%;
 		margin-top: 5px;
+		padding: 0px;
 
 		div {
 			width: 100%;

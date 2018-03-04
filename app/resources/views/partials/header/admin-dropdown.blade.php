@@ -24,7 +24,7 @@
 				<p>System Dashboard</p>
 			</a>
 
-			<a class="icon" href="{{ action('AdminController@userAgent') }}">
+			<a class="icon" href="{{ action('AdminController@userAgentView') }}">
 				@include('svg.eye')
 				<p>User Agent Strings</p>
 			</a>

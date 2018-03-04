@@ -13,7 +13,7 @@
 			</ul>
 		</div>
 
-		<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang_sess("homepage_main_header")</h1></a>
+		<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
 	</header>
 
 	@include('partials.header.navigation', ['platform' => 'desktop'])

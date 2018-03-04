@@ -328,6 +328,52 @@ ul.dot-menu{
 	}
 }
 
+.department-select{
+	form{
+		display: block;
+		width: 48%;
+		margin: 1%;
+	}
+
+	button{
+		width: 100%;
+		height: 15rem;
+		position: relative;
+		background-repeat: no-repeat;
+		background-size: cover;
+		padding: 0;
+
+		&:hover, &:focus{
+			background-blend-mode: luminosity;
+			background-color: $accent;
+
+			p{
+				top: 68%;
+				font-size: 1.1rem;
+				padding-top: 10%;
+			}
+		}
+
+		p{
+			@include transition--medium-cb();
+			border-top: 1px solid rgba(255,255,255, 0.6);
+			position: absolute;
+			top: 84%;
+			width: 100%;
+			margin: 0;
+			padding: 10px;
+			color: white;
+			background: $accent;
+			font-size: 1rem;
+		}
+
+		img{
+			display: block;
+			margin: 0 auto;
+		}
+	}
+}
+
 // Tea
 .tea{ width: 10px; position: absolute; background: sandybrown; border-radius: 1% 1000% 200% 200%; display: none;}
 .tea-fill{ width: 100vw; left: 0; bottom: 0; position: absolute; background: sandybrown; }

@@ -26,7 +26,6 @@ class UserController extends Controller{
 		$this->middleware('auth'); 
 	}
 
-
 	/**
 	 * A list of all users in the system.
 	 *

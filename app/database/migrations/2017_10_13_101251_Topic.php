@@ -10,11 +10,13 @@ class Topic extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('topics_'.$value, function (Blueprint $table) {
-				$table->increments('id');
-				$table->string('name')->unique();
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_topics_'.$section, function (Blueprint $table) {
+					$table->increments('id');
+					$table->string('name')->unique();
+				});
+			}
 		}
 	}
 
@@ -24,6 +26,10 @@ class Topic extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('topics');
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_topics_'.$section);
+			}
+		}
 	}
 }

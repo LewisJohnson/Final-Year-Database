@@ -10,13 +10,15 @@ class ProjectTopic extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (department_sections() as $key => $value) {
-			Schema::create('project_topics_'.$value, function (Blueprint $table) {
-				$table->unsignedBigInteger('project_id');
-				$table->unsignedBigInteger('topic_id');
-				$table->boolean('primary')->default(0);
-				$table->primary(['project_id', 'topic_id']);
-			});
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::create($department.'_project_topics_'.$section, function (Blueprint $table) {
+					$table->unsignedBigInteger('project_id');
+					$table->unsignedBigInteger('topic_id');
+					$table->boolean('primary')->default(0);
+					$table->primary(['project_id', 'topic_id']);
+				});
+			}
 		}
 	}
 
@@ -26,8 +28,10 @@ class ProjectTopic extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (department_sections() as $key => $value) {
-			Schema::dropIfExists('project_topics_'.$value);
+		foreach (departments() as $key => $department) {
+			foreach (department_sections() as $key => $section) {
+				Schema::dropIfExists($department.'_project_topics_'.$section);
+			}
 		}
 	}
 }
