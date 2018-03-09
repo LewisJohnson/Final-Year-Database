@@ -25,11 +25,12 @@
 		@endif
 	</div>
 
-
-	<div class="flex--full">
-		<p>Selected the wrong department?</p> <a href="/set-depart	ment">Click here to change</a>
-	</div>
-
+	@if(!empty(Session::get('department')))
+		<div class="flex--full">
+			<p>Selected the wrong department?</p> <a href="/set-depart	ment">Click here to change</a>
+		</div>
+	@endif
+	
 	@if(config_json("footer.rainbow.value"))
 		<div class="flex--full rainbow">
 			<div></div>

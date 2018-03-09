@@ -1,7 +1,9 @@
 body{
 	margin: 0;
 	position: relative;
-	min-height: 100%;
+
+	// Makes sure footer is always on the bottom
+	min-height: calc(100% - 50px);
 	margin-bottom: 50px;
 }
 
@@ -30,14 +32,6 @@ code{
 	@include transition--medium();
 	padding: 3rem 0;
 }
-
-.flex{ display: flex; }
-.flex--row{ flex-direction: row; }
-.flex--col{ flex-direction: column; }
-.flex--stretch{ flex: 1; }
-.flex--wrap{ flex-wrap: wrap; }
-.flex--stretch-children{ > *{ flex: 1; }}
-.flex--full{ flex: 0 1 100%; }
 
 .cookie-banner{
 	padding: 1rem;

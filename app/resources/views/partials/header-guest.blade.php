@@ -5,35 +5,39 @@
 			<img class="logo" src="{{ config_json('header.logo_url.value') }}">
 		</div>
 
-		<div class="hamburger-container" role="button">
-			<ul class="hamburger-list">
-				<li class="hamburger-line hamburger-line--short"></li>
-				<li class="hamburger-line"></li>
-				<li class="hamburger-line hamburger-line--short"></li>
-			</ul>
-		</div>
-
+		@if(!empty(Session::get('department')))
+			<div class="hamburger-container" role="button">
+				<ul class="hamburger-list">
+					<li class="hamburger-line hamburger-line--short"></li>
+					<li class="hamburger-line"></li>
+					<li class="hamburger-line hamburger-line--short"></li>
+				</ul>
+			</div>
+		@endif
 		<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang("messages.homepage_main_header")</h1></a>
 	</header>
 
-	<nav class="desktop">
-		<ul>
-			<li class="nav-button"><a href="{{ action('HomeController@index') }}" title="Home">Home</a></li>
-			<li class="nav-button dropdown">
-				<button>Help</button>
-				@include('svg.arrow-down')
+	@if(!empty(Session::get('department')))
+		<nav class="desktop">
+			<ul>
+				<li class="nav-button"><a href="{{ action('HomeController@index') }}" title="Home">Home</a></li>
+				<li class="nav-button dropdown">
+					<button>Help</button>
+					@include('svg.arrow-down')
 
-				<div class="dropdown-content shadow-2dp">
-					<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-					<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
-					<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
-				</div>
-			</li>
-			<li class="nav-button" style="margin-left: auto;">
-				<button data-activator="true" data-dialog="login">Login</button>
-			</li>
-		</ul>
-	</nav>
+					<div class="dropdown-content shadow-2dp">
+						<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
+						<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
+						<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+					</div>
+				</li>
+
+				<li class="nav-button" style="margin-left: auto;">
+					<button data-activator="true" data-dialog="login">Login</button>
+				</li>
+			</ul>
+		</nav>
+	@endif
 </div>
 
 <nav class="mobile" aria-hidden="true" aria-expanded="false">

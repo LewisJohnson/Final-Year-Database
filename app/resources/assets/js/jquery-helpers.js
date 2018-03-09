@@ -37,7 +37,7 @@ $(function() {
 
 	// Cookie Banner
 	$(".cookie-banner").on("click", "button",  function(e) {
-		$.ajax({method: 'POST', url: '/seen-cookie-banner'});
+		setCookie('cookie-banner-seen', true, 365);
 		$(this).parent().hide(config.animtions.medium);
 	});
 

@@ -45,20 +45,20 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	Route::get('home', 'HomeController@index');
 	Route::get('/', 'HomeController@index');
 
-	Route::get('set-department', 'HomeController@setDepartmentView');
-	Route::post('set-department', 'HomeController@setDepartment');
-
 	// Help Routes
 	Route::get('information', 'HomeController@information');
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
 
+});
+
+Route::group(['middleware' => ['web']], function() {
+	Route::get('set-department', 'HomeController@setDepartmentView');
+	Route::post('set-department', 'HomeController@setDepartment');
+
 	Route::get('snippet', 'HomeController@snippet');
 
-	// Cookie
-	Route::post('seen-cookie-banner', 'HomeController@seenCookieBanner');
-
-	// Teapot
+	// Easter-egg
 	Route::get('teapot', function(){ abort(418, "I'm a teapot"); });
 });
 
@@ -68,6 +68,9 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 Route::group(['middleware' => ['admin.system']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
 	Route::post('admin/dashboard/system', 'AdminController@configure');
+
+	Route::post('admin/system/new-department', 'AdminController@addNewDepartment');
+	
 	Route::get('system/user-agent', 'AdminController@userAgentView');
 });
 

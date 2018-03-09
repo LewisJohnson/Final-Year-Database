@@ -1,6 +1,8 @@
 <?php
 return [
-	'config_dir' => 'config\config.json',
+	'system_config_file' => 'config\system.json',
+	'default_department_config_file' => 'config\departments\default.json',
+	'department_config_dir' => 'config\departments',
 
 	/*
 	|--------------------------------------------------------------------------

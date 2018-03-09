@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Supervisor;
@@ -14,7 +15,6 @@ use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
-
 
 /**
  * The admin controller.
@@ -464,6 +464,12 @@ class AdminController extends Controller{
 		$headers = array(
 			'Content-Type' => 'text/json',
 		);
+		
 		return response()->download($filename, $filename, $headers);
+	}
+
+	public function addNewDepartment(Request $request){
+		$exitCode = Artisan::call('migrate:fresh');
+		return response()->json(array('successful' => true));
 	}
 }

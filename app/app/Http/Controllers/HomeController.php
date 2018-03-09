@@ -98,16 +98,6 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Tells the server the user has acknowledge the cookie banner.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function seenCookieBanner(){
-		Cookie::queue('cookie-banner-seen', "true", 525600);
-	}
-
-	/**
 	 * Sets the database type.
 	 * 
 	 * Undergraduate or postgraduate database.

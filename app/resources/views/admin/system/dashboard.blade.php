@@ -21,8 +21,9 @@
 				<li class="tab" data-tab-name="System">
 					<button class="button open-tab">System</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
+						<h2>System</h2>
 						<div class="dashboard-section">
-							<h2>Environment</h2>
+							<h3>Environment</h3>
 							<p>To configure environment variables, edit the <b>.env</b> file in the <b>root</b> directory. A server restart is required for changes to take effect.</p>
 							<div class="config-danger">
 								<p class="text-icon">&#9888;&#65039;</p>
@@ -31,17 +32,17 @@
 						</div>
 
 						<div class="dashboard-section">
-							<h2>Laravel</h2>
+							<h3>Laravel</h3>
 							<p>To configure Lavavel (Server) variables, edit any <b>config\*.php</b> file. A server restart <em>might be</em> required for changes to take effect.</p>
 						</div>
 
 						<div class="dashboard-section">
-							<h2>System</h2>
+							<h3>System</h3>
 							<p>To manually configure system variables, edit the <b>storage\app\config\config.json</b>, otherwise use the system dashboard. Changes will take effect immediately.</p>
 						</div>
 
 						<div class="dashboard-section">
-							<h2>Style</h2>
+							<h3>Style</h3>
 							<p>To configure style variables, edit <b>resources\assets\sass\_variables.scss</b>.
 								The SCSS\SASS bundle will have to be recompiled for changes to take effect.
 								To do this, run this command in the <b>root</b> directory.</p>
@@ -49,14 +50,14 @@
 						</div>
 
 						<div class="dashboard-section">
-							<h2>JavaScript</h2>
+							<h3>JavaScript</h3>
 							<p>To configure JavaScript variables, edit <b>resources\assets\config.js</b>.
 								You will have to re-bundle the JavaScript files with Webpack for changes to take effect.
 								To do this, run this command in the <b>root</b> directory.</p>
 
 							<code>npm run production</code>
 
-							<h3>Hotfix</h3>
+							<h4>Hotfix</h4>
 							<p>If you want to apply a hotfix (Apply changes without having to re-bundle JavaScript), you may edit the <b>\public\js\config.js</b> file.</p>
 
 							<div class="config-tip">
@@ -69,6 +70,32 @@
 								<p><b>Be careful!</b> You might break something making the website unusable.</p>
 							</div>
 						</div>
+					</div>
+				</li>
+
+				<li class="tab" data-tab-name="Departments">
+					<button class="button open-tab">Departments</button>
+					<div class="content" aria-expanded="false" aria-hidden="true">
+						<h2>Departments</h2>
+
+						<h3>Existing</h3>
+						<ul class="department-list">
+							@foreach(departments() as $dep)
+								<li class="flex flex--row" style="margin-bottom: 5px">
+									<p>{{ ucfirst($dep) }}</p>
+									<button type="button" class="button button--danger ml-auto">DELETE</button>
+								</li>
+							@endforeach
+						</ul>
+
+						<h3>Add New Department</h3>
+						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@addNewDepartment') }}">
+							{{ csrf_field() }}
+							<input type="text" name="" value="" placeholder="">
+							<div class="form-field form-field--flex">
+								<button class="button button--raised button--accent" type="submit">Save</button>
+							</div>
+						</form>
 					</div>
 				</li>
 

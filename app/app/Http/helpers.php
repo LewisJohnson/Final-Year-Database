@@ -2,22 +2,29 @@
 
 if (!function_exists('config_json')){
 	function config_json($key = null, $value = null) {
-		$config = json_decode(Storage::disk('local')->get(config("app.config_dir")), true);
+		// todo: add per department
+		if(empty(Session::get('department'))){
+			$config = json_decode(Storage::disk('local')->get(config("app.default_department_config_file")), true);
+		} else {
+			$fileDir = config("app.department_config_dir")."\\".Session::get('department').".json";
+			$config = json_decode(Storage::disk('local')->get($fileDir), true);
+		}
 
 		if($key === null){
+			// If no key, return the whole file
 			return $config;
 		}
 
 		if($value === null){
+			// If only key, return value
 			return data_get($config, $key);
 		}
 
 		if(isset($key) && isset($value)){
+			// If key and value, set value
 			$key .= ".value";
-
 			data_set($config, $key, $value);
-
-			Storage::disk('local')->put(config("app.config_dir"), json_encode($config, JSON_PRETTY_PRINT ));
+			Storage::disk('local')->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
 			return;
 		}
 	}
@@ -35,12 +42,14 @@ if (!function_exists('lang_sess')){
 
 if (!function_exists('department_sections')){
 	function department_sections() {
-		return ['ug', 'pg'];
+		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
+		return data_get($config, 'sections');
 	}
 }
 
 if (!function_exists('departments')){
 	function departments() {
-		return ['informatics', 'engineering'];
+		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
+		return data_get($config, 'departments');
 	}
 }

@@ -10,7 +10,9 @@ ul.tab-container{
 
 	.content-host{
 		width: 100%;
+		h2:first-of-type {margin-top: 0 ;}
 		h2 { margin: 1rem 0; }
+		h3 { margin: 0.5rem 0; }
 		ul{ padding-left: 2rem;}
 		select { width: 100%; }
 	}
@@ -28,29 +30,4 @@ ul.tab-container{
 .tab{
 	display: inline-block;
 	.content{ display: none; }
-}
-
-.dashboard-section{
-	padding: 5px 0;
-	border-bottom: 1px solid $form-border-color;
-
-	> {
-		p:first-of-type {margin-top: 0;}
-	}
-}
-
-.mask{
-	display: none;
-	position: relative;
-	float: right;
-	width: 100px;
-	height: 53px;
-	top: -45px;
-	right: -5px;
-	background: linear-gradient(to right, transparent 0%, white 100%);
-	pointer-events: none;
-}
-
-@keyframes tabContentUp{
-	
 }
