@@ -14,11 +14,6 @@
 		</a>
 	</td>
 	<td class="table-action">
-		<a class="button button--svg" title="Browse transactions for {{ $project->title }}" href="{{ action('ProjectController@transactions', $project->id) }}">
-			@include('svg.database')
-		</a>
-	</td>
-	<td class="table-action">
 		<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
 			<button type="submit" class="button button--svg button--danger-text" title="Delete {{ $project->title }}">
 				@include('svg.bin')
