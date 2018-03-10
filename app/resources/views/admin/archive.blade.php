@@ -26,7 +26,7 @@
 
 		<form action="/admin/export" method="GET" accept-charset="utf-8">
 			{{ csrf_field() }}
-			<input type="hidden" name="db" value="tran_masters">
+			<input type="hidden" name="db" value="tran_pg">
 			<button type="submit" class="button button--raised">Masters Transaction</button>
 		</form>
 

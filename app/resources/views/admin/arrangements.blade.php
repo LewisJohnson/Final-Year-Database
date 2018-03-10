@@ -40,8 +40,8 @@
 								<td>{{ $supervisor->project_load_ug }}</td>
 								<td>{{ $supervisor->take_students_ug ? 'Yes' : 'No' }}</td>
 							@elseif(Session::get("db_type") == "masters")
-								<td>{{ $supervisor->project_load_masters }}</td>
-								<td>{{ $supervisor->take_students_masters ? 'Yes' : 'No' }}</td>
+								<td>{{ $supervisor->project_load_pg }}</td>
+								<td>{{ $supervisor->take_students_pg ? 'Yes' : 'No' }}</td>
 							@endif
 						</tr>
 					@endforeach

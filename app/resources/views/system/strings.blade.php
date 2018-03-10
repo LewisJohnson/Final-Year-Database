@@ -31,7 +31,7 @@
 
 <div class="section horizontal">
 	<h3>Masters Strings</h3>
-	@foreach ($strings_masters as $string)
+	@foreach ($strings_pg as $string)
 		<form class="form form--flex" role="form" action="" method="POST">
 			<div class="form-field">
 				<label for="{{ $string->key }}">{{ ucwords(str_replace('_', ' ', $string->key)) }}</label>

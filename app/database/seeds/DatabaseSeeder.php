@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder{
 	 * @return void
 	 */
 	public function run(){
-		// 'guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system'
+		// 'guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_pg', 'admin_system'
 		// Admin: 1 [id 1 & 2]
 		// Supervisors: 40 [id 3 - 43]
 		// Students: 300 [id 44 - 344] (150 UG, 150 MSc)
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder{
 		// 	 'id' => 2,
 		// 	 'first_name' => 'MSc',
 		// 	 'last_name' => 'Admin',
-		// 	 'access_type' => "admin_masters",
+		// 	 'access_type' => "admin_pg",
 		// 	 'username' => 'msc_admin',
 		// 	 'email' => 'msc_admin@susx.ac.uk',
 		// 	 'password' => bcrypt('admin')
@@ -62,10 +62,10 @@ class DatabaseSeeder extends Seeder{
 		// DB::table('supervisors')->insert([
 		// 	 'id' => 2,
 		// 	 'title' => 'Prof.',
-		// 	 'project_load_masters' => 8,
+		// 	 'project_load_pg' => 8,
 		// 	 'project_load_ug' => 6,
-		// 	 'take_students_masters' => true,
-		// 	 'accept_email_masters' => true,
+		// 	 'take_students_pg' => true,
+		// 	 'accept_email_pg' => true,
 		// 	 'take_students_ug' => true,
 		// 	 'accept_email_ug' => true,
 		// ]);

@@ -53,7 +53,7 @@
 						@if(Session::get("db_type") == "ug")
 							<td>{{ $supervisor->project_load_ug }}</td>
 						@elseif(Session::get("db_type") == "masters")
-							<td>{{ $supervisor->project_load_masters }}</td>
+							<td>{{ $supervisor->project_load_pg }}</td>
 						@endif
 					</tr>
 				@endforeach

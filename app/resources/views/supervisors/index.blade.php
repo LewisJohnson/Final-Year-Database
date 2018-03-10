@@ -12,7 +12,7 @@
 			@if(Session::get('db_type') == 'ug')
 				<p>Your <b>Undergraduate</b> project load is currently {{ Auth::user()->supervisor->project_load_ug }}.</p>
 			@elseif(Session::get('db_type') == 'masters')
-				<p>Your <b>Masters</b> project load is currently {{ Auth::user()->supervisor->project_load_masters }}.</p>
+				<p>Your <b>Masters</b> project load is currently {{ Auth::user()->supervisor->project_load_pg }}.</p>
 			@endif
 		</div>
 		<div class="actions button-group--vertical">

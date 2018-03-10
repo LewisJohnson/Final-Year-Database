@@ -10,12 +10,12 @@ $factory->define(SussexProjects\User::class, function (Faker $faker) use ($userI
 
 	if($userIncrement->current() == 1){
 		$username = "admin";
-		$privileges = "admin_system, admin_ug, admin_masters";
+		$privileges = "admin_system, admin_ug, admin_pg";
 	}
 
 	if($userIncrement->current() == 2){
 		$username = "admin_projects";
-		$privileges = "admin_ug, admin_masters";
+		$privileges = "admin_ug, admin_pg";
 	}
 
 	if($userIncrement->current() >= 3 && $userIncrement->current() <= 43){

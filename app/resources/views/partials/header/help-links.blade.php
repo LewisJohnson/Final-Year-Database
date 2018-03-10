@@ -1,5 +1,5 @@
 @php
-	$localePrefix = Session::get('db_type') == 'ug' ?  "messages_ug" : "messages_masters";
+	$localePrefix = Session::get('db_type') == 'ug' ?  "messages_ug" : "messages_pg";
 @endphp
 
 @if(Lang::has($localePrefix.".help_link_1"))

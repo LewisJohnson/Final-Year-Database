@@ -18,8 +18,11 @@
 		@include('svg.arrow-down')
 
 		<div class="dropdown-content shadow-2dp">
+			<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
+			<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
+			<a href="{{ action('UserController@index', 'view=edit') }}">Edit User</a>
 
-			<a class="icon" href="{{ action('AdminController@dashboard') }}">
+{{-- 			<a class="icon" href="{{ action('AdminController@dashboard') }}">
 				@include('svg.cog')
 				<p>System Dashboard</p>
 			</a>
@@ -33,6 +36,6 @@
 				@include('svg.account-edit')
 				<p>Edit User</p>
 			</a>
-		</div>
+ --}}		</div>
 	</li>
 @endif

@@ -4,24 +4,31 @@
 <div class="centered animate-cards width--1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
-		<p>Your privileges are {{ Auth::user()->getPrettyPrivilegesString() }}.</p>
 
-		@if(Auth::user()->isSupervisor())
-			<div class="card card--margin-vertical">
-				<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
-				<p>@lang("messages_supervisor.homepage_introduction_body")</p>
-				<h2>@lang("messages_supervisor.homepage_overview_header")</h2>
-				<p>@lang("messages_supervisor.homepage_overview_body")</p>
-			</div>
-		@endif
+		<div class="card card--margin-vertical">
+			<h2>Your Privileges</h2>
+			<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}</p>
+		</div>
 
-		@if(Auth::user()->isStudent())
-			<div class="card card--margin-vertical">
-				<h2>{{ lang_sess('homepage_introduction_header') }}</h2>
-				<p>{{ lang_sess('homepage_introduction_body') }}</p>
-				<h2>{{ lang_sess('homepage_overview_header') }}</h2>
-				<p>{{ lang_sess('homepage_overview_body') }}</p>
-			</div>
+		@if(Session::get('seen-welcome') != true)
+			@if(Auth::user()->isSupervisor())
+				<div class="card card--margin-vertical">
+					<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
+					<p>@lang("messages_supervisor.homepage_introduction_body")</p>
+					<h2>@lang("messages_supervisor.homepage_overview_header")</h2>
+					<p>@lang("messages_supervisor.homepage_overview_body")</p>
+				</div>
+			@endif
+
+			@if(Auth::user()->isStudent())
+				<div class="card card--margin-vertical">
+					<h2>{{ lang_sess('homepage_introduction_header') }}</h2>
+					<p>{{ lang_sess('homepage_introduction_body') }}</p>
+					<h2>{{ lang_sess('homepage_overview_header') }}</h2>
+					<p>{{ lang_sess('homepage_overview_body') }}</p>
+				</div>
+			@endif
+			{{ Session::put('seen-welcome', true) }}
 		@endif
 
 		<div class="card-container card--margin-vertical">
@@ -29,18 +36,16 @@
 				<div class="card card--half">
 					<h2>Undergraduate Supervisor</h2>
 					<p>Project Load: {{ Auth::user()->supervisor->project_load_ug }}</p>
-					<p>Accepted students: {{ count(Auth::user()->supervisor->getAcceptedStudents("ug")) }} </p>
 					<p>Accept students: {{ Auth::user()->supervisor->take_students_ug ? "Yes" : "No" }}</p>
 					<p>Accept emails: {{ Auth::user()->supervisor->accept_email_ug ? "Yes" : "No" }}</p>
-					<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Undergraduate Supervisor Hub</a>
+					<a class="button button--raised" href="{{ action('SupervisorController@index', 'set-department=ug') }}">Undergraduate Supervisor Hub</a>
 				</div>
 
 				<div class="card card--half">
 					<h2>Masters Supervisor</h2>
-					<p>Project Load: {{ Auth::user()->supervisor->project_load_masters }}</p>
-					<p>Accepted students: {{ count(Auth::user()->supervisor->getAcceptedStudents("masters")) }} </p>
-					<p>Accept students: {{ Auth::user()->supervisor->project_load_masters ? "Yes" : "No" }}</p>
-					<p>Accept emails: {{ Auth::user()->supervisor->accept_email_masters ? "Yes" : "No" }}</p>
+					<p>Project Load: {{ Auth::user()->supervisor->project_load_pg }}</p>
+					<p>Accept students: {{ Auth::user()->supervisor->project_load_pg ? "Yes" : "No" }}</p>
+					<p>Accept emails: {{ Auth::user()->supervisor->accept_email_pg ? "Yes" : "No" }}</p>
 					<a class="button button--raised" href="{{ action('SupervisorController@index') }}">Masters Supervisor Hub</a>
 				</div>
 			@endif

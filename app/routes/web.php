@@ -65,7 +65,7 @@ Route::group(['middleware' => ['web']], function() {
 /* ===============
    2. SYSTEM ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['admin.system']], function() {
+Route::group(['middleware' => ['admin.system', 'checkDepartment']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
 	Route::post('admin/dashboard/system', 'AdminController@configure');
 
@@ -77,7 +77,7 @@ Route::group(['middleware' => ['admin.system']], function() {
 /* ===============
    3. PROJECT ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['admin.project']], function() {
+Route::group(['middleware' => ['admin.project', 'checkDepartment']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
@@ -122,14 +122,14 @@ Route::group(['middleware' => ['admin.project']], function() {
    4. PROJECT AND SYSTEM ADMIN ROUTES
    ================================== */
 
-Route::group(['middleware' => ['admin']], function() {
+Route::group(['middleware' => ['admin', 'checkDepartment']], function() {
 	Route::resource('users', 'UserController');
 });
 
 /* ==============================
    5. SUPERVISOR AND ADMIN ROUTES
    ============================== */
-Route::group(['middleware' => ['supervisor.admin']], function() {
+Route::group(['middleware' => ['supervisor.admin', 'checkDepartment']], function() {
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 
@@ -142,7 +142,7 @@ Route::group(['middleware' => ['supervisor.admin']], function() {
 /* =================
    6. SUPERVISOR ROUTES
    ================= */
-Route::group(['middleware' => ['supervisor']], function() {
+Route::group(['middleware' => ['supervisor', 'checkDepartment']], function() {
 
 	// Project Transaction
 	Route::get('supervisor/transactions', 'SupervisorController@transactions');
@@ -160,7 +160,7 @@ Route::group(['middleware' => ['supervisor']], function() {
 /* =================
    7. STUDENT ROUTES
    ================= */
-Route::group(['middleware' => ['student']], function() {
+Route::group(['middleware' => ['student', 'checkDepartment']], function() {
 	Route::get('students/project-propose', 'StudentController@proposeProjectView');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
@@ -175,7 +175,7 @@ Route::group(['middleware' => ['student']], function() {
 /* ============================
    8. AUTHENTICATED USER ROUTES
    ============================ */
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth', 'checkDepartment']], function() {
 	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');

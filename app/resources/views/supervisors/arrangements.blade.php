@@ -25,12 +25,12 @@
     @elseif(Session::get('db_type') == 'masters')
 		<div class="form-field">
 			<label  for="description" >Masters Project Load</label>
-			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_masters }}"></input>
+			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_pg }}"></input>
 		</div>
 		<div class="form-field">
 			<div class="checkbox">
-				<input class="checkbox-input master-checkbox" id="take_students_masters" type="checkbox" checked="{{ $supervisor->take_students_masters }}">
-				<label for="take_students_masters" >Take Masters Students</label>
+				<input class="checkbox-input master-checkbox" id="take_students_pg" type="checkbox" checked="{{ $supervisor->take_students_pg }}">
+				<label for="take_students_pg" >Take Masters Students</label>
 			</div>
 		</div>
     @endif

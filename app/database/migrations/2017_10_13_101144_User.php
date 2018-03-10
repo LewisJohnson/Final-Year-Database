@@ -25,7 +25,7 @@ class User extends Migration{
 			});
 
 			$dbname = $department.'_users';
-			DB::statement("ALTER TABLE `".$dbname."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_masters', 'admin_system') NOT NULL DEFAULT 'guest' AFTER `id`;");
+			DB::statement("ALTER TABLE `".$dbname."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_pg', 'admin_system') NOT NULL DEFAULT 'guest' AFTER `id`;");
 		}
 	}
 

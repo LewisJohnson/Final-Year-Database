@@ -91,11 +91,11 @@
 		<div class="button-group flex--stretch-children">
 			@if(Auth::user()->isSystemAdmin() || Auth::user()->isPgAdmin())
 				<div class="checkbox">
-					<input type="checkbox" id="privileges-admin-masters" name="privileges[]" value="admin_masters" class="checkbox-input" @if($user->isPgAdmin()) checked @endif>
+					<input type="checkbox" id="privileges-admin-masters" name="privileges[]" value="admin_pg" class="checkbox-input" @if($user->isPgAdmin()) checked @endif>
 					<label for="privileges-admin-masters">Masters administrator</label>
 				</div>
 				<div class="checkbox">
-					<input type="checkbox" id="privileges-student-masters" name="privileges[]" value="student_masters" class="checkbox-input" @if($user->isStudent() && $user->studentType() == "masters") checked @endif>
+					<input type="checkbox" id="privileges-student-masters" name="privileges[]" value="student_pg" class="checkbox-input" @if($user->isStudent() && $user->studentType() == "masters") checked @endif>
 					<label for="privileges-student-masters">Masters student</label>
 				</div>
 			@endif
@@ -155,14 +155,14 @@
 	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isPgAdmin())
 			<div class="checkbox">
-				<input type="checkbox" id="email-masters" name="accept_email_masters" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->accept_email_masters) checked @endif>
+				<input type="checkbox" id="email-masters" name="accept_email_pg" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->accept_email_pg) checked @endif>
 				<label for="email-masters">Accept masters emails</label>
 			</div>
 		@endif
 		
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isUgAdmin())
 			<div class="checkbox">
-				<input type="checkbox" id="email-ug" name="accept_email_masters" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->accept_email_ug) checked @endif>
+				<input type="checkbox" id="email-ug" name="accept_email_pg" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->accept_email_ug) checked @endif>
 				<label for="email-ug">Accept undergraduate emails</label>
 			</div>
 		@endif
@@ -172,7 +172,7 @@
 	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isPgAdmin())
 			<div class="checkbox">
-				<input type="checkbox" id="email-masters" name="take_students_masters" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->take_students_masters) checked @endif>
+				<input type="checkbox" id="email-masters" name="take_students_pg" class="checkbox-input" @if($user->isSupervisor() && $user->supervisor->take_students_pg) checked @endif>
 				<label for="email-masters">Take masters students</label>
 			</div>
 		@endif
@@ -189,8 +189,8 @@
 	<div class="button-group flex--stretch-children">
 		@if(Auth::user()->isSystemAdmin() || Auth::user()->isPgAdmin())
 			<div class="form-field">
-				<label for="project_load_masters">Masters project load</label>
-				<input id="project_load_masters" type="number" name="project_load_masters" min="0" max="255"  @if($user->isSupervisor()) value="{{ $user->supervisor->project_load_masters }}" @endif>
+				<label for="project_load_pg">Masters project load</label>
+				<input id="project_load_pg" type="number" name="project_load_pg" min="0" max="255"  @if($user->isSupervisor()) value="{{ $user->supervisor->project_load_pg }}" @endif>
 			</div>
 		@endif
 		

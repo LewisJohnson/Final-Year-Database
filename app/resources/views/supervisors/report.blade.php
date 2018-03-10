@@ -22,7 +22,7 @@
 			<table class="shadow-2dp table--dark-head " id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>
 					<tr>
-						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_masters }}) @endif</th>
+						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get("db_type") == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_pg }}) @endif</th>
 						
 						@if(Session::get("db_type") == "ug")
 							@if($supervisor->take_students_ug)
@@ -32,7 +32,7 @@
 						@endif
 
 						@elseif(Session::get("db_type") == "masters")
-							@if($supervisor->take_students_masters)
+							@if($supervisor->take_students_pg)
 								<th>@lang('messages.supervisor_open_to_offers')</th>
 							@else
 								<th>@lang('messages.supervisor_closed_to_offers')</th>
