@@ -15,10 +15,6 @@
 				<p>Your <b>Masters</b> project load is currently {{ Auth::user()->supervisor->project_load_pg }}.</p>
 			@endif
 		</div>
-		<div class="actions button-group--vertical">
-			<a class="button button--raised button--accent" title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
-			<a class="button button--raised button--accent" title="Browse all transactions for your projects" href="{{ action('SupervisorController@transactions') }}">Transactions</a>
-		</div>
 	</div>
 	<div class="supervisor hub">
 		@include('supervisors.partials.hub.offers')

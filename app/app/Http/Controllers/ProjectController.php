@@ -21,7 +21,7 @@ use SussexProjects\Supervisor;
  * The project controller.
  *
  * Handles all functions related to projects.
- * 
+ *
 */
 class ProjectController extends Controller{
 
@@ -52,7 +52,7 @@ class ProjectController extends Controller{
 	 * - Select if on-offer
 	 * - Select if NOT archived
 	 * - select if NOT student proposed
-	 * 
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
@@ -65,7 +65,7 @@ class ProjectController extends Controller{
 
 		$projects = Project::where('status', 'on-offer')
 		->whereNotNull('supervisor_id')->get();
-			
+
 		$filteredProjects = $projects->filter(function($project, $key) {
 			if(!$project->supervisor->takeStudents()){
 				return false;
@@ -73,7 +73,7 @@ class ProjectController extends Controller{
 			return true;
 		});
 
-		
+
 		if($request->query("page")){
 			return view('projects.partials.full-project-table-row')
 				->with('projects', $filteredProjects->paginate($this->paginationCount))
@@ -91,7 +91,7 @@ class ProjectController extends Controller{
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @param  GUID  $guid
-	 * 
+	 *
 	 * @return \Illuminate\Http\Response The project view
 	 */
 	public function show(Request $request, $guid) {
@@ -403,6 +403,8 @@ class ProjectController extends Controller{
 			Select if NOT archived
 			select if NOT student proposed
 		*/
+
+		//todo: fix this
 
 		$searchTerm = $request->get("searchTerm");
 		$filters = $request->get("filter");

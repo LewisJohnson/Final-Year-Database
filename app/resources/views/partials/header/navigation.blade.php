@@ -140,12 +140,12 @@
 
 					<form class="db-type-form" action="{{ action('HomeController@setDatabaseType') }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
-						<input type="hidden" name="db_type" value="masters">
-						<button type="submit" style="width: 100%;">Masters</button>
+						<input type="hidden" name="db_type" value="pg">
+						<button type="submit" style="width: 100%;">Postgraduate</button>
 					</form>
 				</div>
 			</li>
-			
+
 
 			<li class="nav-button">
 				<button title="Log out" onclick="$('#logout-form').submit();">Logout</button>

@@ -150,7 +150,7 @@ import '../js/components';
 			url: $(this).prop('action'),
 			type:'POST',
 			data: $(this).serialize(),
-			success:function(){ 
+			success:function(){
 				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).hide();
 				location.reload(true);
 			},
@@ -263,11 +263,10 @@ import '../js/components';
 
 
 	$('.html-editor').each(function(index, value){
-
 		$.ajax({
 			url: '/snippet?snippet=html-editor-toolbar',
 			type:'GET',
-			success:function(result){ 
+			success:function(result){
 				$('.html-editor--input').after(result);
 			},
 		});
@@ -277,13 +276,13 @@ import '../js/components';
 
 		$('.html-editor--input').before(buttonsHtml);
 		$('.html-editor').after(previewHtml);
-		
+
 		$('.html-editor--preview-container').hide();
-		$('.html-editor--preview').html($('.html-editor--input').val());	
+		$('.html-editor--preview').html($('.html-editor--input').val());
 	});
 
 	$('.html-editor--input').on('change', function(){
-		$('.html-editor--preview').html($(this).val());	
+		$('.html-editor--preview').html($(this).val());
 	});
 
 	$('.html-editor--top-buttons .html').on('click', function(){
@@ -297,7 +296,6 @@ import '../js/components';
 		$('.html-editor--toolbar').hide();
 		$('.html-editor--preview-container').show();
 	});
-	
 
 	// Toggle label flips toggle
 	$(".html-editor").on("click", ".html-editor--toolbar li button",  function(e) {
@@ -309,43 +307,47 @@ import '../js/components';
 			case "ol":
 				insertAtCaret('html-editor--input', '\n<ol>\n\t<li>Item 1</li>\n\t<li>Item 2</li>\n\t<li>Item 3</li>\n</ol>');
 				break;
-				
+
 			case "ul":
 				insertAtCaret('html-editor--input', '\n<ul>\n\t<li>Item x</li>\n\t<li>Item y</li>\n\t<li>Item z</li>\n</ul>');
 				break;
-				
+
 			case "bold":
 				wrapTextWithTag('html-editor--input', 'b');
 				break;
-				
+
+			case "tt":
+				wrapTextWithTag('html-editor--input', 'tt');
+				break;
+
 			case "italic":
 				wrapTextWithTag('html-editor--input', 'i');
 				break;
-				
+
 			case "underline":
 				wrapTextWithTag('html-editor--input', 'u');
 				break;
-				
+
 			case "img":
 				var inputUrl = prompt("Enter the image URL", "https://www.");
 				var inputAlt = prompt("Enter alt text", "Image of Sussex campus");
 				insertAtCaret('html-editor--input', '<img alt="' + inputAlt + '" src="' + inputUrl + '">');
 				break;
-				
+
 			case "link":
 				var inputUrl = prompt("Enter the URL", "https://www.");
 				var inputText = prompt("Enter display text", "Sussex");
 				insertAtCaret('html-editor--input', '<a href="' + inputUrl + '">' + inputText + '</a>');
 				break;
-				
+
 			case "code":
 				wrapTextWithTag('html-editor--input', 'code');
 				break;
-				
+
 			case "pre":
 				wrapTextWithTag('html-editor--input', 'pre');
 				break;
-				
+
 			case "info":
 				$.dialog({
 					theme: 'material',
@@ -357,11 +359,7 @@ import '../js/components';
 				});
 				break;
 		}
-	});	
-	
-
-
-
+	});
 
 	/* ===============
 		9. Initialise

@@ -99,7 +99,7 @@
 					</div>
 				</li>
 
-				<li class="tab" data-tab-name="Display">
+{{-- 				<li class="tab" data-tab-name="Display">
 					<button class="button open-tab">Display</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Display</h2>
@@ -120,7 +120,7 @@
 							</div>
 						</form>
 					</div>
-				</li>
+				</li> --}}
 
 				<li class="tab" data-tab-name="User Agent">
 					<button class="button open-tab">User Agent</button>

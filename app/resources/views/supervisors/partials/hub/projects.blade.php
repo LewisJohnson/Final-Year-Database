@@ -9,6 +9,9 @@
 		</div>
 	</div>
 	<div class="content" data-cookie-name="hide-projects" @if(!empty($_COOKIE["hide-projects"])) @if($_COOKIE["hide-projects"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
+		<div class="actions">
+			<a class="button button--raised button--accent" title="Create new project" href="{{ action('ProjectController@create') }}">New Project</a>
+		</div>
 		<div style="overflow: auto;">
 			<table class="data-table supervisor-table">
 				@if(count(Auth::user()->supervisor->getProjects()))
@@ -17,7 +20,6 @@
 							<th>Title</th>
 							<th>Topic</th>
 							<th>Status</th>
-							<th class="table-action-header"></th>
 							<th class="table-action-header"></th>
 							<th class="table-action-header"></th>
 							<th class="table-mobile-menu-header"></th>

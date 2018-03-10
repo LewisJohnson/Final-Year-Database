@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\App;
  *
  * Handles all index based routes and pages.
  * Also handles cookie banner and database type.
- * 
+ *
 */
 class HomeController extends Controller{
 
@@ -82,8 +82,8 @@ class HomeController extends Controller{
 
 	/**
 	 * Gets a rendered HTML snippet.
-	 * 
-	 * Snippets must be in the view/snippets directory. 
+	 *
+	 * Snippets must be in the view/snippets directory.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
@@ -99,7 +99,7 @@ class HomeController extends Controller{
 
 	/**
 	 * Sets the database type.
-	 * 
+	 *
 	 * Undergraduate or postgraduate database.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -121,19 +121,21 @@ class HomeController extends Controller{
 
 	/**
 	 * Sets the department type.
-	 * 
+	 *
 	 * e.g. Informatics or engineering.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartmentView(Request $request){
+		// Reset session department
+		// Session::remove("department");
 		return view('set-department');
 	}
 
 	/**
 	 * Sets the department type.
-	 * 
+	 *
 	 * e.g. Informatics or engineering.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
@@ -142,6 +144,9 @@ class HomeController extends Controller{
 	public function setDepartment(Request $request){
 		if(in_array($request->department, departments())){
 			Session::put("department", $request->department);
+		} else {
+			session()->flash("message", "Sorry, something went wrong.");
+			session()->flash('message_type', 'error');
 		}
 
 		return redirect()->action('HomeController@index');

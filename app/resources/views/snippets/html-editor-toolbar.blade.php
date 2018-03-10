@@ -7,6 +7,7 @@
 	<li><button title="Bold" data-type="bold" type="button" class="button--svg">@include('svg.html-editor.bold')</button></li>
 	<li><button title="Italic" data-type="italic" type="button" class="button--svg">@include('svg.html-editor.italic')</button></li>
 	<li><button title="Underline" data-type="underline" type="button" class="button--svg">@include('svg.html-editor.underline')</button></li>
+	<li><button title="TT" data-type="tt" type="button" class="button--svg">@include('svg.html-editor.underline')</button></li>
 
 	<li class="break"></li>
 
