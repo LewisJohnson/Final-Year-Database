@@ -1,5 +1,34 @@
 <div class="header-container">
 	@include('partials.cookie-banner')
+
+	<div class="flex flex--row" style="background: rgb(52, 61, 70);">
+		<ul class="hl">
+			@foreach (departments() as $key => $department)
+				<li>
+					<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
+							{{ csrf_field() }}
+							<input type="hidden" name="department" value="{{ $department }}">
+							<button type="submit" class="button--small @if(Session('department') == $department)button--accent @endif" >{{ ucfirst($department) }}</button>
+					</form>
+				</li>
+			@endforeach
+		</ul>
+
+		@if(Auth::check())
+			<ul class="hl ml-auto">
+				@foreach (education_levels() as $key => $level)
+					<li>
+						<form role="form" method="POST" action="{{ action('HomeController@setEducationLevel') }}">
+								{{ csrf_field() }}
+								<input type="hidden" name="level" value="{{ $level["shortName"] }}">
+								<button type="submit" class="button--small @if(Session('education_level') == $level["shortName"])button--accent @endif" >{{ ucfirst($level["longName"]) }}</button>
+						</form>
+					</li>
+				@endforeach
+			</ul>
+		@endif
+	</div>
+
 	<header style="background: {{ config_json('header.background.value') }}">
 		<div class="logo-container">
 			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ config_json("header.logo_url.value") }}')"></a>
@@ -13,7 +42,11 @@
 			</ul>
 		</div>
 
-		<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
+		@if(Session::get('educationLevel') != null)
+			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
+		@else
+			<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang('messages.homepage_main_header')</h1></a>
+		@endif
 	</header>
 
 	@include('partials.header.navigation', ['platform' => 'desktop'])

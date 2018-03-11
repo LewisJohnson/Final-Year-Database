@@ -51,9 +51,9 @@ class Supervisor extends User{
 	}
 
 	public function takeStudents(){
-		if(Session::get("db_type") == "ug"){
+		if(Session::get('education_level') == "ug"){
 			return $this->take_students_ug;
-		} elseif(Session::get("db_type") == "pg") {
+		} elseif(Session::get('education_level') == "pg") {
 			return $this->take_students_pg;
 		}
 	}
@@ -72,7 +72,7 @@ class Supervisor extends User{
 			->get();
 	}
 
-	public function getProjectOffers(){
+	public function getSelectedStudents(){
 		$students = Student::all();
 		$offers = array();
 
@@ -126,7 +126,7 @@ class Supervisor extends User{
 		return $offers;
 	}
 
-	public function getProjectProposals(){
+	public function getStudentProjectProposals(){
 		$students = Student::all();
 		$offers = array();
 

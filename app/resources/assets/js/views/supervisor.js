@@ -293,7 +293,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					action: function(){
 						$.ajax({
 							method: 'PATCH',
-							url: '/supervisor/undo',
+							url: '/supervisor/student-undo',
 							data: {
 								project_id : tableRow.data('project-id'),
 								student_id : tableRow.data('student-id')

@@ -13,6 +13,6 @@
 	<td>{{ $project->skills }}</td>
 
 	<td @if($view == "supervisor") hidden @endif >
-		<a href="{{ action('ProjectController@bySupervisor', $project->supervisor->id) }}">{{ $project->supervisor->user->getFullName() }}</a>
+		<a href="{{ action('UserController@projects', $project->supervisor->user) }}">{{ $project->supervisor->user->getFullName() }}</a>
 	</td>
 </tr>

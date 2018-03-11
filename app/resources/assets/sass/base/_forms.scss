@@ -165,7 +165,7 @@ button{
 	cursor: pointer;
 }
 
-.toggle {
+.toggle{
 	position: relative;
 	display: inline-block;
 	height: 14px;
@@ -247,9 +247,7 @@ button{
 }
 
 .button--small{
-	padding: 0 8px;
-	height: 18px;
-	line-height: 18px;
+	padding: 4px 12px;
 }
 
 .button--svg{

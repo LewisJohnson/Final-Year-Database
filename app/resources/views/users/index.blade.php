@@ -22,9 +22,9 @@
 
 
 		<div class="section horizontal card">
-			@if(Session::get('db_type') == 'ug')
+			@if(Session::get('education_level') == 'ug')
 				<h2>Undergraduate Students</h2>
-			@elseif(Session::get('db_type') == 'masters')
+			@elseif(Session::get('education_level') == 'masters')
 				<h2>Masters Students</h2>
 			@endif
 

@@ -19,12 +19,11 @@
 		</thead>
 		<tbody>
 			@foreach($supervisors as $supervisor)
-			{{ dump($supervisor) }}
-			{{ dd($supervisor->user->id) }}
 				@if(count($supervisor->getProjectsByStatus('on-offer')) > 0)
-					<tr class="pointer" tabindex="0" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}" onclick="window.location='{{ action('ProjectController@bySupervisor', $supervisor->id)}}';">
+					<tr class="pointer" tabindex="0" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ count($supervisor->getProjectsByStatus('on-offer')) }}</td>
+						
 					</tr>
 				@endif
 			@endforeach

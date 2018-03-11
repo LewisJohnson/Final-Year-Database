@@ -14,10 +14,10 @@ class Supervisor extends Migration{
 			Schema::create($department.'_supervisors', function (Blueprint $table) {
 				$table->uuid('id')->unique();
 				$table->string('title', 6);
-				foreach (department_sections() as $key => $section) {
-					$table->unsignedTinyInteger('project_load_'.$section);
-					$table->boolean('take_students_'.$section);
-					$table->boolean('accept_email_'.$section);
+				foreach (education_levels() as $key => $level) {
+					$table->unsignedTinyInteger('project_load_'.$level['shortName']);
+					$table->boolean('take_students_'.$level['shortName']);
+					$table->boolean('accept_email_'.$level['shortName']);
 				}
 				$table->primary('id');
 			});

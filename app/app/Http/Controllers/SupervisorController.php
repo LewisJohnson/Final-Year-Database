@@ -43,7 +43,7 @@ class SupervisorController extends Controller{
 		$supervisors = Supervisor::all();
 
 		if($request->query("excludeClosedToOffer") === "true"){
-			if(Session::get("db_type") == "ug"){
+			if(Session::get('education_level') == "ug"){
 				$supervisors = $supervisors->filter(function ($supervisor, $key) {
 					return $supervisor->take_students_ug;
 				});
@@ -178,7 +178,7 @@ class SupervisorController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response JSON
 	 */
-	public function undo(Request $request){
+	public function undoStudent(Request $request){
 		DB::transaction(function() use ($request) {
 			$student = Student::findOrFail(request('student_id'));
 			$transaction = new Transaction;

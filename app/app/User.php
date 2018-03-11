@@ -205,6 +205,7 @@ class User extends Authenticatable{
 	 * @return string
 	 */
 	public function studentType(){
+		// todo: fix this
 		dd($this->student);
 		if($this->hasOne(StudentUg::class, 'id')->exists()){
 			return "ug";
@@ -240,11 +241,7 @@ class User extends Authenticatable{
 	 * @return Project
 	*/
 	public function projects(){
-		if(Session::get("db_type") == "ug"){
-			return $this->hasMany(ProjectUg::class, 'supervisor_id');
-		} else {
-		   return $this->hasMany(ProjectMasters::class, 'supervisor_id');
-		}
+		return $this->hasMany(Project::class, 'supervisor_id');
 	}
 
 	/**

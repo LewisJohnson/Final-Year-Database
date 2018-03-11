@@ -11,8 +11,8 @@ class Student extends Migration{
 	 */
 	public function up(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::create($department.'_students_'.$section, function (Blueprint $table) {
+			foreach (education_levels() as $key => $level) {
+				Schema::create($department.'_students_'.$level['shortName'], function (Blueprint $table) {
 					$table->uuid('id')->unique();
 					$table->string('registration_number');
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
@@ -32,8 +32,8 @@ class Student extends Migration{
 	 */
 	public function down(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::dropIfExists($department.'_students_'.$section);
+			foreach (education_levels() as $key => $level) {
+				Schema::dropIfExists($department.'_students_'.$level['shortName']);
 			}
 		}
 	}

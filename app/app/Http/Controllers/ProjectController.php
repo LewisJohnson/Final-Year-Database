@@ -90,14 +90,14 @@ class ProjectController extends Controller{
 	 * Display the specified resource.
 	 *
 	 * @param \Illuminate\Http\Request $request
-	 * @param  GUID  $guid
+	 * @param  UUID  $uuid
 	 *
 	 * @return \Illuminate\Http\Response The project view
 	 */
-	public function show(Request $request, $guid) {
+	public function show(Request $request, $uuid) {
 		$view = "SupervisorProject";
 		$studentName = "a student";
-		$project = Project::find($guid);
+		$project = Project::find($uuid);
 
 		if($project->status === "student-proposed"){
 			$view = "StudentProject";
@@ -260,11 +260,11 @@ class ProjectController extends Controller{
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  GUID  $guid
+	 * @param  UUID  $uuid
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($guid){
-		$project = Project::findOrFail($guid);
+	public function edit($uuid){
+		$project = Project::findOrFail($uuid);
 
 		if($project->isOwnedByUser()){
 			return view('projects.edit')
@@ -358,22 +358,6 @@ class ProjectController extends Controller{
 			->with('view', 'topic');
 	}
 
-	/**
-	 * Display the projects with by supervisors.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function bySupervisor($id) {
-		$supervisor = Supervisor::findOrFail($id);
-		$projects = Project::where('supervisor_id', $supervisor->id)->get();
-
-		return view('projects.index')
-			->with('projects', $projects)
-			->with('supervisor_name', $supervisor->user->getFullName())
-			->with('view', 'supervisor');
-	}
-
 	public function transactions($id){
 		$transactions = Transaction::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
 		return view('admin.transactions')->with('transactions', $transactions);
@@ -434,12 +418,12 @@ class ProjectController extends Controller{
 
 		session()->flash('search_filters', $selectedFilters);
 
-		if(Session::get("db_type") == "ug"){
+		if(Session::get('education_level') == "ug"){
 			$sessionDbPrefix = "projects_ug.";
 			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
 								->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
 								->where('supervisors.take_students_ug', true);
-		} elseif(Session::get("db_type") == "pg") {
+		} elseif(Session::get('education_level') == "pg") {
 			$sessionDbPrefix = "projects_pg.";
 			$projects = ProjectMasters::select('projects_pg.*', 'supervisors.take_students_pg')
 									->join('supervisors', 'projects_pg.supervisor_id', '=', 'supervisors.id')

@@ -11,8 +11,8 @@ class CreateTransactionsTable extends Migration{
 	 */
 	public function up(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::create($department.'_transactions_'.$section, function (Blueprint $table) {
+			foreach (education_levels() as $key => $level) {
+				Schema::create($department.'_transactions_'.$level['shortName'], function (Blueprint $table) {
 					$table->uuid('id');
 					$table->enum('type', ['topic', 'project', 'student', 'marker']);
 					$table->enum('action', ['proposed', 'selected', 'accepted', 'rejected', 'deleted', 'updated', 'created', 'undo', 'marker-assigned']);
@@ -35,8 +35,8 @@ class CreateTransactionsTable extends Migration{
 	 */
 	public function down(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::dropIfExists($department.'_transactions_'.$section);
+			foreach (education_levels() as $key => $level) {
+				Schema::dropIfExists($department.'_transactions_'.$level['shortName']);
 			}
 		}
 	}

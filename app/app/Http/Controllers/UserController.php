@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use SussexProjects\User;
 use SussexProjects\Student;
+use SussexProjects\Project;
 use SussexProjects\Supervisor;
 use SussexProjects\Http\Requests\StoreUser;
 
@@ -117,6 +118,44 @@ class UserController extends Controller{
 	 */
 	public function show(User $user){
 		return view('users.show', compact('user'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \SussexProjects\User  $user
+	 * @return \Illuminate\Http\Response
+	 */
+	public function projects(User $user){
+		if(Auth::user() == $user){
+			$view = 'personal';
+		} else {
+			$view = 'supervisor';
+		}
+
+		//todo: add student proposed projects
+		$projects = Project::where('supervisor_id', $user->id)->get();
+
+		return view('projects.index')
+			->with('projects', $projects)
+			->with('owner', $user)
+			->with('view', $view);
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \SussexProjects\User  $user
+	 * @return \Illuminate\Http\Response
+	 */
+	public function myProjects(User $user){
+		if(Auth::user() != $user){
+			abort(403);
+		}
+
+		return view('projects.index')
+			->with('projects', $user->projects)
+			->with('view', 'personal');
 	}
 
 	/**

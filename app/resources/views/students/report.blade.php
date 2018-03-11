@@ -18,9 +18,9 @@
 	<div class="section-container card">
 		@foreach(SussexProjects\Project::getAllStatuses() as $status)
 			@php
-				if(Session::get("db_type") == "ug"){
+				if(Session::get('education_level') == "ug"){
 					$students = SussexProjects\StudentUg::Where('project_status', $status)->get();
-				} elseif(Session::get("db_type") == "masters"){
+				} elseif(Session::get('education_level') == "masters"){
 					$students = SussexProjects\StudentMasters::Where('project_status', $status)->get();
 				}
 

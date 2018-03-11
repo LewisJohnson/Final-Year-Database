@@ -2,7 +2,7 @@
 
 if (!function_exists('config_json')){
 	function config_json($key = null, $value = null) {
-		// todo: add per department
+		// todo: add per department config file
 		if(empty(Session::get('department'))){
 			$config = json_decode(Storage::disk('local')->get(config("app.default_department_config_file")), true);
 		} else {
@@ -35,15 +35,15 @@ if (!function_exists('lang_sess')){
 		$key = str_replace('"', '',$key);
 		$key = str_replace('\'', '',$key);
 
-		$key = 'messages_'.Session::get("db_type").'.'.$key;
+		$key = 'messages_'.Session::get('education_level').'.'.$key;
 		return Lang::get($key);
 	}
 }
 
-if (!function_exists('department_sections')){
-	function department_sections() {
+if (!function_exists('education_levels')){
+	function education_levels() {
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
-		return data_get($config, 'sections');
+		return data_get($config, 'educationLevels');
 	}
 }
 

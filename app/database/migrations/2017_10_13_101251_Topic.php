@@ -11,8 +11,8 @@ class Topic extends Migration{
 	 */
 	public function up(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::create($department.'_topics_'.$section, function (Blueprint $table) {
+			foreach (education_levels() as $key => $level) {
+				Schema::create($department.'_topics_'.$level['shortName'], function (Blueprint $table) {
 					$table->uuid('id');
 					$table->string('name')->unique();
 					$table->primary('id');
@@ -28,8 +28,8 @@ class Topic extends Migration{
 	 */
 	public function down(){
 		foreach (departments() as $key => $department) {
-			foreach (department_sections() as $key => $section) {
-				Schema::dropIfExists($department.'_topics_'.$section);
+			foreach (education_levels() as $key => $level) {
+				Schema::dropIfExists($department.'_topics_'.$level['shortName']);
 			}
 		}
 	}

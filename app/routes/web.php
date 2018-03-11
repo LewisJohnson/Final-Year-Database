@@ -50,6 +50,8 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	Route::get('about', 'HomeController@about');
 	Route::get('help', 'HomeController@help');
 
+	Route::get('admin/system/new-department', 'AdminController@addNewDepartment');
+
 });
 
 Route::group(['middleware' => ['web']], function() {
@@ -65,7 +67,7 @@ Route::group(['middleware' => ['web']], function() {
 /* ===============
    2. SYSTEM ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['admin.system', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], function() {
 	Route::get('admin/dashboard', 'AdminController@dashboard');
 	Route::post('admin/dashboard/system', 'AdminController@configure');
 
@@ -77,7 +79,7 @@ Route::group(['middleware' => ['admin.system', 'checkDepartment']], function() {
 /* ===============
    3. PROJECT ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['admin.project', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment']], function() {
 	Route::get('admin', 'AdminController@index');
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
@@ -122,27 +124,27 @@ Route::group(['middleware' => ['admin.project', 'checkDepartment']], function() 
    4. PROJECT AND SYSTEM ADMIN ROUTES
    ================================== */
 
-Route::group(['middleware' => ['admin', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 	Route::resource('users', 'UserController');
 });
 
 /* ==============================
    5. SUPERVISOR AND ADMIN ROUTES
    ============================== */
-Route::group(['middleware' => ['supervisor.admin', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'supervisor.admin', 'checkDepartment']], function() {
 	// Project Transaction
 	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
 
-	Route::post('database-type', 'HomeController@setDatabaseType');
+	Route::post('set-education-level', 'HomeController@setEducationLevel');
 });
 
 /* =================
    6. SUPERVISOR ROUTES
    ================= */
-Route::group(['middleware' => ['supervisor', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
 
 	// Project Transaction
 	Route::get('supervisor/transactions', 'SupervisorController@transactions');
@@ -154,13 +156,13 @@ Route::group(['middleware' => ['supervisor', 'checkDepartment']], function() {
 	// Project offers
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
-	Route::patch('supervisor/undo', 'SupervisorController@undo');
+	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 });
 
 /* =================
    7. STUDENT ROUTES
    ================= */
-Route::group(['middleware' => ['student', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function() {
 	Route::get('students/project-propose', 'StudentController@proposeProjectView');
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 	Route::patch('students/project-select', 'StudentController@selectProject');
@@ -175,7 +177,10 @@ Route::group(['middleware' => ['student', 'checkDepartment']], function() {
 /* ============================
    8. AUTHENTICATED USER ROUTES
    ============================ */
-Route::group(['middleware' => ['auth', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
+
+	Route::get('users/{user}/projects', 'UserController@projects');
+
 	// Project
 	Route::get('projects', 'ProjectController@index');
 	Route::post('projects', 'ProjectController@store');
@@ -183,11 +188,10 @@ Route::group(['middleware' => ['auth', 'checkDepartment']], function() {
 
 	// Projects by Supervisor
 	Route::get('projects/by-supervisor', 'ProjectController@showSupervisors');
-	Route::get('projects/by-supervisor/{id}', 'ProjectController@bySupervisor');
 
 	// Projects by Topic
 	Route::get('projects/by-topic', 'ProjectController@showTopics');
-	Route::get('projects/by-topic/{id}', 'ProjectController@byTopic');
+	Route::get('projects/by-topic/{uuid}', 'ProjectController@byTopic');
 
 	// // Project search
 	Route::get('projects/search', 'ProjectController@search');
@@ -197,11 +201,10 @@ Route::group(['middleware' => ['auth', 'checkDepartment']], function() {
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	Route::get('projects/{guid}', 'ProjectController@show');
-	Route::delete('projects/{guid}/delete', 'ProjectController@destroy');
-	Route::patch('projects/{guid}/edit', 'ProjectController@update');
-	Route::get('projects/{guid}/edit', 'ProjectController@edit');
-	Route::patch('projects/{guid}/restore', 'ProjectController@restore');
+	Route::get('projects/{uuid}', 'ProjectController@show');
+	Route::delete('projects/{uuid}/delete', 'ProjectController@destroy');
+	Route::patch('projects/{uuid}/edit', 'ProjectController@update');
+	Route::get('projects/{uuid}/edit', 'ProjectController@edit');
 
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');

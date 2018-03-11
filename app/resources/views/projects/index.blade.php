@@ -17,7 +17,7 @@
 
 	@if($view == "supervisor")
 		<h1>Projects by Supervisor</h1>
-		<h3>Projects on-offer by {{ $supervisor_name }}</h3>
+		<h3>Projects on-offer by {{ $owner->getFullName() }}</h3>
 	@endif
 
 	@if($view == "topic")
@@ -28,6 +28,10 @@
 	@if($view == "transaction")
 		<h1>Project Transactions</h1>
 		<h3>Click a project to browse it's transactions.</h3>
+	@endif
+
+	@if($view == "personal")
+		<h1>My Projects</h1>
 	@endif
 
 	{{-- We have search results--}}

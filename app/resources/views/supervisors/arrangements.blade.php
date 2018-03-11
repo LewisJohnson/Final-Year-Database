@@ -11,7 +11,7 @@
 		<input maxlength="255" type="text" name="title" id="title" value="{{ $supervisor->title }}" required>
 	</div>
 
-	@if(Session::get('db_type') == 'ug')
+	@if(Session::get('education_level') == 'ug')
 		<div class="form-field">
 			<label  for="description" >Undergraduate Project Load</label>
 			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_ug }}"></input>
@@ -22,7 +22,7 @@
 				<label for="take_students_ug" >Take Undergraduate Students</label>
 			</div>
 		</div>
-    @elseif(Session::get('db_type') == 'masters')
+    @elseif(Session::get('education_level') == 'masters')
 		<div class="form-field">
 			<label  for="description" >Masters Project Load</label>
 			<input min="0" type="number" name="description" id="description" required value="{{ $supervisor->project_load_pg }}"></input>

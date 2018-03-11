@@ -5,11 +5,11 @@
 	<body>
 		@include('partials.no-script')
 
+		@include('partials.header')
+
 		@if(Auth::check())
-			@include('partials.header')
 			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 		@else
-			@include('partials.header-guest')
 			@include('auth.login')
 		@endif
 

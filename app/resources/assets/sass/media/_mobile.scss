@@ -214,14 +214,7 @@
 
 		.footer-right, .footer-left{
 			position: relative;
-
-			a, p {
-				padding: 5px;
-			}
-
-			.seperator{
-				display: none;
-			}
+			width: 100%;
 		}
 	}
 }

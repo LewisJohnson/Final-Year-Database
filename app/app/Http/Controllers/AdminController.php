@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Supervisor;
@@ -25,7 +26,8 @@ use SussexProjects\UserAgentString;
 */
 class AdminController extends Controller{
 	public function __construct(){
-		$this->middleware('auth');
+		// todo: uncomment
+		// $this->middleware('auth');
 		$this->paginationCount = 100;
 	}
 
@@ -126,12 +128,12 @@ class AdminController extends Controller{
 
 				$supervisor = Supervisor::findOrFail($id[0]);
 
-				if (Session::get("db_type") == "ug") {
+				if (Session::get('education_level') == "ug") {
 					if (isset($request->project_load)) {
 						$supervisor->project_load_ug = $request->project_load;
 					}
 					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
-				} elseif (Session::get("db_type") == "pg") {
+				} elseif (Session::get('education_level') == "pg") {
 					if (isset($request->project_load)) {
 						$supervisor->project_load_pg = $request->project_load;
 					}
@@ -245,9 +247,9 @@ class AdminController extends Controller{
 				$project->save();
 			}
 
-			if (Session::get("db_type") == "ug") {
+			if (Session::get('education_level') == "ug") {
 				DB::table(Session::get("department").'_students_ug')->delete();
-			} elseif (Session::get("db_type") == "pg") {
+			} elseif (Session::get('education_level') == "pg") {
 				DB::table(Session::get("department").'_students_pg')->delete();
 			}
 
@@ -309,10 +311,10 @@ class AdminController extends Controller{
 		foreach ($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 
-			if(Session::get('db_type') == 'ug'){
+			if(Session::get('education_level') == 'ug'){
 				$supervisor->project_load = $supervisor->project_load_ug;
 				$supervisor->target_load = ($supervisor->project_load_ug * 2) - $supervisor->accepted_student_count;
-			} elseif(Session::get('db_type') == 'pg'){
+			} elseif(Session::get('education_level') == 'pg'){
 				$supervisor->project_load = $supervisor->project_load_pg;
 				$supervisor->target_load = ($supervisor->project_load_pg * 2) - $supervisor->accepted_student_count;
 			}
@@ -353,9 +355,9 @@ class AdminController extends Controller{
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers 
 	*/
 	public function calculateSecondMarkers(Request $request){
-		if (Session::get("db_type") == "ug") {
+		if (Session::get('education_level') == "ug") {
 			DB::table(Session::get("department").'_students_ug')->update(array('marker_id' => null));
-		} elseif (Session::get("db_type") == "pg") {
+		} elseif (Session::get('education_level') == "pg") {
 			DB::table(Session::get("department").'_students_pg')->update(array('marker_id' => null));
 		}
 
@@ -469,7 +471,8 @@ class AdminController extends Controller{
 	}
 
 	public function addNewDepartment(Request $request){
-		$exitCode = Artisan::call('migrate:fresh');
+		$exitCode = Artisan::call('migrate');
+
 		return response()->json(array('successful' => true));
 	}
 }

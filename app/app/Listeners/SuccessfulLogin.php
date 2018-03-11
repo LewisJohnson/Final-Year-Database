@@ -26,14 +26,14 @@ class SuccessfulLogin
 	 */
 	public function handle(Login $event){
 		if($event->user->isStudent()){
-			Session::put('db_type', $event->user->studentType());
+			Session::put('section', $event->user->studentType());
 
 			if(empty(Cookie::get('favourite_projects'))){
 				Cookie::queue('favourite_projects', null, 525600);
 			}
 		} else {
 			// Just as a default
-			Session::put('db_type', 'ug');
+			Session::put('section', 'ug');
 		}
 
 		$event->user->last_login = new Carbon;

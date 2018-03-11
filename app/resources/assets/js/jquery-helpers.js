@@ -41,15 +41,15 @@ $(function() {
 		$(this).parent().hide(config.animtions.medium);
 	});
 
-	$(".db-type-form").on("submit",  function(e) {
-		$.ajax({
-			method: 'POST',
-			url: $(this).prop('action'),
-			data: $(this).serialize()
-		}).done(function(){
-			location.reload(true);
-		});
-	});
+	// $(".db-type-form").on("submit",  function(e) {
+	// 	$.ajax({
+	// 		method: 'POST',
+	// 		url: $(this).prop('action'),
+	// 		data: $(this).serialize()
+	// 	}).done(function(){
+	// 		location.reload(true);
+	// 	});
+	// });
 
 
 	$(".boolean-checkbox").each(function() {

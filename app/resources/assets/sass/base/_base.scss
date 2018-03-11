@@ -35,7 +35,7 @@ code{
 
 .cookie-banner{
 	padding: 1rem;
-	background: black;
+	background: darken($space-grey, 5%);
 
 	a, button{
 		color: white;

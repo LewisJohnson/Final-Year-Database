@@ -36,10 +36,10 @@
 							<td>{{ $supervisor->user->getFullName() }}</td>
 							<td>{{ $supervisor->user->username }}</td>
 							<td>{{ ucfirst($supervisor->user->access_type) }}</td>
-							@if(Session::get("db_type") == "ug")
+							@if(Session::get('education_level') == "ug")
 								<td>{{ $supervisor->project_load_ug }}</td>
 								<td>{{ $supervisor->take_students_ug ? 'Yes' : 'No' }}</td>
-							@elseif(Session::get("db_type") == "masters")
+							@elseif(Session::get('education_level') == "masters")
 								<td>{{ $supervisor->project_load_pg }}</td>
 								<td>{{ $supervisor->take_students_pg ? 'Yes' : 'No' }}</td>
 							@endif

@@ -6,7 +6,7 @@ footer{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	background: $accent;
+	background: $space-grey;
 	font-size: 12px;
 
 	a, p{
@@ -14,9 +14,9 @@ footer{
 		color: white;
 		display: inline-block;
 		margin: 0;
+		padding: 4px 12px;
 	}
 
-	> div{ padding: 5px; }
 	.footer-left{ margin-right: auto; }
 	.footer-right{ margin-left: auto; }
 
@@ -42,6 +42,7 @@ footer{
 
 	.seperator{
 		padding: 0 10px;
+		color: rgb(144, 144, 144);
 	}
 }
 

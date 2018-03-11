@@ -246,6 +246,17 @@ ul.dot-menu{
 	}
 }
 
+// horizontal list
+.hl{
+	li{
+		display: inline-block;
+	}
+}
+
+.td-none{
+	text-decoration: none;
+}
+
 .icon-list{
 	display: flex;
 	flex-direction: column;

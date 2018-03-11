@@ -1,37 +1,37 @@
 <footer>
-	@if(config_json("footer.accessibility_buttons.value"))
+	@if(config_json("footer.accessibility_buttons.value") == true)
 		<div class="footer-left">
-			@if(Cookie::get('largeFont') == "true")
-				<a href="{{ action('HomeController@index', 'largeFont=false')}}">Regular Font</a>
-			@else
-				<a href="{{ action('HomeController@index', 'largeFont=true')}}">Large Font</a>
-			@endif
-			<p class="seperator">|</p>
-			@if(Cookie::get('highContrast') == "true")
-				<a href="{{ action('HomeController@index', 'highContrast=false')}}">Standard Contast</a>
-			@else
-				<a href="{{ action('HomeController@index', 'highContrast=true')}}">High Contrast</a>
-			@endif
+			<ul class="hl">
+				<li>
+					@if(Cookie::get('accessibility-font') == "true")
+						<a class="button--small button--accent td-none" href="?largeFont=false">Large Font</a>
+					@else
+						<a class="button--small td-none" href="?largeFont=true">Large Font</a>
+					@endif
+				</li>
+
+				<li>
+					@if(Cookie::get('accessibility-contrast') == "true")
+						<a class="button--small button--accent td-none" href="?highContrast=false">High Contrast</a>
+					@else
+						<a class="button--small td-none" href="?highContrast=true">High Contrast</a>
+					@endif
+				</li>
+			</ul>
 		</div>
 	@endif
 
 	<div class="footer-right">
-		<a href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
+		<a class="button--small td-none" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
-		@if(Auth::check())
+		@if(Session::get('educationLevel') != null)
 			<p>{{ lang_sess("footer_maintainer_text") }}</p>
 		@else
 			<p>@lang("messages.footer_maintainer_text")</p>
 		@endif
 	</div>
 
-	@if(!empty(Session::get('department')))
-		<div class="flex--full">
-			<p>Selected the wrong department?</p> <a href="/set-depart	ment">Click here to change</a>
-		</div>
-	@endif
-	
-	@if(config_json("footer.rainbow.value"))
+	@if(config_json("footer.rainbow.value") == true)
 		<div class="flex--full rainbow">
 			<div></div>
 			<div></div>
