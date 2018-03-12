@@ -41,8 +41,25 @@ if (!function_exists('lang_sess')){
 }
 
 if (!function_exists('education_levels')){
-	function education_levels() {
+	function education_levels($shortName = null, $longName = null) {
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
+
+		if($shortName){
+			$ar = array();
+			foreach (data_get($config, 'educationLevels') as $key => $level) {
+				array_push($ar, $level['shortName']);
+			}
+			return $ar;
+		}
+
+		if($longName){
+			$ar = array();
+			foreach (data_get($config, 'educationLevels') as $key => $level) {
+				array_push($ar, $level['longName']);
+			}
+			return $ar;
+		}
+
 		return data_get($config, 'educationLevels');
 	}
 }

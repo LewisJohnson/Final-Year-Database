@@ -2,7 +2,7 @@
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Session;
 /**
  * The user agent model.
  * 
@@ -21,7 +21,7 @@ class UserAgentString extends Model{
 		if(Session::get('department') !== null){
 			return Session::get('department').'_user_agent_strings';
 		} else {
-			return 'UNSET';
+			throw new Exception('Database not found.');
 		}
 	}
 	/**

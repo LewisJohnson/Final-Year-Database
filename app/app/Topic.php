@@ -21,7 +21,7 @@ class Topic extends Model{
 		if(Session::get('department') !== null){
 			return Session::get('department').'_topics_'.Session::get('education_level');
 		} else {
-			return 'UNSET';
+			throw new Exception('Database not found.');
 		}
 	}
 

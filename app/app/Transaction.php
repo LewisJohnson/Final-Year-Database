@@ -21,7 +21,7 @@ class Transaction extends Model{
 		if(Session::get('department') !== null){
 			return Session::get('department').'_transactions_'.Session::get('education_level');
 		} else {
-			return 'UNSET';
+			throw new Exception('Database not found.');
 		}
 	}
 	/**

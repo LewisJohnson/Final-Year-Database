@@ -376,11 +376,12 @@ import '../js/components';
 	$('.animate-cards .card').each(function(index, value) {
 		delay += 200;
 		setTimeout(function(){
+			$(this).addClass("slideInUp animated");
+
 			$(this).animate({
 				opacity: 1
-			},400);
+			}, 800);
 
-			$(this).addClass("slideInUp animated");
 		}.bind(this), delay);
 	});
 });

@@ -18,11 +18,7 @@
 			<ul class="hl ml-auto">
 				@foreach (education_levels() as $key => $level)
 					<li>
-						<form role="form" method="POST" action="{{ action('HomeController@setEducationLevel') }}">
-								{{ csrf_field() }}
-								<input type="hidden" name="level" value="{{ $level["shortName"] }}">
-								<button type="submit" class="button--small @if(Session('education_level') == $level["shortName"])button--accent @endif" >{{ ucfirst($level["longName"]) }}</button>
-						</form>
+						<a href="?educationLevel={{ $level['shortName'] }}" class="button--small td-none @if(Session('education_level') == $level["shortName"])button--accent @endif" >{{ ucfirst($level["longName"]) }}</a>
 					</li>
 				@endforeach
 			</ul>

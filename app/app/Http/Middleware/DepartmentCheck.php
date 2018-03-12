@@ -4,7 +4,7 @@ namespace SussexProjects\Http\Middleware;
 use Closure;
 use Session;
 
-class CheckDepartmentSet{
+class DepartmentCheck{
 	/**
 	 * Handle an incoming request.
 	 *

@@ -17,7 +17,7 @@
 				<div class="dropdown-content">
 					@for ($i = 1; $i <= 20; $i++)
 						@if(Lang::has($localePrefix.".help_link_".$i))
-							<a href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
+							<a target="_blank" href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
 						@endif
 					@endfor
 				</div>
@@ -31,7 +31,7 @@
 			<div class="dropdown-content shadow-2dp">
 				@for ($i = 1; $i <= 20; $i++)
 					@if(Lang::has($localePrefix.".help_link_".$i))
-						<a href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
+						<a target="_blank" href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
 					@endif
 				@endfor
 			</div>

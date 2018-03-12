@@ -84,28 +84,6 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Sets the database type.
-	 *
-	 * Undergraduate or postgraduate database.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function setEducationLevel(Request $request){
-		if($request->level == "ug"){
-			Session::put("education_level", "ug");
-			return redirect()->action('HomeController@index');
-		}
-
-		if($request->level == "pg"){
-			Session::put("education_level", "pg");
-			return redirect()->action('HomeController@index');
-		}
-		return abort(400, "Invalid Request.");
-	}
-
-
-	/**
 	 * Sets the department type.
 	 *
 	 * e.g. Informatics or engineering.

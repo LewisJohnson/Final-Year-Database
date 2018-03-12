@@ -23,7 +23,7 @@ class Supervisor extends User{
 		if(Session::get('department') !== null){
 			return Session::get('department').'_supervisors';
 		} else {
-			return 'UNSET';
+			throw new Exception('Database not found.');
 		}
 	}
 

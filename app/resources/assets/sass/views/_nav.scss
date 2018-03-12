@@ -139,9 +139,9 @@ nav.mobile{
 	transform: translateX(-75vw);
 	@include transition--medium-quad();
 
-	> div {
+	> div{
 		width: 100%;
-		height: calc(100vh - 60px);
+		height: calc(100vh - 53px);
 		overflow-y: auto;
 	}
 
@@ -185,7 +185,6 @@ nav.mobile{
 			color: inherit;
 
 			&:hover, &:focus{
-				
 				background: $accent;
 				color: white;
 			}
@@ -220,7 +219,6 @@ nav.mobile{
 		}
 	}
 }
-
 
 nav.mobile.is-visible{
 	visibility: visible;

@@ -7,9 +7,12 @@
 .loader{
 	position: relative;
 	display: none;
-	border: 5px solid transparent;
-	border-top: 5px solid #5facff;
+	// border: 5px solid transparent;
+	// border-top: 5px solid #5facff;
+	// border-radius: 50%;
+	border-top: 1px solid #5facff;
 	border-radius: 50%;
+	
 	width: 25px;
 	height: 25px;
 	animation: spin 0.5s linear infinite;
@@ -442,16 +445,42 @@ ul.dot-menu{
 .width--1600{ max-width: 1600px; }
 
 // TRANSITIONS
-.transition--slow { @include transition--slow(); }
-.transition--slow:focus { outline: none; }
-.transition--medium { @include transition--medium(); }
-.transition--medium:focus { outline: none; }
-.transition--fast { @include transition--fast(); }
-.transition--fast:focus { outline: none; }
+.transition--slow{ @include transition--slow(); }
+.transition--slow:focus{ outline: none; }
+
+.transition--medium{ @include transition--medium(); }
+.transition--medium:focus{ outline: none; }
+
+.transition--fast{ @include transition--fast(); }
+.transition--fast:focus{ outline: none; }
 
 // ANIMATIONS
-@keyframes spin { from{ transform: rotate(0deg); } to{ transform: rotate(360deg); }}
-@keyframes showDotMenu { from{ transform: scale3d(0.8, 0.8, 1); } to{ transform: scale3d(1, 1, 1); }}
+@keyframes spin{ 
+	0%{ 
+		border-top-color: #5facff;
+		transform: rotate(0deg); 
+	}
+	50%{ 
+		border-top-color: darken(#5facff, 20%);
+		transform: rotate(180deg); 
+	}
+	100%{ 
+		border-top-color: #5facff;
+		transform: rotate(360deg); 
+	}
+}
 
-@keyframes teapot { from{ transform: rotateZ(0deg); } to{ transform: rotateZ(25deg); }}
-@keyframes teafill { from{ height: 0; } to{ height: calc(100% - 250px); }}
+@keyframes showDotMenu { 
+	from{ transform: scale3d(0.8, 0.8, 1); }
+	to{ transform: scale3d(1, 1, 1); }
+}
+
+@keyframes teapot { 
+	from{ transform: rotateZ(0deg); }
+	to{ transform: rotateZ(25deg); }
+}
+
+@keyframes teafill { 
+	from{ height: 0; }
+	to{ height: calc(100% - 250px); }
+}

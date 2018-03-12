@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \SussexProjects\Http\Middleware\RequiredCookies::class,
 			\SussexProjects\Http\Middleware\Language::class,
 			\SussexProjects\Http\Middleware\Accessibility::class,
+			\SussexProjects\Http\Middleware\SetEducationLevel::class
 		],
 
 		'api' => [
@@ -67,6 +68,6 @@ class Kernel extends HttpKernel
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
 		'supervisor.admin' => \SussexProjects\Http\Middleware\SupervisorOrAdmin::class,
 		'student' => \SussexProjects\Http\Middleware\Student::class,
-		'checkDepartment' => \SussexProjects\Http\Middleware\CheckDepartmentSet::class,
+		'checkDepartment' => \SussexProjects\Http\Middleware\DepartmentCheck::class,
 	];
 }

@@ -137,8 +137,6 @@ Route::group(['middleware' => ['web', 'supervisor.admin', 'checkDepartment']], f
 
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
-
-	Route::post('set-education-level', 'HomeController@setEducationLevel');
 });
 
 /* =================

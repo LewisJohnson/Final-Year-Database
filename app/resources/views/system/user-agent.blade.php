@@ -11,7 +11,6 @@
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
 
-
 		<div class="button-group button-group--horizontal button-group--links">
 			@if(isset($_GET["unique"]))
 				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgent')}}">Only first visits</a>
@@ -47,8 +46,10 @@
 	</div>
 @else
 	<div class="centered width--800">
-		<h1>User agent string collection is currently turned off.</h1>
-		<p>You can turn it back on in the system dashboard.</p>
+		<div class="config-danger">
+			<h1 style="color: white">User agent string collection is currently turned off.</h1>
+			<p>You can turn it back on in the <a href="{{ action('AdminController@dashboard') }}">system dashboard</a>.</p>
+		</div>
 	</div>
 @endif
 

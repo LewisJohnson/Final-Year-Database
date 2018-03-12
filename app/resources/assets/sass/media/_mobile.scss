@@ -71,6 +71,13 @@
 }
 
 @media screen and (max-width: 970px){
+
+	.card-container{
+		.card{
+			margin-bottom: 20px;
+		}
+	}
+	
 	.arrangements-container {
 		overflow-x: scroll;
 

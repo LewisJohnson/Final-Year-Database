@@ -24,7 +24,7 @@ class User extends Authenticatable{
 		if(Session::get('department') !== null){
 			return Session::get('department').'_users';
 		} else {
-			return 'UNSET';
+			throw new Exception('Database not found.');
 		}
 	}
 
@@ -123,6 +123,15 @@ class User extends Authenticatable{
 	 */
 	public function isPgAdmin(){
 		return in_array("admin_pg", $this->getPrivileges());
+	}
+
+	/**
+	 * Indicates if authenticated used is a masters project administrator.
+	 *
+	 * @return boolean
+	 */
+	public function isAdminOfEducationLevel($educationLevel){
+		return in_array("admin_".$educationLevel, $this->getPrivileges());
 	}
 
 	/**

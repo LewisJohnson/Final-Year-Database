@@ -33,12 +33,9 @@
 }
 
 .card--half{
-	margin-bottom: 2%;
 	width: 100%;
-	border-top: 2px solid #1d4289;
-	&:nth-child(odd){
-		margin-right: auto;
-	}
+	// border-top: 2px solid #1d4289;
+	border-top: 2px solid rgba(29, 66, 137, 0.25);
 
 	&:nth-child(even){
 		margin-left: auto;
@@ -49,15 +46,14 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+
+	.card{
+		margin-bottom: 2%;
+	}
 }
 
 .card-slim-content{
 	p{
 		margin: 2px;
 	}
-}
-
-.card--margin-vertical{
-	margin-top: 2rem;
-	margin-bottom: 2rem;
 }
