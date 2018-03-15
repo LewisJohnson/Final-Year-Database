@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
 namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Http\Request;
@@ -17,7 +23,7 @@ class UserAgentStringCollector{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if(!config_json('user_agent.collect_user_agent.value')){
+		if(!get_config_json('user_agent.collect_user_agent.value')){
 			return $next($request);
 		}
 
@@ -34,7 +40,7 @@ class UserAgentStringCollector{
 		$userAgentString = new UserAgentString;
 		$userAgentString->user_agent = $request->header('User-Agent');
 
-		if(isset($_SERVER["HTTP_REFERER"]) && config_json('user_agent.collect_referrer.value')){
+		if(isset($_SERVER["HTTP_REFERER"]) && get_config_json('user_agent.collect_referrer.value')){
 			$ref = mb_convert_encoding($_SERVER["HTTP_REFERER"], 'UTF-8', 'UTF-8');
 			$ref = htmlentities($ref, ENT_QUOTES, 'UTF-8');
 			$userAgentString->referrer = $ref;

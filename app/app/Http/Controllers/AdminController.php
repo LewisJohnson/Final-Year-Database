@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -86,7 +92,7 @@ class AdminController extends Controller{
 				if($value === "true"){ $value = true; }
 				if($value === "false"){ $value = false; }
 
-				config_json($request[$key . "-json"], $value);
+				get_config_json($request[$key . "-json"], $value);
 			}
 		}
 		return redirect(url('admin/dashboard'));

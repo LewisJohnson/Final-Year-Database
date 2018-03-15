@@ -1,7 +1,25 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
 
-if (!function_exists('config_json')){
-	function config_json($key = null, $value = null) {
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+
+if (!function_exists('lang_sess')){
+    function lang_sess($key = null, $value = null){
+        $key = str_replace('"', '',$key);
+        $key = str_replace('\'', '',$key);
+
+        $key = 'messages_'.Session::get('education_level').'.'.$key;
+        return Lang::get($key);
+    }
+}
+
+if (!function_exists('get_config_json')){
+	function get_config_json($key = null, $value = null) {
 		// todo: add per department config file
 		if(empty(Session::get('department'))){
 			$config = json_decode(Storage::disk('local')->get(config("app.default_department_config_file")), true);
@@ -30,18 +48,8 @@ if (!function_exists('config_json')){
 	}
 }
 
-if (!function_exists('lang_sess')){
-	function lang_sess($key = null, $value = null){
-		$key = str_replace('"', '',$key);
-		$key = str_replace('\'', '',$key);
-
-		$key = 'messages_'.Session::get('education_level').'.'.$key;
-		return Lang::get($key);
-	}
-}
-
-if (!function_exists('education_levels')){
-	function education_levels($shortName = null, $longName = null) {
+if (!function_exists('get_education_levels')){
+	function get_education_levels($shortName = null, $longName = null) {
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
 		if($shortName){
@@ -64,8 +72,8 @@ if (!function_exists('education_levels')){
 	}
 }
 
-if (!function_exists('departments')){
-	function departments() {
+if (!function_exists('get_departments')){
+	function get_departments() {
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 		return data_get($config, 'departments');
 	}

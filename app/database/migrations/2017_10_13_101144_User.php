@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -10,7 +16,7 @@ class User extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach(departments() as $key => $department) {
+		foreach(get_departments() as $key => $department) {
 			$tableName = $department.'_users';
 
 			if(!Schema::hasTable($tableName)) {
@@ -29,7 +35,7 @@ class User extends Migration{
 
 				$adminLevels = "";
 				$guestLevels = "";
-				$eduLevels = education_levels(true);
+				$eduLevels = get_education_levels(true);
 
 				foreach($eduLevels as $key => $level) {
 					$guestLevels.="'guest_".$level."'";

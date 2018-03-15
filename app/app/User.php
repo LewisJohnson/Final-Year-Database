@@ -1,32 +1,24 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
 namespace SussexProjects;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * The user model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\UserController
 */
 class User extends Authenticatable{
 	use Traits\Uuids;
 	use Notifiable;
-	
-	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_users';
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -70,6 +62,18 @@ class User extends Authenticatable{
 	 */
 	public $incrementing = true;
 
+    /**
+     * The table to retrieve data from.
+     *
+     * @return string
+     */
+    public function getTable(){
+        if(Session::get('department') !== null){
+            return Session::get('department').'_users';
+        } else {
+            throw new Exception('Database not found.');
+        }
+    }
 
 	/**
 	 * Indicates if authenticated used is a guest.
@@ -142,7 +146,7 @@ class User extends Authenticatable{
 	public function isProjectAdmin(){
 		$isProjectAdmin = false;
 
-		foreach (education_levels(true) as $key => $level) {
+		foreach (get_education_levels(true) as $key => $level) {
 			if(in_array("admin_".$level, $this->getPrivileges())){
 				$isProjectAdmin = true;
 			}
@@ -160,16 +164,21 @@ class User extends Authenticatable{
 	}
 
 
-	public function allowedEducationLevel(){
+    /**
+     * An array of all education levels the user has permission too
+     *
+     * @return array Short-name array of education levels (e.g. [ug, pg])
+     */
+    public function allowedEducationLevel(){
 		$allowedLevels = array();
 
-		foreach (education_levels(true) as $key => $level) {
+		foreach (get_education_levels(true) as $key => $level) {
 			if(in_array("admin_".$level, $this->getPrivileges())){
 				array_push($allowedLevels, $level);
 			}
 		}
 
-		foreach (education_levels(true) as $key => $level) {
+		foreach (get_education_levels(true) as $key => $level) {
 			if(in_array("guest_".$level, $this->getPrivileges())){
 				array_push($allowedLevels, $level);
 			}
@@ -177,7 +186,7 @@ class User extends Authenticatable{
 
 		if($this->isSupervisor()){
 			// Adds all education levels
-			foreach (education_levels(true) as $key => $level) {
+			foreach (get_education_levels(true) as $key => $level) {
 				if(!in_array($level, $this->getPrivileges())){
 					array_push($allowedLevels, $level);
 				}
@@ -197,13 +206,15 @@ class User extends Authenticatable{
 		$count = count($privileges);
 		$indx = 1;
 
-		// This is because of how privileges are stored in the db
-		// 1. administrator_system
-		// 2. administrator system
-		// 3. ['administrator', 'system']
-		// 4. ['system', 'administrator']
-		// 5. system administrator
-		foreach ($privileges as $key => $value) {
+        /* This slew of functions are needed because of how privileges are stored in the DB
+            1. administrator_system
+            2. administrator system
+            3. ['administrator', 'system']
+            4. ['system', 'administrator']
+            5. system administrator
+        */
+
+        foreach ($privileges as $key => $value) {
 			$value = str_replace('admin', 'administrator', $value);
 			$value = str_replace('_ug', '_undergraduate', $value);
 			$value = str_replace('_', ' ', $value);
@@ -288,7 +299,7 @@ class User extends Authenticatable{
 	 * Returns authenticated user's full name.
 	 *
 	 * Includes title is user is a supervisor.
-	 * 
+	 *
 	 * @return string
 	*/
 	public function getFullName(){
