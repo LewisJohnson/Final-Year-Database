@@ -10,10 +10,10 @@ class User extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (departments() as $key => $department) {
+		foreach(departments() as $key => $department) {
 			$tableName = $department.'_users';
 
-			if (!Schema::hasTable($tableName)) {
+			if(!Schema::hasTable($tableName)) {
 				Schema::create($tableName, function (Blueprint $table) {
 					$table->uuid('id')->unique();
 					$table->string('first_name', 128);
@@ -27,7 +27,18 @@ class User extends Migration{
 					$table->primary('id');
 				});
 
-				DB::statement("ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', 'admin_ug', 'admin_pg', 'admin_system') NOT NULL DEFAULT 'guest' AFTER `id`;");
+				$adminLevels = "";
+				$eduLevels = education_levels(true);
+
+				foreach($eduLevels as $key => $level) {
+					if ($level == end($eduLevels)){
+						$adminLevels.="'admin_".$level."'";
+					} else {
+						$adminLevels.="'admin_".$level."', ";
+					}
+				}
+
+				DB::statement("ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', ".$adminLevels.") NOT NULL DEFAULT 'guest' AFTER `id`;");
 			}
 		}
 	}
@@ -39,5 +50,6 @@ class User extends Migration{
 	 */
 	public function down(){
 		Schema::dropIfExists('users');
+
 	}
 }

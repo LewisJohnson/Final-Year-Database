@@ -30,69 +30,18 @@ class DatabaseSeeder extends Seeder{
 		// factory(SussexProjects\TopicUg::class, 53)->create();
 		// factory(SussexProjects\TopicMasters::class, 53)->create();
 
-		$id = Uuid::generate()->string;
-		DB::table('informatics_users')->insert([
-			'id' => $id,
-			 'first_name' => 'MSc',
-			 'last_name' => 'Admin',
-			 'privileges' => "admin_system, admin_ug, admin_masters",
-			 'programme' => 'sys',
-			 'username' => 'msc_admin',
-			 'email' => 'msc_admin@susx.ac.uk',
-			 'password' => bcrypt('admin')
-		]);
+
+		DB::statement("INSERT INTO `informatics_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('1', 'supervisor,admin_ug,admin_pg', 'Lewis', 'Johnson', 'lj234', '$2y$10\$WY/ItPPqFwr8kumHrzImFeAwP1Vvy9uY.4BTP2sNG62hqpsanvO96', 'none', 'lj234@susx.com');");
 
 		DB::table('informatics_supervisors')->insert([
-			 'id' => $id,
+			 'id' => 1,
 			 'title' => 'Prof.',
-			 'project_load_masters' => 8,
+			 'project_load_pg' => 8,
 			 'project_load_ug' => 6,
-			 'take_students_masters' => true,
-			 'accept_email_masters' => true,
+			 'take_students_pg' => true,
+			 'accept_email_pg' => true,
 			 'take_students_ug' => true,
 			 'accept_email_ug' => true,
 		]);
 	}
 }
-
-		// for ($i=1; $i < 100; $i++) {
-		// 	for ($j=1; $j < rand(2, 10); $j++) {
-		// 		if($j == 1){
-		// 			DB::table('project_topics')->insert([
-			//  			'project_id' => $i,
-			//  			'topic_id' => $j,
-			//  			'primary' => true
-			//  		]);
-		// 		} else {
-		// 			DB::table('project_topics')->insert([
-			//  			'project_id' => $i,
-			//  			'topic_id' => $j,
-			//  			'primary' => false
-			//  		]);
-		// 		}
-		// 	}
-		// }
-
-<<<<<<< HEAD
-		// DB::table('users')->insert([
-		// 	 'id' => 2,
-		// 	 'first_name' => 'MSc',
-		// 	 'last_name' => 'Admin',
-		// 	 'access_type' => "admin_pg",
-		// 	 'username' => 'msc_admin',
-		// 	 'email' => 'msc_admin@susx.ac.uk',
-		// 	 'password' => bcrypt('admin')
-		// ]);
-
-		// DB::table('supervisors')->insert([
-		// 	 'id' => 2,
-		// 	 'title' => 'Prof.',
-		// 	 'project_load_pg' => 8,
-		// 	 'project_load_ug' => 6,
-		// 	 'take_students_pg' => true,
-		// 	 'accept_email_pg' => true,
-		// 	 'take_students_ug' => true,
-		// 	 'accept_email_ug' => true,
-		// ]);
-=======
->>>>>>> origin/master

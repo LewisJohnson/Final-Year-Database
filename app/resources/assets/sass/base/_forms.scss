@@ -189,7 +189,7 @@ button{
 		opacity: 1;
 	}
 
-	.slider {
+	.slider{
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -248,11 +248,26 @@ button{
 
 .button--small{
 	padding: 4px 12px;
+	@include transition--medium();
 }
 
 a.button--small{
 	display: inline-block;
 	font-size: 13.4px;
+}
+
+.hover--light{
+	@include transition--medium();
+	&:hover{
+		color: white;
+	}
+}
+
+.hover--dark{
+	@include transition--medium();
+	&:hover{
+		color: black;
+	}
 }
 
 .button--svg{
