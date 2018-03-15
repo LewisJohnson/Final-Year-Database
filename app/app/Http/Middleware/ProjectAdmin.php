@@ -6,6 +6,7 @@ use Closure;
 use Session;
 
 class ProjectAdmin{
+	
 	/**
 	 * Handle an incoming request.
 	 *

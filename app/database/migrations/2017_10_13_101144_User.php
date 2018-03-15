@@ -28,9 +28,12 @@ class User extends Migration{
 				});
 
 				$adminLevels = "";
+				$guestLevels = "";
 				$eduLevels = education_levels(true);
 
 				foreach($eduLevels as $key => $level) {
+					$guestLevels.="'guest_".$level."'";
+
 					if ($level == end($eduLevels)){
 						$adminLevels.="'admin_".$level."'";
 					} else {
@@ -38,7 +41,7 @@ class User extends Migration{
 					}
 				}
 
-				DB::statement("ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('guest', 'student', 'staff', 'supervisor', ".$adminLevels.") NOT NULL DEFAULT 'guest' AFTER `id`;");
+				DB::statement("ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET( ."$adminLevels.", 'student', 'staff', 'supervisor', ".$adminLevels.") NOT NULL DEFAULT 'guest' AFTER `id`;");
 			}
 		}
 	}

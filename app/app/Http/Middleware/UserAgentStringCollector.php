@@ -8,6 +8,7 @@ use SussexProjects\UserAgentString;
 use Closure;
 
 class UserAgentStringCollector{
+	
 	/**
 	 * Handle an incoming request.
 	 *

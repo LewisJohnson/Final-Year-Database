@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Closure;
 
 class Student{
+	
 	/**
 	 * Handle an incoming request.
 	 *

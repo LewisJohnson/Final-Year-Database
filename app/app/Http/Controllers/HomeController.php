@@ -23,15 +23,15 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
-		preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
-		if(count($matches)<2){
-			preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
-		}
+		// preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
+		// if(count($matches)<2){
+		// 	preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
+		// }
 
-		if (count($matches)>1){
-			//Then we're using IE
-			return view('help.ie');
-		}
+		// if (count($matches)>1){
+		// 	//Then we're using IE
+		// 	return view('help.ie');
+		// }
 		return view('index');
 	}
 

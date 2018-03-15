@@ -126,7 +126,7 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Indicates if authenticated used is a masters project administrator.
+	 * Indicates if authenticated used is an administrator of the parameters education level.
 	 *
 	 * @return boolean
 	 */
@@ -140,7 +140,14 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isProjectAdmin(){
-		return $this->isUgAdmin() || $this->isPgAdmin();
+		$isProjectAdmin = false;
+
+		foreach (education_levels(true) as $key => $level) {
+			if(in_array("admin_".$level, $this->getPrivileges())){
+				$isProjectAdmin = true;
+			}
+		}
+		return $isProjectAdmin;
 	}
 
 	/**
@@ -152,6 +159,32 @@ class User extends Authenticatable{
 		return in_array("admin_system", $this->getPrivileges());
 	}
 
+
+	public function allowedEducationLevel(){
+		$allowedLevels = array();
+
+		foreach (education_levels(true) as $key => $level) {
+			if(in_array("admin_".$level, $this->getPrivileges())){
+				array_push($allowedLevels, $level);
+			}
+		}
+
+		foreach (education_levels(true) as $key => $level) {
+			if(in_array("guest_".$level, $this->getPrivileges())){
+				array_push($allowedLevels, $level);
+			}
+		}
+
+		if($this->isSupervisor()){
+			// Adds all education levels
+			foreach (education_levels(true) as $key => $level) {
+				if(!in_array($level, $this->getPrivileges())){
+					array_push($allowedLevels, $level);
+				}
+			}
+		}
+		return $allowedLevels;
+	}
 
 	/**
 	 * Returns authenticated users privileges as a pretty string.
@@ -197,7 +230,6 @@ class User extends Authenticatable{
 		return $returnString;
 	}
 
-
 	/**
 	 * Returns authenticated users privileges as a a PHP array.
 	 *
@@ -206,7 +238,6 @@ class User extends Authenticatable{
 	public function getPrivileges(){
 		return explode(',', $this->privileges);
 	}
-
 
 	/**
 	 * Returns student type (undergraduate or postgraduate).

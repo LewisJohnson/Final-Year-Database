@@ -5,8 +5,8 @@ use Auth;
 use Closure;
 use Session;
 
-class SupervisorOrAdmin
-{
+class SupervisorOrAdmin{
+	
 	/**
 	 * Handle an incoming request.
 	 *

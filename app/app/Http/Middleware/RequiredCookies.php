@@ -1,12 +1,11 @@
 <?php
-
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
 use Cookie;
 
-class RequiredCookies
-{
+class RequiredCookies{
+
     /**
      * Handle an incoming request.
      *
@@ -22,6 +21,10 @@ class RequiredCookies
 
         if(Cookie::get('accessibility-contrast') == null){
             Cookie::queue('accessibility-contrast', false, 525600);
+        }
+
+        if(empty(Cookie::get('favourite_projects'))){
+            Cookie::queue('favourite_projects', null, 525600);
         }
         return $next($request);
     }

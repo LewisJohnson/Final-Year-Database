@@ -5,6 +5,7 @@ use Closure;
 use Session;
 
 class DepartmentCheck{
+	
 	/**
 	 * Handle an incoming request.
 	 *

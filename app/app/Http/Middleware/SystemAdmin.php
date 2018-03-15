@@ -5,8 +5,8 @@ use Auth;
 use Closure;
 use Session;
 
-class SystemAdmin
-{
+class SystemAdmin{
+	
 	/**
 	 * Handle an incoming request.
 	 *

@@ -26,14 +26,10 @@ class SuccessfulLogin
 	 */
 	public function handle(Login $event){
 		if($event->user->isStudent()){
-			Session::put('section', $event->user->studentType());
-
-			if(empty(Cookie::get('favourite_projects'))){
-				Cookie::queue('favourite_projects', null, 525600);
-			}
+			Session::put('education_level', $event->user->studentType());
 		} else {
-			// Just as a default
-			Session::put('section', 'ug');
+			// Just as a default for supervisors
+			Session::put('education_level', current($event->user->allowedEducationLevel()));
 		}
 
 		$event->user->last_login = new Carbon;

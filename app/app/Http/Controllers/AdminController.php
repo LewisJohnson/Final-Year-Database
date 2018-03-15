@@ -26,8 +26,6 @@ use SussexProjects\UserAgentString;
 */
 class AdminController extends Controller{
 	public function __construct(){
-		// todo: uncomment
-		// $this->middleware('auth');
 		$this->paginationCount = 100;
 	}
 
@@ -197,6 +195,7 @@ class AdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function loginAs($id){
+		// todo: check if they are allowed
 		$user = User::findOrFail($id);
 		Auth::login($user);
 

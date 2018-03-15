@@ -6,6 +6,7 @@ use Closure;
 use Session;
 
 class Supervisor{
+	
 	/**
 	 * Handle an incoming request.
 	 *

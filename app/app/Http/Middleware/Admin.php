@@ -6,6 +6,7 @@ use Closure;
 use Session;
 
 class Admin{
+	
 	/**
 	 * Handle an incoming request.
 	 *

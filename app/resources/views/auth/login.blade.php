@@ -1,6 +1,6 @@
 @if(isset($view))
 	@include ('partials.html-head')
-	@include ('partials.header-guest')
+	@include ('partials.header')
 
 	<div class="width--600 centered card" style="margin-top: 3rem;">
 		<h1>LOG IN</h1>

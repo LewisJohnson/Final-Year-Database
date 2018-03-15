@@ -6,6 +6,7 @@ use Closure;
 use Cookie;
 
 class Accessibility{
+	
 	/**
 	 * Handle an incoming request.
 	 *
@@ -14,8 +15,7 @@ class Accessibility{
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next)
-	{
+	public function handle($request, Closure $next){
 		if($request->query("largeFont") != null){
 			Cookie::queue('accessibility-font', $request->query("largeFont"), 525600);
 		}
