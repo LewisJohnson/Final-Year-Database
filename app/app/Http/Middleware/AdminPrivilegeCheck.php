@@ -8,8 +8,8 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
-use Session;
-use Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPrivilegeCheck{
 	

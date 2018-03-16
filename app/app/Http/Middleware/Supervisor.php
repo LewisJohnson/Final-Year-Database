@@ -9,7 +9,6 @@ namespace SussexProjects\Http\Middleware;
 
 use Illuminate\Support\Facades\Auth;
 use Closure;
-use Session;
 
 class Supervisor{
 	
@@ -26,6 +25,6 @@ class Supervisor{
 		}
 
 		// We don't need students knowing the route exists
-		abort(404);
+		return abort(404);
 	}
 }

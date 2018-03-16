@@ -57,8 +57,8 @@ class Topic extends Model{
 	 * 
 	 * Includes primary project pivot.
 	 *
-	 * @return Project
-	*/
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
+     */
 	public function projects(){
 		return $this->belongsToMany(Project::class, null, 'topic_id', 'project_id')->withPivot('primary');
 	}
@@ -69,11 +69,11 @@ class Topic extends Model{
 	 * @return Project
 	*/
 	public function projectsOnOffer(){
-		$this->projects->where('status', 'on-offer');
+		return $this->projects->where('status', 'on-offer');
 	}
 
 	/**
-	 * A HTML datalist of all topics.
+	 * A HTML data-list of all topics.
 	 *
 	 * @return string
 	 */

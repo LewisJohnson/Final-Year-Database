@@ -74,34 +74,66 @@ class Project extends Model{
 	 */
 	public $incrementing = false;
 
-	public function topics(){
+    /**
+     * Returns all topics this project has including a primary topic pivot.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Topics
+     */
+    public function topics(){
 		$projectTopic = new ProjectTopic;
 		return $this->belongsToMany(Topic::class, $projectTopic->getTable(), 'project_id', 'topic_id')->withPivot('primary');
 	}
 
-	// Student proposed project
-	public function student(){
+    /**
+     * Returns the project's supervisor (Owner)
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function supervisor(){
+        return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
+    }
+
+    /**
+     * This should only be called on student proposed projects.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function student(){
 		return $this->belongsTo(Student::class, 'id', 'student_id');
 	}
 
-	public function getPrimaryTopic(){
+    /**
+     * Returns the projects primary project.
+     *
+     * Otherwise null is returned.
+     *
+     * @return Topic
+     */
+    public function getPrimaryTopic(){
 		foreach ($this->topics as $key => $value) {
 			if($value->pivot->primary){
 				return $value;
 			}
 		}
+		return null;
 	}
 
-	public function getStudentsWithThisProjectSelected(){
+    /**
+     * Returns all students with this project selected.
+     *
+     * @return Student
+     */
+    public function getStudentsWithThisProjectSelected(){
 		return Student::where('project_id', $this->id)->where('project_status', 'selected')->get();
 	}
 
-	public function getAcceptStudent(){
+    /**
+     * Returns the student who is accepted to undertake this project.
+     *
+     * @return Student
+     */
+    public function getAcceptStudent(){
 		return Student::where('project_id', $this->id)->where('project_status', 'accepted')->first();
-	}
-
-	public function supervisor(){
-		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}
 
 	/**

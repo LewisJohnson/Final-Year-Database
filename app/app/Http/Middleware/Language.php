@@ -8,10 +8,8 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
-use Session;
-use App;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class Language {
 

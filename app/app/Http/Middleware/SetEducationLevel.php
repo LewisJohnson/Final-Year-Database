@@ -8,7 +8,7 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
-use Session;
+use Illuminate\Support\Facades\Session;
 	
 class SetEducationLevel{
 

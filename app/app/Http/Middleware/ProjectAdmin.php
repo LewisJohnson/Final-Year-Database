@@ -7,9 +7,8 @@
 
 namespace SussexProjects\Http\Middleware;
 
-use Auth;
 use Closure;
-use Session;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectAdmin{
 	
@@ -26,6 +25,6 @@ class ProjectAdmin{
 		}
 
 		// We don't need students knowing the route exists
-		abort(404);
+		return abort(404);
 	}
 }

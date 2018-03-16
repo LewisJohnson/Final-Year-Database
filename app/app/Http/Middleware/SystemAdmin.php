@@ -7,9 +7,8 @@
 
 namespace SussexProjects\Http\Middleware;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Closure;
-use Session;
 
 class SystemAdmin{
 	
