@@ -50,9 +50,9 @@ class TransactionController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function byProject(){
-		$projects = Project::all();
-		return view('projects.index')
-			->with('projects', $projects)
-			->with('view', 'transaction');
+		// $projects = Project::all();
+		// return view('projects.index')
+		// 	->with('projects', $projects)
+		// 	->with('view', 'transaction');
 	}
 }

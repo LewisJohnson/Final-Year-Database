@@ -1,4 +1,10 @@
-<div class="section section--full-width shadow-2dp">
+@extends('layouts.app')
+@section ('content')
+@section('scripts')
+	<script src="{{ asset('js/views/supervisor.js') }}"></script>
+@endsection
+
+<div class="shadow-2dp">
 	<div class="header">
 		@include('svg.file')
 		<h2>Projects</h2>
@@ -39,3 +45,5 @@
 		</div>
 	</div>
 </div>
+
+@endsection

@@ -22,7 +22,7 @@
 			<table class="shadow-2dp table--dark-head " id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>
 					<tr>
-						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}(Load: {{ $supervisor->getProjectLoad() }}) @endif</th>
+						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>
 						
 						@if($supervisor->isTakingStudents())
 							<th>@lang('messages.supervisor_open_to_offers')</th>
@@ -72,7 +72,7 @@
 						@endforeach
 					@else
 						<tr>
-							<td>@lang('messages.supervisor_no_Arrangements')</td>
+							<td>@lang('messages.supervisor_no_arrangements')</td>
 							<td></td>
 							<td></td>
 						</tr>

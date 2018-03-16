@@ -361,7 +361,7 @@ import '../js/components';
 					animateFromElement : false,
 					backgroundDismiss: true,
 					title: 'HTML Editor Info',
-					content: 'All HTML 5 elements are valid for the description field, excluding; <br><br> <ul><li>Script tags</li><li>Heading tags</li></ul>',
+					content: 'All links you add will open in a new tab. All HTML 5 elements are valid for the description field, excluding; <br><br> <ul><li>Script tags</li><li>Heading tags</li><li>HTML root tags</li><li>Body tags</li></ul>',
 				});
 				break;
 		}

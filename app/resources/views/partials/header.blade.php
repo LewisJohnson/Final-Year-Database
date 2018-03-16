@@ -38,7 +38,7 @@
 			</ul>
 		</div>
 
-		@if(Session::get('educationLevel') != null)
+		@if(Session::get('education_level')!= null)
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
 		@else
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang('messages.homepage_main_header')</h1></a>

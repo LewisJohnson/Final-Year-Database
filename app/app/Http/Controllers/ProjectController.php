@@ -42,7 +42,7 @@ class ProjectController extends Controller{
 		'Core.CollectErrors' => true,
 		'Attr.ID.HTML5' => true,
 		'HTML.TargetBlank' => true,
-		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6'
+		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6,script,html,body'
 	];
 
 	public function __construct(){

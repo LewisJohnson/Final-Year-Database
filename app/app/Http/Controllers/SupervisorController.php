@@ -40,6 +40,16 @@ class SupervisorController extends Controller{
 	}
 
 	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function projectReport(){
+		return view('supervisors.project-report');
+	}
+	
+
+	/**
 	 * The supervisor report.
 	 *
 	 * @param  \Illuminate\Http\Request  $request

@@ -110,7 +110,7 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartment(Request $request){
-		if(in_array($request->department, departments())){
+		if(in_array($request->department, get_departments())){
 			if(Auth::user()){
 				Auth::logout();
 				session()->flash("message", "You have been logged out.");

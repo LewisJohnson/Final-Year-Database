@@ -136,7 +136,7 @@ class AdminController extends Controller{
 					$supervisor['project_load_'.Session::get('education_level')] = $request->project_load;
 				}
 
-				$supervisor'[take_students_'.Session::get('education_level')] = isset($request->take_students) ? true : false;
+				$supervisor['take_students_'.Session::get('education_level')] = isset($request->take_students) ? true : false;
 
 				$supervisor->save();
 			}

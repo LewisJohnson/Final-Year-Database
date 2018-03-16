@@ -62,5 +62,6 @@ return [
 	/* 4. REPORTS */
 	'supervisor_open_to_offers' => 'Open to offers',
 	'supervisor_closed_to_offers' => 'Currently not accepting offers',
+	'supervisor_no_arrangements' => 'No arrangements to be decided.',
 	'supervisor_no_accepted_students' => 'No students have been accepted yet.',
 ];

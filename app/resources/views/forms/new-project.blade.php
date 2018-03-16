@@ -14,7 +14,7 @@
 	<div class="form-field">
 		<label for="description">Description</label>
 			<div class="html-editor">
-				<textarea id="html-editor--input" required class="html-editor--input" maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
+				<textarea id="html-editor--input" required class="html-editor--input" maxlength="16777215" type="text" name="description" id="description"></textarea>
 			</div>
 	</div>
 
