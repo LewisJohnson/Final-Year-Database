@@ -405,7 +405,7 @@ class ProjectController extends Controller{
 		if(is_null($request->get("searchTerm")) || is_null($request->get("filter"))){
 			session()->flash("message", "Sorry, something went wrong with that request.");
 			session()->flash('message_type', 'error');
-			return redirect('/projects');
+			return redirect()->action('ProjectController@index', $request);
 		}
 
 		foreach ($filters as $selected) {
@@ -424,18 +424,11 @@ class ProjectController extends Controller{
 
 		session()->flash('search_filters', $selectedFilters);
 
-		if(Session::get('education_level') == "ug"){
-			$sessionDbPrefix = "projects_ug.";
-			$projects = ProjectUg::select('projects_ug.*', 'supervisors.take_students_ug')
-								->join('supervisors', 'projects_ug.supervisor_id', '=', 'supervisors.id')
-								->where('supervisors.take_students_ug', true);
-		} elseif(Session::get('education_level') == "pg") {
-			$sessionDbPrefix = "projects_pg.";
-			$projects = ProjectMasters::select('projects_pg.*', 'supervisors.take_students_pg')
-									->join('supervisors', 'projects_pg.supervisor_id', '=', 'supervisors.id')
-									->where('supervisors.take_students_pg', true);
-		}
+		$sessionDbPrefix = "projects_".Session::get('education_level').".";
 
+		$projects = Project::select('projects_'.Session::get('education_level').'.*', 'supervisors.take_students_'.Session::get('education_level').'')
+			->join('supervisors', 'projects_'.Session::get('education_level').'.supervisor_id', '=', 'supervisors.id')
+			->where('supervisors.take_students_'.Session::get('education_level').'', true);
 
 		// Title filter
 		if(in_array("title", $filters)){

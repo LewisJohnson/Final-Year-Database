@@ -38,10 +38,8 @@ class EditUser extends FormRequest
 			'last_name' => 'required|max:128',
 			'email' => 'required|max:128',
 			'privileges' => 'required',
-			
 			'title' => 'max:6',
-			'project_load_ug' => 'min:0|max:255',
-			'project_load_pg' => 'min:0|max:255',
+			'project_load_*' => 'min:0|max:255',
 		];
 	}
 

@@ -1,5 +1,5 @@
 <footer>
-	@if(config_json("footer.accessibility_buttons.value") == true)
+	@if(get_config_json("footer.accessibility_buttons.value") == true)
 		<div class="footer-left">
 			<ul class="hl">
 				<li>
@@ -31,7 +31,7 @@
 		@endif
 	</div>
 
-	@if(config_json("footer.rainbow.value") == true)
+	@if(get_config_json("footer.rainbow.value") == true)
 		<div class="flex--full rainbow">
 			<div></div>
 			<div></div>

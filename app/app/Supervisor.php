@@ -56,28 +56,86 @@ class Supervisor extends User{
 		return $this->hasOne(User::class, 'id');
 	}
 
-	public function takeStudents(){
-		if(Session::get('education_level') == "ug"){
-			return $this->take_students_ug;
-		} elseif(Session::get('education_level') == "pg") {
-			return $this->take_students_pg;
+
+	/**
+	 * Determines if the superior is accepting emails.
+	 * 
+	 * NOTICE: The return value is dynamic, depending on session education level.
+	 *
+	 * @param String $educationLevel An optional education level parameter
+	 * 
+	 * @return boolean Is supervisor accepting emails
+	 */
+	public function isAcceptingEmails($educationLevel = null){
+		if(isset($educationLevel)){
+			return $this["accept_email_".$educationLevel];
 		}
+
+		return $this["accept_email_".Session::get('education_level')];
 	}
 
-	public function getProjectsByStatus($status){
-		return Project::where("supervisor_id", $this->id)
-			->whereNull('student_id')
-			->where("status", "=", $status)
-			->get();
+	/**
+	 * Determines if the superior is taking students.
+	 * 
+	 * NOTICE: The return value is dynamic, depending on session education level.
+	 *
+	 * @param String $educationLevel An optional education level parameter
+	 * 
+	 * @return boolean Is supervisor taking students
+	 */
+	public function isTakingStudents($educationLevel = null){
+
+		if(isset($educationLevel)){
+			return $this["take_students_".$educationLevel];
+		}
+		return $this["take_students_".Session::get('education_level')];
 	}
 
-	public function getProjects(){
+	/**
+	 * The project load of the supervisor (Student load).
+	 * 
+	 * NOTICE: The return value is dynamic, depending on session education level.
+	 *
+	 * @param String $educationLevel An optional education level parameter
+	 * 
+	 * @return int Project load
+	 */
+	public function getProjectLoad($educationLevel = null){
+
+		if(isset($educationLevel)){
+			return $this["project_load_".$educationLevel];
+		}
+
+		return $this["project_load_".Session::get('education_level')];
+	}
+
+	/**
+	 * A list of projects the supervisor has created (Owner).
+	 *
+	 * @param String $status A project status to add the where clause
+	 * 
+	 * @return Project A collection of projects
+	 */
+	public function getProjects($status = null){
+		if(isset($status)){
+			return Project::where("supervisor_id", $this->id)
+				->whereNull('student_id')
+				->where("status", "=", $status)
+				->get();
+		}
+
 		return Project::where("supervisor_id", $this->id)
 			->orderBy('status', 'asc')
 			->whereNull('student_id')
 			->get();
 	}
 
+
+	/**
+	 * A list of students who have selected a project from this supervisor.
+	 * 
+	 * @return Array A key/value array where the key is the student and the value is their selected project
+	 */
 	public function getSelectedStudents(){
 		$students = Student::all();
 		$offers = array();
@@ -105,6 +163,11 @@ class Supervisor extends User{
 		return $offers;
 	}
 
+	/**
+	 * A list of students who have been accepted to undertake a project from this supervisor
+	 * 
+	 * @return Array A key/value array where the key is the student and the value is the project they are accepted for
+	 */
 	public function getAcceptedStudents(){
 		$students = Student::all();
 		$offers = array();
@@ -132,6 +195,11 @@ class Supervisor extends User{
 		return $offers;
 	}
 
+	/**
+	 * A list of students who have proposed a project to this supervisor
+	 * 
+	 * @return Student Array A key/value array where the key is the student and the value is their proposed project
+	 */
 	public function getStudentProjectProposals(){
 		$students = Student::all();
 		$offers = array();
@@ -162,7 +230,12 @@ class Supervisor extends User{
 		return $offers;
 	}
 
-	public function getSupervisingStudents(){
+	/**
+	 * A list of students this supervisor is second supervisor (marker) too.
+	 * 
+	 * @return Student Array A key/value array where the key is the student and the value is their project
+	 */
+	public function getSecondSupervisingStudents(){
 		$students = Student::all();
 		$offers = array();
 

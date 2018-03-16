@@ -3,7 +3,7 @@
 
 	<div class="flex flex--row" style="background: rgb(52, 61, 70);">
 		<ul class="hl">
-			@foreach (departments() as $key => $department)
+			@foreach (get_departments() as $key => $department)
 				<li>
 					<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 							{{ csrf_field() }}
@@ -16,7 +16,7 @@
 
 		@if(Auth::check())
 			<ul class="hl ml-auto">
-				@foreach (education_levels() as $key => $level)
+				@foreach (get_education_levels() as $key => $level)
 					<li>
 						<a href="?educationLevel={{ $level['shortName'] }}" class="button--small hover--light td-none @if(Session('education_level') == $level["shortName"])button--accent @endif" >{{ ucfirst($level["longName"]) }}</a>
 					</li>
@@ -25,9 +25,9 @@
 		@endif
 	</div>
 
-	<header style="background: {{ config_json('header.background.value') }}">
+	<header style="background: {{ get_config_json('header.background.value') }}">
 		<div class="logo-container">
-			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ config_json("header.logo_url.value") }}')"></a>
+			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 		</div>
 
 		<div class="hamburger-container" role="button" aria-label="Toggles the mobile navigation menu.">

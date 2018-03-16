@@ -29,8 +29,17 @@ class TransactionController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(){
-		Transaction::orderBy('transaction_date', 'desc')->get();
-		return view('admin.transactions')->with('transactions', $transactions);
+		$topicTransactions = Transaction::where('type', 'topic')->orderBy('transaction_date', 'desc')->get();
+		$projectTransactions = Transaction::where('type', 'project')->orderBy('transaction_date', 'desc')->get();
+		$studentTransactions = Transaction::where('type', 'student')->orderBy('transaction_date', 'desc')->get();
+		$markerTransactions = Transaction::where('type', 'marker')->orderBy('transaction_date', 'desc')->get();
+
+		// 'topic','project','student','marker'
+		return view('admin.transactions')
+		->with('topicTransactions', $topicTransactions)
+		->with('projectTransactions', $projectTransactions)
+		->with('studentTransactions', $studentTransactions)
+		->with('markerTransactions', $markerTransactions);
 	}
 
 	/**

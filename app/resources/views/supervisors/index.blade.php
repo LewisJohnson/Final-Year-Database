@@ -9,18 +9,14 @@
 		@include('svg.shield')
 		<div class="title">
 			<h1>{{ lang_sess("supervisor_hub_title") }}</h1>
-			@if(Session::get('education_level') == 'ug')
-				<p>Your <b>Undergraduate</b> project load is currently {{ Auth::user()->supervisor->project_load_ug }}.</p>
-			@elseif(Session::get('education_level') == 'masters')
-				<p>Your <b>Masters</b> project load is currently {{ Auth::user()->supervisor->project_load_pg }}.</p>
-			@endif
+			<p>Your <b>{{ Session::get('education_level') }}</b> project load is currently {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')] }}.</p>
 		</div>
 	</div>
 	<div class="supervisor hub">
 		@include('supervisors.partials.hub.selected-students')
 		@include('supervisors.partials.hub.accepted-students')
 		@include('supervisors.partials.hub.projects')
-		{{-- @include('supervisors.partials.hub.supervising-students') --}}
+		@include('supervisors.partials.hub.supervising-students')
 	</div>
 </div>
 @endsection

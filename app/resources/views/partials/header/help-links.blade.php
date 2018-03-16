@@ -1,7 +1,4 @@
-@php
-
-	$localePrefix = Session::get('education_level') == 'ug' ?  "messages_ug" : "messages_pg";
-@endphp
+{{ $localePrefix = "messages_".Session::get('education_level') }}
 
 @if(Lang::has($localePrefix.".help_link_1"))
 	@if($platform === "mobile")

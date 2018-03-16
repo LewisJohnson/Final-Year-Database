@@ -22,21 +22,12 @@
 			<table class="shadow-2dp table--dark-head " id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
 				<thead>
 					<tr>
-						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}@if(Session::get('education_level') == "ug") (Load: {{ $supervisor->project_load_ug }}) @else (Load: {{ $supervisor->project_load_pg }}) @endif</th>
+						<th style="width: 280px;">{{ $supervisor->user->getFullName() }}(Load: {{ $supervisor->getProjectLoad() }}) @endif</th>
 						
-						@if(Session::get('education_level') == "ug")
-							@if($supervisor->take_students_ug)
-								<th>@lang('messages.supervisor_open_to_offers')</th>
-							@else
-								<th>@lang('messages.supervisor_closed_to_offers')</th>
-						@endif
-
-						@elseif(Session::get('education_level') == "masters")
-							@if($supervisor->take_students_pg)
-								<th>@lang('messages.supervisor_open_to_offers')</th>
-							@else
-								<th>@lang('messages.supervisor_closed_to_offers')</th>
-							@endif
+						@if($supervisor->isTakingStudents())
+							<th>@lang('messages.supervisor_open_to_offers')</th>
+						@else
+							<th>@lang('messages.supervisor_closed_to_offers')</th>
 						@endif
 
 						<th></th>
@@ -45,7 +36,7 @@
 
 				<tbody>
 					{{-- SUPERVISOR PROJECTS --}}
-					@foreach($supervisor->getProjectsByStatus('on-offer') as $project)
+					@foreach($supervisor->getProjects('on-offer') as $project)
 						<tr>
 							<td>@if($loop->iteration == 1)<a href="{{ action(action('UserController@projects', $supervisor->user) )}}">Projects ({{count($supervisor->user->projects)}})</a>@endif</td>
 							<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
@@ -81,7 +72,7 @@
 						@endforeach
 					@else
 						<tr>
-							<td>@lang('messages.supervisor_no_arrangments')</td>
+							<td>@lang('messages.supervisor_no_Arrangements')</td>
 							<td></td>
 							<td></td>
 						</tr>

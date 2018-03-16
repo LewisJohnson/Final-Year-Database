@@ -6,7 +6,7 @@
 
 @endsection
 
-@if(config_json('user_agent.collect_user_agent.value'))
+@if(get_config_json('user_agent.collect_user_agent.value'))
 	<div class="centered width--1200">
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
@@ -31,7 +31,7 @@
 				<tr>
 					<th>User Agent</th>
 
-					@if(config_json('user_agent.collect_referrer.value'))
+					@if(get_config_json('user_agent.collect_referrer.value'))
 						<th>Referrer</th>
 					@else
 						<th></th>

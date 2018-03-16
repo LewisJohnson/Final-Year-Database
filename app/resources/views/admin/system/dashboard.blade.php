@@ -80,7 +80,7 @@
 
 						<h3>Existing</h3>
 						<ul class="department-list">
-							@foreach(departments() as $dep)
+							@foreach(get_departments() as $dep)
 								<li class="flex flex--row" style="margin-bottom: 5px">
 									<p>{{ ucfirst($dep) }}</p>
 									<button type="button" class="button button--danger ml-auto">DELETE</button>
@@ -107,10 +107,10 @@
 							{{ csrf_field() }}
 
 							<label for="names">Names</label>
-							<label class="description">{{ config_json("display.names.description") }}</label>
+							<label class="description">{{ get_config_json("display.names.description") }}</label>
 							<input type="hidden" name="names-json" value="display.names">
 							<select name="names" id="names">
-								@foreach(config_json("display.names.type") as $type)
+								@foreach(get_config_json("display.names.type") as $type)
 									<option @if($type == config_json("display.names.value")) selected @endif value="{{ $type }}">{{ ucfirst($type) }}</option>
 								@endforeach
 							</select>
@@ -132,21 +132,21 @@
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="user_agent">Collect user agent strings</p>
 								<label class="toggle">
-									<input type="checkbox" name="coolect_user_agent" id="coolect_user_agent"class="boolean-checkbox" @if(config_json('user_agent.collect_user_agent.value')) checked @endif>
+									<input type="checkbox" name="coolect_user_agent" id="coolect_user_agent"class="boolean-checkbox" @if(get_config_json('user_agent.collect_user_agent.value')) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-							<label class="description">{{ config_json("user_agent.collect_user_agent.description") }}</label>
+							<label class="description">{{ get_config_json("user_agent.collect_user_agent.description") }}</label>
 							<input type="hidden" name="coolect_user_agent-json" value="user_agent.collect_user_agent">
 
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="collect_referrer">Collect referrer url</p>
 								<label class="toggle">
-									<input type="checkbox" name="collect_referrer" id="collect_referrer" class="boolean-checkbox" @if(config_json('user_agent.collect_referrer.value')) checked @endif>
+									<input type="checkbox" name="collect_referrer" id="collect_referrer" class="boolean-checkbox" @if(get_config_json('user_agent.collect_referrer.value')) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-							<label class="description">{{ config_json("user_agent.collect_referrer.description") }}</label>
+							<label class="description">{{ get_config_json("user_agent.collect_referrer.description") }}</label>
 							<input type="hidden" name="collect_referrer-json" value="user_agent.collect_referrer">
 
 							<div class="form-field form-field--flex">
@@ -165,20 +165,20 @@
 
 							<div class="form-field">
 								<label for="header_logo_url">Logo URL</label>
-								<label class="description">{{ config_json("header.logo_url.description") }}</label>
-								<input type="text" name="header_logo_url" id="header_logo_url" value="{{ config_json("header.logo_url.value") }}">
+								<label class="description">{{ get_config_json("header.logo_url.description") }}</label>
+								<input type="text" name="header_logo_url" id="header_logo_url" value="{{ get_config_json("header.logo_url.value") }}">
 							</div>
 							<input type="hidden" name="header_logo_url-json" value="header.logo_url">
 
 							<div class="form-field">
 								<label for="header_background">Background</label>
-								<label class="description">{{ config_json("header.background.description") }}</label>
+								<label class="description">{{ get_config_json("header.background.description") }}</label>
 								<label class="description"> Accepted types:
-									@foreach(config_json("header.background.type") as $type)
+									@foreach(get_config_json("header.background.type") as $type)
 										<span>{{ $type }}@if(!$loop->last), @endif</span>
 									@endforeach
 								</label>
-								<input type="text" name="header_background" id="header_background" value="{{ config_json("header.background.value") }}">
+								<input type="text" name="header_background" id="header_background" value="{{ get_config_json("header.background.value") }}">
 							</div>
 
 							<input type="hidden" name="header_background-json" value="header.background">
@@ -200,21 +200,21 @@
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="accessibility_buttons">Show accessibility buttons</p>
 								<label class="toggle">
-									<input type="checkbox" name="accessibility_buttons" id="accessibility_buttons" class="boolean-checkbox" @if(config_json("footer.accessibility_buttons.value")) checked @endif>
+									<input type="checkbox" name="accessibility_buttons" id="accessibility_buttons" class="boolean-checkbox" @if(get_config_json("footer.accessibility_buttons.value")) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-							<label class="description">{{ config_json("footer.accessibility_buttons.description") }}</label>
+							<label class="description">{{ get_config_json("footer.accessibility_buttons.description") }}</label>
 							<input type="hidden" name="accessibility_buttons-json" value="footer.accessibility_buttons">
 
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="footer_rainbow">Show rainbow</p>
 								<label class="toggle">
-									<input type="checkbox" name="footer_rainbow" id="footer_rainbow" class="boolean-checkbox" @if(config_json("footer.rainbow.value")) checked @endif>
+									<input type="checkbox" name="footer_rainbow" id="footer_rainbow" class="boolean-checkbox" @if(get_config_json("footer.rainbow.value")) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
-							<label class="description">{{ config_json("footer.rainbow.description") }}</label>
+							<label class="description">{{ get_config_json("footer.rainbow.description") }}</label>
 							<input type="hidden" name="footer_rainbow-json" value="footer.rainbow">
 
 							<div class="form-field form-field--flex">

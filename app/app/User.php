@@ -112,24 +112,6 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Indicates if authenticated used is a undergraduate project administrator.
-	 *
-	 * @return boolean
-	 */
-	public function isUgAdmin(){
-		return in_array("admin_ug", $this->getPrivileges());
-	}
-
-	/**
-	 * Indicates if authenticated used is a masters project administrator.
-	 *
-	 * @return boolean
-	 */
-	public function isPgAdmin(){
-		return in_array("admin_pg", $this->getPrivileges());
-	}
-
-	/**
 	 * Indicates if authenticated used is an administrator of the parameters education level.
 	 *
 	 * @return boolean
@@ -216,7 +198,12 @@ class User extends Authenticatable{
 
         foreach ($privileges as $key => $value) {
 			$value = str_replace('admin', 'administrator', $value);
-			$value = str_replace('_ug', '_undergraduate', $value);
+
+			// Replaces short-hand names with long-hand names (e.g. _ug to _undergraduate)
+			foreach (get_education_levels() as $key => $level) {
+				$value = str_replace('_'.$level["shortName"], '_'.$level["longName"], $value);
+			}
+
 			$value = str_replace('_', ' ', $value);
 
 			$words = explode(' ', $value);

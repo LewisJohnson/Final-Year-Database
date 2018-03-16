@@ -109,7 +109,6 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	Route::get('admin/archive', 'AdminController@archiveView');
 	Route::post('admin/archive', 'AdminController@archive');
 
-	Route::get('admin/export', 'AdminController@export');
 	Route::get('admin/parameters', 'AdminController@parameters');
 
 	Route::get('admin/transactions', 'TransactionController@index');

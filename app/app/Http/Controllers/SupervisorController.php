@@ -49,15 +49,9 @@ class SupervisorController extends Controller{
 		$supervisors = Supervisor::all();
 
 		if($request->query("excludeClosedToOffer") === "true"){
-			if(Session::get('education_level') == "ug"){
-				$supervisors = $supervisors->filter(function ($supervisor, $key) {
-					return $supervisor->take_students_ug;
-				});
-			} else {
-				$supervisors = $supervisors->filter(function ($supervisor, $key) {
-					return $supervisor->take_students_pg;
-				});
-			}
+			$supervisors = $supervisors->filter(function ($supervisor, $key) {
+				return $supervisor['take_students_'.Session::get('education_level')];
+			});
 		}
 
 		return view('supervisors.report')->with("supervisors", $supervisors);
@@ -71,19 +65,6 @@ class SupervisorController extends Controller{
 	 */
 	public function acceptedStudentTable(){
 		return view('supervisors.partials.accepted-students-table');
-	}
-
-	/**
-	 * Displays transactions for projects owned by supervisor
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function transactions(){
-		// $projects = Auth::user()->projects->pluck('id');
-		// 	$transactions = Transaction::whereIn('project_id', $projects)->orderBy('transaction_date', 'desc')->get();
-
-		$transactions = [];
-		return view('supervisors.transactions')->with('transactions', $transactions);
 	}
 
 	/**
@@ -176,7 +157,6 @@ class SupervisorController extends Controller{
 
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}
-
 
 	/**
 	 * Undoes an accepted student.

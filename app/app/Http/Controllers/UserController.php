@@ -171,7 +171,8 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(User $user){
-		return view('users.edit')->with('user', $user);
+		return view('users.edit')
+		->with('user', $user);
 	}
 
 	/**
@@ -182,7 +183,7 @@ class UserController extends Controller{
 	 */
 	public function update(StoreUser $user){
 		dd($request);
-		return "null";
+		return null;
 	}
 
 
@@ -201,8 +202,8 @@ class UserController extends Controller{
 	 * - User can NOT be student and a supervisor
 	 * 
 	 * **AUTHENTICATION RULES**
-	 * - Undergraduate administrator can create guest, staff, student_ug and admin_ug.
-	 * - Masters administrator can create guest, staff, student_pg and admin_pg.
+	 * - EducationLevel_X administrator can create guest, staff, student_X and admin_X.
+	 * 		- Where X is typically undergraduate or postgraduate
 	 * - System administrator can create all types of users.
 	 * - Only administrators can create users.
 	 * 
@@ -213,13 +214,13 @@ class UserController extends Controller{
 		$amountOfPrivileges = count($privileges);
 		$amountOfAdminPrivileges = 0;
 		$amountOfStudentPrivileges = 0;
-
-		if(in_array("admin_ug", $privileges)){ $amountOfAdminPrivileges++; }
-		if(in_array("admin_pg", $privileges)){ $amountOfAdminPrivileges++; }
+		
 		if(in_array("admin_system", $privileges)){ $amountOfAdminPrivileges++; }
 
-		if(in_array("student_ug", $privileges)){ $amountOfStudentPrivileges++; }
-		if(in_array("student_pg", $privileges)){ $amountOfStudentPrivileges++; }
+		foreach (get_education_levels(true) as $key => $level) {
+			if(in_array("admin_".$level, $privileges)){ $amountOfAdminPrivileges++; }
+			if(in_array("student_".$level, $privileges)){ $amountOfStudentPrivileges++; }
+		}
 
 		if(in_array("guest", $privileges) && $amountOfPrivileges > 1){
 			// Guest is a unique privilege
@@ -245,17 +246,12 @@ class UserController extends Controller{
 			throw $error;
 		}
 
-		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isPgAdmin()){
-			if(in_array("admin_pg", $privileges) || in_array("student_pg", $privileges)){
-				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a postgraduate administrator or student."]]);
-				throw $error;
-			}
-		}
-
-		if(!Auth::user()->isSystemAdmin() || !Auth::user()->isUgAdmin()){
-			if(in_array("admin_ug", $privileges) || in_array("student_ug", $privileges)){
-				$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create an undergraduate administrator or student"]]);
-				throw $error;
+		foreach (get_education_levels() as $key => $level) {
+			if(!Auth::user()->isSystemAdmin() || !Auth::user()->isAdminOfEducationLevel($level)){
+				if(in_array("admin_".$level["shortName"], $privileges) || in_array("student_".$level["shortName"], $privileges)){
+					$error = ValidationException::withMessages([ "privileges" => ["You are not allowed to create a ".$level["longName"]." administrator or student."]]);
+					throw $error;
+				}
 			}
 		}
 

@@ -38,10 +38,10 @@
 					<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
 					<p>Students proposals {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }}.</p>
 					<p>Students accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }}.</p>
-					<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSupervisingStudents()) }} students.</p>
+					<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
 				</div>
 
-				@foreach(education_levels() as $level)
+				@foreach(get_education_levels() as $level)
 				
 				<div class="card card--half">
 					<h2>{{ ucfirst($level["longName"]) }} Supervisor</h2>
@@ -68,7 +68,7 @@
 				@endforeach
 			@endif
 
-			@foreach(education_levels() as $level)
+			@foreach(get_education_levels() as $level)
 				@if(Auth::user()->isAdminOfEducationLevel($level["shortName"]))
 					<div class="card card--half">
 						<h2>{{ ucfirst($level["longName"]) }} Administrator</h2>

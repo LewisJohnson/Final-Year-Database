@@ -31,8 +31,9 @@ use SussexProjects\UserAgentString;
  * @see SussexProjects\User
 */
 class AdminController extends Controller{
+
 	public function __construct(){
-		$this->paginationCount = 100;
+		$this->middleware('auth');
 	}
 
 	/**
@@ -61,7 +62,6 @@ class AdminController extends Controller{
 	public function dashboard(){
 		return view('admin.system.dashboard');
 	}
-
 
 	/**
 	 * The user agent string view.
@@ -132,17 +132,12 @@ class AdminController extends Controller{
 
 				$supervisor = Supervisor::findOrFail($id[0]);
 
-				if (Session::get('education_level') == "ug") {
-					if (isset($request->project_load)) {
-						$supervisor->project_load_ug = $request->project_load;
-					}
-					$supervisor->take_students_ug = isset($request->take_students) ? true : false;
-				} elseif (Session::get('education_level') == "pg") {
-					if (isset($request->project_load)) {
-						$supervisor->project_load_pg = $request->project_load;
-					}
-					$supervisor->take_students_pg = isset($request->take_students) ? true : false;
+				if (isset($request->project_load)) {
+					$supervisor['project_load_'.Session::get('education_level')] = $request->project_load;
 				}
+
+				$supervisor'[take_students_'.Session::get('education_level')] = isset($request->take_students) ? true : false;
+
 				$supervisor->save();
 			}
 		}
@@ -252,11 +247,7 @@ class AdminController extends Controller{
 				$project->save();
 			}
 
-			if (Session::get('education_level') == "ug") {
-				DB::table(Session::get("department").'_students_ug')->delete();
-			} elseif (Session::get('education_level') == "pg") {
-				DB::table(Session::get("department").'_students_pg')->delete();
-			}
+			DB::table(Stundet::$table)->delete();
 
 		});
 
@@ -315,14 +306,8 @@ class AdminController extends Controller{
 
 		foreach ($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
-
-			if(Session::get('education_level') == 'ug'){
-				$supervisor->project_load = $supervisor->project_load_ug;
-				$supervisor->target_load = ($supervisor->project_load_ug * 2) - $supervisor->accepted_student_count;
-			} elseif(Session::get('education_level') == 'pg'){
-				$supervisor->project_load = $supervisor->project_load_pg;
-				$supervisor->target_load = ($supervisor->project_load_pg * 2) - $supervisor->accepted_student_count;
-			}
+			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')];
+			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')] * 2) - $supervisor->accepted_student_count;
 
 			$supervisorLoadTotal += $supervisor->project_load;
 
@@ -360,12 +345,8 @@ class AdminController extends Controller{
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers 
 	*/
 	public function calculateSecondMarkers(Request $request){
-		if (Session::get('education_level') == "ug") {
-			DB::table(Session::get("department").'_students_ug')->update(array('marker_id' => null));
-		} elseif (Session::get('education_level') == "pg") {
-			DB::table(Session::get("department").'_students_pg')->update(array('marker_id' => null));
-		}
-
+		DB::table(Student::getTable())->update(array('marker_id' => null));
+		
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		// Assignment derived from slack
@@ -438,44 +419,8 @@ class AdminController extends Controller{
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 
-
-	/**
-	 * Exports tables to a local file and is downloaded on the client machine.
-	 *	
-	 * @param \Illuminate\Http\Request $request Table name abbreviated
-	 * @return \Illuminate\Http\Response JSON
-	*/
-	public function export(Request $request){
-		//todo: change to a temp file
-		if ($request->query("db") == "tran_ug") {
-			$filename = "transactions-ug [" . Carbon::now()->toDateString() . "].json";
-			$handle = fopen($filename, 'w+');
-			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
-			fclose($handle);
-		}
-
-		if ($request->query("db") == "tran_pg") {
-			$filename = "transactions-pg [" . Carbon::now()->toDateString() . "].json";
-			$handle = fopen($filename, 'w+');
-			fwrite($handle, json_encode(TransactionUg::all()->toArray(), JSON_PRETTY_PRINT));
-			fclose($handle);
-		}
-
-		if ($request->query("db") == "uas") {
-			$filename = "user-agent-string [" . Carbon::now()->toDateString() . "].json";
-			$handle = fopen($filename, 'w+');
-			fwrite($handle, json_encode(UserAgentString::all()->toArray(), JSON_PRETTY_PRINT));
-			fclose($handle);
-		}
-
-		$headers = array(
-			'Content-Type' => 'text/json',
-		);
-		
-		return response()->download($filename, $filename, $headers);
-	}
-
 	public function addNewDepartment(Request $request){
+		// todo: this
 		$exitCode = Artisan::call('migrate');
 
 		return response()->json(array('successful' => true));

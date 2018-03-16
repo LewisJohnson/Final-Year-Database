@@ -50,11 +50,7 @@
 				@foreach($supervisors as $supervisor)
 					<tr class="pointer" tabindex="0" data-marker-id="{{ $supervisor->id }}" data-marker-name="{{ $supervisor->user->getFullName() }}" disabled>
 						<td>{{ $supervisor->user->getFullName() }}</td>
-						@if(Session::get('education_level') == "ug")
-							<td>{{ $supervisor->project_load_ug }}</td>
-						@elseif(Session::get('education_level') == "masters")
-							<td>{{ $supervisor->project_load_pg }}</td>
-						@endif
+						<td>{{ $supervisor->getProjectLoad() }}</td>
 					</tr>
 				@endforeach
 			</tbody>

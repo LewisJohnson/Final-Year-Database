@@ -4,26 +4,13 @@
 <div class="centered width--1600">
 	<div id="report-header">
 		<h1>Report by Student</h1>
-		<h3>There are a total of <b>{{ $studentCount }}</b> masters students.</h3>
-	</div>
-
-	<div class="button-group button-group--horizontal button-group--links">
-		@if(isset($_GET["excludeClosedToOffer"]))
-			<a class="chip external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report') }}">Closed to Offers</a>
-		@else
-			<a class="chip active external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report', 'excludeClosedToOffer=true') }}">Closed to Offers</a>
-		@endif
+		<h3>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h3>
 	</div>
 	
 	<div class="section-container card">
 		@foreach(SussexProjects\Project::getAllStatuses() as $status)
 			@php
-				if(Session::get('education_level') == "ug"){
-					$students = SussexProjects\StudentUg::Where('project_status', $status)->get();
-				} elseif(Session::get('education_level') == "masters"){
-					$students = SussexProjects\StudentMasters::Where('project_status', $status)->get();
-				}
-
+				$students = SussexProjects\Student::Where('project_status', $status)->get();
 				$sortedStudents = $students->sortBy(function ($student, $key) { return $student->user->last_name; });
 			@endphp
 			@if(count($sortedStudents) > 0)
@@ -54,7 +41,7 @@
 						</div>
 					</div>
 				@else
-					<script>$("#report-header").append("There are no students in the {{ $status }} category.");</script>
+					<script>$("#report-header").append('<div class="config-danger"><b>There are no students in the {{ $status }} category.</b></div>');</script>
 				@endif
 		@endforeach
 	</div>

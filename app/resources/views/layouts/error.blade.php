@@ -11,7 +11,7 @@
 	<body>
 		<header class="error">
 			<div class="logo-container">
-				<a href="{{ action('HomeController@index') }}" class="logo" style="background-image: url('{{ config_json("header.logo_url.value") }}')"></a>
+				<a href="{{ action('HomeController@index') }}" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 			</div>
 
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>Error {{ $exception->getStatusCode() }} ({{ $exception->getMessage() }})</h1></a>

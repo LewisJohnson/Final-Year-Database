@@ -72,6 +72,18 @@ if (!function_exists('get_education_levels')){
 	}
 }
 
+
+if (!function_exists('get_education_level')){
+	/**
+	 * Alias of get_education_levels
+	 *
+	 * @return see get_education_levels
+	 */
+	function get_education_level($shortName = null, $longName = null) {
+		return call_user_func_array('get_education_level', func_get_args());
+	}
+}
+
 if (!function_exists('get_departments')){
 	function get_departments() {
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
