@@ -9,13 +9,18 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('lang_sess')){
-    function lang_sess($key = null, $value = null){
-        $key = str_replace('"', '',$key);
-        $key = str_replace('\'', '',$key);
+	function lang_sess($key = null){
+		$key = str_replace('"', '',$key);
+		$key = str_replace('\'', '',$key);
+		$key = 'messages_'.Session::get('education_level')["shortName"].'.'.$key;
+		$string = Lang::get($key);
 
-        $key = 'messages_'.Session::get('education_level').'.'.$key;
-        return Lang::get($key);
-    }
+		if($string != $key){
+			return $string;
+		}
+
+		return null;
+	}
 }
 
 if (!function_exists('get_config_json')){

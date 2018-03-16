@@ -419,6 +419,11 @@ ul.dot-menu{
 .flex--stretch-children{ > *{ flex: 1; }}
 .flex--full{ flex: 0 1 100%; }
 
+
+// FLOATS
+.fl{ float: left; }
+.fr{ float: right; }
+
 // MARGINS
 .ml-auto{ margin-left: auto !important}
 .mr-auto{ margin-right: auto !important}

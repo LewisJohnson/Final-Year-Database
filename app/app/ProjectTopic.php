@@ -27,7 +27,7 @@ class ProjectTopic extends Model{
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
-			return Session::get('department').'_project_topics_'.Session::get('education_level');
+			return Session::get('department').'_project_topics_'.Session::get('education_level')["shortName"];
 		} else {
 			throw new Exception('Database not found.');
 		}

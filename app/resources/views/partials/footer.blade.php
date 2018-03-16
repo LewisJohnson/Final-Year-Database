@@ -24,7 +24,7 @@
 	<div class="footer-right">
 		<a class="button--small td-none" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 		<p class="seperator">|</p>
-		@if(Session::get('education_level')!= null)
+		@if(Session::get('education_level') != null)
 			<p>{{ lang_sess("footer_maintainer_text") }}</p>
 		@else
 			<p>@lang("messages.footer_maintainer_text")</p>

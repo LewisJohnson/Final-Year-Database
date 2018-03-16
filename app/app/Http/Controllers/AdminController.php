@@ -133,10 +133,10 @@ class AdminController extends Controller{
 				$supervisor = Supervisor::findOrFail($id[0]);
 
 				if (isset($request->project_load)) {
-					$supervisor['project_load_'.Session::get('education_level')] = $request->project_load;
+					$supervisor['project_load_'.Session::get('education_level')["shortName"]] = $request->project_load;
 				}
 
-				$supervisor['take_students_'.Session::get('education_level')] = isset($request->take_students) ? true : false;
+				$supervisor['take_students_'.Session::get('education_level')["shortName"]] = isset($request->take_students) ? true : false;
 
 				$supervisor->save();
 			}
@@ -306,8 +306,8 @@ class AdminController extends Controller{
 
 		foreach ($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
-			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')];
-			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')] * 2) - $supervisor->accepted_student_count;
+			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')["shortName"]];
+			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count;
 
 			$supervisorLoadTotal += $supervisor->project_load;
 

@@ -20,19 +20,6 @@ class Student extends Model{
 	use Traits\Uuids;
 	
 	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_students_'.Session::get('education_level');
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
-	
-	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
@@ -56,6 +43,19 @@ class Student extends Model{
 	}
 
 	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_students_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
+
+	/**
 	 * Returns the project this student has selected.
 	 *
 	 * @return Project
@@ -63,7 +63,12 @@ class Student extends Model{
 	public function project(){
 		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
-
+	
+	/**
+	 * Returns students' second supervisor (marker).
+	 *
+	 * @return Supervisor
+	 */
 	public function marker(){
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}

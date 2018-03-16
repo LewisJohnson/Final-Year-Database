@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 
-class SuccessfulLogin
-{
+class SuccessfulLogin{
 	/**
 	 * Create the event listener.
 	 *
@@ -25,19 +24,16 @@ class SuccessfulLogin
 	public function __construct(){}
 
 	/**
-	 * Handle the event.
+	 * Handles a successful login event.
 	 *
 	 * @param  Login  $event
 	 * @return void
 	 */
 	public function handle(Login $event){
-		if($event->user->isStudent()){
-			Session::put('education_level', $event->user->studentType());
-		} else {
-			// Just as a default for supervisors
-			Session::put('education_level', current($event->user->allowedEducationLevel()));
-		}
+		// Set education level
+		Session::put('education_level', current($event->user->allowedEducationLevel()));
 
+		// Set users last login and save
 		$event->user->last_login = new Carbon;
 		$event->user->save();
 	}

@@ -9,7 +9,8 @@ namespace SussexProjects\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Session;
-	
+use Illuminate\Support\Facades\Auth;
+
 class SetEducationLevel{
 
 	/**
@@ -20,11 +21,17 @@ class SetEducationLevel{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-
-		// Check if they are allowed
+		// Check to see if query param is set
 		if($request->query("educationLevel") != null){
-			if(in_array($request->query("educationLevel"), get_education_levels(true))){
-				Session::put("education_level", $request->query("educationLevel"));
+			// Check to see if they are allowed in this education level
+			if(in_array($request->query("educationLevel"), Auth::user()->allowedEducationLevel(true))){
+				// Check to see if the education level is valid
+				// We can't use in_array because we need the value to put into the session data
+				foreach (get_education_levels() as $key => $level) {
+					if($request->query("educationLevel") == $level["shortName"]){
+						Session::put("education_level", $level);
+					}
+				}
 			}
 		}
 		return $next($request);

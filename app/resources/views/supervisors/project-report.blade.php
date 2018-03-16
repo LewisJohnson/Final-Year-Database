@@ -8,8 +8,8 @@
 	<div class="centered width--1000 hub-container">
 		<div class="header">
 			<div>
-				<h1>{{ Session::get('education_level') }} Supervisor</h1>
-				<p>Your <b>{{ Session::get('education_level') }}</b> project load is currently {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')] }}.</p>
+				<h1>{{ Session::get('education_level')["longName"] }} Supervisor</h1>
+				<p>Your <b>{{ Session::get('education_level')["longName"] }}</b> project load is currently {{ Auth::user()->supervisor->getProjectLoad() }}.</p>
 			</div>
 		</div>
 		<div class="supervisor hub">

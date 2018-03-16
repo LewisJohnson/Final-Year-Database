@@ -1,6 +1,15 @@
-{{ $localePrefix = "messages_".Session::get('education_level') }}
+@if(lang_sess('help_link_1') != null)
 
-@if(Lang::has($localePrefix.".help_link_1"))
+	@section('help-links')
+		@for ($i = 1; $i <= 20; $i++)
+			@if(lang_sess('help_link_'.$i) != null)
+				<a target="_blank" 
+				href="{{ lang_sess('help_link_'.$i.'_url')}}" 
+				title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
+			@endif
+		@endfor
+	@endsection
+	
 	@if($platform === "mobile")
 		{{-- MOBILE --}}
 		<li class="nav-button">
@@ -12,11 +21,7 @@
 					</svg>
 				</div>
 				<div class="dropdown-content">
-					@for ($i = 1; $i <= 20; $i++)
-						@if(Lang::has($localePrefix.".help_link_".$i))
-							<a target="_blank" href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
-						@endif
-					@endfor
+					@yield('help-links')
 				</div>
 			</div>
 		</li>
@@ -26,11 +31,7 @@
 			<button class="sub-dropbtn">Links</button>
 			@include('svg.arrow-right')
 			<div class="dropdown-content shadow-2dp">
-				@for ($i = 1; $i <= 20; $i++)
-					@if(Lang::has($localePrefix.".help_link_".$i))
-						<a target="_blank" href="@lang($localePrefix.".help_link_".$i."_url")" title="@lang($localePrefix.".help_link_".$i)">@lang($localePrefix.".help_link_".$i)</a>
-					@endif
-				@endfor
+				@yield('help-links')
 			</div>
 		</div>
 	@endif

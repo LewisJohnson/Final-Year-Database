@@ -268,6 +268,7 @@ import '../js/components';
 	});
 
 
+	// HTML EDITOR
 	$('.html-editor').each(function(index, value){
 		$.ajax({
 			url: '/snippet?snippet=html-editor-toolbar',
@@ -365,6 +366,43 @@ import '../js/components';
 				});
 				break;
 		}
+	});
+
+
+	$('.student-undo-select').on('click', function(e) {
+		var card = $(this).parent();
+
+		$.confirm({
+			title: 'Undo Project Selection',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			autoClose: 'cancel|10000',
+			content: 'Are you sure you want to un-select your selected project?</b>',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function(){
+						$.ajax({
+							method: 'PATCH',
+							url: '/students/undo-selected-project',
+							success:function(response){
+								if(response.successful){
+									card.hide(400, function() { card.remove(); });
+									showNotification('success', 'Undo successful.');
+								} else {
+									showNotification('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: {},
+			}
+		});
 	});
 
 	/* ===============

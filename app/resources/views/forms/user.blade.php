@@ -96,7 +96,7 @@
 						<label for="privileges-admin-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} administrator</label>
 					</div>
 					<div class="checkbox">
-						<input type="checkbox" id="privileges-student-{{ $educationLevel['shortName'] }}" name="privileges[]" value="student_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isStudent() && $user->studentType() == $educationLevel['shortName']) checked @endif @endif>
+						<input type="checkbox" id="privileges-student-{{ $educationLevel['shortName'] }}" name="privileges[]" value="student_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == $educationLevel['shortName']) checked @endif @endif>
 						<label for="privileges-student-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} student</label>
 					</div>
 				@endif
@@ -137,7 +137,7 @@
 	<div class="form-field">
 		<label for="title">Title</label>
 		@include('forms.partials.error-block', ['name' => 'title'])
-		<input id="title" type="text" name="title" maxlength="6" @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif>
+	<input id="title" type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
 	</div>
 
 	<label>Email preference</label>

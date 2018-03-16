@@ -4,21 +4,21 @@
 			<ul>
 				@if(Auth::check())
 					@if(Auth::user()->isSupervisor())
-					<li class="nav-button">
-						<a class="icon" href="/supervisor" title="Supervisor">
-							@include('svg.shield')
-							<p>Supervisor</p>
-						</a>
-					</li>
+						<li class="nav-button">
+							<a class="icon" href="/supervisor" title="Supervisor">
+								@include('svg.shield')
+								<p>Supervisor</p>
+							</a>
+						</li>
 					@endif
 
 					@if(Auth::user()->isSupervisor())
-					<li class="nav-button">
-						<a class="icon" href="/admin" title="Administrator">
-							@include('svg.shield')
-							<p>Administrator</p>
-						</a>
-					</li>
+						<li class="nav-button">
+							<a class="icon" href="/admin" title="Administrator">
+								@include('svg.shield')
+								<p>Administrator</p>
+							</a>
+						</li>
 					@endif
 				
 					<h3>Browse</h3>
@@ -43,7 +43,7 @@
 								</svg>
 							</div>
 							<div class="dropdown-content">
-								<a href="{{ action('StudentController@showProposeProject') }}">Propose Project</a>
+								<a href="{{ action('StudentController@proposeProjectView') }}">Propose Project</a>
 								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 							</div>
 						</li>
@@ -126,7 +126,7 @@
 								<div class="dropdown-content shadow-2dp">
 									<ul class="icon-list">
 										<li>
-											<a class="icon" title="Show my projects" href="{{ action('ProjectController@create') }}">
+											<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
 												@include('svg.file')
 												<p>Project Report</p>
 											</a>
@@ -154,7 +154,7 @@
 						<button>Student</button>
 						@include('svg.arrow-down')
 						<div class="dropdown-content shadow-2dp">
-							<a href="{{ action('StudentController@showProposeProject') }}">Propose Project</a>
+							<a href="{{ action('StudentController@proposeProjectView') }}">Propose Project</a>
 							<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 						</div>
 					</li>

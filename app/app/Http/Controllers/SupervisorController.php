@@ -30,14 +30,14 @@ class SupervisorController extends Controller{
 		$this->middleware('auth');
 	}
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index(){
-		return view('supervisors.index');
-	}
+	// *
+	//  * Display a listing of the resource.
+	//  *
+	//  * @return \Illuminate\Http\Response
+	 
+	// public function index(){
+	// 	return view('supervisors.index');
+	// }
 
 	/**
 	 * Display a listing of the resource.
@@ -60,7 +60,7 @@ class SupervisorController extends Controller{
 
 		if($request->query("excludeClosedToOffer") === "true"){
 			$supervisors = $supervisors->filter(function ($supervisor, $key) {
-				return $supervisor['take_students_'.Session::get('education_level')];
+				return $supervisor['take_students_'.Session::get('education_level')["shortName"]];
 			});
 		}
 

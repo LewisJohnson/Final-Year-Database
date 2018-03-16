@@ -114,6 +114,8 @@ class User extends Authenticatable{
 	/**
 	 * Indicates if authenticated used is an administrator of the parameters education level.
 	 *
+	 * @param string ShortName of an education level
+	 * 
 	 * @return boolean
 	 */
 	public function isAdminOfEducationLevel($educationLevel){
@@ -151,29 +153,50 @@ class User extends Authenticatable{
      *
      * @return array Short-name array of education levels (e.g. [ug, pg])
      */
-    public function allowedEducationLevel(){
+    public function allowedEducationLevel($shortName = null, $longName = null){
 		$allowedLevels = array();
 
-		foreach (get_education_levels(true) as $key => $level) {
-			if(in_array("admin_".$level, $this->getPrivileges())){
-				array_push($allowedLevels, $level);
+		foreach (get_education_levels() as $key => $level) {
+			if(in_array("admin_".$level["shortName"], $this->getPrivileges())){
+				$allowedLevels[$level["longName"]] = $level;
 			}
 		}
 
-		foreach (get_education_levels(true) as $key => $level) {
-			if(in_array("guest_".$level, $this->getPrivileges())){
-				array_push($allowedLevels, $level);
+		foreach (get_education_levels() as $key => $level) {
+			if(in_array("guest_".$level["shortName"], $this->getPrivileges())){
+				$allowedLevels[$level["longName"]] = $level;
 			}
 		}
 
 		if($this->isSupervisor()){
 			// Adds all education levels
-			foreach (get_education_levels(true) as $key => $level) {
-				if(!in_array($level, $this->getPrivileges())){
-					array_push($allowedLevels, $level);
+			foreach (get_education_levels() as $key => $level) {
+				if(!in_array($level, $allowedLevels)){
+					$allowedLevels[$level["longName"]] = $level;
 				}
 			}
 		}
+
+		if($this->isStudent()){
+			array_push($allowedLevels, $this->studentType());
+		}
+
+		if($shortName){
+			$shortAllowedLevels = array();
+			foreach ($allowedLevels as $key => $level) {
+				array_push($shortAllowedLevels, $level["shortName"]);
+			}
+			return $shortAllowedLevels;
+		}
+
+		if($longName){
+			$longAllowedLevels = array();
+			foreach ($allowedLevels as $key => $level) {
+				array_push($longAllowedLevels, $level["longName"]);
+			}
+			return $longAllowedLevels;
+		}
+				
 		return $allowedLevels;
 	}
 
@@ -229,29 +252,42 @@ class User extends Authenticatable{
 	}
 
 	/**
+	 * Returns student type (undergraduate or postgraduate).
+	 * 
+	 * Do not try to move this to the student model.
+	 * It will cause an exception and no students will be able to log in.
+	 *
+	 * @return string
+	 */
+	public function studentType(){
+		// Temp variable
+		$currentEducationLevel = Session::get('education_level');
+
+		// Check to see if student is in any database
+		foreach(get_education_levels() as $key => $level) {
+			Session::put('education_level', $level);
+			if(Student::find($this->id) != null){
+				// Restore session from temp variable
+				Session::put('education_level', $currentEducationLevel);
+
+				// Return education level
+				return $level;
+			}
+		}
+		// Restore session from temp variable
+		Session::put('education_level', $currentEducationLevel);
+
+		// We couldn't find them in any student database
+		return null;
+	}
+
+	/**
 	 * Returns authenticated users privileges as a a PHP array.
 	 *
 	 * @return string[]
 	 */
 	public function getPrivileges(){
 		return explode(',', $this->privileges);
-	}
-
-	/**
-	 * Returns student type (undergraduate or postgraduate).
-	 *
-	 * @return string
-	 */
-	public function studentType(){
-		// todo: fix this
-		dd($this->student);
-		if($this->hasOne(StudentUg::class, 'id')->exists()){
-			return "ug";
-		}
-		if($this->hasOne(StudentMasters::class, 'id')->exists()){
-			return "pg";
-		}
-		return null;
 	}
 
 	/**

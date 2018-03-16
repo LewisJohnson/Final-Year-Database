@@ -22,11 +22,7 @@
 
 
 		<div class="section horizontal card">
-			@if(Session::get('education_level') == 'ug')
-				<h2>Undergraduate Students</h2>
-			@elseif(Session::get('education_level') == 'masters')
-				<h2>Masters Students</h2>
-			@endif
+			<h2>{{ Session::get('education_level')["longName"] }} Students</h2>
 
 			<ol class="order-list-js last-name-header-list-js" id="studentList" sorted="false" style="list-style: none">
 				@foreach($students as $student)

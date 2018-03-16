@@ -14,7 +14,7 @@
 					<label for="username">Username</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
 					{{-- todo: Remove value="admin" --}}
-					<input value="lj234" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+					<input value="student1" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
 
 				<div class="form-field  {{ $errors->has('password') ? ' has-error' : '' }}">
@@ -52,7 +52,7 @@
 				<div id="login-username" class="form-field">
 					<label for="username">Username</label>
 					{{-- todo: Remove value="admin" --}}
-					<input value="lj234" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+					<input value="student1" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
 
 				<div class="form-field">

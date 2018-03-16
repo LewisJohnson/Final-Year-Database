@@ -5,11 +5,26 @@
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
-			<div class="card card--margin-vertical">
+			<div class="card card--margin-vertical @if(Auth::user()->isStudent()) card--half @endif">
 				<h2>Your Privileges</h2>
 				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}</p>
 			</div>
 
+			@if(Auth::user()->isStudent())
+				<div class="card card--half">
+					<h2>Options</h2>
+					<p>You may hide your name from other students in the supervisor report.</p>
+					<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+						{{ csrf_field() }}
+						<div class="form-field">
+							<div class="checkbox">
+								<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
+								<label for="share_name">Share name</label>
+							</div>
+						</div>
+					</form>
+				</div>
+			@endif
 			@if(Session::get('seen-welcome') != true)
 				@if(Auth::user()->isSupervisor())
 					<div class="card">
@@ -94,8 +109,13 @@
 
 			@if(Auth::user()->isStudent())
 				<div class="card card--margin-vertical">
+					@if(Auth::user()->student->project_status == 'selected')
+						<a class="button button--danger student-undo-select fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
+					@endif
+
 					<h2>Your Project</h2>
 					<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
+
 					@if(Auth::user()->student->project_status != 'none')
 						@include ('projects.partials.student-project-preview', array('project'=> Auth::user()->student->project))
 					@endif
@@ -112,20 +132,6 @@
 					@else
 						<p title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
 					@endif
-				</div>
-
-				<div class="card card--margin-vertical">
-					<h2>Options</h2>
-					<p>You may hide your name from other students in the supervisor report.</p>
-					<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
-						{{ csrf_field() }}
-						<div class="form-field">
-							<div class="checkbox">
-								<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
-								<label for="share_name">Share name</label>
-							</div>
-						</div>
-					</form>
 				</div>
 			</div>
 		@endif

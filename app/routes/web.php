@@ -41,32 +41,50 @@ use Illuminate\Http\Request;
    1. WEB ROUTES
    ============= */
 Route::group(['middleware' => ['web', 'checkDepartment']], function() {
-	// Login Routes
+	/* LOGIN ROUTES (AUTHENTICATION) */
+	// Login form/view
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
+
+	// Perform login
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
+
+	// Perform logout
 	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
-	// Root Routes
+	/* ROOT ROUTES */
+	// Index page alias
 	Route::get('index', 'HomeController@index');
+
+	// Index page alias
 	Route::get('home', 'HomeController@index');
+
+	// Show home page (Default index route)
 	Route::get('/', 'HomeController@index');
 
-	// Help Routes
+	/* HELP ROUTES */
+	// Information page view
 	Route::get('information', 'HomeController@information');
+
+	// About page view
 	Route::get('about', 'HomeController@about');
+
+	// Help page view
 	Route::get('help', 'HomeController@help');
-
-	Route::get('admin/system/new-department', 'AdminController@addNewDepartment');
-
 });
 
 Route::group(['middleware' => ['web']], function() {
+	/* DEPARTMENT ROUTES */
+	// Set department view (Most users landing page)
 	Route::get('set-department', 'HomeController@setDepartmentView');
+
+	// Perform set department
 	Route::post('set-department', 'HomeController@setDepartment');
 
+	/* OTHER ROUTES */
+	// Get HTML code snippet
 	Route::get('snippet', 'HomeController@snippet');
 
-	// Easter-egg
+	// Teapot error code
 	Route::get('teapot', function(){ abort(418, "I'm a teapot"); });
 });
 
@@ -90,38 +108,71 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	Route::get('admin/students/import', 'AdminController@importStudents');
 
+	/* SUPERVISOR ARRANGMENTS ROUTES */
+	// Amend supervisor arrangements form 
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
+
+	// Updated supervisor arrangements POST
 	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
+	/* SECOND SUPERVISOR (Marker) ROUTES */
+	// Manual assign second marker view
 	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManualView');
+
+	// Automatically assign second marker view
 	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomaticView');
+
+	// Automatically assigned second markers table
 	Route::get('admin/marker-assign-automatic-table', 'AdminController@assignMarkerAutomaticTable');
+
+	// Marker report
 	Route::get('admin/marker-assign-report-table', 'AdminController@assignMarkerReportTable');
+
+	// Perform automatic second marker assignment
 	Route::post('admin/marker-calculate', 'AdminController@calculateSecondMarkers');
 
+	// Manually assign second marker
 	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
 
-	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
-
+	/* LOGIN AS ROUTES */
+	// Login as another user view
 	Route::get('admin/login-as', 'AdminController@loginAsView');
+
+	// Perform login alias
 	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
 
-	Route::get('admin/archive', 'AdminController@archiveView');
-	Route::post('admin/archive', 'AdminController@archive');
-
+	/* CONFIGURATION ROUTES */
+	// Yearly parameters configuration view
 	Route::get('admin/parameters', 'AdminController@parameters');
 
+	// End-of-Year archive view
+	Route::get('admin/archive', 'AdminController@archiveView');
+
+	// Perform End-of-Year archive
+	Route::post('admin/archive', 'AdminController@archive');
+
+	/* TRANSACTIONS ROUTES */
+	// Transactions by time view
 	Route::get('admin/transactions', 'TransactionController@index');
+
+	// Transactions by project view
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
-	// Topic routes
+	/* TOPIC ROUTES */
+	// Store new topic
 	Route::post('topics', 'TopicController@store');
+
+	// Update topic view
+	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
+
+	// Update topic
 	Route::patch('topics', 'TopicController@update');
+
+	// Delete topic
 	Route::delete('topics', 'TopicController@destroy');
 
-	/* ==============
-	   STUDENT ROUTES
-	   ============== */
+	/* STUDENT ROUTES */
+	// Store new student POST
 	Route::post('students', 'StudentController@store');
 });
 
@@ -149,17 +200,19 @@ Route::group(['middleware' => ['web', 'supervisor.admin', 'checkDepartment']], f
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
 
-
-	// Supervisor
-	Route::get('supervisor', 'SupervisorController@index');
-
+	// Project report view
 	Route::get('supervisor/project-report', 'SupervisorController@projectReport');
 
+	// Accepted student table (Used with AJAX)
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
 
-	// Project offers
+	// Accept student for their selected project
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');
+
+	// Reject student for their selected project
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
+
+	// Undo student's accepted project
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 });
 
@@ -167,13 +220,26 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
    7. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function() {
+
+	// Propose project view
 	Route::get('students/project-propose', 'StudentController@proposeProjectView');
+
+	// Propose project POST
 	Route::post('students/project-propose', 'StudentController@proposeProject');
+
+	// Project selection
 	Route::patch('students/project-select', 'StudentController@selectProject');
 
+	// Undo selected project
+	Route::patch('students/undo-selected-project', 'StudentController@undoSelectedProject');
+
+	// Share name with other student
 	Route::patch('students/share-name', 'StudentController@shareName');
 
+	// Add project to favourites
 	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
+
+	// Remove project from favourites
 	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
 });
 
@@ -185,9 +251,14 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	Route::get('users/{user}/projects', 'UserController@projects');
 
-	// Project
+	/* PROJECT ROUTES */
+	// Project page
 	Route::get('projects', 'ProjectController@index');
+
+	// Store new project POST
 	Route::post('projects', 'ProjectController@store');
+
+	// New project form
 	Route::get('projects/create', 'ProjectController@create');
 
 	// Projects by Supervisor
@@ -195,21 +266,36 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Projects by Topic
 	Route::get('projects/by-topic', 'ProjectController@showTopics');
+
+	// All projects with this topic
 	Route::get('projects/by-topic/{uuid}', 'ProjectController@byTopic');
 
-	// // Project search
+	// Project search
 	Route::get('projects/search', 'ProjectController@search');
 
-	// Project edit topic routes
+	/* PROJECT TOPIC ROUTES */ 
+	// Add topic to project
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
+
+	// Remove topic from project
 	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
+
+	// Update project primary topic
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
+	// Show project with this id
 	Route::get('projects/{uuid}', 'ProjectController@show');
+
+	// Delete project with this id
 	Route::delete('projects/{uuid}/delete', 'ProjectController@destroy');
+
+	// Update project with this id
 	Route::patch('projects/{uuid}/edit', 'ProjectController@update');
+
+	// Show update project form
 	Route::get('projects/{uuid}/edit', 'ProjectController@edit');
 
+	/* REPORT ROUTES */ 
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });

@@ -16,9 +16,9 @@
 
 		@if(Auth::check())
 			<ul class="hl ml-auto">
-				@foreach (get_education_levels() as $key => $level)
+				@foreach (Auth::user()->allowedEducationLevel() as $key => $level)
 					<li>
-						<a href="?educationLevel={{ $level['shortName'] }}" class="button--small hover--light td-none @if(Session('education_level') == $level["shortName"])button--accent @endif" >{{ ucfirst($level["longName"]) }}</a>
+						<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
 					</li>
 				@endforeach
 			</ul>
@@ -38,7 +38,7 @@
 			</ul>
 		</div>
 
-		@if(Session::get('education_level')!= null)
+		@if(Session::get('education_level') != null)
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
 		@else
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang('messages.homepage_main_header')</h1></a>

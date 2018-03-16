@@ -66,14 +66,15 @@ class ProjectController extends Controller{
 			Select if supervisor take_students is true
 			Select if on-offer
 			Select if NOT archived
+			Select if NOT archived
 			select if NOT student proposed
 		*/
 
 		$projects = Project::where('status', 'on-offer')
-		->whereNotNull('supervisor_id')->get();
+			->whereNotNull('supervisor_id')->get();
 
 		$filteredProjects = $projects->filter(function($project, $key) {
-			if(!$project->supervisor->takeStudents()){
+			if(!$project->supervisor->isTakingStudents()){
 				return false;
 			}
 			return true;
@@ -230,7 +231,6 @@ class ProjectController extends Controller{
 		$result = DB::transaction(function() use ($request) {
 			$project = new Project;
 			$transaction = new Transaction;
-
 			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
 
 			$project->fill(array(
@@ -424,11 +424,11 @@ class ProjectController extends Controller{
 
 		session()->flash('search_filters', $selectedFilters);
 
-		$sessionDbPrefix = "projects_".Session::get('education_level').".";
+		$sessionDbPrefix = "projects_".Session::get('education_level')["shortName"].".";
 
-		$projects = Project::select('projects_'.Session::get('education_level').'.*', 'supervisors.take_students_'.Session::get('education_level').'')
-			->join('supervisors', 'projects_'.Session::get('education_level').'.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_'.Session::get('education_level').'', true);
+		$projects = Project::select('projects_'.Session::get('education_level')["shortName"].'.*', 'supervisors.take_students_'.Session::get('education_level')["shortName"].'')
+			->join('supervisors', 'projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', 'supervisors.id')
+			->where('supervisors.take_students_'.Session::get('education_level')["shortName"].'', true);
 
 		// Title filter
 		if(in_array("title", $filters)){

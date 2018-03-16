@@ -227,6 +227,41 @@ class StudentController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
+	/**
+	 * Undoes selected project.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response JSON
+	 */
+	public function undoSelectedProject(Request $request){
+		if(Auth::user()->student->project == null){
+			return response()->json(array('error' => true, 'message' => "Something went wrong."));
+		}
+
+		if(Auth::user()->student->project_status != 'selected'){
+			return response()->json(array('error' => true, 'message' => "Something went wrong."));
+		}
+
+		DB::transaction(function() use ($request) {
+			$student = Auth::user()->student;
+			$transaction = new Transaction;
+			$transaction->fill(array(
+				'type' =>'project',
+				'action' =>'undo',
+				'project' => $student->project->id,
+				'student' => $student->id,
+				'supervisor' => $student->project->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+			$transaction->save();
+
+			$student->project_id = null;
+			$student->project_status = 'none';
+			$student->save();
+		});
+
+		return response()->json(array('successful' => true, 'message' => "You have un-selected a project."));
+	}
 
 	/**
 	 * Updates the students second marker

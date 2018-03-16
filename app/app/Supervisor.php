@@ -71,7 +71,7 @@ class Supervisor extends User{
 			return $this["accept_email_".$educationLevel];
 		}
 
-		return $this["accept_email_".Session::get('education_level')];
+		return $this["accept_email_".Session::get('education_level')["shortName"]];
 	}
 
 	/**
@@ -84,11 +84,11 @@ class Supervisor extends User{
 	 * @return boolean Is supervisor taking students
 	 */
 	public function isTakingStudents($educationLevel = null){
-
 		if(isset($educationLevel)){
 			return $this["take_students_".$educationLevel];
 		}
-		return $this["take_students_".Session::get('education_level')];
+
+		return $this["take_students_".Session::get('education_level')["shortName"]];
 	}
 
 	/**
@@ -101,12 +101,11 @@ class Supervisor extends User{
 	 * @return int Project load
 	 */
 	public function getProjectLoad($educationLevel = null){
-
 		if(isset($educationLevel)){
 			return $this["project_load_".$educationLevel];
 		}
 
-		return $this["project_load_".Session::get('education_level')];
+		return $this["project_load_".Session::get('education_level')["shortName"]];
 	}
 
 	/**
@@ -141,6 +140,10 @@ class Supervisor extends User{
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
+			if($student->project == null){
+				return false;
+			}
+
 			if($student->project->supervisor_id !== $this->id){
 				return false;
 			}
@@ -173,6 +176,10 @@ class Supervisor extends User{
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
+			if($student->project == null){
+				return false;
+			}
+
 			if($student->project->supervisor_id !== $this->id){
 				return false;
 			}
@@ -205,6 +212,10 @@ class Supervisor extends User{
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
+			if($student->project == null){
+				return false;
+			}
+
 			if($student->project->supervisor_id !== $this->id){
 				return false;
 			}
@@ -216,6 +227,7 @@ class Supervisor extends User{
 			if($student->project->staus !== 'proposed'){
 				return false;
 			}
+
 			return true;
 		});
 
@@ -240,6 +252,9 @@ class Supervisor extends User{
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
+			if($student->project == null){
+				return false;
+			}
 			return $student->project->marker_id == $this->id;
 		});
 
