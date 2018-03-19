@@ -24,8 +24,8 @@ class Project extends Migration{
 					$table->mediumText('description');
 					$table->string('skills', 255);
 					$table->enum('status', ['on-offer', 'withdrawn', 'student-proposed', 'archived']);
-					$table->unsignedBigInteger('supervisor_id')->nullable(true);
-					$table->unsignedBigInteger('student_id')->nullable(true);
+					$table->uuid('supervisor_id')->nullable(true);
+					$table->uuid('student_id')->nullable(true);
 					$table->timestampsTz();
 					$table->primary('id');
 				});

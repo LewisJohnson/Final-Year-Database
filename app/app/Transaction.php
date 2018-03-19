@@ -19,18 +19,6 @@ class Transaction extends Model{
 	use Traits\Uuids;
 	
 	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_transactions_'.Session::get('education_level')["shortName"];
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
-	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
@@ -50,4 +38,24 @@ class Transaction extends Model{
 	 * @var array
 	 */
 	protected $dates = ['transaction_date'];
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_transactions_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
 }

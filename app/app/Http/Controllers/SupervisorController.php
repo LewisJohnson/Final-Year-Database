@@ -194,7 +194,7 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		$message = $student->user->getFullName()." is no longer accepted.";
+		$message = $student->getName()." is no longer accepted.";
 		return response()->json(array('successful' => true, 'message' => $message));
 	}
 }

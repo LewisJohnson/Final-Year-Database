@@ -149,22 +149,6 @@ class UserController extends Controller{
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  \SussexProjects\User  $user
-	 * @return \Illuminate\Http\Response
-	 */
-	public function myProjects(User $user){
-		if(Auth::user() != $user){
-			abort(403);
-		}
-
-		return view('projects.index')
-			->with('projects', $user->projects)
-			->with('view', 'personal');
-	}
-
-	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  \SussexProjects\User  $user

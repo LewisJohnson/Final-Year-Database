@@ -1,6 +1,7 @@
 *.map
 phpdoc-*-*
 /docs
+\public
 
 #################
 ## Eclipse

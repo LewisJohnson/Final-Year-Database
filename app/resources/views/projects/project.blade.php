@@ -18,7 +18,7 @@
 		<h1 class="title">{{ $project->title }}</h1>
 
 		@if($view == "StudentProject")
-			<h2 class="supervisor">Proposed by {{ $student_name }} to {{ $project->supervisor->user->getFullName() }}</h2>
+			<h2 class="supervisor">Proposed by {{ $project->student->getName() }} to {{ $project->supervisor->user->getFullName() }}</h2>
 		@else
 			<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
 		@endif
@@ -65,19 +65,22 @@
 	<div class="button-group button-group--horizontal ">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 		{{-- STUDENT SELECT --}}
-		@if(Auth::user()->isStudent())
-			@if(Auth::user()->student->project_status == 'none')
-				<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
-					{{ csrf_field() }}
-					{{ method_field('PATCH') }}
-					<input type="hidden" name="project_id" value="{{ $project->id }}">
-					<button class="button button--raised button--accent">Select project</button>
-				</form>
-			@else
-				<button class="button button--raised button--accent" disabled>Select project</button>
+
+		@if($view != "StudentProject")
+			@if(Auth::user()->isStudent())
+				@if(Auth::user()->student->project_status == 'none')
+					<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+						{{ csrf_field() }}
+						{{ method_field('PATCH') }}
+						<input type="hidden" name="project_id" value="{{ $project->id }}">
+						<button class="button button--raised button--accent">Select project</button>
+					</form>
+				@else
+					<button class="button button--raised button--accent" disabled>Select project</button>
+				@endif
 			@endif
 		@endif
-
+		
 		@if($project->isOwnedByUser())
 			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 

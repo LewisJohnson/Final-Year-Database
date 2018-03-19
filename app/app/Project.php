@@ -51,14 +51,14 @@ class Project extends Model{
 	 *
 	 * @var array
 	 */
-	protected $guarded = ['supervisor', 'deleted_at'];
+	protected $guarded = ['supervisor'];
 
 	/**
 	 * The attributes that should are dates.
 	 *
 	 * @var array
 	 */
-	protected $dates = ['created_at'. 'updated_at', 'deleted_at'];
+	protected $dates = ['created_at', 'updated_at'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -99,7 +99,7 @@ class Project extends Model{
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function student(){
-		return $this->belongsTo(Student::class, 'id', 'student_id');
+		return $this->belongsTo(Student::class, 'student_id', 'id');
 	}
 
     /**

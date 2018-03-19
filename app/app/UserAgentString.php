@@ -36,4 +36,11 @@ class UserAgentString extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
 }

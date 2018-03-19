@@ -76,8 +76,13 @@
 	}
 }
 
-@media screen and (max-width: 970px){
+@media screen and (max-width: 1200px){
+	.main-content {
+		padding: 3rem 1rem;
+	}
+}
 
+@media screen and (max-width: 970px){
 	.card-container{
 		.card{
 			margin-bottom: 20px;

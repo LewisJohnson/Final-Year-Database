@@ -274,27 +274,6 @@ ul.dot-menu{
 	.icon{ padding: 6.5px; }
 }
 
-.favourite-container {
-	position: relative;
-	float: right;
-	margin-top: 1.6rem;
-
-	svg {
-		fill-opacity: 0.3;
-		fill: $text-color;
-
-		:hover { fill-opacity: 0.6; }
-		polygon { transition: .18s all ease; }
-	}
-
-	svg.favourite {
-		fill-opacity: 1;
-		fill: gold;
-
-		:hover{ fill-opacity: 1; }
-	}
-}
-
 .arrangements-container{
 	display: flex;
 

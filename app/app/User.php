@@ -60,7 +60,7 @@ class User extends Authenticatable{
 	 *
 	 * @var bool
 	 */
-	public $incrementing = true;
+	public $incrementing = false;
 
     /**
      * The table to retrieve data from.

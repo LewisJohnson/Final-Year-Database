@@ -12,8 +12,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
-{
+class LoginController extends Controller{
 	/*
 	|--------------------------------------------------------------------------
 	| Login Controller
@@ -27,7 +26,17 @@ class LoginController extends Controller
 
 	use AuthenticatesUsers;
 
-	public function username(){ return 'username'; }
+	/**
+	 * Handle an authentication attempt.
+	 *
+	 * @return Response
+	 */
+	public function username(){
+		$login = request()->input('username');
+		$field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+		request()->merge([$field => $login]);
+		return $field;
+	}
 
 	/**
 	 * Create a new controller instance.

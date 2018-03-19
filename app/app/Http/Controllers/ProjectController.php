@@ -101,28 +101,22 @@ class ProjectController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response The project view
 	 */
-	public function show(Request $request, $uuid) {
+	public function show(Project $project) {
 		$view = "SupervisorProject";
 		$studentName = "a student";
-		$project = Project::find($uuid);
 
 		if($project->status === "student-proposed"){
 			$view = "StudentProject";
-			if($project->student->share_name || Auth::user()->isSupervisor()){
-				$studentName = $project->student->user->getFullName();
-			}
 		}
 
-		if($request->query("preview") === "true"){
+		if(request()->query("preview") == true){
 			return view('projects.partials.project-preview')
 				->with('project', $project)
-				->with('student_name', $studentName)
 				->with('view', $view);
 		}
 
 		return view('projects.project')
 			->with('project', $project)
-			->with('student_name', $studentName)
 			->with('view', $view);
 	}
 
@@ -140,25 +134,26 @@ class ProjectController extends Controller{
 			$project = Project::findOrFail(request('project_id'));
 
 			// If topic isn't in the relevant topic database, create a new one.
-			if(count($topic) == 0){
+			if($topic == null){
 				$topic = new Topic;
 				$topic->name = request('topic_name');
 				$topic->save();
 			}
-
+			
 			// Validate data
 			$projectTopic = new ProjectTopic;
 
-			// the project has no other projects, so make it's first topic the primary topic
+			// the project has no other topics, so make it's first topic the primary topic
 			$projectTopic->primary = count($project->topics) == 0;
 			$projectTopic->topic_id = $topic->id;
 			$projectTopic->project_id = $project->id;
+
 			$projectTopic->save();
 
 			return Topic::findOrFail($topic->id)->toJson();
 		});
 
-		return $result;
+		return response()->json($result);
 	}
 
 	/**
@@ -177,7 +172,7 @@ class ProjectController extends Controller{
 				->delete();
 		});
 
-		return $result;
+		return response()->json(array('successful' => true));
 	}
 
 	/**
@@ -200,7 +195,7 @@ class ProjectController extends Controller{
 				->update(['primary' => 1]);
 		});
 
-		return $result;
+		return response()->json(array('successful' => true));
 	}
 
 	/**
@@ -341,7 +336,7 @@ class ProjectController extends Controller{
 			$project->delete();
 		});
 
-		return true;
+		return response()->json(array('successful' => true));
 	}
 
 

@@ -24,7 +24,7 @@
 			<ol class="order-list-js last-name-header-list-js" id="studentList" sorted="false" style="list-style: none">
 				@foreach($students as $student)
 					<li>
-						<a title="Log in as {{ $student->user->getFullName() }}" href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->user->getFullName() }}</a>
+						<a title="Log in as {{ $student->getName() }}" href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->getName() }}</a>
 					</li>
 				@endforeach
 			</ol>

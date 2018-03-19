@@ -135,7 +135,6 @@ import '../js/components';
 			type:'PATCH',
 			data: $(this).serialize(),
 			success:function(response){
-				response = JSON.parse(response);
 				if(response.share_name){
 					showNotification('success', 'Your name is being shared with other students.');
 				} else {
@@ -213,7 +212,12 @@ import '../js/components';
 	$(".favourite-container").on('click', function() {
 		var svgContainer = $(this);
 		var svg = svgContainer.find('svg');
-		var projectId = window['project'].data('project-id');
+
+		if(window['project'] != null){
+			var projectId = window['project'].data('project-id');
+		} else {
+			var projectId = $(this).data('project-id');
+		}
 
 		svg.hide(0);
 		$('.loader', svgContainer).show(0);

@@ -284,7 +284,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
 	// Show project with this id
-	Route::get('projects/{uuid}', 'ProjectController@show');
+	Route::get('projects/{project}', 'ProjectController@show');
 
 	// Delete project with this id
 	Route::delete('projects/{uuid}/delete', 'ProjectController@destroy');

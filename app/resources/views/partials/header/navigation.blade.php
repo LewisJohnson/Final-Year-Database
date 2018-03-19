@@ -43,7 +43,8 @@
 								</svg>
 							</div>
 							<div class="dropdown-content">
-								<a href="{{ action('StudentController@proposeProjectView') }}">Propose Project</a>
+								
+								<a href="{{ action('StudentController@proposeProjectView') }}" @if(Auth::user()->student->project_status != 'none') disabled @endif>Propose Project</a>
 								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 							</div>
 						</li>

@@ -10,6 +10,7 @@ namespace SussexProjects;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * The student model.
@@ -27,21 +28,21 @@ class Student extends Model{
 	public $timestamps = false;
 
 	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+	
+	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
 	protected $fillable = ['id', 'registration_number', 'programme', 'marker_id'];
 
-	/**
-	 * Returns the user related to this student.
-	 *
-	 * @return User
-	 */
-	public function user(){
-		return $this->hasOne(User::class, 'id');
-	}
-
+	
+	
 	/**
 	 * The table to retrieve data from.
 	 *
@@ -56,22 +57,58 @@ class Student extends Model{
 	}
 
 	/**
-	 * Returns the project this student has selected.
 	 *
-	 * @return Project
+	 * The students name, hidden if they have they have their name hidden.
+	 *
+	 * The students name will also be visible to supervisors and administrators.
+	 *
+	 * @return string
+	 */
+	public function getName(){
+		if(Auth::check()){
+
+			// If authenticated user is this student, show full name
+			if(Auth::user()->id == $this->id){
+				return $this->user->getFullName();
+			}
+
+			// If authenticated user is student, and this student is hiding there name, hide name
+			if(Auth::user()->isStudent() && !$this->share_name){
+				return "A Student";
+			} else {
+				return $this->user->getFullName();
+			}
+		}
+		return "A Student";
+	}
+	
+	/**
+	 * The user related to this student.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Student
+	 */
+	public function user(){
+		return $this->hasOne(User::class, 'id');
+	}
+
+	/**
+	 * The project this student has selected.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Project
 	 */
 	public function project(){
 		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
-	
+
 	/**
-	 * Returns students' second supervisor (marker).
+	 * The students second supervisor (Marker)
 	 *
-	 * @return Supervisor
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
 	 */
 	public function marker(){
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
+	
 
 	public function getStatusString(){
 		$return = '';
@@ -80,10 +117,8 @@ class Student extends Model{
 				$return = 'You haven\'t selected a project.';
 				break;
 			case 'selected':
-				$return = 'You\'re awaiting supervisor approval.';
-				break;
 			case 'proposed':
-				$return = 'You haven\'t selected a project.';
+				$return = 'You\'re awaiting supervisor approval.';
 				break;
 			case 'accepted':
 				$return = 'Congratulations. You\'ve been accepted.';

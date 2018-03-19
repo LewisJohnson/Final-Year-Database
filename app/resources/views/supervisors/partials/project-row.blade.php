@@ -1,4 +1,4 @@
-<tr>
+{{-- <tr>
 	<td><a href="{{ action('ProjectController@show', $project->id) }}" class="flex--stretch">{{ $project->title }}</a></td>
 	@if($project->getPrimaryTopic() != null)
 		<td>
@@ -51,3 +51,4 @@
 	</td>
 </tr>
 
+ --}}

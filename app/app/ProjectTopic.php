@@ -18,20 +18,13 @@ use SussexProjects\Topic;
  * @see SussexProjects\Http\Controllers\ProjectTopic
 */
 class ProjectTopic extends Model{
-	use Traits\Uuids;
 
 	/**
-	 * The table to retrieve data from.
+	 * Indicates if the IDs are auto-incrementing.
 	 *
-	 * @return string
+	 * @var bool
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_project_topics_'.Session::get('education_level')["shortName"];
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
+	protected $primaryKey = ['project_id', 'topic_id'];
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -47,9 +40,6 @@ class ProjectTopic extends Model{
 	 */
 	public $incrementing = false;
 	
-	
-	protected $primaryKey = ['project_id', 'topic_id'];
-	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -63,4 +53,17 @@ class ProjectTopic extends Model{
 	 * @var array
 	 */
 	protected $guarded = ['id'];
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_project_topics_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
 }

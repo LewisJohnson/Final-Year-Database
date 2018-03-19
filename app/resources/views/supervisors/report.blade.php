@@ -38,19 +38,19 @@
 					{{-- SUPERVISOR PROJECTS --}}
 					@foreach($supervisor->getProjects('on-offer') as $project)
 						<tr>
-							<td>@if($loop->iteration == 1)<a href="{{ action(action('UserController@projects', $supervisor->user) )}}">Projects ({{count($supervisor->user->projects)}})</a>@endif</td>
-							<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
+							<td>@if($loop->iteration == 1)<a href="{{ action('UserController@projects', ['user' => $project->supervisor->user]) }}">Projects ({{count($project->supervisor->user->projects)}})</a>@endif</td>
+							<td><a href="{{ action('ProjectController@show', ['project' => $project]) }}">{{ $project->title }}</a></td>
 							<td>{{ucfirst(str_replace('-', ' ', $project->status))}}</td>
 						</tr>
 					@endforeach
 
 					{{-- ACCEPTED STUDENTS --}}
 					@if(count($supervisor->getAcceptedStudents()))
-						@foreach($supervisor->getAcceptedStudents() as $project)
+						@foreach($supervisor->getAcceptedStudents() as $accepted)
 								<tr>
 									<td>@if($loop->iteration == 1)Accepted Projects ({{ count($supervisor->getAcceptedStudents()) }})@endif</td>
-									<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
-									<td>{{ $project->student_name }}</td>
+									<td><a href="{{ action('ProjectController@show', ['project' => $accepted['project']]) }}">{{ $accepted['project']->title }}</a></td>
+									<td>{{ $accepted['student']->getName() }}</td>
 								</tr>
 						@endforeach
 					@else
@@ -63,11 +63,11 @@
 
 					{{-- PROJECT OFFERS --}}
 					@if(count($supervisor->getSelectedStudents()))
-						@foreach($supervisor->getSelectedStudents() as $project)
+						@foreach($supervisor->getSelectedStudents() as $selected)
 							<tr>
-								<td>@if($loop->iteration == 1)Awaiting Approval ({{count($supervisor->getSelectedStudents())}})@endif</td>
-								<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
-								<td>{{ $project->student_name }}</td>
+								<td>@if($loop->iteration == 1)Awaiting Approval ({{ count($supervisor->getSelectedStudents()) }})@endif</td>
+								<td><a href="{{ action('ProjectController@show', ['project' => $selected['project']]) }}">{{ $selected['project']->title }}</a></td>
+								<td>{{ $selected['student']->getName() }}</td>
 							</tr>
 						@endforeach
 					@else
@@ -79,11 +79,11 @@
 					@endif
 
 					{{-- PROJECT PROPOSALS --}}
-					@foreach($supervisor->getStudentProjectProposals() as $project)
+					@foreach($supervisor->getStudentProjectProposals() as $proposal)
 						<tr>
-							<td>@if($loop->iteration == 1)Student Proposals ({{count($supervisor->getStudentProjectProposals())}})@endif</td>
-							<td><a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a></td>
-							<td>{{ $project->student_name }}</td>
+							<td>@if($loop->iteration == 1)Student Proposals ({{ count($supervisor->getStudentProjectProposals()) }})@endif</td>
+							<td><a href="{{ action('ProjectController@show', ['project' => $proposal['project']]) }}">{{ $proposal['project']->title }}</a></td>
+							<td>{{ $proposal['student']->getName() }}</td>
 						</tr>
 					@endforeach
 				</tbody>

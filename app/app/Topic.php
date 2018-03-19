@@ -19,19 +19,6 @@ class Topic extends Model{
 	use Traits\Uuids;
 
 	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_topics_'.Session::get('education_level')["shortName"];
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
-
-	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
@@ -52,6 +39,26 @@ class Topic extends Model{
 	 */
 	public $fillable = ['name'];
 
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_topics_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
+	
 	/**
 	 * Returns all projects related to this topic.
 	 * 

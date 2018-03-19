@@ -10,7 +10,7 @@
 
 ul.topics-list {
 	list-style: none;
-	padding: 0;
+	padding: 0 !important; //!important needed to override jQuery confirm
 	.topic {
 		background: $topic-bg;
 		color: $topic-color;

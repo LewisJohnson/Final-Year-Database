@@ -5,7 +5,7 @@
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
-			<div class="card card--margin-vertical @if(Auth::user()->isStudent()) card--half @endif">
+			<div class="card @if(Auth::user()->isStudent()) card--half @endif">
 				<h2>Your Privileges</h2>
 				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}</p>
 			</div>
@@ -76,8 +76,8 @@
 					@endif
 
 					<div class="footer">
-						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Projects</a>
-						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@index', 'educationLevel='.$level["shortName"]) }}">Project Report</a>
+						<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">{{ ucfirst($level["longName"]) }} Projects</a>
+						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">Project Report</a>
 					</div>
 				</div>
 				@endforeach
@@ -113,7 +113,11 @@
 						<a class="button button--danger student-undo-select fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
 					@endif
 
-					<h2>Your Project</h2>
+					@if(Auth::user()->student->project_status == 'proposed')
+						<h2>Your Proposed Project</h2>
+					@else 
+						<h2>Your Project</h2>
+					@endif
 					<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
 
 					@if(Auth::user()->student->project_status != 'none')
@@ -121,12 +125,20 @@
 					@endif
 				</div>
 
-				<div class="card card--margin-vertical">
+				<div class="card card--margin-vertical favourite-projects-container">
 					<h2>Favourite Projects</h2>
 					@if($projects = Auth::user()->student->getFavouriteProjects())
 						<div class="favourite-projects flex flex--row flex--wrap">
 							@foreach($projects as $project)
-								<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+								<div>
+									<div class="favourite-container index pointer" data-project-id="{{ $project->id }}">
+										<svg viewBox="0 0 24 24" height="24" width="24" class="favourite">
+											<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
+										</svg>
+										<div class="loader"></div>
+									</div>
+									<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+								</div>
 							@endforeach	
 						</div>
 					@else

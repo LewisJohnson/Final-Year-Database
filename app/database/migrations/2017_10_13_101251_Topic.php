@@ -19,7 +19,7 @@ class Topic extends Migration{
 		foreach (get_departments() as $key => $department) {
 			foreach (get_education_levels() as $key => $level) {
 				Schema::create($department.'_topics_'.$level['shortName'], function (Blueprint $table) {
-					$table->uuid('id');
+					$table->uuid('id')->unique();
 					$table->string('name')->unique();
 					$table->primary('id');
 				});

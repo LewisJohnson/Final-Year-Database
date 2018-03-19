@@ -21,24 +21,19 @@ class Supervisor extends User{
 	use Traits\Uuids;
 
 	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_supervisors';
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
-
-	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
 	 */
 	public $timestamps = false;
+
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+	
 
 	/**
 	 * The attributes that are mass assignable.
@@ -56,6 +51,18 @@ class Supervisor extends User{
 		return $this->hasOne(User::class, 'id');
 	}
 
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_supervisors';
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
 
 	/**
 	 * Determines if the superior is accepting emails.
@@ -212,24 +219,26 @@ class Supervisor extends User{
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
+
 			if($student->project == null){
 				return false;
 			}
-
 			if($student->project->supervisor_id !== $this->id){
 				return false;
 			}
 
-			if($student->project_status !== 'student-proposed'){
+			if($student->project_status !== 'proposed'){
 				return false;
 			}
 
-			if($student->project->staus !== 'proposed'){
+			if($student->project->status !== 'student-proposed'){
 				return false;
 			}
 
 			return true;
 		});
+
+
 
 		//todo: re-add name hiding for students
 		foreach ($students as $key => $student) {
