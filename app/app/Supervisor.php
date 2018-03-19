@@ -45,8 +45,8 @@ class Supervisor extends User{
 	/**
 	 * Returns the user related to this supervisor.
 	 *
-	 * @return User
-	 */
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne User
+     */
 	public function user(){
 		return $this->hasOne(User::class, 'id');
 	}
@@ -140,7 +140,7 @@ class Supervisor extends User{
 	/**
 	 * A list of students who have selected a project from this supervisor.
 	 * 
-	 * @return Array A key/value array where the key is the student and the value is their selected project
+	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
 	public function getSelectedStudents(){
 		$students = Student::all();
@@ -162,7 +162,6 @@ class Supervisor extends User{
 			return true;
 		});
 
-		//todo: re-add name hiding for students
 		foreach ($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;
@@ -176,7 +175,7 @@ class Supervisor extends User{
 	/**
 	 * A list of students who have been accepted to undertake a project from this supervisor
 	 * 
-	 * @return Array A key/value array where the key is the student and the value is the project they are accepted for
+	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
 		$students = Student::all();
@@ -198,7 +197,6 @@ class Supervisor extends User{
 			return true;
 		});
 
-		//todo: re-add name hiding for students
 		foreach ($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;
@@ -212,17 +210,17 @@ class Supervisor extends User{
 	/**
 	 * A list of students who have proposed a project to this supervisor
 	 * 
-	 * @return Student Array A key/value array where the key is the student and the value is their proposed project
+	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
 		$students = Student::all();
 		$offers = array();
 
 		$students = $students->filter(function($student, $key) {
-
 			if($student->project == null){
 				return false;
 			}
+
 			if($student->project->supervisor_id !== $this->id){
 				return false;
 			}
@@ -238,9 +236,6 @@ class Supervisor extends User{
 			return true;
 		});
 
-
-
-		//todo: re-add name hiding for students
 		foreach ($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;
@@ -254,7 +249,7 @@ class Supervisor extends User{
 	/**
 	 * A list of students this supervisor is second supervisor (marker) too.
 	 * 
-	 * @return Student Array A key/value array where the key is the student and the value is their project
+	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
 		$students = Student::all();
@@ -267,7 +262,6 @@ class Supervisor extends User{
 			return $student->project->marker_id == $this->id;
 		});
 
-		//todo: re-add name hiding for students
 		foreach ($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;

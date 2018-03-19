@@ -10,16 +10,13 @@ namespace SussexProjects\Http\Controllers;
 use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Flash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use SussexProjects\Project;
 use SussexProjects\Topic;
 use SussexProjects\ProjectTopic;
-use SussexProjects\Student;
 use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
 
@@ -59,8 +56,8 @@ class ProjectController extends Controller{
 	 * - Select if NOT archived
 	 * - select if NOT student proposed
 	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	 * @return \Illuminate\View\View
+     */
 	public function index(Request $request){
 		/* SELECT CONDITIONS
 			Select if supervisor take_students is true
@@ -99,8 +96,8 @@ class ProjectController extends Controller{
 	 * @param \Illuminate\Http\Request $request
 	 * @param  UUID  $uuid
 	 *
-	 * @return \Illuminate\Http\Response The project view
-	 */
+	 * @return \Illuminate\View\View
+     */
 	public function show(Project $project) {
 		$view = "SupervisorProject";
 		$studentName = "a student";
@@ -128,7 +125,6 @@ class ProjectController extends Controller{
 	 * @return string The newly added topic's name
 	 */
 	public function addTopic(Request $request){
-
 		$result = DB::transaction(function() use ($request) {
 			$topic = Topic::where('name', request('topic_name'))->first();
 			$project = Project::findOrFail(request('project_id'));
@@ -163,7 +159,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function removeTopic(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request) {
 			$topic = Topic::findOrFail(request('topic_id'));
 			$project = Project::findOrFail(request('project_id'));
 
@@ -182,7 +178,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updatePrimaryTopic(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request) {
 			$topic = Topic::findOrFail(request('topic_id'));
 			$project = Project::findOrFail(request('project_id'));
 
@@ -262,8 +258,8 @@ class ProjectController extends Controller{
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  UUID  $uuid
-	 * @return \Illuminate\Http\Response
-	 */
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 	public function edit($uuid){
 		$project = Project::findOrFail($uuid);
 
@@ -343,32 +339,25 @@ class ProjectController extends Controller{
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 	public function showTopics(){
 		$topics = Topic::all();
 		return view('projects.topics')->with('topics', $topics);
 	}
 
-	public function byTopic($id) {
-		$topic = Topic::findOrFail($id);
-
+	public function byTopic(Topic $topic) {
 		return view('projects.index')
 			->with('projects', $topic->projects->where('status', 'on-offer'))
 			->with('topic', $topic)
 			->with('view', 'topic');
 	}
 
-	public function transactions($id){
-		$transactions = Transaction::where('project_id', $id)->orderBy('transaction_date', 'desc')->get();
-		return view('admin.transactions')->with('transactions', $transactions);
-	}
-
 	/**
 	 * Displays all supervisors with projects on offer.
 	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 	public function showSupervisors() {
 		$supervisor = Supervisor::all();
 		return view('projects.supervisors')->with('supervisors', $supervisor);
@@ -378,8 +367,8 @@ class ProjectController extends Controller{
 	 * Searches through projects.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response Mixed object types
-	 */
+	 * @return \Illuminate\View\View
+     */
 	public function search(Request $request) {
 
 		/* SELECT CONDITIONS
@@ -388,8 +377,6 @@ class ProjectController extends Controller{
 			Select if NOT archived
 			select if NOT student proposed
 		*/
-
-		//todo: fix this
 
 		$searchTerm = $request->get("searchTerm");
 		$filters = $request->get("filter");
@@ -419,20 +406,23 @@ class ProjectController extends Controller{
 
 		session()->flash('search_filters', $selectedFilters);
 
-		$sessionDbPrefix = "projects_".Session::get('education_level')["shortName"].".";
+		$sessionDbPrefix = Session::get('department')."_projects_".Session::get('education_level')["shortName"];
 
-		$projects = Project::select('projects_'.Session::get('education_level')["shortName"].'.*', 'supervisors.take_students_'.Session::get('education_level')["shortName"].'')
-			->join('supervisors', 'projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', 'supervisors.id')
-			->where('supervisors.take_students_'.Session::get('education_level')["shortName"].'', true);
+		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"].'')
+			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')
+			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
+
+
+		$projects->where("status", "on-offer");
 
 		// Title filter
 		if(in_array("title", $filters)){
 			$filteredAtLeastOnce = true;
 
 			if(count($filters) == 1){
-				$projects->where($sessionDbPrefix."title", "LIKE", '%'.$searchTerm.'%');
+				$projects->where($sessionDbPrefix."."."title", "LIKE", '%'.$searchTerm.'%');
 			} else {
-				$projects->orWhere($sessionDbPrefix."title", "LIKE", '%'.$searchTerm.'%');
+				$projects->orWhere($sessionDbPrefix."."."title", "LIKE", '%'.$searchTerm.'%');
 			}
 		}
 
@@ -476,7 +466,7 @@ class ProjectController extends Controller{
 		if(!$filteredAtLeastOnce || count($projects) == 0){
 			session()->flash("message", "We couldn't find anything for \"".$searchTerm."\".");
 			session()->flash('message_type', 'warning');
-			return redirect('/projects');
+			return redirect()->action('ProjectController@index');
 		}
 
 		if (count($projects) == 1) {
@@ -490,7 +480,6 @@ class ProjectController extends Controller{
 			return view('projects.project')
 				->with('view', 'SupervisorProject')
 				->with('project', $project);
-
 		}
 
 		if (count($projects) > 1) {
