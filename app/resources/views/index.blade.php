@@ -7,7 +7,7 @@
 		<div class="card-container card--margin-vertical">
 			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
-				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}</p>
+				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}.</p>
 			</div>
 
 			@if(Auth::user()->isStudent())
@@ -31,7 +31,7 @@
 					<h2>Options</h2>
 					<p>You may opt-out from receiving emails.</p>
 					@foreach (get_education_levels() as $educationLevel)
-						<form  class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+						<form id="accept-email-{{ $educationLevel["shortName"] }}"  class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
 							{{ csrf_field() }}
 							<div class="form-field">
 								<div class="checkbox">
@@ -67,10 +67,10 @@
 				{{ Session::put('seen-welcome', true) }}
 			@endif
 
-			
+
 			@if(Auth::user()->isSupervisor())
 				<div class="card card--full">
-					<h2>Overview</h2>
+					<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Overview</h2>
 					@if(count(Auth::user()->supervisor->getSelectedStudents()) > 0)
 						<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
 					@else
@@ -123,7 +123,7 @@
 					<div class="card card--half">
 						<h2>{{ ucfirst($level["longName"]) }} Administrator</h2>
 						<p>{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator. Take a look at the hub to see what actions you can perform.</p>
-						
+
 						<div class="footer">
 							<a class="button--small hover--dark td-none" href="{{ action('AdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
 						</div>
@@ -135,7 +135,7 @@
 				<div class="card card--half">
 					<h2>System Administrator</h2>
 					<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see what actions you can perform.</p>
-					
+
 					<div class="footer">
 						<a class="button--small hover--dark td-none" href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
 					</div>
@@ -150,7 +150,7 @@
 
 					@if(Auth::user()->student->project_status == 'proposed')
 						<h2>Your Proposed Project</h2>
-					@else 
+					@else
 						<h2>Your Project</h2>
 					@endif
 					<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
@@ -174,7 +174,7 @@
 									</div>
 									<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
 								</div>
-							@endforeach	
+							@endforeach
 						</div>
 					@else
 						<p title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>

@@ -193,21 +193,28 @@ import '../js/components';
 
 	// NEW USER
 	// put this stuff in an array
-	// $('#supervisor-form').hide();
-	// $('#student-form').show();
+	// todo: add automatic email, when username field is filled out, put username@sussex.ac.uk in the email field
+	// todo: if student is selected, deselect the rest and disable them (likewise for other checkboxes)
 
-	// $('#create-form-access-select').on('change', function(){
-	// 	if($('.new-user-student').is(":selected")) {
-	// 		$('#student-form').show();
-	// 	} else {
-	// 		$('#student-form').hide();
-	// 	}
-	// 	if($('#supervisor-option').is(":selected")) {
-	// 		$('#supervisor-form').show();
-	// 	} else {
-	// 		$('#supervisor-form').hide();
-	// 	}
-	// });
+	$('.user-form #username').on('change', function(){
+		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
+	});
+
+	$('#supervisor-form').hide();
+	$('#student-form').hide();
+
+	$('#create-form-access-select').on('change', function(){
+		if($('.new-user-student').is(":selected")) {
+			$('#student-form').show();
+		} else {
+			$('#student-form').hide();
+		}
+		if($('#supervisor-option').is(":selected")) {
+			$('#supervisor-form').show();
+		} else {
+			$('#supervisor-form').hide();
+		}
+	});
 
 	$(".favourite-container").on('click', function() {
 		var svgContainer = $(this);

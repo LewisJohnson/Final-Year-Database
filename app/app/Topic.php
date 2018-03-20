@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * The topic model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\topicController
 */
 class Topic extends Model{
@@ -24,14 +24,14 @@ class Topic extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
-	
+
 	/**
 	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
 	protected $guarded = ['id'];
-	
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -58,10 +58,10 @@ class Topic extends Model{
 			throw new Exception('Database not found.');
 		}
 	}
-	
+
 	/**
 	 * Returns all projects related to this topic.
-	 * 
+	 *
 	 * Includes primary project pivot.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
@@ -76,6 +76,7 @@ class Topic extends Model{
 	 * @return Project
 	*/
 	public function projectsOnOffer(){
+		// return $this->projects;
 		return $this->projects->where('status', 'on-offer');
 	}
 

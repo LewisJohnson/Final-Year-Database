@@ -32,16 +32,16 @@ class StoreUser extends FormRequest
 	 * @return array
 	 */
 	public function rules(){
-		return [
-			'username' => 'required|unique:users,username|max:32',
-			'first_name' => 'required|max:128',
-			'last_name' => 'required|max:128',
-			'email' => 'required|unique:users,email|max:128',
-			'password' => 'required|confirmed',
-			'privileges' => 'required',
-			'title' => 'max:6',
-			'project_load_*' => 'min:0|max:255',
-		];
+		// return [
+		// 	'username' => 'required|unique:users,username|max:32',
+		// 	'first_name' => 'required|max:128',
+		// 	'last_name' => 'required|max:128',
+		// 	'email' => 'required|unique:users,email|max:128',
+		// 	'password' => 'required|confirmed',
+		// 	'privileges' => 'required',
+		// 	'title' => 'max:6',
+		// 	'project_load_*' => 'min:0|max:255',
+		// ];
 	}
 
 	/**

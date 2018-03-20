@@ -32,7 +32,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['username', 'first_name', 'last_name', 'email', 'password'];
+	protected $fillable = ['privileges', 'first_name', 'last_name', 'username',  'password', 'programme', 'email'];
 
 	/**
 	 * The attributes that are not mass assignable.
@@ -53,7 +53,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $hidden = [ 'password', 'remember_token'];
+	protected $hidden = ['password', 'remember_token'];
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
@@ -81,7 +81,9 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		return in_array("guest", $this->getPrivileges());
+		// todo: fix this
+		return in_array("guest_ug", $this->getPrivileges());
+		return in_array("guest_pg", $this->getPrivileges());
 	}
 
 	/**
@@ -115,7 +117,7 @@ class User extends Authenticatable{
 	 * Indicates if authenticated used is an administrator of the parameters education level.
 	 *
 	 * @param string ShortName of an education level
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isAdminOfEducationLevel($educationLevel){
@@ -196,7 +198,7 @@ class User extends Authenticatable{
 			}
 			return $longAllowedLevels;
 		}
-				
+
 		return $allowedLevels;
 	}
 
@@ -253,7 +255,7 @@ class User extends Authenticatable{
 
 	/**
 	 * Returns student type (undergraduate or postgraduate).
-	 * 
+	 *
 	 * Do not try to move this to the student model.
 	 * It will cause an exception and no students will be able to log in.
 	 *

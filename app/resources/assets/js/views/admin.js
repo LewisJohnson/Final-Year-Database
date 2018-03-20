@@ -7,7 +7,6 @@
 ;$(function() {
 	"use strict";
 
-
 	$('body').on('submit', '#endOfYearArchive', function(e) {
 		e.preventDefault();
 		var form = $(this);

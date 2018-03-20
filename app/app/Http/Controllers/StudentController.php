@@ -25,7 +25,7 @@ use SussexProjects\Mail\StudentProposed;
  * The student controller.
  *
  * Methods in this controller are used for project and system administrators.
- * 
+ *
  * @see SussexProjects\Student
 */
 class StudentController extends Controller{
@@ -45,7 +45,7 @@ class StudentController extends Controller{
 
 	/**
 	 * Adds project to favourite projects.
-	 *	
+	 *
 	 * @param \Illuminate\Http\Request $request includes project to add
 	 * @return \Illuminate\Http\Response
 	*/
@@ -72,7 +72,7 @@ class StudentController extends Controller{
 
 	/**
 	 * Removes project to favourite projects.
-	 *	
+	 *
 	 * @param \Illuminate\Http\Request $request includes project to remove
 	 * @return \Illuminate\Http\Response
 	*/
@@ -101,7 +101,7 @@ class StudentController extends Controller{
 
 	/**
 	 * The student propose a project view (Form).
-	 *	
+	 *
 	 * @return \Illuminate\Http\Response
 	*/
 	public function proposeProjectView(){
@@ -110,7 +110,7 @@ class StudentController extends Controller{
 
 	/**
 	 * Updates the students share name to other students preference.
-	 *	
+	 *
 	 * @param \Illuminate\Http\Request
 	 * @return \Illuminate\Http\Response
 	*/
@@ -118,12 +118,12 @@ class StudentController extends Controller{
 		$student = Auth::user()->student;
 		$student->share_name = isset($request->share_name);
 		$student->save();
-		return response()->json(array('share_name' => $student->share_name)); 
+		return response()->json(array('share_name' => $student->share_name));
 	}
 
 	/**
 	 * Adds student proposed project to the database
-	 *	
+	 *
 	 * @param \Illuminate\Http\Request $request Student proposed project
 	 * @return \Illuminate\Http\Response
 	*/
@@ -174,7 +174,7 @@ class StudentController extends Controller{
 		});
 
 		// Send student proposed email
-		Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
+		// Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
 
 		return redirect()->action('HomeController@index');
 	}
@@ -183,7 +183,7 @@ class StudentController extends Controller{
 	 * Selects the requested project.
 	 *
 	 * The student will now have to wait to be approved or rejected.
-	 *  	
+	 *
 	 * @param \Illuminate\Http\Request $request Included project ID
 	 * @return \Illuminate\Http\Response Home page
 	*/
@@ -191,7 +191,7 @@ class StudentController extends Controller{
 		// todo: check mode selection date before selecting project
 		$student = Auth::user()->student;
 
-		DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request, $student) {
 
 			// Student has already selected a project
 			if($student->project_id != null){
@@ -222,7 +222,7 @@ class StudentController extends Controller{
 		});
 
 		// Send selected email
-		Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
+		// Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
 
 		return redirect()->action('HomeController@index');
 	}
@@ -265,14 +265,14 @@ class StudentController extends Controller{
 
 	/**
 	 * Updates the students second marker
-	 *	
+	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	*/
 	public function updateSecondMarker(Request $request) {
 		//todo: make sure user is authorized to perform this action
 		$result = DB::transaction(function() use ($request) {
-			
+
 			$project = Project::findOrFail(request('project_id'));
 			$student = Student::findOrFail(request('student_id'));
 			$transaction = new Transaction;

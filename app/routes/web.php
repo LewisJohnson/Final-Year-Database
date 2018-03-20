@@ -40,7 +40,7 @@ use Illuminate\Http\Request;
 Route::get('/mailable', function () {
     $student = SussexProjects\Student::all()->first();
     $supervisor = SussexProjects\Supervisor::all()->first();
-    return new SussexProjects\Mail\StudentRejected($supervisor, $student);
+    return new SussexProjects\Mail\StudentSelected($supervisor, $student);
 });
 
 /* =============
@@ -102,7 +102,7 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 	Route::post('admin/dashboard/system', 'AdminController@configure');
 
 	Route::post('admin/system/new-department', 'AdminController@addNewDepartment');
-	
+
 	Route::get('system/user-agent', 'AdminController@userAgentView');
 });
 
@@ -115,7 +115,7 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	Route::get('admin/students/import', 'AdminController@importStudents');
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
-	// Amend supervisor arrangements form 
+	// Amend supervisor arrangements form
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
 
 	// Updated supervisor arrangements POST
@@ -187,7 +187,14 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
    ================================== */
 
 Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
-	Route::resource('users', 'UserController');
+
+	Route::get('users', 'UserController@index');
+	Route::get('users/create', 'UserController@create');
+
+	Route::post('users', 'UserController@store');
+	Route::get('users/{user}/edit', 'UserController@edit');
+	Route::post('users/{user}', 'UserController@update');
+	Route::delete('users/{user}', 'UserController@destory');
 });
 
 /* ==============================
@@ -279,7 +286,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Project search
 	Route::get('projects/search', 'ProjectController@search');
 
-	/* PROJECT TOPIC ROUTES */ 
+	/* PROJECT TOPIC ROUTES */
 	// Add topic to project
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
 
@@ -301,7 +308,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Show update project form
 	Route::get('projects/{uuid}/edit', 'ProjectController@edit');
 
-	/* REPORT ROUTES */ 
+	/* REPORT ROUTES */
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });

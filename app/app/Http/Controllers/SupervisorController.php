@@ -25,7 +25,7 @@ use SussexProjects\Mail\StudentRejected;
  * The supervisor controller.
  *
  * Handles all functions related to supervisors.
- * 
+ *
 */
 class SupervisorController extends Controller{
 
@@ -37,7 +37,7 @@ class SupervisorController extends Controller{
 	//  * Display a listing of the resource.
 	//  *
 	//  * @return \Illuminate\Http\Response
-	 
+
 	// public function index(){
 	// 	return view('supervisors.index');
 	// }
@@ -50,7 +50,7 @@ class SupervisorController extends Controller{
 	public function projectReport(){
 		return view('supervisors.project-report');
 	}
-	
+
 
 	/**
 	 * The supervisor report.
@@ -141,7 +141,7 @@ class SupervisorController extends Controller{
 		});
 
 		// Send accepted email
-		Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+		// Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
 
 		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
 	}
@@ -173,7 +173,7 @@ class SupervisorController extends Controller{
 		});
 
 		// Send declined email
-		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
+		// Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
 
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}

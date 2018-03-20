@@ -15,12 +15,12 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * The student model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\StudentController
 */
 class Student extends Model{
 	use Traits\Uuids;
-	
+
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
@@ -34,16 +34,14 @@ class Student extends Model{
 	 * @var bool
 	 */
 	public $incrementing = false;
-	
+
 	/**
-	 * The attributes that are mass assignable.
+	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'registration_number', 'programme', 'marker_id'];
+	protected $guarded = [];
 
-	
-	
 	/**
 	 * The table to retrieve data from.
 	 *
@@ -82,7 +80,7 @@ class Student extends Model{
 		}
 		return "A Student";
 	}
-	
+
 	/**
 	 * The user related to this student.
 	 *
@@ -109,7 +107,7 @@ class Student extends Model{
 	public function marker(){
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
-	
+
 
 	public function getStatusString(){
 		$return = '';

@@ -78,7 +78,7 @@
 
 @media screen and (max-width: 1200px){
 	.main-content {
-		padding: 3rem 1rem;
+		padding: 3rem 1rem !important;
 	}
 }
 
@@ -88,7 +88,7 @@
 			margin-bottom: 20px;
 		}
 	}
-	
+
 	.arrangements-container {
 		overflow-x: scroll;
 

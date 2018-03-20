@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * The supervisor model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\SupervisorController
 */
 class Supervisor extends User{
@@ -33,14 +33,14 @@ class Supervisor extends User{
 	 * @var bool
 	 */
 	public $incrementing = false;
-	
+
 
 	/**
-	 * The attributes that are mass assignable.
+	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable = [ 'id', 'title', 'contact_type', 'project_load', 'take_students' ];
+	protected $guarded = [];
 
 	/**
 	 * Returns the user related to this supervisor.
@@ -66,11 +66,11 @@ class Supervisor extends User{
 
 	/**
 	 * Determines if the superior is accepting emails.
-	 * 
+	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
-	 * 
+	 *
 	 * @return boolean Is supervisor accepting emails
 	 */
 	public function isAcceptingEmails($educationLevel = null){
@@ -83,11 +83,11 @@ class Supervisor extends User{
 
 	/**
 	 * Determines if the superior is taking students.
-	 * 
+	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
-	 * 
+	 *
 	 * @return boolean Is supervisor taking students
 	 */
 	public function isTakingStudents($educationLevel = null){
@@ -100,11 +100,11 @@ class Supervisor extends User{
 
 	/**
 	 * The project load of the supervisor (Student load).
-	 * 
+	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
-	 * 
+	 *
 	 * @return int Project load
 	 */
 	public function getProjectLoad($educationLevel = null){
@@ -119,7 +119,7 @@ class Supervisor extends User{
 	 * A list of projects the supervisor has created (Owner).
 	 *
 	 * @param String $status A project status to add the where clause
-	 * 
+	 *
 	 * @return Project A collection of projects
 	 */
 	public function getProjects($status = null){
@@ -139,7 +139,7 @@ class Supervisor extends User{
 
 	/**
 	 * A list of students who have selected a project from this supervisor.
-	 * 
+	 *
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
 	public function getSelectedStudents(){
@@ -168,13 +168,13 @@ class Supervisor extends User{
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
-		
+
 		return $offers;
 	}
 
 	/**
 	 * A list of students who have been accepted to undertake a project from this supervisor
-	 * 
+	 *
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
@@ -203,13 +203,13 @@ class Supervisor extends User{
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
-		
+
 		return $offers;
 	}
 
 	/**
 	 * A list of students who have proposed a project to this supervisor
-	 * 
+	 *
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
@@ -242,13 +242,13 @@ class Supervisor extends User{
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
-		
+
 		return $offers;
 	}
 
 	/**
 	 * A list of students this supervisor is second supervisor (marker) too.
-	 * 
+	 *
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
@@ -268,7 +268,7 @@ class Supervisor extends User{
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
-		
+
 		return $offers;
 	}
 
@@ -276,7 +276,7 @@ class Supervisor extends User{
 	/**
 	 * A HTML 5 data list snippet containing all supervisors.
 	 * This is used for auto-complete.
-	 *	
+	 *
 	 * @return string The resulting HTML
 	*/
 	public static function getDatalist(){
