@@ -36,7 +36,7 @@
 	<li>Propose a Project gives the student the ability to propose a project to either a specific supervisor or generally to any supervisor.</li>
   	<li>List all supervisors, their load and what/whom they supervise.</li>
  	<li>List all students and what projects they have selected.</li>
- 	<li>Withdraw and edit a proposed project. The corresponding buttons can be found on the student's home page just below the project descritpion.</li>
+ 	<li>Withdraw and edit a proposed project. The corresponding buttons can be found on the student's home page just below the project description.</li>
  	<li>Note that a project selected from a specific supervisor's list can't be withdrawn. In this case the student needs to ask the supervisor to reject the selection to release the student.</li>
  </ul>
 </div>
@@ -50,7 +50,6 @@
 		<li>List all supervisors, their load and what/whom they supervise.</li>
 		<li>Browse transactions related to their own projects.</li>
 		<li>List all students and what projects they have selected.</li>
-		<li>A supervisor or administrator can choose to opt-in or opt-out of emails refering to transcations on their projects.</li>
 	</ul>
 </div>
 

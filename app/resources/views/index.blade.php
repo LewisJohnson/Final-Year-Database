@@ -5,7 +5,7 @@
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
-			<div class="card @if(Auth::user()->isStudent()) card--half @endif">
+			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
 				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}</p>
 			</div>
@@ -25,6 +25,27 @@
 					</form>
 				</div>
 			@endif
+
+			@if(Auth::user()->isSupervisor())
+				<div class="card card--half">
+					<h2>Options</h2>
+					<p>You may opt-out from receiving emails.</p>
+					@foreach (get_education_levels() as $educationLevel)
+						<form  class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+							{{ csrf_field() }}
+							<div class="form-field">
+								<div class="checkbox">
+									<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->supervisor->isAcceptingEmails($educationLevel["shortName"])) checked @endif >
+									<label for="share_name">Receive {{ $educationLevel["longName"] }} emails</label>
+								</div>
+							</div>
+						</form>
+					@endforeach
+				</div>
+				{{-- DELETE THIS --}}
+				<div style="display: none" class="card card--half"></div>
+			@endif
+
 			@if(Session::get('seen-welcome') != true)
 				@if(Auth::user()->isSupervisor())
 					<div class="card">
@@ -50,36 +71,50 @@
 			@if(Auth::user()->isSupervisor())
 				<div class="card card--full">
 					<h2>Overview</h2>
-					<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
-					<p>Students proposals {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }}.</p>
-					<p>Students accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }}.</p>
-					<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
+					@if(count(Auth::user()->supervisor->getSelectedStudents()) > 0)
+						<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
+					@else
+						<p>No students are awaiting approval.</p>
+					@endif
+
+					@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
+						<p>A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} have proposed a project to you.</p>
+					@else
+						<p>No students have currently proposed a project to you.</p>
+					@endif
+
+					<p>You have accepted students {{ count(Auth::user()->supervisor->getAcceptedStudents()) }}.</p>
+
+					@if(count(Auth::user()->supervisor->getSecondSupervisingStudents()) > 0)
+						<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
+					@else
+						<p>You have not been assigned as second supervisor to any students.</p>
+					@endif
 				</div>
 
 				@foreach(get_education_levels() as $level)
-				
-				<div class="card card--half">
-					<h2>{{ ucfirst($level["longName"]) }} Supervisor</h2>
-					<p>Your {{ $level["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.$level["shortName"]]}}</p>
+					<div class="card card--half">
+						<h2>{{ ucfirst($level["longName"]) }} Supervisor</h2>
+						<p>Your {{ $level["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.$level["shortName"]]}}</p>
 
-					@if(Auth::user()->supervisor['take_students_'.$level["shortName"]])
-						<p>You are accepting {{ $level["longName"] }} students</p>
-					@else
-						<p>You are NOT accepting {{ $level["longName"] }} students</p>
-					@endif
+						@if(Auth::user()->supervisor['take_students_'.$level["shortName"]])
+							<p>You are accepting {{ $level["longName"] }} students</p>
+						@else
+							<p>You are NOT accepting {{ $level["longName"] }} students</p>
+						@endif
 
-					{{-- TODO: Add form to stop emails --}}
-					@if(Auth::user()->supervisor['accept_email_'.$level["shortName"]])
-						<p>You are receiving emails</p>
-					@else
-						<p>You are NOT currently receiving emails</p>
-					@endif
+						{{-- TODO: Add form to stop emails --}}
+						@if(Auth::user()->supervisor['accept_email_'.$level["shortName"]])
+							<p>You are receiving emails</p>
+						@else
+							<p>You are NOT currently receiving emails</p>
+						@endif
 
-					<div class="footer">
-						<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">{{ ucfirst($level["longName"]) }} Projects</a>
-						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">Project Report</a>
+						<div class="footer">
+							<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">{{ ucfirst($level["longName"]) }} Projects</a>
+							<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">Project Report</a>
+						</div>
 					</div>
-				</div>
 				@endforeach
 			@endif
 
