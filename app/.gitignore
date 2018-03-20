@@ -1,6 +1,4 @@
 /node_modules
-/public
-/public/hot
 /storage/framework
 /storage/logs
 /storage/*.key

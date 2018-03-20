@@ -1,6 +1,7 @@
 {
     "/js/jquery-bundle.js": "/js/jquery-bundle.js",
     "/css/jquery-confirm.css": "/css/jquery-confirm.css",
+    "/css/email.css": "/css/email.css",
     "/css/app.css": "/css/app.css",
     "/css/accessible-contrast.css": "/css/accessible-contrast.css",
     "/css/accessible-font.css": "/css/accessible-font.css",

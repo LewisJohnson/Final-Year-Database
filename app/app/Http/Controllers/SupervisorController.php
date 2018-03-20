@@ -11,12 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SussexProjects\Supervisor;
 use SussexProjects\Project;
 use SussexProjects\Student;
 use SussexProjects\Transaction;
+use SussexProjects\Mail\StudentAccepted;
+use SussexProjects\Mail\StudentRejected;
 
 /**
  * The supervisor controller.
@@ -101,8 +104,9 @@ class SupervisorController extends Controller{
 			'project_id' => 'required',
 		]);
 
-		DB::transaction(function() use ($request) {
-			$student = Student::findOrFail(request('student_id'));
+		$student = Student::findOrFail(request('student_id'));
+
+		DB::transaction(function() use ($request, $student) {
 			$project = Project::findOrFail(request('project_id'));
 			$transaction = new Transaction;
 
@@ -136,6 +140,9 @@ class SupervisorController extends Controller{
 			$transaction->save();
 		});
 
+		// Send accepted email
+		Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+
 		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
 	}
 
@@ -164,6 +171,9 @@ class SupervisorController extends Controller{
 			$student->project_status = 'none';
 			$student->save();
 		});
+
+		// Send declined email
+		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
 
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}

@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
+use SussexProjects\Mail\StudentSelected;
+use SussexProjects\Mail\StudentProposed;
 
 /**
  * The student controller.
@@ -106,66 +109,6 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Adds student proposed project to the database
-	 *	
-	 * @param \Illuminate\Http\Request $request Student proposed project
-	 * @return \Illuminate\Http\Response
-	*/
-	public function proposeProject(Request $request){
-		// todo: check mode year
-		try {
-			DB::transaction(function() use ($request) {
-				$student = Auth::user()->student;
-
-				// Student has already selected a project
-				if($student->project_id != null){
-					session()->flash('message', 'You have already selected a project.');
-					session()->flash('message_type', 'danger');
-					return redirect()->action('HomeController@index');
-				}
-
-				$project = new Project;
-				$transaction = new Transaction;
-				$supervisor = Supervisor::findOrFail(request('supervisor_id'));
-
-				$project->supervisor_id = request('supervisor_id');
-				$project->student_id = Auth::user()->student->id;
-				$project->fill(array(
-					'title' => request('title'),
-					'description' => request('description'),
-					'status' => "student-proposed",
-					'skills' => request('skills')
-				));
-
-				$project->save();
-
-				$transaction->fill(array(
-					'type' =>'project',
-					'action' =>'proposed',
-					'project' => $project->id,
-					'student' => Auth::user()->student->id,
-					'supervisor' => $supervisor->id,
-					'transaction_date' => new Carbon
-				));
-
-				$student->project_id = $project->id;
-				$student->project_status = 'proposed';
-
-				$student->save();
-				$transaction->save();
-
-				session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
-				session()->flash('message_type', 'success');
-			});
-		} catch(ModelNotFoundException $err){
-			session()->flash('message', 'There was a problem proposing the project.');
-			session()->flash('message_type', 'danger');
-		}
-
-		return redirect()->action('HomeController@index');
-	}
-
-	/**
 	 * Updates the students share name to other students preference.
 	 *	
 	 * @param \Illuminate\Http\Request
@@ -179,6 +122,64 @@ class StudentController extends Controller{
 	}
 
 	/**
+	 * Adds student proposed project to the database
+	 *	
+	 * @param \Illuminate\Http\Request $request Student proposed project
+	 * @return \Illuminate\Http\Response
+	*/
+	public function proposeProject(Request $request){
+		// todo: check mode year
+		$student = Auth::user()->student;
+
+		DB::transaction(function() use ($request, $student) {
+			// Student has already selected a project
+			if($student->project_id != null){
+				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'danger');
+				return redirect()->action('HomeController@index');
+			}
+
+			$project = new Project;
+			$transaction = new Transaction;
+			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
+
+			$project->supervisor_id = request('supervisor_id');
+			$project->student_id = Auth::user()->student->id;
+			$project->fill(array(
+				'title' => request('title'),
+				'description' => request('description'),
+				'status' => "student-proposed",
+				'skills' => request('skills')
+			));
+
+			$project->save();
+
+			$transaction->fill(array(
+				'type' =>'project',
+				'action' =>'proposed',
+				'project' => $project->id,
+				'student' => Auth::user()->student->id,
+				'supervisor' => $supervisor->id,
+				'transaction_date' => new Carbon
+			));
+
+			$student->project_id = $project->id;
+			$student->project_status = 'proposed';
+
+			$student->save();
+			$transaction->save();
+
+			session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
+			session()->flash('message_type', 'success');
+		});
+
+		// Send student proposed email
+		Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
+
+		return redirect()->action('HomeController@index');
+	}
+
+	/**
 	 * Selects the requested project.
 	 *
 	 * The student will now have to wait to be approved or rejected.
@@ -188,41 +189,40 @@ class StudentController extends Controller{
 	*/
 	public function selectProject(Request $request){
 		// todo: check mode selection date before selecting project
-		try {
-			DB::transaction(function() use ($request) {
-				$student = Auth::user()->student;
+		$student = Auth::user()->student;
 
-				// Student has already selected a project
-				if($student->project_id != null){
-					session()->flash('message', 'You have already selected a project.');
-					session()->flash('message_type', 'danger');
-					return redirect()->action('HomeController@index');
-				}
+		DB::transaction(function() use ($request) {
 
-				$project = Project::findOrFail(request('project_id'));
-				$transaction = new Transaction;
+			// Student has already selected a project
+			if($student->project_id != null){
+				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'danger');
+				return redirect()->action('HomeController@index');
+			}
 
-				$student->project_id = $project->id;
-				$student->project_status = 'selected';
-				$student->save();
+			$project = Project::findOrFail(request('project_id'));
+			$transaction = new Transaction;
 
-				$transaction->fill(array(
-					'type' =>'project',
-					'action' =>'selected',
-					'project' => request('project_id'),
-					'student' => Auth::user()->student->id,
-					'supervisor' => $project->supervisor->id,
-					'transaction_date' => new Carbon
-				));
+			$student->project_id = $project->id;
+			$student->project_status = 'selected';
+			$student->save();
 
-				$transaction->save();
-				session()->flash('message', 'You have selected "'.$project->title.'".');
-				session()->flash('message_type', 'success');
-			});
-		} catch(ModelNotFoundException $err){
-			session()->flash('message', 'There was a problem selecting the project.');
-			session()->flash('message_type', 'danger');
-		}
+			$transaction->fill(array(
+				'type' =>'project',
+				'action' =>'selected',
+				'project' => request('project_id'),
+				'student' => Auth::user()->student->id,
+				'supervisor' => $project->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+
+			$transaction->save();
+			session()->flash('message', 'You have selected "'.$project->title.'".');
+			session()->flash('message_type', 'success');
+		});
+
+		// Send selected email
+		Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
 
 		return redirect()->action('HomeController@index');
 	}

@@ -1,0 +1,16 @@
+{
+    "departments": [
+        "informatics",
+        "engineering"
+    ],
+    "educationLevels": {
+        "undergraduate": {
+        	"longName": "undergraduate",
+        	"shortName": "ug"
+        },
+        "postgraduate": {
+        	"longName": "postgraduate",
+        	"shortName": "pg"
+        }
+    }
+}

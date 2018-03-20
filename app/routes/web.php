@@ -37,6 +37,12 @@ use Illuminate\Http\Request;
 | DELETE	/photos/{photo}			destroy		photos.destroy
 */
 
+Route::get('/mailable', function () {
+    $student = SussexProjects\Student::all()->first();
+    $supervisor = SussexProjects\Supervisor::all()->first();
+    return new SussexProjects\Mail\StudentRejected($supervisor, $student);
+});
+
 /* =============
    1. WEB ROUTES
    ============= */

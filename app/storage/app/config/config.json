@@ -1,0 +1,10 @@
+{
+    "departments": [
+        "informatics",
+        "engineering"
+    ],
+    "sections": [
+        "ug",
+        "pg"
+    ]
+}

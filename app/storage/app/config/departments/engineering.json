@@ -1,0 +1,71 @@
+{
+    "display": {
+        "names": {
+            "value": "firstname lastname",
+            "type": [
+                "firstname lastname",
+                "firstname, lastname",
+                "lastname firstname",
+                "lastname, firstname"
+            ],
+            "description": "Determines how names will be displayed in lists."
+        }
+    },
+    "header": {
+        "logo_url": {
+            "value": "\/images\/logo.png",
+            "type": [
+                "Relative URL",
+                "Absolute URL"
+            ],
+            "description": "The logo shown on the desktop header. The URL may be relative from app\/public\/.. or absolute."
+        },
+        "background": {
+            "value": "#1D4289",
+            "type": [
+                "HEX",
+                "RGB",
+                "RGBA",
+                "CSS COLOR NAME",
+                "CSS URL"
+            ],
+            "description": "The background colour used for the desktop and mobile headers."
+        }
+    },
+    "footer": {
+        "rainbow": {
+            "value": true,
+            "type": [
+                true,
+                false
+            ],
+            "description": "Determines if a rainbow is shown in the footer."
+        },
+        "accessibility_buttons": {
+            "value": true,
+            "type": [
+                true,
+                false
+            ],
+            "description": "Determines if accessibility buttons are shown in the footer."
+        }
+    },
+    "user_agent": {
+        "collect_user_agent": {
+            "value": false,
+            "type": [
+                true,
+                false
+            ],
+            "description": "Determines if user agent strings are collected."
+        },
+        "collect_referrer": {
+            "value": false,
+            "type": [
+                true,
+                false
+            ],
+            "description": "Determines if referrer URLs are collected."
+        }
+    }
+}

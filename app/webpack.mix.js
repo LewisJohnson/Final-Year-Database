@@ -44,6 +44,7 @@ mix.js('resources/assets/js/dynamic-pagination/user-agent-pagination.js', 'publi
 
 // STYLE
 mix.less('resources/assets/sass/jquery-confirm.less', 'public/css');
+mix.sass('resources/assets/sass/email.scss', 'public/css');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');

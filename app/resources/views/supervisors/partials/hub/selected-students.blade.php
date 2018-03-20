@@ -83,24 +83,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $project)
-						<tr data-student-id="{{ $project->student_id }}" data-project-id="{{ $project->id }}">
+					@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $proposal)
+						<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
 							<td>
 								<div class="checkbox">
-									<input class="checkbox-input" id="offer-{{ $project->student_name }}" type="checkbox">
-									<label for="offer-{{ $project->student_name }}" name="offer-{{ $project->student_name }}"></label>
+									<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox">
+									<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
 								</div>
 							</td>
-							<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
-							<td><a class="flex--stretch" href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+							<td><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
+							<td><a class="flex--stretch" href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a></td>
 							<td class="table-action">
-								<a class="button button--svg offer-action button--danger-text" title="Reject {{ $project->student_name }} for {{ $project->title }}" data-action-type="reject">
+								<a class="button button--svg offer-action button--danger-text" title="Decline {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">
 									@include('svg.close-circle-outline')
 								</a>
 							</td>
 								
 							<td class="table-action">
-								<a class="button button--svg offer-action button--success-text" title="Accept {{ $project->student_name }} for {{ $project->title }}" data-action-type="accept">
+								<a class="button button--svg offer-action button--success-text" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">
 									@include('svg.check-circle-outline')
 								</a>
 							</td>

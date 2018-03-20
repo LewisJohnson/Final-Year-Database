@@ -15,24 +15,24 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach(Auth::user()->supervisor->getAcceptedStudents() as $project)
+		@foreach(Auth::user()->supervisor->getAcceptedStudents() as $accepted)
 			<tr>
 				<td>
 					<div class="checkbox">
-						<input class="checkbox-input" id="accepted-{{ $project->student_name }}" type="checkbox">
-						<label for="accepted-{{ $project->student_name }}" name="accepted-{{ $project->student_name }}"></label>
+						<input class="checkbox-input" id="accepted-{{ $accepted['student']->user->getFullName() }}" type="checkbox">
+						<label for="accepted-{{ $accepted['student']->user->getFullName() }}" name="accepted-{{ $accepted['student']->user->getFullName() }}"></label>
 					</div>
 				</td>
-				<td><a href="mailto:{{ $project->student_email }}">{{ $project->student_name }}</a></td>
-				@if($project->marker)
-					<td>{{ $project->marker->user->getFullName() }}</td>
+				<td><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a></td>
+				@if($accepted['student']->marker)
+					<td>{{ $accepted['student']->marker->user->getFullName() }}</td>
 				@else
 					<td>-</td>
 				@endif
-				<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+				<td><a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a></td>
 
 				<td class="table-action">
-					<a class="button button--svg button--danger-text supervisor-undo-accept" title="Un-accept {{ $project->student_name }} for {{ $project->title }}" data-student-id="{{ $project->student_id }}" data-student-name="{{ $project->student_name }}" data-project-title="{{ $project->title }}">
+					<a class="button button--svg button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">
 						@include('svg.undo')
 					</a>
 				</td>
