@@ -7,22 +7,29 @@
 ;$(function() {
 	"use strict";
 
-	$("#test-import-student-form").on('submit', function(e){
+	$(".import-student-form").on('submit', function(e){
 		e.preventDefault();
 
-		var file_data = $(this).find('.file').prop('files')[0];   
-		var form_data = new FormData()
-		form_data.append('studentFile', file_data);
+		var fileData = $(this).find('.file').prop('files')[0];   
+		var requestType = $(this).data('type');
+		var formData = new FormData()
+
+		formData.append('studentFile', fileData);
 		$.ajax({
 			url: $(this).prop('action'),
 			cache: false,
 			contentType: false,
 			processData: false,
-			data: form_data,
+			data: formData,
 			type: 'post',
 			success: function(response){
-				$('#import-student-test-result').html(response);
-				$('#import-student-test-result').addClass('fadeInUp animated');
+				if(requestType == "test"){
+					$('#import-student-test-result').html(response);
+					$('#import-student-test-result').addClass('fadeInUp animated');
+				} else {
+					$('#import-student-result').html(response);
+					$('#import-student-result').addClass('fadeInUp animated');
+				}
 			}
 		 });
 	});

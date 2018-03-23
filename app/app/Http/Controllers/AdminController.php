@@ -69,9 +69,43 @@ class AdminController extends Controller{
 
 		if ($request->file('studentFile')->isValid()) {
 			$userUpload = $request->file('studentFile');
+			$file = file($userUpload->getRealPath());
 
 			if($request->query('test') == 1){
-				return $this->testImportStudents(file($userUpload->getRealPath()));
+				return $this->testImportStudents($file);
+			} else {
+				// Import to prod tables
+				// Map CSV data into array
+				$csv = array_map('str_getcsv', $file);
+
+				// Remove CSV header and tail
+				for ($i= 1; $i < count($csv) - 1; $i++) {
+					$user = new User;
+					$student = new Student;
+
+					$user->fill(array(
+						'privileges' => 'student',
+						'first_name' => $csv[$i][2],
+						'last_name' => $csv[$i][1],
+						'username' => $csv[$i][4],
+						'password' => bcrypt("password"),
+						'programme' => $csv[$i][3],
+						'email' => $csv[$i][4]."@sussex.ac.uk"
+					));
+					$user->save();
+
+					$student->fill(array(
+						'id' => $user->id,
+						'registration_number' => $csv[$i][0]
+					));
+
+					$student->save();
+				}
+
+				$users = User::where('privileges', 'student')->get();
+				$students = Student::all();
+
+				return view('admin.partials.import-student-table')->with('users', $users)->with('students', $students);
 			}
 		}
 
@@ -117,7 +151,9 @@ class AdminController extends Controller{
 		$users = DB::table('test_users')->select('*')->get();
 		$students = DB::table('test_students')->select('*')->get();
 
-		return view('admin.partials.import-student-table')->with('users', $users)->with('students', $students);
+		return view('admin.partials.import-student-table')
+		->with('users', $users)
+		->with('students', $students);
 	}
 	/**
 		* System administrator dashboard view.

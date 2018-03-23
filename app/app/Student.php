@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
  * @see SussexProjects\Http\Controllers\StudentController
 */
 class Student extends Model{
-	use Traits\Uuids;
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.

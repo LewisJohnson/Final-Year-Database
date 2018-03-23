@@ -1,7 +1,7 @@
 <div class="section-container section-user-selector">
 	<div class="section horizontal">
 		<h4>User Table</h4>
-		<table class="data-table shadow-2dp">
+		<table class="data-table">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -29,7 +29,7 @@
 
 	<div class="section horizontal">
 		<h4>Student Table</h4>
-		<table class="data-table shadow-2dp">
+		<table class="data-table">
 			<thead>
 				<tr>
 					<th>ID</th>

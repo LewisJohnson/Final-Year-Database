@@ -38,7 +38,7 @@
 	<div class="card card--margin-vertical">
 		<h2>Test Import Students</h2>
 		<p>Uploading a file to this form will upload the data to a test table, then display the result.</p>
-		<form id="test-import-student-form" action="{{ action('AdminController@importStudents', ['test' => true]) }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+		<form class="import-student-form" data-type="test" action="{{ action('AdminController@importStudents', ['test' => true]) }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="form-field">
 				<label>Select file to upload</label>
@@ -52,13 +52,14 @@
 	<div class="card card--margin-vertical">
 		<h2>Import Students</h2>
 		<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ Session::get('education_level')["longName"] }} student table.</p>
-		<form id="import-student-form" action="{{ action('AdminController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+		<form class="import-student-form" data-type="prod" action="{{ action('AdminController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="form-field">
 				<label>Select file to upload</label>
 				<input type="file" name="studentFile" class="file" required/>
 				<button class="button" type='submit'>Upload</button>
 			</div>
+			<div id="import-student-result"></div>
 		</form>
 	</div>
 
