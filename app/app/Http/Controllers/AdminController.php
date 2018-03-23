@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Written by Lewis Johnson <lj234@sussex.com>
- */
+	* Copyright (C) University of Sussex 2018.
+	* Unauthorized copying of this file, via any medium is strictly prohibited
+	* Written by Lewis Johnson <lj234@sussex.com>
+	*/
 
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Supervisor;
@@ -24,11 +26,11 @@ use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
 /**
- * The admin controller.
- *
- * Methods in this controller are used for project and system administrators.
- * 
- * @see SussexProjects\User
+	* The admin controller.
+	*
+	* Methods in this controller are used for project and system administrators.
+	* 
+	* @see SussexProjects\User
 */
 class AdminController extends Controller{
 
@@ -37,37 +39,100 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The administrator hub view.
-	 *
-	 * @return \Illuminate\Http\Response
+		* Administrator hub view.
+		*
+		* @return \Illuminate\Http\Response
 	*/
 	public function index(){
 		return view('admin.index');
 	}
 
 	/**
-	 * The import students view.
-	 *
-	 * @return \Illuminate\Http\Response
+		* Import students view.
+		*
+		* @return \Illuminate\Http\Response
 	*/
-	public function importStudents(){
+	public function importStudentsView(){
 		return view('admin.import');
 	}
 
 	/**
-	 * The system administrator dashboard view.
-	 *
-	 * @return \Illuminate\Http\Response
+		* The import students view.
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function importStudents(Request $request){
+		if($request->file('studentFile') === null){
+			return response()->json(array('successful' => false, 'message' => 'Please select a file.'));
+		}
+
+
+		if ($request->file('studentFile')->isValid()) {
+			$userUpload = $request->file('studentFile');
+
+			if($request->query('test') == 1){
+				return $this->testImportStudents(file($userUpload->getRealPath()));
+			}
+		}
+
+		return "no";
+	}
+
+
+	/**
+		* The import students view.
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function testImportStudents($file){
+		// Map CSV data into array
+		$csv = array_map('str_getcsv', $file);
+
+		// Empty test tables
+		DB::table('test_users')->truncate();
+		DB::table('test_students')->truncate();
+
+		// Remove CSV header and tail
+		for ($i= 1; $i < count($csv) - 1; $i++) {
+			$id = $i;
+			DB::table('test_users')->insert(
+				array('id' => $id,
+					'privileges' => 'student',
+					'first_name' => $csv[$i][2],
+					'last_name' => $csv[$i][1],
+					'username' => $csv[$i][4],
+					'password' => bcrypt("password"),
+					'programme' => $csv[$i][3],
+					'email' => $csv[$i][4]."@sussex.ac.uk"
+				)
+			);
+
+			DB::table('test_students')->insert(
+				array('id' => $id,
+					'registration_number' => $csv[$i][0]
+				)
+			);
+		}
+
+		$users = DB::table('test_users')->select('*')->get();
+		$students = DB::table('test_students')->select('*')->get();
+
+		return view('admin.partials.import-student-table')->with('users', $users)->with('students', $students);
+	}
+	/**
+		* System administrator dashboard view.
+		*
+		* @return \Illuminate\Http\Response
 	*/
 	public function dashboard(){
 		return view('admin.system.dashboard');
 	}
 
 	/**
-	 * The user agent string view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* User agent string view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function userAgentView(Request $request){
 		if ($request->query("unique") == "1") {
@@ -99,11 +164,11 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The amend supervisor arrangements view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * 
-	 * @return \Illuminate\Http\Response
+		* The amend supervisor arrangements view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* 
+		* @return \Illuminate\Http\Response
 	*/
 	public function amendSupervisorArrangementsView(Request $request){
 		$supervisors = Supervisor::all();
@@ -112,10 +177,10 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The amend supervisor arrangements view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The amend supervisor arrangements view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function amendSupervisorArrangements(Request $request){
 		if (isset($request->project_load)) {
@@ -148,10 +213,10 @@ class AdminController extends Controller{
 
 
 	/**
-	 * The amend topics view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The amend topics view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function amendTopicsView(Request $request){
 		$topics = Topic::all();
@@ -160,10 +225,10 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The log-in as another user view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The log-in as another user view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function loginAsView(Request $request){
 		$students = Student::all();
@@ -190,10 +255,10 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * Log-in the currently authenticated user as another user.
-	 *	
-	 * @param string $id User ID
-	 * @return \Illuminate\Http\Response
+		* Log-in the currently authenticated user as another user.
+		*	
+		* @param string $id User ID
+		* @return \Illuminate\Http\Response
 	*/
 	public function loginAs($id){
 		// todo: check if they are allowed
@@ -209,29 +274,29 @@ class AdminController extends Controller{
 
 	/* =====================
 		ARCHIVE
-	   =====================*/
+				=====================*/
 
 	/**
-	 * The end of year archive view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The end of year archive view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function archiveView(Request $request){
 		return view('admin.archive');
 	}
 
 	/**
-	 * Runs the end of year archive script
-	 *	
-	 * - Adds This student was undertaken by [STUDENT NAME]” to project description.
-	 * - Set all projects status to archived.
-	 * - Empty the student tables.
-	 * - Empty the transaction tables.
-	 * - Remove all students from the user table.
-	 * 
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* Runs the end of year archive script
+		*	
+		* - Adds This student was undertaken by [STUDENT NAME]” to project description.
+		* - Set all projects status to archived.
+		* - Empty the student tables.
+		* - Empty the transaction tables.
+		* - Remove all students from the user table.
+		* 
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function archive(Request $request){
 		DB::transaction(function() {
@@ -256,13 +321,13 @@ class AdminController extends Controller{
 
 	/* =====================
 		SECOND MARKER
-	   =====================*/
+				=====================*/
 
 	/**
-	 * The manual assign second marker view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The manual assign second marker view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function assignMarkerManualView(Request $request){
 		$supervisors = Supervisor::all();
@@ -282,19 +347,19 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The automatic (Algorithmic) assign second marker view.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* The automatic (Algorithmic) assign second marker view.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function assignMarkerAutomaticView(Request $request){
 		return view('admin.assign-marker-automatic');
 	}
 
 	/**
-	 * Returns all the needed parameters for the automatic second marker assignment algorithm.
-	 *	
-	 * @return object[] slack, supervisors
+		* Returns all the needed parameters for the automatic second marker assignment algorithm.
+		*	
+		* @return object[] slack, supervisors
 	*/
 	public function setupAutomaticSecondMarkerAssignment(){
 		$supervisors = Supervisor::all();
@@ -318,7 +383,7 @@ class AdminController extends Controller{
 
 			// Determine who has max target load
 			if($supervisor->target_load >= $maxTargetLoad){
-				 $maxTargetLoad = $supervisor->target_load;
+					$maxTargetLoad = $supervisor->target_load;
 			}
 
 			// Determine lazy score
@@ -339,10 +404,10 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * The actual action of assigning second markers to students.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response A HTML report of assigned markers 
+		* The actual action of assigning second markers to students.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response A HTML report of assigned markers 
 	*/
 	public function calculateSecondMarkers(Request $request){
 		DB::table(Student::getTable())->update(array('marker_id' => null));
@@ -388,10 +453,10 @@ class AdminController extends Controller{
 	}
 
 	/**
-	 * An overview of each automatically assigned second supervisor.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* An overview of each automatically assigned second supervisor.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function assignMarkerAutomaticTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
@@ -405,10 +470,10 @@ class AdminController extends Controller{
 
 
 	/**
-	 * An overview of each supervisor and which students they are second supervisor to.
-	 *	
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+		* An overview of each supervisor and which students they are second supervisor to.
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
 	*/
 	public function assignMarkerReportTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();

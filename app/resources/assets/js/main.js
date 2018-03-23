@@ -446,4 +446,3 @@ $(document).ajaxError(function( event, request, settings ) {
 		showNotification('error', 'Something went wrong with that request.');
 	}
 });
-

@@ -112,7 +112,8 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'adminPrivilegeCheck']], function() {
 	Route::get('admin', 'AdminController@index');
 
-	Route::get('admin/students/import', 'AdminController@importStudents');
+	Route::post('admin/students/import', 'AdminController@importStudents');
+	Route::get('admin/students/import', 'AdminController@importStudentsView');
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form

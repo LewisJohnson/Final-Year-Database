@@ -1,44 +1,66 @@
 @extends('layouts.app')
+
+@section('scripts')
+	<script src="{{ asset('js/views/admin.js') }}"></script>
+@endsection
+
 @section('content')
-<div class="centered card width--1000">
-<h2>Import Students With XML</h2>
-<p>Select file to upload.</p>
-<script>
-	function handleFileSelect(){
-		if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-			alert('The File APIs are not fully supported in this browser.');
-			return;
-		}
+<div class="centered width--1200">
+	<h1>Import Students</h1>
 
-		input = document.getElementById('fileinput');
-		if (!input) {
-			alert("Um, couldn't find the fileinput element.");
-		}
-		else if (!input.files) {
-			alert("This browser doesn't seem to support the `files` property of file inputs.");
-		}
-		else if (!input.files[0]) {
-			alert("Please select a file before clicking 'Load'");
-		}
-		else {
-			file = input.files[0];
-			fr = new FileReader();
-			fr.onload = receivedText;
-			//fr.readAsText(file);
-			fr.readAsDataURL(file);
-		}
-	}
+	<div class="card card--margin-vertical">
+		<h2>File Format</h2>
 
-	function receivedText() {
-		document.getElementById('editor').appendChild(document.createTextNode(fr.result));
-	}
+		<p style="margin: 0">You can easily export spreadsheets to CSV, all versions of Microsoft Excel and LibreOffice Calc support this feature.</p>
+		<p style="margin: 0">The CSV file must be encoded in UTF-8.</p>
+		<table style="max-width: 800px">
+			<thead>
+				<tr>
+					<th>Registration Number</th>
+					<th>Last Name</th>
+					<th>First Name</th>
+					<th>Programme</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+					<tr>
+						<td>21201297</td>
+						<td>Smith</td>
+						<td>Amadeus</td>
+						<td>Computer Science</td>
+						<td>as997</td>
+					</tr>
+			</tbody>
+		</table>
+	</div>
 
-</script>
+	<div class="card card--margin-vertical">
+		<h2>Test Import Students</h2>
+		<p>Uploading a file to this form will upload the data to a test table, then display the result.</p>
+		<form id="test-import-student-form" action="{{ action('AdminController@importStudents', ['test' => true]) }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			<div class="form-field">
+				<label>Select file to upload</label>
+				<input type="file" name="studentFile" class="file" required/>
+				<button class="button" type='submit'>Upload Test</button>
+			</div>
+		</form>
+		<div id="import-student-test-result"></div>
+	</div>
 
-<input type="file" id="fileinput"/>
-<input type='button' id='btnLoad' value='Load' onclick='handleFileSelect();'>
-<div id="editor"></div>
-<ul>
-</ul>
+	<div class="card card--margin-vertical">
+		<h2>Import Students</h2>
+		<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ Session::get('education_level')["longName"] }} student table.</p>
+		<form id="import-student-form" action="{{ action('AdminController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			<div class="form-field">
+				<label>Select file to upload</label>
+				<input type="file" name="studentFile" class="file" required/>
+				<button class="button" type='submit'>Upload</button>
+			</div>
+		</form>
+	</div>
+
 </div>
 @endsection

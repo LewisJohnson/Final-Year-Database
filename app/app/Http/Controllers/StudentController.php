@@ -174,7 +174,9 @@ class StudentController extends Controller{
 		});
 
 		// Send student proposed email
-		// Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
+		if($student->project->supervisor->isAcceptingEmails()){
+			Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
+		}
 
 		return redirect()->action('HomeController@index');
 	}
@@ -222,7 +224,9 @@ class StudentController extends Controller{
 		});
 
 		// Send selected email
-		// Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
+		if($student->project->supervisor->isAcceptingEmails()){
+			Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
+		}
 
 		return redirect()->action('HomeController@index');
 	}

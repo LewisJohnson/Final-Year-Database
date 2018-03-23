@@ -7,6 +7,26 @@
 ;$(function() {
 	"use strict";
 
+	$("#test-import-student-form").on('submit', function(e){
+		e.preventDefault();
+
+		var file_data = $(this).find('.file').prop('files')[0];   
+		var form_data = new FormData()
+		form_data.append('studentFile', file_data);
+		$.ajax({
+			url: $(this).prop('action'),
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: form_data,
+			type: 'post',
+			success: function(response){
+				$('#import-student-test-result').html(response);
+				$('#import-student-test-result').addClass('fadeInUp animated');
+			}
+		 });
+	});
+
 	$('body').on('submit', '#endOfYearArchive', function(e) {
 		e.preventDefault();
 		var form = $(this);

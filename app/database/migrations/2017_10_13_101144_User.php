@@ -24,7 +24,9 @@ class User extends Migration{
 			$projectAdminLevels.="'admin_".$level."',";
 		}
 
-		foreach(get_departments() as $key => $department) {
+		$departments = get_departments();
+		
+		foreach(array_push($departments,"test"); as $key => $department) {
 			$tableName = $department.'_users';
 			// if(!Schema::hasTable($tableName)) {
 			Schema::create($tableName, function (Blueprint $table) {
