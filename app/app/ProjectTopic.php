@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Project;
 use SussexProjects\Topic;
+use Exception;
 
 /**
  * The project topic model.

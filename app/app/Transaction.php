@@ -9,6 +9,7 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Exception;
 
 /**
  * The transaction model.

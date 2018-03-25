@@ -64,7 +64,7 @@
 									container.html('<h2>Archive Complete</h2>');
 								} else {
 									container.html(oldContainerHtml);
-									showNotification('error', response.message);
+									createToast('error', response.message);
 								}
 							}
 						});

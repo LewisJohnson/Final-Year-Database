@@ -155,7 +155,10 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	/* CONFIGURATION ROUTES */
 	// Yearly parameters configuration view
-	Route::get('admin/parameters', 'AdminController@parameters');
+	Route::get('admin/parameters', 'AdminController@amendParametersView');
+
+	// Yearly parameters form post
+	Route::post('admin/parameters', 'AdminController@amendParameters');
 
 	// End-of-Year archive view
 	Route::get('admin/archive', 'AdminController@archiveView');

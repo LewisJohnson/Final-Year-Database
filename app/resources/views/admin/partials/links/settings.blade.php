@@ -17,10 +17,10 @@
 			<p>Edit Topics</p>
 		</a>
 	</li>
-	{{-- <li>
-		<a class="icon" href="{{ action('AdminController@Parameters') }}">
+	<li>
+		<a class="icon" href="{{ action('AdminController@amendParametersView') }}">
 			@include('svg.globe')
-			<p>Change Global Parameters</p>
+			<p>Amend Parameters</p>
 		</a>
-	</li> --}}
+	</li>
 </ul>

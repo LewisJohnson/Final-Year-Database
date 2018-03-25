@@ -9,6 +9,7 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Exception;
 
 class Mode extends Model{
 
@@ -23,6 +24,7 @@ class Mode extends Model{
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
+	 * @access protected
 	 */
 	protected $fillable = ['project_year', 'start_date', 'mode'];
 
@@ -31,9 +33,18 @@ class Mode extends Model{
 	 * The columns to be parsed as dates.
 	 *
 	 * @var array
+	 * @access protected
 	 */
-	protected $dates = ['project_year', 'start_date'];
+	protected $dates = ['start_date'];
 
+
+	/**
+	 * The models primary key 
+	 * 
+	 * @var integer
+	 * @access protected
+	 */
+	protected $primaryKey = 'project_year';
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
@@ -42,7 +53,7 @@ class Mode extends Model{
 	 */
 	public $incrementing = false;
 
-    /**
+	/**
 	 * The table to retrieve data from.
 	 *
 	 * @return string
@@ -55,23 +66,52 @@ class Mode extends Model{
 		}
 	}
 
-	public static function getStartDate($human = null){
+	/**
+	 * Call this method to get singleton
+	 * 
+	 * ish...
+	 *
+	 * @return UserFactory
+	 */
+	public static function Instance(){
 		$mode = Mode::all()->first();
 
+		if($mode == null){
+			throw new Exception("Error Processing Request", 1);
+			
+		}
+
+		return $mode;
+	}
+
+	/**
+	 * Gets start date
+	 *
+	 * @return string
+	 */
+	public static function getStartDate($human = null){
 		if($human){
-			return $mode->start_date->toDayDateTimeString();
+			return Mode::Instance()->start_date->toDayDateTimeString();
 		} else {
-			return $mode->start_date;
+			return Mode::Instance()->start_date;
 		}
 	}
 
+	/**
+	 * Gets project year
+	 *
+	 * @return string
+	 */
 	public static function getProjectYear(){
-		$mode = Mode::all()->first();
-		return $mode->project_year;
+		return Mode::Instance()->project_year;
 	}
 
+	/**
+	 * Gets mode
+	 *
+	 * @return string
+	 */
 	public static function getMode(){
-		$mode = Mode::all()->first();
-		return $mode->mode;
+		return Mode::Instance()->mode;
 	}
 }

@@ -6,29 +6,52 @@
 
 /* ================
 	HELPERS
-	 ================ */
-function showNotification(type, message){
-	var notification = $('.notification');
-	notification.removeClass();
+	================ */
 
-	notification.addClass('notification ' + type);
-	$(notification).html("<p>" + message + "</p>");
+const toastHtmlSnippet = '<div class="toast" role="alert"></div>';
 
-	notification.show();
+/**
+ * Creates a new toast.
+ * @param {string} type The css class to add to the toast
+ * @param {string} message The message to add to the toast
+ */
+function createToast(type, message){
 
-	var animDuration = notification.css("animation-duration").toString().replace(/s/g, '') * 1000;
+	// Remove other toasts
+	$('.toast').remove();
+
+	// Create new toast
+	var toast = $(toastHtmlSnippet).appendTo('body');
+
+	// Add message to toast
+	$(toast).html("<p>" + message + "</p>");
+
+	// Add classes to toast
+	$(toast).addClass('notification ' + type);
 
 	setTimeout(function() {
-		notification.hide(0);
-	}, animDuration);
+		// Delete toast
+		$(toast).remove();
+	}, 3000);
 }
 
+
+/**
+ * Removes all shadow classes from DOM element.
+ * @param {Object} element
+ */
 function removeAllShadowClasses(element){
 	$(element).removeClass (function (index, className) {
 		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
 	});
 }
 
+
+/**
+ * Sorts an unordered list by it's text value.
+ *
+ * @param {object} ul The lost to sort
+ */
 function sortUnorderedList(ul) {
 	var listitems = ul.children('li').get();
 
@@ -110,6 +133,13 @@ function addTitleHeadersToList(ul) {
 	}
 }
 
+/**
+ * Creates a new cookie.
+ *
+ * @param {string} cname The name of the cookie
+ * @param {string} cvalue The value of the cookie
+ * @param {int} exdays The duration of days the cookie should lsat 
+ */
 function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
 	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -117,6 +147,11 @@ function setCookie(cname, cvalue, exdays) {
 	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+/**
+ * Retrieves a cookie.
+ *
+ * @param {string} cname The name of the cookie
+ */
 function getCookie(cname) {
 	var name = cname + "=";
 	var ca = document.cookie.split(';');
@@ -176,12 +211,16 @@ function repopulateCheckboxes(){
 	}
 }
 
-/*
-* From http://web.archive.org/web/20110102112946/http://www.scottklarr.com/topic/425/how-to-insert-text-into-a-textarea-where-the-cursor-is/
-* Posted On Oct 11, 2008 at 10:16 pm
-* Can not find an author to credit
-*/
+/**
+ * Inserts text at a caret (Cursor)
+ *
+ * @param {string} areaId The ID of the element to search the caret for (Should be an input)
+ * @param {string} text The value of the text to insert
 
+ * A modified version 0f http://web.archive.org/web/20110102112946/http://www.scottklarr.com/topic/425/how-to-insert-text-into-a-textarea-where-the-cursor-is/
+ * Posted On Oct 11, 2008 at 10:16 pm
+ * Can not find an author to credit
+ */
 function insertAtCaret(areaId, text) {
 	var txtarea = document.getElementById(areaId);
 	if (!txtarea || !text) { return; }
@@ -201,6 +240,12 @@ function insertAtCaret(areaId, text) {
 	txtarea.scrollTop = scrollPos;
 }
 
+/**
+ * Inserts text around a caret (Cursor)
+ *
+ * @param {string} areaId The ID of the element to search the caret for (Should be an input)
+ * @param {string} text The value of the text to insert
+ */
 function wrapTextWithTag(areaId, tag) {
 	var txtarea = document.getElementById(areaId);
 	if (!txtarea || !tag) { return; }
@@ -220,7 +265,6 @@ function wrapTextWithTag(areaId, tag) {
 
 	$(txtarea).trigger("change");
 
-	// txtarea.selectionEnd
 	txtarea.focus();
 
 	txtarea.selectionStart = strPos;

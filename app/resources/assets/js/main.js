@@ -136,9 +136,9 @@ import '../js/components';
 			data: $(this).serialize(),
 			success:function(response){
 				if(response.share_name){
-					showNotification('success', 'Your name is being shared with other students.');
+					createToast('success', 'Your name is being shared with other students.');
 				} else {
-					showNotification('', 'You are no longer sharing your name with other students.');
+					createToast('', 'You are no longer sharing your name with other students.');
 				}
 				$('#share_name').prop('checked', response.share_name);
 			},
@@ -155,9 +155,9 @@ import '../js/components';
 			data: $(this).serialize(),
 			success:function(response){
 				if(response.successful){
-					showNotification('success', response.message);
+					createToast('success', response.message);
 				} else {
-					showNotification('error', response.message);
+					createToast('error', response.message);
 				}
 			},
 		});
@@ -425,9 +425,9 @@ import '../js/components';
 							success:function(response){
 								if(response.successful){
 									card.hide(400, function() { card.remove(); });
-									showNotification('success', 'Undo successful.');
+									createToast('success', 'Undo successful.');
 								} else {
-									showNotification('error', response.message);
+									createToast('error', response.message);
 								}
 							}
 						});
@@ -465,6 +465,6 @@ import '../js/components';
 
 $(document).ajaxError(function( event, request, settings ) {
 	if(config.showAjaxRequestFailNotification){
-		showNotification('error', 'Something went wrong with that request.');
+		createToast('error', 'Something went wrong with that request.');
 	}
 });

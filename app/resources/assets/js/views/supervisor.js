@@ -183,13 +183,13 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					tableRow.hide(400, function() { tableRow.remove(); });
 					
 					if(actionType === "accept"){
-						showNotification('success', 'Student has been accepted.');
+						createToast('success', 'Student has been accepted.');
 						updateAcceptedStudentsTable();
 					} else if (actionType === "reject"){
-						showNotification('', 'Student has been rejected.');
+						createToast('', 'Student has been rejected.');
 					}
 				} else {
-					showNotification('error', response.message);
+					createToast('error', response.message);
 					actionButton.html(actionType);
 				}
 			}
@@ -307,10 +307,10 @@ import Swappable from '@shopify/draggable/lib/swappable';
 							success:function(response){
 								if(response.successful){
 									tableRow.hide(400, function() { tableRow.remove(); });
-									showNotification('success', 'Undo successful.');
+									createToast('success', 'Undo successful.');
 									updateAcceptedStudentsTable();
 								} else {
-									showNotification('error', response.message);
+									createToast('error', response.message);
 								}
 							}
 						});

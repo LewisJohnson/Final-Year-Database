@@ -10,6 +10,7 @@ namespace SussexProjects;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Exception;
 
 /**
  * The user model.

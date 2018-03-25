@@ -33,7 +33,7 @@
 		margin: 0;
 	}
 
-	&.error{
+	&.error, &.danger{
 		background: $notification-error-bg;
 		p {
 			color: white;

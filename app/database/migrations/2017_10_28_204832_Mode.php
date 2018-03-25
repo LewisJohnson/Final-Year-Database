@@ -19,10 +19,11 @@ class Mode extends Migration{
 		foreach (get_departments() as $key => $department) {
 			foreach (get_education_levels() as $key => $level) {
 				Schema::create($department.'_mode_'.$level['shortName'], function (Blueprint $table) {
-					$table->smallInteger('project_year')->unique();
 					$table->dateTimeTz('start_date');
 					$table->string('mode');
 				});
+
+				DB::statement("ALTER TABLE `."department.'_mode_'.$level['shortName']".` ADD `project_year` YEAR NOT NULL");
 			}
 		}
 	}

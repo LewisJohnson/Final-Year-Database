@@ -22,6 +22,7 @@ use SussexProjects\Project;
 use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
+use SussexProjects\Mode;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
@@ -109,7 +110,7 @@ class AdminController extends Controller{
 			}
 		}
 
-		return "no";
+		return response()->json(array('successful' => false, 'message' => 'Invalid file.'));
 	}
 
 
@@ -165,7 +166,7 @@ class AdminController extends Controller{
 
 	/**
 		* User agent string view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -183,6 +184,45 @@ class AdminController extends Controller{
 			return view('system.user-agent')
 				->with('userAgents', $userAgents->paginate($this->paginationCount));
 		}
+	}
+
+	/**
+		* Amend parameters view (mode)
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
+	*/
+	public function amendParametersView(Request $request){
+		return view('admin.parameters');
+	}
+
+	/**
+		* Amend parameters view (mode)
+		*	
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
+	*/
+	public function amendParameters(Request $request){
+		$mode = Mode::all()->first();
+
+		if (isset($request->start_date)) {
+			$mode->start_date = $request->start_date;
+		}
+
+		if (isset($request->project_year)) {
+			$mode->project_year = $request->project_year;
+		}
+
+		if (isset($request->mode)) {
+			$mode->mode = $request->mode;
+		}
+
+		$mode->save();
+
+		session()->flash('message', 'Parameters have been updated successfully.');
+		session()->flash('message_type', 'success');
+
+		return redirect()->action('HomeController@index');
 	}
 
 	public function configure(Request $request){
