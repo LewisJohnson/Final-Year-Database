@@ -30,6 +30,9 @@ class SuccessfulLogin{
 	 * @return void
 	 */
 	public function handle(Login $event){
+		// todo: CHECK WITH IDAP to see if they are guest
+		// todo: Set education level with IDAP
+
 		// Set education level
 		Session::put('education_level', current($event->user->allowedEducationLevel()));
 

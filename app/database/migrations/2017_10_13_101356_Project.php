@@ -18,7 +18,7 @@ class Project extends Migration{
 	public function up(){
 		foreach (get_departments() as $key => $department) {
 			foreach (get_education_levels() as $key => $level) {
-				Schema::create($department.'_projects_'.$level['shortName'], function (Blueprint $table) {
+				Schema::create($department.'_projects_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('id')->unique();
 					$table->string('title', 255);
 					$table->mediumText('description');
@@ -28,6 +28,9 @@ class Project extends Migration{
 					$table->uuid('student_id')->nullable(true);
 					$table->timestampsTz();
 					$table->primary('id');
+
+					$table->foreign('supervisor_id')->references('id')->on($department.'_supervisors');
+					$table->foreign('student_id')->references('id')->on($department.'_students_'.$level['shortName']);
 				});
 			}
 		}

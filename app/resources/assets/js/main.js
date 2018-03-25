@@ -127,7 +127,7 @@ import '../js/components';
 	});
 
 	// Used on the student index page
-	$("#share-project-form").on('submit', function(e){
+	$("#share-name-form").on('submit', function(e){
 		e.preventDefault();
 
 		$.ajax({
@@ -144,6 +144,29 @@ import '../js/components';
 			},
 		});
 	});
+
+	// Used on the student index page
+	$(".receive-emails-form").on('submit', function(e){
+		e.preventDefault();
+
+		$.ajax({
+			url: $(this).prop('action'),
+			type:'PATCH',
+			data: $(this).serialize(),
+			success:function(response){
+				if(response.successful){
+					showNotification('success', response.message);
+				} else {
+					showNotification('error', response.message);
+				}
+			},
+		});
+	});
+
+	$('.receive-emails-checkbox').on('click', function(e){
+		$(this).submit();
+	});
+
 
 	$("#loginForm").on('submit', function(e){
 		e.preventDefault();
@@ -193,7 +216,6 @@ import '../js/components';
 
 	// NEW USER
 	// put this stuff in an array
-	// todo: add automatic email, when username field is filled out, put username@sussex.ac.uk in the email field
 	// todo: if student is selected, deselect the rest and disable them (likewise for other checkboxes)
 
 	$('.user-form #username').on('change', function(){

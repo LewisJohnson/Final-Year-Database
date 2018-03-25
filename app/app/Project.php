@@ -123,7 +123,7 @@ class Project extends Model{
      *
      * @return Student
      */
-    public function getStudentsWithThisProjectSelected(){
+    public function getStudentsWithProjectSelected(){
 		return Student::where('project_id', $this->id)->where('project_status', 'selected')->get();
 	}
 
@@ -132,7 +132,7 @@ class Project extends Model{
      *
      * @return Student
      */
-    public function getAcceptStudent(){
+    public function getAcceptedStudent(){
 		return Student::where('project_id', $this->id)->where('project_status', 'accepted')->first();
 	}
 

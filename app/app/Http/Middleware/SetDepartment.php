@@ -29,10 +29,6 @@ class SetDepartment{
 			}
 		}
 
-		// if($request->route()->uri() == "set-department" && $_SERVER['REQUEST_METHOD'] == 'GET'){
-		// 	return redirect('/index');
-		// }
-
 		return $next($request);
 	}
 }

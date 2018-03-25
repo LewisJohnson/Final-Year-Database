@@ -32,6 +32,13 @@
 
 	@if($view == "personal")
 		<h1>My Projects</h1>
+
+		@if(count($projects) < 1)
+			<div class="card centered width--600">
+				<h2>You have no projects!</h2>
+				<p>Why not create one now? Just <a href="{{ action('ProjectController@create') }}">click here</a></p>
+			</div>
+		@endif
 	@endif
 
 	{{-- We have search results--}}
@@ -42,26 +49,28 @@
 		@include('projects.partials.search')
 	@endif
 
-	<div class="table-responsive">
-		<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }}">
-			<thead>
-				<tr>
-					<th data-default="true">Topic</th>
-					<th data-default="true">Title</th>
-					<th data-default="false" hidden>Short Description</th>
-					<th data-default="false" hidden>Full Description</th>
-					<th data-default="true">Skills</th>
-					<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
-				</tr>
-			</thead>
+	@if(count($projects) > 0)
+		<div class="table-responsive">
+			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }}">
+				<thead>
+					<tr>
+						<th data-default="true">Topic</th>
+						<th data-default="true">Title</th>
+						<th data-default="false" hidden>Short Description</th>
+						<th data-default="false" hidden>Full Description</th>
+						<th data-default="true">Skills</th>
+						<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
+					</tr>
+				</thead>
 
-			<tbody>
-				@foreach($projects as $project)
-					@include('projects.partials.project-table-row')
-				@endforeach
-			</tbody>
-		</table>
-	</div>
-	<div style="margin: 1rem auto" class="loader loader--medium projects"></div>
+				<tbody>
+					@foreach($projects as $project)
+						@include('projects.partials.project-table-row')
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		<div style="margin: 1rem auto" class="loader loader--medium projects"></div>
+	@endif
 </div>
 @endsection

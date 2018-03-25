@@ -71,7 +71,7 @@ class ProjectController extends Controller{
 			->whereNotNull('supervisor_id')->get();
 
 		$filteredProjects = $projects->filter(function($project, $key) {
-			if(!$project->supervisor->isTakingStudents()){
+			if(!$project->supervisor->getTakingStudents()){
 				return false;
 			}
 			return true;

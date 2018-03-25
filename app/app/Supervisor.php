@@ -52,6 +52,62 @@ class Supervisor extends User{
 	}
 
 	/**
+	 * Sets the superior's email preference.
+	 *
+	 * @param String $educationLevel An optional education level parameter
+	 *
+	 * @return boolean Is supervisor accepting emails
+	 */
+	public function setAcceptingEmails($value, $educationLevel = null){
+		if(isset($educationLevel)){
+			$this["accept_email_".$educationLevel] = $value;
+		} else {
+			$this["accept_email_".Session::get('education_level')["shortName"]] = $value;
+		}
+
+		$this->save();
+		return;
+	}
+	
+	/**
+	 * Sets taking student property.
+	 *
+	 *
+	 * @param Boolean $value Take students
+	 * @param String $educationLevel An optional education level parameter
+	 *
+	 * @return
+	 */
+	public function setTakingStudents($value, $educationLevel = null){
+		if(isset($educationLevel)){
+			$this["take_students_".$educationLevel] = $value;
+		} else {
+			$this["take_students_".Session::get('education_level')["shortName"]] = $value;
+		}
+		$this->save();
+		return;
+	}
+
+	/**
+	 * Sets the project load of the supervisor (Student load).
+	 *
+	 *
+	 * @param Int $value The project load
+	 * @param String $educationLevel An optional education level parameter
+	 *
+	 * @return
+	 */
+	public function setProjectLoad($value, $educationLevel = null){
+		if(isset($educationLevel)){
+			$this["project_load_".$educationLevel] = $value;
+		} else {
+			$this["project_load_".Session::get('education_level')["shortName"]] = $value;
+		}
+		$this->save();
+		return;
+	}
+
+	/**
 	 * The table to retrieve data from.
 	 *
 	 * @return string
@@ -73,7 +129,7 @@ class Supervisor extends User{
 	 *
 	 * @return boolean Is supervisor accepting emails
 	 */
-	public function isAcceptingEmails($educationLevel = null){
+	public function getAcceptingEmails($educationLevel = null){
 		if(isset($educationLevel)){
 			return $this["accept_email_".$educationLevel];
 		}
@@ -90,7 +146,7 @@ class Supervisor extends User{
 	 *
 	 * @return boolean Is supervisor taking students
 	 */
-	public function isTakingStudents($educationLevel = null){
+	public function getTakingStudents($educationLevel = null){
 		if(isset($educationLevel)){
 			return $this["take_students_".$educationLevel];
 		}
@@ -135,8 +191,6 @@ class Supervisor extends User{
 			->whereNull('student_id')
 			->get();
 	}
-
-
 	/**
 	 * A list of students who have selected a project from this supervisor.
 	 *
@@ -272,7 +326,6 @@ class Supervisor extends User{
 		return $offers;
 	}
 
-
 	/**
 	 * A HTML 5 data list snippet containing all supervisors.
 	 * This is used for auto-complete.
@@ -290,6 +343,6 @@ class Supervisor extends User{
 
 		return $dataListHtml;
 	}
+
+
 }
-
-

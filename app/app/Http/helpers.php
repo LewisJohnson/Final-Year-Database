@@ -25,8 +25,7 @@ if (!function_exists('lang_sess')){
 
 if (!function_exists('get_config_json')){
 	function get_config_json($key = null, $value = null) {
-		// todo: add per department config file
-		if(empty(Session::get('department'))){
+		if(Session::get('department') == null){
 			$config = json_decode(Storage::disk('local')->get(config("app.default_department_config_file")), true);
 		} else {
 			$fileDir = config("app.department_config_dir")."\\".Session::get('department').".json";

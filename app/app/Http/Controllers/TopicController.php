@@ -35,14 +35,14 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		//todo: add topic created transaction to DB
 		$result = DB::transaction(function() use ($request) {
 			$topic = Topic::create(['name' => $request->topic_name]);
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'action' =>'created',
-				'topic_id' => $topic->id,
+				'type' =>'created',
+				'action' =>'deleted',
+				'topic' => $topic->name,
 				'transaction_date' => new Carbon
 			));
 
@@ -60,19 +60,18 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
-		// todo: add topic updated transaction to DB
-		// Problem with the topic update transaction is that the new name will be used, because it's linked to the Id.
 		$result = DB::transaction(function() use ($request) {
 			$topic = Topic::findOrFail($request->topic_id);
-			// $transaction = new Transaction;
+			$transaction = new Transaction;
 
-			// $transaction->fill(array(
-			// 	'action' =>'updated',
-			// 	'topic_id' => $topic->id,
-			// 	'transaction_date' => new Carbon
-			// ));
+			$transaction->fill(array(
+				'type' =>'topic',
+				'action' =>'updated',
+				'topic' => $topic->id,
+				'transaction_date' => new Carbon
+			));
 
-			// $transaction->save();
+			$transaction->save();
 
 			$topic->name = $request->topic_name;
 			$topic->save();
@@ -87,15 +86,15 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Request $request){
-		//todo: add topic destroyed transaction to DB
 		$result = DB::transaction(function() use ($request) {
 			$projectTopic = ProjectTopic::where('topic_id', $request->topic_id);
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
+				'type' =>'topic',
 				'action' =>'deleted',
-				'topic_id' => $topic->id,
+				'topic' => $topic->id,
 				'transaction_date' => new Carbon
 			));
 

@@ -18,11 +18,14 @@ class ProjectTopic extends Migration{
 	public function up(){
 		foreach (get_departments() as $key => $department) {
 			foreach (get_education_levels() as $key => $level) {
-				Schema::create($department.'_project_topics_'.$level['shortName'], function (Blueprint $table) {
+				Schema::create($department.'_project_topics_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('project_id');
 					$table->uuid('topic_id');
 					$table->boolean('primary')->default(0);
 					$table->primary(['project_id', 'topic_id']);
+
+					$table->foreign('project_id')->references('id')->on($department.'_projects_'.$level['shortName']);
+					$table->foreign('topic_id')->references('id')->on($department.'_topics_'.$level['shortName']);
 				});
 			}
 		}

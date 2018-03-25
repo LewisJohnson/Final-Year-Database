@@ -18,6 +18,7 @@ use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
+use SussexProjects\Mode;
 use SussexProjects\Mail\StudentSelected;
 use SussexProjects\Mail\StudentProposed;
 
@@ -128,14 +129,19 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function proposeProject(Request $request){
-		// todo: check mode year
+		if(Mode::getStartDate()->gt(Carbon::now())){
+			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getStartDate().'.');
+			session()->flash('message_type', 'danger');
+			return redirect()->action('HomeController@index');
+		}
+
 		$student = Auth::user()->student;
 
 		DB::transaction(function() use ($request, $student) {
 			// Student has already selected a project
 			if($student->project_id != null){
 				session()->flash('message', 'You have already selected a project.');
-				session()->flash('message_type', 'danger');
+				session()->flash('message_type', 'error');
 				return redirect()->action('HomeController@index');
 			}
 
@@ -174,8 +180,8 @@ class StudentController extends Controller{
 		});
 
 		// Send student proposed email
-		if($student->project->supervisor->isAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()));
+		if($student->project->supervisor->getAcceptingEmails()){
+			Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
 		}
 
 		return redirect()->action('HomeController@index');
@@ -190,7 +196,12 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response Home page
 	*/
 	public function selectProject(Request $request){
-		// todo: check mode selection date before selecting project
+		if(Mode::getStartDate()->gt(Carbon::now())){
+			session()->flash('message', 'You are not allowed to select a project until '.Mode::getStartDate(true).'.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@show', request('project_id'));
+		}
+
 		$student = Auth::user()->student;
 
 		DB::transaction(function() use ($request, $student) {
@@ -198,8 +209,8 @@ class StudentController extends Controller{
 			// Student has already selected a project
 			if($student->project_id != null){
 				session()->flash('message', 'You have already selected a project.');
-				session()->flash('message_type', 'danger');
-				return redirect()->action('HomeController@index');
+				session()->flash('message_type', 'error');
+				return redirect()->action('ProjectController@show', request('project_id'));
 			}
 
 			$project = Project::findOrFail(request('project_id'));
@@ -224,8 +235,8 @@ class StudentController extends Controller{
 		});
 
 		// Send selected email
-		if($student->project->supervisor->isAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()));
+		if($student->project->supervisor->getAcceptingEmails()){
+			Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
 		}
 
 		return redirect()->action('HomeController@index');
@@ -274,14 +285,15 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function updateSecondMarker(Request $request) {
-		//todo: make sure user is authorized to perform this action
-		$result = DB::transaction(function() use ($request) {
+		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level'))){
+			return redirect()->action('HomeController@index'); 
+		}
 
+		$result = DB::transaction(function() use ($request) {
 			$project = Project::findOrFail(request('project_id'));
 			$student = Student::findOrFail(request('student_id'));
 			$transaction = new Transaction;
 			$marker = Supervisor::findOrFail(request('marker_id'));
-
 			$transaction->fill(array(
 				'type' =>'project',
 				'action' => 'marker-assigned',

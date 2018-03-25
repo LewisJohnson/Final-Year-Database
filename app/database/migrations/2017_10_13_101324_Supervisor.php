@@ -17,7 +17,7 @@ class Supervisor extends Migration{
 	 */
 	public function up(){
 		foreach (get_departments() as $key => $department) {
-			Schema::create($department.'_supervisors', function (Blueprint $table) {
+			Schema::create($department.'_supervisors', function (Blueprint $table) use ($department){
 				$table->uuid('id')->unique();
 				$table->string('title', 6);
 				foreach (get_education_levels() as $key => $level) {
@@ -26,6 +26,7 @@ class Supervisor extends Migration{
 					$table->boolean('accept_email_'.$level['shortName']);
 				}
 				$table->primary('id');
+				$table->foreign('id')->references('id')->on($department.'_users');
 			});
 		}
 	}

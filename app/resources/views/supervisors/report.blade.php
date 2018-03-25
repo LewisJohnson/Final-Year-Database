@@ -24,7 +24,7 @@
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>
 						
-						@if($supervisor->isTakingStudents())
+						@if($supervisor->getTakingStudents())
 							<th>@lang('messages.supervisor_open_to_offers')</th>
 						@else
 							<th>@lang('messages.supervisor_closed_to_offers')</th>

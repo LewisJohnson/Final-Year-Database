@@ -110,10 +110,15 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
    3. PROJECT ADMIN ROUTES
    =============== */
 Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'adminPrivilegeCheck']], function() {
+	
+	// Admin hub
 	Route::get('admin', 'AdminController@index');
 
-	Route::post('admin/students/import', 'AdminController@importStudents');
+	// Import student view
 	Route::get('admin/students/import', 'AdminController@importStudentsView');
+
+	// Import student form
+	Route::post('admin/students/import', 'AdminController@importStudents');
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form
@@ -213,6 +218,9 @@ Route::group(['middleware' => ['web', 'supervisor.admin', 'checkDepartment']], f
    6. SUPERVISOR ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
+
+	// Receive emails form
+	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');
 
 	// Project report view
 	Route::get('supervisor/project-report', 'SupervisorController@projectReport');

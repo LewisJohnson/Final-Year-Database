@@ -37,7 +37,7 @@
 							<td>{{ $supervisor->user->username }}</td>
 							<td>{{ ucfirst($supervisor->user->access_type) }}</td>
 							<td>{{ $supervisor->getProjectLoad() }}</td>
-							<td>{{ $supervisor->isTakingStudents() ? 'Yes' : 'No' }}</td>
+							<td>{{ $supervisor->getTakingStudents() ? 'Yes' : 'No' }}</td>
 						</tr>
 
 					@endforeach

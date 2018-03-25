@@ -178,6 +178,31 @@ class SupervisorController extends Controller{
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}
 
+
+	/**
+	 * Updates the students share name to other students preference.
+	 *
+	 * @param \Illuminate\Http\Request
+	 * @return \Illuminate\Http\Response
+	*/
+	public function receiveEmails(Request $request){
+		$educationLevels = get_education_levels(true);
+
+		if(in_array($request->education_level, $educationLevels)){
+			Auth::user()->supervisor->setAcceptingEmails(isset($request["accept_emails_".$request->education_level]) ? 1 : 0, $request->education_level);
+		} else {
+			return response()->json(array('successful' => false, 'message' => 'Incorrect parameters.'));
+		}
+
+		if(isset($request["accept_emails_".$request->education_level])){
+			$message = "You have opted in to ".$request->education_level." emails.";
+		} else {
+			$message = "You have opted out of ".$request->education_level." emails.";
+		}
+
+		return response()->json(array('successful' => true, 'message' => $message));
+	}
+
 	/**
 	 * Undoes an accepted student.
 	 *

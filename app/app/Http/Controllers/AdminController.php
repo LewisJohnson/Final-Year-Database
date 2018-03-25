@@ -131,7 +131,6 @@ class AdminController extends Controller{
 			$id = $i;
 			DB::table('test_users')->insert(
 				array('id' => $id,
-					'privileges' => 'student',
 					'first_name' => $csv[$i][2],
 					'last_name' => $csv[$i][1],
 					'username' => $csv[$i][4],
@@ -234,19 +233,16 @@ class AdminController extends Controller{
 				$supervisor = Supervisor::findOrFail($id[0]);
 
 				if (isset($request->project_load)) {
-					$supervisor['project_load_'.Session::get('education_level')["shortName"]] = $request->project_load;
+					$supervisor->setProjectLoad($request->project_load);
 				}
 
-				$supervisor['take_students_'.Session::get('education_level')["shortName"]] = isset($request->take_students) ? true : false;
-
-				$supervisor->save();
+				$supervisor->setTakingStudents(isset($request->take_students) ? 1 : 0);
 			}
 		}
 		$supervisors = Supervisor::all();
 		return view('admin.arrangements')
 			->with('supervisors', $supervisors);
 	}
-
 
 	/**
 		* The amend topics view.
@@ -308,10 +304,6 @@ class AdminController extends Controller{
 		return redirect()->action('HomeController@index');
 	}
 
-	/* =====================
-		ARCHIVE
-				=====================*/
-
 	/**
 		* The end of year archive view.
 		*	
@@ -339,25 +331,19 @@ class AdminController extends Controller{
 			$projects = Project::all();
 
 			foreach ($projects as $key => $project) {
-
-				if($project->getAcceptStudent() != null){
-					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptStudent()->user->getFullName().")";
+				if($project->getAcceptedStudent() != null){
+					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName().")";
 				}
 
 				$project->status = 'archived';
 				$project->save();
 			}
 
-			DB::table(Stundet::$table)->delete();
-
+			DB::table(Student::$table)->truncate();
 		});
 
 		return response()->json(array('successful' => true));
 	}
-
-	/* =====================
-		SECOND MARKER
-				=====================*/
 
 	/**
 		* The manual assign second marker view.

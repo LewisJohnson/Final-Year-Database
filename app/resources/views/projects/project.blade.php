@@ -2,6 +2,15 @@
 @section('content')
 
 <div class="centered width--800">
+
+	@if($view != "StudentProject")
+		@if(Auth::user()->isStudent())
+			@if(SussexProjects\Mode::getStartDate()->gt(\Carbon\Carbon::now()))
+			<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getStartDate()->diffForHumans() }}.</p>
+			@endif
+		@endif
+	@endif
+
 	@if($project->archived)
 		<h1>This project is archived.</h1>
 	@endif
@@ -69,12 +78,14 @@
 		@if($view != "StudentProject")
 			@if(Auth::user()->isStudent())
 				@if(Auth::user()->student->project_status == 'none')
-					<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
-						{{ csrf_field() }}
-						{{ method_field('PATCH') }}
-						<input type="hidden" name="project_id" value="{{ $project->id }}">
-						<button class="button button--raised button--accent">Select project</button>
-					</form>
+					@if(SussexProjects\Mode::getStartDate()->lte(\Carbon\Carbon::now()))
+						<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+							{{ csrf_field() }}
+							{{ method_field('PATCH') }}
+							<input type="hidden" name="project_id" value="{{ $project->id }}">
+							<button class="button button--raised button--accent">Select project</button>
+						</form>
+					@endif
 				@else
 					<button class="button button--raised button--accent" disabled>Select project</button>
 				@endif

@@ -7,20 +7,21 @@
 		<div class="card-container card--margin-vertical">
 			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
-				<p>{{ ucfirst(Auth::user()->getPrettyPrivilegesString()) }}.</p>
+				<p>You are a {{ Auth::user()->getPrettyPrivilegesString() }}.</p>
 			</div>
 
 			@if(Auth::user()->isStudent())
 				<div class="card card--half">
 					<h2>Options</h2>
 					<p>You may hide your name from other students in the supervisor report.</p>
-					<form id="share-project-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+					<form id="#share-name-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
 						<div class="form-field">
 							<div class="checkbox">
-								<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
+								<input onChange="$('#share-name-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
 								<label for="share_name">Share name</label>
 							</div>
+
 						</div>
 					</form>
 				</div>
@@ -31,12 +32,14 @@
 					<h2>Options</h2>
 					<p>You may opt-out from receiving emails.</p>
 					@foreach (get_education_levels() as $educationLevel)
-						<form id="accept-email-{{ $educationLevel["shortName"] }}"  class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+						<form id='#receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form form form--flex" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
 							{{ csrf_field() }}
+
+							<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
 							<div class="form-field">
 								<div class="checkbox">
-									<input onChange="$('#share-project-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->supervisor->isAcceptingEmails($educationLevel["shortName"])) checked @endif >
-									<label for="share_name">Receive {{ $educationLevel["longName"] }} emails</label>
+									<input class="receive-emails-checkbox" type="checkbox" name="accept_emails_{{ $educationLevel["shortName"] }}" id="accept_emails_{{ $educationLevel["shortName"] }}" @if(Auth::user()->supervisor->getAcceptingEmails($educationLevel["shortName"])) checked @endif >
+									<label for="accept_emails_{{ $educationLevel["shortName"] }}">Receive {{ $educationLevel["longName"] }} emails</label>
 								</div>
 							</div>
 						</form>
@@ -103,7 +106,6 @@
 							<p>You are NOT accepting {{ $level["longName"] }} students</p>
 						@endif
 
-						{{-- TODO: Add form to stop emails --}}
 						@if(Auth::user()->supervisor['accept_email_'.$level["shortName"]])
 							<p>You are receiving emails</p>
 						@else

@@ -81,9 +81,8 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		// todo: fix this
-		return in_array("guest_ug", $this->getPrivileges());
-		return in_array("guest_pg", $this->getPrivileges());
+		// todo: CHECK WITH IDAP
+		return false;
 	}
 
 	/**
