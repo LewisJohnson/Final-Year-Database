@@ -6,19 +6,29 @@
 
 /*
 |--------------------------------------------------------------------------
-| FILE STRUCTURE
+| MAIN
 |--------------------------------------------------------------------------
+|
+| A bunch of stuff.
+|
+|------------------
+| FILE STRUCTURE
+|------------------
 |
 |  	1. AJAX Setup
 |	2. HTML Modifications
-|	3. Other
-|
+|	3. Forms
+|	4. Click Events
+| 	5. Change Events
+|	6. HTML Editor
 */
 
 import '../js/components';
 
 "use strict";
 ;$(function() {
+
+	var animatedCardEntranceAnimationDelay = 0;
 
 	/* ================
 		1. AJAX Setup
@@ -36,6 +46,21 @@ import '../js/components';
 	if($('.show--scroll-to-top').length > 0){
 		$('.main-content').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
+
+	$('.animate-cards .card').css("opacity", 0);
+
+	// Animate all cards
+	$('.animate-cards .card').each(function(index, value) {
+		delay += 200;
+		setTimeout(function(){
+			$(this).addClass("slideInUp animated");
+
+			$(this).animate({
+				opacity: 1
+			}, 800);
+
+		}.bind(this), animatedCardEntranceAnimationDelay);
+	});
 
 	// Accessibility
 	$('.dropdown').attr('tabindex', '0');
@@ -85,46 +110,8 @@ import '../js/components';
 	});
 
 	/* ======================
-		 3. OTHER
+		 3. FORMS
 	   ====================== */
-	$("body").on("change", ".email-table .checkbox input", function() {
-		var select = function(dom){
-			var status = dom.parents().eq(4).data('status');
-			var emailString = "mailto:";
-			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
-			var emailButtonselector = ".email-selected." + status;
-
-			$(checkboxSelector).each(function(index, value) {
-				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
-					emailString += $(value).data('email');
-					emailString += ",";
-				}
-			});
-			$(emailButtonselector).prop('href', emailString);
-		};
-		setTimeout(select($(this)), 2000);
-	});
-
-	$("body").on("click", ".email-selected", function(e) {
-		if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
-			alert("You haven't selected anyone.");
-			e.preventDefault();
-		}
-	});
-
-	// External links give an illusion of AJAX
-	$("body").on("click", ".external-link",  function(e) {
-		var elemToHideSelector = $($(this).data('element-to-hide-selector'));
-		var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
-
-		$(this).removeClass('active');
-
-		elemToHideSelector.hide();
-		elemToReplace.hide();
-		elemToReplace.after('<div id="content-replaced-container" class="loader loader--x-large"></div>');
-
-		$('#content-replaced-container').css('display', 'block');
-	});
 
 	// Used on the student index page
 	$("#share-name-form").on('submit', function(e){
@@ -145,7 +132,12 @@ import '../js/components';
 		});
 	});
 
-	// Used on the student index page
+
+	/**
+		* Toggle reverencing emails.
+		*
+		* Visible on supervisor homepage
+	*/
 	$(".receive-emails-form").on('submit', function(e){
 		e.preventDefault();
 
@@ -163,11 +155,9 @@ import '../js/components';
 		});
 	});
 
-	$('.receive-emails-checkbox').on('click', function(e){
-		$(this).submit();
-	});
-
-
+		/**
+		* Submit login details
+	*/
 	$("#loginForm").on('submit', function(e){
 		e.preventDefault();
 
@@ -192,6 +182,10 @@ import '../js/components';
 		});
 	});
 
+
+	/**
+		* Create a new topic form submit
+	*/
 	$('#new-topic-form').on('submit', function(e) {
 		e.preventDefault();
 
@@ -238,6 +232,96 @@ import '../js/components';
 		}
 	});
 
+	/* ======================
+		 4. CLICK EVENTS
+	   ====================== */
+
+	$("body").on("click", ".email-selected", function(e) {
+		if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
+			alert("You haven't selected anyone.");
+			e.preventDefault();
+		}
+	});
+
+	// External links give an illusion of AJAX
+	$("body").on("click", ".external-link",  function(e) {
+		var elemToHideSelector = $($(this).data('element-to-hide-selector'));
+		var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
+
+		$(this).removeClass('active');
+
+		elemToHideSelector.hide();
+		elemToReplace.hide();
+		elemToReplace.after('<div id="content-replaced-container" class="loader loader--x-large"></div>');
+
+		$('#content-replaced-container').css('display', 'block');
+	});
+
+	$('nav.mobile .sub-dropdown').on('click', function(){
+		var dropdown = $(this);
+		var content = dropdown.find('.dropdown-content');
+
+		if(dropdown.attr("aria-expanded") == "true"){
+			dropdown.attr("aria-expanded", false);
+			content.attr("aria-hidden", true);
+
+			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
+			dropdown.removeClass("active");
+			content.hide(config.animtions.medium);
+		} else {
+			dropdown.attr("aria-expanded", true);
+			content.attr("aria-hidden", false);
+
+			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
+			dropdown.addClass("active");
+			content.show(config.animtions.medium);
+		}
+	});
+
+	$('.student-undo-select').on('click', function(e) {
+		var card = $(this).parent();
+
+		$.confirm({
+			title: 'Undo Project Selection',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			autoClose: 'cancel|10000',
+			content: 'Are you sure you want to un-select your selected project?</b>',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function(){
+						$.ajax({
+							method: 'PATCH',
+							url: '/students/undo-selected-project',
+							success:function(response){
+								if(response.successful){
+									card.hide(400, function() { card.remove(); });
+									createToast('success', 'Undo successful.');
+								} else {
+									createToast('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: {},
+			}
+		});
+	});
+
+	/**
+		* Submit receive email form when checkbox toggled
+	*/
+	$('.receive-emails-checkbox').on('click', function(e){
+		$(this).submit();
+	});
+
+
 	$(".favourite-container").on('click', function() {
 		var svgContainer = $(this);
 		var svg = svgContainer.find('svg');
@@ -278,30 +362,31 @@ import '../js/components';
 			$('.loader', svgContainer).hide(0);
 		});
 	});
+	
+	/* ======================
+		 5. CHANGE EVENTS
+	   ====================== */
+	$("body").on("change", ".email-table .checkbox input", function() {
+		var select = function(dom){
+			var status = dom.parents().eq(4).data('status');
+			var emailString = "mailto:";
+			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
+			var emailButtonselector = ".email-selected." + status;
 
-	$('nav.mobile .sub-dropdown').on('click', function(){
-		var dropdown = $(this);
-		var content = dropdown.find('.dropdown-content');
-
-		if(dropdown.attr("aria-expanded") == "true"){
-			dropdown.attr("aria-expanded", false);
-			content.attr("aria-hidden", true);
-
-			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
-			dropdown.removeClass("active");
-			content.hide(config.animtions.medium);
-		} else {
-			dropdown.attr("aria-expanded", true);
-			content.attr("aria-hidden", false);
-
-			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
-			dropdown.addClass("active");
-			content.show(config.animtions.medium);
-		}
+			$(checkboxSelector).each(function(index, value) {
+				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
+					emailString += $(value).data('email');
+					emailString += ",";
+				}
+			});
+			$(emailButtonselector).prop('href', emailString);
+		};
+		setTimeout(select($(this)), 2000);
 	});
 
-
-	// HTML EDITOR
+	/* ======================
+		 6. HTML EDITOR
+	   ====================== */
 	$('.html-editor').each(function(index, value){
 		$.ajax({
 			url: '/snippet?snippet=html-editor-toolbar',
@@ -400,71 +485,4 @@ import '../js/components';
 				break;
 		}
 	});
-
-
-	$('.student-undo-select').on('click', function(e) {
-		var card = $(this).parent();
-
-		$.confirm({
-			title: 'Undo Project Selection',
-			type: 'red',
-			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',
-			theme: 'modern',
-			escapeKey: true,
-			backgroundDismiss: true,
-			animateFromElement : false,
-			autoClose: 'cancel|10000',
-			content: 'Are you sure you want to un-select your selected project?</b>',
-			buttons: {
-				confirm: {
-					btnClass: 'btn-red',
-					action: function(){
-						$.ajax({
-							method: 'PATCH',
-							url: '/students/undo-selected-project',
-							success:function(response){
-								if(response.successful){
-									card.hide(400, function() { card.remove(); });
-									createToast('success', 'Undo successful.');
-								} else {
-									createToast('error', response.message);
-								}
-							}
-						});
-					}
-				},
-				cancel: {},
-			}
-		});
-	});
-
-	/* ===============
-		9. Initialise
-	   =============== */
-
-	// Used as an easy way for functions to get current project data
-	if($('.project-card').length > 0){
-		window['project'] = $('.project-card');
-	}
-
-	$('.animate-cards .card').css("opacity", 0);
-
-	var delay = 0;
-	$('.animate-cards .card').each(function(index, value) {
-		delay += 200;
-		setTimeout(function(){
-			$(this).addClass("slideInUp animated");
-
-			$(this).animate({
-				opacity: 1
-			}, 800);
-
-		}.bind(this), delay);
-	});
-});
-
-$(document).ajaxError(function( event, request, settings ) {
-	if(config.showAjaxRequestFailNotification){
-		createToast('error', 'Something went wrong with that request.');
-	}
 });

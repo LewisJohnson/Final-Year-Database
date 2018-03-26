@@ -1,8 +1,12 @@
 /*
- * Copyright (C) University of Sussex 2018.
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Written by Lewis Johnson <lj234@sussex.com>
- */
+|--------------------------------------------------------------------------
+| jQuery Confirm
+|--------------------------------------------------------------------------
+|
+| A modified version of jQuery confirm.
+| If you updated jQuery confirm, please make you apply the changes made here.
+| The main feature needed is SVG's as icons 
+*/
 
 if (typeof jQuery === 'undefined') {
 	throw new Error('jquery-confirm requires jQuery');

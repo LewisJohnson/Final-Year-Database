@@ -4,14 +4,17 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-/* FILE STRUCTURE
-
-*/
 
 /*
 |--------------------------------------------------------------------------
-| FILE STRUCTURE
+| COMPONENTS
 |--------------------------------------------------------------------------
+|
+| Definitions and nationalisations of custom components.
+|
+|------------------
+| FILE STRUCTURE
+|------------------
 |
 |	1. Mobile Menu
 |	2. Dialog / Modal
@@ -184,6 +187,7 @@
 
 	$(document).ready(function() {
 		$(this).keydown(function(e) {
+			// Is ESC key is pressed, hide dialogs and mobile menu
 			if(e.keyCode == 27 && window['Dialog'] != null) {
 				window['Dialog'].hideDialog();
 			}
@@ -250,11 +254,9 @@
 	};
 
 	DataTable.prototype.init = function () {
-
 		var dataTable = this;
 
 		this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dataTable));
-
 		$(this.checkboxes).each(function(i) {
 			$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
 		});
@@ -302,7 +304,6 @@
 	};
 
 	ColumnToggleTable.prototype.functions = {
-
 		toggleColumn: function(columnIndex, table, checked) {
 			if(checked){
 				table.head.children().eq(columnIndex).removeAttr('hidden');
@@ -325,7 +326,6 @@
 			var hideIndices = [];
 
 			table.bodyRows = table.element.find('tbody tr');
-
 			table.headers.each(function(){
 				if($(this).attr('hidden')){
 					hideIndices.push($(this).index());
@@ -347,7 +347,6 @@
 	};
 
 	ColumnToggleTable.prototype.init = function () {
-
 		if(!this.element.attr('id')){
 			console.log("ColumnToggleTable requires the table to have an unique ID.");
 			return;
@@ -820,6 +819,7 @@
 		window['Marker'] = new Marker();
 	}
 
+	// Initialise all components
 	MobileMenu.prototype.initAll();
 	Dialog.prototype.initAll();
 	DataTable.prototype.initAll();

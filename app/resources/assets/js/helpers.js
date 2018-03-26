@@ -4,9 +4,14 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-/* ================
-	HELPERS
-	================ */
+/*
+|--------------------------------------------------------------------------
+| HELPERS
+|--------------------------------------------------------------------------
+|
+| Helper functions.
+|
+*/
 
 const toastHtmlSnippet = '<div class="toast" role="alert"></div>';
 
@@ -38,6 +43,7 @@ function createToast(type, message){
 
 /**
  * Removes all shadow classes from DOM element.
+ *
  * @param {Object} element
  */
 function removeAllShadowClasses(element){

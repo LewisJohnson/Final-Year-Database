@@ -17,6 +17,6 @@
 */
 
 
-// Artisan::command('populate', function () {
-//     $this->comment(Inspiring::quote());
-// })->describe('Populates tables "Project", "Topic" & "ProjectTopic" with test data.');
+Artisan::command('make:admin', function () {
+    $this->comment(Inspiring::quote());
+})->describe('Creates a system admin in each department to bootstrap the system.');
