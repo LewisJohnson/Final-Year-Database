@@ -17,7 +17,7 @@
 				<div class="section horizontal">
 						<h3>{{ ucfirst($status) }} ({{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%)</h3>
 						<h4 style="margin-top: 0px;">Total: {{ count($sortedStudents) }}</h4>
-						<table class="data-table email-table {{ $status }} shadow-2dp" data-status="{{ $status }}">
+						<table class="data-table email-table {{ $status }}" data-status="{{ $status }}">
 							<thead>
 								<tr>
 									<th>

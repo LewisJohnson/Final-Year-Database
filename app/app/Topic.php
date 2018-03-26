@@ -68,7 +68,8 @@ class Topic extends Model{
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
      */
 	public function projects(){
-		return $this->belongsToMany(Project::class, null, 'topic_id', 'project_id')->withPivot('primary');
+		$projectTopic = new ProjectTopic;
+		return $this->belongsToMany(Project::class, $projectTopic->getTable(), 'topic_id', 'project_id')->withPivot('primary');
 	}
 
 	/**
@@ -76,8 +77,7 @@ class Topic extends Model{
 	 *
 	 * @return Project
 	*/
-	public function projectsOnOffer(){
-		// return $this->projects;
+	public function getProjectsOnOffer(){
 		return $this->projects->where('status', 'on-offer');
 	}
 

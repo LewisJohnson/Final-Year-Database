@@ -5,7 +5,6 @@
 	<h3>{{ lang_sess('select_supervisor_arragments') }}</h3>
 	<form action="{{ action('AdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
-		{{ method_field('PATCH') }}
 		<div class="arrangements-container">
 			<table class="data-table data-table--selectable shadow-2dp">
 				<thead>
@@ -18,14 +17,13 @@
 						</th>
 						<th>Name</th>
 						<th>Username</th>
-						<th>Access Type</th>
 						<th>Project Load</th>
 						<th>Take Students</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($supervisors as $supervisor)
-						<tr class="pointer" onclick="$('#supervisor-{{ $supervisor->id }}').click();">
+						<tr class="pointer">
 							<td>
 								<div class="checkbox">
 									<input class="checkbox-input" id="supervisor-{{ $supervisor->id }}" type="checkbox" name="supervisor-{{ $supervisor->id }}">
@@ -35,7 +33,6 @@
 
 							<td>{{ $supervisor->user->getFullName() }}</td>
 							<td>{{ $supervisor->user->username }}</td>
-							<td>{{ ucfirst($supervisor->user->access_type) }}</td>
 							<td>{{ $supervisor->getProjectLoad() }}</td>
 							<td>{{ $supervisor->getTakingStudents() ? 'Yes' : 'No' }}</td>
 						</tr>

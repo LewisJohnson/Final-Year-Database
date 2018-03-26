@@ -125,7 +125,7 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
 
 	// Updated supervisor arrangements POST
-	Route::patch('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
+	Route::post('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
 
 	/* SECOND SUPERVISOR (Marker) ROUTES */
 	// Manual assign second marker view
@@ -293,7 +293,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	Route::get('projects/by-topic', 'ProjectController@showTopics');
 
 	// All projects with this topic
-	Route::get('projects/by-topic/{uuid}', 'ProjectController@byTopic');
+	Route::get('projects/by-topic/{topic}', 'ProjectController@byTopic');
 
 	// Project search
 	Route::get('projects/search', 'ProjectController@search');
@@ -308,17 +308,17 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Update project primary topic
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	// Show project with this id
+	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
 
-	// Delete project with this id
-	Route::delete('projects/{uuid}/delete', 'ProjectController@destroy');
+	// Delete project
+	Route::delete('projects/{project}/delete', 'ProjectController@destroy');
 
-	// Update project with this id
-	Route::patch('projects/{uuid}/edit', 'ProjectController@update');
+	// Update project 
+	Route::patch('projects/{project}/edit', 'ProjectController@update');
 
 	// Show update project form
-	Route::get('projects/{uuid}/edit', 'ProjectController@edit');
+	Route::get('projects/{project}/edit', 'ProjectController@edit');
 
 	/* REPORT ROUTES */
 	// Supervisor report

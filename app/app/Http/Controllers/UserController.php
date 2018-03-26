@@ -78,7 +78,6 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return;
 		}
@@ -190,13 +189,12 @@ class UserController extends Controller{
 	 * This method throws an exception if a condition fails.
 	 *
 	 * **RULES**
-	 * - Guest is a unique privilege
 	 * - Staff is a unique privilege
 	 * - User can NOT be student and an admin
 	 * - User can NOT be student and a supervisor
 	 *
 	 * **AUTHENTICATION RULES**
-	 * - EducationLevel_X administrator can create guest, staff, student_X and admin_X.
+	 * - EducationLevel_X administrator can create staff, student_X and admin_X.
 	 * 		- Where X is typically undergraduate or postgraduate
 	 * - System administrator can create all types of users.
 	 * - Only administrators can create users.
@@ -214,14 +212,6 @@ class UserController extends Controller{
 		foreach (get_education_levels(true) as $key => $level) {
 			if(in_array("admin_".$level, $privileges)){ $amountOfAdminPrivileges++; }
 			if(in_array("student_".$level, $privileges)){ $amountOfStudentPrivileges++; }
-		}
-
-		foreach (get_education_levels() as $key => $level) {
-			if(in_array("guest_".$level["shortName"], $privileges) && $amountOfPrivileges > 1){
-				// Guest is a unique privilege
-				$error = ValidationException::withMessages([ "privileges" => ["Guest is a unique privilege."]]);
-				throw $error;
-			}
 		}
 
 		if(in_array("staff", $privileges) && $amountOfPrivileges > 1){

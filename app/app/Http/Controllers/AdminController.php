@@ -266,11 +266,8 @@ class AdminController extends Controller{
 
 		foreach ($request->all() as $key => $value) {
 			if (strpos($key, 'supervisor-') === 0) {
-				preg_match('/\d+/', $key, $id);
-
-				if (is_null($id[0])) {continue;}
-
-				$supervisor = Supervisor::findOrFail($id[0]);
+				$id = substr($key, 11); 
+				$supervisor = Supervisor::findOrFail($id);
 
 				if (isset($request->project_load)) {
 					$supervisor->setProjectLoad($request->project_load);
@@ -305,7 +302,7 @@ class AdminController extends Controller{
 	public function loginAsView(Request $request){
 		$students = Student::all();
 		$supervisors = Supervisor::all();
-		$staffUsers = User::Where('access_type', 'staff')->get();
+		$staffUsers = User::Where('privileges', 'staff')->get();
 
 		$students = $students->sortBy(function ($student, $key) {
 			return $student->user->last_name;
@@ -379,7 +376,10 @@ class AdminController extends Controller{
 				$project->save();
 			}
 
-			DB::table(Student::$table)->truncate();
+			$student = new Student();
+			// DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+			DB::table($student->getTable())->delete();
+			// DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 		});
 
 		return response()->json(array('successful' => true));
@@ -522,11 +522,9 @@ class AdminController extends Controller{
 	*/
 	public function assignMarkerAutomaticTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-
 		$view = view('admin.partials.automatic-second-marker-assignment-table')
 			->with('supervisors', $assignmentSetup["supervisors"])
 			->with('slack', $assignmentSetup["slack"]);
-
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
 

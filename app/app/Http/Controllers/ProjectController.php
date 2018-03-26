@@ -159,7 +159,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function removeTopic(Request $request){
-		DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request){
 			$topic = Topic::findOrFail(request('topic_id'));
 			$project = Project::findOrFail(request('project_id'));
 
@@ -209,7 +209,7 @@ class ProjectController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request){
 		// Validate data
 		// Move to validation form
 		$this->validate(request(), [
@@ -260,9 +260,7 @@ class ProjectController extends Controller{
 	 * @param  UUID  $uuid
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function edit($uuid){
-		$project = Project::findOrFail($uuid);
-
+	public function edit(Project $project){
 		if($project->isOwnedByUser()){
 			return view('projects.edit')
 			->with('project', $project);
@@ -277,12 +275,10 @@ class ProjectController extends Controller{
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update($id) {
+	public function update(Project $project){
 		// todo: add form validation
-		$result = DB::Transaction(function() use ($id){
-			$project = Project::findOrFail($id);
+		$result = DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
-
 			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
 
 			$project->update([
@@ -315,10 +311,9 @@ class ProjectController extends Controller{
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
+	public function destroy(Project $project) {
 
-		DB::Transaction(function() use ($id){
-			$project = Project::findOrFail($id);
+		DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
@@ -346,9 +341,9 @@ class ProjectController extends Controller{
 		return view('projects.topics')->with('topics', $topics);
 	}
 
-	public function byTopic(Topic $topic) {
+	public function byTopic(Topic $topic){
 		return view('projects.index')
-			->with('projects', $topic->projects->where('status', 'on-offer'))
+			->with('projects', $topic->getProjectsOnOffer())
 			->with('topic', $topic)
 			->with('view', 'topic');
 	}
@@ -358,7 +353,7 @@ class ProjectController extends Controller{
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-	public function showSupervisors() {
+	public function showSupervisors(){
 		$supervisor = Supervisor::all();
 		return view('projects.supervisors')->with('supervisors', $supervisor);
 	}
@@ -369,7 +364,7 @@ class ProjectController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\View\View
      */
-	public function search(Request $request) {
+	public function search(Request $request){
 
 		/* SELECT CONDITIONS
 			Select if supervisor take_students is true

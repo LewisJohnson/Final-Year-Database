@@ -11,10 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use SussexProjects\ProjectTopic;
 use SussexProjects\Topic;
-use SussexProjects\Transaction;
 use SussexProjects\ProjectTopic;
+use SussexProjects\Transaction;
 
 /**
  * The topic controller.

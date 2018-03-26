@@ -1,4 +1,3 @@
-
 @if($view === "new")
 	<form class="form form--flex user-form" role="form" method="POST" action="{{ action('UserController@store') }}">
 @elseif($view === "edit")
@@ -103,11 +102,6 @@
 		@foreach (get_education_levels() as $educationLevel)
 			<div class="button-group flex--stretch-children">
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
-					<div class="checkbox">
-						<input type="checkbox" id="privileges-guest" name="privileges[]" value="guest_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isGuest()) checked @endif @endif>
-						<label for="privileges-guest">Guest</label>
-					</div>
-
 					<div class="checkbox">
 						<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
 						<label for="privileges-admin-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} administrator</label>
