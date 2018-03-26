@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+namespace SussexProjects\Providers;
+
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+	/**
+	 * The policy mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $policies = [
+		'SussexProjects\Model' => 'SussexProjects\Policies\ModelPolicy',
+	];
+
+	/**
+	 * Register any authentication / authorization services.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->registerPolicies();
+
+		//
+	}
+}
+

@@ -24,16 +24,14 @@ class Mode extends Model{
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
-	 * @access protected
 	 */
-	protected $fillable = ['project_year', 'start_date', 'mode'];
+	protected $fillable = ['project_year', 'start_date'];
 
 
 	/**
 	 * The columns to be parsed as dates.
 	 *
 	 * @var array
-	 * @access protected
 	 */
 	protected $dates = ['start_date'];
 
@@ -42,7 +40,6 @@ class Mode extends Model{
 	 * The models primary key 
 	 * 
 	 * @var integer
-	 * @access protected
 	 */
 	protected $primaryKey = 'project_year';
 
@@ -104,14 +101,5 @@ class Mode extends Model{
 	 */
 	public static function getProjectYear(){
 		return Mode::Instance()->project_year;
-	}
-
-	/**
-	 * Gets mode
-	 *
-	 * @return string
-	 */
-	public static function getMode(){
-		return Mode::Instance()->mode;
 	}
 }

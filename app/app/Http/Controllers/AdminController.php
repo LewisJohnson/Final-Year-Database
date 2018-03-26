@@ -213,10 +213,6 @@ class AdminController extends Controller{
 			$mode->project_year = $request->project_year;
 		}
 
-		if (isset($request->mode)) {
-			$mode->mode = $request->mode;
-		}
-
 		$mode->save();
 
 		session()->flash('message', 'Parameters have been updated successfully.');

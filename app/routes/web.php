@@ -98,11 +98,17 @@ Route::group(['middleware' => ['web']], function() {
    2. SYSTEM ADMIN ROUTES
    =============== */
 Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], function() {
+
+	// System admin dashboard
 	Route::get('admin/dashboard', 'AdminController@dashboard');
+
+	// Updated configuration post
 	Route::post('admin/dashboard/system', 'AdminController@configure');
 
+	// Add new department
 	Route::post('admin/system/new-department', 'AdminController@addNewDepartment');
 
+	// User agent view
 	Route::get('system/user-agent', 'AdminController@userAgentView');
 });
 

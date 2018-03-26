@@ -9,11 +9,6 @@
 			{{ csrf_field() }}
 
 			<div class="form-field">
-				<label for="mode">Mode</label>
-				<input maxlength="255" type="text" name="mode" id="mode" value="{{ SussexProjects\Mode::getMode() }}">
-			</div>
-
-			<div class="form-field">
 				<label for="start_date">Start Date</label>
 				<input type="date" name="start_date" value="{{ SussexProjects\Mode::getStartDate()->toDateString() }}">
 			</div>

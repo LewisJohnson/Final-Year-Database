@@ -1,6 +1,5 @@
 *.map
 phpdoc-*-*
-/docs
 
 #################
 ## Eclipse
