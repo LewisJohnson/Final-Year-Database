@@ -12,10 +12,6 @@ use Illuminate\Http\Request;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| The following language lines are used throughout the application for
-| messages we need to display to the user. You are free to modify the
-| language lines according to your application's requirements.
-|
 | 1. Web Routes (Accessible by any request)
 | 2. System admin routes
 | 3. Project admin routes

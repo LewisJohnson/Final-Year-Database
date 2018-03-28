@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
-class StudentAccepted extends Mailable{
+class StudentSelected extends Mailable{
 	use Queueable, SerializesModels;
 
 	/**
@@ -31,7 +31,7 @@ class StudentAccepted extends Mailable{
 	 * @var Project
 	 */
 	public $project;
-	
+
 	/**
 	 * Create a new message instance.
 	 *
@@ -42,6 +42,7 @@ class StudentAccepted extends Mailable{
 		$this->student = $student;
 		$this->project = $this->student->project;
 	}
+	
 
 	/**
 	 * Build the message.
@@ -49,7 +50,7 @@ class StudentAccepted extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.student.accepted')
+		return $this->view('emails.supervisor.student-unselected')
 			->with([
 				'supervisor' => $this->supervisor,
 				'student' => $this->student,

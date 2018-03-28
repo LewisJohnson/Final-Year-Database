@@ -22,7 +22,7 @@ class Mode extends Migration{
 					$table->dateTimeTz('start_date');
 				});
 
-				DB::statement("ALTER TABLE `."department.'_mode_'.$level['shortName']".` ADD `project_year` YEAR NOT NULL");
+				DB::statement("ALTER TABLE `".$department.'_mode_'.$level['shortName']."` ADD `project_year` YEAR NOT NULL;");
 			}
 		}
 	}

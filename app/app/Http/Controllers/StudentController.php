@@ -20,6 +20,7 @@ use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
 use SussexProjects\Mode;
 use SussexProjects\Mail\StudentSelected;
+use SussexProjects\Mail\StudentUnselected;
 use SussexProjects\Mail\StudentProposed;
 
 /**
@@ -274,6 +275,11 @@ class StudentController extends Controller{
 			$student->project_status = 'none';
 			$student->save();
 		});
+
+		// Send selected email
+		if($student->project->supervisor->getAcceptingEmails()){
+			Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+		}
 
 		return response()->json(array('successful' => true, 'message' => "You have un-selected a project."));
 	}

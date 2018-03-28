@@ -1,0 +1,1 @@
+start cmd.exe @cmd /k php vendor\phpunit\phpunit\phpunit
