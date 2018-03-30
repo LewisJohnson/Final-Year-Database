@@ -51,7 +51,7 @@ import '../js/components';
 
 	// Animate all cards
 	$('.animate-cards .card').each(function(index, value) {
-		delay += 200;
+		animatedCardEntranceAnimationDelay += 200;
 		setTimeout(function(){
 			$(this).addClass("slideInUp animated");
 

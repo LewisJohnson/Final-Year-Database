@@ -4,6 +4,16 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
+
+/*
+|--------------------------------------------------------------------------
+| CONFIGURATION
+|--------------------------------------------------------------------------
+|
+| An object literal of settings used through the JavaScript.
+|
+*/
+
 "use strict";
 
 var config = {
@@ -15,15 +25,32 @@ var config = {
 		superFast: 100,
 	},
 
+	// The width mobile view should kick in (Make sure is corresponds to SCSS)
 	mobileWidth: 970,
+
+	// Show help footer in help pages
 	showHelpFooter: true,
+
+	// Ohhh... Fancy (Entrance animations)
 	fancyAnimations: true,
+
+	// Y-offset to show scroll to top button
 	showScrollToTopButtonOffset: 50,
+
+	// How long should scroll to top take
 	scrollToTopDuration: 600,
+
+	// The red banner "Something went wrong with that request"
+	// Unless you implement a custom request fail for-each AJAX request, leave this as true
 	showAjaxRequestFailNotification: true,
+
+	// How long should a user have to hold to show project preview
+	// Used on "on-offer" project page
+	// In milliseconds
 	tapHeldTime: 500
 }
 
+// Make config available to all files
 window["config"] = config;
 /*
  * Copyright (C) University of Sussex 2018.
@@ -31,9 +58,14 @@ window["config"] = config;
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-/* ================
-	HELPERS
-	================ */
+/*
+|--------------------------------------------------------------------------
+| HELPERS
+|--------------------------------------------------------------------------
+|
+| Helper functions.
+|
+*/
 
 const toastHtmlSnippet = '<div class="toast" role="alert"></div>';
 
@@ -65,6 +97,7 @@ function createToast(type, message){
 
 /**
  * Removes all shadow classes from DOM element.
+ *
  * @param {Object} element
  */
 function removeAllShadowClasses(element){
