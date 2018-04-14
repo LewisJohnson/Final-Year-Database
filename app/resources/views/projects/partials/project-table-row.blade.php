@@ -8,7 +8,7 @@
 	@endif
 
 	<td>{{ $project->title }}</td>
-	<td hidden>{{ substr(html_entity_decode($project->description), 0, 50) }}...</td>
+	<td class="short-description" hidden>{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
 	<td hidden>{!! html_entity_decode($project->description) !!}</td>
 	<td>{{ $project->skills }}</td>
 

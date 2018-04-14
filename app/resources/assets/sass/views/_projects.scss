@@ -48,10 +48,17 @@
     }
 }
 
+.short-description{
+	* {
+		display: inline;
+		margin: 0;
+		padding: 0;
+	}
+}
+
 .favourite-projects-container{
 	border-top: 2px solid rgba(255, 215, 0, 0.25) !important;
 }
-
 
 .favourite-container{
 	position: relative;

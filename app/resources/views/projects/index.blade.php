@@ -27,16 +27,15 @@
 
 	@if($view == "transaction")
 		<h1>Project Transactions</h1>
-		<h3>Click a project to browse it's transactions.</h3>
+		<h3>Click a project to browse it's transactions</h3>
 	@endif
 
 	@if($view == "personal")
 		<h1>My Projects</h1>
-
 		@if(count($projects) < 1)
-			<div class="card centered width--600">
-				<h2>You have no projects!</h2>
-				<p>Why not create one now? Just <a href="{{ action('ProjectController@create') }}">click here</a></p>
+			<div style="text-align: center;">
+				<h1>You have no projects...</h1>
+				<p>Why not create a project for students right now? Just <a href="{{ action('ProjectController@create') }}">click here</a> to create a new project.</p>
 			</div>
 		@endif
 	@endif

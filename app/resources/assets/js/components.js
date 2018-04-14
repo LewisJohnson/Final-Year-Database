@@ -279,9 +279,9 @@
 	*/
 	var ColumnToggleTable = function ColumnToggleTable(element) {
 		this.element = $(element);
-		this.head = $(element).find('thead tr');
-		this.headers = $(element).find('thead tr th');
-		this.bodyRows = $(element).find('tbody tr');
+		this.head = $(element).find('> thead tr');
+		this.headers = $(element).find('> thead tr th');
+		this.bodyRows = $(element).find('> tbody tr');
 		this.selectorMenu = null;
 		this.selectorButton = null;
 		this.init();
