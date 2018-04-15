@@ -56,7 +56,7 @@ return [
 
 	/* 3. FOOTER */
 	'footer_maintainer_text' => 'Information maintained by Bernhard Reus and Andrew Philippides',
-	'footer_link_text' => 'Sussex websites Disclaimer',
+	'footer_link_text' => 'Sussex Websites Disclaimer',
 	'footer_link_url' => 'http://www.sussex.ac.uk/disclaimer',
 
 	/* 4. REPORTS */

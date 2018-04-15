@@ -47,7 +47,7 @@
 @else
 	<div class="centered width--800">
 		<div class="config-danger">
-			<h1 style="color: white">User agent string collection is currently turned off.</h1>
+			<h1 style="color: white; margin-top: 0;">User agent string collection is currently turned off.</h1>
 			<p>You can turn it back on in the <a href="{{ action('AdminController@dashboard') }}">system dashboard</a>.</p>
 		</div>
 	</div>

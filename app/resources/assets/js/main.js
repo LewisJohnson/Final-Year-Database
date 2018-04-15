@@ -280,7 +280,6 @@ import '../js/components';
 
 	$('.student-undo-select').on('click', function(e) {
 		var card = $(this).parent();
-
 		$.confirm({
 			title: 'Undo Project Selection',
 			type: 'red',
@@ -314,14 +313,79 @@ import '../js/components';
 		});
 	});
 
-	/**
-		* Submit receive email form when checkbox toggled
-	*/
+	
+	// Site-wide feedback
+	$('#leave-feedback-button').on('click', function(e){
+		
+
+		$.confirm({
+			title: 'Feedback',
+			content: function () {
+				var self = this;
+				return $.ajax({
+					url: '/feedback',
+					dataType: 'html',
+					method: 'GET',
+				}).done(function (response) {
+					self.setContent(response);
+				}).fail(function(){
+					self.setContent('Something went wrong.');
+				});
+			},
+			type: 'blue',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path  d="M17,9H7V7H17M17,13H7V11H17M14,17H7V15H14M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" /></svg></div>',
+			theme: 'material',
+			escapeKey: true,
+			backgroundDismiss: false,
+			animateFromElement : false,
+			buttons: {
+				formSubmit: {
+					text: 'Submit',
+					btnClass: 'btn-blue',
+					action: function () {
+						var comment = this.$content.find('.comment').val();
+						if(!comment){
+							$.alert('Please provide some feedback');
+							return false;
+						}
+
+						$.ajax({
+							url: '/feedback',
+							method: 'POST',
+							data: this.$content.find('form').serialize(),
+							success:function(response){
+								if(response.successful){
+									createToast('success', response.message);
+								} else {
+									createToast('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: function () {
+					//close
+				},
+			},
+			onContentReady: function () {
+				$('#feedback-page').val(window.location.pathname);
+
+				// bind to events
+				var jc = this;
+				this.$content.find('form').on('submit', function (e) {
+					e.preventDefault();
+					jc.$$formSubmit.trigger('click');
+				});
+			}
+		});
+	});
+
+	// Submit receive email form when checkbox toggled
 	$('.receive-emails-checkbox').on('click', function(e){
 		$(this).submit();
 	});
-
-
+	
+	// Adds or removes a project from a student favourites
 	$(".favourite-container").on('click', function() {
 		var svgContainer = $(this);
 		var svg = svgContainer.find('svg');

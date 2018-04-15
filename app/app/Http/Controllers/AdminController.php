@@ -23,6 +23,7 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\Mode;
+use SussexProjects\Feedback;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
@@ -46,6 +47,16 @@ class AdminController extends Controller{
 	*/
 	public function index(){
 		return view('admin.index');
+	}
+
+	/**
+		* User feedback view.
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function feedback(){
+		return view('admin.feedback')
+		->with('feedback', Feedback::all());
 	}
 
 	/**

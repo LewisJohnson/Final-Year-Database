@@ -6,7 +6,7 @@
 					@if(Cookie::get('accessibility-font') == "true")
 						<a class="button--small button--accent td-none" href="?largeFont=false">Large Font</a>
 					@else
-						<a class="button--small td-none" href="?largeFont=true">Large Font</a>
+						<a class="button--small td-none hover--light" href="?largeFont=true">Large Font</a>
 					@endif
 				</li>
 
@@ -14,7 +14,7 @@
 					@if(Cookie::get('accessibility-contrast') == "true")
 						<a class="button--small button--accent td-none" href="?highContrast=false">High Contrast</a>
 					@else
-						<a class="button--small td-none" href="?highContrast=true">High Contrast</a>
+						<a class="button--small td-none hover--light" href="?highContrast=true">High Contrast</a>
 					@endif
 				</li>
 			</ul>
@@ -22,13 +22,23 @@
 	@endif
 
 	<div class="footer-right">
-		<a class="button--small td-none" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
-		<p class="seperator">|</p>
-		@if(Session::get('education_level') != null)
-			<p>{{ lang_sess("footer_maintainer_text") }}</p>
-		@else
-			<p>@lang("messages.footer_maintainer_text")</p>
-		@endif
+		<ul class="hl">
+			<li>
+				<a id="leave-feedback-button" class="button--small td-none hover--light" href="#" data-is-guest="{{ Auth::guest() ? 'true' : 'false' }}">Leave Feedback</a>
+			</li>
+			<li><p class="seperator">|</p></li>
+			<li>
+				<a class="button--small td-none hover--light" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
+			</li>
+			<li><p class="seperator">|</p></li>
+			<li>
+				@if(Session::get('education_level') != null)
+					<p class="hover--light">{{ lang_sess("footer_maintainer_text") }}</p>
+				@else
+					<p class="hover--light">@lang("messages.footer_maintainer_text")</p>
+				@endif
+			</li>
+		</ul>
 	</div>
 
 	@if(get_config_json("footer.rainbow.value") == true)

@@ -7,12 +7,12 @@
 
 namespace SussexProjects\Http\Controllers;
 
+use SussexProjects\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-
 /**
  * The home controller.
  *
@@ -59,6 +59,50 @@ class HomeController extends Controller{
 	 */
 	public function information(Request $request){
 		return view('help.information');
+	}
+
+	/**
+	 * Displays the feedback form.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function showFeedbackForm(Request $request){
+		return view('forms.feedback');
+	}
+
+	/**
+	 * Log feedback to database.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function feedback(Request $request){
+		$this->validate(request(), [
+			'comment' => 'required',
+		]);
+
+		$feedback = new Feedback;
+		$feedback->comment = request('comment');
+
+		if(Auth::check()){
+			if(empty(request('anonymous'))){
+				// Record user email if not anonymous
+				$feedback->email = Auth::user()->email;
+			}
+		} else {
+			if(!empty(request('email'))){
+				// Record guest email if it exists
+				$feedback->email = request('email');
+			}
+		}
+
+		if(!empty(request('page'))){
+			$feedback->page = request('page');
+		}
+
+		$feedback->save();
+		return response()->json(array('successful' => true, 'message' => 'Thank you for your feedback.'));
 	}
 
 	/**

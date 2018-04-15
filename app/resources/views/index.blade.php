@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="centered animate-cards width--1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>

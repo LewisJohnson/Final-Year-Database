@@ -264,14 +264,14 @@ a.button--small{
 
 .hover--light{
 	@include transition--medium();
-	&:hover{
+	&:hover, &:focus{
 		color: white;
 	}
 }
 
 .hover--dark{
 	@include transition--medium();
-	&:hover{
+	&:hover, &:focus{
 		color: black;
 	}
 }

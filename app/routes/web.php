@@ -34,14 +34,16 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/mailable', function () {
-    $student = SussexProjects\Student::all()->first();
-    $supervisor = SussexProjects\Supervisor::all()->first();
-    return new SussexProjects\Mail\StudentSelected($supervisor, $student);
+	$student = SussexProjects\Student::all()->first();
+	$supervisor = SussexProjects\Supervisor::all()->first();
+	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
 });
 
 /* =============
    1. WEB ROUTES
    ============= */
+
+// WITH department check
 Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	/* LOGIN ROUTES (AUTHENTICATION) */
 	// Login form/view
@@ -74,6 +76,7 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	Route::get('help', 'HomeController@help');
 });
 
+// Without department check
 Route::group(['middleware' => ['web']], function() {
 	/* DEPARTMENT ROUTES */
 	// Set department view (Most users landing page)
@@ -88,6 +91,12 @@ Route::group(['middleware' => ['web']], function() {
 
 	// Teapot error code
 	Route::get('teapot', function(){ abort(418, "I'm a teapot"); });
+
+	// Feedback form
+	Route::get('feedback', 'HomeController@showFeedbackForm');
+
+	// Feedback form post
+	Route::post('feedback', 'HomeController@feedback');
 });
 
 /* ===============
@@ -106,6 +115,9 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 
 	// User agent view
 	Route::get('system/user-agent', 'AdminController@userAgentView');
+
+	// User feedback view
+	Route::get('admin/feedback', 'AdminController@feedback');
 });
 
 /* ===============

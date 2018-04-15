@@ -134,7 +134,7 @@
 
 	.main-content{
 		padding: 0 1rem;
-		padding-bottom: 7rem;
+		padding-bottom: 6rem !important;
 		overflow-x: scroll;
 	}
 
@@ -233,6 +233,22 @@
 		.footer-right, .footer-left{
 			position: relative;
 			width: 100%;
+		}
+
+		a, p, li{
+			display: block;
+			width: 100%;
+		}
+
+		.hl li{
+			display: block;
+		}
+
+		a, p{
+			padding: 6px;
+		}
+		.seperator{
+			display: none;
 		}
 	}
 }
