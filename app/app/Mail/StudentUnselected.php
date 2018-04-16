@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
-class StudentSelected extends Mailable{
+class StudentUnselected extends Mailable{
 	use Queueable, SerializesModels;
 
 	/**
