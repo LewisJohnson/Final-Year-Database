@@ -13,15 +13,13 @@
 			<div id="login-username" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
 					<label for="username">Username/Email</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
-					{{-- todo: Remove value="admin" --}}
-					<input value="student1" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+					<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
 
 				<div class="form-field  {{ $errors->has('password') ? ' has-error' : '' }}">
 					<label for="password">Password</label>
-					{{-- todo: Remove value="password" --}}
 					@include('forms.partials.error-block', ['name' => 'password'])
-					<input value="password" id="password" type="password" name="password" required>
+					<input id="password" type="password" name="password" required>
 				</div>
 
 				<div class="form-field" title="This is not recommended for shared devices">
@@ -51,14 +49,12 @@
 
 				<div id="login-username" class="form-field">
 					<label for="username">Username/Email</label>
-					{{-- todo: Remove value="admin" --}}
-					<input value="student1" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
+					<input id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
 
 				<div class="form-field">
 					<label for="password">Password</label>
-					{{-- todo: Remove value="password" --}}
-					<input value="password" id="password" type="password" name="password" required>
+					<input id="password" type="password" name="password" required>
 				</div>
 
 				<div class="form-field" title="This is not recommended for shared devices">
