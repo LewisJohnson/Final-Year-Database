@@ -13,7 +13,7 @@
 		<tbody>
 		@foreach($topics as $topic)
 			@php
-				$amountOfProjects = count($topic->projectsOnOffer());
+				$amountOfProjects = count($topic->getProjectsOnOffer());
 			@endphp
 
 			@if($amountOfProjects > 0)

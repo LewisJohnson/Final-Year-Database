@@ -42,21 +42,6 @@
 			<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
 			<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
 			<a href="{{ action('AdminController@feedback') }}">User Feedback</a>
-
-{{-- 			<a class="icon" href="{{ action('AdminController@dashboard') }}">
-				@include('svg.cog')
-				<p>System Dashboard</p>
-			</a>
-
-			<a class="icon" href="{{ action('AdminController@userAgentView') }}">
-				@include('svg.eye')
-				<p>User Agent Strings</p>
-			</a>
-
-			<a class="icon" href="{{ action('UserController@index', 'view=edit') }}">
-				@include('svg.account-edit')
-				<p>Edit User</p>
-			</a>
- --}}		</div>
+		</div>
 	</li>
 @endif

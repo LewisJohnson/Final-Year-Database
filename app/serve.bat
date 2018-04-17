@@ -1,5 +1,8 @@
 cd C:\xampp\htdocs\Final-Year-Database\app
 start cmd.exe @cmd /k "php artisan serve"
 start cmd.exe @cmd /k "npm run watch"
+start cmd.exe @cmd /k "ngrok http -region eu 8000"
 start cmd.exe @cmd /k
-start C:\xampp\xampp-control.exe
+"C:\xampp\xampp-control.exe"
+"F:\Program Files\Sublime Text 3\subl.exe"
+exit

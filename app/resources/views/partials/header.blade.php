@@ -30,13 +30,21 @@
 			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 		</div>
 
-		<div class="hamburger-container" role="button" aria-label="Toggles the mobile navigation menu.">
-			<ul class="hamburger-list">
-				<li class="hamburger-line hamburger-line--short"></li>
-				<li class="hamburger-line"></li>
-				<li class="hamburger-line hamburger-line--short"></li>
-			</ul>
-		</div>
+
+		@if(Auth::check())
+			<div class="hamburger-container" role="button" aria-label="Toggles the mobile navigation menu.">
+				<ul class="hamburger-list">
+					<li class="hamburger-line hamburger-line--short"></li>
+					<li class="hamburger-line"></li>
+					<li class="hamburger-line hamburger-line--short"></li>
+				</ul>
+			</div>
+		@else
+			<div class="hamburger-container" style="max-width: 300px" role="button">
+				<button class="button" style="margin-top: 5px; color: rgb(255, 255, 255);" data-activator="true" data-dialog="login">Login</button>
+			</div>
+		@endif
+		
 
 		@if(Session::get('education_level') != null)
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
@@ -48,4 +56,6 @@
 	@include('partials.header.navigation', ['platform' => 'desktop'])
 </div>
 
-@include('partials.header.navigation', ['platform' => 'mobile'])
+@if(Auth::check())
+	@include('partials.header.navigation', ['platform' => 'mobile'])
+@endif

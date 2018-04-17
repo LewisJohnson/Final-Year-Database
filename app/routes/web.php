@@ -216,7 +216,7 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 
 	Route::post('users', 'UserController@store');
 	Route::get('users/{user}/edit', 'UserController@edit');
-	Route::post('users/{user}', 'UserController@update');
+	Route::patch('users/{user}', 'UserController@update');
 	Route::delete('users/{user}', 'UserController@destory');
 });
 

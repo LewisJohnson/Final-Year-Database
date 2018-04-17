@@ -83,7 +83,6 @@ class UserController extends Controller{
 		}
 
 		$user = new User;
-
 		$result = DB::transaction(function() use ($request, $user) {
 			$user->fill(array(
 				'first_name' => $request['first_name'],
@@ -174,9 +173,73 @@ class UserController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $user){
-		dd($request);
-		return null;
+	public function update(User $user, Request $request){
+		if(!$this->checkPrivilegeConditions($request->privileges)){
+			return;
+		}
+
+		$result = DB::transaction(function() use ($request, $user) {
+			$user->fill(array(
+				'first_name' => $request['first_name'],
+				'last_name' => $request['last_name'],
+				'username' => $request['username'],
+				'password' => bcrypt($request['password']),
+				'programme' => $request['programme'],
+				'email' => $request['email'],
+			));
+
+			
+
+			if(in_array("student", $request->privileges)){
+				if($user->isStudent()){
+					// If they are a student already, update
+					$user->student->registration_number = $request['registration_number'];
+					$user->student->save();
+				} else {
+					// Else, create a new student
+					$student = Student::create([
+						'id' => $user->id,
+						'registration_number' => $request['registration_number'],
+					]);
+					$student->save();
+				}
+			}
+
+			if(in_array("supervisor", $request->privileges)){
+				if($user->isSupervisor()){
+					// If they are a student already, update
+					$user->supervisor->fill([
+						'id' => $user->id,
+						'title' => $request['title'],
+						'project_load_'.Session::get('education_level')['shortName'] => $request['project_load_'.Session::get('education_level')['shortName']],
+						'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
+						'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
+					]);
+
+					$user->supervisor->save();
+				} else {
+					// Else, create a new supervisor
+					$supervisor = Supervisor::create([
+						'id' => $user->id,
+						'title' => $request['title'],
+						'project_load_'.Session::get('education_level')['shortName'] => $request['project_load_'.Session::get('education_level')['shortName']],
+						'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
+						'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
+					]);
+					$supervisor->save();
+				}
+			}
+		});
+
+		$user->save();
+
+		$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
+		$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+		DB::statement($replaced);
+
+		session()->flash('message', 'User was created.');
+		session()->flash('message_type', 'success');
+		return redirect()->action('HomeController@index');
 	}
 
 

@@ -1,10 +1,10 @@
 <ul class="icon-list">
-	<li>
+{{-- 	<li>
 		<a class="icon" href="/admin/transactions/by-project">
 			@include('svg.file')
 			<p>Browse Transactions by Project</p>
 		</a>
-	</li>
+	</li> --}}
 	<li>
 		<a class="icon" href="/admin/transactions">
 			@include('svg.clock')
