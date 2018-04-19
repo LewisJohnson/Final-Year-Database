@@ -91,6 +91,14 @@ class HomeController extends Controller{
 			$feedback->page = request('page');
 		}
 
+		if(!empty(Session::get('department'))){
+			$feedback->department = Session::get('department');
+		}
+
+		if(!empty(Session::get('education_level'))){
+			$feedback->education_level = Session::get('education_level')["shortName"];
+		}
+
 		$feedback->save();
 		return response()->json(array('successful' => true, 'message' => 'Thank you for your feedback.'));
 	}

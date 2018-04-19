@@ -349,6 +349,10 @@ ul.dot-menu{
 		display: block;
 		width: 48%;
 		margin: 1%;
+		@include transition--medium-cb();
+		&:hover, &:focus{
+			transform: scale(1.03, 1.03);
+		}
 	}
 
 	button{
@@ -359,19 +363,7 @@ ul.dot-menu{
 		background-size: cover;
 		padding: 0;
 
-		&:hover, &:focus{
-			background-blend-mode: luminosity;
-			background-color: $accent;
-
-			p{
-				top: 68%;
-				font-size: 1.1rem;
-				padding-top: 10%;
-			}
-		}
-
 		p{
-			@include transition--medium-cb();
 			border-top: 1px solid rgba(255,255,255, 0.6);
 			position: absolute;
 			top: 84%;

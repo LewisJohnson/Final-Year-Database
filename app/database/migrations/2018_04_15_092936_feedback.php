@@ -17,6 +17,8 @@ class Feedback extends Migration
 			$table->text('comment')->nullable(false);
 			$table->string('email', 128)->nullable(true);
 			$table->string('page', 256)->nullable(true);
+			$table->string('department', 256)->nullable(true);
+			$table->string('education_level', 256)->nullable(true);
 			$table->primary('id');
 		});
 

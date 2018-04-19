@@ -1,6 +1,7 @@
 {
     "departments": [
-        "informatics"
+        "informatics",
+        "engineering"
     ],
     "educationLevels": {
         "undergraduate": {
