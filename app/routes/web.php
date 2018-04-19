@@ -66,9 +66,6 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	Route::get('/', 'HomeController@index');
 
 	/* HELP ROUTES */
-	// Information page view
-	Route::get('information', 'HomeController@information');
-
 	// About page view
 	Route::get('about', 'HomeController@about');
 

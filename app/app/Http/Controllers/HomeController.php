@@ -52,16 +52,6 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Displays the general information page.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function information(Request $request){
-		return view('help.information');
-	}
-
-	/**
 	 * Displays the feedback form.
 	 *
 	 * @param  \Illuminate\Http\Request  $request

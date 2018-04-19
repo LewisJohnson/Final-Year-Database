@@ -120,7 +120,6 @@
 						</div>
 						<div class="dropdown-content">
 							<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-							<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
 							<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
 						</div>
 					</div>
@@ -225,7 +224,6 @@
 					<button>Help</button>
 					@include('svg.arrow-down')
 					<div class="dropdown-content shadow-2dp">
-						<a href="{{ action('HomeController@information') }}" title="General Information">General Information</a>
 						<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
 						<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
 						@include('partials.header.help-links', ['platform' => 'desktop'])
