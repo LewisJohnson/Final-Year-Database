@@ -550,11 +550,4 @@ class AdminController extends Controller{
 
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
-
-	public function addNewDepartment(Request $request){
-		// todo: this
-		$exitCode = Artisan::call('migrate');
-
-		return response()->json(array('successful' => true));
-	}
 }

@@ -10,7 +10,7 @@
 	<h3>Select a supervisor to see their projects.</h3>
 	@include('supervisors.partials.supervisor-search')
 
-	<table class="data-table shadow-2dp">
+	<table class="data-table sort-table shadow-2dp">
 		<thead>
 			<tr>
 				<th>Supervisor</th>
@@ -23,7 +23,6 @@
 					<tr class="pointer" tabindex="0" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ count($supervisor->getProjects('on-offer')) }}</td>
-						
 					</tr>
 				@endif
 			@endforeach

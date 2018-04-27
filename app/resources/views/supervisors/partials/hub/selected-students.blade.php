@@ -58,7 +58,7 @@
 					</tbody>
 				@else
 					<tfoot>
-						<tr><td>You have no selected-students yet.</td></tr>
+						<tr><td>No students have selected one of your projects yet.</td></tr>
 					</tfoot>
 				@endif
 			</table>

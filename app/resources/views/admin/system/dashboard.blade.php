@@ -78,24 +78,27 @@
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Departments</h2>
 
+						<h3>Add New Department</h3>
+						<p>To add a new department, edit the <tt>app\config\system.json</tt> file.</p>
+
 						<h3>Existing</h3>
 						<ul class="department-list">
 							@foreach(get_departments() as $dep)
 								<li class="flex flex--row" style="margin-bottom: 5px">
 									<p>{{ ucfirst($dep) }}</p>
-									<button type="button" class="button button--danger ml-auto">DELETE</button>
+									{{-- <button type="button" class="button button--danger ml-auto">DELETE</button> --}}
 								</li>
 							@endforeach
 						</ul>
 
-						<h3>Add New Department</h3>
-						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@addNewDepartment') }}">
+						
+						{{-- <form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@newDepartment') }}">
 							{{ csrf_field() }}
 							<input type="text" name="" value="" placeholder="">
 							<div class="form-field form-field--flex">
 								<button class="button button--raised button--accent" type="submit">Save</button>
 							</div>
-						</form>
+						</form> --}}
 					</div>
 				</li>
 

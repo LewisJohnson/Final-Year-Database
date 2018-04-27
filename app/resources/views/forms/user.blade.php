@@ -81,65 +81,15 @@
 	@include('forms.partials.error-block', ['name' => 'email'])
 </div>
 
-
-
-<div class="form-field{{ $errors->has('privileges') ? ' has-error' : '' }}">
-	<label>Privileges</label>
-	@include('forms.partials.error-block', ['name' => 'privileges'])
-
-	<div>
-		<div class="button-group flex--stretch-children">
-			<div class="checkbox">
-				<input type="checkbox" id="privileges-staff" name="privileges[]" value="staff" class="checkbox-input" @if($view === "edit") @if($user->isStaff()) checked @endif @endif>
-				<label for="privileges-staff">Staff</label>
-			</div>
-			<div class="checkbox">
-				<input type="checkbox" id="privileges-supervisor" name="privileges[]" value="supervisor" class="checkbox-input" @if($view === "edit") @if($user->isSupervisor()) checked @endif @endif>
-				<label for="privileges-supervisor">Supervisor</label>
-			</div>
-		</div>
-
-		@foreach (get_education_levels() as $educationLevel)
-			<div class="button-group flex--stretch-children">
-				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
-					<div class="checkbox">
-						<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
-						<label for="privileges-admin-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} administrator</label>
-					</div>
-				@endif
-			</div>
-		@endforeach
-
-		@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel(Session::get('education_level')['shortName']))
-			<div class="checkbox">
-				<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName']) checked @endif @endif>
-				<label for="privileges-student">{{ ucfirst(Session::get('education_level')['longName']) }} student</label>
-			</div>
-		@endif
-
-		<div class="button-group flex--stretch-children">
-			@if(Auth::user()->isSystemAdmin())
-				<div class="checkbox">
-					<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input" @if($view === "edit") @if($user->isSystemAdmin()) checked @endif @endif>
-					<label for="privileges-admin-system">System administrator</label>
-				</div>
-			@endif
-		</div>
+{{-- STUDENT FORM --}}
+<div id="student-form">
+	<h3>Student</h3>
+	<p>You are creating an {{ lang_sess('full_name') }} student.</p>
+	<div class="form-field">
+		<label for="registration_number">Registration Number</label>
+		<input id="registration_number" type="text" name="registration_number" @if($view === "edit") @if($user->isStudent()) value="{{ $user->student->registration_number }}" @endif @endif>
 	</div>
 </div>
-
-{{-- STUDENT FORM --}}
-@if($view === "new")
-	<div id="student-form">
-		<h3>Student</h3>
-		<p>You are creating a {{ lang_sess('full_name') }} student.</p>
-		<div class="form-field">
-			<label for="registration_number">Registration Number</label>
-			<input id="registration_number" type="text" name="registration_number">
-		</div>
-	</div>
-{{-- END STUDENT FORM --}}
-@endif
 
 {{-- SUPERVISOR FORM --}}
 <div id="supervisor-form">
@@ -191,6 +141,53 @@
 		@include('forms.partials.error-block', ['name' => 'project_load'])
 	</div>
 	{{-- END SUPERVISOR FORM --}}
+</div>
+
+<div class="form-field{{ $errors->has('privileges') ? ' has-error' : '' }}">
+	<label>Privileges</label>
+	<ins>You must switch education level to create a postgraduate student.</ins>
+
+	@include('forms.partials.error-block', ['name' => 'privileges'])
+
+	<div id="user-privileges-select">
+		<div class="button-group flex--stretch-children">
+			<div class="checkbox">
+				<input type="checkbox" id="privileges-staff" name="privileges[]" value="staff" class="checkbox-input" @if($view === "edit") @if($user->isStaff()) checked @endif @endif>
+				<label for="privileges-staff">Staff</label>
+			</div>
+			<div class="checkbox">
+				<input type="checkbox" id="privileges-supervisor" name="privileges[]" value="supervisor" class="checkbox-input user-form-supervisor" @if($view === "edit") @if($user->isSupervisor()) checked @endif @endif>
+				<label for="privileges-supervisor">Supervisor</label>
+			</div>
+		</div>
+
+		@foreach (get_education_levels() as $educationLevel)
+			<div class="button-group flex--stretch-children">
+				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
+					<div class="checkbox">
+						<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
+						<label for="privileges-admin-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} administrator</label>
+					</div>
+				@endif
+			</div>
+		@endforeach
+
+		@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel(Session::get('education_level')['shortName']))
+			<div class="checkbox">
+				<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input user-form-student" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName']) checked @endif @endif>
+				<label for="privileges-student">{{ ucfirst(Session::get('education_level')['longName']) }} student</label>
+			</div>
+		@endif
+
+		<div class="button-group flex--stretch-children">
+			@if(Auth::user()->isSystemAdmin())
+				<div class="checkbox">
+					<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input" @if($view === "edit") @if($user->isSystemAdmin()) checked @endif @endif>
+					<label for="privileges-admin-system">System administrator</label>
+				</div>
+			@endif
+		</div>
+	</div>
 </div>
 
 <div class="form-field">

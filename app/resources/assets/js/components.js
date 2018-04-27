@@ -143,7 +143,10 @@
 		this.underlay.data("owner", this.dialogName);
 		this.element.addClass(this.CssClasses_.ACTIVE);
 		window['Dialog'] = this;
-		window['MobileMenu'].closeMenu();
+
+		if (typeof(window['MobileMenu']) != "undefined"){
+			window['MobileMenu'].closeMenu();
+		}
 	};
 
 	Dialog.prototype.hideDialog = function(){

@@ -335,11 +335,12 @@ class Supervisor extends User{
 	*/
 	public static function getDatalist(){
 		$supervisors = Supervisor::all();
-
 		$dataListHtml = '<datalist id="supervisor-datalist">';
+
 		foreach ($supervisors as $supervisor) {
 			$dataListHtml .= '<option value="'. $supervisor->user->getFullName().'">';
 		}
+		
 		$dataListHtml .= '</datalist>';
 
 		return $dataListHtml;

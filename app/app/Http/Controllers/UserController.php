@@ -188,8 +188,6 @@ class UserController extends Controller{
 				'email' => $request['email'],
 			));
 
-			
-
 			if(in_array("student", $request->privileges)){
 				if($user->isStudent()){
 					// If they are a student already, update

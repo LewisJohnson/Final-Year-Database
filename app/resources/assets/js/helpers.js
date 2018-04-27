@@ -223,7 +223,7 @@ function repopulateCheckboxes(){
  * @param {string} areaId The ID of the element to search the caret for (Should be an input)
  * @param {string} text The value of the text to insert
 
- * A modified version 0f http://web.archive.org/web/20110102112946/http://www.scottklarr.com/topic/425/how-to-insert-text-into-a-textarea-where-the-cursor-is/
+ * A modified version of http://web.archive.org/web/20110102112946/http://www.scottklarr.com/topic/425/how-to-insert-text-into-a-textarea-where-the-cursor-is/
  * Posted On Oct 11, 2008 at 10:16 pm
  * Can not find an author to credit
  */
@@ -277,3 +277,71 @@ function wrapTextWithTag(areaId, tag) {
 	txtarea.selectionEnd = endPos;
 	txtarea.scrollTop = scrollPos;
 }
+
+function sortTable(header, table) {
+
+		var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+
+		if(!(header instanceof jQuery)){
+			header = $(header);
+		}
+
+		if(!(table instanceof jQuery)){
+			table = $(table);
+		}
+
+		switching = true;
+		
+		// Set the sorting direction to ascending:
+		dir = "asc"; 
+		/* Make a loop that will continue until
+		no switching has been done: */
+		while (switching) {
+			// Start by saying: no switching is done:
+			switching = false;
+			rows = table.find("TR");
+			/* Loop through all table rows (except the
+			first, which contains table headers): */
+			for (i = 1; i < (rows.length - 1); i++) {
+				// Start by saying there should be no switching:
+				shouldSwitch = false;
+				/* Get the two elements you want to compare,
+				one from current row and one from the next: */
+				x = $(rows[i]).find("TD").get(header.index());
+				y = $(rows[i + 1]).find("TD").get(header.index());
+
+				/* Check if the two rows should switch place,
+				based on the direction, asc or desc: */
+				if (dir == "asc") {
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+						// If so, mark as a switch and break the loop:
+						shouldSwitch= true;
+						break;
+					}
+				} else if (dir == "desc") {
+					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+						// If so, mark as a switch and break the loop:
+						shouldSwitch= true;
+						break;
+					}
+				}
+			}
+			if (shouldSwitch) {
+				/* If a switch has been marked, make the switch
+				and mark that a switch has been done: */
+				// $(rows[i]).parent().insertBefore($(rows[i + 1]), $(rows[i]));
+				$(rows[i]).before($(rows[i + 1]));
+				// $(rows[i]).parent().insertBefore($(rows[i + 1]), $(rows[i]));
+				switching = true;
+				// Each time a switch is done, increase this count by 1:
+				switchcount ++; 
+			} else {
+				/* If no switching has been done AND the direction is "asc",
+				set the direction to "desc" and run the while loop again. */
+				if (switchcount == 0 && dir == "asc") {
+					dir = "desc";
+					switching = true;
+				}
+			}
+		}
+	}

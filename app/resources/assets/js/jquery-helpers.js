@@ -115,6 +115,11 @@ $(function() {
 		window['project'] = $('.project-card');
 	}
 
+
+	$('.sort-table thead tr th').on('click', function() {
+		sortTable($(this), $(this).closest('table'));
+	});
+
 	// Repopulate checkboxes
 	repopulateCheckboxes();
 });

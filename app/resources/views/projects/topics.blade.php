@@ -3,11 +3,11 @@
 <div class="centered width--800">
 	<h1>Projects by Topic</h1>
 	<h3>Select a topic to browse related projects.</h3>
-	<table class="data-table shadow-2dp">
+	<table class="data-table sort-table shadow-2dp">
 		<thead>
 			<tr>
-				<th>Topic</th>
-				<th>Projects</th>
+				<th class="pointer">Topic</th>
+				<th class="pointer">Projects</th>
 			</tr>
 		</thead>
 		<tbody>

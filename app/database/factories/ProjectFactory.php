@@ -10,5 +10,6 @@ $factory->define(SussexProjects\Project::class, function (Faker $faker) {
 		'description' => $faker->realText($maxNbChars = 600, $indexSize = 2),
 		'skills' => $faker->catchPhrase,
 		'status' => 'on-offer',
+		'supervisor_id' => '8a74a357-8536-4605-9542-8001d31ee389'
 	];
 });

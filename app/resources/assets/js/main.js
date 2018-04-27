@@ -155,7 +155,7 @@ import '../js/components';
 		});
 	});
 
-		/**
+	/**
 		* Submit login details
 	*/
 	$("#loginForm").on('submit', function(e){
@@ -175,9 +175,10 @@ import '../js/components';
 			error: function (data) {
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
 
-				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
 				$('#login-username', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
-				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data["responseJSON"]["errors"]["username"][0]);
+
+				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
+				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data.responseJSON.message);
 			}
 		});
 	});
@@ -208,34 +209,68 @@ import '../js/components';
 		});
 	});
 
-	// NEW USER
-	// put this stuff in an array
-	// todo: if student is selected, deselect the rest and disable them (likewise for other checkboxes)
+	/**
+		* New/Edit user form
+	*/
+	var supervisorForm = $('#supervisor-form');
+	var studentForm = $('#student-form');
+
+	supervisorForm.hide();
+	studentForm.hide();
+
+	$('.user-form-supervisor').each(function() {
+		if($(this).prop('checked')){
+			supervisorForm.show();
+		}
+	});
+
+	$('.user-form-supervisor').on('change', function(){
+		if($(this).prop('checked')){
+			supervisorForm.show();
+		} else {
+			var checked = false;
+			$('.user-form-supervisor').each(function() {
+				if($(this).prop('checked')){
+					checked = true;
+				}
+			});
+
+			if(!checked){
+				supervisorForm.hide();
+			}
+		}
+	});
+
+	$('.user-form-student').each(function() {
+		if($(this).prop('checked')){
+			studentForm.show();
+		}
+	});
+
+	$('.user-form-student').on('change', function(){
+		if($(this).prop('checked')){
+			studentForm.show();
+		} else {
+			var checked = false;
+			$('.user-form-student').each(function() {
+				if($(this).prop('checked')){
+					checked = true;
+				}
+			});
+
+			if(!checked){
+				studentForm.hide();
+			}
+		}
+	});
 
 	$('.user-form #username').on('change', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
-	$('#supervisor-form').hide();
-	$('#student-form').hide();
-
-	$('#create-form-access-select').on('change', function(){
-		if($('.new-user-student').is(":selected")) {
-			$('#student-form').show();
-		} else {
-			$('#student-form').hide();
-		}
-		if($('#supervisor-option').is(":selected")) {
-			$('#supervisor-form').show();
-		} else {
-			$('#supervisor-form').hide();
-		}
-	});
-
 	/* ======================
 		 4. CLICK EVENTS
 	   ====================== */
-
 	$("body").on("click", ".email-selected", function(e) {
 		if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
 			alert("You haven't selected anyone.");
@@ -313,11 +348,8 @@ import '../js/components';
 		});
 	});
 
-	
-	// Site-wide feedback
+	// Site-wide feedback form
 	$('#leave-feedback-button').on('click', function(e){
-		
-
 		$.confirm({
 			title: 'Feedback',
 			content: function () {

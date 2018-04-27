@@ -33,11 +33,13 @@ use Illuminate\Http\Request;
 | DELETE	/photos/{photo}			destroy		photos.destroy
 */
 
-Route::get('/mailable', function () {
-	$student = SussexProjects\Student::all()->first();
-	$supervisor = SussexProjects\Supervisor::all()->first();
-	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
-});
+
+// This can be used to test mailables
+// Route::get('/mailable', function () {
+// 	$student = SussexProjects\Student::all()->first();
+// 	$supervisor = SussexProjects\Supervisor::all()->first();
+// 	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
+// });
 
 /* =============
    1. WEB ROUTES
@@ -108,7 +110,7 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 	Route::post('admin/dashboard/system', 'AdminController@configure');
 
 	// Add new department
-	Route::post('admin/system/new-department', 'AdminController@addNewDepartment');
+	Route::post('admin/system/new-department', 'AdminController@newDepartment');
 
 	// User agent view
 	Route::get('system/user-agent', 'AdminController@userAgentView');
