@@ -40,12 +40,13 @@
 				</ul>
 			</div>
 		@else
-			<div class="hamburger-container" style="max-width: 300px" role="button">
-				<button class="button" style="margin-top: 5px; color: rgb(255, 255, 255);" data-activator="true" data-dialog="login">Login</button>
-			</div>
+			@if(!empty(Session::get('department')) && Request::path() !== 'set-department')
+				<div class="hamburger-container" style="max-width: 300px" role="button">
+					<button class="button" style="margin-top: 5px; color: rgb(255, 255, 255);" data-activator="true" data-dialog="login">Login</button>
+				</div>
+			@endif
 		@endif
 		
-
 		@if(Session::get('education_level') != null)
 			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
 		@else

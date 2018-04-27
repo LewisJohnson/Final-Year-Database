@@ -328,6 +328,7 @@ class ProjectController extends Controller{
 				'transaction_date' => new Carbon
 			));
 
+			$transaction->save();
 			$project->delete();
 		});
 

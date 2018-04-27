@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
-
 /**
  * The student model.
  *

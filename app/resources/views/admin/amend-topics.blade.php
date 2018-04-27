@@ -18,7 +18,7 @@
 			<li class="topic" data-topic-id="{{ $topic->id }}" data-original-topic-name="{{ $topic->name }}">
 				<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
 				<button class="button edit-topic">Edit</button>
-				<button class="button delete-topic button--danger">Delete</button>
+				<button class="button delete-topic button--danger-text">Delete</button>
 			</li>
 		@endforeach
 	</ul>

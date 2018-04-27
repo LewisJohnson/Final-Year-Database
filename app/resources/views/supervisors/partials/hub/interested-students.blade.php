@@ -1,8 +1,8 @@
-<div class="section section--full-width shadow-2dp">
+<div class="section section--full-width">
 	{{-- HEADER --}}
 	<div class="header">
-		@include('svg.tag')
-		<h2>Selected Students</h2>
+		@include('svg.clipboard')
+		<h2>Interested Students</h2>
 		<div class="svg-container expand pointer" style="margin-left: auto;">
 			<svg class="transition--medium" viewBox="0 0 24 24">
 				<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
@@ -14,8 +14,8 @@
 	<div class="content" data-cookie-name="hide-selected-students" @if(!empty($_COOKIE["hide-selected-students"])) @if($_COOKIE["hide-selected-students"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 		<h5>Project Offers</h5>
 		<div class="responsive-table">
-			<table class="data-table supervisor-table">
-				@if (count(Auth::user()->supervisor->getSelectedStudents()))
+			<table class="data-table sort-table supervisor-table table--dark-head">
+				@if(count(Auth::user()->supervisor->getSelectedStudents()))
 					<thead>
 						<tr>
 							<th>
@@ -24,8 +24,8 @@
 									<label for="selected-students" name="selected-students"></label>
 								</div>
 							</th>
-							<th>Student</th>
-							<th>Project</th>
+							<th class="pointer">Student</th>
+							<th class="pointer">Project</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -66,7 +66,7 @@
 
 		<h5>Students Proposals</h5>
 		<div class="responsive-table">
-			<table class="data-table supervisor-table">
+			<table class="data-table table--dark-head supervisor-table">
 				@if (count(Auth::user()->supervisor->getStudentProjectProposals()))
 				<thead>
 					<tr>

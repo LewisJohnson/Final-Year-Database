@@ -558,7 +558,7 @@
 								},
 								success: function(){
 									topic.element.hide(config.animtions.slow, function() {
-										topic.remove();
+										topic.element.remove();
 									});
 								}
 							});
@@ -569,7 +569,10 @@
 		},
 
 		createEditTopicDOM: function(topicId, originalName){
-			$(".edit-topic-list").prepend('<li class="topic" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
+			var elem = $('<li class="topic" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
+			$(".edit-topic-list").prepend(elem);
+			elem.hide(0);
+			elem.show(400);
 			EditTopic.prototype.initAll();
 		}
 	};

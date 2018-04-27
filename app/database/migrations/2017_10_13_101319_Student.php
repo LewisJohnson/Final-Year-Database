@@ -22,7 +22,7 @@ class Student extends Migration{
 			foreach (get_education_levels() as $key => $level) {
 				Schema::create($department.'_students_'.$level['shortName'], function (Blueprint $table) use ($department){
 					$table->uuid('id')->unique();
-					$table->string('registration_number');
+					$table->string('registration_number')->unique();
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
 					$table->uuid('project_id')->nullable(true);
 					$table->boolean('share_name')->default(1);

@@ -201,7 +201,8 @@ import '../js/components';
 			data: $(this).serialize(),
 			success:function(data){
 				data = JSON.parse(data);
-				EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
+				var elem = EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
+				
 			},
 		}).done(function(){
 			$(this).find('input').val('');

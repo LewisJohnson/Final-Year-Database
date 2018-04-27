@@ -4,6 +4,7 @@
 		@include('svg.arrow-down')
 
 		<div class="dropdown-content shadow-2dp">
+			<a href="/admin">Admin Hub</a>
 			@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])
 			@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])
 			@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])
@@ -18,6 +19,9 @@
 		@include('svg.arrow-down')
 
 		<div class="dropdown-content shadow-2dp">
+			<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
+			<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
+			<a href="{{ action('AdminController@feedback') }}">User Feedback</a>
 			<div class="sub-dropdown">
 				<button class="sub-dropbtn">Users</button>
 				@include('svg.arrow-right')
@@ -38,10 +42,6 @@
 					</ul>
 				</div>
 			</div>
-
-			<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
-			<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
-			<a href="{{ action('AdminController@feedback') }}">User Feedback</a>
 		</div>
 	</li>
 @endif

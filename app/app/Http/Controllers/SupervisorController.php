@@ -33,15 +33,6 @@ class SupervisorController extends Controller{
 		$this->middleware('auth');
 	}
 
-	// *
-	//  * Display a listing of the resource.
-	//  *
-	//  * @return \Illuminate\Http\Response
-
-	// public function index(){
-	// 	return view('supervisors.index');
-	// }
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -50,7 +41,6 @@ class SupervisorController extends Controller{
 	public function projectReport(){
 		return view('supervisors.project-report');
 	}
-
 
 	/**
 	 * The supervisor report.
@@ -78,18 +68,6 @@ class SupervisorController extends Controller{
 	 */
 	public function acceptedStudentTable(){
 		return view('supervisors.partials.accepted-students-table');
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
 	}
 
 	/**
@@ -141,7 +119,7 @@ class SupervisorController extends Controller{
 		});
 
 		// Send accepted email
-		// Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+		Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
 
 		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
 	}
@@ -173,7 +151,7 @@ class SupervisorController extends Controller{
 		});
 
 		// Send declined email
-		// Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
+		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
 
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}

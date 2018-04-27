@@ -1,4 +1,4 @@
-<div class="section section--full-width shadow-2dp">
+<div class="section section--full-width">
 	<div class="header">
 		@include('svg.check-circle')
 		<h2>Accepted Students</h2>

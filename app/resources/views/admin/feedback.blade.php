@@ -4,14 +4,14 @@
 	<h1>User Feedback</h1>
 	<h3>Browse all of the user submitted feedback</h3>
 
-	<table>
+	<table class="data-table table--dark-head sort-table">
 		<thead>
 			<tr>
-				<th>Page</th>
-				<th>Department</th>
-				<th>Education Level</th>
-				<th>Comment</th>
-				<th>Email</th>
+				<th class="pointer">Page</th>
+				<th class="pointer">Department</th>
+				<th class="pointer">Education Level</th>
+				<th class="pointer">Comment</th>
+				<th class="pointer">Email</th>
 			</tr>
 		</thead>
 		<tbody>

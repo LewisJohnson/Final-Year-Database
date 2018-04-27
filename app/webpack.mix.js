@@ -12,7 +12,7 @@ var webpack = require('webpack');
  */
 
 mix.disableNotifications();
-mix.sourceMaps();
+// mix.sourceMaps();
 new webpack.ProvidePlugin({ $: 'jquery', Query: 'jquery' });
 
 // JAVASCRIPT

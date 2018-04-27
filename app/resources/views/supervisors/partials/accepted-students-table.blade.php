@@ -1,4 +1,4 @@
-<table class="data-table" id="supervisor-accepted-students-table">
+<table class="data-table sort-table table--dark-head" id="supervisor-accepted-students-table">
 	@if (count(Auth::user()->supervisor->getAcceptedStudents()))
 	<thead>
 		<tr>
@@ -8,9 +8,9 @@
 					<label for="accepted" name="accepted"></label>
 				</div>
 			</th>
-			<th>Student Name</th>
-			<th>Second Marker</th>
-			<th>Project Title</th>
+			<th class="pointer">Student Name</th>
+			<th class="pointer">Second Marker</th>
+			<th class="pointer">Project Title</th>
 			<th></th>
 		</tr>
 	</thead>

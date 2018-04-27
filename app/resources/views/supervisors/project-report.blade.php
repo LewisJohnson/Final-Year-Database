@@ -13,7 +13,7 @@
 			</div>
 		</div>
 		<div class="supervisor hub">
-			@include('supervisors.partials.hub.selected-students')
+			@include('supervisors.partials.hub.interested-students')
 			@include('supervisors.partials.hub.accepted-students')
 		</div>
 	</div>

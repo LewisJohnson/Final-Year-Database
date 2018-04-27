@@ -6,13 +6,14 @@
  */
 
 use Faker\Generator as Faker;
+$studentIncrement = studentIncrement();
 
-$factory->define(SussexProjects\User::class, function (Faker $faker) {
-	Session::put('education_level', current(get_education_levels()));
-	Session::put('department', 'informatics');
-
+$factory->define(SussexProjects\User::class, function (Faker $faker) use ($studentIncrement){
+	$studentIncrement->next();
 	// Sussex style username
-	$username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(0,999);
+	// $username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(0,999);
+
+	$username = "eng_student".$studentIncrement->current();
 
 	return [
 		'first_name' => $faker->firstName,
@@ -20,18 +21,24 @@ $factory->define(SussexProjects\User::class, function (Faker $faker) {
 		'username' => $username,
 		'password' => bcrypt('password'),
 		'programme' => 'Computer Science',
-		'email' => $username.'@test.ac.uk'
+		'email' => $username.'@susx.ac.uk'
 	];
 });
 
 $factory->state(SussexProjects\User::class, 'staff', [
-	'privileges' => 'staff',
+	'privileges' => 'staff'
 ]);
 
 $factory->state(SussexProjects\User::class, 'student', [
-	'privileges' => 'student',
+	'privileges' => 'student'
 ]);
 
 $factory->state(SussexProjects\User::class, 'supervisor', [
-	'privileges' => 'supervisor',
+	'privileges' => 'supervisor'
 ]);
+
+function studentIncrement(){
+	for ($i = 0; $i < 1000; $i++) {
+		yield $i;
+	}
+}

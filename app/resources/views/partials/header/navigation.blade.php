@@ -103,7 +103,11 @@
 								</svg>
 							</div>
 							<div class="dropdown-content">
-								<a href="{{ action('StudentController@proposeProjectView') }}" @if(Auth::user()->student->project_status != 'none') disabled @endif>Propose Project</a>
+								@if(Auth::user()->student->project_status == "none")
+									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
+								@elseif(Auth::user()->student->project_status == "proposed")
+									<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
+								@endif
 								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 							</div>
 						</div>
@@ -214,7 +218,11 @@
 						<button>Student</button>
 						@include('svg.arrow-down')
 						<div class="dropdown-content shadow-2dp">
-							<a href="{{ action('StudentController@proposeProjectView') }}">Propose Project</a>
+								@if(Auth::user()->student->project_status == "none")
+									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
+								@elseif(Auth::user()->student->project_status == "proposed")
+									<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
+								@endif
 							<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 						</div>
 					</li>
@@ -234,9 +242,11 @@
 					<button title="Log out" onclick="$('#logout-form').submit();">Logout</button>
 				</li>
 			@else
-				<li class="nav-button" style="margin-left: auto;">
-					<button data-activator="true" data-dialog="login">Login</button>
-				</li>
+				@if(!empty(Session::get('department')) && Request::path() !== 'set-department')
+					<li class="nav-button" style="margin-left: auto;">
+						<button data-activator="true" data-dialog="login">Login</button>
+					</li>
+				@endif
 			@endif
 		</ul>
 	</nav>

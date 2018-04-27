@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Exception;
 
 class Feedback extends Model{
-
+	use Traits\Uuids;
+	
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *

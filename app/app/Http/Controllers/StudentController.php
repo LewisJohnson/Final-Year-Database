@@ -91,23 +91,16 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id){
-		//
-	}
-
-	/**
 	 * The student propose a project view (Form).
 	 *
 	 * @return \Illuminate\Http\Response
 	*/
 	public function proposeProjectView(){
-		return view("students.propose-project");
+		if(Auth::user()->student->project_status == "none"){
+			return view("students.propose-project");
+		} else {
+			return redirect()->action('HomeController@index');
+		}
 	}
 
 	/**
@@ -258,8 +251,9 @@ class StudentController extends Controller{
 			return response()->json(array('error' => true, 'message' => "Something went wrong."));
 		}
 
-		DB::transaction(function() use ($request) {
-			$student = Auth::user()->student;
+		$student = Auth::user()->student;
+
+		DB::transaction(function() use ($request, $student) {
 			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' =>'project',
@@ -317,17 +311,6 @@ class StudentController extends Controller{
 		});
 
 		return $result;
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 
 	/**
