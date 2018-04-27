@@ -22,22 +22,15 @@ class DatabaseSeeder extends Seeder{
 		
 		// factory(SussexProjects\Student::class, 200)->create();
 		// factory(SussexProjects\Supervisor::class, 50)->create();
-		// factory(SussexProjects\Project::class, 50)->create();
-		factory(SussexProjects\Topics::class, 50)->create();
+		// factory(SussexProjects\Project::class, 200)->create();
+		// factory(SussexProjects\Topic::class, 53)->create();
+		// factory(SussexProjects\ProjectTopic::class, 200)->states('primary')->create();
+		// factory(SussexProjects\ProjectTopic::class, 800)->states('extra')->create();
 
-		// $adminId = (string) Str::orderedUuid();
+		$inf_adminId = (string) Str::orderedUuid();
+		$eng_adminId = (string) Str::orderedUuid();
 
-		// DB::statement("INSERT INTO `informatics_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('".$adminId."', 'supervisor,admin_ug,admin_pg', 'Admin', 'Account', 'admin', '".bcrypt('password')."', 'none', 'admin@susx.com');");
-
-		// DB::table('informatics_supervisors')->insert([
-		// 	 'id' => $adminId,
-		// 	 'title' => 'Prof.',
-		// 	 'project_load_pg' => 8,
-		// 	 'project_load_ug' => 6,
-		// 	 'take_students_pg' => true,
-		// 	 'accept_email_pg' => true,
-		// 	 'take_students_ug' => true,
-		// 	 'accept_email_ug' => true,
-		// ]);
+		DB::statement("INSERT INTO `informatics_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('".$inf_adminId."', 'admin_ug,admin_pg', 'Admin', 'Account', 'admin', '".bcrypt('password')."', 'none', 'admin@susx.com');");
+		DB::statement("INSERT INTO `engineering_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('".$eng_adminId."', 'admin_ug,admin_pg', 'Admin', 'Account', 'admin', '".bcrypt('password')."', 'none', 'admin@susx.com');");
 	}
 }

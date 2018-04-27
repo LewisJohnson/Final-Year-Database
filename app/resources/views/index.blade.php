@@ -13,7 +13,7 @@
 				<div class="card card--half">
 					<h2>Options</h2>
 					<p>You may hide your name from other students in the supervisor report.</p>
-					<form id="#share-name-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+					<form id="share-name-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
 						<div class="form-field">
 							<div class="checkbox">
@@ -31,7 +31,7 @@
 					<h2>Options</h2>
 					<p>You may opt-out from receiving emails.</p>
 					@foreach (get_education_levels() as $educationLevel)
-						<form id='#receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form form form--flex" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
+						<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form form form--flex" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
 							{{ csrf_field() }}
 
 							<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
@@ -44,7 +44,6 @@
 						</form>
 					@endforeach
 				</div>
-				{{-- DELETE THIS --}}
 				<div style="display: none" class="card card--half"></div>
 			@endif
 
@@ -119,6 +118,7 @@
 				@endforeach
 			@endif
 
+			<div style="display: none" class="card card--half"></div>
 			@foreach(get_education_levels() as $level)
 				@if(Auth::user()->isAdminOfEducationLevel($level["shortName"]))
 					<div class="card card--half">
