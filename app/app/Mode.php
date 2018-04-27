@@ -72,9 +72,11 @@ class Mode extends Model{
 	 */
 	public static function Instance(){
 		$mode = Mode::all()->first();
+
 		if($mode == null){
-			throw new Exception("Error Processing Request", 1);
+			throw new Exception("Error Processing Request. (You may have not added a mode to the database)", 1);
 		}
+
 		return $mode;
 	}
 

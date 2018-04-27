@@ -53,6 +53,19 @@ class Supervisor extends User{
 	}
 
 	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_supervisors';
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
+
+	/**
 	 * Sets the superior's email preference.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -106,19 +119,6 @@ class Supervisor extends User{
 		}
 		$this->save();
 		return;
-	}
-
-	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_supervisors';
-		} else {
-			throw new Exception('Database not found.');
-		}
 	}
 
 	/**

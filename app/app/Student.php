@@ -108,7 +108,11 @@ class Student extends Model{
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
-
+	/**
+	 * The status of the student in a pretty string.
+	 *
+	 * @return String status
+	 */
 	public function getStatusString(){
 		$return = '';
 		switch($this->project_status) {
@@ -138,6 +142,27 @@ class Student extends Model{
 		return $return;
 	}
 
+
+	/**
+	 * Returns all favourite projects.
+	 *
+	 * @return Project Projects
+	 */
+	public function getFavouriteProjects(){
+		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
+			return null;
+		} else {
+			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
+		}
+		return $projects;
+	}
+
+	/**
+	 * Returns a boolean whether the parameter project is a favourite project.
+	 *
+	 * @param $id Project ID
+	 * @return boolean favourite project
+	 */
 	public function isFavouriteProject($id){
 		if(empty(Cookie::get('favourite_projects'))){
 			return false;
@@ -151,14 +176,5 @@ class Student extends Model{
 			}
 		}
 		return false;
-	}
-
-	public function getFavouriteProjects(){
-		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
-			return null;
-		} else {
-			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
-		}
-		return $projects;
 	}
 }
