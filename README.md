@@ -470,7 +470,7 @@ above includes such engine without additional plugins. An example use would be i
 each student to create a list. The template engine allows snippets of HTML to be used across the
 rest of the project. An example snippet would look something like this;
 
-```
+```blade
 1 <li class="student">
 2 <p> {{ $student->first_name }} </p>
 3 <p> {{ $student->last_name }} </p>
@@ -821,7 +821,7 @@ have the users’ CSRF token. If the victim was a system administrator this coul
 The token is stored as a meta field in the head section of every HTML file sent from the server.
 The CSRF token meta field in the HTML head looks like this;
 
-```
+```Blade
 1 <head>
 2 <meta name="csrf-token" content="{{ csrf_token() }}">
 3 ...
@@ -852,11 +852,11 @@ request”. A Laravel form request has two basic methods to override, rules() an
 . The rules method lets custom validation logic to be defined, the quickest way to explain this is
 with a snippet;
 
-```
+```php
 1 public function rules(){
 2 return [
-3 'username' => 'required|unique:users|max:7',
-4 'password' => 'required|min:10',
+3    'username' => 'required|unique:users|max:7',
+4    'password' => 'required|min:10',
 5 ];
 6 }
 ```
@@ -1037,14 +1037,14 @@ that table (Multiple tables in the case of the user and student model).
 As a result of this, in most cases, we can query and modify data in the table using ORM, instead
 of writing MySql queries. Let us look at a small example to understand it better;
 
-```
+```sql
 1 ProjectTopic:: where ('project_id', ' 47 a4-asd3')
 2 -> where ('topic_id','ds3d-34fd')
 3 -> delete ();
 ```
 (a) Eloquent ORM.
 
-```
+```sql
 1 DELETE FROM `informatics_project_topics_ug `
 2 WHERE `project_id ` = ' 47 a4-asd3' AND 'topic_id' = 'ds3d-34fd';
 ```
@@ -1131,7 +1131,7 @@ Laravel Blade is an HTML templating engine. It allows views to inherit, yield an
 views. This is convenient because we can use a single layout template for most views, a layout
 template would look something along the lines of this;
 
-```
+```Blade
 1 <! DOCTYPE html>
 2 < html lang ="{{ app()->getLocale() }}">
 3 @include ('partials.html-head')
@@ -1145,6 +1145,7 @@ template would look something along the lines of this;
 11
 12 @include('partials.footer ')
 13 </ html>
+```
 
 ```
 Figure 13: An example code snippet of Laravel Blade.
@@ -1205,10 +1206,6 @@ help solve the issue of screen real estate on small screen devices. The issue is
 can not see all the details of a project in the table. However, with a project preview, a user can
 simply hold the project row for 250ms to view a preview of the project.
 
-
-```
-(a) Browse projects page. (b) Project preview.
-```
 ### 6.5 Other
 
 #### 6.5.1 Project Management.
@@ -1267,6 +1264,7 @@ described as follows;
 interaction with the object in a manner that is consistent with user expectations about
 other objects of that type.”
 ```
+
 So this means, the roles model makes it easy for users to identify what the role of an element is,
 how it can be interacted with, and in most cases, what the outcome will be. The roles model is
 implemented throughout the website for modals, tables, forms, buttons and every other element
@@ -1275,13 +1273,13 @@ detailed in the specification.
 A great use of the role model is with the mobile hamburger, button which is a div element with a
 role=”button” attribute.
 
-[language=HTML]
 
 ```
 1 <div class="mobile-menu" role="button">
 2 <...>
 3 </div>
 ```
+  
 ```
 Figure 15: An example of how the ARIA role model can be implemented.
 ```
@@ -1298,10 +1296,12 @@ grey to black.
 (a) The new website with accessibility options
 turned off.
 ```
+
 ```
 (b) The new website with accessibility options
 turned on.
 ```
+
 ### 7.3 Validating Accessibility
 
 It is all good and well to follow guidelines and specifications, but with a website this large, it can
