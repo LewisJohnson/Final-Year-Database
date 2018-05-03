@@ -1412,104 +1412,56 @@ Lastly, thank you Dr.Reus for being an amazing supervisor.
 [2]Inc. Cake Software Foundation. Cakephp - build fast, grow solid. https://cakephp.org/, 2017. [Online; accessed 03-Nov-2017].
 [3]Oracle Corporation. Mysql.https://www.mysql.com/, 2018. [Online; accessed 29-Mar-2018].
 [4]Tammy Everts. Page bloat: The average web page size is more than 2mb comments feed. https://www.soasta.com/blog/page-bloat-average-web-page-2-mb/, 2015. [Online; ac- cessed 07-Nov-2017].
-[5]IETF Internet Engineering Task Force and Scott Bradner. Key words for use in rfcs to indicate
-requirement levels. hhttps://tools.ietf.org/html/rfc2119, 1997. [Online; accessed 09-
-Feb-2018].
-[6]IETF Internet Engineering Task Force and Larry Masinter. Hyper text coffee pot control pro-
-tocol (htcpcp/1.0). https://tools.ietf.org/html/rfc2324#section-2.3.2, 1998. [On-
-line; accessed 09-Feb-2018].
+[5]IETF Internet Engineering Task Force and Scott Bradner. Key words for use in rfcs to indicate requirement levels. hhttps://tools.ietf.org/html/rfc2119, 1997. [Online; accessed 09-Feb-2018].
+[6]IETF Internet Engineering Task Force and Larry Masinter. Hyper text coffee pot control protocol (htcpcp/1.0). https://tools.ietf.org/html/rfc2324#section-2.3.2, 1998. [Online; accessed 09-Feb-2018].
 [7]JS Foundation. webpack.https://webpack.js.org/, 2018. [Online; accessed 31-Mar-2018].
-[8]The Apache Software Foundation. Apache http server project.https://httpd.apache.org/,
-2018. [Online; accessed 29-Mar-2018].
+[8]The Apache Software Foundation. Apache http server project.https://httpd.apache.org/ 2018. [Online; accessed 29-Mar-2018].
 [9]Inc. GitHub. Github.https://github.com/, 2017. [Online; accessed 01-Sep-2017].
-[10]The PHP Group. Php: Hypertext preprocessor. [http://php.net,](http://php.net,) 2018. [Online; accessed
-29-Mar-2018].
+[10]The PHP Group. Php: Hypertext preprocessor. [http://php.net,](http://php.net,) 2018. [Online; accessed 29-Mar-2018].
 [11]Chris Eppstein Hampton Catlin, Natalie Weizenbaum and individual contributors. Sass:Syntactically awesome style sheets. [http://sass-lang.com/,](http://sass-lang.com/,) 2015. [Online; accessed 03- Nov-2017].
 [12]M. Mealling IETF Internet Engineering Task Force, P. Leach and Microsoft. Key words for use in rfcs to indicate requirement levels. https://tools.ietf.org/html/rfc4122, 2018. [Online; accessed 29-Apr-2018].
 [13]Google Inc. Audit rules google chrome. https://github.com/GoogleChrome/ accessibility-developer-tools/wiki/Audit-Rules, 2017. [Online; accessed 22-Dec-2017].
 [14]Google Inc. Final year project database.https://goo.gl/qzPGSd, 2017. [Online; accessed 06-Nov-2017].
-[15]Google Inc. and individual contributors. Lighthouse | tools for web developers | google devel-
-opers.https://developers.google.com/web/tools/lighthouse/, 2018. [Online; accessed 03-Feb-2018].
+[15]Google Inc. and individual contributors. Lighthouse | tools for web developers | google developers.https://developers.google.com/web/tools/lighthouse/, 2018. [Online; accessed 03-Feb-2018].
 [16]NGINX Inc. Nginx | high performance load balancer, web server, reverse proxy. https://www.nginx.com/, 2018. [Online; accessed 29-Mar-2018].
 [17]Over 1100 individual contributors. Git. https://git-scm.com/, 2017. [Online; accessed 01-Sep-2017].
 [18]The jQuery Foundation. jquery.https://jquery.com/, 2017. [Online; accessed 03-Nov-2017].
-[19]Yii Software LLC. Yii php framework: Best for web 2.0 development. [http://www.](http://www.)
-yiiframework.com/, 2017. [Online; accessed 03-Nov-2017].
-[20]lutz. guid - how unique is uuid? - stack overflow.https://stackoverflow.com/questions/
-1155008/how-unique-is-uuid, 2009. [Online; accessed 29-Apr-2017].
-[21]Nikos M. The differences between int and uuid in mysql. https://stackoverflow.com/
-questions/30461895/the-differences-between-int-and-uuid-in-mysql, 2018. [Online;
-accessed 08-Apr-2018].
-[22]Microsoft. Lightweight directory access protocol. https://msdn.microsoft.com/en-us/
-library/aa367008(v=vs.85).aspx, 2018. [Online; accessed 29-Apr-2018].
-[23]Max Woolf (@minimaxir). The big list of naughty strings is a list of strings which have a high
-probability of causing issues when used as user-input data.https://github.com/minimaxir/
-big-list-of-naughty-strings, 2017. [Online; accessed 03-Feb-2018].
-[24]Mozilla and individual contributors. Accessibility | mdn.https://developer.mozilla.org/
-en-US/docs/Web/Accessibility, 2017. [Online; accessed 22-Dec-2017].
+[19]Yii Software LLC. Yii php framework: Best for web 2.0 development. [http://www.](http://www.)yiiframework.com/, 2017. [Online; accessed 03-Nov-2017].
+[20]lutz. guid - how unique is uuid? - stack overflow.https://stackoverflow.com/questions/1155008/how-unique-is-uuid, 2009. [Online; accessed 29-Apr-2017].
+[21]Nikos M. The differences between int and uuid in mysql. https://stackoverflow.com/questions/30461895/the-differences-between-int-and-uuid-in-mysql, 2018. [Online;accessed 08-Apr-2018].
+[22]Microsoft. Lightweight directory access protocol. https://msdn.microsoft.com/en-us/library/aa367008(v=vs.85).aspx, 2018. [Online; accessed 29-Apr-2018].
+[23]Max Woolf (@minimaxir). The big list of naughty strings is a list of strings which have a high probability of causing issues when used as user-input data.https://github.com/minimaxir/big-list-of-naughty-strings, 2017. [Online; accessed 03-Feb-2018].
+[24]Mozilla and individual contributors. Accessibility | mdn.https://developer.mozilla.org/en-US/docs/Web/Accessibility, 2017. [Online; accessed 22-Dec-2017].
 [25]qdirks chrisdavidmills Juggernaughtt Mozilla, EdwardB. Handling common javascript problems. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/JavaScript, 2017. [Online; accessed 03-Nov-2017].
 [26]Jordi Boggiano Nils Adermann and many community contributions. Composer. https: //getcomposer.org/, 2018. [Online; accessed 29-Mar-2018].
 [27]Inc npm. npm.https://www.npmjs.com/, 2018. [Online; accessed 31-Mar-2018].
 [28]University of Sussex. University templates and logo - brand and content guide for web and print. http://www.sussex.ac.uk/brand/templates, 2017. [Online; accessed 06-Oct-2017].
 [29]Taylor Otwell. Getting started with laravel. https://laravel.com/docs/, 2015. [Online; accessed 06-Oct-2017].
 [30]Taylor Otwell. Browser test.https://laravel.com/docs/5.6/dusk, 2018. [Online; accessed 20-Apr-2018].
-[31]Taylor Otwell. Eloquent: Getting started.https://laravel.com/docs/5.6/eloquent, 2018.
-[Online; accessed 28-Apr-2018].
+[31]Taylor Otwell. Eloquent: Getting started.https://laravel.com/docs/5.6/eloquent, 2018.[Online; accessed 28-Apr-2018].
 [32]Inc. PayPal Holdings. Github - paypal/aatt : Automated accessibility testing tool. https://github.com/paypal/AATT, 2017. [Online; accessed 22-Dec-2017].
-[33]David Thomas & Bernhard Reus. Final year project database.https://www.informatics.
-sussex.ac.uk/courses/csaiproj09/index.php, 2011. [Online; accessed 20-Oct-2017].
-[34]Color Safe. Color safe - accessible web color combinations. [http://colorsafe.co/,](http://colorsafe.co/,) 2017.
-[Online; accessed 06-Oct-2017].
-[35]Alberto Savoia. How much unit test coverage do you need? - the testivus answer. [http:](http:)//www.artima.com/forums/flat.jsp?forum=106&thread=204677, 2010. [Online; accessed 03-Nov-2017].
-[36]Mark Seemann. Code coverage is a useless target measure.http://blog.ploeh.dk/2015/11/
-16/code-coverage-is-a-useless-target-measure, 2015. [Online; accessed 03-Nov-2017].
-[37]SensioLabs. Symfony, high performace php framework for web development. https:
-//symfony.com/, 2017. [Online; accessed 03-Nov-2017].
-[38]Helen Sharp, Yvonne Rogers, and Jennifer Preece. _Interaction design: beyond human-
-computer interaction_ , pages 35–38. Wiley, 4th edition, 2016.
-[39]Wolfgang Skala. Gantt charts with the pgfgantt package. https://www.overleaf.com/
-latex/examples/gantt-charts-with-the-pgfgantt-package/jmkwfxrnfxnw, 2017. [On-
-line; accessed 01-Nov-2017].
-[40]SMARTDOME. Smartdome constructions.http://www.smartdome.si/, 2017. [Online; ac-
-cessed 07-Nov-2017].
+[33]David Thomas & Bernhard Reus. Final year project database.https://www.informatics.sussex.ac.uk/courses/csaiproj09/index.php, 2011. [Online; accessed 20-Oct-2017].
+[34]Color Safe. Color safe - accessible web color combinations. [http://colorsafe.co/,](http://colorsafe.co/,) 2017.[Online; accessed 06-Oct-2017].
+[35]Alberto Savoia. How much unit test coverage do you need? - the testivus answer [http(http:)//www.artima.com/forums/flat.jspforum=106&thread=204677, 2010. [Online; accessed 03-Nov-2017].
+[36]Mark Seemann. Code coverage is a useless target measure.http://blog.ploeh.dk/2015/11/16/code-coverage-is-a-useless-target-measure, 2015. [Online; accessed 03-Nov-2017].
+[37]SensioLabs. Symfony, high performace php framework for web development. https://symfony.com/, 2017. [Online; accessed 03-Nov-2017].
+[38]Helen Sharp, Yvonne Rogers, and Jennifer Preece. _Interaction design: beyond human-computer interaction_ , pages 35–38. Wiley, 4th edition, 2016.
+[39]Wolfgang Skala. Gantt charts with the pgfgantt package. https://www.overleaf.com/latex/examples/gantt-charts-with-the-pgfgantt-package/jmkwfxrnfxnw, 2017. [Online; accessed 01-Nov-2017].
+[40]SMARTDOME. Smartdome constructions.http://www.smartdome.si/, 2017. [Online; accessed 07-Nov-2017].
 [41]José Torre. 6 animation guidelines for ux design - 6 animation guidelines for ux design. https://blog.prototypr.io/6-animation-guidelines-for-ux-design-74c90eb5e47a, 2017. [Online; accessed 10-Feb-2018].
 [42]Unknown. Chromedriver. https://sites.google.com/a/chromium.org/chromedriver//, 2018. [Online; accessed 20-Apr-2018].
-[43]Unknown. phpdocumentor. https://www.phpdoc.org/, 2018. [Online; accessed 08-Apr-
-2018].
-[44]W3C. Cascading style sheets. https://www.w3.org/Style/CSS/, 2018. [Online; accessed
-24-Apr-2018].
-[45]World Wide Web Consortium (W3C) and individual contributors. Wai-aria overview | web
-accessibility initiative (wai) | w3c. https://www.w3.org/WAI/intro/aria, 2006. [Online;
-accessed 22-Dec-2017].
-
-[46]World Wide Web Consortium (W3C) and individual contributors. Web content accessibility
-guidelines (wcag) 2.0. https://www.w3.org/TR/WCAG20/, 2008. [Online; accessed 22-Dec-
-2017].
-
-[47]World Wide Web Consortium (W3C) and individual contributors. Accessible rich internet ap-
-plications (wai-aria) 1.1.https://www.w3.org/TR/wai-aria-1.1/, 2017. [Online; accessed
-22-Dec-2017].
-
-[48]Neil Walkinshaw. _Software Quality Assurance - Consistency in the Face of Complexity and
-Change_. Springer, University of Leicester, United Kingdom, 2017.
-
-[49]Wikipedia and individual contributors. Active record pattern.https://en.wikipedia.org/
-wiki/Active_record_pattern, 2018. [Online; accessed 28-Apr-2018].
-
-[50]Wikipedia and individual contributors. bcrypt.https://en.wikipedia.org/wiki/Bcrypt,
-
-2018. [Online; accessed 02-Apr-2018].
-
-[51]Wikipedia and individual contributors. Cross-site request forgery. https://en.wikipedia.
-org/wiki/Cross-site_request_forgery, 2018. [Online; accessed 02-Apr-2018].
-
-[52]Wikipedia and individual contributors. Session hijacking.https://en.wikipedia.org/wiki/
-Session_hijacking, 2018. [Online; accessed 02-Apr-2018].
-
+[43]Unknown. phpdocumentor. https://www.phpdoc.org/, 2018. [Online; accessed 08-Apr-2018].
+[44]W3C. Cascading style sheets. https://www.w3.org/Style/CSS/, 2018. [Online; accessed 24-Apr-2018].
+[45]World Wide Web Consortium (W3C) and individual contributors. Wai-aria overview | web accessibility initiative (wai) | w3c. https://www.w3.org/WAI/intro/aria, 2006. [Online; accessed 22-Dec-2017].
+[46]World Wide Web Consortium (W3C) and individual contributors. Web content accessibility guidelines (wcag) 2.0. https://www.w3.org/TR/WCAG20/, 2008. [Online; accessed 22-Dec- 2017].
+[47]World Wide Web Consortium (W3C) and individual contributors. Accessible rich internet applications (wai-aria) 1.1.https://www.w3.org/TR/wai-aria-1.1/, 2017. [Online; accessed 22-Dec-2017].
+[48]Neil Walkinshaw. _Software Quality Assurance - Consistency in the Face of Complexity and Change_. Springer, University of Leicester, United Kingdom, 2017.
+[49]Wikipedia and individual contributors. Active record pattern.https://en.wikipedia.org/wiki/Active_record_pattern, 2018. [Online; accessed 28-Apr-2018].
+[50]Wikipedia and individual contributors. bcrypt.https://en.wikipedia.org/wiki/Bcrypt, 2018. [Online; accessed 02-Apr-2018].
+[51]Wikipedia and individual contributors. Cross-site request forgery. https://en.wikipedia.org/wiki/Cross-site_request_forgery, 2018. [Online; accessed 02-Apr-2018].
+[52]Wikipedia and individual contributors. Session hijacking.https://en.wikipedia.org/wiki/Session_hijacking, 2018. [Online; accessed 02-Apr-2018].
 [53]Jon Yablonski. Laws of ux.www.lawsofux.com, 2017. [Online; accessed 10-Feb-2017].
-
 [54]Evan You. Vue.js.https://vuejs.org/, 2017. [Online; accessed 20-April-2017].
-
 
 ## 11 Appendix
 
