@@ -56,7 +56,6 @@ quickly.
 
 ## Table of Contents
 
-
 - 1 Introduction
 - 2 Professional considerations
 - 3 Requirements analysis
@@ -570,7 +569,7 @@ The functional requirements are broken down to different levels.
 
 | ID        | Description    
 | --------- | ----------- |
-|FR 47| A student shall only be able to see projects which are **_not_*|archived, and where the supervisor’s project load is greater than zero.|
+|FR 47| A student shall only be able to see projects which are not archived, and where the supervisor’s project load is greater than zero.|
 |FR 48| A master student shall only be able to see master projects.|
 |FR 49| A final year student shall only be able to see final year projects.|
 |FR 50| A student shall be able to see their project status.|
@@ -607,8 +606,9 @@ The functional requirements are broken down to different levels.
 
 
 **Database**
-| ID        | Description
-| :-------- | :----------|
+
+| ID        | Description    
+| --------- | ----------- |
 |FR 71| A transaction shall have a unique ID, transaction time, transaction type, project id, related supervisor and/or related student.|
 |FR 72| A user shall have a unique ID, first name, last name, username, email, last log-in date and access type (’student’, ’staff’, ’supervisor’, ’admin’).|
 |FR 73| A project shall have a unique ID, title, description, skills, status (’on-offer’, ’withdrawn’, ’student-proposed’, ’archived’), supervisor ID and student ID.|
@@ -618,7 +618,7 @@ The functional requirements are broken down to different levels.
 |FR 77| Prior to a topic being deleted, said topic shall be disassociated from all projects.|
 |FR 78| Prior to a user being deleted, said user shall be disassociated with all projects.|
 
-Other
+**Other**
 
 | ID        | Description    
 | --------- | ----------- |
@@ -708,6 +708,7 @@ To quote the guidelines;
 5.Animations must feel natural.
 6.Animations must not waste time.
 ```
+
 Following guideline 2 is needed to create a seamless experience throughout the website. The
 website uses transitions to soften harsh cuts, this can be seen in the help page and the system
 administrator dashboard. Both of these pages feature a tab system, and when a user selects a
@@ -751,34 +752,22 @@ and so on for-each department. This can also be used for each education level. T
 complicated, especially if there were ten departments, but this can be organised neatly into sub-
 folders.
 
-```
 Language String Layout
-Lang
-Generic
-```
-```
-Informatics
-Generic
-```
-```
-Undergraduate
-```
-```
-Postgraduate
-```
-```
-Engineering
-Generic
-```
-```
-Undergraduate
-```
-```
-Postgraduate
-```
+
+- Lang
+  - Generic
+  - Informatics
+      - Generic
+      - Undergraduate
+      - Postgraduate
+  - Engineering
+      - Generic
+      - Undergraduate
+      - Postgraduate
 ```
 Figure 8: The layout of localisation files.
 ```
+
 ## 5 Security
 
 ### 5.1 Authentication
@@ -786,7 +775,6 @@ Figure 8: The layout of localisation files.
 The first step of authentication for the application is LDAP[ 22 ]. LDAP, an abbreviation for
 Lightweight Directory Access Protocol, is the authentication method used by ITS at the University
 of Sussex. This method allows us to identify who is a member of the university, which department
-
 
 they belong to, and which level of education they are. Once a user has authenticated with ITS
 (External authentication), the server checks in the internal database to check whether or not a
@@ -833,13 +821,13 @@ have the users’ CSRF token. If the victim was a system administrator this coul
 The token is stored as a meta field in the head section of every HTML file sent from the server.
 The CSRF token meta field in the HTML head looks like this;
 
-
 ```
 1 <head>
 2 <meta name="csrf-token" content="{{ csrf_token() }}">
 3 ...
 4 </head>
 ```
+
 ```
 Figure 9: Example CSRF token code snippet.
 ```
@@ -875,6 +863,7 @@ with a snippet;
 ```
 Figure 10: Example custom validation logic.
 ```
+
 Without covering every rule, let us cover some of the most powerful and frequently used. Required
 is self-explanatory, so is min and max. The unique rule is robust, it is equivalent to unique on
 a MySql server, but it can happen before trying to insert into the database. This functions by
@@ -929,7 +918,6 @@ development section.
 In general, databases will store sequential IDs which auto increment, therefore ID’s increment
 from 1 to _n_. This could have security implications; Say there is a website with a list of users,
 you look at a few users and see the URLs are similar, e.g. [http://www.example.com/user?id=250,](http://www.example.com/user?id=250,)
-
 
 [http://www.example.com/user?id=251,www.example.com/user?id=252,](http://www.example.com/user?id=251,www.example.com/user?id=252,) etc. This would imply that
 the IDs in the database are auto incrementing. This method is not inherently bad, however, if an
@@ -1054,15 +1042,16 @@ of writing MySql queries. Let us look at a small example to understand it better
 2 -> where ('topic_id','ds3d-34fd')
 3 -> delete ();
 ```
-```
 (a) Eloquent ORM.
+
+```
 1 DELETE FROM `informatics_project_topics_ug `
 2 WHERE `project_id ` = ' 47 a4-asd3' AND 'topic_id' = 'ds3d-34fd';
 ```
-```
 (b) Regular MySql statement.
-```
-(^3) There is no real measure of popularity. However, popularity can be measured by the web activity of the
+
+
+There is no real measure of popularity. However, popularity can be measured by the web activity of the
 framework (Open source project, blogs, news, meet-ups, etc..).
 
 
@@ -1156,10 +1145,11 @@ template would look something along the lines of this;
 11
 12 @include('partials.footer ')
 13 </ html>
-```
+
 ```
 Figure 13: An example code snippet of Laravel Blade.
 ```
+
 This template can now be used for all kinds of views such as ’browse projects’ and the homepage.
 It includes the HTML head which contains all the meta-data needed for browsers. And the header
 needed for navigation. The @yield('content') is where the body of the page would be
@@ -1408,60 +1398,60 @@ Lastly, thank you Dr.Reus for being an amazing supervisor.
 
 ## References
 
-[1]Maintained by the core team with the help from contributors. Bootstrap · the most popular html, css, and js library in the world.https://getbootstrap.com/, 2017. [Online; accessed 20-April-2017].
-[2]Inc. Cake Software Foundation. Cakephp - build fast, grow solid. https://cakephp.org/, 2017. [Online; accessed 03-Nov-2017].
-[3]Oracle Corporation. Mysql.https://www.mysql.com/, 2018. [Online; accessed 29-Mar-2018].
-[4]Tammy Everts. Page bloat: The average web page size is more than 2mb comments feed. https://www.soasta.com/blog/page-bloat-average-web-page-2-mb/, 2015. [Online; ac- cessed 07-Nov-2017].
-[5]IETF Internet Engineering Task Force and Scott Bradner. Key words for use in rfcs to indicate requirement levels. hhttps://tools.ietf.org/html/rfc2119, 1997. [Online; accessed 09-Feb-2018].
-[6]IETF Internet Engineering Task Force and Larry Masinter. Hyper text coffee pot control protocol (htcpcp/1.0). https://tools.ietf.org/html/rfc2324#section-2.3.2, 1998. [Online; accessed 09-Feb-2018].
-[7]JS Foundation. webpack.https://webpack.js.org/, 2018. [Online; accessed 31-Mar-2018].
-[8]The Apache Software Foundation. Apache http server project.https://httpd.apache.org/ 2018. [Online; accessed 29-Mar-2018].
-[9]Inc. GitHub. Github.https://github.com/, 2017. [Online; accessed 01-Sep-2017].
-[10]The PHP Group. Php: Hypertext preprocessor. [http://php.net,](http://php.net,) 2018. [Online; accessed 29-Mar-2018].
-[11]Chris Eppstein Hampton Catlin, Natalie Weizenbaum and individual contributors. Sass:Syntactically awesome style sheets. [http://sass-lang.com/,](http://sass-lang.com/,) 2015. [Online; accessed 03- Nov-2017].
-[12]M. Mealling IETF Internet Engineering Task Force, P. Leach and Microsoft. Key words for use in rfcs to indicate requirement levels. https://tools.ietf.org/html/rfc4122, 2018. [Online; accessed 29-Apr-2018].
-[13]Google Inc. Audit rules google chrome. https://github.com/GoogleChrome/ accessibility-developer-tools/wiki/Audit-Rules, 2017. [Online; accessed 22-Dec-2017].
-[14]Google Inc. Final year project database.https://goo.gl/qzPGSd, 2017. [Online; accessed 06-Nov-2017].
-[15]Google Inc. and individual contributors. Lighthouse | tools for web developers | google developers.https://developers.google.com/web/tools/lighthouse/, 2018. [Online; accessed 03-Feb-2018].
-[16]NGINX Inc. Nginx | high performance load balancer, web server, reverse proxy. https://www.nginx.com/, 2018. [Online; accessed 29-Mar-2018].
-[17]Over 1100 individual contributors. Git. https://git-scm.com/, 2017. [Online; accessed 01-Sep-2017].
-[18]The jQuery Foundation. jquery.https://jquery.com/, 2017. [Online; accessed 03-Nov-2017].
-[19]Yii Software LLC. Yii php framework: Best for web 2.0 development. [http://www.](http://www.)yiiframework.com/, 2017. [Online; accessed 03-Nov-2017].
-[20]lutz. guid - how unique is uuid? - stack overflow.https://stackoverflow.com/questions/1155008/how-unique-is-uuid, 2009. [Online; accessed 29-Apr-2017].
-[21]Nikos M. The differences between int and uuid in mysql. https://stackoverflow.com/questions/30461895/the-differences-between-int-and-uuid-in-mysql, 2018. [Online;accessed 08-Apr-2018].
-[22]Microsoft. Lightweight directory access protocol. https://msdn.microsoft.com/en-us/library/aa367008(v=vs.85).aspx, 2018. [Online; accessed 29-Apr-2018].
-[23]Max Woolf (@minimaxir). The big list of naughty strings is a list of strings which have a high probability of causing issues when used as user-input data.https://github.com/minimaxir/big-list-of-naughty-strings, 2017. [Online; accessed 03-Feb-2018].
-[24]Mozilla and individual contributors. Accessibility | mdn.https://developer.mozilla.org/en-US/docs/Web/Accessibility, 2017. [Online; accessed 22-Dec-2017].
-[25]qdirks chrisdavidmills Juggernaughtt Mozilla, EdwardB. Handling common javascript problems. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/JavaScript, 2017. [Online; accessed 03-Nov-2017].
-[26]Jordi Boggiano Nils Adermann and many community contributions. Composer. https: //getcomposer.org/, 2018. [Online; accessed 29-Mar-2018].
-[27]Inc npm. npm.https://www.npmjs.com/, 2018. [Online; accessed 31-Mar-2018].
-[28]University of Sussex. University templates and logo - brand and content guide for web and print. http://www.sussex.ac.uk/brand/templates, 2017. [Online; accessed 06-Oct-2017].
-[29]Taylor Otwell. Getting started with laravel. https://laravel.com/docs/, 2015. [Online; accessed 06-Oct-2017].
-[30]Taylor Otwell. Browser test.https://laravel.com/docs/5.6/dusk, 2018. [Online; accessed 20-Apr-2018].
-[31]Taylor Otwell. Eloquent: Getting started.https://laravel.com/docs/5.6/eloquent, 2018.[Online; accessed 28-Apr-2018].
-[32]Inc. PayPal Holdings. Github - paypal/aatt : Automated accessibility testing tool. https://github.com/paypal/AATT, 2017. [Online; accessed 22-Dec-2017].
-[33]David Thomas & Bernhard Reus. Final year project database.https://www.informatics.sussex.ac.uk/courses/csaiproj09/index.php, 2011. [Online; accessed 20-Oct-2017].
-[34]Color Safe. Color safe - accessible web color combinations. [http://colorsafe.co/,](http://colorsafe.co/,) 2017.[Online; accessed 06-Oct-2017].
-[35]Alberto Savoia. How much unit test coverage do you need? - the testivus answer [http(http:)//www.artima.com/forums/flat.jspforum=106&thread=204677, 2010. [Online; accessed 03-Nov-2017].
-[36]Mark Seemann. Code coverage is a useless target measure.http://blog.ploeh.dk/2015/11/16/code-coverage-is-a-useless-target-measure, 2015. [Online; accessed 03-Nov-2017].
-[37]SensioLabs. Symfony, high performace php framework for web development. https://symfony.com/, 2017. [Online; accessed 03-Nov-2017].
-[38]Helen Sharp, Yvonne Rogers, and Jennifer Preece. _Interaction design: beyond human-computer interaction_ , pages 35–38. Wiley, 4th edition, 2016.
-[39]Wolfgang Skala. Gantt charts with the pgfgantt package. https://www.overleaf.com/latex/examples/gantt-charts-with-the-pgfgantt-package/jmkwfxrnfxnw, 2017. [Online; accessed 01-Nov-2017].
-[40]SMARTDOME. Smartdome constructions.http://www.smartdome.si/, 2017. [Online; accessed 07-Nov-2017].
-[41]José Torre. 6 animation guidelines for ux design - 6 animation guidelines for ux design. https://blog.prototypr.io/6-animation-guidelines-for-ux-design-74c90eb5e47a, 2017. [Online; accessed 10-Feb-2018].
-[42]Unknown. Chromedriver. https://sites.google.com/a/chromium.org/chromedriver//, 2018. [Online; accessed 20-Apr-2018].
-[43]Unknown. phpdocumentor. https://www.phpdoc.org/, 2018. [Online; accessed 08-Apr-2018].
-[44]W3C. Cascading style sheets. https://www.w3.org/Style/CSS/, 2018. [Online; accessed 24-Apr-2018].
-[45]World Wide Web Consortium (W3C) and individual contributors. Wai-aria overview | web accessibility initiative (wai) | w3c. https://www.w3.org/WAI/intro/aria, 2006. [Online; accessed 22-Dec-2017].
-[46]World Wide Web Consortium (W3C) and individual contributors. Web content accessibility guidelines (wcag) 2.0. https://www.w3.org/TR/WCAG20/, 2008. [Online; accessed 22-Dec- 2017].
-[47]World Wide Web Consortium (W3C) and individual contributors. Accessible rich internet applications (wai-aria) 1.1.https://www.w3.org/TR/wai-aria-1.1/, 2017. [Online; accessed 22-Dec-2017].
-[48]Neil Walkinshaw. _Software Quality Assurance - Consistency in the Face of Complexity and Change_. Springer, University of Leicester, United Kingdom, 2017.
-[49]Wikipedia and individual contributors. Active record pattern.https://en.wikipedia.org/wiki/Active_record_pattern, 2018. [Online; accessed 28-Apr-2018].
-[50]Wikipedia and individual contributors. bcrypt.https://en.wikipedia.org/wiki/Bcrypt, 2018. [Online; accessed 02-Apr-2018].
-[51]Wikipedia and individual contributors. Cross-site request forgery. https://en.wikipedia.org/wiki/Cross-site_request_forgery, 2018. [Online; accessed 02-Apr-2018].
-[52]Wikipedia and individual contributors. Session hijacking.https://en.wikipedia.org/wiki/Session_hijacking, 2018. [Online; accessed 02-Apr-2018].
-[53]Jon Yablonski. Laws of ux.www.lawsofux.com, 2017. [Online; accessed 10-Feb-2017].
-[54]Evan You. Vue.js.https://vuejs.org/, 2017. [Online; accessed 20-April-2017].
+* [1] Maintained by the core team with the help from contributors. Bootstrap · the most popular html, css, and js library in the world.https://getbootstrap.com/, 2017. [Online; accessed 20-April-2017].
+* [2] Inc. Cake Software Foundation. Cakephp - build fast, grow solid. https://cakephp.org/, 2017. [Online; accessed 03-Nov-2017].
+* [3] Oracle Corporation. Mysql.https://www.mysql.com/, 2018. [Online; accessed 29-Mar-2018].
+* [4] Tammy Everts. Page bloat: The average web page size is more than 2mb comments feed. https://www.soasta.com/blog/page-bloat-average-web-page-2-mb/, 2015. [Online; ac- cessed 07-Nov-2017].
+* [5] IETF Internet Engineering Task Force and Scott Bradner. Key words for use in rfcs to indicate requirement levels. hhttps://tools.ietf.org/html/rfc2119, 1997. [Online; accessed 09-Feb-2018].
+* [6] IETF Internet Engineering Task Force and Larry Masinter. Hyper text coffee pot control protocol (htcpcp/1.0). https://tools.ietf.org/html/rfc2324#section-2.3.2, 1998. [Online; accessed 09-Feb-2018].
+* [7] JS Foundation. webpack.https://webpack.js.org/, 2018. [Online; accessed 31-Mar-2018].
+* [8] The Apache Software Foundation. Apache http server project.https://httpd.apache.org/ 2018. [Online; accessed 29-Mar-2018].
+* [9] Inc. GitHub. Github.https://github.com/, 2017. [Online; accessed 01-Sep-2017].
+* [10] The PHP Group. Php: Hypertext preprocessor. [http://php.net,](http://php.net,) 2018. [Online; accessed 29-Mar-2018].
+* [11] Chris Eppstein Hampton Catlin, Natalie Weizenbaum and individual contributors. Sass:Syntactically awesome style sheets. [http://sass-lang.com/,](http://sass-lang.com/,) 2015. [Online; accessed 03- Nov-2017].
+* [12] M. Mealling IETF Internet Engineering Task Force, P. Leach and Microsoft. Key words for use in rfcs to indicate requirement levels. https://tools.ietf.org/html/rfc4122, 2018. [Online; accessed 29-Apr-2018].
+* [13] Google Inc. Audit rules google chrome. https://github.com/GoogleChrome/ accessibility-developer-tools/wiki/Audit-Rules, 2017. [Online; accessed 22-Dec-2017].
+* [14] Google Inc. Final year project database.https://goo.gl/qzPGSd, 2017. [Online; accessed 06-Nov-2017].
+* [15] Google Inc. and individual contributors. Lighthouse | tools for web developers | google developers.https://developers.google.com/web/tools/lighthouse/, 2018. [Online; accessed 03-Feb-2018].
+* [16] NGINX Inc. Nginx | high performance load balancer, web server, reverse proxy. https://www.nginx.com/, 2018. [Online; accessed 29-Mar-2018].
+* [17] Over 1100 individual contributors. Git. https://git-scm.com/, 2017. [Online; accessed 01-Sep-2017].
+* [18] The jQuery Foundation. jquery.https://jquery.com/, 2017. [Online; accessed 03-Nov-2017].
+* [19] Yii Software LLC. Yii php framework: Best for web 2.0 development. [http://www.](http://www.)yiiframework.com/, 2017. [Online; accessed 03-Nov-2017].
+* [20] lutz. guid - how unique is uuid? - stack overflow.https://stackoverflow.com/questions/1155008/how-unique-is-uuid, 2009. [Online; accessed 29-Apr-2017].
+* [21] Nikos M. The differences between int and uuid in mysql. https://stackoverflow.com/questions/30461895/the-differences-between-int-and-uuid-in-mysql, 2018. [Online;accessed 08-Apr-2018].
+* [22] Microsoft. Lightweight directory access protocol. https://msdn.microsoft.com/en-us/library/aa367008(v=vs.85).aspx, 2018. [Online; accessed 29-Apr-2018].
+* [23] Max Woolf (@minimaxir). The big list of naughty strings is a list of strings which have a high probability of causing issues when used as user-input data.https://github.com/minimaxir/big-list-of-naughty-strings, 2017. [Online; accessed 03-Feb-2018].
+* [24] Mozilla and individual contributors. Accessibility | mdn.https://developer.mozilla.org/en-US/docs/Web/Accessibility, 2017. [Online; accessed 22-Dec-2017].
+* [25] qdirks chrisdavidmills Juggernaughtt Mozilla, EdwardB. Handling common javascript problems. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/JavaScript, 2017. [Online; accessed 03-Nov-2017].
+* [26] Jordi Boggiano Nils Adermann and many community contributions. Composer. https: //getcomposer.org/, 2018. [Online; accessed 29-Mar-2018].
+* [27] Inc npm. npm.https://www.npmjs.com/, 2018. [Online; accessed 31-Mar-2018].
+* [28] University of Sussex. University templates and logo - brand and content guide for web and print. http://www.sussex.ac.uk/brand/templates, 2017. [Online; accessed 06-Oct-2017].
+* [29] Taylor Otwell. Getting started with laravel. https://laravel.com/docs/, 2015. [Online; accessed 06-Oct-2017].
+* [30] Taylor Otwell. Browser test.https://laravel.com/docs/5.6/dusk, 2018. [Online; accessed 20-Apr-2018].
+* [31] Taylor Otwell. Eloquent: Getting started.https://laravel.com/docs/5.6/eloquent, 2018.[Online; accessed 28-Apr-2018].
+* [32] Inc. PayPal Holdings. Github - paypal/aatt : Automated accessibility testing tool. https://github.com/paypal/AATT, 2017. [Online; accessed 22-Dec-2017].
+* [33] David Thomas & Bernhard Reus. Final year project database.https://www.informatics.sussex.ac.uk/courses/csaiproj09/index.php, 2011. [Online; accessed 20-Oct-2017].
+* [34] Color Safe. Color safe - accessible web color combinations. [http://colorsafe.co/,](http://colorsafe.co/,) 2017.[Online; accessed 06-Oct-2017].
+* [35] Alberto Savoia. How much unit test coverage do you need? - the testivus answer [http(http:)//www.artima.com/forums/flat.jspforum=106&thread=204677, 2010. [Online; accessed 03-Nov-2017].
+* [36] Mark Seemann. Code coverage is a useless target measure.http://blog.ploeh.dk/2015/11/16/code-coverage-is-a-useless-target-measure, 2015. [Online; accessed 03-Nov-2017].
+* [37] SensioLabs. Symfony, high performace php framework for web development. https://symfony.com/, 2017. [Online; accessed 03-Nov-2017].
+* [38] Helen Sharp, Yvonne Rogers, and Jennifer Preece. _Interaction design: beyond human-computer interaction_ , pages 35–38. Wiley, 4th edition, 2016.
+* [39] Wolfgang Skala. Gantt charts with the pgfgantt package. https://www.overleaf.com/latex/examples/gantt-charts-with-the-pgfgantt-package/jmkwfxrnfxnw, 2017. [Online; accessed 01-Nov-2017].
+* [40] SMARTDOME. Smartdome constructions.http://www.smartdome.si/, 2017. [Online; accessed 07-Nov-2017].
+* [41] José Torre. 6 animation guidelines for ux design - 6 animation guidelines for ux design. https://blog.prototypr.io/6-animation-guidelines-for-ux-design-74c90eb5e47a, 2017. [Online; accessed 10-Feb-2018].
+* [42] Unknown. Chromedriver. https://sites.google.com/a/chromium.org/chromedriver//, 2018. [Online; accessed 20-Apr-2018].
+* [43] Unknown. phpdocumentor. https://www.phpdoc.org/, 2018. [Online; accessed 08-Apr-2018].
+* [44] W3C. Cascading style sheets. https://www.w3.org/Style/CSS/, 2018. [Online; accessed 24-Apr-2018].
+* [45] World Wide Web Consortium (W3C) and individual contributors. Wai-aria overview | web accessibility initiative (wai) | w3c. https://www.w3.org/WAI/intro/aria, 2006. [Online; accessed 22-Dec-2017].
+* [46] World Wide Web Consortium (W3C) and individual contributors. Web content accessibility guidelines (wcag) 2.0. https://www.w3.org/TR/WCAG20/, 2008. [Online; accessed 22-Dec- 2017].
+* [47] World Wide Web Consortium (W3C) and individual contributors. Accessible rich internet applications (wai-aria) 1.1.https://www.w3.org/TR/wai-aria-1.1/, 2017. [Online; accessed 22-Dec-2017].
+* [48] Neil Walkinshaw. _Software Quality Assurance - Consistency in the Face of Complexity and Change_. Springer, University of Leicester, United Kingdom, 2017.
+* [49] Wikipedia and individual contributors. Active record pattern.https://en.wikipedia.org/wiki/Active_record_pattern, 2018. [Online; accessed 28-Apr-2018].
+* [50] Wikipedia and individual contributors. bcrypt.https://en.wikipedia.org/wiki/Bcrypt, 2018. [Online; accessed 02-Apr-2018].
+* [51] Wikipedia and individual contributors. Cross-site request forgery. https://en.wikipedia.org/wiki/Cross-site_request_forgery, 2018. [Online; accessed 02-Apr-2018].
+* [52] Wikipedia and individual contributors. Session hijacking.https://en.wikipedia.org/wiki/Session_hijacking, 2018. [Online; accessed 02-Apr-2018].
+* [53] Jon Yablonski. Laws of ux.www.lawsofux.com, 2017. [Online; accessed 10-Feb-2017].
+* [54] Evan You. Vue.js.https://vuejs.org/, 2017. [Online; accessed 20-April-2017].
 
 ## 11 Appendix
 
