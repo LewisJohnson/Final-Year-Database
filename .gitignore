@@ -1,7 +1,9 @@
 *.map
 phpdoc-*-*
 
-public/
+app/public/js/
+app/public/css/
+
 !.gitignore
 !index.php
 
