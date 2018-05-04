@@ -1,7 +1,7 @@
 <div class="project-preview project-preview--student">
 	<div class="project">
 		<h1 class="title">{{ $project->title }}</h1>
-		{{-- <h2 class="supervisor">{{ $project->getSupervisor()->user->getFullName() }}</h2> --}}
+		<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
 		<h3>Description</h3>
 		<p>{!! html_entity_decode($project->description) !!}</p>
 		<h3>Skills</h3>

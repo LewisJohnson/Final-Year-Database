@@ -312,7 +312,8 @@ a.button--small{
 
 	svg{ fill: $accent-danger-text-color !important; }
 	&:hover{ background: saturate($accent-danger-background, 20%); }
-	&-text{ color: $accent-danger-background; }
+
+	&-text{ color: $accent-danger-background; &:hover{ color:white; background:saturate($accent-danger-background, 20%);} }
 }
 
 .button--success{
@@ -321,7 +322,7 @@ a.button--small{
 
 	svg{ fill: $accent-success-text-color !important;}
 	&:hover{ background: lighten(saturate($accent-success-background, 20%), 10%); }
-	&-text{ color: $accent-success-background; }
+	&-text{ color: $accent-success-background; &:hover{ color:white; background:saturate($accent-success-background, 20%);} }
 }
 
 .button--accent{

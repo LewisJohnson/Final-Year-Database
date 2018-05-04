@@ -1,1 +1,251 @@
-!function(t){var e={};function n(i){if(e[i])return e[i].exports;var a=e[i]={i:i,l:!1,exports:{}};return t[i].call(a.exports,a,a.exports,n),a.l=!0,a.exports}n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:i})},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=15)}({15:function(t,e,n){t.exports=n(16)},16:function(t,e){$(function(){"use strict";var t=$(".tab-card"),e=$(".tab-container"),n=e.find("li.tab"),i=n.find(".content"),a=n.find("> button"),o=$(".content-host"),d=!0,s=!1,r=null,c=null,l=null,u=null;$.ajax({url:"/snippet?snippet=card-help-footer",type:"GET",success:function(t){u=t}}),$(".open-tab").on("click",function(){var f=$(this).parent(),h=f.find(".content");"true"==h.attr("aria-hidden")&&(null!==r&&(o.removeClass().addClass("content-host"),$(window).width()<=config.mobileWidth?f.index()>r.index()?o.addClass("slideOutLeft animated quick"):o.addClass("slideOutRight animated quick"):f.index()>r.index()?o.addClass("slideOutUp animated quick"):o.addClass("slideOutDown animated quick")),setTimeout(function(){if(o.find(".content").appendTo(r),o.html(""),h.appendTo(o),o.removeClass().addClass("content-host"),$(window).width()<=config.mobileWidth?f.index()>c?o.addClass("slideInRight animated quick"):o.addClass("slideInLeft animated quick"):f.index()>c?o.addClass("slideInUp animated quick"):o.addClass("slideInDown animated quick"),config.fancyAnimations){if($(window).width()<=config.mobileWidth)var m=t.outerHeight(!1);else m=t.height();t.css("height",l),t.animate({height:m},config.animtions.medium,"linear",function(){t.css("height","auto"),l=$(window).width()<=config.mobileWidth?t.outerHeight(!1):t.height()})}i.attr("aria-expanded","false"),i.attr("aria-hidden","true"),a.removeClass("button--accent"),a.blur(),h.attr("aria-expanded","true"),h.attr("aria-hidden","false"),n.removeClass("selected"),$(this).addClass("button--accent"),e.data("help-footer")&&config.showHelpFooter&&(d||s||null!=u&&(t.append(u),s=!0)),"undefined"!=typeof Storage?sessionStorage.setItem(e.data("cookie-name"),f.data("tab-name")):setCookie(e.data("cookie-name"),f.data("tab-name"),365),d=!1,c=(r=f).index()}.bind(this),100))}),function(t,e){if("undefined"!=typeof Storage)var n=sessionStorage.getItem(t.data("cookie-name"));if(null==n&&null!==getCookie(t.data("cookie-name")))var n=getCookie(t.data("cookie-name"));null==n&&$(".open-tab").first().click();var i=!1;e.each(function(){if($(this).data("tab-name")===n)return $(this).find("> button").click(),void(i=!0)}),i||$(".open-tab").first().click()}(e,n)})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 15:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(16);
+
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, exports) {
+
+/*
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+;$(function () {
+	"use strict";
+
+	var tabCard = $(".tab-card");
+	var tabContainer = $(".tab-container");
+	var tabs = tabContainer.find("li.tab");
+	var tabsContent = tabs.find(".content");
+	var buttons = tabs.find("> button");
+	var contentHost = $(".content-host");
+	var firstTabSelected = true;
+	var helpTabShown = false;
+	var previousTab = null;
+	var previousTabIndex = null;
+	var previousHeight = null;
+	var helpFooterSnippet = null;
+
+	// Get help footer snippet using ajax
+	$.ajax({
+		url: '/snippet?snippet=card-help-footer',
+		type: 'GET',
+		success: function success(result) {
+			helpFooterSnippet = result;
+		}
+	});
+
+	$(".open-tab").on('click', function () {
+		var currentTab = $(this).parent();
+		var currentContent = currentTab.find(".content");
+
+		if (currentContent.attr("aria-hidden") == "true") {
+			if (previousTab !== null) {
+				contentHost.removeClass().addClass('content-host');
+
+				if ($(window).width() <= config.mobileWidth) {
+					if (currentTab.index() > previousTab.index()) {
+						contentHost.addClass('slideOutLeft animated quick');
+					} else {
+						contentHost.addClass('slideOutRight animated quick');
+					}
+				} else {
+					if (currentTab.index() > previousTab.index()) {
+						contentHost.addClass('slideOutUp animated quick');
+					} else {
+						contentHost.addClass('slideOutDown animated quick');
+					}
+				}
+			}
+
+			setTimeout(function () {
+				contentHost.find(".content").appendTo(previousTab);
+				contentHost.html("");
+				currentContent.appendTo(contentHost);
+				contentHost.removeClass().addClass('content-host');
+
+				if ($(window).width() <= config.mobileWidth) {
+					if (currentTab.index() > previousTabIndex) {
+						contentHost.addClass('slideInRight animated quick');
+					} else {
+						contentHost.addClass('slideInLeft animated quick');
+					}
+				} else {
+					if (currentTab.index() > previousTabIndex) {
+						contentHost.addClass('slideInUp animated quick');
+					} else {
+						contentHost.addClass('slideInDown animated quick');
+					}
+				}
+
+				if (config.fancyAnimations) {
+					if ($(window).width() <= config.mobileWidth) {
+						var newTabHeight = tabCard.outerHeight(false);
+					} else {
+						var newTabHeight = tabCard.height();
+					}
+
+					tabCard.css('height', previousHeight);
+
+					tabCard.animate({ height: newTabHeight }, config.animtions.medium, 'linear', function () {
+						tabCard.css('height', 'auto');
+						if ($(window).width() <= config.mobileWidth) {
+							previousHeight = tabCard.outerHeight(false);
+						} else {
+							previousHeight = tabCard.height();
+						}
+					});
+				}
+
+				tabsContent.attr("aria-expanded", "false");
+				tabsContent.attr("aria-hidden", "true");
+
+				// Remove accent and blur (unfocus) all other buttons
+				buttons.removeClass("button--accent");
+				buttons.blur();
+
+				// ARIA
+				currentContent.attr("aria-expanded", "true");
+				currentContent.attr("aria-hidden", "false");
+
+				tabs.removeClass("selected");
+
+				$(this).addClass("button--accent");
+
+				// If settings allow footer
+				if (tabContainer.data("help-footer") && config.showHelpFooter) {
+					// If not the first tab and tab not already shown
+					if (!firstTabSelected && !helpTabShown) {
+						// If AJAX request was successful
+						if (helpFooterSnippet != null) {
+							tabCard.append(helpFooterSnippet);
+							helpTabShown = true;
+						}
+					}
+				}
+
+				if (typeof Storage !== "undefined") {
+					sessionStorage.setItem(tabContainer.data("cookie-name"), currentTab.data("tab-name"));
+				} else {
+					// Cookie fallback
+					setCookie(tabContainer.data("cookie-name"), currentTab.data("tab-name"), 365);
+				}
+
+				firstTabSelected = false;
+				previousTab = currentTab;
+				previousTabIndex = previousTab.index();
+			}.bind(this), 100);
+		}
+	});
+
+	restoreOldTabFromStorage(tabContainer, tabs);
+});
+
+function restoreOldTabFromStorage(tabContainer, tabs) {
+	if (typeof Storage !== "undefined") {
+		// Check session storage first
+		var oldSelectedTab = sessionStorage.getItem(tabContainer.data("cookie-name"));
+	}
+
+	if (oldSelectedTab == null) {
+		// Fallback to see if cookie is set
+		if (getCookie(tabContainer.data("cookie-name")) !== null) {
+			var oldSelectedTab = getCookie(tabContainer.data("cookie-name"));
+		}
+	}
+
+	if (oldSelectedTab == null) {
+		// No session or cookie
+		$(".open-tab").first().click();
+	}
+
+	var tabClicked = false;
+	tabs.each(function () {
+		if ($(this).data("tab-name") === oldSelectedTab) {
+			$(this).find('> button').click();
+			tabClicked = true;
+			return;
+		}
+	});
+
+	// Tab name not found, could be different authentication
+	if (!tabClicked) {
+		$(".open-tab").first().click();
+	}
+}
+
+/***/ })
+
+/******/ });

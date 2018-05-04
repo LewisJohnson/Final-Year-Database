@@ -279,8 +279,8 @@ function wrapTextWithTag(areaId, tag) {
 }
 
 function sortTable(header, table) {
-
 		var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+		switching = true;
 
 		if(!(header instanceof jQuery)){
 			header = $(header);
@@ -290,13 +290,38 @@ function sortTable(header, table) {
 			table = $(table);
 		}
 
-		switching = true;
+		table.find('th').each(function(key, th) {
+			if(!$(th).is(header)){
+				$(th).find('span').remove();
+			}
+		});
+
 		
 		// Set the sorting direction to ascending:
-		dir = "asc"; 
+		dir = "asc";
+
+		if(header.find('span').length < 1){
+			header.append('<span>&#x25B2;</span>');
+			header.attr('data-asc', '');
+		} else {
+
+			if(header.attr('data-asc') == ""){
+				header.removeAttr('data-asc');
+				header.attr('data-desc', '');
+				header.find('span').remove();
+				header.append('<span>&#x25BC;</span>');
+			} else if(header.attr('data-desc') == ""){
+				header.removeAttr('data-desc');
+				header.attr('data-asc', '');
+				header.find('span').remove();
+				header.append('<span>&#x25B2;</span>');
+			}
+
+		}
+
 		/* Make a loop that will continue until
 		no switching has been done: */
-		while (switching) {
+		while (switching){
 			// Start by saying: no switching is done:
 			switching = false;
 			rows = table.find("TR");
@@ -313,12 +338,28 @@ function sortTable(header, table) {
 				/* Check if the two rows should switch place,
 				based on the direction, asc or desc: */
 				if (dir == "asc") {
+					if(typeof $(x).data('use-hover-value') !== 'undefined'){
+						if ($(x).data('hover').toLowerCase() > $(y).data('hover').toLowerCase()) {
+							// If so, mark as a switch and break the loop:
+							shouldSwitch= true;
+							break;
+						}
+					}
+
 					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
 						break;
 					}
 				} else if (dir == "desc") {
+					if(typeof $(x).data('use-hover-value') !== 'undefined'){
+						if ($(x).data('hover').toLowerCase() < $(y).data('hover').toLowerCase()) {
+							// If so, mark as a switch and break the loop:
+							shouldSwitch= true;
+							break;
+						}
+					}
+
 					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
@@ -329,9 +370,8 @@ function sortTable(header, table) {
 			if (shouldSwitch) {
 				/* If a switch has been marked, make the switch
 				and mark that a switch has been done: */
-				// $(rows[i]).parent().insertBefore($(rows[i + 1]), $(rows[i]));
 				$(rows[i]).before($(rows[i + 1]));
-				// $(rows[i]).parent().insertBefore($(rows[i + 1]), $(rows[i]));
+
 				switching = true;
 				// Each time a switch is done, increase this count by 1:
 				switchcount ++; 

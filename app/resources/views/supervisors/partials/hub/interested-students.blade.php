@@ -42,16 +42,12 @@
 								<td><a href="mailto:{{ $offer['student']->user->email }}">{{ $offer['student']->user->getFullName() }}</a></td>
 								<td><a href="{{ action('ProjectController@show', $offer['project']) }}">{{ $offer['project']->title }}</a></td>
 
-								<td class="table-action">
-									<a class="button button--svg offer-action button--danger-text" title="Reject {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="reject">
-										@include('svg.close-circle-outline')
-									</a>
+								<td>
+									<button class="button offer-action button--danger-text" title="Reject {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="reject">Reject</button>
 								</td>
 								
-								<td class="table-action">
-									<a class="button button--svg offer-action button--success-text" title="Accept {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="accept">
-										@include('svg.check-circle-outline')
-									</a>
+								<td>
+									<button class="button offer-action button--success" title="Accept {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="accept">Accept</button>
 								</td>
 							</tr>
 						@endforeach

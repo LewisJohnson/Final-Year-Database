@@ -84,23 +84,21 @@ class SupervisorController extends Controller{
 
 		$student = Student::findOrFail(request('student_id'));
 
-		DB::transaction(function() use ($request, $student) {
+		// We must return the error because the return in the transaction will not break out of the function.
+		$error = DB::transaction(function() use ($request, $student) {
 			$project = Project::findOrFail(request('project_id'));
 			$transaction = new Transaction;
 
-			$acceptedStudent = Student::where('project_id', $project->id)->where('project_status', 'accepted')->get();
-			$selectedStudent = Student::where('project_id', $project->id)->where('project_status', 'selected')->get();
-
 			if($project->id != $student->project_id){
-				return response()->json(array('successful' => false, 'message' => 'Project ID and student project ID do not match up'));
+				return response()->json(array('successful' => false, 'message' => 'Project ID and student project ID do not match up.'));
 			}
 
-			if(count($acceptedStudent) != 0){
-				return response()->json(array('successful' => false, 'message' => 'This project has already been allocated to another student'));
+			if($project->getAcceptedStudent() != null){
+				return response()->json(array('successful' => false, 'message' => 'This project has already been allocated to another student.'));
 			}
 
-			if(count($selectedStudent) > 1){
-				return response()->json(array('successful' => false, 'message' => 'You must reject all other students before accepting a student'));
+			if(count($project->getStudentsWithProjectSelected()) > 1){
+				return response()->json(array('successful' => false, 'message' => 'You must reject all other students before accepting '.$student->user->first_name));
 			}
 
 			$student->project_status = 'accepted';
@@ -118,6 +116,10 @@ class SupervisorController extends Controller{
 			$transaction->save();
 		});
 
+		if($error != null){
+			return $error;
+		}
+
 		// Send accepted email
 		Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
 
@@ -131,10 +133,13 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function rejectStudent(Request $request){
-		DB::transaction(function() use ($request) {
-			$student = Student::findOrFail(request('student_id'));
-			$transaction = new Transaction;
+		$student = Student::findOrFail(request('student_id'));
 
+		// We need to store this for the email
+		$projectId = $student->project_id;
+
+		DB::transaction(function() use ($request, $student) {
+			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' =>'project',
 				'action' =>'rejected',
@@ -151,7 +156,7 @@ class SupervisorController extends Controller{
 		});
 
 		// Send declined email
-		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student));
+		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student, $projectId));
 
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}

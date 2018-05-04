@@ -384,9 +384,7 @@ class AdminController extends Controller{
 			}
 
 			$student = new Student();
-			// DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 			DB::table($student->getTable())->delete();
-			// DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 		});
 
 		return response()->json(array('successful' => true));

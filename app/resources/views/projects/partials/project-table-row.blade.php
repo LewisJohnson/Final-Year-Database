@@ -8,11 +8,11 @@
 	@endif
 
 	<td>{{ $project->title }}</td>
-	<td class="short-description" hidden>{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
-	<td hidden>{!! html_entity_decode($project->description) !!}</td>
+	<td class="short-description">{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
+	<td>{!! html_entity_decode($project->description) !!}</td>
 	<td>{{ $project->skills }}</td>
 
-	<td @if($view == "supervisor") hidden @endif >
+	<td @if($view == "supervisor") @endif >
 		<a href="{{ action('UserController@projects', $project->supervisor->user) }}">{{ $project->supervisor->user->getFullName() }}</a>
 	</td>
 </tr>

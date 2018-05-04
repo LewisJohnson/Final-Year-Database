@@ -21,6 +21,7 @@
 |	4. Click Events
 | 	5. Change Events
 |	6. HTML Editor
+|   7. Other
 */
 
 import '../js/components';
@@ -538,10 +539,6 @@ import '../js/components';
 				wrapTextWithTag('html-editor--input', 'b');
 				break;
 
-			case "tt":
-				wrapTextWithTag('html-editor--input', 'tt');
-				break;
-
 			case "italic":
 				wrapTextWithTag('html-editor--input', 'i');
 				break;
@@ -581,5 +578,17 @@ import '../js/components';
 				});
 				break;
 		}
+	});
+
+	/* ======================
+		 7. OTHER
+	   ====================== */
+	$('[data-hover]').on('mouseenter', function(){
+		$(this).attr('data-original', $(this).text());
+		$(this).text($(this).data('hover'));
+	});
+
+	$('[data-hover]').on('mouseleave', function(){
+		$(this).text($(this).data('original'));
 	});
 });

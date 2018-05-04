@@ -1,1 +1,128 @@
-!function(e){var r={};function t(n){if(r[n])return r[n].exports;var o=r[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,t),o.l=!0,o.exports}t.m=e,t.c=r,t.d=function(e,r,n){t.o(e,r)||Object.defineProperty(e,r,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},t.p="",t(t.s=30)}({30:function(e,r,t){e.exports=t(31)},31:function(e,r){var t=2,n=!1,o=!1;$(function(){"use strict";$(window).scroll(function(){if($(window).scrollTop()+$(window).height()>$(document).height()-100)if(n||o)$(".loader.user-agent").hide();else{if($(".loader.user-agent").show(),o=!0,$("#show-fv-only").prop("checked"))var e="/system/user-agent?unique=1?page="+t;else e="/system/user-agent?page="+t;$.ajax({type:"GET",url:e,success:function(e){$(".loader.user-agent").hide(),0==e.length?(n=!0,$("#user-agent-table").after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>')):$("#user-agent-table tbody").append($(e)),t++}}).done(function(e){o=!1,$(".loader.user-agent").hide()})}})})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 30:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(31);
+
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, exports) {
+
+/*
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+var agents_pageNumber = 2,
+    agents_endOfTable = false,
+    agents_awaitingResponse = false;
+
+;$(function () {
+	"use strict";
+
+	$(window).scroll(function () {
+		if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+			if (!agents_endOfTable && !agents_awaitingResponse) {
+				$(".loader.user-agent").show();
+				agents_awaitingResponse = true;
+				if ($('#show-fv-only').prop('checked')) {
+					var ajaxUrl = "/system/user-agent?unique=1?page=" + agents_pageNumber;
+				} else {
+					var ajaxUrl = "/system/user-agent?page=" + agents_pageNumber;
+				}
+				$.ajax({
+					type: 'GET',
+					url: ajaxUrl,
+					success: function success(data) {
+						$(".loader.user-agent").hide();
+						if (data.length == 0) {
+							agents_endOfTable = true;
+							$('#user-agent-table').after('<div style="width: 10px;height: 10px;margin: 1rem auto;background: rgba(0, 0, 0, 0.07);border: 1px solid rgba(0, 0, 0, 0.11);border-radius: 90px;"></div>');
+						} else {
+							$('#user-agent-table tbody').append($(data));
+						}
+						agents_pageNumber++;
+					}
+				}).done(function (data) {
+					agents_awaitingResponse = false;
+					$(".loader.user-agent").hide();
+				});
+			} else {
+				$(".loader.user-agent").hide();
+			}
+		}
+	});
+});
+
+/***/ })
+
+/******/ });

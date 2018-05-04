@@ -1,1 +1,211 @@
-!function(t){var o={};function e(n){if(o[n])return o[n].exports;var c=o[n]={i:n,l:!1,exports:{}};return t[n].call(c.exports,c,c.exports,e),c.l=!0,c.exports}e.m=t,e.c=o,e.d=function(t,o,n){e.o(t,o)||Object.defineProperty(t,o,{configurable:!1,enumerable:!0,get:n})},e.n=function(t){var o=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(o,"a",o),o},e.o=function(t,o){return Object.prototype.hasOwnProperty.call(t,o)},e.p="",e(e.s=13)}({13:function(t,o,e){t.exports=e(14)},14:function(t,o){$(function(){$(window).scroll(function(){$(this).scrollTop()>config.showScrollToTopButtonOffset?$(".scroll-to-top").fadeIn():$(".scroll-to-top").fadeOut()}),$("body").on("click",".scroll-to-top",function(t){$("html, body").animate({scrollTop:0},config.scrollToTopDuration)}),$("body").on("click",".show-more",function(t){$(this).hide(),$(".project").addClass("expand")}),$("body").on("click",".switch-label.switch-label--toggle",function(t){var o="#"+$(this).attr("for");$(o).click()}),$("body").on("click",".form-field--toggle",function(t){$(t.target).hasClass("toggle")||$(t.target).parent().hasClass("toggle")||$(this).find("input:checkbox").click()}),$(".cookie-banner").on("click","button",function(t){setCookie("cookie-banner-seen",!0,365),$(this).parent().hide(config.animtions.medium)}),$(".boolean-checkbox").each(function(){$(this).parent().parent().after('<input type="hidden" name="'+$(this).attr("name")+'" value="'+$(this).is(":checked")+'" />')}),$("body").on("click",".boolean-checkbox",function(t){$(this).is(":checked")?$(this).parent().parent().next().val("true"):$(this).parent().parent().next().val("false")}),$(".remember-with-cookie:checkbox").on("change",function(){rememberFormValues("checkbox")}),$(".project-card").length>0&&(window.project=$(".project-card")),$(".sort-table thead tr th").on("click",function(){sortTable($(this),$(this).closest("table"))}),repopulateCheckboxes()}),$(document).ajaxError(function(t,o,e){config.showAjaxRequestFailNotification&&createToast("error","Something went wrong with that request.")})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 13:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(14);
+
+
+/***/ }),
+
+/***/ 14:
+/***/ (function(module, exports) {
+
+/*
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+/*
+|--------------------------------------------------------------------------
+| jQuery HELPERS
+|--------------------------------------------------------------------------
+|
+| Helper functions that need to be called after the DOM is ready.
+|
+*/
+
+$(function () {
+
+	/**
+ 	* Show scroll to top button.
+ */
+	$(window).scroll(function () {
+		if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
+			$('.scroll-to-top').fadeIn();
+		} else {
+			$('.scroll-to-top').fadeOut();
+		}
+	});
+
+	/**
+ 	* Scroll to top when button is clicked.
+ */
+	$("body").on("click", ".scroll-to-top", function (e) {
+		$('html, body').animate({
+			scrollTop: 0
+		}, config.scrollToTopDuration);
+	});
+
+	/**
+ 	* The "Show more" button on students homepage.
+ 	* 
+ 	* Only shown if a student has selected, proposed or been accepted for a project.
+ */
+	$("body").on("click", ".show-more", function (e) {
+		$(this).hide();
+		$('.project').addClass('expand');
+	});
+
+	/**
+ 	* Toggle label flips toggle.
+ 	*
+ 	* Toggles a toggle if it's label is clicked.
+ */
+	$("body").on("click", ".switch-label.switch-label--toggle", function (e) {
+		var id = "#" + $(this).attr('for');
+		$(id).click();
+	});
+
+	/**
+ 	* Checkbox form toggle.
+ 	*
+ 	* Toggles a toggle if it's form is clicked.
+ */
+	$("body").on("click", ".form-field--toggle", function (e) {
+		if ($(e.target).hasClass("toggle") || $(e.target).parent().hasClass("toggle")) {
+			return;
+		}
+
+		$(this).find('input:checkbox').click();
+	});
+
+	/**
+ 	* EU Cookie banner.
+ 	*
+ 	* Hides banner when clicked.
+ */
+	$(".cookie-banner").on("click", "button", function (e) {
+		setCookie('cookie-banner-seen', true, 365);
+		$(this).parent().hide(config.animtions.medium);
+	});
+
+	/**
+ 	* Boolean valued checkbox.
+ 	*
+ 	* Instead of 'checked' attribute, the values will be true/false
+ */
+	$(".boolean-checkbox").each(function () {
+		$(this).parent().parent().after('<input type="hidden" name="' + $(this).attr("name") + '" value="' + $(this).is(':checked') + '" />');
+	});
+
+	$("body").on("click", ".boolean-checkbox", function (e) {
+		if ($(this).is(':checked')) {
+			$(this).parent().parent().next().val("true");
+		} else {
+			$(this).parent().parent().next().val("false");
+		}
+	});
+
+	/**
+ 	* Remember checkbox value with cookies.
+ 	*
+ 	* Toggles a toggle if it's form is clicked.
+ */
+	$('.remember-with-cookie:checkbox').on('change', function () {
+		rememberFormValues("checkbox");
+	});
+
+	/**
+ 	* Assign project to window variable.
+ 	*
+ 	* Used as an easy way for functions to get current project data from other JS files.
+ */
+	if ($('.project-card').length > 0) {
+		window['project'] = $('.project-card');
+	}
+
+	$('.sort-table thead tr th').on('click', function () {
+		sortTable($(this), $(this).closest('table'));
+	});
+
+	// Repopulate checkboxes
+	repopulateCheckboxes();
+});
+
+// A catch all approach to AJAX errors.
+$(document).ajaxError(function (event, request, settings) {
+	if (config.showAjaxRequestFailNotification) {
+		createToast('error', 'Something went wrong with that request.');
+	}
+});
+
+/***/ })
+
+/******/ });

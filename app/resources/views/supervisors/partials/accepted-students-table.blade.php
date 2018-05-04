@@ -31,10 +31,8 @@
 				@endif
 				<td><a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a></td>
 
-				<td class="table-action">
-					<a class="button button--svg button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">
-						@include('svg.undo')
-					</a>
+				<td>
+					<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
 				</td>
 			</tr>
 		@endforeach

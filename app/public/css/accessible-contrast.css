@@ -2,4 +2,56 @@
  * Copyright (C) University of Sussex 2018.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
- */.card{border:1px solid #000!important}.button,.section,input,textarea{border:1px solid #000!important;border-radius:0!important}a,h1,h2,h3,h4,h5,h6,li,p,td,th,tr{color:#000}svg{fill:#000!important}*{-webkit-transition:none!important;transition:none!important;-webkit-animation-duration:0s!important;animation-duration:0s!important}tr:hover{background:#a0a0a0!important}tr:hover,tr:hover *{color:#fff!important}
+ */
+
+.card {
+  border: 1px solid black !important;
+}
+
+.section {
+  border: 1px solid black !important;
+  border-radius: 0px !important;
+}
+
+input,
+textarea,
+.button {
+  border: 1px solid black !important;
+  border-radius: 0px !important;
+}
+
+a,
+p,
+li,
+tr,
+th,
+td,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: black;
+}
+
+svg {
+  fill: black !important;
+}
+
+* {
+  -webkit-transition: none !important;
+  transition: none !important;
+  -webkit-animation-duration: 0s !important;
+          animation-duration: 0s !important;
+}
+
+tr:hover {
+  background: #a0a0a0 !important;
+  color: white !important;
+}
+
+tr:hover * {
+  color: white !important;
+}
+

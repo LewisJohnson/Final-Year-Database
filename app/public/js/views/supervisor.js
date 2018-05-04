@@ -1,1 +1,8342 @@
-!function(t){var e={};function r(n){if(e[n])return e[n].exports;var o=e[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:n})},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=21)}({21:function(t,e,r){t.exports=r(22)},22:function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(23),o=r.n(n);$(function(){var t=function(){};window.ProjectTopics=t,t.prototype.CssClasses_={DATA_TABLE:"data-table",IS_SELECTED:"is-selected"},t.prototype.Selectors_={ADD_TOPIC_INPUT:"#addTopicInput",NEW_TOPIC_INPUT_CONTAINER:"#new-topic-input-container"},t.prototype.Keys_={SPACE:32,ENTER:13,COMMA:45};var e=new t;t.prototype.functions={addTopicToProject:function(t,r){$(".loader").show(0);$.ajax({type:"POST",url:"/projects/topic-add",data:{topic_name:r,project_id:t},success:function(t){$(e.Selectors_.ADD_TOPIC_INPUT).val(""),$(".topics-list.edit li.topic:last").length>0?$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="'+t.id+'"><button type="button" class="topic-remove">X</button><p class="topic-name">'+t.name+"</p></li>"):$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="'+t.id+'"><button type="button" class="topic-remove">X</button><p class="topic-name">'+t.name+"</p></li>")}}).done(function(t){$("body").append(t),$(".loader").hide(0)})},removeTopicFromProject:function(t,e){$(".loader").show(0);$.ajax({type:"DELETE",url:"/projects/topic-remove",data:{topic_id:e,project_id:t},success:function(){$(".topics-list.edit li.topic").each(function(t,r){$(this).data("topic-id")==e&&$(this).remove()})}}).done(function(){$(".loader").hide(0)})},updateProjectPrimaryTopic:function(t,e){$(".loader").show(0);$.ajax({type:"PATCH",url:"/projects/topic-update-primary",data:{topic_id:e,project_id:t},success:function(){$("#editProjectForm").attr("data-project-id",e),$(".topics-list.edit li.topic").each(function(t,r){$(this).data("topic-id")==e?$(this).addClass("first"):$(this).removeClass("first")})}}).done(function(){$(".loader").hide(0)})}};var r=new o.a(document.querySelectorAll(".topics-list.edit"),{draggable:".topic"});function n(){$.ajax({method:"GET",url:"/supervisor/accepted-students-table",success:function(t){$("#supervisor-accepted-students-table").html(t)}})}window.swappable=r,r.on("swappable:swapped",function(){var t=$("#editProjectForm").data("project-id"),r=$("#editProjectForm").data("primary-topic-id"),n=$(".topics-list.edit li:first-child").data("topic-id");n!=r&&e.functions.updateProjectPrimaryTopic(t,n)}),$(e.Selectors_.ADD_TOPIC_INPUT).keypress(function(t){if(t.which==e.Keys_.ENTER){var r=$("#editProjectForm").data("project-id");e.functions.addTopicToProject(r,$(this).val())}}),$(".topics-list.edit").on("click",".topic .topic-remove",function(){var t=$("#editProjectForm").data("project-id"),r=$(this).parent("li").data("topic-id");e.functions.removeTopicFromProject(t,r)}),$(e.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on("click",function(){$(e.Selectors_.ADD_TOPIC_INPUT).focus()}),$(".supervisor-table").on("click",".offer-action",function(){var t=$(this),e=t.data("action-type"),r=t.parents().eq(1);if(t.html('<div class="loader"></div>'),$(".loader",t).css("display","block"),"accept"===e)var o="/supervisor/student-accept";else if("reject"===e)o="/supervisor/student-reject";null!=o?$.ajax({method:"POST",url:o,data:{project_id:r.data("project-id"),student_id:r.data("student-id")},success:function(o){o.successful?(r.hide(400,function(){r.remove()}),"accept"===e?(createToast("success","Student has been accepted."),n()):"reject"===e&&createToast("","Student has been rejected.")):(createToast("error",o.message),t.html(e))}}):console.error("Invalid supervisor action.")}),$(".supervisor-table").on("submit","form.delete-project",function(t){t.preventDefault();var e=$(this),r=e.data("project-title");$.confirm({title:"Delete",type:"red",icon:'<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',theme:"modern",escapeKey:!0,backgroundDismiss:!0,animateFromElement:!1,content:"Are you sure you want to delete <b>"+r+"</b>?",buttons:{confirm:{btnClass:"btn-red",action:function(){$.ajax({url:e.prop("action"),type:"DELETE",success:function(t){e.parent().parent().replaceWith(t)}})}},cancel:{}}})}),$(".supervisor-table").on("submit","form.restore-project",function(t){t.preventDefault();var e=$(this),r=e.data("project-title");$.confirm({title:"Restore",type:"green",icon:'<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3M12,8V13L16.28,15.54L17,14.33L13.5,12.25V8H12Z" /></svg></div>',theme:"modern",escapeKey:!0,backgroundDismiss:!0,animateFromElement:!1,content:"Are you sure you want to restore <b>"+r+"</b>?",buttons:{confirm:{btnClass:"btn-green",action:function(){$.ajax({url:e.prop("action"),type:"PATCH",success:function(t){e.parent().parent().replaceWith(t)}})}},cancel:{}}})}),$(".expand").on("click",function(t){var e=$(this).parents().eq(1).find(".content");"true"==e.attr("aria-expanded")?($(this).parent().removeClass("active"),$(this).find("svg").css("transform","rotateZ(0deg)"),e.hide(200),e.attr("aria-expanded","false"),setCookie(e.data("cookie-name"),!0,365)):($(this).parent().addClass("active"),$(this).find("svg").css("transform","rotateZ(180deg)"),e.show(200),e.attr("aria-expanded","true"),setCookie(e.data("cookie-name"),!1,365))}),$("#supervisor-accepted-students-table").on("click",".supervisor-undo-accept",function(t){var e=$(this),r=e.data("student-name"),o=e.data("project-title");$.confirm({title:"Undo Project Selection",type:"red",icon:'<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',theme:"modern",escapeKey:!0,backgroundDismiss:!0,animateFromElement:!1,content:"Are you sure you want to un-accept <b>"+r+"</b> for <b>"+o+"</b> ?",buttons:{confirm:{btnClass:"btn-red",action:function(){$.ajax({method:"PATCH",url:"/supervisor/student-undo",data:{project_id:e.data("project-id"),student_id:e.data("student-id")},success:function(t){t.successful?(e.hide(400,function(){e.remove()}),createToast("success","Undo successful."),n()):createToast("error",t.message)}})}},cancel:{}}})})})},23:function(t,e,r){var n;"undefined"!=typeof self&&self,n=function(){return function(t){var e={};function r(n){if(e[n])return e[n].exports;var o=e[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}return r.m=t,r.c=e,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:n})},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=60)}([function(t,e,r){"use strict";e.__esModule=!0,e.default=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}},function(t,e,r){"use strict";e.__esModule=!0;var n,o=r(62),i=(n=o)&&n.__esModule?n:{default:n};e.default=function(){function t(t,e){for(var r=0;r<e.length;r++){var n=e[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),(0,i.default)(t,n.key,n)}}return function(e,r,n){return r&&t(e.prototype,r),n&&t(e,n),e}}()},function(t,e,r){"use strict";e.__esModule=!0;var n,o=r(45),i=(n=o)&&n.__esModule?n:{default:n};e.default=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!==(void 0===e?"undefined":(0,i.default)(e))&&"function"!=typeof e?t:e}},function(t,e,r){"use strict";e.__esModule=!0;var n=a(r(89)),o=a(r(93)),i=a(r(45));function a(t){return t&&t.__esModule?t:{default:t}}e.default=function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+(void 0===e?"undefined":(0,i.default)(e)));t.prototype=(0,o.default)(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(n.default?(0,n.default)(t,e):t.__proto__=e)}},function(t,e){var r=t.exports={version:"2.5.3"};"number"==typeof __e&&(__e=r)},function(t,e,r){var n=r(33)("wks"),o=r(22),i=r(6).Symbol,a="function"==typeof i;(t.exports=function(t){return n[t]||(n[t]=a&&i[t]||(a?i:o)("Symbol."+t))}).store=n},function(t,e){var r=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=r)},function(t,e,r){var n=r(13),o=r(43),i=r(25),a=Object.defineProperty;e.f=r(9)?Object.defineProperty:function(t,e,r){if(n(t),e=i(e,!0),n(r),o)try{return a(t,e,r)}catch(t){}if("get"in r||"set"in r)throw TypeError("Accessors not supported!");return"value"in r&&(t[e]=r.value),t}},function(t,e,r){var n=r(6),o=r(4),i=r(24),a=r(12),s=function(t,e,r){var u,c,l,f=t&s.F,d=t&s.G,v=t&s.S,p=t&s.P,h=t&s.B,g=t&s.W,y=d?o:o[e]||(o[e]={}),m=y.prototype,b=d?n:v?n[e]:(n[e]||{}).prototype;for(u in d&&(r=e),r)(c=!f&&b&&void 0!==b[u])&&u in y||(l=c?b[u]:r[u],y[u]=d&&"function"!=typeof b[u]?r[u]:h&&c?i(l,n):g&&b[u]==l?function(t){var e=function(e,r,n){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(e);case 2:return new t(e,r)}return new t(e,r,n)}return t.apply(this,arguments)};return e.prototype=t.prototype,e}(l):p&&"function"==typeof l?i(Function.call,l):l,p&&((y.virtual||(y.virtual={}))[u]=l,t&s.R&&m&&!m[u]&&a(m,u,l)))};s.F=1,s.G=2,s.S=4,s.P=8,s.B=16,s.W=32,s.U=64,s.R=128,t.exports=s},function(t,e,r){t.exports=!r(15)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,e){var r={}.hasOwnProperty;t.exports=function(t,e){return r.call(t,e)}},function(t,e,r){var n=r(71),o=r(27);t.exports=function(t){return n(o(t))}},function(t,e,r){var n=r(7),o=r(16);t.exports=r(9)?function(t,e,r){return n.f(t,e,o(1,r))}:function(t,e,r){return t[e]=r,t}},function(t,e,r){var n=r(14);t.exports=function(t){if(!n(t))throw TypeError(t+" is not an object!");return t}},function(t,e){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,e){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}},function(t,e){t.exports={}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(96),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.closest=void 0;var n,o=r(117),i=(n=o)&&n.__esModule?n:{default:n};e.closest=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(130),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(133);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})})},function(t,e){var r=0,n=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++r+n).toString(36))}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(112),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){var n=r(65);t.exports=function(t,e,r){if(n(t),void 0===e)return t;switch(r){case 1:return function(r){return t.call(e,r)};case 2:return function(r,n){return t.call(e,r,n)};case 3:return function(r,n,o){return t.call(e,r,n,o)}}return function(){return t.apply(e,arguments)}}},function(t,e,r){var n=r(14);t.exports=function(t,e){if(!n(t))return t;var r,o;if(e&&"function"==typeof(r=t.toString)&&!n(o=r.call(t)))return o;if("function"==typeof(r=t.valueOf)&&!n(o=r.call(t)))return o;if(!e&&"function"==typeof(r=t.toString)&&!n(o=r.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,e){var r=Math.ceil,n=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?n:r)(t)}},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,e){t.exports=!0},function(t,e,r){var n=r(13),o=r(70),i=r(34),a=r(32)("IE_PROTO"),s=function(){},u=function(){var t,e=r(44)("iframe"),n=i.length;for(e.style.display="none",r(74).appendChild(e),e.src="javascript:",(t=e.contentWindow.document).open(),t.write("<script>document.F=Object<\/script>"),t.close(),u=t.F;n--;)delete u.prototype[i[n]];return u()};t.exports=Object.create||function(t,e){var r;return null!==t?(s.prototype=n(t),r=new s,s.prototype=null,r[a]=t):r=u(),void 0===e?r:o(r,e)}},function(t,e,r){var n=r(49),o=r(34);t.exports=Object.keys||function(t){return n(t,o)}},function(t,e){var r={}.toString;t.exports=function(t){return r.call(t).slice(8,-1)}},function(t,e,r){var n=r(33)("keys"),o=r(22);t.exports=function(t){return n[t]||(n[t]=o(t))}},function(t,e,r){var n=r(6),o=n["__core-js_shared__"]||(n["__core-js_shared__"]={});t.exports=function(t){return o[t]||(o[t]={})}},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,e,r){var n=r(7).f,o=r(10),i=r(5)("toStringTag");t.exports=function(t,e,r){t&&!o(t=r?t:t.prototype,i)&&n(t,i,{configurable:!0,value:e})}},function(t,e,r){var n=r(27);t.exports=function(t){return Object(n(t))}},function(t,e,r){e.f=r(5)},function(t,e,r){var n=r(6),o=r(4),i=r(28),a=r(37),s=r(7).f;t.exports=function(t){var e=o.Symbol||(o.Symbol=i?{}:n.Symbol||{});"_"==t.charAt(0)||t in e||s(e,t,{value:a.f(t)})}},function(t,e){e.f={}.propertyIsEnumerable},function(t,e,r){var n=r(39),o=r(16),i=r(11),a=r(25),s=r(10),u=r(43),c=Object.getOwnPropertyDescriptor;e.f=r(9)?c:function(t,e){if(t=i(t),e=a(e,!0),u)try{return c(t,e)}catch(t){}if(s(t,e))return o(!n.f.call(t,e),t[e])}},function(t,e,r){"use strict";e.__esModule=!0;var n,o=r(119),i=(n=o)&&n.__esModule?n:{default:n};e.default=function(t){if(Array.isArray(t)){for(var e=0,r=Array(t.length);e<t.length;e++)r[e]=t[e];return r}return(0,i.default)(t)}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(61);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})})},function(t,e,r){t.exports=!r(9)&&!r(15)(function(){return 7!=Object.defineProperty(r(44)("div"),"a",{get:function(){return 7}}).a})},function(t,e,r){var n=r(14),o=r(6).document,i=n(o)&&n(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,e,r){"use strict";e.__esModule=!0;var n=a(r(66)),o=a(r(79)),i="function"==typeof o.default&&"symbol"==typeof n.default?function(t){return typeof t}:function(t){return t&&"function"==typeof o.default&&t.constructor===o.default&&t!==o.default.prototype?"symbol":typeof t};function a(t){return t&&t.__esModule?t:{default:t}}e.default="function"==typeof o.default&&"symbol"===i(n.default)?function(t){return void 0===t?"undefined":i(t)}:function(t){return t&&"function"==typeof o.default&&t.constructor===o.default&&t!==o.default.prototype?"symbol":void 0===t?"undefined":i(t)}},function(t,e,r){"use strict";var n=r(68)(!0);r(47)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,e=this._t,r=this._i;return r>=e.length?{value:void 0,done:!0}:(t=n(e,r),this._i+=t.length,{value:t,done:!1})})},function(t,e,r){"use strict";var n=r(28),o=r(8),i=r(48),a=r(12),s=r(10),u=r(17),c=r(69),l=r(35),f=r(51),d=r(5)("iterator"),v=!([].keys&&"next"in[].keys()),p=function(){return this};t.exports=function(t,e,r,h,g,y,m){c(r,e,h);var b,_,O,E=function(t){if(!v&&t in P)return P[t];switch(t){case"keys":case"values":return function(){return new r(this,t)}}return function(){return new r(this,t)}},S=e+" Iterator",w="values"==g,M=!1,P=t.prototype,j=P[d]||P["@@iterator"]||g&&P[g],C=!v&&j||E(g),k=g?w?E("entries"):C:void 0,x="Array"==e&&P.entries||j;if(x&&(O=f(x.call(new t)))!==Object.prototype&&O.next&&(l(O,S,!0),n||s(O,d)||a(O,d,p)),w&&j&&"values"!==j.name&&(M=!0,C=function(){return j.call(this)}),n&&!m||!v&&!M&&P[d]||a(P,d,C),u[e]=C,u[S]=p,g)if(b={values:w?C:E("values"),keys:y?C:E("keys"),entries:k},m)for(_ in b)_ in P||i(P,_,b[_]);else o(o.P+o.F*(v||M),e,b);return b}},function(t,e,r){t.exports=r(12)},function(t,e,r){var n=r(10),o=r(11),i=r(72)(!1),a=r(32)("IE_PROTO");t.exports=function(t,e){var r,s=o(t),u=0,c=[];for(r in s)r!=a&&n(s,r)&&c.push(r);for(;e.length>u;)n(s,r=e[u++])&&(~i(c,r)||c.push(r));return c}},function(t,e,r){var n=r(26),o=Math.min;t.exports=function(t){return t>0?o(n(t),9007199254740991):0}},function(t,e,r){var n=r(10),o=r(36),i=r(32)("IE_PROTO"),a=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),n(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?a:null}},function(t,e){e.f=Object.getOwnPropertySymbols},function(t,e,r){var n=r(49),o=r(34).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return n(t,o)}},function(t,e,r){var n=r(8),o=r(4),i=r(15);t.exports=function(t,e){var r=(o.Object||{})[t]||Object[t],a={};a[t]=e(r),n(n.S+n.F*i(function(){r(1)}),"Object",a)}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(106);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(107);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(108);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(109);Object.defineProperty(e,"Mirror",{enumerable:!0,get:function(){return s(n).default}}),Object.defineProperty(e,"defaultMirrorOptions",{enumerable:!0,get:function(){return n.defaultOptions}});var o=r(113);Object.defineProperty(e,"Announcement",{enumerable:!0,get:function(){return s(o).default}}),Object.defineProperty(e,"defaultAnnouncementOptions",{enumerable:!0,get:function(){return o.defaultOptions}});var i=r(115);Object.defineProperty(e,"Scrollable",{enumerable:!0,get:function(){return s(i).default}}),Object.defineProperty(e,"defaultScrollableOptions",{enumerable:!0,get:function(){return i.defaultOptions}});var a=r(128);function s(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"Accessibility",{enumerable:!0,get:function(){return s(a).default}})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(20);Object.defineProperty(e,"Sensor",{enumerable:!0,get:function(){return c(n).default}});var o=r(131);Object.defineProperty(e,"MouseSensor",{enumerable:!0,get:function(){return c(o).default}});var i=r(134);Object.defineProperty(e,"TouchSensor",{enumerable:!0,get:function(){return c(i).default}});var a=r(136);Object.defineProperty(e,"DragSensor",{enumerable:!0,get:function(){return c(a).default}});var s=r(138);Object.defineProperty(e,"ForceTouchSensor",{enumerable:!0,get:function(){return c(s).default}});var u=r(21);function c(t){return t&&t.__esModule?t:{default:t}}Object.keys(u).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return u[t]}})})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(42);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})});var o,i=r(97),a=(o=i)&&o.__esModule?o:{default:o};e.default=a.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.SwappableStopEvent=e.SwappableSwappedEvent=e.SwappableSwapEvent=e.SwappableStartEvent=e.SwappableEvent=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(18));function u(t){return t&&t.__esModule?t:{default:t}}var c=e.SwappableEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"dragEvent",get:function(){return this.data.dragEvent}}]),e}(s.default);c.type="swappable";var l=e.SwappableStartEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c);l.type="swappable:start",l.cancelable=!0;var f=e.SwappableSwapEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"over",get:function(){return this.data.over}},{key:"overContainer",get:function(){return this.data.overContainer}}]),e}(c);f.type="swappable:swap",f.cancelable=!0,(e.SwappableSwappedEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"swappedElement",get:function(){return this.data.swappedElement}}]),e}(c)).type="swappable:swapped",(e.SwappableStopEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="swappable:stop"},function(t,e,r){t.exports={default:r(63),__esModule:!0}},function(t,e,r){r(64);var n=r(4).Object;t.exports=function(t,e,r){return n.defineProperty(t,e,r)}},function(t,e,r){var n=r(8);n(n.S+n.F*!r(9),"Object",{defineProperty:r(7).f})},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,e,r){t.exports={default:r(67),__esModule:!0}},function(t,e,r){r(46),r(75),t.exports=r(37).f("iterator")},function(t,e,r){var n=r(26),o=r(27);t.exports=function(t){return function(e,r){var i,a,s=String(o(e)),u=n(r),c=s.length;return u<0||u>=c?t?"":void 0:(i=s.charCodeAt(u))<55296||i>56319||u+1===c||(a=s.charCodeAt(u+1))<56320||a>57343?t?s.charAt(u):i:t?s.slice(u,u+2):a-56320+(i-55296<<10)+65536}}},function(t,e,r){"use strict";var n=r(29),o=r(16),i=r(35),a={};r(12)(a,r(5)("iterator"),function(){return this}),t.exports=function(t,e,r){t.prototype=n(a,{next:o(1,r)}),i(t,e+" Iterator")}},function(t,e,r){var n=r(7),o=r(13),i=r(30);t.exports=r(9)?Object.defineProperties:function(t,e){o(t);for(var r,a=i(e),s=a.length,u=0;s>u;)n.f(t,r=a[u++],e[r]);return t}},function(t,e,r){var n=r(31);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==n(t)?t.split(""):Object(t)}},function(t,e,r){var n=r(11),o=r(50),i=r(73);t.exports=function(t){return function(e,r,a){var s,u=n(e),c=o(u.length),l=i(a,c);if(t&&r!=r){for(;c>l;)if((s=u[l++])!=s)return!0}else for(;c>l;l++)if((t||l in u)&&u[l]===r)return t||l||0;return!t&&-1}}},function(t,e,r){var n=r(26),o=Math.max,i=Math.min;t.exports=function(t,e){return(t=n(t))<0?o(t+e,0):i(t,e)}},function(t,e,r){var n=r(6).document;t.exports=n&&n.documentElement},function(t,e,r){r(76);for(var n=r(6),o=r(12),i=r(17),a=r(5)("toStringTag"),s="CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList".split(","),u=0;u<s.length;u++){var c=s[u],l=n[c],f=l&&l.prototype;f&&!f[a]&&o(f,a,c),i[c]=i.Array}},function(t,e,r){"use strict";var n=r(77),o=r(78),i=r(17),a=r(11);t.exports=r(47)(Array,"Array",function(t,e){this._t=a(t),this._i=0,this._k=e},function(){var t=this._t,e=this._k,r=this._i++;return!t||r>=t.length?(this._t=void 0,o(1)):o(0,"keys"==e?r:"values"==e?t[r]:[r,t[r]])},"values"),i.Arguments=i.Array,n("keys"),n("values"),n("entries")},function(t,e){t.exports=function(){}},function(t,e){t.exports=function(t,e){return{value:e,done:!!t}}},function(t,e,r){t.exports={default:r(80),__esModule:!0}},function(t,e,r){r(81),r(86),r(87),r(88),t.exports=r(4).Symbol},function(t,e,r){"use strict";var n=r(6),o=r(10),i=r(9),a=r(8),s=r(48),u=r(82).KEY,c=r(15),l=r(33),f=r(35),d=r(22),v=r(5),p=r(37),h=r(38),g=r(83),y=r(84),m=r(13),b=r(14),_=r(11),O=r(25),E=r(16),S=r(29),w=r(85),M=r(40),P=r(7),j=r(30),C=M.f,k=P.f,x=w.f,D=n.Symbol,L=n.JSON,T=L&&L.stringify,A=v("_hidden"),F=v("toPrimitive"),N={}.propertyIsEnumerable,X=l("symbol-registry"),Y=l("symbols"),$=l("op-symbols"),I=Object.prototype,H="function"==typeof D,B=n.QObject,R=!B||!B.prototype||!B.prototype.findChild,U=i&&c(function(){return 7!=S(k({},"a",{get:function(){return k(this,"a",{value:7}).a}})).a})?function(t,e,r){var n=C(I,e);n&&delete I[e],k(t,e,r),n&&t!==I&&k(I,e,n)}:k,V=function(t){var e=Y[t]=S(D.prototype);return e._k=t,e},q=H&&"symbol"==typeof D.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof D},W=function(t,e,r){return t===I&&W($,e,r),m(t),e=O(e,!0),m(r),o(Y,e)?(r.enumerable?(o(t,A)&&t[A][e]&&(t[A][e]=!1),r=S(r,{enumerable:E(0,!1)})):(o(t,A)||k(t,A,E(1,{})),t[A][e]=!0),U(t,e,r)):k(t,e,r)},G=function(t,e){m(t);for(var r,n=g(e=_(e)),o=0,i=n.length;i>o;)W(t,r=n[o++],e[r]);return t},z=function(t){var e=N.call(this,t=O(t,!0));return!(this===I&&o(Y,t)&&!o($,t))&&(!(e||!o(this,t)||!o(Y,t)||o(this,A)&&this[A][t])||e)},K=function(t,e){if(t=_(t),e=O(e,!0),t!==I||!o(Y,e)||o($,e)){var r=C(t,e);return!r||!o(Y,e)||o(t,A)&&t[A][e]||(r.enumerable=!0),r}},Z=function(t){for(var e,r=x(_(t)),n=[],i=0;r.length>i;)o(Y,e=r[i++])||e==A||e==u||n.push(e);return n},J=function(t){for(var e,r=t===I,n=x(r?$:_(t)),i=[],a=0;n.length>a;)!o(Y,e=n[a++])||r&&!o(I,e)||i.push(Y[e]);return i};H||(s((D=function(){if(this instanceof D)throw TypeError("Symbol is not a constructor!");var t=d(arguments.length>0?arguments[0]:void 0),e=function(r){this===I&&e.call($,r),o(this,A)&&o(this[A],t)&&(this[A][t]=!1),U(this,t,E(1,r))};return i&&R&&U(I,t,{configurable:!0,set:e}),V(t)}).prototype,"toString",function(){return this._k}),M.f=K,P.f=W,r(53).f=w.f=Z,r(39).f=z,r(52).f=J,i&&!r(28)&&s(I,"propertyIsEnumerable",z,!0),p.f=function(t){return V(v(t))}),a(a.G+a.W+a.F*!H,{Symbol:D});for(var Q="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),tt=0;Q.length>tt;)v(Q[tt++]);for(var et=j(v.store),rt=0;et.length>rt;)h(et[rt++]);a(a.S+a.F*!H,"Symbol",{for:function(t){return o(X,t+="")?X[t]:X[t]=D(t)},keyFor:function(t){if(!q(t))throw TypeError(t+" is not a symbol!");for(var e in X)if(X[e]===t)return e},useSetter:function(){R=!0},useSimple:function(){R=!1}}),a(a.S+a.F*!H,"Object",{create:function(t,e){return void 0===e?S(t):G(S(t),e)},defineProperty:W,defineProperties:G,getOwnPropertyDescriptor:K,getOwnPropertyNames:Z,getOwnPropertySymbols:J}),L&&a(a.S+a.F*(!H||c(function(){var t=D();return"[null]"!=T([t])||"{}"!=T({a:t})||"{}"!=T(Object(t))})),"JSON",{stringify:function(t){for(var e,r,n=[t],o=1;arguments.length>o;)n.push(arguments[o++]);if(r=e=n[1],(b(e)||void 0!==t)&&!q(t))return y(e)||(e=function(t,e){if("function"==typeof r&&(e=r.call(this,t,e)),!q(e))return e}),n[1]=e,T.apply(L,n)}}),D.prototype[F]||r(12)(D.prototype,F,D.prototype.valueOf),f(D,"Symbol"),f(Math,"Math",!0),f(n.JSON,"JSON",!0)},function(t,e,r){var n=r(22)("meta"),o=r(14),i=r(10),a=r(7).f,s=0,u=Object.isExtensible||function(){return!0},c=!r(15)(function(){return u(Object.preventExtensions({}))}),l=function(t){a(t,n,{value:{i:"O"+ ++s,w:{}}})},f=t.exports={KEY:n,NEED:!1,fastKey:function(t,e){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,n)){if(!u(t))return"F";if(!e)return"E";l(t)}return t[n].i},getWeak:function(t,e){if(!i(t,n)){if(!u(t))return!0;if(!e)return!1;l(t)}return t[n].w},onFreeze:function(t){return c&&f.NEED&&u(t)&&!i(t,n)&&l(t),t}}},function(t,e,r){var n=r(30),o=r(52),i=r(39);t.exports=function(t){var e=n(t),r=o.f;if(r)for(var a,s=r(t),u=i.f,c=0;s.length>c;)u.call(t,a=s[c++])&&e.push(a);return e}},function(t,e,r){var n=r(31);t.exports=Array.isArray||function(t){return"Array"==n(t)}},function(t,e,r){var n=r(11),o=r(53).f,i={}.toString,a="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[];t.exports.f=function(t){return a&&"[object Window]"==i.call(t)?function(t){try{return o(t)}catch(t){return a.slice()}}(t):o(n(t))}},function(t,e){},function(t,e,r){r(38)("asyncIterator")},function(t,e,r){r(38)("observable")},function(t,e,r){t.exports={default:r(90),__esModule:!0}},function(t,e,r){r(91),t.exports=r(4).Object.setPrototypeOf},function(t,e,r){var n=r(8);n(n.S,"Object",{setPrototypeOf:r(92).set})},function(t,e,r){var n=r(14),o=r(13),i=function(t,e){if(o(t),!n(e)&&null!==e)throw TypeError(e+": can't set as prototype!")};t.exports={set:Object.setPrototypeOf||("__proto__"in{}?function(t,e,n){try{(n=r(24)(Function.call,r(40).f(Object.prototype,"__proto__").set,2))(t,[]),e=!(t instanceof Array)}catch(t){e=!0}return function(t,r){return i(t,r),e?t.__proto__=r:n(t,r),t}}({},!1):void 0),check:i}},function(t,e,r){t.exports={default:r(94),__esModule:!0}},function(t,e,r){r(95);var n=r(4).Object;t.exports=function(t,e){return n.create(t,e)}},function(t,e,r){var n=r(8);n(n.S,"Object",{create:r(29)})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=i(r(0)),o=i(r(1));function i(t){return t&&t.__esModule?t:{default:t}}var a=Symbol("canceled"),s=function(){function t(e){(0,n.default)(this,t),this[a]=!1,this.data=e}return(0,o.default)(t,[{key:"cancel",value:function(){this[a]=!0}},{key:"canceled",value:function(){return Boolean(this[a])}},{key:"type",get:function(){return this.constructor.type}},{key:"cancelable",get:function(){return this.constructor.cancelable}}]),t}();s.type="event",s.cancelable=!1,e.default=s},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=l(r(0)),o=l(r(1)),i=l(r(2)),a=l(r(98)),s=l(r(3)),u=l(r(105)),c=r(42);function l(t){return t&&t.__esModule?t:{default:t}}var f=Symbol("onDragStart"),d=Symbol("onDragOver"),v=Symbol("onDragStop");var p={"swappabled:swapped":function(t){var e=t.dragEvent,r=t.swappedElement;return"Swapped "+(e.source.textContent.trim()||e.source.id||"swappable element")+" with "+(r.textContent.trim()||r.id||"swappable element")}},h=function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,e);var o=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,Object.assign({},r,{announcements:Object.assign({},p,r.announcements||{})})));return o.lastOver=null,o[f]=o[f].bind(o),o[d]=o[d].bind(o),o[v]=o[v].bind(o),o.on("drag:start",o[f]).on("drag:over",o[d]).on("drag:stop",o[v]),o}return(0,s.default)(e,t),(0,o.default)(e,[{key:"destroy",value:function(){(0,a.default)(e.prototype.__proto__||Object.getPrototypeOf(e.prototype),"destroy",this).call(this),this.off("drag:start",this._onDragStart).off("drag:over",this._onDragOver).off("drag:stop",this._onDragStop)}},{key:f,value:function(t){var e=new c.SwappableStartEvent({dragEvent:t});this.trigger(e),e.canceled()&&t.cancel()}},{key:d,value:function(t){if(t.over!==t.originalSource&&t.over!==t.source&&!t.canceled()){var e=new c.SwappableSwapEvent({dragEvent:t,over:t.over,overContainer:t.overContainer});if(this.trigger(e),!e.canceled()){this.lastOver&&this.lastOver!==t.over&&g(this.lastOver,t.source),this.lastOver===t.over?this.lastOver=null:this.lastOver=t.over,g(t.source,t.over);var r=new c.SwappableSwappedEvent({dragEvent:t,swappedElement:t.over});this.trigger(r)}}}},{key:v,value:function(t){var e=new c.SwappableStopEvent({dragEvent:t});this.trigger(e),this.lastOver=null}}]),e}(u.default);function g(t,e){var r,n,o=e.parentNode,i=t.parentNode;r=function(r){i.insertBefore(r,t),o.insertBefore(t,e),i.insertBefore(e,r)},n=document.createElement("div"),r(n),n.parentNode.removeChild(n)}e.default=h},function(t,e,r){"use strict";e.__esModule=!0;var n=i(r(99)),o=i(r(102));function i(t){return t&&t.__esModule?t:{default:t}}e.default=function t(e,r,i){null===e&&(e=Function.prototype);var a=(0,o.default)(e,r);if(void 0===a){var s=(0,n.default)(e);return null===s?void 0:t(s,r,i)}if("value"in a)return a.value;var u=a.get;return void 0!==u?u.call(i):void 0}},function(t,e,r){t.exports={default:r(100),__esModule:!0}},function(t,e,r){r(101),t.exports=r(4).Object.getPrototypeOf},function(t,e,r){var n=r(36),o=r(51);r(54)("getPrototypeOf",function(){return function(t){return o(n(t))}})},function(t,e,r){t.exports={default:r(103),__esModule:!0}},function(t,e,r){r(104);var n=r(4).Object;t.exports=function(t,e){return n.getOwnPropertyDescriptor(t,e)}},function(t,e,r){var n=r(11),o=r(40).f;r(54)("getOwnPropertyDescriptor",function(){return function(t,e){return o(n(t),e)}})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(55);Object.keys(n).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return n[t]}})});var o=r(56);Object.keys(o).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return o[t]}})});var i=r(57);Object.keys(i).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return i[t]}})});var a=r(58);Object.keys(a).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return a[t]}})});var s=r(59);Object.keys(s).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(e,t,{enumerable:!0,get:function(){return s[t]}})});var u,c=r(140),l=(u=c)&&u.__esModule?u:{default:u};e.default=l.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.DragStopEvent=e.DragPressureEvent=e.DragOutContainerEvent=e.DragOverContainerEvent=e.DragOutEvent=e.DragOverEvent=e.DragMoveEvent=e.DragStartEvent=e.DragEvent=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(18));function u(t){return t&&t.__esModule?t:{default:t}}var c=e.DragEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"hasMirror",value:function(){return Boolean(this.mirror)}},{key:"source",get:function(){return this.data.source}},{key:"originalSource",get:function(){return this.data.originalSource}},{key:"mirror",get:function(){return this.data.mirror}},{key:"sourceContainer",get:function(){return this.data.sourceContainer}},{key:"sensorEvent",get:function(){return this.data.sensorEvent}},{key:"originalEvent",get:function(){return this.sensorEvent?this.sensorEvent.originalEvent:null}}]),e}(s.default);c.type="drag";var l=e.DragStartEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c);l.type="drag:start",l.cancelable=!0,(e.DragMoveEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:move";var f=e.DragOverEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"overContainer",get:function(){return this.data.overContainer}},{key:"over",get:function(){return this.data.over}}]),e}(c);f.type="drag:over",f.cancelable=!0,(e.DragOutEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"overContainer",get:function(){return this.data.overContainer}},{key:"over",get:function(){return this.data.over}}]),e}(c)).type="drag:out",(e.DragOverContainerEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"overContainer",get:function(){return this.data.overContainer}}]),e}(c)).type="drag:over:container",(e.DragOutContainerEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"overContainer",get:function(){return this.data.overContainer}}]),e}(c)).type="drag:out:container",(e.DragPressureEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"pressure",get:function(){return this.data.pressure}}]),e}(c)).type="drag:pressure",(e.DragStopEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:stop"},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.DraggableDestroyEvent=e.DraggableInitializedEvent=e.DraggableEvent=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(18));function u(t){return t&&t.__esModule?t:{default:t}}var c=e.DraggableEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"draggable",get:function(){return this.data.draggable}}]),e}(s.default);c.type="draggable",(e.DraggableInitializedEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="draggable:initialize",(e.DraggableDestroyEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="draggable:destroy"},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.MirrorDestroyEvent=e.MirrorMoveEvent=e.MirrorAttachedEvent=e.MirrorCreatedEvent=e.MirrorCreateEvent=e.MirrorEvent=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(18));function u(t){return t&&t.__esModule?t:{default:t}}var c=e.MirrorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"hasMirror",value:function(){return Boolean(this.mirror)}},{key:"source",get:function(){return this.data.source}},{key:"originalSource",get:function(){return this.data.originalSource}},{key:"sourceContainer",get:function(){return this.data.sourceContainer}},{key:"sensorEvent",get:function(){return this.data.sensorEvent}},{key:"originalEvent",get:function(){return this.sensorEvent?this.sensorEvent.originalEvent:null}}]),e}(s.default);(e.MirrorCreateEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="mirror:create",(e.MirrorCreatedEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"mirror",get:function(){return this.data.mirror}}]),e}(c)).type="mirror:created",(e.MirrorAttachedEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"mirror",get:function(){return this.data.mirror}}]),e}(c)).type="mirror:attached";var l=e.MirrorMoveEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"mirror",get:function(){return this.data.mirror}}]),e}(c);l.type="mirror:move",l.cancelable=!0;var f=e.MirrorDestroyEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"mirror",get:function(){return this.data.mirror}}]),e}(c);f.type="mirror:destroy",f.cancelable=!0},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=void 0;var n,o=r(110),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default,e.defaultOptions=o.defaultOptions},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=e.onScroll=e.onMirrorMove=e.onMirrorCreated=e.onDragStop=e.onDragStart=void 0;var n=c(r(111)),o=c(r(0)),i=c(r(1)),a=c(r(2)),s=c(r(3)),u=c(r(23));function c(t){return t&&t.__esModule?t:{default:t}}var l=e.onDragStart=Symbol("onDragStart"),f=e.onDragStop=Symbol("onDragStop"),d=e.onMirrorCreated=Symbol("onMirrorCreated"),v=e.onMirrorMove=Symbol("onMirrorMove"),p=e.onScroll=Symbol("onScroll"),h=e.defaultOptions={constrainDimensions:!1,xAxis:!0,yAxis:!0,cursorOffsetX:null,cursorOffsetY:null},g=function(t){function e(t){(0,o.default)(this,e);var r=(0,a.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return r.options=Object.assign({},h,r.getOptions()),r.scrollOffset={x:0,y:0},r.initialScrollOffset={x:window.scrollX,y:window.scrollY},r[l]=r[l].bind(r),r[f]=r[f].bind(r),r[d]=r[d].bind(r),r[v]=r[v].bind(r),r[p]=r[p].bind(r),r}return(0,s.default)(e,t),(0,i.default)(e,[{key:"attach",value:function(){this.draggable.on("drag:start",this[l]).on("drag:stop",this[f]).on("mirror:created",this[d]).on("mirror:move",this[v])}},{key:"detach",value:function(){this.draggable.off("drag:start",this[l]).off("drag:stop",this[f]).off("mirror:created",this[d]).off("mirror:move",this[v])}},{key:"getOptions",value:function(){return this.draggable.options.mirror||{}}},{key:l,value:function(){"ontouchstart"in window&&document.addEventListener("scroll",this[p],!0),this.initialScrollOffset={x:window.scrollX,y:window.scrollY}}},{key:f,value:function(){"ontouchstart"in window&&document.removeEventListener("scroll",this[p],!0),this.initialScrollOffset={x:0,y:0},this.scrollOffset={x:0,y:0}}},{key:p,value:function(){this.scrollOffset={x:window.scrollX-this.initialScrollOffset.x,y:window.scrollY-this.initialScrollOffset.y}}},{key:d,value:function(t){var e=this,r={mirror:t.mirror,source:t.source,sensorEvent:t.sensorEvent,mirrorClass:this.draggable.getClassNameFor("mirror"),scrollOffset:this.scrollOffset,options:this.options};return Promise.resolve(r).then(y).then(m).then(b).then(_).then(E({initial:!0})).then(O).then(function(t){var r=t.mirrorOffset,o=t.initialX,i=t.initialY,a=(0,n.default)(t,["mirrorOffset","initialX","initialY"]);return e.mirrorOffset=r,e.initialX=o,e.initialY=i,Object.assign({mirrorOffset:r,initialX:o,initialY:i},a)})}},{key:v,value:function(t){var e={mirror:t.mirror,sensorEvent:t.sensorEvent,mirrorOffset:this.mirrorOffset,options:this.options,initialX:this.initialX,initialY:this.initialY,scrollOffset:this.scrollOffset};return Promise.resolve(e).then(E({raf:!0}))}}]),e}(u.default);function y(t){var e=t.source,r=(0,n.default)(t,["source"]);return S(function(t){var n=e.getBoundingClientRect();t(Object.assign({source:e,sourceRect:n},r))})}function m(t){var e=t.sensorEvent,r=t.sourceRect,o=t.options,i=(0,n.default)(t,["sensorEvent","sourceRect","options"]);return S(function(t){var n={top:null===o.cursorOffsetY?e.clientY-r.top:o.cursorOffsetY,left:null===o.cursorOffsetX?e.clientX-r.left:o.cursorOffsetX};t(Object.assign({sensorEvent:e,sourceRect:r,mirrorOffset:n,options:o},i))})}function b(t){var e=t.mirror,r=t.source,o=t.options,i=(0,n.default)(t,["mirror","source","options"]);return S(function(t){var n=void 0,a=void 0;if(o.constrainDimensions){var s=getComputedStyle(r);n=s.getPropertyValue("height"),a=s.getPropertyValue("width")}e.style.position="fixed",e.style.pointerEvents="none",e.style.top=0,e.style.left=0,e.style.margin=0,o.constrainDimensions&&(e.style.height=n,e.style.width=a),t(Object.assign({mirror:e,source:r,options:o},i))})}function _(t){var e=t.mirror,r=t.mirrorClass,o=(0,n.default)(t,["mirror","mirrorClass"]);return S(function(t){e.classList.add(r),t(Object.assign({mirror:e,mirrorClass:r},o))})}function O(t){var e=t.mirror,r=(0,n.default)(t,["mirror"]);return S(function(t){e.removeAttribute("id"),delete e.id,t(Object.assign({mirror:e},r))})}function E(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},e=t.withFrame,r=void 0!==e&&e,o=t.initial,i=void 0!==o&&o;return function(t){var e=t.mirror,o=t.sensorEvent,a=t.mirrorOffset,s=t.initialY,u=t.initialX,c=t.scrollOffset,l=t.options,f=(0,n.default)(t,["mirror","sensorEvent","mirrorOffset","initialY","initialX","scrollOffset","options"]);return S(function(t){var r=Object.assign({mirror:e,sensorEvent:o,mirrorOffset:a,options:l},f);if(a){var n=o.clientX-a.left-c.x,d=o.clientY-a.top-c.y;l.xAxis&&l.yAxis||i?e.style.transform="translate3d("+n+"px, "+d+"px, 0)":l.xAxis&&!l.yAxis?e.style.transform="translate3d("+n+"px, "+s+"px, 0)":l.yAxis&&!l.xAxis&&(e.style.transform="translate3d("+u+"px, "+d+"px, 0)"),i&&(r.initialX=n,r.initialY=d)}t(r)},{frame:r})}}function S(t){var e=(arguments.length>1&&void 0!==arguments[1]?arguments[1]:{}).raf,r=void 0!==e&&e;return new Promise(function(e,n){r?requestAnimationFrame(function(){t(e,n)}):t(e,n)})}e.default=g},function(t,e,r){"use strict";e.__esModule=!0,e.default=function(t,e){var r={};for(var n in t)e.indexOf(n)>=0||Object.prototype.hasOwnProperty.call(t,n)&&(r[n]=t[n]);return r}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=i(r(0)),o=i(r(1));function i(t){return t&&t.__esModule?t:{default:t}}var a=function(){function t(e){(0,n.default)(this,t),this.draggable=e}return(0,o.default)(t,[{key:"attach",value:function(){throw new Error("Not Implemented")}},{key:"detach",value:function(){throw new Error("Not Implemented")}}]),t}();e.default=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=void 0;var n,o=r(114),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default,e.defaultOptions=o.defaultOptions},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(23));function u(t){return t&&t.__esModule?t:{default:t}}var c=Symbol("onInitialize"),l=Symbol("onDestroy"),f=Symbol("announceEvent"),d=Symbol("announceMessage"),v="aria-relevant",p="aria-atomic",h="aria-live",g="role",y=e.defaultOptions={expire:7e3},m=function(t){function e(t){(0,n.default)(this,e);var r=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return r.options=Object.assign({},y,r.getOptions()),r.originalTriggerMethod=r.draggable.trigger,r[c]=r[c].bind(r),r[l]=r[l].bind(r),r}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){this.draggable.on("draggable:initialize",this[c])}},{key:"detach",value:function(){this.draggable.off("draggable:destroy",this[l])}},{key:"getOptions",value:function(){return this.draggable.options.announcements||{}}},{key:f,value:function(t){var e=this.options[t.type];e&&"string"==typeof e&&this[d](e),e&&"function"==typeof e&&this[d](e(t))}},{key:d,value:function(t){!function(t,e){var r=e.expire,n=document.createElement("div");n.innerHTML=t,_.appendChild(n),setTimeout(function(){_.removeChild(n)},r)}(t,{expire:this.options.expire})}},{key:c,value:function(){var t=this;this.draggable.trigger=function(e){try{t[f](e)}finally{t.originalTriggerMethod.call(t.draggable,e)}}}},{key:l,value:function(){this.draggable.trigger=this.originalTriggerMethod}}]),e}(s.default);e.default=m;var b,_=((b=document.createElement("div")).setAttribute("id","draggable-live-region"),b.setAttribute(v,"additions"),b.setAttribute(p,"true"),b.setAttribute(h,"assertive"),b.setAttribute(g,"log"),b.style.position="fixed",b.style.width="1px",b.style.height="1px",b.style.top="-1px",b.style.overflow="hidden",b);document.addEventListener("DOMContentLoaded",function(){document.body.appendChild(_)})},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=void 0;var n,o=r(116),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default,e.defaultOptions=o.defaultOptions},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=e.scroll=e.onDragStop=e.onDragMove=e.onDragStart=void 0;var n=c(r(0)),o=c(r(1)),i=c(r(2)),a=c(r(3)),s=c(r(23)),u=r(19);function c(t){return t&&t.__esModule?t:{default:t}}var l=e.onDragStart=Symbol("onDragStart"),f=e.onDragMove=Symbol("onDragMove"),d=e.onDragStop=Symbol("onDragStop"),v=e.scroll=Symbol("scroll"),p=e.defaultOptions={speed:10,sensitivity:30,scrollableElements:[]},h=function(t){function e(t){(0,n.default)(this,e);var r=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return r.options=Object.assign({},p,r.getOptions()),r.currentMousePosition=null,r.scrollAnimationFrame=null,r.scrollableElement=null,r.findScrollableElementFrame=null,r[l]=r[l].bind(r),r[f]=r[f].bind(r),r[d]=r[d].bind(r),r[v]=r[v].bind(r),r}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){this.draggable.on("drag:start",this[l]).on("drag:move",this[f]).on("drag:stop",this[d])}},{key:"detach",value:function(){this.draggable.off("drag:start",this[l]).off("drag:move",this[f]).off("drag:stop",this[d])}},{key:"getOptions",value:function(){return this.draggable.options.scrollable||{}}},{key:"getScrollableElement",value:function(t){return this.hasDefinedScrollableElements()?(0,u.closest)(t,this.options.scrollableElements)||document.documentElement:(e=t,(0,u.closest)(e,function(t){return e=getComputedStyle(t,null),r=e.getPropertyValue("overflow")+e.getPropertyValue("overflow-y")+e.getPropertyValue("overflow-x"),/(auto|scroll)/.test(r);var e,r})||document.scrollingElement||document.documentElement||null);var e}},{key:"hasDefinedScrollableElements",value:function(){return Boolean(0!==this.options.scrollableElements.length)}},{key:l,value:function(t){var e=this;this.findScrollableElementFrame=requestAnimationFrame(function(){e.scrollableElement=e.getScrollableElement(t.source)})}},{key:f,value:function(t){var e=this;if(this.findScrollableElementFrame=requestAnimationFrame(function(){e.scrollableElement=e.getScrollableElement(t.sensorEvent.target)}),this.scrollableElement){var r=t.sensorEvent,n={x:0,y:0};"ontouchstart"in window&&(n.y=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n.x=window.pageXOffset||document.documentElement.scrollLeft||document.body.scrollLeft||0),this.currentMousePosition={clientX:r.clientX-n.x,clientY:r.clientY-n.y},this.scrollAnimationFrame=requestAnimationFrame(this[v])}}},{key:d,value:function(){cancelAnimationFrame(this.scrollAnimationFrame),cancelAnimationFrame(this.findScrollableElementFrame),this.scrollableElement=null,this.scrollAnimationFrame=null,this.findScrollableElementFrame=null,this.currentMousePosition=null}},{key:v,value:function(){if(this.scrollableElement){cancelAnimationFrame(this.scrollAnimationFrame);var t=window.innerHeight,e=window.innerWidth,r=this.scrollableElement.getBoundingClientRect(),n=r.right,o=r.left,i=void 0,a=void 0;i=r.top<0?0:r.top,t<r.bottom?(this.scrollableElement!==document.documentElement&&(this.scrollableElement=this.getScrollableElement(this.scrollableElement.parentNode)),a=t):a=r.bottom;var s=(Math.abs(a-this.currentMousePosition.clientY)<=this.options.sensitivity)-(Math.abs(i-this.currentMousePosition.clientY)<=this.options.sensitivity),u=(Math.abs(n-this.currentMousePosition.clientX)<=this.options.sensitivity)-(Math.abs(o-this.currentMousePosition.clientX)<=this.options.sensitivity);u||s||(u=(e-this.currentMousePosition.clientX<=this.options.sensitivity)-(this.currentMousePosition.clientX<=this.options.sensitivity),s=(t-this.currentMousePosition.clientY<=this.options.sensitivity)-(this.currentMousePosition.clientY<=this.options.sensitivity)),this.scrollableElement.scrollTop+=s*this.options.speed,this.scrollableElement.scrollLeft+=u*this.options.speed,this.scrollAnimationFrame=requestAnimationFrame(this[v])}}}]),e}(s.default);e.default=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(118),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(41),i=(n=o)&&n.__esModule?n:{default:n};e.default=function(t,e){if(!t)return null;var r=e,n=e,o=e,s=e,u=Boolean("string"==typeof e),c=Boolean("function"==typeof e),l=Boolean(e instanceof NodeList||e instanceof Array),f=Boolean(e instanceof HTMLElement);function d(t){return t?u?a.call(t,r):l?[].concat((0,i.default)(o)).includes(t):f?s===t:c?n(t):null:t}var v=t;do{if(d(v=v.correspondingUseElement||v.correspondingElement||v))return v;v=v.parentNode}while(v&&v!==document.body&&v!==document);return null};var a=Element.prototype.matches||Element.prototype.webkitMatchesSelector||Element.prototype.mozMatchesSelector||Element.prototype.msMatchesSelector},function(t,e,r){t.exports={default:r(120),__esModule:!0}},function(t,e,r){r(46),r(121),t.exports=r(4).Array.from},function(t,e,r){"use strict";var n=r(24),o=r(8),i=r(36),a=r(122),s=r(123),u=r(50),c=r(124),l=r(125);o(o.S+o.F*!r(127)(function(t){Array.from(t)}),"Array",{from:function(t){var e,r,o,f,d=i(t),v="function"==typeof this?this:Array,p=arguments.length,h=p>1?arguments[1]:void 0,g=void 0!==h,y=0,m=l(d);if(g&&(h=n(h,p>2?arguments[2]:void 0,2)),void 0==m||v==Array&&s(m))for(r=new v(e=u(d.length));e>y;y++)c(r,y,g?h(d[y],y):d[y]);else for(f=m.call(d),r=new v;!(o=f.next()).done;y++)c(r,y,g?a(f,h,[o.value,y],!0):o.value);return r.length=y,r}})},function(t,e,r){var n=r(13);t.exports=function(t,e,r,o){try{return o?e(n(r)[0],r[1]):e(r)}catch(e){var i=t.return;throw void 0!==i&&n(i.call(t)),e}}},function(t,e,r){var n=r(17),o=r(5)("iterator"),i=Array.prototype;t.exports=function(t){return void 0!==t&&(n.Array===t||i[o]===t)}},function(t,e,r){"use strict";var n=r(7),o=r(16);t.exports=function(t,e,r){e in t?n.f(t,e,o(0,r)):t[e]=r}},function(t,e,r){var n=r(126),o=r(5)("iterator"),i=r(17);t.exports=r(4).getIteratorMethod=function(t){if(void 0!=t)return t[o]||t["@@iterator"]||i[n(t)]}},function(t,e,r){var n=r(31),o=r(5)("toStringTag"),i="Arguments"==n(function(){return arguments}());t.exports=function(t){var e,r,a;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(r=function(t,e){try{return t[e]}catch(t){}}(e=Object(t),o))?r:i?n(e):"Object"==(a=n(e))&&"function"==typeof e.callee?"Arguments":a}},function(t,e,r){var n=r(5)("iterator"),o=!1;try{var i=[7][n]();i.return=function(){o=!0},Array.from(i,function(){throw 2})}catch(t){}t.exports=function(t,e){if(!e&&!o)return!1;var r=!1;try{var i=[7],a=i[n]();a.next=function(){return{done:r=!0}},i[n]=function(){return a},t(i)}catch(t){}return r}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(129),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=s(r(0)),o=s(r(1)),i=s(r(2)),a=s(r(3));function s(t){return t&&t.__esModule?t:{default:t}}var u="aria-grabbed",c=function(t){function e(t){(0,n.default)(this,e);var r=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return r._onInit=r._onInit.bind(r),r._onDestroy=r._onDestroy.bind(r),r}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){this.draggable.on("init",this._onInit).on("destroy",this._onDestroy).on("drag:start",l).on("drag:stop",f)}},{key:"detach",value:function(){this.draggable.off("init",this._onInit).off("destroy",this._onDestroy).off("drag:start",l).off("drag:stop",f)}},{key:"_onInit",value:function(t){var e=t.containers,r=!0,n=!1,o=void 0;try{for(var i,a=e[Symbol.iterator]();!(r=(i=a.next()).done);r=!0){var s=i.value;s.setAttribute("aria-dropeffect",this.draggable.options.type);var c=!0,l=!1,f=void 0;try{for(var d,v=s.querySelectorAll(this.draggable.options.draggable)[Symbol.iterator]();!(c=(d=v.next()).done);c=!0){var p=d.value;p.setAttribute("tabindex",0),p.setAttribute(u,!1)}}catch(t){l=!0,f=t}finally{try{!c&&v.return&&v.return()}finally{if(l)throw f}}}}catch(t){n=!0,o=t}finally{try{!r&&a.return&&a.return()}finally{if(n)throw o}}}},{key:"_onDestroy",value:function(t){var e=t.containers,r=!0,n=!1,o=void 0;try{for(var i,a=e[Symbol.iterator]();!(r=(i=a.next()).done);r=!0){var s=i.value;s.removeAttribute("aria-dropeffect");var c=!0,l=!1,f=void 0;try{for(var d,v=s.querySelectorAll(this.draggable.options.draggable)[Symbol.iterator]();!(c=(d=v.next()).done);c=!0){var p=d.value;p.removeAttribute("tabindex",0),p.removeAttribute(u,!1)}}catch(t){l=!0,f=t}finally{try{!c&&v.return&&v.return()}finally{if(l)throw f}}}}catch(t){n=!0,o=t}finally{try{!r&&a.return&&a.return()}finally{if(n)throw o}}}}]),e}(s(r(23)).default);function l(t){t.source.setAttribute(u,!0)}function f(t){t.source.setAttribute(u,!1)}e.default=c},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=i(r(0)),o=i(r(1));function i(t){return t&&t.__esModule?t:{default:t}}var a=function(){function t(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,t),this.containers=e,this.options=Object.assign({},r),this.dragging=!1,this.currentContainer=null}return(0,o.default)(t,[{key:"attach",value:function(){return this}},{key:"detach",value:function(){return this}},{key:"trigger",value:function(t,e){var r=document.createEvent("Event");return r.detail=e,r.initEvent(e.type,!0,!0),t.dispatchEvent(r),this.lastEvent=e,e}}]),t}();e.default=a},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(132),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=l(r(0)),o=l(r(1)),i=l(r(2)),a=l(r(3)),s=r(19),u=l(r(20)),c=r(21);function l(t){return t&&t.__esModule?t:{default:t}}var f=Symbol("onContextMenuWhileDragging"),d=Symbol("onMouseDown"),v=Symbol("onMouseMove"),p=Symbol("onMouseUp"),h=function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,e);var o=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,r));return o.mouseDown=!1,o.mouseDownTimeout=null,o.openedContextMenu=!1,o[f]=o[f].bind(o),o[d]=o[d].bind(o),o[v]=o[v].bind(o),o[p]=o[p].bind(o),o}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){document.addEventListener("mousedown",this[d],!0)}},{key:"detach",value:function(){document.removeEventListener("mousedown",this[d],!0)}},{key:d,value:function(t){var e=this;if(0===t.button&&!t.ctrlKey&&!t.metaKey){document.addEventListener("mouseup",this[p]),document.addEventListener("dragstart",g);var r=document.elementFromPoint(t.clientX,t.clientY),n=(0,s.closest)(r,this.containers);n&&(this.mouseDown=!0,clearTimeout(this.mouseDownTimeout),this.mouseDownTimeout=setTimeout(function(){if(e.mouseDown){var o=new c.DragStartSensorEvent({clientX:t.clientX,clientY:t.clientY,target:r,container:n,originalEvent:t});e.trigger(n,o),e.currentContainer=n,e.dragging=!o.canceled(),e.dragging&&(document.addEventListener("contextmenu",e[f]),document.addEventListener("mousemove",e[v]))}},this.options.delay))}}},{key:v,value:function(t){if(this.dragging){var e=document.elementFromPoint(t.clientX,t.clientY),r=new c.DragMoveSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}}},{key:p,value:function(t){if(this.mouseDown=Boolean(this.openedContextMenu),this.openedContextMenu)this.openedContextMenu=!1;else if(document.removeEventListener("mouseup",this[p]),document.removeEventListener("dragstart",g),this.dragging){var e=document.elementFromPoint(t.clientX,t.clientY),r=new c.DragStopSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r),document.removeEventListener("contextmenu",this[f]),document.removeEventListener("mousemove",this[v]),this.currentContainer=null,this.dragging=!1}}},{key:f,value:function(t){t.preventDefault(),this.openedContextMenu=!0}}]),e}(u.default);function g(t){t.preventDefault()}e.default=h},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.DragPressureSensorEvent=e.DragStopSensorEvent=e.DragMoveSensorEvent=e.DragStartSensorEvent=e.SensorEvent=void 0;var n=u(r(0)),o=u(r(1)),i=u(r(2)),a=u(r(3)),s=u(r(18));function u(t){return t&&t.__esModule?t:{default:t}}var c=e.SensorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),(0,o.default)(e,[{key:"originalEvent",get:function(){return this.data.originalEvent}},{key:"clientX",get:function(){return this.data.clientX}},{key:"clientY",get:function(){return this.data.clientY}},{key:"target",get:function(){return this.data.target}},{key:"container",get:function(){return this.data.container}},{key:"pressure",get:function(){return this.data.pressure}}]),e}(s.default);(e.DragStartSensorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:start",(e.DragMoveSensorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:move",(e.DragStopSensorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:stop",(e.DragPressureSensorEvent=function(t){function e(){return(0,n.default)(this,e),(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return(0,a.default)(e,t),e}(c)).type="drag:pressure"},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(135),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=l(r(0)),o=l(r(1)),i=l(r(2)),a=l(r(3)),s=r(19),u=l(r(20)),c=r(21);function l(t){return t&&t.__esModule?t:{default:t}}var f=Symbol("onTouchStart"),d=Symbol("onTouchHold"),v=Symbol("onTouchEnd"),p=Symbol("onTouchMove"),h=Symbol("onScroll");document.ontouchmove=document.ontouchmove||function(){return!0};var g=function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,e);var o=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,r));return o.currentScrollableParent=null,o.tapTimeout=null,o.touchMoved=!1,o[f]=o[f].bind(o),o[d]=o[d].bind(o),o[v]=o[v].bind(o),o[p]=o[p].bind(o),o[h]=o[h].bind(o),o}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){document.addEventListener("touchstart",this[f])}},{key:"detach",value:function(){document.removeEventListener("touchstart",this[f])}},{key:f,value:function(t){var e=(0,s.closest)(t.target,this.containers);e&&(document.addEventListener("touchmove",this[p],{passive:!1}),document.addEventListener("touchend",this[v]),document.addEventListener("touchcancel",this[v]),document.addEventListener("scroll",this[h]),e.addEventListener("contextmenu",y),this.currentContainer=e,this.currentScrollableParent=(0,s.closest)(e,function(t){return t.offsetHeight<t.scrollHeight}),this.currentScrollableParent&&this.currentScrollableParent.addEventListener("scroll",this[h]),this.tapTimeout=setTimeout(this[d](t,e),this.options.delay))}},{key:d,value:function(t,e){var r=this;return function(){if(!r.touchMoved){var n=t.touches[0]||t.changedTouches[0],o=t.target,i=new c.DragStartSensorEvent({clientX:n.pageX,clientY:n.pageY,target:o,container:e,originalEvent:t});r.trigger(e,i),r.dragging=!i.canceled()}}}},{key:p,value:function(t){if(this.touchMoved=!0,this.dragging){t.preventDefault(),t.stopPropagation();var e=t.touches[0]||t.changedTouches[0],r=document.elementFromPoint(e.pageX-window.scrollX,e.pageY-window.scrollY),n=new c.DragMoveSensorEvent({clientX:e.pageX,clientY:e.pageY,target:r,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,n)}}},{key:v,value:function(t){if(this.touchMoved=!1,document.removeEventListener("touchend",this[v]),document.removeEventListener("touchcancel",this[v]),document.removeEventListener("touchmove",this[p],{passive:!1}),document.removeEventListener("scroll",this[h]),this.currentContainer&&this.currentContainer.removeEventListener("contextmenu",y),this.currentScrollableParent&&this.currentScrollableParent.removeEventListener("scroll",this[h]),clearTimeout(this.tapTimeout),this.dragging){var e=t.touches[0]||t.changedTouches[0],r=document.elementFromPoint(e.pageX-window.scrollX,e.pageY-window.scrollY);t.preventDefault();var n=new c.DragStopSensorEvent({clientX:e.pageX,clientY:e.pageY,target:r,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,n),this.currentContainer=null,this.dragging=!1}}},{key:h,value:function(){clearTimeout(this.tapTimeout)}}]),e}(u.default);function y(t){t.preventDefault(),t.stopPropagation()}e.default=g},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(137),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=l(r(0)),o=l(r(1)),i=l(r(2)),a=l(r(3)),s=r(19),u=l(r(20)),c=r(21);function l(t){return t&&t.__esModule?t:{default:t}}var f=Symbol("onMouseDown"),d=Symbol("onMouseUp"),v=Symbol("onDragStart"),p=Symbol("onDragOver"),h=Symbol("onDragEnd"),g=Symbol("onDrop"),y=Symbol("reset"),m=function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,e);var o=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,r));return o.mouseDownTimeout=null,o.draggableElement=null,o.nativeDraggableElement=null,o[f]=o[f].bind(o),o[d]=o[d].bind(o),o[v]=o[v].bind(o),o[p]=o[p].bind(o),o[h]=o[h].bind(o),o[g]=o[g].bind(o),o}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){document.addEventListener("mousedown",this[f],!0)}},{key:"detach",value:function(){document.removeEventListener("mousedown",this[f],!0)}},{key:v,value:function(t){var e=this;t.dataTransfer.setData("text",""),t.dataTransfer.effectAllowed=this.options.type;var r=document.elementFromPoint(t.clientX,t.clientY);if(this.currentContainer=(0,s.closest)(t.target,this.containers),this.currentContainer){var n=new c.DragStartSensorEvent({clientX:t.clientX,clientY:t.clientY,target:r,container:this.currentContainer,originalEvent:t});setTimeout(function(){e.trigger(e.currentContainer,n),n.canceled()?e.dragging=!1:e.dragging=!0},0)}}},{key:p,value:function(t){if(this.dragging){var e=document.elementFromPoint(t.clientX,t.clientY),r=this.currentContainer,n=new c.DragMoveSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n),n.canceled()||(t.preventDefault(),t.dataTransfer.dropEffect=this.options.type)}}},{key:h,value:function(t){if(this.dragging){document.removeEventListener("mouseup",this[d],!0);var e=document.elementFromPoint(t.clientX,t.clientY),r=this.currentContainer,n=new c.DragStopSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n),this.dragging=!1,this[y]()}}},{key:g,value:function(t){t.preventDefault()}},{key:f,value:function(t){var e=this;if(!t.target||!t.target.form&&!t.target.contenteditable){var r=(0,s.closest)(t.target,function(t){return t.draggable});r&&(r.draggable=!1,this.nativeDraggableElement=r),document.addEventListener("mouseup",this[d],!0),document.addEventListener("dragstart",this[v],!1),document.addEventListener("dragover",this[p],!1),document.addEventListener("dragend",this[h],!1),document.addEventListener("drop",this[g],!1);var n=(0,s.closest)(t.target,this.options.draggable);n&&(this.mouseDownTimeout=setTimeout(function(){n.draggable=!0,e.draggableElement=n},this.options.delay))}}},{key:d,value:function(){this[y]()}},{key:y,value:function(){clearTimeout(this.mouseDownTimeout),document.removeEventListener("mouseup",this[d],!0),document.removeEventListener("dragstart",this[v],!1),document.removeEventListener("dragover",this[p],!1),document.removeEventListener("dragend",this[h],!1),document.removeEventListener("drop",this[g],!1),this.nativeDraggableElement&&(this.nativeDraggableElement.draggable=!0,this.nativeDraggableElement=null),this.draggableElement&&(this.draggableElement.draggable=!1,this.draggableElement=null)}}]),e}(u.default);e.default=m},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(139),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=c(r(0)),o=c(r(1)),i=c(r(2)),a=c(r(3)),s=c(r(20)),u=r(21);function c(t){return t&&t.__esModule?t:{default:t}}var l=Symbol("onMouseForceWillBegin"),f=Symbol("onMouseForceDown"),d=Symbol("onMouseDown"),v=Symbol("onMouseForceChange"),p=Symbol("onMouseMove"),h=Symbol("onMouseUp"),g=Symbol("onMouseForceGlobalChange"),y=function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};(0,n.default)(this,e);var o=(0,i.default)(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t,r));return o.mightDrag=!1,o[l]=o[l].bind(o),o[f]=o[f].bind(o),o[d]=o[d].bind(o),o[v]=o[v].bind(o),o[p]=o[p].bind(o),o[h]=o[h].bind(o),o}return(0,a.default)(e,t),(0,o.default)(e,[{key:"attach",value:function(){var t=!0,e=!1,r=void 0;try{for(var n,o=this.containers[Symbol.iterator]();!(t=(n=o.next()).done);t=!0){var i=n.value;i.addEventListener("webkitmouseforcewillbegin",this[l],!1),i.addEventListener("webkitmouseforcedown",this[f],!1),i.addEventListener("mousedown",this[d],!0),i.addEventListener("webkitmouseforcechanged",this[v],!1)}}catch(t){e=!0,r=t}finally{try{!t&&o.return&&o.return()}finally{if(e)throw r}}document.addEventListener("mousemove",this[p]),document.addEventListener("mouseup",this[h])}},{key:"detach",value:function(){var t=!0,e=!1,r=void 0;try{for(var n,o=this.containers[Symbol.iterator]();!(t=(n=o.next()).done);t=!0){var i=n.value;i.removeEventListener("webkitmouseforcewillbegin",this[l],!1),i.removeEventListener("webkitmouseforcedown",this[f],!1),i.removeEventListener("mousedown",this[d],!0),i.removeEventListener("webkitmouseforcechanged",this[v],!1)}}catch(t){e=!0,r=t}finally{try{!t&&o.return&&o.return()}finally{if(e)throw r}}document.removeEventListener("mousemove",this[p]),document.removeEventListener("mouseup",this[h])}},{key:l,value:function(t){t.preventDefault(),this.mightDrag=!0}},{key:f,value:function(t){if(!this.dragging){var e=document.elementFromPoint(t.clientX,t.clientY),r=t.currentTarget,n=new u.DragStartSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n),this.currentContainer=r,this.dragging=!n.canceled(),this.mightDrag=!1}}},{key:h,value:function(t){if(this.dragging){var e=new u.DragStopSensorEvent({clientX:t.clientX,clientY:t.clientY,target:null,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,e),this.currentContainer=null,this.dragging=!1,this.mightDrag=!1}}},{key:d,value:function(t){this.mightDrag&&(t.stopPropagation(),t.stopImmediatePropagation(),t.preventDefault())}},{key:p,value:function(t){if(this.dragging){var e=document.elementFromPoint(t.clientX,t.clientY),r=new u.DragMoveSensorEvent({clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}}},{key:v,value:function(t){if(!this.dragging){var e=t.target,r=t.currentTarget,n=new u.DragPressureSensorEvent({pressure:t.webkitForce,clientX:t.clientX,clientY:t.clientY,target:e,container:r,originalEvent:t});this.trigger(r,n)}}},{key:g,value:function(t){if(this.dragging){var e=t.target,r=new u.DragPressureSensorEvent({pressure:t.webkitForce,clientX:t.clientX,clientY:t.clientY,target:e,container:this.currentContainer,originalEvent:t});this.trigger(this.currentContainer,r)}}}]),e}(s.default);e.default=y},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.defaultOptions=void 0;var n=v(r(41)),o=v(r(0)),i=v(r(1)),a=r(19),s=r(58),u=v(r(141)),c=r(59),l=r(56),f=r(55),d=r(57);function v(t){return t&&t.__esModule?t:{default:t}}var p=Symbol("onDragStart"),h=Symbol("onDragMove"),g=Symbol("onDragStop"),y=Symbol("onDragPressure"),m=Symbol("getAppendableContainer"),b={"drag:start":function(t){return"Picked up "+(t.source.textContent.trim()||t.source.id||"draggable element")},"drag:stop":function(t){return"Released "+(t.source.textContent.trim()||t.source.id||"draggable element")}},_={"container:dragging":"draggable-container--is-dragging","source:dragging":"draggable-source--is-dragging","source:placed":"draggable-source--placed","container:placed":"draggable-container--placed","body:dragging":"draggable--is-dragging","draggable:over":"draggable--over","container:over":"draggable-container--over","source:original":"draggable--original",mirror:"draggable-mirror"},O=e.defaultOptions={draggable:".draggable-source",handle:null,delay:100,placedTimeout:800,plugins:[],sensors:[]},E=function(){function t(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[document.body],r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};if((0,o.default)(this,t),e instanceof NodeList||e instanceof Array)this.containers=[].concat((0,n.default)(e));else{if(!(e instanceof HTMLElement))throw new Error("Draggable containers are expected to be of type `NodeList`, `HTMLElement[]` or `HTMLElement`");this.containers=[e]}this.options=Object.assign({},O,r,{classes:Object.assign({},_,r.classes||{}),announcements:Object.assign({},b,r.announcements||{})}),this.emitter=new u.default,this.dragging=!1,this.plugins=[],this.sensors=[],this[p]=this[p].bind(this),this[h]=this[h].bind(this),this[g]=this[g].bind(this),this[y]=this[y].bind(this),document.addEventListener("drag:start",this[p],!0),document.addEventListener("drag:move",this[h],!0),document.addEventListener("drag:stop",this[g],!0),document.addEventListener("drag:pressure",this[y],!0),this.addPlugin.apply(this,[s.Mirror,s.Accessibility,s.Scrollable,s.Announcement].concat((0,n.default)(this.options.plugins))),this.addSensor.apply(this,[c.MouseSensor,c.TouchSensor].concat((0,n.default)(this.options.sensors)));var i=new l.DraggableInitializedEvent({draggable:this});this.trigger(i)}return(0,i.default)(t,[{key:"destroy",value:function(){document.removeEventListener("drag:start",this[p],!0),document.removeEventListener("drag:move",this[h],!0),document.removeEventListener("drag:stop",this[g],!0),document.removeEventListener("drag:pressure",this[y],!0);var t=new l.DraggableDestroyEvent({draggable:this});this.trigger(t),this.removePlugin.apply(this,(0,n.default)(this.plugins.map(function(t){return t.constructor}))),this.removeSensor.apply(this,(0,n.default)(this.sensors.map(function(t){return t.constructor})))}},{key:"addPlugin",value:function(){for(var t=this,e=arguments.length,r=Array(e),o=0;o<e;o++)r[o]=arguments[o];var i=r.map(function(e){return new e(t)});return i.forEach(function(t){return t.attach()}),this.plugins=[].concat((0,n.default)(this.plugins),(0,n.default)(i)),this}},{key:"removePlugin",value:function(){for(var t=arguments.length,e=Array(t),r=0;r<t;r++)e[r]=arguments[r];return this.plugins.filter(function(t){return e.includes(t.constructor)}).forEach(function(t){return t.detach()}),this.plugins=this.plugins.filter(function(t){return!e.includes(t.constructor)}),this}},{key:"addSensor",value:function(){for(var t=this,e=arguments.length,r=Array(e),o=0;o<e;o++)r[o]=arguments[o];var i=r.map(function(e){return new e(t.containers,t.options)});return i.forEach(function(t){return t.attach()}),this.sensors=[].concat((0,n.default)(this.sensors),(0,n.default)(i)),this}},{key:"removeSensor",value:function(){for(var t=arguments.length,e=Array(t),r=0;r<t;r++)e[r]=arguments[r];return this.sensors.filter(function(t){return e.includes(t.constructor)}).forEach(function(t){return t.detach()}),this.sensors=this.sensors.filter(function(t){return!e.includes(t.constructor)}),this}},{key:"addContainer",value:function(){for(var t=arguments.length,e=Array(t),r=0;r<t;r++)e[r]=arguments[r];return this.containers=[].concat((0,n.default)(this.containers),e),this}},{key:"removeContainer",value:function(){for(var t=arguments.length,e=Array(t),r=0;r<t;r++)e[r]=arguments[r];return this.containers=this.containers.filter(function(t){return!e.includes(t)}),this}},{key:"on",value:function(t){for(var e,r=arguments.length,n=Array(r>1?r-1:0),o=1;o<r;o++)n[o-1]=arguments[o];return(e=this.emitter).on.apply(e,[t].concat(n)),this}},{key:"off",value:function(t,e){return this.emitter.off(t,e),this}},{key:"trigger",value:function(t){return this.emitter.trigger(t),this}},{key:"getClassNameFor",value:function(t){return this.options.classes[t]}},{key:"isDragging",value:function(){return Boolean(this.dragging)}},{key:"getDraggableElementsForContainer",value:function(t){var e=this,r=t.querySelectorAll(this.options.draggable);return[].concat((0,n.default)(r)).filter(function(t){return t!==e.originalSource&&t!==e.mirror})}},{key:p,value:function(t){var e=this,r=S(t),n=r.target,o=r.container,i=r.originalEvent;if(this.containers.includes(o))if(this.options.handle&&n&&!(0,a.closest)(n,this.options.handle))r.cancel();else if(this.originalSource=(0,a.closest)(n,this.options.draggable),this.sourceContainer=o,this.originalSource){this.lastPlacedSource&&this.lastPlacedContainer&&(clearTimeout(this.placedTimeoutID),this.lastPlacedSource.classList.remove(this.getClassNameFor("source:placed")),this.lastPlacedContainer.classList.remove(this.getClassNameFor("container:placed"))),this.dragging=!0,this.source=this.originalSource.cloneNode(!0);var s=new d.MirrorCreateEvent({source:this.source,originalSource:this.originalSource,sourceContainer:o,sensorEvent:r});if(this.trigger(s),!function(t){return/^drag/.test(t.type)}(i)&&!s.canceled()){var u=this[m]({source:this.originalSource});this.mirror=this.source.cloneNode(!0);var c=new d.MirrorCreatedEvent({source:this.source,originalSource:this.originalSource,mirror:this.mirror,sourceContainer:o,sensorEvent:r}),l=new d.MirrorAttachedEvent({source:this.source,originalSource:this.originalSource,mirror:this.mirror,sourceContainer:o,sensorEvent:r});this.trigger(c),u.appendChild(this.mirror),this.trigger(l)}this.originalSource.classList.add(this.getClassNameFor("source:original")),this.originalSource.parentNode.insertBefore(this.source,this.originalSource),this.originalSource.style.display="none",this.source.classList.add(this.getClassNameFor("source:dragging")),this.sourceContainer.classList.add(this.getClassNameFor("container:dragging")),document.body.classList.add(this.getClassNameFor("body:dragging")),w(document.body,"none");var v=new f.DragStartEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:o,sensorEvent:r});this.trigger(v),v.canceled()?(this.dragging=!1,this.mirror&&this.mirror.parentNode.removeChild(this.mirror),this.source.parentNode.removeChild(this.source),this.originalSource.style.display=null,this.source.classList.remove(this.getClassNameFor("source:dragging")),this.sourceContainer.classList.remove(this.getClassNameFor("container:dragging")),document.body.classList.remove(this.getClassNameFor("body:dragging"))):requestAnimationFrame(function(){return e[h](t)})}else r.cancel()}},{key:h,value:function(t){if(this.dragging){var e=S(t),r=e.container,n=e.target,o=new f.DragMoveEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e});if(this.trigger(o),o.canceled()&&e.cancel(),this.mirror&&!o.canceled()){var i=new d.MirrorMoveEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e});this.trigger(i)}n=(0,a.closest)(n,this.options.draggable);var s=(0,a.closest)(e.target,this.containers),u=e.overContainer||s,c=this.currentOverContainer&&u!==this.currentOverContainer,l=this.currentOver&&n!==this.currentOver,v=u&&this.currentOverContainer!==u,p=s&&n&&this.currentOver!==n;if(l){var h=new f.DragOutEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,over:this.currentOver});this.currentOver.classList.remove(this.getClassNameFor("draggable:over")),this.currentOver=null,this.trigger(h)}if(c){var g=new f.DragOutContainerEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:this.currentOverContainer});this.currentOverContainer.classList.remove(this.getClassNameFor("container:over")),this.currentOverContainer=null,this.trigger(g)}if(v){u.classList.add(this.getClassNameFor("container:over"));var y=new f.DragOverContainerEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:u});this.currentOverContainer=u,this.trigger(y)}if(p){n.classList.add(this.getClassNameFor("draggable:over"));var m=new f.DragOverEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sourceContainer:r,sensorEvent:e,overContainer:u,over:n});this.currentOver=n,this.trigger(m)}}}},{key:g,value:function(t){var e=this;if(this.dragging){this.dragging=!1;var r=S(t),n=new f.DragStopEvent({source:this.source,mirror:this.mirror,originalSource:this.originalSource,sensorEvent:t.sensorEvent,sourceContainer:this.sourceContainer});if(this.trigger(n),this.source.parentNode.insertBefore(this.originalSource,this.source),this.source.parentNode.removeChild(this.source),this.originalSource.style.display="",this.source.classList.remove(this.getClassNameFor("source:dragging")),this.originalSource.classList.remove(this.getClassNameFor("source:original")),this.originalSource.classList.add(this.getClassNameFor("source:placed")),this.sourceContainer.classList.add(this.getClassNameFor("container:placed")),this.sourceContainer.classList.remove(this.getClassNameFor("container:dragging")),document.body.classList.remove(this.getClassNameFor("body:dragging")),w(document.body,""),this.currentOver&&this.currentOver.classList.remove(this.getClassNameFor("draggable:over")),this.currentOverContainer&&this.currentOverContainer.classList.remove(this.getClassNameFor("container:over")),this.mirror){var o=new d.MirrorDestroyEvent({source:this.source,mirror:this.mirror,sourceContainer:r.container,sensorEvent:r});this.trigger(o),o.canceled()||this.mirror.parentNode.removeChild(this.mirror)}this.lastPlacedSource=this.originalSource,this.lastPlacedContainer=this.sourceContainer,this.placedTimeoutID=setTimeout(function(){e.lastPlacedSource&&e.lastPlacedSource.classList.remove(e.getClassNameFor("source:placed")),e.lastPlacedContainer&&e.lastPlacedContainer.classList.remove(e.getClassNameFor("container:placed")),e.lastPlacedSource=null,e.lastPlacedContainer=null},this.options.placedTimeout),this.source=null,this.mirror=null,this.originalSource=null,this.currentOverContainer=null,this.currentOver=null,this.sourceContainer=null}}},{key:y,value:function(t){if(this.dragging){var e=S(t),r=this.source||(0,a.closest)(e.originalEvent.target,this.options.draggable),n=new f.DragPressureEvent({sensorEvent:e,source:r,pressure:e.pressure});this.trigger(n)}}},{key:m,value:function(t){var e=t.source,r=this.options.appendTo;return"string"==typeof r?document.querySelector(r):r instanceof HTMLElement?r:"function"==typeof r?r(e):e.parentNode}}]),t}();function S(t){return t.detail}function w(t,e){t.style.webkitUserSelect=e,t.style.mozUserSelect=e,t.style.msUserSelect=e,t.style.oUserSelect=e,t.style.userSelect=e}E.Plugins={Mirror:s.Mirror,Accessibility:s.Accessibility,Scrollable:s.Scrollable,Announcement:s.Announcement},e.default=E},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n,o=r(142),i=(n=o)&&n.__esModule?n:{default:n};e.default=i.default},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=a(r(41)),o=a(r(0)),i=a(r(1));function a(t){return t&&t.__esModule?t:{default:t}}var s=function(){function t(){(0,o.default)(this,t),this.callbacks={}}return(0,i.default)(t,[{key:"on",value:function(t){var e;this.callbacks[t]||(this.callbacks[t]=[]);for(var r=arguments.length,n=Array(r>1?r-1:0),o=1;o<r;o++)n[o-1]=arguments[o];return(e=this.callbacks[t]).push.apply(e,n),this}},{key:"off",value:function(t,e){if(!this.callbacks[t])return null;for(var r=this.callbacks[t].slice(0),n=0;n<r.length;n++)e===r[n]&&this.callbacks[t].splice(n,1);return this}},{key:"trigger",value:function(t){if(!this.callbacks[t.type])return null;for(var e=[].concat((0,n.default)(this.callbacks[t.type])),r=[],o=e.length-1;o>=0;o--){var i=e[o];try{i(t)}catch(t){r.push(t)}}if(r.length)throw new Error("Draggable caught errors while triggering '"+t.type+"'",r);return this}}]),t}();e.default=s}])},t.exports=n()}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(22);
+
+
+/***/ }),
+
+/***/ 22:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable__);
+/*
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+
+
+;$(function () {
+	"use strict";
+
+	/* =================================
+ 	4.4 Project Topics [Supervisor]
+    ================================= */
+
+	/**
+ * Class constructor for project topics.
+ *
+ * @param {HTMLElement} element The element that will be upgraded.
+ */
+
+	var ProjectTopics = function ProjectTopics() {};
+	window["ProjectTopics"] = ProjectTopics;
+
+	ProjectTopics.prototype.CssClasses_ = {
+		DATA_TABLE: 'data-table',
+		IS_SELECTED: 'is-selected'
+	};
+
+	ProjectTopics.prototype.Selectors_ = {
+		ADD_TOPIC_INPUT: '#addTopicInput',
+		NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container'
+	};
+
+	ProjectTopics.prototype.Keys_ = {
+		SPACE: 32,
+		ENTER: 13,
+		COMMA: 45
+	};
+
+	var projectTopics = new ProjectTopics();
+
+	ProjectTopics.prototype.functions = {
+		addTopicToProject: function addTopicToProject(projectId, topicName) {
+			$('.loader').show(0);
+			var ajaxUrl = "/projects/topic-add";
+			$.ajax({
+				type: "POST",
+				url: ajaxUrl,
+				data: {
+					topic_name: topicName,
+					project_id: projectId
+				},
+				success: function success(response) {
+					$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
+
+					if ($(".topics-list.edit li.topic:last").length > 0) {
+						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
+					} else {
+						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
+					}
+				}
+			}).done(function (response) {
+				$('body').append(response);
+				$('.loader').hide(0);
+			});
+		},
+
+		removeTopicFromProject: function removeTopicFromProject(projectId, topicId) {
+			$(".loader").show(0);
+			var ajaxUrl = "/projects/topic-remove";
+			$.ajax({
+				type: "DELETE",
+				url: ajaxUrl,
+				data: {
+					topic_id: topicId,
+					project_id: projectId
+				},
+				success: function success() {
+					$(".topics-list.edit li.topic").each(function (i, obj) {
+						if ($(this).data("topic-id") == topicId) {
+							$(this).remove();
+						}
+					});
+				}
+			}).done(function () {
+				$(".loader").hide(0);
+			});
+		},
+
+		updateProjectPrimaryTopic: function updateProjectPrimaryTopic(projectId, topicId) {
+			$(".loader").show(0);
+			var ajaxUrl = "/projects/topic-update-primary";
+			$.ajax({
+				type: "PATCH",
+				url: ajaxUrl,
+				data: {
+					topic_id: topicId,
+					project_id: projectId
+				},
+				success: function success() {
+					$("#editProjectForm").attr("data-project-id", topicId);
+					$(".topics-list.edit li.topic").each(function (i, obj) {
+						if ($(this).data("topic-id") == topicId) {
+							$(this).addClass("first");
+						} else {
+							$(this).removeClass("first");
+						}
+					});
+				}
+			}).done(function () {
+				$(".loader").hide(0);
+			});
+		}
+	};
+
+	var swappable = new __WEBPACK_IMPORTED_MODULE_0__shopify_draggable_lib_swappable___default.a(document.querySelectorAll(".topics-list.edit"), {
+		draggable: ".topic"
+	});
+
+	window["swappable"] = swappable;
+
+	swappable.on('swappable:swapped', function () {
+		var projectId = $('#editProjectForm').data('project-id');
+		var originalPrimaryTopicId = $('#editProjectForm').data('primary-topic-id');
+		var topicId = $(".topics-list.edit li:first-child").data('topic-id');
+
+		if (topicId != originalPrimaryTopicId) {
+			projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
+		}
+	});
+
+	// Add new topic
+	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function (e) {
+		if (e.which == projectTopics.Keys_.ENTER) {
+			var projectId = $("#editProjectForm").data('project-id');
+			projectTopics.functions.addTopicToProject(projectId, $(this).val());
+		}
+	});
+
+	// Remove topic
+	$('.topics-list.edit').on('click', '.topic .topic-remove', function () {
+		var projectId = $("#editProjectForm").data('project-id');
+		var topicId = $(this).parent('li').data('topic-id');
+		projectTopics.functions.removeTopicFromProject(projectId, topicId);
+	});
+
+	$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function () {
+		$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
+	});
+
+	/* ========
+ 	OTHER
+ =========== */
+	$('.supervisor-table').on('click', '.offer-action', function () {
+		var actionButton = $(this);
+		var actionType = actionButton.data('action-type');
+		var tableRow = actionButton.parents().eq(1);
+
+		actionButton.html('<div class="loader"></div>');
+		$('.loader', actionButton).css('display', 'block');
+
+		if (actionType === "accept") {
+			var ajaxUrl = '/supervisor/student-accept';
+		} else if (actionType === "reject") {
+			var ajaxUrl = '/supervisor/student-reject';
+		}
+
+		if (ajaxUrl == null) {
+			console.error("Invalid supervisor action.");
+			return;
+		}
+
+		$.ajax({
+			method: 'POST',
+			url: ajaxUrl,
+			data: {
+				project_id: tableRow.data('project-id'),
+				student_id: tableRow.data('student-id')
+			},
+			success: function success(response) {
+				if (response.successful) {
+					tableRow.hide(400, function () {
+						tableRow.remove();
+					});
+
+					if (actionType === "accept") {
+						createToast('success', 'Student has been accepted.');
+						updateAcceptedStudentsTable();
+					} else if (actionType === "reject") {
+						createToast('', 'Student has been rejected.');
+					}
+				} else {
+					createToast('error', response.message);
+					actionButton.html(actionType);
+				}
+			}
+		});
+	});
+
+	$('.supervisor-table').on('submit', 'form.delete-project', function (e) {
+		e.preventDefault();
+		var form = $(this);
+		var projectName = form.data('project-title');
+
+		$.confirm({
+			title: 'Delete',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement: false,
+			content: 'Are you sure you want to delete <b>' + projectName + '</b>?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function action() {
+						$.ajax({
+							url: form.prop('action'),
+							type: 'DELETE',
+							success: function success(row) {
+								form.parent().parent().replaceWith(row);
+							}
+						});
+					}
+				},
+				cancel: {}
+			}
+		});
+	});
+
+	$('.supervisor-table').on('submit', 'form.restore-project', function (e) {
+		e.preventDefault();
+		var form = $(this);
+		var projectName = form.data('project-title');
+
+		$.confirm({
+			title: 'Restore',
+			type: 'green',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3M12,8V13L16.28,15.54L17,14.33L13.5,12.25V8H12Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement: false,
+			content: 'Are you sure you want to restore <b>' + projectName + '</b>?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-green',
+					action: function action() {
+						$.ajax({
+							url: form.prop('action'),
+							type: 'PATCH',
+							success: function success(row) {
+								form.parent().parent().replaceWith(row);
+							}
+						});
+					}
+				},
+				cancel: {}
+			}
+		});
+	});
+
+	$('.expand').on('click', function (e) {
+		var content = $(this).parents().eq(1).find('.content');
+
+		if (content.attr("aria-expanded") == "true") {
+			$(this).parent().removeClass("active");
+			$(this).find("svg").css("transform", "rotateZ(0deg)");
+			content.hide(200);
+			content.attr("aria-expanded", "false");
+			setCookie(content.data("cookie-name"), true, 365);
+		} else {
+			$(this).parent().addClass("active");
+			$(this).find("svg").css("transform", "rotateZ(180deg)");
+			content.show(200);
+			content.attr("aria-expanded", "true");
+			setCookie(content.data("cookie-name"), false, 365);
+		}
+	});
+
+	$('#supervisor-accepted-students-table').on('click', '.supervisor-undo-accept', function (e) {
+		var tableRow = $(this);
+		var studentName = tableRow.data('student-name');
+		var projectTitle = tableRow.data('project-title');
+
+		$.confirm({
+			title: 'Undo Project Selection',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement: false,
+			content: 'Are you sure you want to un-accept <b>' + studentName + '</b> for <b>' + projectTitle + '</b> ?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function action() {
+						$.ajax({
+							method: 'PATCH',
+							url: '/supervisor/student-undo',
+							data: {
+								project_id: tableRow.data('project-id'),
+								student_id: tableRow.data('student-id')
+							},
+							success: function success(response) {
+								if (response.successful) {
+									tableRow.hide(400, function () {
+										tableRow.remove();
+									});
+									createToast('success', 'Undo successful.');
+									updateAcceptedStudentsTable();
+								} else {
+									createToast('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: {}
+			}
+		});
+	});
+
+	function updateAcceptedStudentsTable() {
+		$.ajax({
+			method: 'GET',
+			url: '/supervisor/accepted-students-table',
+			success: function success(data) {
+				$("#supervisor-accepted-students-table").html(data);
+			}
+		});
+	}
+});
+
+/***/ }),
+
+/***/ 23:
+/***/ (function(module, exports, __webpack_require__) {
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("Swappable", [], factory);
+	else if(typeof exports === 'object')
+		exports["Swappable"] = factory();
+	else
+		root["Swappable"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 60);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(62);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _typeof2 = __webpack_require__(45);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _setPrototypeOf = __webpack_require__(89);
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = __webpack_require__(93);
+
+var _create2 = _interopRequireDefault(_create);
+
+var _typeof2 = __webpack_require__(45);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  }
+
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.3' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var store = __webpack_require__(33)('wks');
+var uid = __webpack_require__(22);
+var Symbol = __webpack_require__(6).Symbol;
+var USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function (name) {
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(13);
+var IE8_DOM_DEFINE = __webpack_require__(43);
+var toPrimitive = __webpack_require__(25);
+var dP = Object.defineProperty;
+
+exports.f = __webpack_require__(9) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if (IE8_DOM_DEFINE) try {
+    return dP(O, P, Attributes);
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(6);
+var core = __webpack_require__(4);
+var ctx = __webpack_require__(24);
+var hide = __webpack_require__(12);
+var PROTOTYPE = 'prototype';
+
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var IS_WRAP = type & $export.W;
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE];
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+  var key, own, out;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if (own && key in exports) continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function (C) {
+      var F = function (a, b, c) {
+        if (this instanceof C) {
+          switch (arguments.length) {
+            case 0: return new C();
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if (IS_PROTO) {
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(15)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(71);
+var defined = __webpack_require__(27);
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(7);
+var createDesc = __webpack_require__(16);
+module.exports = __webpack_require__(9) ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(14);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = {};
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _AbstractEvent = __webpack_require__(96);
+
+var _AbstractEvent2 = _interopRequireDefault(_AbstractEvent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _AbstractEvent2.default;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.closest = undefined;
+
+var _closest = __webpack_require__(117);
+
+var _closest2 = _interopRequireDefault(_closest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.closest = _closest2.default;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Sensor = __webpack_require__(130);
+
+var _Sensor2 = _interopRequireDefault(_Sensor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Sensor2.default;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SensorEvent = __webpack_require__(133);
+
+Object.keys(_SensorEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _SensorEvent[key];
+    }
+  });
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _AbstractPlugin = __webpack_require__(112);
+
+var _AbstractPlugin2 = _interopRequireDefault(_AbstractPlugin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _AbstractPlugin2.default;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(65);
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
+      return fn.call(that, a);
+    };
+    case 2: return function (a, b) {
+      return fn.call(that, a, b);
+    };
+    case 3: return function (a, b, c) {
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function (/* ...args */) {
+    return fn.apply(that, arguments);
+  };
+};
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(14);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = true;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(13);
+var dPs = __webpack_require__(70);
+var enumBugKeys = __webpack_require__(34);
+var IE_PROTO = __webpack_require__(32)('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(44)('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(74).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(49);
+var enumBugKeys = __webpack_require__(34);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(33)('keys');
+var uid = __webpack_require__(22);
+module.exports = function (key) {
+  return shared[key] || (shared[key] = uid(key));
+};
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(6);
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+module.exports = function (key) {
+  return store[key] || (store[key] = {});
+};
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var def = __webpack_require__(7).f;
+var has = __webpack_require__(10);
+var TAG = __webpack_require__(5)('toStringTag');
+
+module.exports = function (it, tag, stat) {
+  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
+};
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(27);
+module.exports = function (it) {
+  return Object(defined(it));
+};
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports.f = __webpack_require__(5);
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(6);
+var core = __webpack_require__(4);
+var LIBRARY = __webpack_require__(28);
+var wksExt = __webpack_require__(37);
+var defineProperty = __webpack_require__(7).f;
+module.exports = function (name) {
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
+};
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+exports.f = {}.propertyIsEnumerable;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pIE = __webpack_require__(39);
+var createDesc = __webpack_require__(16);
+var toIObject = __webpack_require__(11);
+var toPrimitive = __webpack_require__(25);
+var has = __webpack_require__(10);
+var IE8_DOM_DEFINE = __webpack_require__(43);
+var gOPD = Object.getOwnPropertyDescriptor;
+
+exports.f = __webpack_require__(9) ? gOPD : function getOwnPropertyDescriptor(O, P) {
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if (IE8_DOM_DEFINE) try {
+    return gOPD(O, P);
+  } catch (e) { /* empty */ }
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__(119);
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SwappableEvent = __webpack_require__(61);
+
+Object.keys(_SwappableEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _SwappableEvent[key];
+    }
+  });
+});
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(9) && !__webpack_require__(15)(function () {
+  return Object.defineProperty(__webpack_require__(44)('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(14);
+var document = __webpack_require__(6).document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
+  return is ? document.createElement(it) : {};
+};
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _iterator = __webpack_require__(66);
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = __webpack_require__(79);
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $at = __webpack_require__(68)(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+__webpack_require__(47)(String, 'String', function (iterated) {
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var index = this._i;
+  var point;
+  if (index >= O.length) return { value: undefined, done: true };
+  point = $at(O, index);
+  this._i += point.length;
+  return { value: point, done: false };
+});
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY = __webpack_require__(28);
+var $export = __webpack_require__(8);
+var redefine = __webpack_require__(48);
+var hide = __webpack_require__(12);
+var has = __webpack_require__(10);
+var Iterators = __webpack_require__(17);
+var $iterCreate = __webpack_require__(69);
+var setToStringTag = __webpack_require__(35);
+var getPrototypeOf = __webpack_require__(51);
+var ITERATOR = __webpack_require__(5)('iterator');
+var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+var FF_ITERATOR = '@@iterator';
+var KEYS = 'keys';
+var VALUES = 'values';
+
+var returnThis = function () { return this; };
+
+module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function (kind) {
+    if (!BUGGY && kind in proto) return proto[kind];
+    switch (kind) {
+      case KEYS: return function keys() { return new Constructor(this, kind); };
+      case VALUES: return function values() { return new Constructor(this, kind); };
+    } return function entries() { return new Constructor(this, kind); };
+  };
+  var TAG = NAME + ' Iterator';
+  var DEF_VALUES = DEFAULT == VALUES;
+  var VALUES_BUG = false;
+  var proto = Base.prototype;
+  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
+  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+  var methods, key, IteratorPrototype;
+  // Fix native
+  if ($anyNative) {
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if (DEF_VALUES && $native && $native.name !== VALUES) {
+    VALUES_BUG = true;
+    $default = function values() { return $native.call(this); };
+  }
+  // Define iterator
+  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG] = returnThis;
+  if (DEFAULT) {
+    methods = {
+      values: DEF_VALUES ? $default : getMethod(VALUES),
+      keys: IS_SET ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if (FORCED) for (key in methods) {
+      if (!(key in proto)) redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(12);
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__(10);
+var toIObject = __webpack_require__(11);
+var arrayIndexOf = __webpack_require__(72)(false);
+var IE_PROTO = __webpack_require__(32)('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(26);
+var min = Math.min;
+module.exports = function (it) {
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has = __webpack_require__(10);
+var toObject = __webpack_require__(36);
+var IE_PROTO = __webpack_require__(32)('IE_PROTO');
+var ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function (O) {
+  O = toObject(O);
+  if (has(O, IE_PROTO)) return O[IE_PROTO];
+  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys = __webpack_require__(49);
+var hiddenKeys = __webpack_require__(34).concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+  return $keys(O, hiddenKeys);
+};
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(8);
+var core = __webpack_require__(4);
+var fails = __webpack_require__(15);
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY];
+  var exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
+};
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _DragEvent = __webpack_require__(106);
+
+Object.keys(_DragEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _DragEvent[key];
+    }
+  });
+});
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _DraggableEvent = __webpack_require__(107);
+
+Object.keys(_DraggableEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _DraggableEvent[key];
+    }
+  });
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MirrorEvent = __webpack_require__(108);
+
+Object.keys(_MirrorEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MirrorEvent[key];
+    }
+  });
+});
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Mirror = __webpack_require__(109);
+
+Object.defineProperty(exports, 'Mirror', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Mirror).default;
+  }
+});
+Object.defineProperty(exports, 'defaultMirrorOptions', {
+  enumerable: true,
+  get: function get() {
+    return _Mirror.defaultOptions;
+  }
+});
+
+var _Announcement = __webpack_require__(113);
+
+Object.defineProperty(exports, 'Announcement', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Announcement).default;
+  }
+});
+Object.defineProperty(exports, 'defaultAnnouncementOptions', {
+  enumerable: true,
+  get: function get() {
+    return _Announcement.defaultOptions;
+  }
+});
+
+var _Scrollable = __webpack_require__(115);
+
+Object.defineProperty(exports, 'Scrollable', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Scrollable).default;
+  }
+});
+Object.defineProperty(exports, 'defaultScrollableOptions', {
+  enumerable: true,
+  get: function get() {
+    return _Scrollable.defaultOptions;
+  }
+});
+
+var _Accessibility = __webpack_require__(128);
+
+Object.defineProperty(exports, 'Accessibility', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Accessibility).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Sensor = __webpack_require__(20);
+
+Object.defineProperty(exports, 'Sensor', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Sensor).default;
+  }
+});
+
+var _MouseSensor = __webpack_require__(131);
+
+Object.defineProperty(exports, 'MouseSensor', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_MouseSensor).default;
+  }
+});
+
+var _TouchSensor = __webpack_require__(134);
+
+Object.defineProperty(exports, 'TouchSensor', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_TouchSensor).default;
+  }
+});
+
+var _DragSensor = __webpack_require__(136);
+
+Object.defineProperty(exports, 'DragSensor', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_DragSensor).default;
+  }
+});
+
+var _ForceTouchSensor = __webpack_require__(138);
+
+Object.defineProperty(exports, 'ForceTouchSensor', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ForceTouchSensor).default;
+  }
+});
+
+var _SensorEvent = __webpack_require__(21);
+
+Object.keys(_SensorEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _SensorEvent[key];
+    }
+  });
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _SwappableEvent = __webpack_require__(42);
+
+Object.keys(_SwappableEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _SwappableEvent[key];
+    }
+  });
+});
+
+var _Swappable = __webpack_require__(97);
+
+var _Swappable2 = _interopRequireDefault(_Swappable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Swappable2.default;
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SwappableStopEvent = exports.SwappableSwappedEvent = exports.SwappableSwapEvent = exports.SwappableStartEvent = exports.SwappableEvent = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractEvent2 = __webpack_require__(18);
+
+var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base swappable event
+ * @class SwappableEvent
+ * @module SwappableEvent
+ * @extends AbstractEvent
+ */
+var SwappableEvent = exports.SwappableEvent = function (_AbstractEvent) {
+  (0, _inherits3.default)(SwappableEvent, _AbstractEvent);
+
+  function SwappableEvent() {
+    (0, _classCallCheck3.default)(this, SwappableEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SwappableEvent.__proto__ || Object.getPrototypeOf(SwappableEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(SwappableEvent, [{
+    key: 'dragEvent',
+
+
+    /**
+     * Original drag event that triggered this swappable event
+     * @property dragEvent
+     * @type {DragEvent}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.dragEvent;
+    }
+  }]);
+  return SwappableEvent;
+}(_AbstractEvent3.default);
+
+/**
+ * Swappable start event
+ * @class SwappableStartEvent
+ * @module SwappableStartEvent
+ * @extends SwappableEvent
+ */
+
+
+SwappableEvent.type = 'swappable';
+
+var SwappableStartEvent = exports.SwappableStartEvent = function (_SwappableEvent) {
+  (0, _inherits3.default)(SwappableStartEvent, _SwappableEvent);
+
+  function SwappableStartEvent() {
+    (0, _classCallCheck3.default)(this, SwappableStartEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SwappableStartEvent.__proto__ || Object.getPrototypeOf(SwappableStartEvent)).apply(this, arguments));
+  }
+
+  return SwappableStartEvent;
+}(SwappableEvent);
+
+/**
+ * Swappable swap event
+ * @class SwappableSwapEvent
+ * @module SwappableSwapEvent
+ * @extends SwappableEvent
+ */
+
+
+SwappableStartEvent.type = 'swappable:start';
+SwappableStartEvent.cancelable = true;
+
+var SwappableSwapEvent = exports.SwappableSwapEvent = function (_SwappableEvent2) {
+  (0, _inherits3.default)(SwappableSwapEvent, _SwappableEvent2);
+
+  function SwappableSwapEvent() {
+    (0, _classCallCheck3.default)(this, SwappableSwapEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SwappableSwapEvent.__proto__ || Object.getPrototypeOf(SwappableSwapEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(SwappableSwapEvent, [{
+    key: 'over',
+
+
+    /**
+     * Draggable element you are over
+     * @property over
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.over;
+    }
+
+    /**
+     * Draggable container you are over
+     * @property overContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'overContainer',
+    get: function get() {
+      return this.data.overContainer;
+    }
+  }]);
+  return SwappableSwapEvent;
+}(SwappableEvent);
+
+/**
+ * Swappable swapped event
+ * @class SwappableSwappedEvent
+ * @module SwappableSwappedEvent
+ * @extends SwappableEvent
+ */
+
+
+SwappableSwapEvent.type = 'swappable:swap';
+SwappableSwapEvent.cancelable = true;
+
+var SwappableSwappedEvent = exports.SwappableSwappedEvent = function (_SwappableEvent3) {
+  (0, _inherits3.default)(SwappableSwappedEvent, _SwappableEvent3);
+
+  function SwappableSwappedEvent() {
+    (0, _classCallCheck3.default)(this, SwappableSwappedEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SwappableSwappedEvent.__proto__ || Object.getPrototypeOf(SwappableSwappedEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(SwappableSwappedEvent, [{
+    key: 'swappedElement',
+
+
+    /**
+     * The draggable element that you swapped with
+     * @property swappedElement
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.swappedElement;
+    }
+  }]);
+  return SwappableSwappedEvent;
+}(SwappableEvent);
+
+/**
+ * Swappable stop event
+ * @class SwappableStopEvent
+ * @module SwappableStopEvent
+ * @extends SwappableEvent
+ */
+
+
+SwappableSwappedEvent.type = 'swappable:swapped';
+
+var SwappableStopEvent = exports.SwappableStopEvent = function (_SwappableEvent4) {
+  (0, _inherits3.default)(SwappableStopEvent, _SwappableEvent4);
+
+  function SwappableStopEvent() {
+    (0, _classCallCheck3.default)(this, SwappableStopEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SwappableStopEvent.__proto__ || Object.getPrototypeOf(SwappableStopEvent)).apply(this, arguments));
+  }
+
+  return SwappableStopEvent;
+}(SwappableEvent);
+
+SwappableStopEvent.type = 'swappable:stop';
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(63), __esModule: true };
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(64);
+var $Object = __webpack_require__(4).Object;
+module.exports = function defineProperty(it, key, desc) {
+  return $Object.defineProperty(it, key, desc);
+};
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(8);
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__(9), 'Object', { defineProperty: __webpack_require__(7).f });
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(67), __esModule: true };
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(46);
+__webpack_require__(75);
+module.exports = __webpack_require__(37).f('iterator');
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(26);
+var defined = __webpack_require__(27);
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function (TO_STRING) {
+  return function (that, pos) {
+    var s = String(defined(that));
+    var i = toInteger(pos);
+    var l = s.length;
+    var a, b;
+    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var create = __webpack_require__(29);
+var descriptor = __webpack_require__(16);
+var setToStringTag = __webpack_require__(35);
+var IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+__webpack_require__(12)(IteratorPrototype, __webpack_require__(5)('iterator'), function () { return this; });
+
+module.exports = function (Constructor, NAME, next) {
+  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(7);
+var anObject = __webpack_require__(13);
+var getKeys = __webpack_require__(30);
+
+module.exports = __webpack_require__(9) ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = getKeys(Properties);
+  var length = keys.length;
+  var i = 0;
+  var P;
+  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(31);
+// eslint-disable-next-line no-prototype-builtins
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(11);
+var toLength = __webpack_require__(50);
+var toAbsoluteIndex = __webpack_require__(73);
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(26);
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var document = __webpack_require__(6).document;
+module.exports = document && document.documentElement;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(76);
+var global = __webpack_require__(6);
+var hide = __webpack_require__(12);
+var Iterators = __webpack_require__(17);
+var TO_STRING_TAG = __webpack_require__(5)('toStringTag');
+
+var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
+  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
+  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
+  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
+  'TextTrackList,TouchList').split(',');
+
+for (var i = 0; i < DOMIterables.length; i++) {
+  var NAME = DOMIterables[i];
+  var Collection = global[NAME];
+  var proto = Collection && Collection.prototype;
+  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var addToUnscopables = __webpack_require__(77);
+var step = __webpack_require__(78);
+var Iterators = __webpack_require__(17);
+var toIObject = __webpack_require__(11);
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = __webpack_require__(47)(Array, 'Array', function (iterated, kind) {
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var kind = this._k;
+  var index = this._i++;
+  if (!O || index >= O.length) {
+    this._t = undefined;
+    return step(1);
+  }
+  if (kind == 'keys') return step(0, index);
+  if (kind == 'values') return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports) {
+
+module.exports = function () { /* empty */ };
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports) {
+
+module.exports = function (done, value) {
+  return { value: value, done: !!done };
+};
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(80), __esModule: true };
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(81);
+__webpack_require__(86);
+__webpack_require__(87);
+__webpack_require__(88);
+module.exports = __webpack_require__(4).Symbol;
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// ECMAScript 6 symbols shim
+var global = __webpack_require__(6);
+var has = __webpack_require__(10);
+var DESCRIPTORS = __webpack_require__(9);
+var $export = __webpack_require__(8);
+var redefine = __webpack_require__(48);
+var META = __webpack_require__(82).KEY;
+var $fails = __webpack_require__(15);
+var shared = __webpack_require__(33);
+var setToStringTag = __webpack_require__(35);
+var uid = __webpack_require__(22);
+var wks = __webpack_require__(5);
+var wksExt = __webpack_require__(37);
+var wksDefine = __webpack_require__(38);
+var enumKeys = __webpack_require__(83);
+var isArray = __webpack_require__(84);
+var anObject = __webpack_require__(13);
+var isObject = __webpack_require__(14);
+var toIObject = __webpack_require__(11);
+var toPrimitive = __webpack_require__(25);
+var createDesc = __webpack_require__(16);
+var _create = __webpack_require__(29);
+var gOPNExt = __webpack_require__(85);
+var $GOPD = __webpack_require__(40);
+var $DP = __webpack_require__(7);
+var $keys = __webpack_require__(30);
+var gOPD = $GOPD.f;
+var dP = $DP.f;
+var gOPN = gOPNExt.f;
+var $Symbol = global.Symbol;
+var $JSON = global.JSON;
+var _stringify = $JSON && $JSON.stringify;
+var PROTOTYPE = 'prototype';
+var HIDDEN = wks('_hidden');
+var TO_PRIMITIVE = wks('toPrimitive');
+var isEnum = {}.propertyIsEnumerable;
+var SymbolRegistry = shared('symbol-registry');
+var AllSymbols = shared('symbols');
+var OPSymbols = shared('op-symbols');
+var ObjectProto = Object[PROTOTYPE];
+var USE_NATIVE = typeof $Symbol == 'function';
+var QObject = global.QObject;
+// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function () {
+  return _create(dP({}, 'a', {
+    get: function () { return dP(this, 'a', { value: 7 }).a; }
+  })).a != 7;
+}) ? function (it, key, D) {
+  var protoDesc = gOPD(ObjectProto, key);
+  if (protoDesc) delete ObjectProto[key];
+  dP(it, key, D);
+  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
+} : dP;
+
+var wrap = function (tag) {
+  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+  sym._k = tag;
+  return sym;
+};
+
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
+  return typeof it == 'symbol';
+} : function (it) {
+  return it instanceof $Symbol;
+};
+
+var $defineProperty = function defineProperty(it, key, D) {
+  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
+  anObject(it);
+  key = toPrimitive(key, true);
+  anObject(D);
+  if (has(AllSymbols, key)) {
+    if (!D.enumerable) {
+      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+      D = _create(D, { enumerable: createDesc(0, false) });
+    } return setSymbolDesc(it, key, D);
+  } return dP(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P) {
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P));
+  var i = 0;
+  var l = keys.length;
+  var key;
+  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P) {
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key) {
+  var E = isEnum.call(this, key = toPrimitive(key, true));
+  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+  it = toIObject(it);
+  key = toPrimitive(key, true);
+  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
+  var D = gOPD(it, key);
+  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+  var names = gOPN(toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
+  } return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+  var IS_OP = it === ObjectProto;
+  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
+  } return result;
+};
+
+// 19.4.1.1 Symbol([description])
+if (!USE_NATIVE) {
+  $Symbol = function Symbol() {
+    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
+    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+    var $set = function (value) {
+      if (this === ObjectProto) $set.call(OPSymbols, value);
+      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, createDesc(1, value));
+    };
+    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
+    return wrap(tag);
+  };
+  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
+    return this._k;
+  });
+
+  $GOPD.f = $getOwnPropertyDescriptor;
+  $DP.f = $defineProperty;
+  __webpack_require__(53).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(39).f = $propertyIsEnumerable;
+  __webpack_require__(52).f = $getOwnPropertySymbols;
+
+  if (DESCRIPTORS && !__webpack_require__(28)) {
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+
+  wksExt.f = function (name) {
+    return wrap(wks(name));
+  };
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
+
+for (var es6Symbols = (
+  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
+
+for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
+
+$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function (key) {
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(sym) {
+    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
+  },
+  useSetter: function () { setter = true; },
+  useSimple: function () { setter = false; }
+});
+
+$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
+})), 'JSON', {
+  stringify: function stringify(it) {
+    var args = [it];
+    var i = 1;
+    var replacer, $replacer;
+    while (arguments.length > i) args.push(arguments[i++]);
+    $replacer = replacer = args[1];
+    if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+    if (!isArray(replacer)) replacer = function (key, value) {
+      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
+      if (!isSymbol(value)) return value;
+    };
+    args[1] = replacer;
+    return _stringify.apply($JSON, args);
+  }
+});
+
+// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(12)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var META = __webpack_require__(22)('meta');
+var isObject = __webpack_require__(14);
+var has = __webpack_require__(10);
+var setDesc = __webpack_require__(7).f;
+var id = 0;
+var isExtensible = Object.isExtensible || function () {
+  return true;
+};
+var FREEZE = !__webpack_require__(15)(function () {
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function (it) {
+  setDesc(it, META, { value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  } });
+};
+var fastKey = function (it, create) {
+  // return primitive with prefix
+  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!has(it, META)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return 'F';
+    // not necessary to add metadata
+    if (!create) return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function (it, create) {
+  if (!has(it, META)) {
+    // can't set metadata to uncaught frozen object
+    if (!isExtensible(it)) return true;
+    // not necessary to add metadata
+    if (!create) return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function (it) {
+  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY: META,
+  NEED: false,
+  fastKey: fastKey,
+  getWeak: getWeak,
+  onFreeze: onFreeze
+};
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// all enumerable object keys, includes symbols
+var getKeys = __webpack_require__(30);
+var gOPS = __webpack_require__(52);
+var pIE = __webpack_require__(39);
+module.exports = function (it) {
+  var result = getKeys(it);
+  var getSymbols = gOPS.f;
+  if (getSymbols) {
+    var symbols = getSymbols(it);
+    var isEnum = pIE.f;
+    var i = 0;
+    var key;
+    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
+  } return result;
+};
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.2.2 IsArray(argument)
+var cof = __webpack_require__(31);
+module.exports = Array.isArray || function isArray(arg) {
+  return cof(arg) == 'Array';
+};
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = __webpack_require__(11);
+var gOPN = __webpack_require__(53).f;
+var toString = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function (it) {
+  try {
+    return gOPN(it);
+  } catch (e) {
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it) {
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(38)('asyncIterator');
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(38)('observable');
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(90), __esModule: true };
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(91);
+module.exports = __webpack_require__(4).Object.setPrototypeOf;
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__(8);
+$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(92).set });
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = __webpack_require__(14);
+var anObject = __webpack_require__(13);
+var check = function (O, proto) {
+  anObject(O);
+  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function (test, buggy, set) {
+      try {
+        set = __webpack_require__(24)(Function.call, __webpack_require__(40).f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch (e) { buggy = true; }
+      return function setPrototypeOf(O, proto) {
+        check(O, proto);
+        if (buggy) O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(94), __esModule: true };
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(95);
+var $Object = __webpack_require__(4).Object;
+module.exports = function create(P, D) {
+  return $Object.create(P, D);
+};
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(8);
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', { create: __webpack_require__(29) });
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _canceled = Symbol('canceled');
+
+/**
+ * All events fired by draggable inherit this class. You can call `cancel()` to
+ * cancel a specific event or you can check if an event has been canceled by
+ * calling `canceled()`.
+ * @abstract
+ * @class AbstractEvent
+ * @module AbstractEvent
+ */
+
+var AbstractEvent = function () {
+
+  /**
+   * AbstractEvent constructor.
+   * @constructs AbstractEvent
+   * @param {object} data - Event data
+   */
+
+
+  /**
+   * Event type
+   * @static
+   * @abstract
+   * @property type
+   * @type {String}
+   */
+  function AbstractEvent(data) {
+    (0, _classCallCheck3.default)(this, AbstractEvent);
+
+    this[_canceled] = false;
+    this.data = data;
+  }
+
+  /**
+   * Read-only type
+   * @abstract
+   * @return {String}
+   */
+
+
+  /**
+   * Event cancelable
+   * @static
+   * @abstract
+   * @property cancelable
+   * @type {Boolean}
+   */
+
+
+  (0, _createClass3.default)(AbstractEvent, [{
+    key: 'cancel',
+
+
+    /**
+     * Cancels the event instance
+     * @abstract
+     */
+    value: function cancel() {
+      this[_canceled] = true;
+    }
+
+    /**
+     * Check if event has been canceled
+     * @abstract
+     * @return {Boolean}
+     */
+
+  }, {
+    key: 'canceled',
+    value: function canceled() {
+      return Boolean(this[_canceled]);
+    }
+  }, {
+    key: 'type',
+    get: function get() {
+      return this.constructor.type;
+    }
+
+    /**
+     * Read-only cancelable
+     * @abstract
+     * @return {Boolean}
+     */
+
+  }, {
+    key: 'cancelable',
+    get: function get() {
+      return this.constructor.cancelable;
+    }
+  }]);
+  return AbstractEvent;
+}();
+
+AbstractEvent.type = 'event';
+AbstractEvent.cancelable = false;
+exports.default = AbstractEvent;
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _get2 = __webpack_require__(98);
+
+var _get3 = _interopRequireDefault(_get2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _Draggable2 = __webpack_require__(105);
+
+var _Draggable3 = _interopRequireDefault(_Draggable2);
+
+var _SwappableEvent = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onDragStart = Symbol('onDragStart');
+var onDragOver = Symbol('onDragOver');
+var onDragStop = Symbol('onDragStop');
+
+/**
+ * Returns an announcement message when the Draggable element is swapped with another draggable element
+ * @param {SwappableSwappedEvent} swappableEvent
+ * @return {String}
+ */
+function onSwappableSwappedDefaultAnnouncement(_ref) {
+  var dragEvent = _ref.dragEvent,
+      swappedElement = _ref.swappedElement;
+
+  var sourceText = dragEvent.source.textContent.trim() || dragEvent.source.id || 'swappable element';
+  var overText = swappedElement.textContent.trim() || swappedElement.id || 'swappable element';
+
+  return 'Swapped ' + sourceText + ' with ' + overText;
+}
+
+/**
+ * @const {Object} defaultAnnouncements
+ * @const {Function} defaultAnnouncements['swappabled:swapped']
+ */
+var defaultAnnouncements = {
+  'swappabled:swapped': onSwappableSwappedDefaultAnnouncement
+};
+
+/**
+ * Swappable is built on top of Draggable and allows swapping of draggable elements.
+ * Order is irrelevant to Swappable.
+ * @class Swappable
+ * @module Swappable
+ * @extends Draggable
+ */
+
+var Swappable = function (_Draggable) {
+  (0, _inherits3.default)(Swappable, _Draggable);
+
+  /**
+   * Swappable constructor.
+   * @constructs Swappable
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Swappable containers
+   * @param {Object} options - Options for Swappable
+   */
+  function Swappable() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, Swappable);
+
+    /**
+     * Last draggable element that was dragged over
+     * @property lastOver
+     * @type {HTMLElement}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Swappable.__proto__ || Object.getPrototypeOf(Swappable)).call(this, containers, Object.assign({}, options, {
+      announcements: Object.assign({}, defaultAnnouncements, options.announcements || {})
+    })));
+
+    _this.lastOver = null;
+
+    _this[onDragStart] = _this[onDragStart].bind(_this);
+    _this[onDragOver] = _this[onDragOver].bind(_this);
+    _this[onDragStop] = _this[onDragStop].bind(_this);
+
+    _this.on('drag:start', _this[onDragStart]).on('drag:over', _this[onDragOver]).on('drag:stop', _this[onDragStop]);
+    return _this;
+  }
+
+  /**
+   * Destroys Swappable instance.
+   */
+
+
+  (0, _createClass3.default)(Swappable, [{
+    key: 'destroy',
+    value: function destroy() {
+      (0, _get3.default)(Swappable.prototype.__proto__ || Object.getPrototypeOf(Swappable.prototype), 'destroy', this).call(this);
+
+      this.off('drag:start', this._onDragStart).off('drag:over', this._onDragOver).off('drag:stop', this._onDragStop);
+    }
+
+    /**
+     * Drag start handler
+     * @private
+     * @param {DragStartEvent} event - Drag start event
+     */
+
+  }, {
+    key: onDragStart,
+    value: function value(event) {
+      var swappableStartEvent = new _SwappableEvent.SwappableStartEvent({
+        dragEvent: event
+      });
+
+      this.trigger(swappableStartEvent);
+
+      if (swappableStartEvent.canceled()) {
+        event.cancel();
+      }
+    }
+
+    /**
+     * Drag over handler
+     * @private
+     * @param {DragOverEvent} event - Drag over event
+     */
+
+  }, {
+    key: onDragOver,
+    value: function value(event) {
+      if (event.over === event.originalSource || event.over === event.source || event.canceled()) {
+        return;
+      }
+
+      var swappableSwapEvent = new _SwappableEvent.SwappableSwapEvent({
+        dragEvent: event,
+        over: event.over,
+        overContainer: event.overContainer
+      });
+
+      this.trigger(swappableSwapEvent);
+
+      if (swappableSwapEvent.canceled()) {
+        return;
+      }
+
+      // swap originally swapped element back
+      if (this.lastOver && this.lastOver !== event.over) {
+        swap(this.lastOver, event.source);
+      }
+
+      if (this.lastOver === event.over) {
+        this.lastOver = null;
+      } else {
+        this.lastOver = event.over;
+      }
+
+      swap(event.source, event.over);
+
+      var swappableSwappedEvent = new _SwappableEvent.SwappableSwappedEvent({
+        dragEvent: event,
+        swappedElement: event.over
+      });
+
+      this.trigger(swappableSwappedEvent);
+    }
+
+    /**
+     * Drag stop handler
+     * @private
+     * @param {DragStopEvent} event - Drag stop event
+     */
+
+  }, {
+    key: onDragStop,
+    value: function value(event) {
+      var swappableStopEvent = new _SwappableEvent.SwappableStopEvent({
+        dragEvent: event
+      });
+
+      this.trigger(swappableStopEvent);
+      this.lastOver = null;
+    }
+  }]);
+  return Swappable;
+}(_Draggable3.default);
+
+exports.default = Swappable;
+
+
+function withTempElement(callback) {
+  var tmpElement = document.createElement('div');
+  callback(tmpElement);
+  tmpElement.parentNode.removeChild(tmpElement);
+}
+
+function swap(source, over) {
+  var overParent = over.parentNode;
+  var sourceParent = source.parentNode;
+
+  withTempElement(function (tmpElement) {
+    sourceParent.insertBefore(tmpElement, source);
+    overParent.insertBefore(source, over);
+    sourceParent.insertBefore(over, tmpElement);
+  });
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _getPrototypeOf = __webpack_require__(99);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _getOwnPropertyDescriptor = __webpack_require__(102);
+
+var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = (0, _getOwnPropertyDescriptor2.default)(object, property);
+
+  if (desc === undefined) {
+    var parent = (0, _getPrototypeOf2.default)(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+
+    if (getter === undefined) {
+      return undefined;
+    }
+
+    return getter.call(receiver);
+  }
+};
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(100), __esModule: true };
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(101);
+module.exports = __webpack_require__(4).Object.getPrototypeOf;
+
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject = __webpack_require__(36);
+var $getPrototypeOf = __webpack_require__(51);
+
+__webpack_require__(54)('getPrototypeOf', function () {
+  return function getPrototypeOf(it) {
+    return $getPrototypeOf(toObject(it));
+  };
+});
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(103), __esModule: true };
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(104);
+var $Object = __webpack_require__(4).Object;
+module.exports = function getOwnPropertyDescriptor(it, key) {
+  return $Object.getOwnPropertyDescriptor(it, key);
+};
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject = __webpack_require__(11);
+var $getOwnPropertyDescriptor = __webpack_require__(40).f;
+
+__webpack_require__(54)('getOwnPropertyDescriptor', function () {
+  return function getOwnPropertyDescriptor(it, key) {
+    return $getOwnPropertyDescriptor(toIObject(it), key);
+  };
+});
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _DragEvent = __webpack_require__(55);
+
+Object.keys(_DragEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _DragEvent[key];
+    }
+  });
+});
+
+var _DraggableEvent = __webpack_require__(56);
+
+Object.keys(_DraggableEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _DraggableEvent[key];
+    }
+  });
+});
+
+var _MirrorEvent = __webpack_require__(57);
+
+Object.keys(_MirrorEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MirrorEvent[key];
+    }
+  });
+});
+
+var _Plugins = __webpack_require__(58);
+
+Object.keys(_Plugins).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Plugins[key];
+    }
+  });
+});
+
+var _Sensors = __webpack_require__(59);
+
+Object.keys(_Sensors).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Sensors[key];
+    }
+  });
+});
+
+var _Draggable = __webpack_require__(140);
+
+var _Draggable2 = _interopRequireDefault(_Draggable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Draggable2.default;
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DragStopEvent = exports.DragPressureEvent = exports.DragOutContainerEvent = exports.DragOverContainerEvent = exports.DragOutEvent = exports.DragOverEvent = exports.DragMoveEvent = exports.DragStartEvent = exports.DragEvent = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractEvent2 = __webpack_require__(18);
+
+var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base drag event
+ * @class DragEvent
+ * @module DragEvent
+ * @extends AbstractEvent
+ */
+var DragEvent = exports.DragEvent = function (_AbstractEvent) {
+  (0, _inherits3.default)(DragEvent, _AbstractEvent);
+
+  function DragEvent() {
+    (0, _classCallCheck3.default)(this, DragEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragEvent.__proto__ || Object.getPrototypeOf(DragEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragEvent, [{
+    key: 'hasMirror',
+
+
+    /**
+     * Checks if mirror has been created
+     * @return {Boolean}
+     */
+    value: function hasMirror() {
+      return Boolean(this.mirror);
+    }
+  }, {
+    key: 'source',
+
+
+    /**
+     * Draggables source element
+     * @property source
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.source;
+    }
+
+    /**
+     * Draggables original source element
+     * @property originalSource
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'originalSource',
+    get: function get() {
+      return this.data.originalSource;
+    }
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'mirror',
+    get: function get() {
+      return this.data.mirror;
+    }
+
+    /**
+     * Draggables source container element
+     * @property sourceContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'sourceContainer',
+    get: function get() {
+      return this.data.sourceContainer;
+    }
+
+    /**
+     * Sensor event
+     * @property sensorEvent
+     * @type {SensorEvent}
+     * @readonly
+     */
+
+  }, {
+    key: 'sensorEvent',
+    get: function get() {
+      return this.data.sensorEvent;
+    }
+
+    /**
+     * Original event that triggered sensor event
+     * @property originalEvent
+     * @type {Event}
+     * @readonly
+     */
+
+  }, {
+    key: 'originalEvent',
+    get: function get() {
+      if (this.sensorEvent) {
+        return this.sensorEvent.originalEvent;
+      }
+
+      return null;
+    }
+  }]);
+  return DragEvent;
+}(_AbstractEvent3.default);
+
+/**
+ * Drag start event
+ * @class DragStartEvent
+ * @module DragStartEvent
+ * @extends DragEvent
+ */
+
+
+DragEvent.type = 'drag';
+
+var DragStartEvent = exports.DragStartEvent = function (_DragEvent) {
+  (0, _inherits3.default)(DragStartEvent, _DragEvent);
+
+  function DragStartEvent() {
+    (0, _classCallCheck3.default)(this, DragStartEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragStartEvent.__proto__ || Object.getPrototypeOf(DragStartEvent)).apply(this, arguments));
+  }
+
+  return DragStartEvent;
+}(DragEvent);
+
+/**
+ * Drag move event
+ * @class DragMoveEvent
+ * @module DragMoveEvent
+ * @extends DragEvent
+ */
+
+
+DragStartEvent.type = 'drag:start';
+DragStartEvent.cancelable = true;
+
+var DragMoveEvent = exports.DragMoveEvent = function (_DragEvent2) {
+  (0, _inherits3.default)(DragMoveEvent, _DragEvent2);
+
+  function DragMoveEvent() {
+    (0, _classCallCheck3.default)(this, DragMoveEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragMoveEvent.__proto__ || Object.getPrototypeOf(DragMoveEvent)).apply(this, arguments));
+  }
+
+  return DragMoveEvent;
+}(DragEvent);
+
+/**
+ * Drag over event
+ * @class DragOverEvent
+ * @module DragOverEvent
+ * @extends DragEvent
+ */
+
+
+DragMoveEvent.type = 'drag:move';
+
+var DragOverEvent = exports.DragOverEvent = function (_DragEvent3) {
+  (0, _inherits3.default)(DragOverEvent, _DragEvent3);
+
+  function DragOverEvent() {
+    (0, _classCallCheck3.default)(this, DragOverEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragOverEvent.__proto__ || Object.getPrototypeOf(DragOverEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragOverEvent, [{
+    key: 'overContainer',
+
+
+    /**
+     * Draggable container you are over
+     * @property overContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.overContainer;
+    }
+
+    /**
+     * Draggable element you are over
+     * @property over
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'over',
+    get: function get() {
+      return this.data.over;
+    }
+  }]);
+  return DragOverEvent;
+}(DragEvent);
+
+/**
+ * Drag out event
+ * @class DragOutEvent
+ * @module DragOutEvent
+ * @extends DragEvent
+ */
+
+
+DragOverEvent.type = 'drag:over';
+DragOverEvent.cancelable = true;
+
+var DragOutEvent = exports.DragOutEvent = function (_DragEvent4) {
+  (0, _inherits3.default)(DragOutEvent, _DragEvent4);
+
+  function DragOutEvent() {
+    (0, _classCallCheck3.default)(this, DragOutEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragOutEvent.__proto__ || Object.getPrototypeOf(DragOutEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragOutEvent, [{
+    key: 'overContainer',
+
+
+    /**
+     * Draggable container you are over
+     * @property overContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.overContainer;
+    }
+
+    /**
+     * Draggable element you left
+     * @property over
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'over',
+    get: function get() {
+      return this.data.over;
+    }
+  }]);
+  return DragOutEvent;
+}(DragEvent);
+
+/**
+ * Drag over container event
+ * @class DragOverContainerEvent
+ * @module DragOverContainerEvent
+ * @extends DragEvent
+ */
+
+
+DragOutEvent.type = 'drag:out';
+
+var DragOverContainerEvent = exports.DragOverContainerEvent = function (_DragEvent5) {
+  (0, _inherits3.default)(DragOverContainerEvent, _DragEvent5);
+
+  function DragOverContainerEvent() {
+    (0, _classCallCheck3.default)(this, DragOverContainerEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragOverContainerEvent.__proto__ || Object.getPrototypeOf(DragOverContainerEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragOverContainerEvent, [{
+    key: 'overContainer',
+
+
+    /**
+     * Draggable container you are over
+     * @property overContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.overContainer;
+    }
+  }]);
+  return DragOverContainerEvent;
+}(DragEvent);
+
+/**
+ * Drag out container event
+ * @class DragOutContainerEvent
+ * @module DragOutContainerEvent
+ * @extends DragEvent
+ */
+
+
+DragOverContainerEvent.type = 'drag:over:container';
+
+var DragOutContainerEvent = exports.DragOutContainerEvent = function (_DragEvent6) {
+  (0, _inherits3.default)(DragOutContainerEvent, _DragEvent6);
+
+  function DragOutContainerEvent() {
+    (0, _classCallCheck3.default)(this, DragOutContainerEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragOutContainerEvent.__proto__ || Object.getPrototypeOf(DragOutContainerEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragOutContainerEvent, [{
+    key: 'overContainer',
+
+
+    /**
+     * Draggable container you left
+     * @property overContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.overContainer;
+    }
+  }]);
+  return DragOutContainerEvent;
+}(DragEvent);
+
+/**
+ * Drag pressure event
+ * @class DragPressureEvent
+ * @module DragPressureEvent
+ * @extends DragEvent
+ */
+
+
+DragOutContainerEvent.type = 'drag:out:container';
+
+var DragPressureEvent = exports.DragPressureEvent = function (_DragEvent7) {
+  (0, _inherits3.default)(DragPressureEvent, _DragEvent7);
+
+  function DragPressureEvent() {
+    (0, _classCallCheck3.default)(this, DragPressureEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragPressureEvent.__proto__ || Object.getPrototypeOf(DragPressureEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DragPressureEvent, [{
+    key: 'pressure',
+
+
+    /**
+     * Pressure applied on draggable element
+     * @property pressure
+     * @type {Number}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.pressure;
+    }
+  }]);
+  return DragPressureEvent;
+}(DragEvent);
+
+/**
+ * Drag stop event
+ * @class DragStopEvent
+ * @module DragStopEvent
+ * @extends DragEvent
+ */
+
+
+DragPressureEvent.type = 'drag:pressure';
+
+var DragStopEvent = exports.DragStopEvent = function (_DragEvent8) {
+  (0, _inherits3.default)(DragStopEvent, _DragEvent8);
+
+  function DragStopEvent() {
+    (0, _classCallCheck3.default)(this, DragStopEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragStopEvent.__proto__ || Object.getPrototypeOf(DragStopEvent)).apply(this, arguments));
+  }
+
+  return DragStopEvent;
+}(DragEvent);
+
+DragStopEvent.type = 'drag:stop';
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DraggableDestroyEvent = exports.DraggableInitializedEvent = exports.DraggableEvent = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractEvent2 = __webpack_require__(18);
+
+var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base draggable event
+ * @class DraggableEvent
+ * @module DraggableEvent
+ * @extends AbstractEvent
+ */
+var DraggableEvent = exports.DraggableEvent = function (_AbstractEvent) {
+  (0, _inherits3.default)(DraggableEvent, _AbstractEvent);
+
+  function DraggableEvent() {
+    (0, _classCallCheck3.default)(this, DraggableEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DraggableEvent.__proto__ || Object.getPrototypeOf(DraggableEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(DraggableEvent, [{
+    key: 'draggable',
+
+
+    /**
+     * Draggable instance
+     * @property draggable
+     * @type {Draggable}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.draggable;
+    }
+  }]);
+  return DraggableEvent;
+}(_AbstractEvent3.default);
+
+/**
+ * Draggable initialized event
+ * @class DraggableInitializedEvent
+ * @module DraggableInitializedEvent
+ * @extends DraggableEvent
+ */
+
+
+DraggableEvent.type = 'draggable';
+
+var DraggableInitializedEvent = exports.DraggableInitializedEvent = function (_DraggableEvent) {
+  (0, _inherits3.default)(DraggableInitializedEvent, _DraggableEvent);
+
+  function DraggableInitializedEvent() {
+    (0, _classCallCheck3.default)(this, DraggableInitializedEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DraggableInitializedEvent.__proto__ || Object.getPrototypeOf(DraggableInitializedEvent)).apply(this, arguments));
+  }
+
+  return DraggableInitializedEvent;
+}(DraggableEvent);
+
+/**
+ * Draggable destory event
+ * @class DraggableInitializedEvent
+ * @module DraggableDestroyEvent
+ * @extends DraggableDestroyEvent
+ */
+
+
+DraggableInitializedEvent.type = 'draggable:initialize';
+
+var DraggableDestroyEvent = exports.DraggableDestroyEvent = function (_DraggableEvent2) {
+  (0, _inherits3.default)(DraggableDestroyEvent, _DraggableEvent2);
+
+  function DraggableDestroyEvent() {
+    (0, _classCallCheck3.default)(this, DraggableDestroyEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DraggableDestroyEvent.__proto__ || Object.getPrototypeOf(DraggableDestroyEvent)).apply(this, arguments));
+  }
+
+  return DraggableDestroyEvent;
+}(DraggableEvent);
+
+DraggableDestroyEvent.type = 'draggable:destroy';
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MirrorDestroyEvent = exports.MirrorMoveEvent = exports.MirrorAttachedEvent = exports.MirrorCreatedEvent = exports.MirrorCreateEvent = exports.MirrorEvent = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractEvent2 = __webpack_require__(18);
+
+var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base mirror event
+ * @class MirrorEvent
+ * @module MirrorEvent
+ * @extends AbstractEvent
+ */
+var MirrorEvent = exports.MirrorEvent = function (_AbstractEvent) {
+  (0, _inherits3.default)(MirrorEvent, _AbstractEvent);
+
+  function MirrorEvent() {
+    (0, _classCallCheck3.default)(this, MirrorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorEvent.__proto__ || Object.getPrototypeOf(MirrorEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(MirrorEvent, [{
+    key: 'hasMirror',
+
+
+    /**
+     * Checks if mirror has been created
+     * @return {Boolean}
+     */
+    value: function hasMirror() {
+      return Boolean(this.mirror);
+    }
+  }, {
+    key: 'source',
+
+
+    /**
+     * Draggables source element
+     * @property source
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.source;
+    }
+
+    /**
+     * Draggables original source element
+     * @property originalSource
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'originalSource',
+    get: function get() {
+      return this.data.originalSource;
+    }
+
+    /**
+     * Draggables source container element
+     * @property sourceContainer
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'sourceContainer',
+    get: function get() {
+      return this.data.sourceContainer;
+    }
+
+    /**
+     * Sensor event
+     * @property sensorEvent
+     * @type {SensorEvent}
+     * @readonly
+     */
+
+  }, {
+    key: 'sensorEvent',
+    get: function get() {
+      return this.data.sensorEvent;
+    }
+
+    /**
+     * Original event that triggered sensor event
+     * @property originalEvent
+     * @type {Event}
+     * @readonly
+     */
+
+  }, {
+    key: 'originalEvent',
+    get: function get() {
+      if (this.sensorEvent) {
+        return this.sensorEvent.originalEvent;
+      }
+
+      return null;
+    }
+  }]);
+  return MirrorEvent;
+}(_AbstractEvent3.default);
+
+/**
+ * Mirror create event
+ * @class MirrorCreateEvent
+ * @module MirrorCreateEvent
+ * @extends MirrorEvent
+ */
+
+
+var MirrorCreateEvent = exports.MirrorCreateEvent = function (_MirrorEvent) {
+  (0, _inherits3.default)(MirrorCreateEvent, _MirrorEvent);
+
+  function MirrorCreateEvent() {
+    (0, _classCallCheck3.default)(this, MirrorCreateEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorCreateEvent.__proto__ || Object.getPrototypeOf(MirrorCreateEvent)).apply(this, arguments));
+  }
+
+  return MirrorCreateEvent;
+}(MirrorEvent);
+
+/**
+ * Mirror created event
+ * @class MirrorCreatedEvent
+ * @module MirrorCreatedEvent
+ * @extends MirrorEvent
+ */
+
+
+MirrorCreateEvent.type = 'mirror:create';
+
+var MirrorCreatedEvent = exports.MirrorCreatedEvent = function (_MirrorEvent2) {
+  (0, _inherits3.default)(MirrorCreatedEvent, _MirrorEvent2);
+
+  function MirrorCreatedEvent() {
+    (0, _classCallCheck3.default)(this, MirrorCreatedEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorCreatedEvent.__proto__ || Object.getPrototypeOf(MirrorCreatedEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(MirrorCreatedEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
+  return MirrorCreatedEvent;
+}(MirrorEvent);
+
+/**
+ * Mirror attached event
+ * @class MirrorAttachedEvent
+ * @module MirrorAttachedEvent
+ * @extends MirrorEvent
+ */
+
+
+MirrorCreatedEvent.type = 'mirror:created';
+
+var MirrorAttachedEvent = exports.MirrorAttachedEvent = function (_MirrorEvent3) {
+  (0, _inherits3.default)(MirrorAttachedEvent, _MirrorEvent3);
+
+  function MirrorAttachedEvent() {
+    (0, _classCallCheck3.default)(this, MirrorAttachedEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorAttachedEvent.__proto__ || Object.getPrototypeOf(MirrorAttachedEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(MirrorAttachedEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
+  return MirrorAttachedEvent;
+}(MirrorEvent);
+
+/**
+ * Mirror move event
+ * @class MirrorMoveEvent
+ * @module MirrorMoveEvent
+ * @extends MirrorEvent
+ */
+
+
+MirrorAttachedEvent.type = 'mirror:attached';
+
+var MirrorMoveEvent = exports.MirrorMoveEvent = function (_MirrorEvent4) {
+  (0, _inherits3.default)(MirrorMoveEvent, _MirrorEvent4);
+
+  function MirrorMoveEvent() {
+    (0, _classCallCheck3.default)(this, MirrorMoveEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorMoveEvent.__proto__ || Object.getPrototypeOf(MirrorMoveEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(MirrorMoveEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
+  return MirrorMoveEvent;
+}(MirrorEvent);
+
+/**
+ * Mirror destroy event
+ * @class MirrorDestroyEvent
+ * @module MirrorDestroyEvent
+ * @extends MirrorEvent
+ */
+
+
+MirrorMoveEvent.type = 'mirror:move';
+MirrorMoveEvent.cancelable = true;
+
+var MirrorDestroyEvent = exports.MirrorDestroyEvent = function (_MirrorEvent5) {
+  (0, _inherits3.default)(MirrorDestroyEvent, _MirrorEvent5);
+
+  function MirrorDestroyEvent() {
+    (0, _classCallCheck3.default)(this, MirrorDestroyEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (MirrorDestroyEvent.__proto__ || Object.getPrototypeOf(MirrorDestroyEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(MirrorDestroyEvent, [{
+    key: 'mirror',
+
+
+    /**
+     * Draggables mirror element
+     * @property mirror
+     * @type {HTMLElement}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.mirror;
+    }
+  }]);
+  return MirrorDestroyEvent;
+}(MirrorEvent);
+
+MirrorDestroyEvent.type = 'mirror:destroy';
+MirrorDestroyEvent.cancelable = true;
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _Mirror = __webpack_require__(110);
+
+var _Mirror2 = _interopRequireDefault(_Mirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Mirror2.default;
+exports.defaultOptions = _Mirror.defaultOptions;
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = exports.onScroll = exports.onMirrorMove = exports.onMirrorCreated = exports.onDragStop = exports.onDragStart = undefined;
+
+var _objectWithoutProperties2 = __webpack_require__(111);
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(23);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onDragStart = exports.onDragStart = Symbol('onDragStart');
+var onDragStop = exports.onDragStop = Symbol('onDragStop');
+var onMirrorCreated = exports.onMirrorCreated = Symbol('onMirrorCreated');
+var onMirrorMove = exports.onMirrorMove = Symbol('onMirrorMove');
+var onScroll = exports.onScroll = Symbol('onScroll');
+
+/**
+ * Mirror default options
+ * @property {Object} defaultOptions
+ * @property {Boolean} defaultOptions.constrainDimensions
+ * @property {Boolean} defaultOptions.xAxis
+ * @property {Boolean} defaultOptions.yAxis
+ * @property {null} defaultOptions.cursorOffsetX
+ * @property {null} defaultOptions.cursorOffsetY
+ * @type {Object}
+ */
+var defaultOptions = exports.defaultOptions = {
+  constrainDimensions: false,
+  xAxis: true,
+  yAxis: true,
+  cursorOffsetX: null,
+  cursorOffsetY: null
+};
+
+/**
+ * Mirror plugin which controls the mirror positioning while dragging
+ * @class Mirror
+ * @module Mirror
+ * @extends AbstractPlugin
+ */
+
+var Mirror = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Mirror, _AbstractPlugin);
+
+  /**
+   * Mirror constructor.
+   * @constructs Mirror
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function Mirror(draggable) {
+    (0, _classCallCheck3.default)(this, Mirror);
+
+    /**
+     * Mirror options
+     * @property {Object} options
+     * @property {Boolean} options.constrainDimensions
+     * @property {Boolean} options.xAxis
+     * @property {Boolean} options.yAxis
+     * @property {Number|null} options.cursorOffsetX
+     * @property {Number|null} options.cursorOffsetY
+     * @type {Object}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Mirror.__proto__ || Object.getPrototypeOf(Mirror)).call(this, draggable));
+
+    _this.options = Object.assign({}, defaultOptions, _this.getOptions());
+
+    /**
+     * Scroll offset for touch devices because the mirror is positioned fixed
+     * @property {Object} scrollOffset
+     * @property {Number} scrollOffset.x
+     * @property {Number} scrollOffset.y
+     */
+    _this.scrollOffset = { x: 0, y: 0 };
+
+    /**
+     * Initial scroll offset for touch devices because the mirror is positioned fixed
+     * @property {Object} scrollOffset
+     * @property {Number} scrollOffset.x
+     * @property {Number} scrollOffset.y
+     */
+    _this.initialScrollOffset = {
+      x: window.scrollX,
+      y: window.scrollY
+    };
+
+    _this[onDragStart] = _this[onDragStart].bind(_this);
+    _this[onDragStop] = _this[onDragStop].bind(_this);
+    _this[onMirrorCreated] = _this[onMirrorCreated].bind(_this);
+    _this[onMirrorMove] = _this[onMirrorMove].bind(_this);
+    _this[onScroll] = _this[onScroll].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches plugins event listeners
+   */
+
+
+  (0, _createClass3.default)(Mirror, [{
+    key: 'attach',
+    value: function attach() {
+      this.draggable.on('drag:start', this[onDragStart]).on('drag:stop', this[onDragStop]).on('mirror:created', this[onMirrorCreated]).on('mirror:move', this[onMirrorMove]);
+    }
+
+    /**
+     * Detaches plugins event listeners
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.draggable.off('drag:start', this[onDragStart]).off('drag:stop', this[onDragStop]).off('mirror:created', this[onMirrorCreated]).off('mirror:move', this[onMirrorMove]);
+    }
+
+    /**
+     * Returns options passed through draggable
+     * @return {Object}
+     */
+
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.draggable.options.mirror || {};
+    }
+  }, {
+    key: onDragStart,
+    value: function value() {
+      if ('ontouchstart' in window) {
+        document.addEventListener('scroll', this[onScroll], true);
+      }
+
+      this.initialScrollOffset = {
+        x: window.scrollX,
+        y: window.scrollY
+      };
+    }
+  }, {
+    key: onDragStop,
+    value: function value() {
+      if ('ontouchstart' in window) {
+        document.removeEventListener('scroll', this[onScroll], true);
+      }
+
+      this.initialScrollOffset = { x: 0, y: 0 };
+      this.scrollOffset = { x: 0, y: 0 };
+    }
+  }, {
+    key: onScroll,
+    value: function value() {
+      this.scrollOffset = {
+        x: window.scrollX - this.initialScrollOffset.x,
+        y: window.scrollY - this.initialScrollOffset.y
+      };
+    }
+
+    /**
+     * Mirror created handler
+     * @param {MirrorCreatedEvent} mirrorEvent
+     * @return {Promise}
+     * @private
+     */
+
+  }, {
+    key: onMirrorCreated,
+    value: function value(_ref) {
+      var _this2 = this;
+
+      var mirror = _ref.mirror,
+          source = _ref.source,
+          sensorEvent = _ref.sensorEvent;
+
+      var mirrorClass = this.draggable.getClassNameFor('mirror');
+
+      var setState = function setState(_ref2) {
+        var mirrorOffset = _ref2.mirrorOffset,
+            initialX = _ref2.initialX,
+            initialY = _ref2.initialY,
+            args = (0, _objectWithoutProperties3.default)(_ref2, ['mirrorOffset', 'initialX', 'initialY']);
+
+        _this2.mirrorOffset = mirrorOffset;
+        _this2.initialX = initialX;
+        _this2.initialY = initialY;
+        return Object.assign({ mirrorOffset: mirrorOffset, initialX: initialX, initialY: initialY }, args);
+      };
+
+      var initialState = {
+        mirror: mirror,
+        source: source,
+        sensorEvent: sensorEvent,
+        mirrorClass: mirrorClass,
+        scrollOffset: this.scrollOffset,
+        options: this.options
+      };
+
+      return Promise.resolve(initialState)
+      // Fix reflow here
+      .then(computeMirrorDimensions).then(calculateMirrorOffset).then(resetMirror).then(addMirrorClasses).then(positionMirror({ initial: true })).then(removeMirrorID).then(setState);
+    }
+
+    /**
+     * Mirror move handler
+     * @param {MirrorMoveEvent} mirrorEvent
+     * @return {Promise}
+     * @private
+     */
+
+  }, {
+    key: onMirrorMove,
+    value: function value(_ref3) {
+      var mirror = _ref3.mirror,
+          sensorEvent = _ref3.sensorEvent;
+
+      var initialState = {
+        mirror: mirror,
+        sensorEvent: sensorEvent,
+        mirrorOffset: this.mirrorOffset,
+        options: this.options,
+        initialX: this.initialX,
+        initialY: this.initialY,
+        scrollOffset: this.scrollOffset
+      };
+
+      return Promise.resolve(initialState).then(positionMirror({ raf: true }));
+    }
+  }]);
+  return Mirror;
+}(_AbstractPlugin3.default);
+
+/**
+ * Computes mirror dimensions based on the source element
+ * Adds sourceRect to state
+ * @param {Object} state
+ * @param {HTMLElement} state.source
+ * @return {Promise}
+ * @private
+ */
+
+
+exports.default = Mirror;
+function computeMirrorDimensions(_ref4) {
+  var source = _ref4.source,
+      args = (0, _objectWithoutProperties3.default)(_ref4, ['source']);
+
+  return withPromise(function (resolve) {
+    var sourceRect = source.getBoundingClientRect();
+    resolve(Object.assign({ source: source, sourceRect: sourceRect }, args));
+  });
+}
+
+/**
+ * Calculates mirror offset
+ * Adds mirrorOffset to state
+ * @param {Object} state
+ * @param {SensorEvent} state.sensorEvent
+ * @param {DOMRect} state.sourceRect
+ * @return {Promise}
+ * @private
+ */
+function calculateMirrorOffset(_ref5) {
+  var sensorEvent = _ref5.sensorEvent,
+      sourceRect = _ref5.sourceRect,
+      options = _ref5.options,
+      args = (0, _objectWithoutProperties3.default)(_ref5, ['sensorEvent', 'sourceRect', 'options']);
+
+  return withPromise(function (resolve) {
+    var top = options.cursorOffsetY === null ? sensorEvent.clientY - sourceRect.top : options.cursorOffsetY;
+    var left = options.cursorOffsetX === null ? sensorEvent.clientX - sourceRect.left : options.cursorOffsetX;
+
+    var mirrorOffset = { top: top, left: left };
+
+    resolve(Object.assign({ sensorEvent: sensorEvent, sourceRect: sourceRect, mirrorOffset: mirrorOffset, options: options }, args));
+  });
+}
+
+/**
+ * Applys mirror styles
+ * @param {Object} state
+ * @param {HTMLElement} state.mirror
+ * @param {HTMLElement} state.source
+ * @param {Object} state.options
+ * @return {Promise}
+ * @private
+ */
+function resetMirror(_ref6) {
+  var mirror = _ref6.mirror,
+      source = _ref6.source,
+      options = _ref6.options,
+      args = (0, _objectWithoutProperties3.default)(_ref6, ['mirror', 'source', 'options']);
+
+  return withPromise(function (resolve) {
+    var offsetHeight = void 0;
+    var offsetWidth = void 0;
+
+    if (options.constrainDimensions) {
+      var computedSourceStyles = getComputedStyle(source);
+      offsetHeight = computedSourceStyles.getPropertyValue('height');
+      offsetWidth = computedSourceStyles.getPropertyValue('width');
+    }
+
+    mirror.style.position = 'fixed';
+    mirror.style.pointerEvents = 'none';
+    mirror.style.top = 0;
+    mirror.style.left = 0;
+    mirror.style.margin = 0;
+
+    if (options.constrainDimensions) {
+      mirror.style.height = offsetHeight;
+      mirror.style.width = offsetWidth;
+    }
+
+    resolve(Object.assign({ mirror: mirror, source: source, options: options }, args));
+  });
+}
+
+/**
+ * Applys mirror class on mirror element
+ * @param {Object} state
+ * @param {HTMLElement} state.mirror
+ * @param {String} state.mirrorClass
+ * @return {Promise}
+ * @private
+ */
+function addMirrorClasses(_ref7) {
+  var mirror = _ref7.mirror,
+      mirrorClass = _ref7.mirrorClass,
+      args = (0, _objectWithoutProperties3.default)(_ref7, ['mirror', 'mirrorClass']);
+
+  return withPromise(function (resolve) {
+    mirror.classList.add(mirrorClass);
+    resolve(Object.assign({ mirror: mirror, mirrorClass: mirrorClass }, args));
+  });
+}
+
+/**
+ * Removes source ID from cloned mirror element
+ * @param {Object} state
+ * @param {HTMLElement} state.mirror
+ * @return {Promise}
+ * @private
+ */
+function removeMirrorID(_ref8) {
+  var mirror = _ref8.mirror,
+      args = (0, _objectWithoutProperties3.default)(_ref8, ['mirror']);
+
+  return withPromise(function (resolve) {
+    mirror.removeAttribute('id');
+    delete mirror.id;
+    resolve(Object.assign({ mirror: mirror }, args));
+  });
+}
+
+/**
+ * Positions mirror with translate3d
+ * @param {Object} state
+ * @param {HTMLElement} state.mirror
+ * @param {SensorEvent} state.sensorEvent
+ * @param {Object} state.mirrorOffset
+ * @param {Number} state.initialY
+ * @param {Number} state.initialX
+ * @param {Object} state.options
+ * @return {Promise}
+ * @private
+ */
+function positionMirror() {
+  var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref9$withFrame = _ref9.withFrame,
+      withFrame = _ref9$withFrame === undefined ? false : _ref9$withFrame,
+      _ref9$initial = _ref9.initial,
+      initial = _ref9$initial === undefined ? false : _ref9$initial;
+
+  return function (_ref10) {
+    var mirror = _ref10.mirror,
+        sensorEvent = _ref10.sensorEvent,
+        mirrorOffset = _ref10.mirrorOffset,
+        initialY = _ref10.initialY,
+        initialX = _ref10.initialX,
+        scrollOffset = _ref10.scrollOffset,
+        options = _ref10.options,
+        args = (0, _objectWithoutProperties3.default)(_ref10, ['mirror', 'sensorEvent', 'mirrorOffset', 'initialY', 'initialX', 'scrollOffset', 'options']);
+
+    return withPromise(function (resolve) {
+      var result = Object.assign({
+        mirror: mirror,
+        sensorEvent: sensorEvent,
+        mirrorOffset: mirrorOffset,
+        options: options
+      }, args);
+
+      if (mirrorOffset) {
+        var x = sensorEvent.clientX - mirrorOffset.left - scrollOffset.x;
+        var y = sensorEvent.clientY - mirrorOffset.top - scrollOffset.y;
+
+        if (options.xAxis && options.yAxis || initial) {
+          mirror.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+        } else if (options.xAxis && !options.yAxis) {
+          mirror.style.transform = 'translate3d(' + x + 'px, ' + initialY + 'px, 0)';
+        } else if (options.yAxis && !options.xAxis) {
+          mirror.style.transform = 'translate3d(' + initialX + 'px, ' + y + 'px, 0)';
+        }
+
+        if (initial) {
+          result.initialX = x;
+          result.initialY = y;
+        }
+      }
+
+      resolve(result);
+    }, { frame: withFrame });
+  };
+}
+
+/**
+ * Wraps functions in promise with potential animation frame option
+ * @param {Function} callback
+ * @param {Object} options
+ * @param {Boolean} options.raf
+ * @return {Promise}
+ * @private
+ */
+function withPromise(callback) {
+  var _ref11 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref11$raf = _ref11.raf,
+      raf = _ref11$raf === undefined ? false : _ref11$raf;
+
+  return new Promise(function (resolve, reject) {
+    if (raf) {
+      requestAnimationFrame(function () {
+        callback(resolve, reject);
+      });
+    } else {
+      callback(resolve, reject);
+    }
+  });
+}
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+};
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * All draggable plugins inherit from this class.
+ * @abstract
+ * @class AbstractPlugin
+ * @module AbstractPlugin
+ */
+var AbstractPlugin = function () {
+
+  /**
+   * AbstractPlugin constructor.
+   * @constructs AbstractPlugin
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function AbstractPlugin(draggable) {
+    (0, _classCallCheck3.default)(this, AbstractPlugin);
+
+
+    /**
+     * Draggable instance
+     * @property draggable
+     * @type {Draggable}
+     */
+    this.draggable = draggable;
+  }
+
+  /**
+   * Override to add listeners
+   * @abstract
+   */
+
+
+  (0, _createClass3.default)(AbstractPlugin, [{
+    key: 'attach',
+    value: function attach() {
+      throw new Error('Not Implemented');
+    }
+
+    /**
+     * Override to remove listeners
+     * @abstract
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      throw new Error('Not Implemented');
+    }
+  }]);
+  return AbstractPlugin;
+}();
+
+exports.default = AbstractPlugin;
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _Announcement = __webpack_require__(114);
+
+var _Announcement2 = _interopRequireDefault(_Announcement);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Announcement2.default;
+exports.defaultOptions = _Announcement.defaultOptions;
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(23);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onInitialize = Symbol('onInitialize');
+var onDestroy = Symbol('onDestroy');
+var announceEvent = Symbol('announceEvent');
+var announceMessage = Symbol('announceMessage');
+
+var ARIA_RELEVANT = 'aria-relevant';
+var ARIA_ATOMIC = 'aria-atomic';
+var ARIA_LIVE = 'aria-live';
+var ROLE = 'role';
+
+/**
+ * Announcement default options
+ * @property {Object} defaultOptions
+ * @property {Number} defaultOptions.expire
+ * @type {Object}
+ */
+var defaultOptions = exports.defaultOptions = {
+  expire: 7000
+};
+
+/**
+ * Announcement plugin
+ * @class Announcement
+ * @module Announcement
+ * @extends AbstractPlugin
+ */
+
+var Announcement = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Announcement, _AbstractPlugin);
+
+  /**
+   * Announcement constructor.
+   * @constructs Announcement
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function Announcement(draggable) {
+    (0, _classCallCheck3.default)(this, Announcement);
+
+    /**
+     * Plugin options
+     * @property options
+     * @type {Object}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Announcement.__proto__ || Object.getPrototypeOf(Announcement)).call(this, draggable));
+
+    _this.options = Object.assign({}, defaultOptions, _this.getOptions());
+
+    /**
+     * Original draggable trigger method. Hack until we have onAll or on('all')
+     * @property originalTriggerMethod
+     * @type {Function}
+     */
+    _this.originalTriggerMethod = _this.draggable.trigger;
+
+    _this[onInitialize] = _this[onInitialize].bind(_this);
+    _this[onDestroy] = _this[onDestroy].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches listeners to draggable
+   */
+
+
+  (0, _createClass3.default)(Announcement, [{
+    key: 'attach',
+    value: function attach() {
+      this.draggable.on('draggable:initialize', this[onInitialize]);
+    }
+
+    /**
+     * Detaches listeners from draggable
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.draggable.off('draggable:destroy', this[onDestroy]);
+    }
+
+    /**
+     * Returns passed in options
+     */
+
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.draggable.options.announcements || {};
+    }
+
+    /**
+     * Announces event
+     * @private
+     * @param {AbstractEvent} event
+     */
+
+  }, {
+    key: announceEvent,
+    value: function value(event) {
+      var message = this.options[event.type];
+
+      if (message && typeof message === 'string') {
+        this[announceMessage](message);
+      }
+
+      if (message && typeof message === 'function') {
+        this[announceMessage](message(event));
+      }
+    }
+
+    /**
+     * Announces message to screen reader
+     * @private
+     * @param {String} message
+     */
+
+  }, {
+    key: announceMessage,
+    value: function value(message) {
+      announce(message, { expire: this.options.expire });
+    }
+
+    /**
+     * Initialize hander
+     * @private
+     */
+
+  }, {
+    key: onInitialize,
+    value: function value() {
+      var _this2 = this;
+
+      // Hack until there is an api for listening for all events
+      this.draggable.trigger = function (event) {
+        try {
+          _this2[announceEvent](event);
+        } finally {
+          // Ensure that original trigger is called
+          _this2.originalTriggerMethod.call(_this2.draggable, event);
+        }
+      };
+    }
+
+    /**
+     * Destroy hander
+     * @private
+     */
+
+  }, {
+    key: onDestroy,
+    value: function value() {
+      this.draggable.trigger = this.originalTriggerMethod;
+    }
+  }]);
+  return Announcement;
+}(_AbstractPlugin3.default);
+
+/**
+ * @const {HTMLElement} liveRegion
+ */
+
+
+exports.default = Announcement;
+var liveRegion = createRegion();
+
+/**
+ * Announces message via live region
+ * @param {String} message
+ * @param {Object} options
+ * @param {Number} options.expire
+ */
+function announce(message, _ref) {
+  var expire = _ref.expire;
+
+  var element = document.createElement('div');
+  element.innerHTML = message;
+  liveRegion.appendChild(element);
+  return setTimeout(function () {
+    liveRegion.removeChild(element);
+  }, expire);
+}
+
+/**
+ * Creates region element
+ * @return {HTMLElement}
+ */
+function createRegion() {
+  var element = document.createElement('div');
+
+  element.setAttribute('id', 'draggable-live-region');
+  element.setAttribute(ARIA_RELEVANT, 'additions');
+  element.setAttribute(ARIA_ATOMIC, 'true');
+  element.setAttribute(ARIA_LIVE, 'assertive');
+  element.setAttribute(ROLE, 'log');
+
+  element.style.position = 'fixed';
+  element.style.width = '1px';
+  element.style.height = '1px';
+  element.style.top = '-1px';
+  element.style.overflow = 'hidden';
+
+  return element;
+}
+
+// Append live region element as early as possible
+document.addEventListener('DOMContentLoaded', function () {
+  document.body.appendChild(liveRegion);
+});
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _Scrollable = __webpack_require__(116);
+
+var _Scrollable2 = _interopRequireDefault(_Scrollable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Scrollable2.default;
+exports.defaultOptions = _Scrollable.defaultOptions;
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = exports.scroll = exports.onDragStop = exports.onDragMove = exports.onDragStart = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(23);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+var _utils = __webpack_require__(19);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onDragStart = exports.onDragStart = Symbol('onDragStart');
+var onDragMove = exports.onDragMove = Symbol('onDragMove');
+var onDragStop = exports.onDragStop = Symbol('onDragStop');
+var scroll = exports.scroll = Symbol('scroll');
+
+/**
+ * Scrollable default options
+ * @property {Object} defaultOptions
+ * @property {Number} defaultOptions.speed
+ * @property {Number} defaultOptions.sensitivity
+ * @property {HTMLElement[]} defaultOptions.scrollableElements
+ * @type {Object}
+ */
+var defaultOptions = exports.defaultOptions = {
+  speed: 10,
+  sensitivity: 30,
+  scrollableElements: []
+};
+
+/**
+ * Scrollable plugin which scrolls the closest scrollable parent
+ * @class Scrollable
+ * @module Scrollable
+ * @extends AbstractPlugin
+ */
+
+var Scrollable = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Scrollable, _AbstractPlugin);
+
+  /**
+   * Scrollable constructor.
+   * @constructs Scrollable
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function Scrollable(draggable) {
+    (0, _classCallCheck3.default)(this, Scrollable);
+
+    /**
+     * Scrollable options
+     * @property {Object} options
+     * @property {Number} options.speed
+     * @property {Number} options.sensitivity
+     * @property {HTMLElement[]} options.scrollableElements
+     * @type {Object}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Scrollable.__proto__ || Object.getPrototypeOf(Scrollable)).call(this, draggable));
+
+    _this.options = Object.assign({}, defaultOptions, _this.getOptions());
+
+    /**
+     * Keeps current mouse position
+     * @property {Object} currentMousePosition
+     * @property {Number} currentMousePosition.clientX
+     * @property {Number} currentMousePosition.clientY
+     * @type {Object|null}
+     */
+    _this.currentMousePosition = null;
+
+    /**
+     * Scroll animation frame
+     * @property scrollAnimationFrame
+     * @type {Number|null}
+     */
+    _this.scrollAnimationFrame = null;
+
+    /**
+     * Closest scrollable element
+     * @property scrollableElement
+     * @type {HTMLElement|null}
+     */
+    _this.scrollableElement = null;
+
+    /**
+     * Animation frame looking for the closest scrollable element
+     * @property findScrollableElementFrame
+     * @type {Number|null}
+     */
+    _this.findScrollableElementFrame = null;
+
+    _this[onDragStart] = _this[onDragStart].bind(_this);
+    _this[onDragMove] = _this[onDragMove].bind(_this);
+    _this[onDragStop] = _this[onDragStop].bind(_this);
+    _this[scroll] = _this[scroll].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches plugins event listeners
+   */
+
+
+  (0, _createClass3.default)(Scrollable, [{
+    key: 'attach',
+    value: function attach() {
+      this.draggable.on('drag:start', this[onDragStart]).on('drag:move', this[onDragMove]).on('drag:stop', this[onDragStop]);
+    }
+
+    /**
+     * Detaches plugins event listeners
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.draggable.off('drag:start', this[onDragStart]).off('drag:move', this[onDragMove]).off('drag:stop', this[onDragStop]);
+    }
+
+    /**
+     * Returns options passed through draggable
+     * @return {Object}
+     */
+
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.draggable.options.scrollable || {};
+    }
+
+    /**
+     * Returns closest scrollable elements by element
+     * @param {HTMLElement} target
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getScrollableElement',
+    value: function getScrollableElement(target) {
+      if (this.hasDefinedScrollableElements()) {
+        return (0, _utils.closest)(target, this.options.scrollableElements) || document.documentElement;
+      } else {
+        return closestScrollableElement(target);
+      }
+    }
+
+    /**
+     * Returns true if at least one scrollable element have been defined via options
+     * @param {HTMLElement} target
+     * @return {Boolean}
+     */
+
+  }, {
+    key: 'hasDefinedScrollableElements',
+    value: function hasDefinedScrollableElements() {
+      return Boolean(this.options.scrollableElements.length !== 0);
+    }
+
+    /**
+     * Drag start handler. Finds closest scrollable parent in separate frame
+     * @param {DragStartEvent} dragEvent
+     * @private
+     */
+
+  }, {
+    key: onDragStart,
+    value: function value(dragEvent) {
+      var _this2 = this;
+
+      this.findScrollableElementFrame = requestAnimationFrame(function () {
+        _this2.scrollableElement = _this2.getScrollableElement(dragEvent.source);
+      });
+    }
+
+    /**
+     * Drag move handler. Remembers mouse position and initiates scrolling
+     * @param {DragMoveEvent} dragEvent
+     * @private
+     */
+
+  }, {
+    key: onDragMove,
+    value: function value(dragEvent) {
+      var _this3 = this;
+
+      this.findScrollableElementFrame = requestAnimationFrame(function () {
+        _this3.scrollableElement = _this3.getScrollableElement(dragEvent.sensorEvent.target);
+      });
+
+      if (!this.scrollableElement) {
+        return;
+      }
+
+      var sensorEvent = dragEvent.sensorEvent;
+      var scrollOffset = { x: 0, y: 0 };
+
+      if ('ontouchstart' in window) {
+        scrollOffset.y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        scrollOffset.x = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+      }
+
+      this.currentMousePosition = {
+        clientX: sensorEvent.clientX - scrollOffset.x,
+        clientY: sensorEvent.clientY - scrollOffset.y
+      };
+
+      this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+    }
+
+    /**
+     * Drag stop handler. Cancels scroll animations and resets state
+     * @private
+     */
+
+  }, {
+    key: onDragStop,
+    value: function value() {
+      cancelAnimationFrame(this.scrollAnimationFrame);
+      cancelAnimationFrame(this.findScrollableElementFrame);
+
+      this.scrollableElement = null;
+      this.scrollAnimationFrame = null;
+      this.findScrollableElementFrame = null;
+      this.currentMousePosition = null;
+    }
+
+    /**
+     * Scroll function that does the heavylifting
+     * @private
+     */
+
+  }, {
+    key: scroll,
+    value: function value() {
+      if (!this.scrollableElement) {
+        return;
+      }
+
+      cancelAnimationFrame(this.scrollAnimationFrame);
+
+      var windowHeight = window.innerHeight;
+      var windowWidth = window.innerWidth;
+      var rect = this.scrollableElement.getBoundingClientRect();
+      var right = rect.right,
+          left = rect.left;
+
+      var top = void 0;
+      var bottom = void 0;
+
+      if (rect.top < 0) {
+        top = 0;
+      } else {
+        top = rect.top;
+      }
+
+      if (windowHeight < rect.bottom) {
+        if (this.scrollableElement !== document.documentElement) {
+          this.scrollableElement = this.getScrollableElement(this.scrollableElement.parentNode);
+        }
+
+        bottom = windowHeight;
+      } else {
+        bottom = rect.bottom;
+      }
+
+      var offsetY = (Math.abs(bottom - this.currentMousePosition.clientY) <= this.options.sensitivity) - (Math.abs(top - this.currentMousePosition.clientY) <= this.options.sensitivity);
+      var offsetX = (Math.abs(right - this.currentMousePosition.clientX) <= this.options.sensitivity) - (Math.abs(left - this.currentMousePosition.clientX) <= this.options.sensitivity);
+
+      if (!offsetX && !offsetY) {
+        offsetX = (windowWidth - this.currentMousePosition.clientX <= this.options.sensitivity) - (this.currentMousePosition.clientX <= this.options.sensitivity);
+        offsetY = (windowHeight - this.currentMousePosition.clientY <= this.options.sensitivity) - (this.currentMousePosition.clientY <= this.options.sensitivity);
+      }
+
+      this.scrollableElement.scrollTop += offsetY * this.options.speed;
+      this.scrollableElement.scrollLeft += offsetX * this.options.speed;
+
+      this.scrollAnimationFrame = requestAnimationFrame(this[scroll]);
+    }
+  }]);
+  return Scrollable;
+}(_AbstractPlugin3.default);
+
+/**
+ * Checks if element has overflow
+ * @param {HTMLElement} element
+ * @return {Boolean}
+ * @private
+ */
+
+
+exports.default = Scrollable;
+function hasOverflow(element) {
+  var overflowRegex = /(auto|scroll)/;
+  var computedStyles = getComputedStyle(element, null);
+
+  var overflow = computedStyles.getPropertyValue('overflow') + computedStyles.getPropertyValue('overflow-y') + computedStyles.getPropertyValue('overflow-x');
+
+  return overflowRegex.test(overflow);
+}
+
+/**
+ * Finds closest scrollable element
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ * @private
+ */
+function closestScrollableElement(element) {
+  var scrollableElement = (0, _utils.closest)(element, function (currentElement) {
+    return hasOverflow(currentElement);
+  });
+
+  return scrollableElement || document.scrollingElement || document.documentElement || null;
+}
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _closest = __webpack_require__(118);
+
+var _closest2 = _interopRequireDefault(_closest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _closest2.default;
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(41);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+exports.default = closest;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var matchFunction = Element.prototype.matches || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector;
+
+/**
+ * Get the closest parent element of a given element that matches the given
+ * selector string or matching function
+ *
+ * @param {Element} element The child element to find a parent of
+ * @param {String|Function} selector The string or function to use to match
+ *     the parent element
+ * @return {Element|null}
+ */
+function closest(element, value) {
+  if (!element) {
+    return null;
+  }
+
+  var selector = value;
+  var callback = value;
+  var nodeList = value;
+  var singleElement = value;
+
+  var isSelector = Boolean(typeof value === 'string');
+  var isFunction = Boolean(typeof value === 'function');
+  var isNodeList = Boolean(value instanceof NodeList || value instanceof Array);
+  var isElement = Boolean(value instanceof HTMLElement);
+
+  function conditionFn(currentElement) {
+    if (!currentElement) {
+      return currentElement;
+    } else if (isSelector) {
+      return matchFunction.call(currentElement, selector);
+    } else if (isNodeList) {
+      return [].concat((0, _toConsumableArray3.default)(nodeList)).includes(currentElement);
+    } else if (isElement) {
+      return singleElement === currentElement;
+    } else if (isFunction) {
+      return callback(currentElement);
+    } else {
+      return null;
+    }
+  }
+
+  var current = element;
+
+  do {
+    current = current.correspondingUseElement || current.correspondingElement || current;
+    if (conditionFn(current)) {
+      return current;
+    }
+    current = current.parentNode;
+  } while (current && current !== document.body && current !== document);
+
+  return null;
+}
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(120), __esModule: true };
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(46);
+__webpack_require__(121);
+module.exports = __webpack_require__(4).Array.from;
+
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var ctx = __webpack_require__(24);
+var $export = __webpack_require__(8);
+var toObject = __webpack_require__(36);
+var call = __webpack_require__(122);
+var isArrayIter = __webpack_require__(123);
+var toLength = __webpack_require__(50);
+var createProperty = __webpack_require__(124);
+var getIterFn = __webpack_require__(125);
+
+$export($export.S + $export.F * !__webpack_require__(127)(function (iter) { Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = getIterFn(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// call something on iterator step with safe closing on error
+var anObject = __webpack_require__(13);
+module.exports = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// check on default Array iterator
+var Iterators = __webpack_require__(17);
+var ITERATOR = __webpack_require__(5)('iterator');
+var ArrayProto = Array.prototype;
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $defineProperty = __webpack_require__(7);
+var createDesc = __webpack_require__(16);
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof = __webpack_require__(126);
+var ITERATOR = __webpack_require__(5)('iterator');
+var Iterators = __webpack_require__(17);
+module.exports = __webpack_require__(4).getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = __webpack_require__(31);
+var TAG = __webpack_require__(5)('toStringTag');
+// ES3 wrong here
+var ARG = cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+module.exports = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ITERATOR = __webpack_require__(5)('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  Array.from(riter, function () { throw 2; });
+} catch (e) { /* empty */ }
+
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Accessibility = __webpack_require__(129);
+
+var _Accessibility2 = _interopRequireDefault(_Accessibility);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Accessibility2.default;
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractPlugin2 = __webpack_require__(23);
+
+var _AbstractPlugin3 = _interopRequireDefault(_AbstractPlugin2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ARIA_GRABBED = 'aria-grabbed';
+var ARIA_DROPEFFECT = 'aria-dropeffect';
+var TABINDEX = 'tabindex';
+
+/**
+ * __WIP__ Accessibility plugin
+ * @class Accessibility
+ * @module Accessibility
+ * @extends AbstractPlugin
+ */
+
+var Accessibility = function (_AbstractPlugin) {
+  (0, _inherits3.default)(Accessibility, _AbstractPlugin);
+
+  /**
+   * Accessibility constructor.
+   * @constructs Accessibility
+   * @param {Draggable} draggable - Draggable instance
+   */
+  function Accessibility(draggable) {
+    (0, _classCallCheck3.default)(this, Accessibility);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Accessibility.__proto__ || Object.getPrototypeOf(Accessibility)).call(this, draggable));
+
+    _this._onInit = _this._onInit.bind(_this);
+    _this._onDestroy = _this._onDestroy.bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches listeners to draggable
+   */
+
+
+  (0, _createClass3.default)(Accessibility, [{
+    key: 'attach',
+    value: function attach() {
+      this.draggable.on('init', this._onInit).on('destroy', this._onDestroy).on('drag:start', _onDragStart).on('drag:stop', _onDragStop);
+    }
+
+    /**
+     * Detaches listeners from draggable
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      this.draggable.off('init', this._onInit).off('destroy', this._onDestroy).off('drag:start', _onDragStart).off('drag:stop', _onDragStop);
+    }
+
+    /**
+     * Intialize handler
+     * @private
+     * @param {Object} param
+     * @param {HTMLElement[]} param.containers
+     */
+
+  }, {
+    key: '_onInit',
+    value: function _onInit(_ref) {
+      var containers = _ref.containers;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = containers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var container = _step.value;
+
+          container.setAttribute(ARIA_DROPEFFECT, this.draggable.options.type);
+
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = container.querySelectorAll(this.draggable.options.draggable)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var element = _step2.value;
+
+              element.setAttribute(TABINDEX, 0);
+              element.setAttribute(ARIA_GRABBED, false);
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+
+    /**
+     * Destroy handler handler
+     * @private
+     * @param {Object} param
+     * @param {HTMLElement[]} param.containers
+     */
+
+  }, {
+    key: '_onDestroy',
+    value: function _onDestroy(_ref2) {
+      var containers = _ref2.containers;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = containers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var container = _step3.value;
+
+          container.removeAttribute(ARIA_DROPEFFECT);
+
+          var _iteratorNormalCompletion4 = true;
+          var _didIteratorError4 = false;
+          var _iteratorError4 = undefined;
+
+          try {
+            for (var _iterator4 = container.querySelectorAll(this.draggable.options.draggable)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+              var element = _step4.value;
+
+              element.removeAttribute(TABINDEX, 0);
+              element.removeAttribute(ARIA_GRABBED, false);
+            }
+          } catch (err) {
+            _didIteratorError4 = true;
+            _iteratorError4 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                _iterator4.return();
+              }
+            } finally {
+              if (_didIteratorError4) {
+                throw _iteratorError4;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+    }
+  }]);
+  return Accessibility;
+}(_AbstractPlugin3.default);
+
+exports.default = Accessibility;
+
+
+function _onDragStart(_ref3) {
+  var source = _ref3.source;
+
+  source.setAttribute(ARIA_GRABBED, true);
+}
+
+function _onDragStop(_ref4) {
+  var source = _ref4.source;
+
+  source.setAttribute(ARIA_GRABBED, false);
+}
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base sensor class. Extend from this class to create a new or custom sensor
+ * @class Sensor
+ * @module Sensor
+ */
+var Sensor = function () {
+
+  /**
+   * Sensor constructor.
+   * @constructs Sensor
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Containers
+   * @param {Object} options - Options
+   */
+  function Sensor() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, Sensor);
+
+
+    /**
+     * Current containers
+     * @property containers
+     * @type {HTMLElement[]}
+     */
+    this.containers = containers;
+
+    /**
+     * Current options
+     * @property options
+     * @type {Object}
+     */
+    this.options = Object.assign({}, options);
+
+    /**
+     * Current drag state
+     * @property dragging
+     * @type {Boolean}
+     */
+    this.dragging = false;
+
+    /**
+     * Current container
+     * @property currentContainer
+     * @type {HTMLElement}
+     */
+    this.currentContainer = null;
+  }
+
+  /**
+   * Attaches sensors event listeners to the DOM
+   * @return {Sensor}
+   */
+
+
+  (0, _createClass3.default)(Sensor, [{
+    key: 'attach',
+    value: function attach() {
+      return this;
+    }
+
+    /**
+     * Detaches sensors event listeners to the DOM
+     * @return {Sensor}
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      return this;
+    }
+
+    /**
+     * Triggers event on target element
+     * @param {HTMLElement} element - Element to trigger event on
+     * @param {SensorEvent} sensorEvent - Sensor event to trigger
+     */
+
+  }, {
+    key: 'trigger',
+    value: function trigger(element, sensorEvent) {
+      var event = document.createEvent('Event');
+      event.detail = sensorEvent;
+      event.initEvent(sensorEvent.type, true, true);
+      element.dispatchEvent(event);
+      this.lastEvent = sensorEvent;
+      return sensorEvent;
+    }
+  }]);
+  return Sensor;
+}();
+
+exports.default = Sensor;
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MouseSensor = __webpack_require__(132);
+
+var _MouseSensor2 = _interopRequireDefault(_MouseSensor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _MouseSensor2.default;
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(19);
+
+var _Sensor2 = __webpack_require__(20);
+
+var _Sensor3 = _interopRequireDefault(_Sensor2);
+
+var _SensorEvent = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onContextMenuWhileDragging = Symbol('onContextMenuWhileDragging');
+var onMouseDown = Symbol('onMouseDown');
+var onMouseMove = Symbol('onMouseMove');
+var onMouseUp = Symbol('onMouseUp');
+
+/**
+ * This sensor picks up native browser mouse events and dictates drag operations
+ * @class MouseSensor
+ * @module MouseSensor
+ * @extends Sensor
+ */
+
+var MouseSensor = function (_Sensor) {
+  (0, _inherits3.default)(MouseSensor, _Sensor);
+
+  /**
+   * MouseSensor constructor.
+   * @constructs MouseSensor
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Containers
+   * @param {Object} options - Options
+   */
+  function MouseSensor() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, MouseSensor);
+
+    /**
+     * Indicates if mouse button is still down
+     * @property mouseDown
+     * @type {Boolean}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (MouseSensor.__proto__ || Object.getPrototypeOf(MouseSensor)).call(this, containers, options));
+
+    _this.mouseDown = false;
+
+    /**
+     * Mouse down timer which will end up triggering the drag start operation
+     * @property mouseDownTimeout
+     * @type {Number}
+     */
+    _this.mouseDownTimeout = null;
+
+    /**
+     * Indicates if context menu has been opened during drag operation
+     * @property openedContextMenu
+     * @type {Boolean}
+     */
+    _this.openedContextMenu = false;
+
+    _this[onContextMenuWhileDragging] = _this[onContextMenuWhileDragging].bind(_this);
+    _this[onMouseDown] = _this[onMouseDown].bind(_this);
+    _this[onMouseMove] = _this[onMouseMove].bind(_this);
+    _this[onMouseUp] = _this[onMouseUp].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches sensors event listeners to the DOM
+   */
+
+
+  (0, _createClass3.default)(MouseSensor, [{
+    key: 'attach',
+    value: function attach() {
+      document.addEventListener('mousedown', this[onMouseDown], true);
+    }
+
+    /**
+     * Detaches sensors event listeners to the DOM
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      document.removeEventListener('mousedown', this[onMouseDown], true);
+    }
+
+    /**
+     * Mouse down handler
+     * @private
+     * @param {Event} event - Mouse down event
+     */
+
+  }, {
+    key: onMouseDown,
+    value: function value(event) {
+      var _this2 = this;
+
+      if (event.button !== 0 || event.ctrlKey || event.metaKey) {
+        return;
+      }
+
+      document.addEventListener('mouseup', this[onMouseUp]);
+      document.addEventListener('dragstart', preventNativeDragStart);
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+      var container = (0, _utils.closest)(target, this.containers);
+
+      if (!container) {
+        return;
+      }
+
+      this.mouseDown = true;
+
+      clearTimeout(this.mouseDownTimeout);
+      this.mouseDownTimeout = setTimeout(function () {
+        if (!_this2.mouseDown) {
+          return;
+        }
+
+        var dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+          clientX: event.clientX,
+          clientY: event.clientY,
+          target: target,
+          container: container,
+          originalEvent: event
+        });
+
+        _this2.trigger(container, dragStartEvent);
+
+        _this2.currentContainer = container;
+        _this2.dragging = !dragStartEvent.canceled();
+
+        if (_this2.dragging) {
+          document.addEventListener('contextmenu', _this2[onContextMenuWhileDragging]);
+          document.addEventListener('mousemove', _this2[onMouseMove]);
+        }
+      }, this.options.delay);
+    }
+
+    /**
+     * Mouse move handler
+     * @private
+     * @param {Event} event - Mouse move event
+     */
+
+  }, {
+    key: onMouseMove,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+
+      var dragMoveEvent = new _SensorEvent.DragMoveSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragMoveEvent);
+    }
+
+    /**
+     * Mouse up handler
+     * @private
+     * @param {Event} event - Mouse up event
+     */
+
+  }, {
+    key: onMouseUp,
+    value: function value(event) {
+      this.mouseDown = Boolean(this.openedContextMenu);
+
+      if (this.openedContextMenu) {
+        this.openedContextMenu = false;
+        return;
+      }
+
+      document.removeEventListener('mouseup', this[onMouseUp]);
+      document.removeEventListener('dragstart', preventNativeDragStart);
+
+      if (!this.dragging) {
+        return;
+      }
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+
+      var dragStopEvent = new _SensorEvent.DragStopSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragStopEvent);
+
+      document.removeEventListener('contextmenu', this[onContextMenuWhileDragging]);
+      document.removeEventListener('mousemove', this[onMouseMove]);
+
+      this.currentContainer = null;
+      this.dragging = false;
+    }
+
+    /**
+     * Context menu handler
+     * @private
+     * @param {Event} event - Context menu event
+     */
+
+  }, {
+    key: onContextMenuWhileDragging,
+    value: function value(event) {
+      event.preventDefault();
+      this.openedContextMenu = true;
+    }
+  }]);
+  return MouseSensor;
+}(_Sensor3.default);
+
+exports.default = MouseSensor;
+
+
+function preventNativeDragStart(event) {
+  event.preventDefault();
+}
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DragPressureSensorEvent = exports.DragStopSensorEvent = exports.DragMoveSensorEvent = exports.DragStartSensorEvent = exports.SensorEvent = undefined;
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _AbstractEvent2 = __webpack_require__(18);
+
+var _AbstractEvent3 = _interopRequireDefault(_AbstractEvent2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Base sensor event
+ * @class SensorEvent
+ * @module SensorEvent
+ * @extends AbstractEvent
+ */
+var SensorEvent = exports.SensorEvent = function (_AbstractEvent) {
+  (0, _inherits3.default)(SensorEvent, _AbstractEvent);
+
+  function SensorEvent() {
+    (0, _classCallCheck3.default)(this, SensorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (SensorEvent.__proto__ || Object.getPrototypeOf(SensorEvent)).apply(this, arguments));
+  }
+
+  (0, _createClass3.default)(SensorEvent, [{
+    key: 'originalEvent',
+
+
+    /**
+     * Original browser event that triggered a sensor
+     * @property originalEvent
+     * @type {Event}
+     * @readonly
+     */
+    get: function get() {
+      return this.data.originalEvent;
+    }
+
+    /**
+     * Normalized clientX for both touch and mouse events
+     * @property clientX
+     * @type {Number}
+     * @readonly
+     */
+
+  }, {
+    key: 'clientX',
+    get: function get() {
+      return this.data.clientX;
+    }
+
+    /**
+     * Normalized clientY for both touch and mouse events
+     * @property clientY
+     * @type {Number}
+     * @readonly
+     */
+
+  }, {
+    key: 'clientY',
+    get: function get() {
+      return this.data.clientY;
+    }
+
+    /**
+     * Normalized target for both touch and mouse events
+     * Returns the element that is behind cursor or touch pointer
+     * @property target
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'target',
+    get: function get() {
+      return this.data.target;
+    }
+
+    /**
+     * Container that initiated the sensor
+     * @property container
+     * @type {HTMLElement}
+     * @readonly
+     */
+
+  }, {
+    key: 'container',
+    get: function get() {
+      return this.data.container;
+    }
+
+    /**
+     * Trackpad pressure
+     * @property pressure
+     * @type {Number}
+     * @readonly
+     */
+
+  }, {
+    key: 'pressure',
+    get: function get() {
+      return this.data.pressure;
+    }
+  }]);
+  return SensorEvent;
+}(_AbstractEvent3.default);
+
+/**
+ * Drag start sensor event
+ * @class DragStartSensorEvent
+ * @module DragStartSensorEvent
+ * @extends SensorEvent
+ */
+
+
+var DragStartSensorEvent = exports.DragStartSensorEvent = function (_SensorEvent) {
+  (0, _inherits3.default)(DragStartSensorEvent, _SensorEvent);
+
+  function DragStartSensorEvent() {
+    (0, _classCallCheck3.default)(this, DragStartSensorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragStartSensorEvent.__proto__ || Object.getPrototypeOf(DragStartSensorEvent)).apply(this, arguments));
+  }
+
+  return DragStartSensorEvent;
+}(SensorEvent);
+
+/**
+ * Drag move sensor event
+ * @class DragMoveSensorEvent
+ * @module DragMoveSensorEvent
+ * @extends SensorEvent
+ */
+
+
+DragStartSensorEvent.type = 'drag:start';
+
+var DragMoveSensorEvent = exports.DragMoveSensorEvent = function (_SensorEvent2) {
+  (0, _inherits3.default)(DragMoveSensorEvent, _SensorEvent2);
+
+  function DragMoveSensorEvent() {
+    (0, _classCallCheck3.default)(this, DragMoveSensorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragMoveSensorEvent.__proto__ || Object.getPrototypeOf(DragMoveSensorEvent)).apply(this, arguments));
+  }
+
+  return DragMoveSensorEvent;
+}(SensorEvent);
+
+/**
+ * Drag stop sensor event
+ * @class DragStopSensorEvent
+ * @module DragStopSensorEvent
+ * @extends SensorEvent
+ */
+
+
+DragMoveSensorEvent.type = 'drag:move';
+
+var DragStopSensorEvent = exports.DragStopSensorEvent = function (_SensorEvent3) {
+  (0, _inherits3.default)(DragStopSensorEvent, _SensorEvent3);
+
+  function DragStopSensorEvent() {
+    (0, _classCallCheck3.default)(this, DragStopSensorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragStopSensorEvent.__proto__ || Object.getPrototypeOf(DragStopSensorEvent)).apply(this, arguments));
+  }
+
+  return DragStopSensorEvent;
+}(SensorEvent);
+
+/**
+ * Drag pressure sensor event
+ * @class DragPressureSensorEvent
+ * @module DragPressureSensorEvent
+ * @extends SensorEvent
+ */
+
+
+DragStopSensorEvent.type = 'drag:stop';
+
+var DragPressureSensorEvent = exports.DragPressureSensorEvent = function (_SensorEvent4) {
+  (0, _inherits3.default)(DragPressureSensorEvent, _SensorEvent4);
+
+  function DragPressureSensorEvent() {
+    (0, _classCallCheck3.default)(this, DragPressureSensorEvent);
+    return (0, _possibleConstructorReturn3.default)(this, (DragPressureSensorEvent.__proto__ || Object.getPrototypeOf(DragPressureSensorEvent)).apply(this, arguments));
+  }
+
+  return DragPressureSensorEvent;
+}(SensorEvent);
+
+DragPressureSensorEvent.type = 'drag:pressure';
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _TouchSensor = __webpack_require__(135);
+
+var _TouchSensor2 = _interopRequireDefault(_TouchSensor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _TouchSensor2.default;
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(19);
+
+var _Sensor2 = __webpack_require__(20);
+
+var _Sensor3 = _interopRequireDefault(_Sensor2);
+
+var _SensorEvent = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onTouchStart = Symbol('onTouchStart');
+var onTouchHold = Symbol('onTouchHold');
+var onTouchEnd = Symbol('onTouchEnd');
+var onTouchMove = Symbol('onTouchMove');
+var onScroll = Symbol('onScroll');
+
+/**
+ * Adds default document.ontouchmove. Workaround for preventing scrolling on touchmove
+ */
+document.ontouchmove = document.ontouchmove || function () {
+  return true;
+};
+
+/**
+ * This sensor picks up native browser touch events and dictates drag operations
+ * @class TouchSensor
+ * @module TouchSensor
+ * @extends Sensor
+ */
+
+var TouchSensor = function (_Sensor) {
+  (0, _inherits3.default)(TouchSensor, _Sensor);
+
+  /**
+   * TouchSensor constructor.
+   * @constructs TouchSensor
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Containers
+   * @param {Object} options - Options
+   */
+  function TouchSensor() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, TouchSensor);
+
+    /**
+     * Closest scrollable container so accidental scroll can cancel long touch
+     * @property currentScrollableParent
+     * @type {HTMLElement}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (TouchSensor.__proto__ || Object.getPrototypeOf(TouchSensor)).call(this, containers, options));
+
+    _this.currentScrollableParent = null;
+
+    /**
+     * TimeoutID for long touch
+     * @property tapTimeout
+     * @type {Number}
+     */
+    _this.tapTimeout = null;
+
+    /**
+     * touchMoved indicates if touch has moved during tapTimeout
+     * @property touchMoved
+     * @type {Boolean}
+     */
+    _this.touchMoved = false;
+
+    _this[onTouchStart] = _this[onTouchStart].bind(_this);
+    _this[onTouchHold] = _this[onTouchHold].bind(_this);
+    _this[onTouchEnd] = _this[onTouchEnd].bind(_this);
+    _this[onTouchMove] = _this[onTouchMove].bind(_this);
+    _this[onScroll] = _this[onScroll].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches sensors event listeners to the DOM
+   */
+
+
+  (0, _createClass3.default)(TouchSensor, [{
+    key: 'attach',
+    value: function attach() {
+      document.addEventListener('touchstart', this[onTouchStart]);
+    }
+
+    /**
+     * Detaches sensors event listeners to the DOM
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      document.removeEventListener('touchstart', this[onTouchStart]);
+    }
+
+    /**
+     * Touch start handler
+     * @private
+     * @param {Event} event - Touch start event
+     */
+
+  }, {
+    key: onTouchStart,
+    value: function value(event) {
+      var container = (0, _utils.closest)(event.target, this.containers);
+
+      if (!container) {
+        return;
+      }
+
+      document.addEventListener('touchmove', this[onTouchMove], { passive: false });
+      document.addEventListener('touchend', this[onTouchEnd]);
+      document.addEventListener('touchcancel', this[onTouchEnd]);
+
+      // detect if body is scrolling on iOS
+      document.addEventListener('scroll', this[onScroll]);
+      container.addEventListener('contextmenu', onContextMenu);
+
+      this.currentContainer = container;
+
+      this.currentScrollableParent = (0, _utils.closest)(container, function (element) {
+        return element.offsetHeight < element.scrollHeight;
+      });
+
+      if (this.currentScrollableParent) {
+        this.currentScrollableParent.addEventListener('scroll', this[onScroll]);
+      }
+
+      this.tapTimeout = setTimeout(this[onTouchHold](event, container), this.options.delay);
+    }
+
+    /**
+     * Touch hold handler
+     * @private
+     * @param {Event} event - Touch start event
+     * @param {HTMLElement} container - Container element
+     */
+
+  }, {
+    key: onTouchHold,
+    value: function value(event, container) {
+      var _this2 = this;
+
+      return function () {
+        if (_this2.touchMoved) {
+          return;
+        }
+
+        var touch = event.touches[0] || event.changedTouches[0];
+        var target = event.target;
+
+        var dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+          clientX: touch.pageX,
+          clientY: touch.pageY,
+          target: target,
+          container: container,
+          originalEvent: event
+        });
+
+        _this2.trigger(container, dragStartEvent);
+
+        _this2.dragging = !dragStartEvent.canceled();
+      };
+    }
+
+    /**
+     * Touch move handler
+     * @private
+     * @param {Event} event - Touch move event
+     */
+
+  }, {
+    key: onTouchMove,
+    value: function value(event) {
+      this.touchMoved = true;
+
+      if (!this.dragging) {
+        return;
+      }
+
+      // Cancels scrolling while dragging
+      event.preventDefault();
+      event.stopPropagation();
+
+      var touch = event.touches[0] || event.changedTouches[0];
+      var target = document.elementFromPoint(touch.pageX - window.scrollX, touch.pageY - window.scrollY);
+
+      var dragMoveEvent = new _SensorEvent.DragMoveSensorEvent({
+        clientX: touch.pageX,
+        clientY: touch.pageY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragMoveEvent);
+    }
+
+    /**
+     * Touch end handler
+     * @private
+     * @param {Event} event - Touch end event
+     */
+
+  }, {
+    key: onTouchEnd,
+    value: function value(event) {
+      this.touchMoved = false;
+
+      document.removeEventListener('touchend', this[onTouchEnd]);
+      document.removeEventListener('touchcancel', this[onTouchEnd]);
+      document.removeEventListener('touchmove', this[onTouchMove], { passive: false });
+
+      document.removeEventListener('scroll', this[onScroll]);
+
+      if (this.currentContainer) {
+        this.currentContainer.removeEventListener('contextmenu', onContextMenu);
+      }
+
+      if (this.currentScrollableParent) {
+        this.currentScrollableParent.removeEventListener('scroll', this[onScroll]);
+      }
+
+      clearTimeout(this.tapTimeout);
+
+      if (!this.dragging) {
+        return;
+      }
+
+      var touch = event.touches[0] || event.changedTouches[0];
+      var target = document.elementFromPoint(touch.pageX - window.scrollX, touch.pageY - window.scrollY);
+
+      event.preventDefault();
+
+      var dragStopEvent = new _SensorEvent.DragStopSensorEvent({
+        clientX: touch.pageX,
+        clientY: touch.pageY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragStopEvent);
+
+      this.currentContainer = null;
+      this.dragging = false;
+    }
+
+    /**
+     * Scroll handler, cancel potential drag and allow scroll on iOS or other touch devices
+     * @private
+     */
+
+  }, {
+    key: onScroll,
+    value: function value() {
+      clearTimeout(this.tapTimeout);
+    }
+  }]);
+  return TouchSensor;
+}(_Sensor3.default);
+
+exports.default = TouchSensor;
+
+
+function onContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _DragSensor = __webpack_require__(137);
+
+var _DragSensor2 = _interopRequireDefault(_DragSensor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _DragSensor2.default;
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(19);
+
+var _Sensor2 = __webpack_require__(20);
+
+var _Sensor3 = _interopRequireDefault(_Sensor2);
+
+var _SensorEvent = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onMouseDown = Symbol('onMouseDown');
+var onMouseUp = Symbol('onMouseUp');
+var onDragStart = Symbol('onDragStart');
+var onDragOver = Symbol('onDragOver');
+var onDragEnd = Symbol('onDragEnd');
+var onDrop = Symbol('onDrop');
+var reset = Symbol('reset');
+
+/**
+ * This sensor picks up native browser drag events and dictates drag operations
+ * @class DragSensor
+ * @module DragSensor
+ * @extends Sensor
+ */
+
+var DragSensor = function (_Sensor) {
+  (0, _inherits3.default)(DragSensor, _Sensor);
+
+  /**
+   * DragSensor constructor.
+   * @constructs DragSensor
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Containers
+   * @param {Object} options - Options
+   */
+  function DragSensor() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, DragSensor);
+
+    /**
+     * Mouse down timer which will end up setting the draggable attribute, unless canceled
+     * @property mouseDownTimeout
+     * @type {Number}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (DragSensor.__proto__ || Object.getPrototypeOf(DragSensor)).call(this, containers, options));
+
+    _this.mouseDownTimeout = null;
+
+    /**
+     * Draggable element needs to be remembered to unset the draggable attribute after drag operation has completed
+     * @property draggableElement
+     * @type {HTMLElement}
+     */
+    _this.draggableElement = null;
+
+    /**
+     * Native draggable element could be links or images, their draggable state will be disabled during drag operation
+     * @property nativeDraggableElement
+     * @type {HTMLElement}
+     */
+    _this.nativeDraggableElement = null;
+
+    _this[onMouseDown] = _this[onMouseDown].bind(_this);
+    _this[onMouseUp] = _this[onMouseUp].bind(_this);
+    _this[onDragStart] = _this[onDragStart].bind(_this);
+    _this[onDragOver] = _this[onDragOver].bind(_this);
+    _this[onDragEnd] = _this[onDragEnd].bind(_this);
+    _this[onDrop] = _this[onDrop].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches sensors event listeners to the DOM
+   */
+
+
+  (0, _createClass3.default)(DragSensor, [{
+    key: 'attach',
+    value: function attach() {
+      document.addEventListener('mousedown', this[onMouseDown], true);
+    }
+
+    /**
+     * Detaches sensors event listeners to the DOM
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      document.removeEventListener('mousedown', this[onMouseDown], true);
+    }
+
+    /**
+     * Drag start handler
+     * @private
+     * @param {Event} event - Drag start event
+     */
+
+  }, {
+    key: onDragStart,
+    value: function value(event) {
+      var _this2 = this;
+
+      // Need for firefox. "text" key is needed for IE
+      event.dataTransfer.setData('text', '');
+      event.dataTransfer.effectAllowed = this.options.type;
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+      this.currentContainer = (0, _utils.closest)(event.target, this.containers);
+
+      if (!this.currentContainer) {
+        return;
+      }
+
+      var dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      // Workaround
+      setTimeout(function () {
+        _this2.trigger(_this2.currentContainer, dragStartEvent);
+
+        if (dragStartEvent.canceled()) {
+          _this2.dragging = false;
+        } else {
+          _this2.dragging = true;
+        }
+      }, 0);
+    }
+
+    /**
+     * Drag over handler
+     * @private
+     * @param {Event} event - Drag over event
+     */
+
+  }, {
+    key: onDragOver,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+      var container = this.currentContainer;
+
+      var dragMoveEvent = new _SensorEvent.DragMoveSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: container,
+        originalEvent: event
+      });
+
+      this.trigger(container, dragMoveEvent);
+
+      if (!dragMoveEvent.canceled()) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = this.options.type;
+      }
+    }
+
+    /**
+     * Drag end handler
+     * @private
+     * @param {Event} event - Drag end event
+     */
+
+  }, {
+    key: onDragEnd,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      document.removeEventListener('mouseup', this[onMouseUp], true);
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+      var container = this.currentContainer;
+
+      var dragStopEvent = new _SensorEvent.DragStopSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: container,
+        originalEvent: event
+      });
+
+      this.trigger(container, dragStopEvent);
+
+      this.dragging = false;
+
+      this[reset]();
+    }
+
+    /**
+     * Drop handler
+     * @private
+     * @param {Event} event - Drop event
+     */
+
+  }, {
+    key: onDrop,
+    value: function value(event) {
+      // eslint-disable-line class-methods-use-this
+      event.preventDefault();
+    }
+
+    /**
+     * Mouse down handler
+     * @private
+     * @param {Event} event - Mouse down event
+     */
+
+  }, {
+    key: onMouseDown,
+    value: function value(event) {
+      var _this3 = this;
+
+      // Firefox bug for inputs within draggables https://bugzilla.mozilla.org/show_bug.cgi?id=739071
+      if (event.target && (event.target.form || event.target.contenteditable)) {
+        return;
+      }
+
+      var nativeDraggableElement = (0, _utils.closest)(event.target, function (element) {
+        return element.draggable;
+      });
+
+      if (nativeDraggableElement) {
+        nativeDraggableElement.draggable = false;
+        this.nativeDraggableElement = nativeDraggableElement;
+      }
+
+      document.addEventListener('mouseup', this[onMouseUp], true);
+      document.addEventListener('dragstart', this[onDragStart], false);
+      document.addEventListener('dragover', this[onDragOver], false);
+      document.addEventListener('dragend', this[onDragEnd], false);
+      document.addEventListener('drop', this[onDrop], false);
+
+      var target = (0, _utils.closest)(event.target, this.options.draggable);
+
+      if (!target) {
+        return;
+      }
+
+      this.mouseDownTimeout = setTimeout(function () {
+        target.draggable = true;
+        _this3.draggableElement = target;
+      }, this.options.delay);
+    }
+
+    /**
+     * Mouse up handler
+     * @private
+     * @param {Event} event - Mouse up event
+     */
+
+  }, {
+    key: onMouseUp,
+    value: function value() {
+      this[reset]();
+    }
+
+    /**
+     * Mouse up handler
+     * @private
+     * @param {Event} event - Mouse up event
+     */
+
+  }, {
+    key: reset,
+    value: function value() {
+      clearTimeout(this.mouseDownTimeout);
+
+      document.removeEventListener('mouseup', this[onMouseUp], true);
+      document.removeEventListener('dragstart', this[onDragStart], false);
+      document.removeEventListener('dragover', this[onDragOver], false);
+      document.removeEventListener('dragend', this[onDragEnd], false);
+      document.removeEventListener('drop', this[onDrop], false);
+
+      if (this.nativeDraggableElement) {
+        this.nativeDraggableElement.draggable = true;
+        this.nativeDraggableElement = null;
+      }
+
+      if (this.draggableElement) {
+        this.draggableElement.draggable = false;
+        this.draggableElement = null;
+      }
+    }
+  }]);
+  return DragSensor;
+}(_Sensor3.default);
+
+exports.default = DragSensor;
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ForceTouchSensor = __webpack_require__(139);
+
+var _ForceTouchSensor2 = _interopRequireDefault(_ForceTouchSensor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _ForceTouchSensor2.default;
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(3);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _Sensor2 = __webpack_require__(20);
+
+var _Sensor3 = _interopRequireDefault(_Sensor2);
+
+var _SensorEvent = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onMouseForceWillBegin = Symbol('onMouseForceWillBegin');
+var onMouseForceDown = Symbol('onMouseForceDown');
+var onMouseDown = Symbol('onMouseDown');
+var onMouseForceChange = Symbol('onMouseForceChange');
+var onMouseMove = Symbol('onMouseMove');
+var onMouseUp = Symbol('onMouseUp');
+var onMouseForceGlobalChange = Symbol('onMouseForceGlobalChange');
+
+/**
+ * This sensor picks up native force touch events and dictates drag operations
+ * @class ForceTouchSensor
+ * @module ForceTouchSensor
+ * @extends Sensor
+ */
+
+var ForceTouchSensor = function (_Sensor) {
+  (0, _inherits3.default)(ForceTouchSensor, _Sensor);
+
+  /**
+   * ForceTouchSensor constructor.
+   * @constructs ForceTouchSensor
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Containers
+   * @param {Object} options - Options
+   */
+  function ForceTouchSensor() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, ForceTouchSensor);
+
+    /**
+     * Draggable element needs to be remembered to unset the draggable attribute after drag operation has completed
+     * @property mightDrag
+     * @type {Boolean}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (ForceTouchSensor.__proto__ || Object.getPrototypeOf(ForceTouchSensor)).call(this, containers, options));
+
+    _this.mightDrag = false;
+
+    _this[onMouseForceWillBegin] = _this[onMouseForceWillBegin].bind(_this);
+    _this[onMouseForceDown] = _this[onMouseForceDown].bind(_this);
+    _this[onMouseDown] = _this[onMouseDown].bind(_this);
+    _this[onMouseForceChange] = _this[onMouseForceChange].bind(_this);
+    _this[onMouseMove] = _this[onMouseMove].bind(_this);
+    _this[onMouseUp] = _this[onMouseUp].bind(_this);
+    return _this;
+  }
+
+  /**
+   * Attaches sensors event listeners to the DOM
+   */
+
+
+  (0, _createClass3.default)(ForceTouchSensor, [{
+    key: 'attach',
+    value: function attach() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.containers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var container = _step.value;
+
+          container.addEventListener('webkitmouseforcewillbegin', this[onMouseForceWillBegin], false);
+          container.addEventListener('webkitmouseforcedown', this[onMouseForceDown], false);
+          container.addEventListener('mousedown', this[onMouseDown], true);
+          container.addEventListener('webkitmouseforcechanged', this[onMouseForceChange], false);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      document.addEventListener('mousemove', this[onMouseMove]);
+      document.addEventListener('mouseup', this[onMouseUp]);
+    }
+
+    /**
+     * Detaches sensors event listeners to the DOM
+     */
+
+  }, {
+    key: 'detach',
+    value: function detach() {
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.containers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var container = _step2.value;
+
+          container.removeEventListener('webkitmouseforcewillbegin', this[onMouseForceWillBegin], false);
+          container.removeEventListener('webkitmouseforcedown', this[onMouseForceDown], false);
+          container.removeEventListener('mousedown', this[onMouseDown], true);
+          container.removeEventListener('webkitmouseforcechanged', this[onMouseForceChange], false);
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      document.removeEventListener('mousemove', this[onMouseMove]);
+      document.removeEventListener('mouseup', this[onMouseUp]);
+    }
+
+    /**
+     * Mouse force will begin handler
+     * @private
+     * @param {Event} event - Mouse force will begin event
+     */
+
+  }, {
+    key: onMouseForceWillBegin,
+    value: function value(event) {
+      event.preventDefault();
+      this.mightDrag = true;
+    }
+
+    /**
+     * Mouse force down handler
+     * @private
+     * @param {Event} event - Mouse force down event
+     */
+
+  }, {
+    key: onMouseForceDown,
+    value: function value(event) {
+      if (this.dragging) {
+        return;
+      }
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+      var container = event.currentTarget;
+
+      var dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: container,
+        originalEvent: event
+      });
+
+      this.trigger(container, dragStartEvent);
+
+      this.currentContainer = container;
+      this.dragging = !dragStartEvent.canceled();
+      this.mightDrag = false;
+    }
+
+    /**
+     * Mouse up handler
+     * @private
+     * @param {Event} event - Mouse up event
+     */
+
+  }, {
+    key: onMouseUp,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var dragStopEvent = new _SensorEvent.DragStopSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: null,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragStopEvent);
+
+      this.currentContainer = null;
+      this.dragging = false;
+      this.mightDrag = false;
+    }
+
+    /**
+     * Mouse down handler
+     * @private
+     * @param {Event} event - Mouse down event
+     */
+
+  }, {
+    key: onMouseDown,
+    value: function value(event) {
+      if (!this.mightDrag) {
+        return;
+      }
+
+      // Need workaround for real click
+      // Cancel potential drag events
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      event.preventDefault();
+    }
+
+    /**
+     * Mouse move handler
+     * @private
+     * @param {Event} event - Mouse force will begin event
+     */
+
+  }, {
+    key: onMouseMove,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var target = document.elementFromPoint(event.clientX, event.clientY);
+
+      var dragMoveEvent = new _SensorEvent.DragMoveSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragMoveEvent);
+    }
+
+    /**
+     * Mouse force change handler
+     * @private
+     * @param {Event} event - Mouse force change event
+     */
+
+  }, {
+    key: onMouseForceChange,
+    value: function value(event) {
+      if (this.dragging) {
+        return;
+      }
+
+      var target = event.target;
+      var container = event.currentTarget;
+
+      var dragPressureEvent = new _SensorEvent.DragPressureSensorEvent({
+        pressure: event.webkitForce,
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: container,
+        originalEvent: event
+      });
+
+      this.trigger(container, dragPressureEvent);
+    }
+
+    /**
+     * Mouse force global change handler
+     * @private
+     * @param {Event} event - Mouse force global change event
+     */
+
+  }, {
+    key: onMouseForceGlobalChange,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var target = event.target;
+
+      var dragPressureEvent = new _SensorEvent.DragPressureSensorEvent({
+        pressure: event.webkitForce,
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target: target,
+        container: this.currentContainer,
+        originalEvent: event
+      });
+
+      this.trigger(this.currentContainer, dragPressureEvent);
+    }
+  }]);
+  return ForceTouchSensor;
+}(_Sensor3.default);
+
+exports.default = ForceTouchSensor;
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultOptions = undefined;
+
+var _toConsumableArray2 = __webpack_require__(41);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _utils = __webpack_require__(19);
+
+var _Plugins = __webpack_require__(58);
+
+var _Emitter = __webpack_require__(141);
+
+var _Emitter2 = _interopRequireDefault(_Emitter);
+
+var _Sensors = __webpack_require__(59);
+
+var _DraggableEvent = __webpack_require__(56);
+
+var _DragEvent = __webpack_require__(55);
+
+var _MirrorEvent = __webpack_require__(57);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var onDragStart = Symbol('onDragStart');
+var onDragMove = Symbol('onDragMove');
+var onDragStop = Symbol('onDragStop');
+var onDragPressure = Symbol('onDragPressure');
+var getAppendableContainer = Symbol('getAppendableContainer');
+
+/**
+ * @const {Object} defaultAnnouncements
+ * @const {Function} defaultAnnouncements['drag:start']
+ * @const {Function} defaultAnnouncements['drag:stop']
+ */
+var defaultAnnouncements = {
+  'drag:start': function dragStart(event) {
+    return 'Picked up ' + (event.source.textContent.trim() || event.source.id || 'draggable element');
+  },
+  'drag:stop': function dragStop(event) {
+    return 'Released ' + (event.source.textContent.trim() || event.source.id || 'draggable element');
+  }
+};
+
+var defaultClasses = {
+  'container:dragging': 'draggable-container--is-dragging',
+  'source:dragging': 'draggable-source--is-dragging',
+  'source:placed': 'draggable-source--placed',
+  'container:placed': 'draggable-container--placed',
+  'body:dragging': 'draggable--is-dragging',
+  'draggable:over': 'draggable--over',
+  'container:over': 'draggable-container--over',
+  'source:original': 'draggable--original',
+  mirror: 'draggable-mirror'
+};
+
+var defaultOptions = exports.defaultOptions = {
+  draggable: '.draggable-source',
+  handle: null,
+  delay: 100,
+  placedTimeout: 800,
+  plugins: [],
+  sensors: []
+};
+
+/**
+ * This is the core draggable library that does the heavy lifting
+ * @class Draggable
+ * @module Draggable
+ */
+
+var Draggable = function () {
+
+  /**
+   * Draggable constructor.
+   * @constructs Draggable
+   * @param {HTMLElement[]|NodeList|HTMLElement} containers - Draggable containers
+   * @param {Object} options - Options for draggable
+   */
+  function Draggable() {
+    var containers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [document.body];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (0, _classCallCheck3.default)(this, Draggable);
+
+
+    /**
+     * Draggable containers
+     * @property containers
+     * @type {HTMLElement[]}
+     */
+    if (containers instanceof NodeList || containers instanceof Array) {
+      this.containers = [].concat((0, _toConsumableArray3.default)(containers));
+    } else if (containers instanceof HTMLElement) {
+      this.containers = [containers];
+    } else {
+      throw new Error('Draggable containers are expected to be of type `NodeList`, `HTMLElement[]` or `HTMLElement`');
+    }
+
+    this.options = Object.assign({}, defaultOptions, options, {
+      classes: Object.assign({}, defaultClasses, options.classes || {}),
+      announcements: Object.assign({}, defaultAnnouncements, options.announcements || {})
+    });
+
+    /**
+     * Draggables event emitter
+     * @property emitter
+     * @type {Emitter}
+     */
+    this.emitter = new _Emitter2.default();
+
+    /**
+     * Current drag state
+     * @property dragging
+     * @type {Boolean}
+     */
+    this.dragging = false;
+
+    /**
+     * Active plugins
+     * @property plugins
+     * @type {Plugin[]}
+     */
+    this.plugins = [];
+
+    /**
+     * Active sensors
+     * @property sensors
+     * @type {Sensor[]}
+     */
+    this.sensors = [];
+
+    this[onDragStart] = this[onDragStart].bind(this);
+    this[onDragMove] = this[onDragMove].bind(this);
+    this[onDragStop] = this[onDragStop].bind(this);
+    this[onDragPressure] = this[onDragPressure].bind(this);
+
+    document.addEventListener('drag:start', this[onDragStart], true);
+    document.addEventListener('drag:move', this[onDragMove], true);
+    document.addEventListener('drag:stop', this[onDragStop], true);
+    document.addEventListener('drag:pressure', this[onDragPressure], true);
+
+    this.addPlugin.apply(this, [_Plugins.Mirror, _Plugins.Accessibility, _Plugins.Scrollable, _Plugins.Announcement].concat((0, _toConsumableArray3.default)(this.options.plugins)));
+    this.addSensor.apply(this, [_Sensors.MouseSensor, _Sensors.TouchSensor].concat((0, _toConsumableArray3.default)(this.options.sensors)));
+
+    var draggableInitializedEvent = new _DraggableEvent.DraggableInitializedEvent({
+      draggable: this
+    });
+
+    this.trigger(draggableInitializedEvent);
+  }
+
+  /**
+   * Destroys Draggable instance. This removes all internal event listeners and
+   * deactivates sensors and plugins
+   */
+
+
+  /**
+   * Default plugins draggable uses
+   * @static
+   * @property {Object} Plugins
+   * @property {Mirror} Plugins.Mirror
+   * @property {Accessibility} Plugins.Accessibility
+   * @property {Scrollable} Plugins.Scrollable
+   * @property {Announcement} Plugins.Announcement
+   * @type {Object}
+   */
+
+
+  (0, _createClass3.default)(Draggable, [{
+    key: 'destroy',
+    value: function destroy() {
+      document.removeEventListener('drag:start', this[onDragStart], true);
+      document.removeEventListener('drag:move', this[onDragMove], true);
+      document.removeEventListener('drag:stop', this[onDragStop], true);
+      document.removeEventListener('drag:pressure', this[onDragPressure], true);
+
+      var draggableDestroyEvent = new _DraggableEvent.DraggableDestroyEvent({
+        draggable: this
+      });
+
+      this.trigger(draggableDestroyEvent);
+
+      this.removePlugin.apply(this, (0, _toConsumableArray3.default)(this.plugins.map(function (plugin) {
+        return plugin.constructor;
+      })));
+      this.removeSensor.apply(this, (0, _toConsumableArray3.default)(this.sensors.map(function (sensor) {
+        return sensor.constructor;
+      })));
+    }
+
+    /**
+     * Adds plugin to this draggable instance. This will end up calling the attach method of the plugin
+     * @param {...typeof Plugin} plugins - Plugins that you want attached to draggable
+     * @return {Draggable}
+     * @example draggable.addPlugin(CustomA11yPlugin, CustomMirrorPlugin)
+     */
+
+  }, {
+    key: 'addPlugin',
+    value: function addPlugin() {
+      var _this = this;
+
+      for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
+        plugins[_key] = arguments[_key];
+      }
+
+      var activePlugins = plugins.map(function (Plugin) {
+        return new Plugin(_this);
+      });
+      activePlugins.forEach(function (plugin) {
+        return plugin.attach();
+      });
+      this.plugins = [].concat((0, _toConsumableArray3.default)(this.plugins), (0, _toConsumableArray3.default)(activePlugins));
+      return this;
+    }
+
+    /**
+     * Removes plugins that are already attached to this draggable instance. This will end up calling
+     * the detach method of the plugin
+     * @param {...typeof Plugin} plugins - Plugins that you want detached from draggable
+     * @return {Draggable}
+     * @example draggable.removePlugin(MirrorPlugin, CustomMirrorPlugin)
+     */
+
+  }, {
+    key: 'removePlugin',
+    value: function removePlugin() {
+      for (var _len2 = arguments.length, plugins = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        plugins[_key2] = arguments[_key2];
+      }
+
+      var removedPlugins = this.plugins.filter(function (plugin) {
+        return plugins.includes(plugin.constructor);
+      });
+      removedPlugins.forEach(function (plugin) {
+        return plugin.detach();
+      });
+      this.plugins = this.plugins.filter(function (plugin) {
+        return !plugins.includes(plugin.constructor);
+      });
+      return this;
+    }
+
+    /**
+     * Adds sensors to this draggable instance. This will end up calling the attach method of the sensor
+     * @param {...typeof Sensor} sensors - Sensors that you want attached to draggable
+     * @return {Draggable}
+     * @example draggable.addSensor(ForceTouchSensor, CustomSensor)
+     */
+
+  }, {
+    key: 'addSensor',
+    value: function addSensor() {
+      var _this2 = this;
+
+      for (var _len3 = arguments.length, sensors = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        sensors[_key3] = arguments[_key3];
+      }
+
+      var activeSensors = sensors.map(function (Sensor) {
+        return new Sensor(_this2.containers, _this2.options);
+      });
+      activeSensors.forEach(function (sensor) {
+        return sensor.attach();
+      });
+      this.sensors = [].concat((0, _toConsumableArray3.default)(this.sensors), (0, _toConsumableArray3.default)(activeSensors));
+      return this;
+    }
+
+    /**
+     * Removes sensors that are already attached to this draggable instance. This will end up calling
+     * the detach method of the sensor
+     * @param {...typeof Sensor} sensors - Sensors that you want attached to draggable
+     * @return {Draggable}
+     * @example draggable.removeSensor(TouchSensor, DragSensor)
+     */
+
+  }, {
+    key: 'removeSensor',
+    value: function removeSensor() {
+      for (var _len4 = arguments.length, sensors = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        sensors[_key4] = arguments[_key4];
+      }
+
+      var removedSensors = this.sensors.filter(function (sensor) {
+        return sensors.includes(sensor.constructor);
+      });
+      removedSensors.forEach(function (sensor) {
+        return sensor.detach();
+      });
+      this.sensors = this.sensors.filter(function (sensor) {
+        return !sensors.includes(sensor.constructor);
+      });
+      return this;
+    }
+
+    /**
+     * Adds container to this draggable instance
+     * @param {...HTMLElement} containers - Containers you want to add to draggable
+     * @return {Draggable}
+     * @example draggable.addPlugin(CustomA11yPlugin, CustomMirrorPlugin)
+     */
+
+  }, {
+    key: 'addContainer',
+    value: function addContainer() {
+      for (var _len5 = arguments.length, containers = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        containers[_key5] = arguments[_key5];
+      }
+
+      this.containers = [].concat((0, _toConsumableArray3.default)(this.containers), containers);
+      return this;
+    }
+
+    /**
+     * Removes container from this draggable instance
+     * @param {...HTMLElement} containers - Containers you want to remove from draggable
+     * @return {Draggable}
+     * @example draggable.removePlugin(MirrorPlugin, CustomMirrorPlugin)
+     */
+
+  }, {
+    key: 'removeContainer',
+    value: function removeContainer() {
+      for (var _len6 = arguments.length, containers = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        containers[_key6] = arguments[_key6];
+      }
+
+      this.containers = this.containers.filter(function (container) {
+        return !containers.includes(container);
+      });
+      return this;
+    }
+
+    /**
+     * Adds listener for draggable events
+     * @param {String} type - Event name
+     * @param {...Function} callbacks - Event callbacks
+     * @return {Draggable}
+     * @example draggable.on('drag:start', (dragEvent) => dragEvent.cancel());
+     */
+
+  }, {
+    key: 'on',
+    value: function on(type) {
+      var _emitter;
+
+      for (var _len7 = arguments.length, callbacks = Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+        callbacks[_key7 - 1] = arguments[_key7];
+      }
+
+      (_emitter = this.emitter).on.apply(_emitter, [type].concat(callbacks));
+      return this;
+    }
+
+    /**
+     * Removes listener from draggable
+     * @param {String} type - Event name
+     * @param {Function} callback - Event callback
+     * @return {Draggable}
+     * @example draggable.off('drag:start', handlerFunction);
+     */
+
+  }, {
+    key: 'off',
+    value: function off(type, callback) {
+      this.emitter.off(type, callback);
+      return this;
+    }
+
+    /**
+     * Triggers draggable event
+     * @param {AbstractEvent} event - Event instance
+     * @return {Draggable}
+     * @example draggable.trigger(event);
+     */
+
+  }, {
+    key: 'trigger',
+    value: function trigger(event) {
+      this.emitter.trigger(event);
+      return this;
+    }
+
+    /**
+     * Returns class name for class identifier
+     * @param {String} name - Name of class identifier
+     * @return {String|null}
+     */
+
+  }, {
+    key: 'getClassNameFor',
+    value: function getClassNameFor(name) {
+      return this.options.classes[name];
+    }
+
+    /**
+     * Returns true if this draggable instance is currently dragging
+     * @return {Boolean}
+     */
+
+  }, {
+    key: 'isDragging',
+    value: function isDragging() {
+      return Boolean(this.dragging);
+    }
+
+    /**
+     * Returns draggable elements for a given container, excluding the mirror and
+     * original source element if present
+     * @param {HTMLElement} container
+     * @return {HTMLElement[]}
+     */
+
+  }, {
+    key: 'getDraggableElementsForContainer',
+    value: function getDraggableElementsForContainer(container) {
+      var _this3 = this;
+
+      var allDraggableElements = container.querySelectorAll(this.options.draggable);
+
+      return [].concat((0, _toConsumableArray3.default)(allDraggableElements)).filter(function (childElement) {
+        return childElement !== _this3.originalSource && childElement !== _this3.mirror;
+      });
+    }
+
+    /**
+     * Drag start handler
+     * @private
+     * @param {Event} event - DOM Drag event
+     */
+
+  }, {
+    key: onDragStart,
+    value: function value(event) {
+      var _this4 = this;
+
+      var sensorEvent = getSensorEvent(event);
+      var target = sensorEvent.target,
+          container = sensorEvent.container,
+          originalEvent = sensorEvent.originalEvent;
+
+
+      if (!this.containers.includes(container)) {
+        return;
+      }
+
+      if (this.options.handle && target && !(0, _utils.closest)(target, this.options.handle)) {
+        sensorEvent.cancel();
+        return;
+      }
+
+      // Find draggable source element
+      this.originalSource = (0, _utils.closest)(target, this.options.draggable);
+      this.sourceContainer = container;
+
+      if (!this.originalSource) {
+        sensorEvent.cancel();
+        return;
+      }
+
+      if (this.lastPlacedSource && this.lastPlacedContainer) {
+        clearTimeout(this.placedTimeoutID);
+        this.lastPlacedSource.classList.remove(this.getClassNameFor('source:placed'));
+        this.lastPlacedContainer.classList.remove(this.getClassNameFor('container:placed'));
+      }
+
+      this.dragging = true;
+
+      this.source = this.originalSource.cloneNode(true);
+
+      var mirrorCreateEvent = new _MirrorEvent.MirrorCreateEvent({
+        source: this.source,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent: sensorEvent
+      });
+
+      this.trigger(mirrorCreateEvent);
+
+      if (!isDragEvent(originalEvent) && !mirrorCreateEvent.canceled()) {
+        var appendableContainer = this[getAppendableContainer]({ source: this.originalSource });
+        this.mirror = this.source.cloneNode(true);
+
+        var mirrorCreatedEvent = new _MirrorEvent.MirrorCreatedEvent({
+          source: this.source,
+          originalSource: this.originalSource,
+          mirror: this.mirror,
+          sourceContainer: container,
+          sensorEvent: sensorEvent
+        });
+
+        var mirrorAttachedEvent = new _MirrorEvent.MirrorAttachedEvent({
+          source: this.source,
+          originalSource: this.originalSource,
+          mirror: this.mirror,
+          sourceContainer: container,
+          sensorEvent: sensorEvent
+        });
+
+        this.trigger(mirrorCreatedEvent);
+        appendableContainer.appendChild(this.mirror);
+        this.trigger(mirrorAttachedEvent);
+      }
+
+      this.originalSource.classList.add(this.getClassNameFor('source:original'));
+      this.originalSource.parentNode.insertBefore(this.source, this.originalSource);
+
+      this.originalSource.style.display = 'none';
+      this.source.classList.add(this.getClassNameFor('source:dragging'));
+      this.sourceContainer.classList.add(this.getClassNameFor('container:dragging'));
+      document.body.classList.add(this.getClassNameFor('body:dragging'));
+      applyUserSelect(document.body, 'none');
+
+      var dragEvent = new _DragEvent.DragStartEvent({
+        source: this.source,
+        mirror: this.mirror,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent: sensorEvent
+      });
+
+      this.trigger(dragEvent);
+
+      if (dragEvent.canceled()) {
+        this.dragging = false;
+
+        if (this.mirror) {
+          this.mirror.parentNode.removeChild(this.mirror);
+        }
+
+        this.source.parentNode.removeChild(this.source);
+        this.originalSource.style.display = null;
+
+        this.source.classList.remove(this.getClassNameFor('source:dragging'));
+        this.sourceContainer.classList.remove(this.getClassNameFor('container:dragging'));
+        document.body.classList.remove(this.getClassNameFor('body:dragging'));
+      } else {
+        requestAnimationFrame(function () {
+          return _this4[onDragMove](event);
+        });
+      }
+    }
+
+    /**
+     * Drag move handler
+     * @private
+     * @param {Event} event - DOM Drag event
+     */
+
+  }, {
+    key: onDragMove,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var sensorEvent = getSensorEvent(event);
+      var container = sensorEvent.container;
+
+      var target = sensorEvent.target;
+
+      var dragMoveEvent = new _DragEvent.DragMoveEvent({
+        source: this.source,
+        mirror: this.mirror,
+        originalSource: this.originalSource,
+        sourceContainer: container,
+        sensorEvent: sensorEvent
+      });
+
+      this.trigger(dragMoveEvent);
+
+      if (dragMoveEvent.canceled()) {
+        sensorEvent.cancel();
+      }
+
+      if (this.mirror && !dragMoveEvent.canceled()) {
+        var mirrorMoveEvent = new _MirrorEvent.MirrorMoveEvent({
+          source: this.source,
+          mirror: this.mirror,
+          originalSource: this.originalSource,
+          sourceContainer: container,
+          sensorEvent: sensorEvent
+        });
+
+        this.trigger(mirrorMoveEvent);
+      }
+
+      target = (0, _utils.closest)(target, this.options.draggable);
+      var withinCorrectContainer = (0, _utils.closest)(sensorEvent.target, this.containers);
+      var overContainer = sensorEvent.overContainer || withinCorrectContainer;
+      var isLeavingContainer = this.currentOverContainer && overContainer !== this.currentOverContainer;
+      var isLeavingDraggable = this.currentOver && target !== this.currentOver;
+      var isOverContainer = overContainer && this.currentOverContainer !== overContainer;
+      var isOverDraggable = withinCorrectContainer && target && this.currentOver !== target;
+
+      if (isLeavingDraggable) {
+        var dragOutEvent = new _DragEvent.DragOutEvent({
+          source: this.source,
+          mirror: this.mirror,
+          originalSource: this.originalSource,
+          sourceContainer: container,
+          sensorEvent: sensorEvent,
+          over: this.currentOver
+        });
+
+        this.currentOver.classList.remove(this.getClassNameFor('draggable:over'));
+        this.currentOver = null;
+
+        this.trigger(dragOutEvent);
+      }
+
+      if (isLeavingContainer) {
+        var dragOutContainerEvent = new _DragEvent.DragOutContainerEvent({
+          source: this.source,
+          mirror: this.mirror,
+          originalSource: this.originalSource,
+          sourceContainer: container,
+          sensorEvent: sensorEvent,
+          overContainer: this.currentOverContainer
+        });
+
+        this.currentOverContainer.classList.remove(this.getClassNameFor('container:over'));
+        this.currentOverContainer = null;
+
+        this.trigger(dragOutContainerEvent);
+      }
+
+      if (isOverContainer) {
+        overContainer.classList.add(this.getClassNameFor('container:over'));
+
+        var dragOverContainerEvent = new _DragEvent.DragOverContainerEvent({
+          source: this.source,
+          mirror: this.mirror,
+          originalSource: this.originalSource,
+          sourceContainer: container,
+          sensorEvent: sensorEvent,
+          overContainer: overContainer
+        });
+
+        this.currentOverContainer = overContainer;
+
+        this.trigger(dragOverContainerEvent);
+      }
+
+      if (isOverDraggable) {
+        target.classList.add(this.getClassNameFor('draggable:over'));
+
+        var dragOverEvent = new _DragEvent.DragOverEvent({
+          source: this.source,
+          mirror: this.mirror,
+          originalSource: this.originalSource,
+          sourceContainer: container,
+          sensorEvent: sensorEvent,
+          overContainer: overContainer,
+          over: target
+        });
+
+        this.currentOver = target;
+
+        this.trigger(dragOverEvent);
+      }
+    }
+
+    /**
+     * Drag stop handler
+     * @private
+     * @param {Event} event - DOM Drag event
+     */
+
+  }, {
+    key: onDragStop,
+    value: function value(event) {
+      var _this5 = this;
+
+      if (!this.dragging) {
+        return;
+      }
+
+      this.dragging = false;
+
+      var sensorEvent = getSensorEvent(event);
+      var dragStopEvent = new _DragEvent.DragStopEvent({
+        source: this.source,
+        mirror: this.mirror,
+        originalSource: this.originalSource,
+        sensorEvent: event.sensorEvent,
+        sourceContainer: this.sourceContainer
+      });
+
+      this.trigger(dragStopEvent);
+
+      this.source.parentNode.insertBefore(this.originalSource, this.source);
+      this.source.parentNode.removeChild(this.source);
+      this.originalSource.style.display = '';
+
+      this.source.classList.remove(this.getClassNameFor('source:dragging'));
+      this.originalSource.classList.remove(this.getClassNameFor('source:original'));
+      this.originalSource.classList.add(this.getClassNameFor('source:placed'));
+      this.sourceContainer.classList.add(this.getClassNameFor('container:placed'));
+      this.sourceContainer.classList.remove(this.getClassNameFor('container:dragging'));
+      document.body.classList.remove(this.getClassNameFor('body:dragging'));
+      applyUserSelect(document.body, '');
+
+      if (this.currentOver) {
+        this.currentOver.classList.remove(this.getClassNameFor('draggable:over'));
+      }
+
+      if (this.currentOverContainer) {
+        this.currentOverContainer.classList.remove(this.getClassNameFor('container:over'));
+      }
+
+      if (this.mirror) {
+        var mirrorDestroyEvent = new _MirrorEvent.MirrorDestroyEvent({
+          source: this.source,
+          mirror: this.mirror,
+          sourceContainer: sensorEvent.container,
+          sensorEvent: sensorEvent
+        });
+
+        this.trigger(mirrorDestroyEvent);
+
+        if (!mirrorDestroyEvent.canceled()) {
+          this.mirror.parentNode.removeChild(this.mirror);
+        }
+      }
+
+      this.lastPlacedSource = this.originalSource;
+      this.lastPlacedContainer = this.sourceContainer;
+
+      this.placedTimeoutID = setTimeout(function () {
+        if (_this5.lastPlacedSource) {
+          _this5.lastPlacedSource.classList.remove(_this5.getClassNameFor('source:placed'));
+        }
+
+        if (_this5.lastPlacedContainer) {
+          _this5.lastPlacedContainer.classList.remove(_this5.getClassNameFor('container:placed'));
+        }
+
+        _this5.lastPlacedSource = null;
+        _this5.lastPlacedContainer = null;
+      }, this.options.placedTimeout);
+
+      this.source = null;
+      this.mirror = null;
+      this.originalSource = null;
+      this.currentOverContainer = null;
+      this.currentOver = null;
+      this.sourceContainer = null;
+    }
+
+    /**
+     * Drag pressure handler
+     * @private
+     * @param {Event} event - DOM Drag event
+     */
+
+  }, {
+    key: onDragPressure,
+    value: function value(event) {
+      if (!this.dragging) {
+        return;
+      }
+
+      var sensorEvent = getSensorEvent(event);
+      var source = this.source || (0, _utils.closest)(sensorEvent.originalEvent.target, this.options.draggable);
+
+      var dragPressureEvent = new _DragEvent.DragPressureEvent({
+        sensorEvent: sensorEvent,
+        source: source,
+        pressure: sensorEvent.pressure
+      });
+
+      this.trigger(dragPressureEvent);
+    }
+
+    /**
+     * Returns appendable container for mirror based on the appendTo option
+     * @private
+     * @param {Object} options
+     * @param {HTMLElement} options.source - Current source
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: getAppendableContainer,
+    value: function value(_ref) {
+      var source = _ref.source;
+
+      var appendTo = this.options.appendTo;
+
+      if (typeof appendTo === 'string') {
+        return document.querySelector(appendTo);
+      } else if (appendTo instanceof HTMLElement) {
+        return appendTo;
+      } else if (typeof appendTo === 'function') {
+        return appendTo(source);
+      } else {
+        return source.parentNode;
+      }
+    }
+  }]);
+  return Draggable;
+}();
+
+Draggable.Plugins = { Mirror: _Plugins.Mirror, Accessibility: _Plugins.Accessibility, Scrollable: _Plugins.Scrollable, Announcement: _Plugins.Announcement };
+exports.default = Draggable;
+
+
+function getSensorEvent(event) {
+  return event.detail;
+}
+
+function isDragEvent(event) {
+  return (/^drag/.test(event.type)
+  );
+}
+
+function applyUserSelect(element, value) {
+  element.style.webkitUserSelect = value;
+  element.style.mozUserSelect = value;
+  element.style.msUserSelect = value;
+  element.style.oUserSelect = value;
+  element.style.userSelect = value;
+}
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Emitter = __webpack_require__(142);
+
+var _Emitter2 = _interopRequireDefault(_Emitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Emitter2.default;
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _toConsumableArray2 = __webpack_require__(41);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(1);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The Emitter is a simple emitter class that provides you with `on()`, `off()` and `trigger()` methods
+ * @class Emitter
+ * @module Emitter
+ */
+var Emitter = function () {
+  function Emitter() {
+    (0, _classCallCheck3.default)(this, Emitter);
+
+    this.callbacks = {};
+  }
+
+  /**
+   * Registers callbacks by event name
+   * @param {String} type
+   * @param {...Function} callbacks
+   */
+
+
+  (0, _createClass3.default)(Emitter, [{
+    key: "on",
+    value: function on(type) {
+      var _callbacks$type;
+
+      if (!this.callbacks[type]) {
+        this.callbacks[type] = [];
+      }
+
+      for (var _len = arguments.length, callbacks = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        callbacks[_key - 1] = arguments[_key];
+      }
+
+      (_callbacks$type = this.callbacks[type]).push.apply(_callbacks$type, callbacks);
+
+      return this;
+    }
+
+    /**
+     * Unregisters callbacks by event name
+     * @param {String} type
+     * @param {Function} callback
+     */
+
+  }, {
+    key: "off",
+    value: function off(type, callback) {
+      if (!this.callbacks[type]) {
+        return null;
+      }
+
+      var copy = this.callbacks[type].slice(0);
+
+      for (var i = 0; i < copy.length; i++) {
+        if (callback === copy[i]) {
+          this.callbacks[type].splice(i, 1);
+        }
+      }
+
+      return this;
+    }
+
+    /**
+     * Triggers event callbacks by event object
+     * @param {AbstractEvent} event
+     */
+
+  }, {
+    key: "trigger",
+    value: function trigger(event) {
+      if (!this.callbacks[event.type]) {
+        return null;
+      }
+
+      var callbacks = [].concat((0, _toConsumableArray3.default)(this.callbacks[event.type]));
+      var caughtErrors = [];
+
+      for (var i = callbacks.length - 1; i >= 0; i--) {
+        var callback = callbacks[i];
+        try {
+          callback(event);
+        } catch (error) {
+          caughtErrors.push(error);
+        }
+      }
+
+      if (caughtErrors.length) {
+        throw new Error("Draggable caught errors while triggering '" + event.type + "'", caughtErrors);
+      }
+
+      return this;
+    }
+  }]);
+  return Emitter;
+}();
+
+exports.default = Emitter;
+
+/***/ })
+/******/ ]);
+});
+
+/***/ })
+
+/******/ });

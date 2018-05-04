@@ -302,7 +302,8 @@
 	};
 
 	ColumnToggleTable.prototype.HtmlSnippets_ = {
-		COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
+				// COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
+		COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-left:auto;">Columns</button>',
 		COLUMN_SELECTOR_MENU: '<ul class="dot-menu dot-menu--bottom-left"></ul>'
 	};
 
@@ -373,7 +374,10 @@
 
 		this.headers.each(function (){
 			var checked = $(this).data("default") ? "checked" : "";
-			$(this).data('visible', $(this).data("default"));
+
+			if($(this).data("default") != true){
+				$(this).attr("hidden", "true");
+			}
 
 			columnSelectorMenu.append('\
 				<li class="dot-menu__item dot-menu__item--padded"> \
@@ -394,6 +398,8 @@
 		$(this.Selectors_.TOGGLE_TABLE).each(function() {
 			this.ColumnToggleTable = new ColumnToggleTable(this);
 		});
+
+		ColumnToggleTable.prototype.functions.refreshAll();
 	};
 
 	/* ============================

@@ -34,7 +34,6 @@ class TransactionController extends Controller{
 		$studentTransactions = Transaction::where('type', 'student')->orderBy('transaction_date', 'desc')->get();
 		$markerTransactions = Transaction::where('type', 'marker')->orderBy('transaction_date', 'desc')->get();
 
-		// 'topic','project','student','marker'
 		return view('admin.transactions')
 		->with('topicTransactions', $topicTransactions)
 		->with('projectTransactions', $projectTransactions)

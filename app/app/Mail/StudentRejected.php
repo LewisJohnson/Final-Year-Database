@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
+use SussexProjects\Project;
 
 class StudentRejected extends Mailable{
     use Queueable, SerializesModels;
@@ -37,10 +38,10 @@ class StudentRejected extends Mailable{
      *
      * @return void
      */
-    public function __construct(Supervisor $supervisor, Student $student){
+    public function __construct(Supervisor $supervisor, Student $student, $projectId){
         $this->supervisor = $supervisor;
         $this->student = $student;
-        $this->project = $this->student->project;
+        $this->project = Project::findOrFail($projectId);
     }
 
     /**

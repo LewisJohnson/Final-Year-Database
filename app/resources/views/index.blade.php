@@ -71,7 +71,16 @@
 
 			@if(Auth::user()->isSupervisor())
 				<div class="card card--full">
-					<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Overview</h2>
+					<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h2>
+
+					<p>Your {{ Session::get('education_level')["longName"] }} student load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</p>
+
+					@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
+						<p>You are accepting {{ Session::get('education_level')["longName"] }} students.</p>
+					@else
+						<p>You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</p>
+					@endif
+
 					@if(count(Auth::user()->supervisor->getSelectedStudents()) > 0)
 						<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
 					@else
@@ -84,38 +93,23 @@
 						<p>No students have currently proposed a project to you.</p>
 					@endif
 
-					<p>You have accepted students {{ count(Auth::user()->supervisor->getAcceptedStudents()) }}.</p>
-
+					@if(count(Auth::user()->supervisor->getAcceptedStudents()) > 0)
+						<p>You have accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }} students.</p>
+					@else
+						<p>You have accepted no students.</p>
+					@endif
+					
 					@if(count(Auth::user()->supervisor->getSecondSupervisingStudents()) > 0)
 						<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
 					@else
 						<p>You have not been assigned as second supervisor to any students.</p>
 					@endif
-				</div>
 
-				@foreach(get_education_levels() as $level)
-					<div class="card card--half">
-						<h2>{{ ucfirst($level["longName"]) }} Supervisor</h2>
-						<p>Your {{ $level["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.$level["shortName"]]}}</p>
-
-						@if(Auth::user()->supervisor['take_students_'.$level["shortName"]])
-							<p>You are accepting {{ $level["longName"] }} students</p>
-						@else
-							<p>You are NOT accepting {{ $level["longName"] }} students</p>
-						@endif
-
-						@if(Auth::user()->supervisor['accept_email_'.$level["shortName"]])
-							<p>You are receiving emails</p>
-						@else
-							<p>You are NOT currently receiving emails</p>
-						@endif
-
-						<div class="footer">
-							<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">{{ ucfirst($level["longName"]) }} Projects</a>
-							<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => $level['shortName']]) }}">Project Report</a>
-						</div>
+					<div class="footer">
+						<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
+						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">Project Report</a>
 					</div>
-				@endforeach
+				</div>
 			@endif
 
 			<div style="display: none" class="card card--half"></div>
