@@ -40,6 +40,7 @@ class StudentRejected extends Mailable{
     public function __construct(Supervisor $supervisor, Student $student){
         $this->supervisor = $supervisor;
         $this->student = $student;
+        $this->project = $this->student->project;
     }
 
     /**
@@ -48,8 +49,6 @@ class StudentRejected extends Mailable{
      * @return $this
      */
     public function build(){
-        $this->project = $this->student->project;
-
         return $this->view('emails.student.rejected')
             ->with([
                 'supervisor' => $this->supervisor,

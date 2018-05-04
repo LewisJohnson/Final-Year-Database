@@ -29,7 +29,7 @@ class Student extends Migration{
 					$table->uuid('marker_id')->nullable(true);
 					$table->primary('id');
 
-					$table->foreign('id')->references('id')->on($department.'_users');
+					$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');
 				});
 			}
 		}

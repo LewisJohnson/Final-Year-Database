@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class LoginTest extends DuskTestCase{
 	
 	/**
-	 * A Dusk test example.
+	 * Tests log in.
 	 *
 	 * @return void
 	 */
@@ -24,10 +24,12 @@ class LoginTest extends DuskTestCase{
 				->click('.department-select form button');
 
 			$browser->visit('/login')
-				->type('username', 'admin')
+				->type('username', 'testUser')
 				->type('password', 'password')
 				->press('LOG IN')
 				->assertPathIs('/home');
 		});
 	}
+
+
 }

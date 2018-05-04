@@ -26,7 +26,7 @@ class Supervisor extends Migration{
 					$table->boolean('accept_email_'.$level['shortName']);
 				}
 				$table->primary('id');
-				$table->foreign('id')->references('id')->on($department.'_users');
+				$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');
 			});
 		}
 	}

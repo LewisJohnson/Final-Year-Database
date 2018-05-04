@@ -39,8 +39,8 @@ class TopicController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' =>'created',
-				'action' =>'deleted',
+				'type' =>'topic',
+				'action' =>'created',
 				'topic' => $topic->name,
 				'transaction_date' => new Carbon
 			));

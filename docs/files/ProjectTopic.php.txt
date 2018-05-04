@@ -19,12 +19,6 @@ use Exception;
  * @see SussexProjects\Http\Controllers\ProjectTopic
 */
 class ProjectTopic extends Model{
-
-	/**
-	 * Indicates if the IDs are auto-incrementing.
-	 *
-	 * @var bool
-	 */
 	protected $primaryKey = ['project_id', 'topic_id'];
 
 	/**

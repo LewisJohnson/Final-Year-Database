@@ -23,6 +23,7 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\Mode;
+use SussexProjects\Feedback;
 use SussexProjects\User;
 use SussexProjects\UserAgentString;
 
@@ -46,6 +47,16 @@ class AdminController extends Controller{
 	*/
 	public function index(){
 		return view('admin.index');
+	}
+
+	/**
+		* User feedback view.
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function feedback(){
+		return view('admin.feedback')
+		->with('feedback', Feedback::all());
 	}
 
 	/**
@@ -211,10 +222,6 @@ class AdminController extends Controller{
 
 		if (isset($request->project_year)) {
 			$mode->project_year = $request->project_year;
-		}
-
-		if (isset($request->mode)) {
-			$mode->mode = $request->mode;
 		}
 
 		$mode->save();
@@ -542,13 +549,6 @@ class AdminController extends Controller{
 			->with('supervisors', $assignmentSetup["supervisors"]);
 
 		return response()->json(array('successful' => true, 'html' => $view->render()));
-	}
-
-	public function addNewDepartment(Request $request){
-		// todo: this
-		$exitCode = Artisan::call('migrate');
-
-		return response()->json(array('successful' => true));
 	}
 }
 

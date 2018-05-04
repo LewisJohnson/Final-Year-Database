@@ -40,6 +40,7 @@ class StudentSelected extends Mailable{
 	public function __construct(Supervisor $supervisor, Student $student){
 		$this->supervisor = $supervisor;
 		$this->student = $student;
+		$this->project = $this->student->project;
 	}
 	
 
@@ -49,8 +50,6 @@ class StudentSelected extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		$this->project = $this->student->project;
-
 		return $this->view('emails.supervisor.student-selected')
 			->with([
 				'supervisor' => $this->supervisor,

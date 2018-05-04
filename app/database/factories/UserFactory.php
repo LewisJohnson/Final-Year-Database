@@ -6,14 +6,10 @@
  */
 
 use Faker\Generator as Faker;
-$studentIncrement = studentIncrement();
 
-$factory->define(SussexProjects\User::class, function (Faker $faker) use ($studentIncrement){
-	$studentIncrement->next();
+$factory->define(SussexProjects\User::class, function (Faker $faker){
 	// Sussex style username
-	// $username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(0,999);
-
-	$username = "eng_student".$studentIncrement->current();
+	$username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(0,999);
 
 	return [
 		'first_name' => $faker->firstName,
@@ -36,9 +32,3 @@ $factory->state(SussexProjects\User::class, 'student', [
 $factory->state(SussexProjects\User::class, 'supervisor', [
 	'privileges' => 'supervisor'
 ]);
-
-function studentIncrement(){
-	for ($i = 0; $i < 1000; $i++) {
-		yield $i;
-	}
-}

@@ -9,6 +9,7 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Carbon;
 use Exception;
 
 class Mode extends Model{
@@ -25,7 +26,7 @@ class Mode extends Model{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['project_year', 'start_date', 'mode'];
+	protected $fillable = ['project_year', 'start_date'];
 
 
 	/**
@@ -73,9 +74,16 @@ class Mode extends Model{
 	public static function Instance(){
 		$mode = Mode::all()->first();
 
+		// There is no mode, create one
 		if($mode == null){
-			throw new Exception("Error Processing Request", 1);
-			
+			$newMode = new Mode();
+			$carbon = Carbon::now();
+
+			$newMode->project_year = $carbon->year;
+			$newMode->start_date = $carbon->addYear();
+			$newMode->save();
+
+			return $newMode;
 		}
 
 		return $mode;
@@ -101,15 +109,6 @@ class Mode extends Model{
 	 */
 	public static function getProjectYear(){
 		return Mode::Instance()->project_year;
-	}
-
-	/**
-	 * Gets mode
-	 *
-	 * @return string
-	 */
-	public static function getMode(){
-		return Mode::Instance()->mode;
 	}
 }
 

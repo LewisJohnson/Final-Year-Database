@@ -77,6 +77,60 @@ class User extends Authenticatable{
     }
 
 	/**
+	 * Returns authenticated user's full name.
+	 *
+	 * Includes title is user is a supervisor.
+	 *
+	 * @return string
+	*/
+	public function getFullName(){
+		if($this->isSupervisor()){
+			$format = '%s %s %s';
+			return sprintf($format, $this->supervisor->title, $this->first_name, $this->last_name);
+		} else {
+			$format = '%s %s';
+			return sprintf($format, $this->first_name, $this->last_name);
+		}
+	}
+
+    /**
+	 * Returns authenticated users privileges as a a PHP array.
+	 *
+	 * @return string[]
+	 */
+	public function getPrivileges(){
+		return explode(',', $this->privileges);
+	}
+
+	/**
+	 * Returns the student related to this user.
+	 *
+	 * @return Student
+	*/
+	public function student(){
+		return $this->hasOne(Student::class, 'id');
+	}
+
+	/**
+	 * Returns the supervisor related to this user.
+	 *
+	 * @return Supervisor
+	*/
+	public function supervisor(){
+		return $this->hasOne(Supervisor::class, 'id');
+	}
+
+
+	/**
+	 * Returns all projects related to this user.
+	 *
+	 * @return Project
+	*/
+	public function projects(){
+		return $this->hasMany(Project::class, 'supervisor_id');
+	}
+
+	/**
 	 * Indicates if authenticated used is a guest.
 	 *
 	 * @return boolean
@@ -281,60 +335,6 @@ class User extends Authenticatable{
 
 		// We couldn't find them in any student database
 		return null;
-	}
-
-	/**
-	 * Returns authenticated users privileges as a a PHP array.
-	 *
-	 * @return string[]
-	 */
-	public function getPrivileges(){
-		return explode(',', $this->privileges);
-	}
-
-	/**
-	 * Returns the student related to this user.
-	 *
-	 * @return Student
-	*/
-	public function student(){
-		return $this->hasOne(Student::class, 'id');
-	}
-
-	/**
-	 * Returns the supervisor related to this user.
-	 *
-	 * @return Supervisor
-	*/
-	public function supervisor(){
-		return $this->hasOne(Supervisor::class, 'id');
-	}
-
-
-	/**
-	 * Returns all projects related to this user.
-	 *
-	 * @return Project
-	*/
-	public function projects(){
-		return $this->hasMany(Project::class, 'supervisor_id');
-	}
-
-	/**
-	 * Returns authenticated user's full name.
-	 *
-	 * Includes title is user is a supervisor.
-	 *
-	 * @return string
-	*/
-	public function getFullName(){
-		if($this->isSupervisor()){
-			$format = '%s %s %s';
-			return sprintf($format, $this->supervisor->title, $this->first_name, $this->last_name);
-		} else {
-			$format = '%s %s';
-			return sprintf($format, $this->first_name, $this->last_name);
-		}
 	}
 }
 

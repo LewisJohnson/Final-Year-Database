@@ -9,6 +9,7 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Carbon;
 use Exception;
 
 class Mode extends Model{
@@ -73,8 +74,16 @@ class Mode extends Model{
 	public static function Instance(){
 		$mode = Mode::all()->first();
 
+		// There is no mode, create one
 		if($mode == null){
-			throw new Exception("Error Processing Request. (You may have not added a mode to the database)", 1);
+			$newMode = new Mode();
+			$carbon = Carbon::now();
+
+			$newMode->project_year = $carbon->year;
+			$newMode->start_date = $carbon->addYear();
+			$newMode->save();
+
+			return $newMode;
 		}
 
 		return $mode;

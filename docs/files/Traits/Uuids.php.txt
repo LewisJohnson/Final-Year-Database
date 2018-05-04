@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
-
 namespace SussexProjects\Traits;
 
 use Illuminate\Support\Str;
