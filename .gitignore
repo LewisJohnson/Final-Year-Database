@@ -1,6 +1,9 @@
 *.map
 phpdoc-*-*
+
 public/
+!.gitignore
+!index.php
 
 #################
 ## Eclipse
