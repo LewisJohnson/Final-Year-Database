@@ -2,7 +2,7 @@
 	@if(isset($exception))
 		<title>Error {{ $exception->getStatusCode() }} ({{ $exception->getMessage() }})</title>
 	@else
-		<title>@lang("messages.official_name") - @yield('title')</title>
+		<title>@lang("messages.official_name")</title>
 	@endif
 
 	<!-- Meta -->
@@ -10,7 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	{{-- <link rel="icon" sizes="192x192" href="icon.png"> --}}
+	<link rel="shortcut icon" sizes="16x16" href="{{ asset('favicon.png') }}">
 
 	<!-- Fonts -->
 	@yield('fonts')
