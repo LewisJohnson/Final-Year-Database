@@ -25,7 +25,6 @@ nav {
 		background: none;
 		padding: 0;
 	}
-
 }
 
 nav.desktop {
@@ -39,17 +38,12 @@ nav.desktop {
 	width: 100%;
 
 	> ul {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-
 		> li > a {
 			line-height: 50px;
 			margin-right: 10px;
 			color: white;
 			text-decoration: none;
 		}
-
 	}
 
 }
@@ -59,10 +53,10 @@ nav.desktop {
 	 ================ */
 nav.mobile {
 	visibility: hidden;
-	position: fixed;
+	position: absolute;
 	background: #fafafa;
 	z-index: 10;
-	top: 2vh;
+	top: 22px;
 	border-radius: 4px;
 	// To clip border
 	overflow: hidden;
@@ -73,6 +67,8 @@ nav.mobile {
 	right: 10px;
 	box-shadow: 0 50px 100px rgba(50, 50, 93, .1), 0 15px 35px rgba(50, 50, 93, .15), 0 5px 15px rgba(0, 0, 0, .1);
 	padding-top: 40px;
+
+	@include transition--medium-quad();
 
 	&.is-visible {
 		visibility: visible;
@@ -111,7 +107,6 @@ nav.mobile {
 		vertical-align: middle;
 	}
 
-	@include transition--medium-quad();
 
 	h3 {
 		padding-left: 1rem;
@@ -163,6 +158,10 @@ nav.mobile {
 			padding: 5px;
 			margin-bottom: 10px;
 			color: rgb(103, 114, 229);
+
+			&:hover{
+				text-decoration: underline;
+			}
 		}
 
 		.sub-dropdown {
@@ -269,18 +268,11 @@ $color-4: #548c7e; // Patina
 
 // color tint and shade
 
-@function shade(
-    $color,
-    $percent
-  ) {
-
+@function shade($color, $percent) {
   @return mix(#000, $color, $percent);
 }
-@function tint(
-    $color,
-    $percent
-  ) {
 
+@function tint($color, $percent) {
   @return mix(#fff, $color, $percent);
 }
 
@@ -289,25 +281,13 @@ $color-4: #548c7e; // Patina
   float: $float-direction;
 }
 
-
 .cd-morph-dropdown {
 	position: relative;
-	height: 60px;
 	background-color: $color-3;
 
-	.main-nav {
-		display: none;
-	}
-
 	.morph-dropdown-wrapper {
-		display: none;
 		position: absolute;
-		top: 60px;
 		left: 0;
-		width: 100%;
-		padding: 1.2em 5%;
-		box-shadow: inset 0 1px 0 shade($color-3, 10%);
-		background-color: $color-3;
 	}
 
 	&.nav-open .morph-dropdown-wrapper {
@@ -400,23 +380,13 @@ $color-4: #548c7e; // Patina
 		}
 	}
 
+	
 	@media screen and (min-width: 720px) {
-		position: absolute;
-		height: 80px;
-		left: 0;
-		top: 0;
-		width: 100%;
 		padding: 0;
 		text-align: center;
-		background-color: transparent;
-
-		.main-nav {
-			display: inline-block;
-		}
 
 		.main-nav > ul > li {
 			display: inline-block;
-			float: left;
 		}
 
 		.main-nav > ul > li > a {
@@ -438,7 +408,8 @@ $color-4: #548c7e; // Patina
 		.morph-dropdown-wrapper {
 			/* dropdown wrapper - used to create the slide up/slide down effect when dropdown is revealed/hidden */
 			display: block;
-			top: 58px;
+			top: 103px;
+			z-index: 8;
 			/* overwrite mobile style */
 			width: auto;
 			padding: 0;
@@ -463,7 +434,7 @@ $color-4: #548c7e; // Patina
 			transform: translateZ(0);
 			will-change: transform, width, height;
 			transition: visibility .3s;
-			box-shadow: 0 10px 20px rgba(#000, .08);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 
 			.no-csstransitions & {
 				display: none;
@@ -478,7 +449,7 @@ $color-4: #548c7e; // Patina
 				height: 0;
 				width: 0;
 				border: 8px solid transparent;
-				border-bottom-color: $color-3;
+				border-bottom-color: white;
 				opacity: 0;
 				transition: opacity .3s;
 			}

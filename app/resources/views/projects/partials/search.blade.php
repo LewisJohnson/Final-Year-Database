@@ -1,4 +1,4 @@
-<form id="project-search-form" class="form form--flex" action="{{ action('ProjectController@search') }}" role="form" method="GET" accept-charset="utf-8">
+<form id="project-search-form" class="form form--flex" action="{{ action('ProjectController@search') }}" role="form" method="GET" accept-charset="utf-8" style="padding-bottom: 2rem;">
 	{{ csrf_field() }}
 	<div class="search-container shadow-4dp">
 		<input class="search-input" style="flex-grow: 1;" type="search" name="searchTerm" placeholder="Search..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>

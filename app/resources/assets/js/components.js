@@ -161,7 +161,7 @@
 		var dialog = this;
 
 		// Find activator button
-		$('button').each(function() {
+		$('button, a').each(function() {
 			if($(this).data('activator') && $(this).data('dialog') == dialog.dialogName){
 				dialog.activatorButtons.push($(this));
 			}
@@ -839,7 +839,6 @@
 	Marker.prototype.initAll();
 	DotMenu.prototype.initAll();
 
-jQuery(document).ready(function($){
 	function morphDropdown( element ) {
 		this.element = element;
 		this.mainNavigation = this.element.find('.main-nav');
@@ -975,6 +974,5 @@ jQuery(document).ready(function($){
 			resizing = false;
 		};
 	}
-});
 
 });

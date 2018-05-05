@@ -233,11 +233,11 @@ ul.dot-menu{
 }
 
 .icon {
-	margin: 0;
-	padding: 1rem;
-	width: 100%;
-	display: block;
-	text-decoration: none;
+	// margin: 0;
+	// padding: 1rem;
+	// width: 100%;
+	// display: block;
+	// text-decoration: none;
 	p {
 		margin-left: 5px;
 		line-height: 32px;
@@ -271,8 +271,6 @@ ul.dot-menu{
 	display: flex;
 	flex-direction: column;
 	list-style: none;
-
-	.icon{ padding: 6.5px; }
 }
 
 .arrangements-container{
@@ -455,7 +453,7 @@ ul.dot-menu{
 }
 
 @keyframes showDotMenu { 
-	from{ transform: scale3d(0.8, 0.8, 1); }
+	from{ transform: scale3d(0.9, 0.9, 1); }
 	to{ transform: scale3d(1, 1, 1); }
 }
 

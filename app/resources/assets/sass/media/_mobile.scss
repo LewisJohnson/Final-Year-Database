@@ -29,6 +29,7 @@
 			left: 0px;
 			opacity: 1;
 			z-index: 8;
+			margin-right: 20px;
 		}
 
 		> a {
@@ -84,7 +85,13 @@
 	}
 }
 
+
 @media screen and (max-width: 720px){
+
+	.morph-dropdown-wrapper{
+		display: none;
+	}
+
 	.card-container{
 		.card{
 			margin-bottom: 20px;
@@ -269,5 +276,37 @@
 		li{
 			display: block !important;
 		}
+	}
+}
+
+@media screen and (max-width: 400px){
+	header{
+		> a {
+			h1{
+				font-size: 100%;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 342px){
+	header{
+		> a {
+			width: 100%;
+			padding: 0;
+			margin: 0;
+			h1{
+				text-align: center;
+			}
+		}
+	}
+
+	.logo-container{
+		display: none;
+	}
+
+	.mobile-menu-container{
+		margin: 0 auto;
+		max-width: none;
 	}
 }

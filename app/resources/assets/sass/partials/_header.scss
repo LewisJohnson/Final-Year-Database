@@ -5,17 +5,13 @@
  */
 
 .header-container{
-	position: sticky;
+	position: relative;
 	top: 0;
 	z-index: 2;
 }
 
 header{
-	width: 100%;
 	background: $header-background;
-	position: relative;
-	display: flex;
-	flex-direction: row;
 	z-index: 3;
 
 	@include transition--slow-cb();
