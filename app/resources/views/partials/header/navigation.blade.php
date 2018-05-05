@@ -1,6 +1,7 @@
 @if($platform === "mobile")
-	<nav class="mobile shadow-8dp" aria-hidden="true">
+	<nav class="mobile" aria-hidden="true">
 		<div>
+			<button class="close-menu" type="button">X</button>
 			<ul>
 			@if(Auth::check())
 				@if(Auth::user()->isSystemAdmin())
@@ -9,7 +10,7 @@
 						<div class="sub-dropdown" tab-index="0">
 							<h3>System</h3>
 							<div class="svg-container pointer">
-								<svg class="transition--medium" viewBox="0 0 24 24">
+								<svg viewBox="0 0 24 24">
 									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 								</svg>
 							</div>
@@ -48,206 +49,101 @@
 
 				@if(Auth::user()->isSupervisor())
 					<h4>Supervisor</h4>
-					<li class="nav-button">
-						<div class="sub-dropdown" tab-index="0">
-							<h3>Projects</h3>
-							<div class="svg-container pointer">
-								<svg class="transition--medium" viewBox="0 0 24 24">
-									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-								</svg>
-							</div>
-							<div class="dropdown-content">
-								<a title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">My Projects</a>
-								<a title="Create a new project" href="{{ action('ProjectController@create') }}">New Project</a>
-							</div>
-						</div>
-					</li>
 
-					<li class="nav-button">
-						<div class="sub-dropdown" tab-index="0">
-							<h3>Reports</h3>
-							<div class="svg-container pointer">
-								<svg class="transition--medium" viewBox="0 0 24 24">
-									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-								</svg>
+					<div class="flex flex--row flex--stretch-children">
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>Projects</h3>
+								<div class="svg-container pointer">
+									<svg viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
+								</div>
+								<div class="dropdown-content flex flex--row flex--stretch-children">
+									<a title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">My Projects</a>
+									<a title="Create a new project" href="{{ action('ProjectController@create') }}">New Project</a>
+								</div>
 							</div>
-							<div class="dropdown-content">
-								<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">Project Report</a>
-								<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
+						</li>
+
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>Reports</h3>
+								<div class="svg-container pointer">
+									<svg viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
+								</div>
+								<div class="dropdown-content">
+									<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">Project Report</a>
+									<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
+								</div>
 							</div>
-						</div>
-					</li>
-					<hr>
+						</li>
+					</div>
+					<hr style="padding-bottom: 2rem;">
 				@endif
-
-				<h3>Browse</h3>
-				<li class="nav-button">
-					<a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">All Projects</a>
-				</li>
-
-				<li class="nav-button">
-					<a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">By Supervisor</a>
-				</li>
-
-				<li class="nav-button">
-					<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">By Topic</a>
-				</li>
 
 				@if(Auth::user()->isStudent())
-					<li class="nav-button">
-						<div class="sub-dropdown" tab-index="0">
-							<h3>Student</h3>
-							<div class="svg-container pointer">
-								<svg class="transition--medium" viewBox="0 0 24 24">
-									<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-								</svg>
-							</div>
-							<div class="dropdown-content">
+					<div class="centre-links">
+						<h4>Student</h4>
+						<div style="padding: 0rem 1rem;" class="flex flex--row flex--stretch-children">
+							<li class="nav-button">
 								@if(Auth::user()->student->project_status == "none")
-									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
-								@elseif(Auth::user()->student->project_status == "proposed")
-									<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
-								@endif
-								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
-							</div>
-						</div>
-					</li>
-				@endif
+										<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
+									@elseif(Auth::user()->student->project_status == "proposed")
+										<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
+									@endif
+							</li>
 
-				<li class="nav-button">
-					<div class="sub-dropdown" tab-index="0">
-						<h3>Help</h3>
-						<div class="svg-container pointer">
-							<svg class="transition--medium" viewBox="0 0 24 24">
-								<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-							</svg>
-						</div>
-						<div class="dropdown-content">
-							<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-							<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+							<li class="nav-button">
+								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+							</li>
 						</div>
 					</div>
-				</li>
+				@endif
 
-				@include('partials.header.help-links', ['platform' => 'mobile'])
+				<div class="centre-links">
+					<h4>Browse</h4>
+					<div style="padding: 0rem 1rem;" class="flex flex--row flex--stretch-children flex--wrap">
+						<li class="nav-button">
+							<a center" href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">All Projects</a>
+						</li>
 
+						<li class="nav-button">
+							<a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">By Supervisor</a>
+						</li>
+
+						<li class="nav-button">
+							<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">By Topic</a>
+						</li>
+					</div>
+				</div>
+
+				<div class="flex flex--row flex--stretch-children" style="padding: 1rem 1rem 0rem 1rem;">
+					<div>
+						<h4 style="padding-left: 0rem;">Help</h4>
+						<div class="flex flex--col">
+							<li class="nav-button">
+								<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
+							</li>
+
+							<li class="nav-button">
+								<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+							</li>
+						</div>
+					</div>
+
+					<div>
+						<h4 style="padding-left: 0">Links</h4>
+						@include('partials.header.help-links', ['platform' => 'mobile'])
+					</div>
+				</div>
 				<li class="footer">
-					<button class="logout" title="Log out" onclick="document.getElementById('logout-form').submit();">
-						@include('svg.logout')
-					</button>
+					<button class="logout button" title="Log out" onclick="document.getElementById('logout-form').submit();">Logout</button>
 				</li>
 			</ul>
 			@endif
 		</div>
-	</nav>
-@endif
-@if($platform === "desktop")
-	<nav class="desktop">
-		<ul>
-			@if(Auth::check())
-				<li class="nav-button">
-					<a href="{{ action('HomeController@index') }}" title="Home">Home</a>
-				</li>
-
-				<li class="nav-button dropdown">
-					<button>Browse</button>
-					@include('svg.arrow-down')
-					<div class="dropdown-content shadow-2dp">
-						<a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a>
-						<a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a>
-						<a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a>
-					</div>
-				</li>
-
-				@if(Auth::user()->isSupervisor())
-					<li class="nav-button dropdown">
-						<button>Supervisor</button>
-						@include('svg.arrow-down')
-						<div class="dropdown-content shadow-2dp">
-							<div class="sub-dropdown">
-								<button class="sub-dropbtn">Project</button>
-								@include('svg.arrow-right')
-								<div class="dropdown-content shadow-2dp">
-									<ul class="icon-list">
-										<li>
-											<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
-												@include('svg.file')
-												<p>My Projects</p>
-											</a>
-										</li>
-										<li>
-											<a class="icon" title="Create a new project" href="{{ action('ProjectController@create') }}">
-												@include('svg.account-multiple-plus')
-												<p>New Project</p>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						<div class="sub-dropdown">
-								<button class="sub-dropbtn">Reports</button>
-								@include('svg.arrow-right')
-								<div class="dropdown-content shadow-2dp">
-									<ul class="icon-list">
-										<li>
-											<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
-												@include('svg.file')
-												<p>Project Report</p>
-											</a>
-										</li>
-										<li>
-											<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
-												@include('svg.account-multiple-plus')
-												<p>Supervisor Report</p>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-	{{-- 						<a href="{{ action('SupervisorController@index') }}" title="Supervisor hub">Supervisor Hub</a>
-							<a href="{{ action('ProjectController@create') }}" title="Create new project">New Project</a>
-							<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a> --}}
-						</div>
-					</li>
-				@endif
-
-				@include("partials.header.admin-dropdown")
-
-				@if(Auth::user()->isStudent())
-					<li class="nav-button dropdown">
-						<button>Student</button>
-						@include('svg.arrow-down')
-						<div class="dropdown-content shadow-2dp">
-								@if(Auth::user()->student->project_status == "none")
-									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
-								@elseif(Auth::user()->student->project_status == "proposed")
-									<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
-								@endif
-							<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
-						</div>
-					</li>
-				@endif
-
-				<li class="nav-button dropdown">
-					<button>Help</button>
-					@include('svg.arrow-down')
-					<div class="dropdown-content shadow-2dp">
-						<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
-						<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
-						@include('partials.header.help-links', ['platform' => 'desktop'])
-					</div>
-				</li>
-
-				<li class="nav-button ml-auto">
-					<button title="Log out" onclick="$('#logout-form').submit();">Logout</button>
-				</li>
-			@else
-				@if(!empty(Session::get('department')) && Request::path() !== 'set-department')
-					<li class="nav-button" style="margin-left: auto;">
-						<button data-activator="true" data-dialog="login">Login</button>
-					</li>
-				@endif
-			@endif
-		</ul>
 	</nav>
 @endif

@@ -388,6 +388,7 @@ ul.dot-menu{
 .flex--col{ flex-direction: column; }
 .flex--stretch{ flex: 1; }
 .flex--wrap{ flex-wrap: wrap; }
+.flex--no-wrap{ flex-wrap: nowrap; }
 .flex--stretch-children{ > *{ flex: 1; }}
 .flex--full{ flex: 0 1 100%; }
 

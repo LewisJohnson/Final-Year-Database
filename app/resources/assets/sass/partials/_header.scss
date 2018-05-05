@@ -17,18 +17,20 @@ header{
 	display: flex;
 	flex-direction: row;
 	z-index: 3;
-	padding-right: 10px;
+
 	@include transition--slow-cb();
 
 	> a {
 		text-decoration: none;
 		display: block;
-		margin-left: auto;
+		margin-right: auto;
+		padding-left: 20px;
+
 		h1{
 			color: white;
 			margin: 0;
 			font-size: 120%;
-			line-height: 45px;
+			line-height: 53px;
 			@include transition--slow-cb();
 		}
 	}
@@ -38,11 +40,12 @@ header{
 		visibility: hidden;
 		@include transition--slow-cb();
 		height: 45px;
-		left: -50px;
+		top: -50px;
 		overflow: hidden;
-		max-width: 0px;
 		width: 50px;
 		height: 50px;
+		left: 40px;
+		opacity: 0;
 
 		.logo{
 			display: block;
@@ -64,29 +67,27 @@ header.error{
 	}
 }
 
-.hamburger-container{
+.mobile-menu-container{
 	max-width: 50px;
 	overflow: hidden;
 	visibility: visible;
 	@include transition--slow-cb();
 }
 
-.hamburger-list{
+.mobile-menu{
 	padding: 1rem;
 	cursor: pointer;
 	list-style: none;
 	outline: none;
 	-webkit-tap-highlight-color: transparent;
+	li {
+		border-radius: 1px;
+		overflow: hidden;
+		position: relative;
+		width: 24px;
+		height: 2px;
+		background: white;
+		margin-bottom: 5px;
+	}
 }
 
-.hamburger-line{
-	position: relative;
-	width: 24px;
-	height: 2px;
-	background: white;
-	margin-bottom: 5px;
-}
-
-.hamburger-line--short{
-	width: 20px;
-}
