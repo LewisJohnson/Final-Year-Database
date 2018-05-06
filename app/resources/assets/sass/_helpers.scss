@@ -238,12 +238,17 @@ ul.dot-menu{
 	// width: 100%;
 	// display: block;
 	// text-decoration: none;
-	p {
-		margin-left: 5px;
-		line-height: 32px;
-		margin: 0;
+	
+	p, h1, h2, h3, h4, h5, h6 {
+		// margin-left: 5px;
+		// line-height: 32px;
+		// margin: 0;
 		display: inline-block;
-		color: inherit;
+		// color: inherit;
+	}
+
+	p{
+		margin: 0;
 	}
 
 	.svg-container {

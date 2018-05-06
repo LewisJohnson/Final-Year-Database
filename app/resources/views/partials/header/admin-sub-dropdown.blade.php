@@ -1,5 +1,5 @@
-<div class="sub-dropdown">
-	<h3>{{ $title }}</h3>
+<div>
+	<h5>{{ $title }}</h5>
 	<div class="dropdown-content">
 		@include('admin.partials.links.'.$links)
 	</div>

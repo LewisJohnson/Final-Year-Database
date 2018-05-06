@@ -62,8 +62,14 @@
 					@endif
 
 					@if(Auth::user()->isProjectAdmin() || Auth::user()->isSystemAdmin())
-						<li class="has-dropdown links" data-content="admin">
+						<li class="has-dropdown links" data-content="project-admin">
 							<a href="#0">Admin</a>
+						</li>
+					@endif
+
+					@if(Auth::user()->isSystemAdmin())
+						<li class="has-dropdown links" data-content="system-admin">
+							<a href="#0">System Admin</a>
 						</li>
 					@endif
 
@@ -152,52 +158,56 @@
 							</div>
 						</li>
 
-						<li id="admin" class="dropdown links">
-							<a href="#0" class="label">Administrator</a>
-							<div class="content">
-								<ul>
-									@if(Auth::user()->isProjectAdmin())
+						@if(Auth::user()->isProjectAdmin())
+							<li id="project-admin" class="dropdown links">
+								<a href="#0" class="label">Administrator</a>
+								<div class="content">
+									<h4>Administrator</h4>
+									<a href="{{ action('AdminController@index') }}">Administrator Hub</a>
+									<ul>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Settings', 'links' => 'settings'])</li>
+									</ul>
+								</div>
+							</li>
+						@endif
+
+						@if(Auth::user()->isSystemAdmin())
+							<li id="system-admin" class="dropdown links">
+								<a href="#0" class="label">System Administrator</a>
+								<div class="content">
+									<h4>System Administrator</h4>
+									<ul>
 										<li>
-											<h3>Administrator</h3>
-
-											<a href="/admin">Admin Hub</a>
-											@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])
-											@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])
-											@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])
-											@include('partials.header.admin-sub-dropdown', ['title' => 'Settings', 'links' => 'settings'])
+											<ul>	
+												<li><a href="{{ action('AdminController@dashboard') }}">System Dashboard</a></li>
+												<li><a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a></li>
+												<li><a href="{{ action('AdminController@feedback') }}">User Feedback</a></li>
+											</ul>
 										</li>
-									@endif
-
-									@if(Auth::user()->isSystemAdmin())
 										<li>
-											<h3>System Administrator</h3>
-											<div>
-												<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
-												<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
-												<a href="{{ action('AdminController@feedback') }}">User Feedback</a>
-												
-												<button class="sub-dropbtn">Users</button>
-												<ul class="icon-list">
-													<li>
-														<a class="icon" href="/users/create">
-															@include('svg.account-plus')
-															<p>Add User</p>
-														</a>
-													</li>
-													<li>
-														<a class="icon" href="{{ action('UserController@index', 'view=edit') }}">
-															@include('svg.account-edit')
-															<p>Edit User</p>
-														</a>
-													</li>
-												</ul>
-											</div>
+											<h5>Users</h5>
+											<ul class="icon-list links-list">
+												<li>
+													<a class="icon" href="/users/create">
+														@include('svg.account-plus')
+														<p>Add User</p>
+													</a>
+												</li>
+												<li>
+													<a class="icon" href="{{ action('UserController@index', 'view=edit') }}">
+														@include('svg.account-edit')
+														<p>Edit User</p>
+													</a>
+												</li>
+											</ul>
 										</li>
-									@endif
-
-								</ul>
-							</div>
-						</li>
+									</ul>
+								</div>
+							</li>
+						@endif
 
 						<li id="student" class="dropdown links">
 							<a href="#0" class="label">Student</a>
@@ -224,7 +234,10 @@
 									</li>
 
 									<li>
-										<h4>External Links</h4>
+										<div class="icon">
+											<h4>External Links</h4>
+											@include('svg.external')
+										</div>
 										<ul class="links-list">
 											@include('partials.header.help-links', ['platform' => 'desktop'])
 										</ul>
@@ -241,5 +254,5 @@
 </div>
 
 @if(Auth::check())
-	@include('partials.header.navigation')
+	@include('partials.header.mobile-navigation')
 @endif

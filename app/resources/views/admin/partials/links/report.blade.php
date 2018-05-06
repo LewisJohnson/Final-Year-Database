@@ -1,4 +1,4 @@
-<ul class="icon-list">
+<ul class="icon-list links-list">
 	<li>
 		<a class="icon" href="{{ action('StudentController@report') }}">
 			@include('svg.school')
