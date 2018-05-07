@@ -96,6 +96,9 @@ Route::group(['middleware' => ['web']], function() {
 
 	// Feedback form post
 	Route::post('feedback', 'HomeController@feedback');
+
+	// Sudo mode
+	Route::post('sudo', 'HomeController@sudo');
 });
 
 /* ===============

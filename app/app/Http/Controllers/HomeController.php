@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 /**
  * The home controller.
  *
@@ -101,6 +103,23 @@ class HomeController extends Controller{
 
 		$feedback->save();
 		return response()->json(array('successful' => true, 'message' => 'Thank you for your feedback.'));
+	}
+
+	/**
+	 * Checks the users password and puts them into sudo-mode.
+	 * 
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function sudo(Request $request){
+		$this->validate(request(), [
+			'password' => 'required',
+		]);
+
+		if (Hash::check(request('password'), Auth::user()->password)) {
+			Session::put('sudo-mode', true);
+			return back();
+		}
 	}
 
 	/**
