@@ -17,9 +17,9 @@
 			backgroundDismiss: true,
 			draggable: true,
 			dragWindowBorder: false,
-			theme: 'material',
+			theme: 'modern',
 			escapeKey: true,
-			animateFromElement : false,
+			animateFromElement : true,
 			content: function () {
 				var self = this;
 				return $.ajax({
@@ -27,7 +27,7 @@
 					method: "GET"
 				}).done(function (response) {
 					self.setContent(response);
-					self.setTitle(" ");
+					self.setTitle("&nbsp;");
 				}).fail(function(){
 					self.setContent("Sorry, we couldn't load this project.");
 				});

@@ -24,6 +24,7 @@
 |	6. Edit Topics [Admin]
 |	7. Menu
 |
+|
 */
 "use strict";
 
@@ -830,14 +831,6 @@
 		window['Marker'] = new Marker();
 	}
 
-	// Initialise all components
-	MobileMenu.prototype.initAll();
-	Dialog.prototype.initAll();
-	DataTable.prototype.initAll();
-	ColumnToggleTable.prototype.initAll();
-	EditTopic.prototype.initAll();
-	Marker.prototype.initAll();
-	DotMenu.prototype.initAll();
 
 	function morphDropdown( element ) {
 		this.element = element;
@@ -974,5 +967,14 @@
 			resizing = false;
 		};
 	}
+
+	// Initialise all components
+	MobileMenu.prototype.initAll();
+	Dialog.prototype.initAll();
+	DataTable.prototype.initAll();
+	ColumnToggleTable.prototype.initAll();
+	EditTopic.prototype.initAll();
+	Marker.prototype.initAll();
+	DotMenu.prototype.initAll();
 
 });

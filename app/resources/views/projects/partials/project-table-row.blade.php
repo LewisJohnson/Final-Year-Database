@@ -1,7 +1,7 @@
 <tr class="pointer project-row" tabindex="0" data-project-id="{{ $project }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" onclick="window.location='{{ action('ProjectController@show', $project->id)}}';" >
 	@if($project->getPrimaryTopic() != null)
 		<td>
-			<a href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
+			<a class="blue-link" href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
 		</td>
 	@else
 		<td>-</td>

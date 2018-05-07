@@ -5,6 +5,17 @@
  */
 
 
+.fancy-page{
+	h1{
+		font-weight: 400;
+		text-align: center;
+	}
+
+	h2{
+		font-weight: 300;
+		text-align: center;
+	}
+}
 .loader-container{
 	margin: 0 auto;
 	text-align: center;
@@ -233,6 +244,7 @@ ul.dot-menu{
 }
 
 .icon {
+	white-space: nowrap;
 	// margin: 0;
 	// padding: 1rem;
 	// width: 100%;
@@ -252,12 +264,19 @@ ul.dot-menu{
 	}
 
 	.svg-container {
-		vertical-align: middle;
 		svg {
 			width: 20px;
 			height: 20px;
 			vertical-align: text-bottom;
 		}
+	}
+}
+
+.blue-link{
+	color: rgb(103, 114, 229);
+
+	&:hover{
+		text-decoration: underline;
 	}
 }
 

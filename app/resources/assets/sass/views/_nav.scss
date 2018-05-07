@@ -220,7 +220,6 @@ nav.mobile {
 
 $color-1: #1A1A1A; // Cod Gray
 $color-2: #DB6356; // Roman
-$color-3: #FFFFFF; // White
 $color-4: #548c7e; // Patina
 
 @mixin center($xy:xy) {
@@ -244,20 +243,17 @@ $color-4: #548c7e; // Patina
 }
 
 // border radius
-
 @mixin border-radius($radius:.25em) {
   border-radius: $radius;
 }
 
-// antialiasing mode font rendering
-
+// anti-aliasing mode font rendering
 @mixin font-smoothing {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-// clearfix
-
+// clear fix
 @mixin clearfix {
   &::after {
     clear: both;
@@ -266,8 +262,7 @@ $color-4: #548c7e; // Patina
   }
 }
 
-// color tint and shade
-
+// colour tint and shade
 @function shade($color, $percent) {
   @return mix(#000, $color, $percent);
 }
@@ -283,7 +278,7 @@ $color-4: #548c7e; // Patina
 
 .cd-morph-dropdown {
 	position: relative;
-	background-color: $color-3;
+	background-color: white;
 
 	.morph-dropdown-wrapper {
 		position: absolute;
@@ -294,10 +289,6 @@ $color-4: #548c7e; // Patina
 		display: block;
 	}
 
-	.dropdown-list  > ul > li {
-		margin-bottom: 3.3em;
-	}
-
 	.label {
 		display: block;
 		font-size: 2.2rem;
@@ -305,9 +296,47 @@ $color-4: #548c7e; // Patina
 		margin-bottom: .8em;
 	}
 
-	.content li {
-		@include clearfix;
+
+	.content {
+		padding: 2.2em 1.8em;
+		transition: transform .3s;
+		text-align: left;
+
+		 h2 {
+			color: shade(white, 35%);
+			text-transform: uppercase;
+			font-weight: bold;
+			font-size: 1.3rem;
+			margin: 20px 0 10px 14px;
+		}
+
+		ul{	
+			list-style: none;
+
+			li{
+				margin-bottom: 20px;
+			}
+
+			a, .icon p {
+				color: rgb(103, 114, 229);
+				text-decoration: none;
+
+				&:hover{
+					text-decoration: underline;
+				}
+			}
+		}
+
+		> ul {
+			display: flex;
+			flex-wrap: wrap;
+
+			> li {
+				width: 50%;
+			}
+		}
 	}
+
 
 	.gallery .content li {
 		margin-bottom: 1.4em;
@@ -315,7 +344,7 @@ $color-4: #548c7e; // Patina
 
 	.gallery .content a {
 		display: block;
-
+		
 		&::before {
 			/* icon on the left */
 			content: '';
@@ -342,7 +371,7 @@ $color-4: #548c7e; // Patina
 
 		span {
 			font-size: 1.4rem;
-			color: shade($color-3, 35%);
+			color: shade(white, 35%);
 		}
 
 		&:hover::before {
@@ -350,33 +379,9 @@ $color-4: #548c7e; // Patina
 		}
 	}
 
-	.links .content > ul > li {
-		margin-top: 1em;
-	}
-
 	.links-list a, .btn {
 		&:hover {
 			color: $color-1;
-		}
-	}
-
-	.content h2 {
-		color: shade($color-3, 35%);
-		text-transform: uppercase;
-		font-weight: bold;
-		font-size: 1.3rem;
-		margin: 20px 0 10px 14px;
-	}
-
-	.content ul {
-		list-style: none;
-
-		li{
-			margin-bottom: 20px;
-		}
-
-		a {
-			text-decoration: none;
 		}
 	}
 
@@ -391,7 +396,7 @@ $color-4: #548c7e; // Patina
 
 		.main-nav > ul > li > a {
 			padding: 0 1.8em;
-			color: $color-3;
+			color: white;
 			@include font-smoothing;
 			transition: opacity .2s;
 		}
@@ -500,26 +505,6 @@ $color-4: #548c7e; // Patina
 			display: none;
 		}
 
-		.content {
-			padding: 2.2em 1.8em;
-			transition: transform .3s;
-			text-align: left;
-
-			> ul {
-				@include clearfix;
-			}
-
-			> ul > li {
-				@include column(.48);
-				margin-right: 4%;
-				margin-top: 0;
-
-				&:nth-of-type(2n) {
-					margin-right: 0;
-				}
-			}
-		}
-
 		.gallery .content {
 			/* you need to set a width for the .content elements because they have a position absolute */
 			width: 510px;
@@ -528,10 +513,6 @@ $color-4: #548c7e; // Patina
 			li {
 				margin-bottom: 1.8em;
 			}
-		}
-
-		.links .content > ul > li {
-			margin-top: 0;
 		}
 
 		.links .content,
@@ -546,14 +527,14 @@ $color-4: #548c7e; // Patina
 			margin: 1.5em 0 0;
 			font-size: 1.8rem;
 			text-align: center;
-			color: $color-3;
+			color: white;
 			line-height: 60px;
 			background: $color-2;
 			@include font-smoothing;
 
 			&:hover {
 				background: $color-1;
-				color: $color-3;
+				color: white;
 			}
 		}
 
@@ -572,7 +553,7 @@ $color-4: #548c7e; // Patina
 			left: 0;
 			height: 1px;
 			width: 1px;
-			background: $color-3;
+			background: white;
 			opacity: 0;
 			transition: opacity .3s;
 			transform-origin: top left;
