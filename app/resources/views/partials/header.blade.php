@@ -50,9 +50,13 @@
 
 		<nav class="main-nav flex--full desktop">
 			<ul>
-				<li>
-					<a href="{{ action('HomeController@index') }}">Home</a>
-				</li>
+
+				@if(!empty(Session::get('department')) && Request::path() !== 'set-department')
+					<li>
+						<a href="{{ action('HomeController@index') }}">Home</a>
+					</li>
+				@endif
+				
 
 				@if(Auth::check())
 					<li class="has-dropdown links" data-content="browse">
