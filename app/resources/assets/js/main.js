@@ -273,13 +273,6 @@ import '../js/components';
 	/* ======================
 		 4. CLICK EVENTS
 	   ====================== */
-	$("body").on("click", ".email-selected", function(e) {
-		if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
-			alert("You haven't selected anyone.");
-			e.preventDefault();
-		}
-	});
-
 	// External links give an illusion of AJAX
 	$("body").on("click", ".external-link",  function(e) {
 		var elemToHideSelector = $($(this).data('element-to-hide-selector'));
@@ -464,19 +457,51 @@ import '../js/components';
 	/* ======================
 		 5. CHANGE EVENTS
 	   ====================== */
+
+	var dontRemindAgainAmoutMailtoLimit = false;
 	$("body").on("change", ".email-table .checkbox input", function() {
 		var select = function(dom){
 			var status = dom.parents().eq(4).data('status');
 			var emailString = "mailto:";
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 			var emailButtonselector = ".email-selected." + status;
+			var amountOfEmails = 0;
 
 			$(checkboxSelector).each(function(index, value) {
+				if(amountOfEmails > 100){
+					return false;
+				}
+
 				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
 					emailString += $(value).data('email');
 					emailString += ",";
 				}
+				amountOfEmails++;
 			});
+
+			if(amountOfEmails > 100 && !dontRemindAgainAmoutMailtoLimit){
+				$.confirm({
+					type: 'red',
+					icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div>',
+					theme: 'modern',
+					escapeKey: true,
+					animateFromElement : false,
+					backgroundDismiss: true,
+					title: 'Mailto Limit Reached',
+					content: 'URLs have a length limit of around 2000 characters. The amount of people you have selected is greater than this limit. The first 100 people you selected will be emailed.',
+					buttons: {
+						neveragain: {
+							text: "Okay, don't remind me again",
+							btnClass: 'btn-red-text',
+							action: function(){
+								dontRemindAgainAmoutMailtoLimit = true;
+							}
+						},
+						okay: {},
+					}
+				});
+			}
+
 			$(emailButtonselector).prop('href', emailString);
 		};
 		setTimeout(select($(this)), 2000);
@@ -569,7 +594,7 @@ import '../js/components';
 
 			case "info":
 				$.dialog({
-					theme: 'material',
+					theme: 'modern',
 					escapeKey: true,
 					animateFromElement : false,
 					backgroundDismiss: true,

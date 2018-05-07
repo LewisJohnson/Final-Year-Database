@@ -8,13 +8,13 @@
 			<h2>Build with</h2>
 			<ul class="flex flex--wrap flex--row" style="list-style: none;">
 				<li style="width: 50%">
-					<a href="#" title="">
+					<a href="https://laravel.com" title="Laravel">
 						<img style="width: 100%; padding: 0 15%;" src="{{ asset('images/laravel-text-logo.png') }}" alt="">
 					</a>
 				</li>
 
 				<li style="width: 50%">
-					<a href="#" title="">
+					<a href="https://nodejs.org" title="NodeJs">
 						<img style="width: 100%; padding: 0 15%;" src="{{ asset('images/nodejs-logo.png') }}" alt="">
 					</a>
 				</li>

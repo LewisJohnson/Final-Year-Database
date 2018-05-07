@@ -50,6 +50,10 @@
 
 		<nav class="main-nav flex--full desktop">
 			<ul>
+				<li>
+					<a href="{{ action('HomeController@index') }}">Home</a>
+				</li>
+
 				@if(Auth::check())
 					<li class="has-dropdown links" data-content="browse">
 						<a href="#0">Browse</a>
@@ -188,8 +192,8 @@
 											</ul>
 										</li>
 										<li>
-											<h5>Users</h5>
-											<ul class="icon-list links-list">
+
+											<ul class="links-list">
 												<li>
 													<a class="icon" href="/users/create">
 														@include('svg.account-plus')

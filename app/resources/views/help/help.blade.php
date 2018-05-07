@@ -7,7 +7,7 @@
 	<h1>Help</h1>
 
 	@if($user = Auth::user())
-		<h3>Need a helping hand {{ Auth::user()->first_name }}? Here you can find help relevant to you.</h3>
+		<h3>Need a helping hand, {{ Auth::user()->first_name }}? Here you can find help relevant to you.</h3>
 	@else
 		<h3>Need a helping hand? Here you can find help relevant to you.</h3>
 	@endif

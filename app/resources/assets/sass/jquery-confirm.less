@@ -379,6 +379,17 @@ body[class*=jconfirm-no-scroll-] {
 					}
 				}
 
+				&.btn-red-text {
+					border: 1px solid @red;
+					color: @red;
+					text-shadow: none;
+					transition: background .2s;
+					&:hover {
+						background-color: @red;
+						color: #FFF;
+					}
+				}
+
 				&.btn-orange {
 					background-color: @orange;
 					color: #FFF;
