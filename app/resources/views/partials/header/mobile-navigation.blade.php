@@ -91,7 +91,7 @@
 							@if(Auth::user()->student->project_status == "none")
 									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
 								@elseif(Auth::user()->student->project_status == "proposed")
-									<a href="{{ action('ProjectController@view', Auth::user()->student->project) }}">Your Proposed Project</a>
+									<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
 								@endif
 						</li>
 

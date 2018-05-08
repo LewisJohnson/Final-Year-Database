@@ -217,18 +217,27 @@
 							</li>
 						@endif
 
-						<li id="student" class="dropdown links">
-							<a href="#0" class="label">Student</a>
-							<div class="content">
-								<h3>Student</h3>
-								<ul>
-									<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
-									<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-									<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
-								</ul>
-							</div>
-						</li>
+						@if(Auth::user()->isStudent())
+							<li id="student" class="dropdown links">
+								<a href="#0" class="label">Student</a>
+								<div class="content">
+									<h3>Student</h3>
+									<ul>
+										<li>
+											@if(Auth::user()->student->project_status == "none")
+												<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
+											@elseif(Auth::user()->student->project_status == "proposed")
+												<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
+											@endif
+										</li>
 
+										<li>
+											<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+						@endif
 						<li id="help" class="dropdown links">
 							<a href="#0" class="label">Help</a>
 							<div class="content">

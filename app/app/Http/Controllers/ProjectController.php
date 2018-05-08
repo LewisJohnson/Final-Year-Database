@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Project;
 use SussexProjects\Topic;
 use SussexProjects\ProjectTopic;
@@ -35,7 +36,7 @@ class ProjectController extends Controller{
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
 	 * @var string[] ~HTML purifier configuration
 	*/
-	private $descriptionPurifyConfig = [
+	public static $descriptionPurifyConfig = [
 		'Core.CollectErrors' => true,
 		'Attr.ID.HTML5' => true,
 		'HTML.TargetBlank' => true,
@@ -149,11 +150,10 @@ class ProjectController extends Controller{
 			$projectTopic->project_id = $project->id;
 
 			$projectTopic->save();
-
-			return Topic::findOrFail($topic->id)->toJson();
+			return Topic::findOrFail($topic->id);
 		});
 
-		return response()->json($result);
+		return response()->json(array('successful' => true, 'topic' => $result));
 	}
 
 	/**
@@ -213,20 +213,12 @@ class ProjectController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request){
-		// Validate data
-		// Move to validation form
-		$this->validate(request(), [
-			'title'       => 'required|max:255',
-			'description' => 'required|max:16777215',
-			'skills' => 'required|max:255',
-			'status' => 'required',
-		]);
+	public function store(ProjectForm $request){
 
 		$result = DB::transaction(function() use ($request) {
 			$project = new Project;
 			$transaction = new Transaction;
-			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
+			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
 			$project->fill(array(
 				'title' => request('title'),
@@ -279,11 +271,10 @@ class ProjectController extends Controller{
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Project $project){
-		// todo: add form validation
+	public function update(ProjectForm $project){
 		$result = DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
-			$clean_html = Purify::clean(request('description'), $this->descriptionPurifyConfig);
+			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
 			$project->update([
 				'title' => request('title'),
@@ -292,13 +283,24 @@ class ProjectController extends Controller{
 				'skills' => request('skills')
 			]);
 
-			$transaction->fill(array(
-				'type' =>'project',
-				'action' =>'updated',
-				'project' => $project->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
+			if($project->status == "student-proposed"){
+				$transaction->fill(array(
+					'type' =>'project',
+					'action' =>'updated',
+					'project' => $project->id,
+					'supervisor' => Auth::user()->supervisor->id,
+					'transaction_date' => new Carbon
+				));
+			} else {
+				$transaction->fill(array(
+					'type' =>'project',
+					'action' =>'updated',
+					'project' => $project->id,
+					'student' => Auth::user()->student->id,
+					'transaction_date' => new Carbon
+				));
+			}
+
 
 			$transaction->save();
 			session()->flash('message', '"'.$project->title.'" has been updated.');

@@ -55,9 +55,9 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
 
 					if($(".topics-list.edit li.topic:last").length > 0){
-						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
+						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
 					} else {
-						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response["id"] + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response["name"] + '</p></li>');
+						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
 					}
 				}
 			}).done(function(response){

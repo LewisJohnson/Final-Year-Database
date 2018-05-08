@@ -6,13 +6,17 @@
 
 
 .fancy-page{
-	h1{
+	> h1{
 		font-weight: 400;
 		text-align: center;
 	}
 
-	h2{
+	> h2{
 		font-weight: 300;
+		text-align: center;
+	}
+
+	.subtitle{
 		text-align: center;
 	}
 }

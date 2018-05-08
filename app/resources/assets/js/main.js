@@ -70,7 +70,10 @@ import '../js/components';
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('.topics-list .loader').fadeOut(0);
+	$('#topics-loading-loader').fadeOut('fast', function(){
+		$(this).remove();
+    });
+
 	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNextTopic() {
 		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNextTopic);
 	});
@@ -505,6 +508,18 @@ import '../js/components';
 			$(emailButtonselector).prop('href', emailString);
 		};
 		setTimeout(select($(this)), 2000);
+	});
+
+	var titleCharCount = $('#title-character-count');
+	$('#title').on("keydown", function() {
+		var length = $(this).val().length;
+		titleCharCount.text(length + '/40');
+
+		if(length > 40){
+			titleCharCount.css('color', 'red');
+		} else {
+			titleCharCount.css('color', 'darkgray');
+		}
 	});
 
 	/* ======================

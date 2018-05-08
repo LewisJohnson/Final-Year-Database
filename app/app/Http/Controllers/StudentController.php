@@ -7,6 +7,7 @@
 
 namespace SussexProjects\Http\Controllers;
 
+use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Transaction;
@@ -22,6 +24,7 @@ use SussexProjects\Mode;
 use SussexProjects\Mail\StudentSelected;
 use SussexProjects\Mail\StudentUnselected;
 use SussexProjects\Mail\StudentProposed;
+use ProjectController;
 
 /**
  * The student controller.
@@ -122,7 +125,7 @@ class StudentController extends Controller{
 	 * @param \Illuminate\Http\Request $request Student proposed project
 	 * @return \Illuminate\Http\Response
 	*/
-	public function proposeProject(Request $request){
+	public function proposeProject(ProjectForm $request){
 		if(Mode::getStartDate()->gt(Carbon::now())){
 			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getStartDate().'.');
 			session()->flash('message_type', 'danger');
@@ -140,6 +143,8 @@ class StudentController extends Controller{
 			}
 
 			$project = new Project;
+			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
+
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
@@ -147,7 +152,7 @@ class StudentController extends Controller{
 			$project->student_id = Auth::user()->student->id;
 			$project->fill(array(
 				'title' => request('title'),
-				'description' => request('description'),
+				'description' =>  $clean_html,
 				'status' => "student-proposed",
 				'skills' => request('skills')
 			));

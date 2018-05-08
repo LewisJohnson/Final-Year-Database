@@ -11,17 +11,17 @@
 	<h1>You are editing "{{ $project->title }}".</h1>
 
 	<div class="card project-card card--margin-vertical">
-		<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
+		<form id="editProjectForm" class="form form--flex" role="form" method="POST" onkeypress="return event.keyCode != 13;" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 
 			<div class="form-field">
-				<label for="title">Title</label>
+				<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
 				<input maxlength="255" type="text" name="title" id="title" value="{{ $project->title }}">
 			</div>
 
 			<div class="form-field">
-				<label for="description">Description</label>
+				<label style="float: left;" for="description">Description</label>
 				<div class="html-editor">
 					<textarea id="html-editor--input" class="html-editor--input" maxlength="16777215" type="text" name="description" id="description">{{ $project->description }}</textarea>
 				</div>
@@ -49,8 +49,8 @@
 								</li>
 							@endif
 						@endforeach
-						<input list="topicsDataList" type="text" name="name" id="addTopicInput">
-						<div style="display: block" class="loader"></div>
+						<input list="topicsDataList" autocomplete="off" type="text" name="name" id="addTopicInput">
+						<div id="topics-loading-loader" style="display: block" class="loader loader--medium"></div>
 					</ul>
 					<div class="loader"></div>
 				</div>

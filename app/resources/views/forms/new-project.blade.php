@@ -7,12 +7,12 @@
 	@endif
 
 	<div class="form-field">
-		<label for="title">Title</label>
+		<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
 		<input maxlength="255" type="text" name="title" id="title" autofocus="true" required>
 	</div>
 
 	<div class="form-field">
-		<label for="description">Description</label>
+		<label style="float: left;" for="description">Description</label>
 			<div class="html-editor">
 				<textarea id="html-editor--input" required class="html-editor--input" maxlength="16777215" type="text" name="description" id="description"></textarea>
 			</div>

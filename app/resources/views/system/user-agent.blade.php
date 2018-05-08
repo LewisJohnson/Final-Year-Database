@@ -48,7 +48,7 @@
 	<div class="centered width--800 fancy-page">
 		<div>
 			<h1>User agent string collection is disabled.</h1>
-			<p style="text-align: center;">You can turn it back on in the <a href="{{ action('AdminController@dashboard') }}">system dashboard</a>.</p>
+			<p class="subtitle">You can turn it back on in the <a href="{{ action('AdminController@dashboard') }}">system dashboard</a>.</p>
 		</div>
 	</div>
 @endif

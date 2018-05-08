@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use SussexProjects\Http\Controllers\UserController;
 
-class StoreUser extends FormRequest
-{
+class StoreUser extends FormRequest{
 	/**
 	 * Determine if the user is authorized to make this request.
 	 *

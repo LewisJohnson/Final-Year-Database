@@ -49,7 +49,7 @@
 					</li>
 				@endforeach
 				<li>
-					<div class="loader loader--medium" style="display: block"></div>
+					<div id="topics-loading-loader" class="loader loader--medium" style="display: block"></div>
 				</li>
 			@endif
 			@if(!count($project->topics))

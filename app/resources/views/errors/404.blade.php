@@ -9,7 +9,11 @@
 		@if(empty($_SERVER['REQUEST_URI']))
 			<p>We couldn't find this page.</p>
 		@else
-			<p>You wanted {{ $_SERVER['REQUEST_URI'] }}, we gave you nothing. <ins>Sorry about that.</ins></p>
+			@if(strlen($_SERVER['REQUEST_URI']) > 100)
+				<p>You wanted {{ substr($_SERVER['REQUEST_URI'], 0, 100) }}..., but we couldn't find it. <ins>Sorry about that.</ins></p>
+			@else
+				<p>You wanted {{ $_SERVER['REQUEST_URI'] }}, we gave you nothing. <ins>Sorry about that.</ins></p>
+			@endif
 		@endif
 	</div>
 </div>
