@@ -269,7 +269,7 @@ import '../js/components';
 		}
 	});
 
-	$('.user-form #username').on('change', function(){
+	$('.user-form #username').on('keydown', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
@@ -510,17 +510,25 @@ import '../js/components';
 		setTimeout(select($(this)), 2000);
 	});
 
-	var titleCharCount = $('#title-character-count');
-	$('#title').on("keydown", function() {
-		var length = $(this).val().length;
-		titleCharCount.text(length + '/40');
+	if($('#title').length > 0){
+		var titleCharCount = $('#title-character-count');
 
-		if(length > 40){
-			titleCharCount.css('color', 'red');
-		} else {
-			titleCharCount.css('color', 'darkgray');
+		checkTitle();
+		$('#title').on("keydown change",  function(){
+			checkTitle();
+		});
+
+		function checkTitle(){
+			var length = $('#title').val().length;
+			titleCharCount.text(length + '/40');
+
+			if(length > 40){
+				titleCharCount.css('color', 'red');
+			} else {
+				titleCharCount.css('color', 'darkgray');
+			}
 		}
-	});
+	}
 
 	/* ======================
 		 6. HTML EDITOR

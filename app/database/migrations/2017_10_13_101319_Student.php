@@ -30,6 +30,7 @@ class Student extends Migration{
 					$table->primary('id');
 
 					$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');
+					$table->foreign('project_id')->references('id')->on($department.'_project_'.$level['shortName'])->onDelete('cascade');
 				});
 			}
 		}

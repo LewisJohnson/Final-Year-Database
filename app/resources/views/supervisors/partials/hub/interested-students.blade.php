@@ -89,16 +89,12 @@
 							</td>
 							<td><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
 							<td><a class="flex--stretch" href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a></td>
-							<td class="table-action">
-								<a class="button button--svg offer-action button--danger-text" title="Decline {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">
-									@include('svg.close-circle-outline')
-								</a>
+							<td>
+								<button class="button offer-action button--danger-text" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
 							</td>
-								
-							<td class="table-action">
-								<a class="button button--svg offer-action button--success-text" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">
-									@include('svg.check-circle-outline')
-								</a>
+							
+							<td>
+								<button class="button offer-action button--success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
 							</td>
 						</tr>
 					@endforeach
@@ -110,12 +106,12 @@
 				@endif
 			</table>
 		</div>
-		@if (count(Auth::user()->supervisor->getStudentProjectProposals()))
+{{-- 		@if (count(Auth::user()->supervisor->getStudentProjectProposals()))
 			<div class="button-group">
 				<button class="button button--raised" type="">Email Selected</button>
 				<button class="button button--raised" type="">Accept Selected</button>
 				<button class="button button--raised" type="">Reject Selected</button>
 			</div>
-		@endif
+		@endif --}}
 	</div>
 </div>

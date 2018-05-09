@@ -29,8 +29,8 @@ class Project extends Migration{
 					$table->timestampsTz();
 					$table->primary('id');
 
-					$table->foreign('supervisor_id')->references('id')->on($department.'_supervisors');
-					$table->foreign('student_id')->references('id')->on($department.'_students_'.$level['shortName']);
+					$table->foreign('supervisor_id')->references('id')->on($department.'_supervisors')->onDelete('cascade');
+					$table->foreign('student_id')->references('id')->on($department.'_students_'.$level['shortName'])->onDelete('cascade');
 				});
 			}
 		}

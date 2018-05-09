@@ -29,7 +29,6 @@
 					<p>This project has no associated topics.</p>
 				</li>
 			@elseif(!$project->getPrimaryTopic())
-				{{-- This should never be shown. --}}
 				<li class="no-topics">
 					<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
 						<path fill="#fff" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
@@ -38,7 +37,7 @@
 				</li>
 			@endif
 			<li>
-				<div class="loader" style="display: block"></div>
+				<div id="topics-loading-loader" class="loader" style="display: block"></div>
 			</li>
 		</ul>
 	</div>

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use SussexProjects\Http\Requests\ProjectForm;
+use SussexProjects\Http\Controllers\ProjectController;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Transaction;
@@ -24,7 +25,6 @@ use SussexProjects\Mode;
 use SussexProjects\Mail\StudentSelected;
 use SussexProjects\Mail\StudentUnselected;
 use SussexProjects\Mail\StudentProposed;
-use ProjectController;
 
 /**
  * The student controller.
@@ -180,9 +180,14 @@ class StudentController extends Controller{
 
 		// Send student proposed email
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send accepted email
+				Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+			} catch (\Exception $e) {
+				
+			}
 		}
-
+		
 		return redirect()->action('HomeController@index');
 	}
 
@@ -202,7 +207,7 @@ class StudentController extends Controller{
 		}
 
 		$student = Auth::user()->student;
-
+		dd("ddd");
 		DB::transaction(function() use ($request, $student) {
 
 			// Student has already selected a project
@@ -233,9 +238,16 @@ class StudentController extends Controller{
 			session()->flash('message_type', 'success');
 		});
 
-		// Send selected email
+
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send selected email
+				if($student->project->supervisor->getAcceptingEmails()){
+					Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+				}
+			} catch (\Exception $e) {
+				
+			}
 		}
 
 		return redirect()->action('HomeController@index');
@@ -275,9 +287,15 @@ class StudentController extends Controller{
 			$student->save();
 		});
 
-		// Send selected email
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send selected email
+				if($student->project->supervisor->getAcceptingEmails()){
+					Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+				}
+			} catch (\Exception $e) {
+				
+			}
 		}
 
 		return response()->json(array('successful' => true, 'message' => "You have un-selected a project."));

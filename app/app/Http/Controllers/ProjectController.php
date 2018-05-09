@@ -214,7 +214,6 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(ProjectForm $request){
-
 		$result = DB::transaction(function() use ($request) {
 			$project = new Project;
 			$transaction = new Transaction;
@@ -257,12 +256,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function edit(Project $project){
-		if($project->isOwnedByUser()){
-			return view('projects.edit')
-			->with('project', $project);
-		} else {
-			return redirect()->action('ProjectController@show', $project);
+		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+			return view('projects.edit')->with('project', $project);
 		}
+		return redirect()->action('ProjectController@show', $project);
 	}
 
 	/**
@@ -271,16 +268,25 @@ class ProjectController extends Controller{
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(ProjectForm $project){
-		$result = DB::Transaction(function() use ($project){
+	public function update(ProjectForm $input, Project $project){
+		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+			return response()->json(array('successful' => false));
+		}
+
+		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
 			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
+			// So student proposals can't be overridden
+			if($project->status == "student-proposed"){
+				$input->status = "student-proposed";
+			}
+
 			$project->update([
-				'title' => request('title'),
+				'title' => $input->title,
 				'description' => $clean_html,
-				'status' => request('status'),
-				'skills' => request('skills')
+				'status' => $input->status,
+				'skills' => $input->skills
 			]);
 
 			if($project->status == "student-proposed"){
@@ -288,7 +294,7 @@ class ProjectController extends Controller{
 					'type' =>'project',
 					'action' =>'updated',
 					'project' => $project->id,
-					'supervisor' => Auth::user()->supervisor->id,
+					'student' => Auth::user()->student->id,
 					'transaction_date' => new Carbon
 				));
 			} else {
@@ -296,19 +302,17 @@ class ProjectController extends Controller{
 					'type' =>'project',
 					'action' =>'updated',
 					'project' => $project->id,
-					'student' => Auth::user()->student->id,
+					'supervisor' => Auth::user()->supervisor->id,
 					'transaction_date' => new Carbon
 				));
 			}
 
-
 			$transaction->save();
-			session()->flash('message', '"'.$project->title.'" has been updated.');
-			session()->flash('message_type', 'success');
-			return redirect()->action('ProjectController@show', $project);
 		});
 
-		return $result;
+		session()->flash('message', '"'.$project->title.'" has been updated.');
+		session()->flash('message_type', 'success');
+		return redirect()->action('ProjectController@show', $project);
 	}
 
 	/**
@@ -318,10 +322,12 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Project $project) {
+		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+			return response()->json(array('successful' => false));
+		}
 
 		DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
-
 			$transaction->fill(array(
 				'type' =>'project',
 				'action' =>'deleted',

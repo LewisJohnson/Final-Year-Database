@@ -24,8 +24,8 @@ class ProjectTopic extends Migration{
 					$table->boolean('primary')->default(0);
 					$table->primary(['project_id', 'topic_id']);
 
-					$table->foreign('project_id')->references('id')->on($department.'_projects_'.$level['shortName']);
-					$table->foreign('topic_id')->references('id')->on($department.'_topics_'.$level['shortName']);
+					$table->foreign('project_id')->references('id')->on($department.'_projects_'.$level['shortName'])->onDelete('cascade');
+					$table->foreign('topic_id')->references('id')->on($department.'_topics_'.$level['shortName'])->onDelete('cascade');
 				});
 			}
 		}
