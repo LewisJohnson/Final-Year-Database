@@ -26,7 +26,7 @@ var config = {
 	},
 
 	// The width mobile view should kick in (Make sure is corresponds to SCSS)
-	mobileWidth: 970,
+	mobileWidth: 720,
 
 	// Show help footer in help pages
 	showHelpFooter: true,

@@ -4,7 +4,7 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-@media screen and (min-width: 970px){
+@media screen and (min-width: 720px){
 	.mobile-nav-underlay{display: none !important;}
 
 	// Header & Navigation
@@ -15,7 +15,7 @@
 		max-height: 50px;
 	}
 
-	.hamburger-container{
+	.mobile-menu-container{
 		visibility: hidden;
 		max-width: 0;
 	}
@@ -25,8 +25,11 @@
 
 		.logo-container{
 			visibility: visible;
+			top: 0px;
 			left: 0px;
-			max-width: 50px;
+			opacity: 1;
+			z-index: 8;
+			margin-right: 20px;
 		}
 
 		> a {
@@ -82,7 +85,13 @@
 	}
 }
 
-@media screen and (max-width: 970px){
+
+@media screen and (max-width: 720px){
+
+	.morph-dropdown-wrapper{
+		display: none;
+	}
+
 	.card-container{
 		.card{
 			margin-bottom: 20px;
@@ -267,5 +276,37 @@
 		li{
 			display: block !important;
 		}
+	}
+}
+
+@media screen and (max-width: 400px){
+	header{
+		> a {
+			h1{
+				font-size: 100%;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 342px){
+	header{
+		> a {
+			width: 100%;
+			padding: 0;
+			margin: 0;
+			h1{
+				text-align: center;
+			}
+		}
+	}
+
+	.logo-container{
+		display: none;
+	}
+
+	.mobile-menu-container{
+		margin: 0 auto;
+		max-width: none;
 	}
 }

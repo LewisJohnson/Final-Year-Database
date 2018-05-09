@@ -5,6 +5,21 @@
  */
 
 
+.fancy-page{
+	> h1{
+		font-weight: 400;
+		text-align: center;
+	}
+
+	> h2{
+		font-weight: 300;
+		text-align: center;
+	}
+
+	.subtitle{
+		text-align: center;
+	}
+}
 .loader-container{
 	margin: 0 auto;
 	text-align: center;
@@ -206,7 +221,7 @@ ul.dot-menu{
 .alpha-header{
 	display: block;
 	position: sticky;
-	top: 40px;
+	top: 0px;
 	padding: 1rem 0;
 	padding-bottom: 5px;
 	background: white;
@@ -233,26 +248,39 @@ ul.dot-menu{
 }
 
 .icon {
-	margin: 0;
-	padding: 1rem;
-	width: 100%;
-	display: block;
-	text-decoration: none;
-	p {
-		margin-left: 5px;
-		line-height: 32px;
-		margin: 0;
+	white-space: nowrap;
+	// margin: 0;
+	// padding: 1rem;
+	// width: 100%;
+	// display: block;
+	// text-decoration: none;
+	
+	p, h1, h2, h3, h4, h5, h6 {
+		// margin-left: 5px;
+		// line-height: 32px;
+		// margin: 0;
 		display: inline-block;
-		color: inherit;
+		// color: inherit;
+	}
+
+	p{
+		margin: 0;
 	}
 
 	.svg-container {
-		vertical-align: middle;
 		svg {
 			width: 20px;
 			height: 20px;
 			vertical-align: text-bottom;
 		}
+	}
+}
+
+.blue-link{
+	color: rgb(103, 114, 229);
+
+	&:hover{
+		text-decoration: underline;
 	}
 }
 
@@ -271,8 +299,6 @@ ul.dot-menu{
 	display: flex;
 	flex-direction: column;
 	list-style: none;
-
-	.icon{ padding: 6.5px; }
 }
 
 .arrangements-container{
@@ -388,6 +414,7 @@ ul.dot-menu{
 .flex--col{ flex-direction: column; }
 .flex--stretch{ flex: 1; }
 .flex--wrap{ flex-wrap: wrap; }
+.flex--no-wrap{ flex-wrap: nowrap; }
 .flex--stretch-children{ > *{ flex: 1; }}
 .flex--full{ flex: 0 1 100%; }
 
@@ -454,7 +481,7 @@ ul.dot-menu{
 }
 
 @keyframes showDotMenu { 
-	from{ transform: scale3d(0.8, 0.8, 1); }
+	from{ transform: scale3d(0.9, 0.9, 1); }
 	to{ transform: scale3d(1, 1, 1); }
 }
 

@@ -45,7 +45,7 @@ import '../js/components';
 	   ======================== */
 
 	if($('.show--scroll-to-top').length > 0){
-		$('.main-content').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
+		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
 
 	$('.animate-cards .card').css("opacity", 0);
@@ -70,7 +70,10 @@ import '../js/components';
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('.topics-list .loader').fadeOut(0);
+	$('#topics-loading-loader').fadeOut('fast', function(){
+		$(this).remove();
+    });
+
 	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNextTopic() {
 		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNextTopic);
 	});
@@ -266,20 +269,13 @@ import '../js/components';
 		}
 	});
 
-	$('.user-form #username').on('change', function(){
+	$('.user-form #username').on('keydown', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
 	/* ======================
 		 4. CLICK EVENTS
 	   ====================== */
-	$("body").on("click", ".email-selected", function(e) {
-		if($(this).prop('href') === 'mailto:' || $(this).prop('href') === null){
-			alert("You haven't selected anyone.");
-			e.preventDefault();
-		}
-	});
-
 	// External links give an illusion of AJAX
 	$("body").on("click", ".external-link",  function(e) {
 		var elemToHideSelector = $($(this).data('element-to-hide-selector'));
@@ -368,7 +364,7 @@ import '../js/components';
 			},
 			type: 'blue',
 			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path  d="M17,9H7V7H17M17,13H7V11H17M14,17H7V15H14M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" /></svg></div>',
-			theme: 'material',
+			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: false,
 			animateFromElement : false,
@@ -464,23 +460,75 @@ import '../js/components';
 	/* ======================
 		 5. CHANGE EVENTS
 	   ====================== */
+
+	var dontRemindAgainAmoutMailtoLimit = false;
 	$("body").on("change", ".email-table .checkbox input", function() {
 		var select = function(dom){
 			var status = dom.parents().eq(4).data('status');
 			var emailString = "mailto:";
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 			var emailButtonselector = ".email-selected." + status;
+			var amountOfEmails = 0;
 
 			$(checkboxSelector).each(function(index, value) {
+				if(amountOfEmails > 100){
+					return false;
+				}
+
 				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
 					emailString += $(value).data('email');
 					emailString += ",";
 				}
+				amountOfEmails++;
 			});
+
+			if(amountOfEmails > 100 && !dontRemindAgainAmoutMailtoLimit){
+				$.confirm({
+					type: 'red',
+					icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div>',
+					theme: 'modern',
+					escapeKey: true,
+					animateFromElement : false,
+					backgroundDismiss: true,
+					title: 'Mailto Limit Reached',
+					content: 'URLs have a length limit of around 2000 characters. The amount of people you have selected is greater than this limit. The first 100 people you selected will be emailed.',
+					buttons: {
+						neveragain: {
+							text: "Okay, don't remind me again",
+							btnClass: 'btn-red-text',
+							action: function(){
+								dontRemindAgainAmoutMailtoLimit = true;
+							}
+						},
+						okay: {},
+					}
+				});
+			}
+
 			$(emailButtonselector).prop('href', emailString);
 		};
 		setTimeout(select($(this)), 2000);
 	});
+
+	if($('#title').length > 0){
+		var titleCharCount = $('#title-character-count');
+
+		checkTitle();
+		$('#title').on("keydown change",  function(){
+			checkTitle();
+		});
+
+		function checkTitle(){
+			var length = $('#title').val().length;
+			titleCharCount.text(length + '/40');
+
+			if(length > 40){
+				titleCharCount.css('color', 'red');
+			} else {
+				titleCharCount.css('color', 'darkgray');
+			}
+		}
+	}
 
 	/* ======================
 		 6. HTML EDITOR
@@ -569,7 +617,7 @@ import '../js/components';
 
 			case "info":
 				$.dialog({
-					theme: 'material',
+					theme: 'modern',
 					escapeKey: true,
 					animateFromElement : false,
 					backgroundDismiss: true,

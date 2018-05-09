@@ -120,10 +120,14 @@ class SupervisorController extends Controller{
 			return $error;
 		}
 
-		// Send accepted email
-		Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+		try {
+			// Send accepted email
+			Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+		} catch (\Exception $e) {
+			return response()->json(array('successful' => true, 'email_successful' => false, 'message' => $student->user->first_name.'was accepted. However, the confirmation email failed to send.'));
+		}
 
-		return response()->json(array('successful' => true, 'message' => 'Student accepted'));
+		return response()->json(array('successful' => true, 'message' => $student->user->first_name.' has been accepted.'));
 	}
 
 	/**
@@ -136,7 +140,7 @@ class SupervisorController extends Controller{
 		$student = Student::findOrFail(request('student_id'));
 
 		// We need to store this for the email
-		$projectId = $student->project_id;
+		$project = $student->project;
 
 		DB::transaction(function() use ($request, $student) {
 			$transaction = new Transaction;
@@ -155,9 +159,24 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		// Send declined email
-		Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student, $projectId));
+		$emailError = false;
+		try {
+			// Send declined email
+			Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student, $project->id));
+		} catch (\Exception $e) {
+			$emailError = true;
+		}
 
+		if($project->status == "student-proposed"){
+			$project->supervisor == null;
+			$project->student == null;
+			$project->save();
+			$project->delete();
+		}
+		
+		if($emailError){
+			return response()->json(array('successful' => true, 'email_successful' => false, 'message' => $student.' has been rejected.'));
+		}
 		return response()->json(array('successful' => true, 'message' => 'Student rejected'));
 	}
 

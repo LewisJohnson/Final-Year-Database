@@ -46,7 +46,7 @@ return [
 	'toolbar_text' => 'Undergraduate',
 
 	// Help links are shown in the help->links dropdown, you may add up to 20 help links.
-	'help_link_1' => 'For Students and Supervisors',
+	'help_link_1' => 'Sussex Information',
 	'help_link_1_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/informationforstudents/',
 	'help_link_2' => 'Marking Criteria',
 	'help_link_2_url' => 'http://www.sussex.ac.uk/ei/internal/forstudents/informatics/undergraduate/finalyearprojects/reportmarkingcriteria',

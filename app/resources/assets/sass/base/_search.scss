@@ -27,6 +27,7 @@
 	width: 100%;
 	background: rgba(0, 0, 0, 0.02);
 	transition: visibility 0s, .28s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
+	will-change: visibility, max-height, border-right, border-left, border-bottom, padding;
 
 	&.active{
 		visibility: visible;

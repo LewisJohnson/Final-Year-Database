@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 /**
  * The home controller.
  *
@@ -29,15 +31,6 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
-		// preg_match('/MSIE (.*?);/', $_SERVER['HTTP_USER_AGENT'], $matches);
-		// if(count($matches)<2){
-		// 	preg_match('/Trident\/\d{1,2}.\d{1,2}; rv:([0-9]*)/', $_SERVER['HTTP_USER_AGENT'], $matches);
-		// }
-
-		// if (count($matches)>1){
-		// 	//Then we're using IE
-		// 	return view('help.ie');
-		// }
 		return view('index');
 	}
 
@@ -101,6 +94,23 @@ class HomeController extends Controller{
 
 		$feedback->save();
 		return response()->json(array('successful' => true, 'message' => 'Thank you for your feedback.'));
+	}
+
+	/**
+	 * Checks the users password and puts them into sudo-mode.
+	 * 
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function sudo(Request $request){
+		$this->validate(request(), [
+			'password' => 'required',
+		]);
+
+		if (Hash::check(request('password'), Auth::user()->password)) {
+			Session::put('sudo-mode', true);
+			return back();
+		}
 	}
 
 	/**

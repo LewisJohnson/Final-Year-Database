@@ -49,7 +49,7 @@
 					</li>
 				@endforeach
 				<li>
-					<div class="loader loader--medium" style="display: block"></div>
+					<div id="topics-loading-loader" class="loader loader--medium" style="display: block"></div>
 				</li>
 			@endif
 			@if(!count($project->topics))
@@ -92,19 +92,15 @@
 			@endif
 		@endif
 		
-		@if($project->isOwnedByUser())
+		@if($project->isOwnedByUser() && !Auth::user()->isStudent())
 			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
-			<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
-				<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
-			</form>
 			{{-- <form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
-				<button type="submit" class="button button--svg button--danger" title="Delete {{ $project->title }}">
-					@include('svg.bin')
-					<p>Delete</p>
-				</button>
+				<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
 			</form> --}}
 		@endif
+
+
 
 	</div>
 </div>

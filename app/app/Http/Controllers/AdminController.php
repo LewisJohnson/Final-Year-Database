@@ -324,7 +324,6 @@ class AdminController extends Controller{
 		});
 
 		return view('admin.login-as')
-		// ->with('supervisors', $supervisors->sortBy('title'))
 		->with('supervisors', $supervisors)
 			->with('staff', $staffUsers)
 			->with('students', $students);
@@ -337,8 +336,20 @@ class AdminController extends Controller{
 		* @return \Illuminate\Http\Response
 	*/
 	public function loginAs($id){
-		// todo: check if they are allowed
+		if(Session::get('sudo-mode') == null || Session::get('sudo-mode') == false){
+			session()->flash('message', 'Something went wrong');
+			session()->flash('message_type', 'error');
+			return false;
+		}
+
 		$user = User::findOrFail($id);
+
+		if($user->isSystemAdmin() || $user->isProjectAdmin()){
+			session()->flash('message', 'You may not log in as an administrator');
+			session()->flash('message_type', 'error');
+			return false;
+		}
+
 		Auth::login($user);
 
 		// Redirect

@@ -91,3 +91,18 @@ td:last-of-type, th:last-of-type {
 		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	}
 }
+
+.table--small{
+	th, td {
+		padding: 0 9px 6px 9px;
+	}
+
+	td{
+		height: 25px;
+		line-height: 25px;
+	}
+
+	.checkbox{
+			margin-top: 5px;
+	}
+}

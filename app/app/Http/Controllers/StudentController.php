@@ -7,6 +7,7 @@
 
 namespace SussexProjects\Http\Controllers;
 
+use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use SussexProjects\Http\Requests\ProjectForm;
+use SussexProjects\Http\Controllers\ProjectController;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Transaction;
@@ -122,7 +125,7 @@ class StudentController extends Controller{
 	 * @param \Illuminate\Http\Request $request Student proposed project
 	 * @return \Illuminate\Http\Response
 	*/
-	public function proposeProject(Request $request){
+	public function proposeProject(ProjectForm $request){
 		if(Mode::getStartDate()->gt(Carbon::now())){
 			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getStartDate().'.');
 			session()->flash('message_type', 'danger');
@@ -140,6 +143,8 @@ class StudentController extends Controller{
 			}
 
 			$project = new Project;
+			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
+
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
@@ -147,7 +152,7 @@ class StudentController extends Controller{
 			$project->student_id = Auth::user()->student->id;
 			$project->fill(array(
 				'title' => request('title'),
-				'description' => request('description'),
+				'description' =>  $clean_html,
 				'status' => "student-proposed",
 				'skills' => request('skills')
 			));
@@ -175,9 +180,14 @@ class StudentController extends Controller{
 
 		// Send student proposed email
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send accepted email
+				Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+			} catch (\Exception $e) {
+				
+			}
 		}
-
+		
 		return redirect()->action('HomeController@index');
 	}
 
@@ -197,7 +207,7 @@ class StudentController extends Controller{
 		}
 
 		$student = Auth::user()->student;
-
+		dd("ddd");
 		DB::transaction(function() use ($request, $student) {
 
 			// Student has already selected a project
@@ -228,9 +238,16 @@ class StudentController extends Controller{
 			session()->flash('message_type', 'success');
 		});
 
-		// Send selected email
+
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send selected email
+				if($student->project->supervisor->getAcceptingEmails()){
+					Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+				}
+			} catch (\Exception $e) {
+				
+			}
 		}
 
 		return redirect()->action('HomeController@index');
@@ -270,9 +287,15 @@ class StudentController extends Controller{
 			$student->save();
 		});
 
-		// Send selected email
 		if($student->project->supervisor->getAcceptingEmails()){
-			Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+			try {
+				// Send selected email
+				if($student->project->supervisor->getAcceptingEmails()){
+					Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+				}
+			} catch (\Exception $e) {
+				
+			}
 		}
 
 		return response()->json(array('successful' => true, 'message' => "You have un-selected a project."));

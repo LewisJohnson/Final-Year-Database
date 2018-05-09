@@ -3,11 +3,13 @@
 	@include ('partials.header')
 
 	<div class="width--600 centered card" style="margin-top: 3rem;">
-		<h1>LOG IN</h1>
-		<h3>Use your Sussex ITS login details to log in to this system.</h3>
+		<div class="header">
+			<h2 id="dialog-title">LOG IN</h2>
+			<p id="dialog-desc">Use your Sussex ITS login details to log in to this system</p>
+		</div>
 
 		<div class="content">
-			<form class="form form--flex" role="form" method="POST" action="/login">
+			<form class="form form--flex" role="form" method="POST" action="/login" accept-charset="utf-8">
 				{{ csrf_field() }}
 
 			<div id="login-username" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
@@ -28,7 +30,6 @@
 						<label for="remember">Remember Me</label>
 					</div>
 				</div>
-
 
 				<div class="flex flex--row">
 					<button class="button button--raised button--accent" type="submit">LOG IN</button>

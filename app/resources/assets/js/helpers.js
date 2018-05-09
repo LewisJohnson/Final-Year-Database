@@ -279,8 +279,10 @@ function wrapTextWithTag(areaId, tag) {
 }
 
 function sortTable(header, table) {
-		var rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-		switching = true;
+		var i, shouldSwitch, switchcount = 0;
+		var rows, x, y = $();
+		var switching = true;
+		var dir = "asc";
 
 		if(!(header instanceof jQuery)){
 			header = $(header);
@@ -290,21 +292,21 @@ function sortTable(header, table) {
 			table = $(table);
 		}
 
+		// If the header is a checkbox, ignore it
+		if(header.find('.checkbox').length > 0){
+			return;
+		}
+
 		table.find('th').each(function(key, th) {
 			if(!$(th).is(header)){
 				$(th).find('span').remove();
 			}
 		});
 
-		
-		// Set the sorting direction to ascending:
-		dir = "asc";
-
 		if(header.find('span').length < 1){
 			header.append('<span>&#x25B2;</span>');
 			header.attr('data-asc', '');
 		} else {
-
 			if(header.attr('data-asc') == ""){
 				header.removeAttr('data-asc');
 				header.attr('data-desc', '');
@@ -332,35 +334,35 @@ function sortTable(header, table) {
 				shouldSwitch = false;
 				/* Get the two elements you want to compare,
 				one from current row and one from the next: */
-				x = $(rows[i]).find("TD").get(header.index());
-				y = $(rows[i + 1]).find("TD").get(header.index());
+				x = rows.eq(i).find("TD").eq(header.index());
+				y = rows.eq(i + 1).find("TD").eq(header.index());
 
 				/* Check if the two rows should switch place,
 				based on the direction, asc or desc: */
 				if (dir == "asc") {
-					if(typeof $(x).data('use-hover-value') !== 'undefined'){
-						if ($(x).data('hover').toLowerCase() > $(y).data('hover').toLowerCase()) {
+					if(typeof x.data('use-hover-value') !== 'undefined'){
+						if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == 1) {
 							// If so, mark as a switch and break the loop:
 							shouldSwitch= true;
 							break;
 						}
 					}
 
-					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+					if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == 1) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
 						break;
 					}
 				} else if (dir == "desc") {
-					if(typeof $(x).data('use-hover-value') !== 'undefined'){
-						if ($(x).data('hover').toLowerCase() < $(y).data('hover').toLowerCase()) {
+					if(typeof x.data('use-hover-value') !== 'undefined'){
+						if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == -1) {
 							// If so, mark as a switch and break the loop:
 							shouldSwitch= true;
 							break;
 						}
 					}
 
-					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+					if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == -1) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
 						break;
@@ -370,7 +372,7 @@ function sortTable(header, table) {
 			if (shouldSwitch) {
 				/* If a switch has been marked, make the switch
 				and mark that a switch has been done: */
-				$(rows[i]).before($(rows[i + 1]));
+				rows.eq(i).before(rows.eq(i + 1));
 
 				switching = true;
 				// Each time a switch is done, increase this count by 1:

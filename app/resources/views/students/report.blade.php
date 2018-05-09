@@ -7,7 +7,7 @@
 		<h3>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h3>
 	</div>
 	
-	<div class="section-container card">
+	<div class="section-container">
 		@foreach(SussexProjects\Project::getAllStatuses() as $status)
 			@php
 				$students = SussexProjects\Student::Where('project_status', $status)->get();
@@ -15,9 +15,11 @@
 			@endphp
 			@if(count($sortedStudents) > 0)
 				<div class="section horizontal">
-						<h3>{{ ucfirst($status) }} ({{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%)</h3>
-						<h4 style="margin-top: 0px;">Total: {{ count($sortedStudents) }}</h4>
-						<table class="data-table sort-table email-table {{ $status }}" data-status="{{ $status }}">
+						<div class="flex flex--row flex--no-wrap">
+							<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins>| {{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%</ins></p>
+							<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($sortedStudents) }}</p>
+						</div>
+						<table class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">
 							<thead>
 								<tr>
 									<th>
@@ -41,7 +43,7 @@
 						</div>
 					</div>
 				@else
-					<script>$("#report-header").append('<div class="config-danger"><b>There are no students in the {{ $status }} category.</b></div>');</script>
+					<script>$("#report-header").append('<div class=""><p>There are no students in the {{ $status }} category.</p></div>');</script>
 				@endif
 		@endforeach
 	</div>

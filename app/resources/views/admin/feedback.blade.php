@@ -21,7 +21,7 @@
 					<td>{{ $piece->department }}</td>
 					<td>{{ $piece->education_level }}</td>
 					<td>{{ $piece->comment }}</td>
-					<td>{{ $piece->email }}</td>
+					<td><a class="blue-link" href="mailto:{{ $piece->email }}">{{ $piece->email }}</a></td>
 				</tr>
 			@endforeach
 		</tbody>
