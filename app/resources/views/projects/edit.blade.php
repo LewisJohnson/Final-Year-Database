@@ -38,19 +38,18 @@
 					<ul class="topics-list edit">
 						@foreach($project->topics as $topic)
 							@if($project->getPrimaryTopic())
-								<li style="display: none" class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
+								<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
 									<button type="button" class="topic-remove">X</button>
 									<p class="topic-name">{{$topic->name}}</p>
 								</li>
 							@else
-								<li style="display: none" class="topic" data-topic-id="{{ $topic->id }}">
+								<li class="topic" data-topic-id="{{ $topic->id }}">
 									<button type="button" class="topic-remove">X</button>
 									<p class="topic-name">{{$topic->name}}</p>
 								</li>
 							@endif
 						@endforeach
 						<input list="topicsDataList" autocomplete="off" type="text" name="name" id="addTopicInput">
-						<div id="topics-loading-loader" style="display: block" class="loader loader--medium"></div>
 					</ul>
 					<div class="loader"></div>
 				</div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered animate-cards width--1000">
+<div class="centered animated-entrance width--1000">
 	@if(Auth::check())
 		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
@@ -155,24 +155,24 @@
 					@endif
 				</div>
 
-				<div class="card card--margin-vertical favourite-projects-container">
-					<h2>Favourite Projects</h2>
+				<div style="width: 100%;" class="fancy-page card--margin-vertical">
+					<h2>Your Favourite Projects</h2>
 					@if($projects = Auth::user()->student->getFavouriteProjects())
 						<div class="favourite-projects flex flex--row flex--wrap">
 							@foreach($projects as $project)
-								<div>
+								<div class="card">
 									<div class="favourite-container index pointer" data-project-id="{{ $project->id }}">
-										<svg viewBox="0 0 24 24" height="24" width="24" class="favourite">
+										<svg title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24" class="favourite">
 											<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 										</svg>
-										<div class="loader"></div>
+										<div class="loader loader--tiny"></div>
 									</div>
 									<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
 								</div>
 							@endforeach
 						</div>
 					@else
-						<p title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
+						<p class="subtitle" title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
 					@endif
 				</div>
 			</div>

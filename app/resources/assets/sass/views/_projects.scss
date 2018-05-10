@@ -57,9 +57,6 @@
 	}
 }
 
-.favourite-projects-container{
-	border-top: 2px solid rgba(255, 215, 0, 0.25) !important;
-}
 
 .favourite-container{
 	position: relative;
@@ -77,7 +74,6 @@
 	svg.favourite {
 		fill-opacity: 1;
 		fill: gold;
-
 		:hover{ fill-opacity: 1; }
 	}
 }
@@ -90,21 +86,10 @@
 	svg{ vertical-align: text-bottom; }
 }
 
-.favourite-container.index{
-	display: inline-block;
-	float: none;
-	margin: 0;
-}
-
 .favourite-projects{
 	> div{
-		background: rgba(0, 0, 0, 0.01);
 		width: 48%;
 		margin: 1%;
-		padding: 7px;
-		border-radius: 2px;
-		text-align: justify;
-		border: 1px solid rgba(0, 0, 0, 0.12);
 	}
 
 	a{

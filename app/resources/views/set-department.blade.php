@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered animate-cards width--1000">
+<div class="centered animated-entrance width--1000">
 	<h1>Welcome.</h1>
 	<h4>Please select a department.</h4>
 

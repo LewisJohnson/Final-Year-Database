@@ -11,11 +11,11 @@
 			@if (count($project->topics))
 				@foreach($project->topics as $topic)
 					@if($project->getPrimaryTopic())
-						<li style="display: none" class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+						<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 							<p>{{$topic->name}}</p>
 						</li>
 					@else
-						<li style="display: none" class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic) }}';">
+						<li class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic) }}';">
 							<p>{{$topic->name}}</p>
 						</li>
 					@endif
@@ -36,9 +36,6 @@
 					<p>This project has no primary topic.</p>
 				</li>
 			@endif
-			<li>
-				<div id="topics-loading-loader" class="loader" style="display: block"></div>
-			</li>
 		</ul>
 	</div>
 	<a class="show-more" href="#show">Show more &raquo;</a>

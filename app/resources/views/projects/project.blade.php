@@ -44,13 +44,10 @@
 		<ul class="topics-list">
 			@if (count($project->topics))
 				@foreach($project->topics as $topic)
-					<li style="display: none" class="pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
+					<li class="pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
 						<a title="Browse projects with the topic {{ $topic->name }}" href="{{ action('ProjectController@byTopic', $topic->id) }}">{{$topic->name}}</a>
 					</li>
 				@endforeach
-				<li>
-					<div id="topics-loading-loader" class="loader loader--medium" style="display: block"></div>
-				</li>
 			@endif
 			@if(!count($project->topics))
 				<li class="no-topics">

@@ -207,7 +207,6 @@ class StudentController extends Controller{
 		}
 
 		$student = Auth::user()->student;
-		dd("ddd");
 		DB::transaction(function() use ($request, $student) {
 
 			// Student has already selected a project

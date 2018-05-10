@@ -29,8 +29,6 @@ import '../js/components';
 "use strict";
 ;$(function() {
 
-	var animatedCardEntranceAnimationDelay = 0;
-
 	/* ================
 		1. AJAX Setup
 	   ================ */
@@ -48,11 +46,15 @@ import '../js/components';
 		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
 
-	$('.animate-cards .card').css("opacity", 0);
+	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p').css("opacity", 0);
 
 	// Animate all cards
-	$('.animate-cards .card').each(function(index, value) {
-		animatedCardEntranceAnimationDelay += 200;
+	var animatedEntranceAnimationDelay = 0;
+
+	// So the scroll bar doesn't show
+	$('body').css('overflow-y', 'hidden');
+	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p').each(function(index, value) {
+		animatedEntranceAnimationDelay += 50;
 		setTimeout(function(){
 			$(this).addClass("slideInUp animated");
 
@@ -60,8 +62,11 @@ import '../js/components';
 				opacity: 1
 			}, 800);
 
-		}.bind(this), animatedCardEntranceAnimationDelay);
+		}.bind(this), animatedEntranceAnimationDelay);
 	});
+
+	// So we can scroll again
+	$('body').css('overflow-y', 'scroll');
 
 	// Accessibility
 	$('.dropdown').attr('tabindex', '0');
@@ -70,12 +75,19 @@ import '../js/components';
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('#topics-loading-loader').fadeOut('fast', function(){
-		$(this).remove();
-    });
+	$('.topics-list li').css("opacity", 0);
 
-	$('.topics-list li').first().fadeIn(config.animtions.fast, function showNextTopic() {
-		$(this).next( ".topics-list li" ).fadeIn(config.animtions.fast, showNextTopic);
+	var animatedTopicsAnimationDelay = 0;
+	$('.topics-list li').each(function(index, value) {
+		animatedTopicsAnimationDelay += 200;
+		setTimeout(function(){
+			$(this).addClass("slideInRight animated");
+
+			$(this).animate({
+				opacity: 1
+			}, 800);
+
+		}.bind(this), animatedTopicsAnimationDelay);
 	});
 
 	$('.order-list-js').each(function() {
@@ -417,6 +429,10 @@ import '../js/components';
 	
 	// Adds or removes a project from a student favourites
 	$(".favourite-container").on('click', function() {
+		if($('.loader', svgContainer).css('display') !== 'none'){
+			return;
+		}
+
 		var svgContainer = $(this);
 		var svg = svgContainer.find('svg');
 
