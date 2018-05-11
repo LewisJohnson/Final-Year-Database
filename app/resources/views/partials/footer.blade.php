@@ -28,7 +28,7 @@
 			</li>
 			<li><p class="seperator">|</p></li>
 			<li>
-				<a class="button--small td-none hover--light" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
+				<a class="button--small td-none hover--light" target="_blank" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 			</li>
 			<li><p class="seperator">|</p></li>
 			<li>

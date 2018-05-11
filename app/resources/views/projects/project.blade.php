@@ -15,7 +15,7 @@
 		<h1>This project is archived.</h1>
 	@endif
 
-	<div class="card project-card card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
+	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
 		@if(Auth::user()->isStudent())
 			<div class="favourite-container pointer">
 				<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>

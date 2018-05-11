@@ -92,6 +92,8 @@
 									<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
 								@elseif(Auth::user()->student->project_status == "proposed")
 									<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
+								@elseif(Auth::user()->student->project_status == "selected")
+									<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Selected Project</a>
 								@elseif(Auth::user()->student->project_status == "accepted")
 									<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Accepted Project</a>
 								@endif

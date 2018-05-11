@@ -90,7 +90,6 @@
 								</li>
 							@endforeach
 						</ul>
-
 						
 						{{-- <form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@newDepartment') }}">
 							{{ csrf_field() }}
@@ -135,12 +134,12 @@
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="user_agent">Collect user agent strings</p>
 								<label class="toggle">
-									<input type="checkbox" name="coolect_user_agent" id="coolect_user_agent"class="boolean-checkbox" @if(get_config_json('user_agent.collect_user_agent.value')) checked @endif>
+									<input type="checkbox" name="collect_user_agent" id="collect_user_agent"class="boolean-checkbox" @if(get_config_json('user_agent.collect_user_agent.value')) checked @endif>
 									<span class="slider"></span>
 								</label>
 							</div>
 							<label class="description">{{ get_config_json("user_agent.collect_user_agent.description") }}</label>
-							<input type="hidden" name="coolect_user_agent-json" value="user_agent.collect_user_agent">
+							<input type="hidden" name="collect_user_agent-json" value="user_agent.collect_user_agent">
 
 							<div class="form-field form-field--flex form-field--toggle">
 								<p class="switch-label" for="collect_referrer">Collect referrer url</p>

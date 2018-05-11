@@ -9,10 +9,11 @@
 
 	@if(Auth::check())
 		<div class="form-field">
-			<div class="checkbox">
+			<div style="width: 170px;margin: 4px auto;" class="checkbox">
 				<input type="checkbox" id="anonymous" name="anonymous" class="checkbox-input">
-				<label for="anonymous">Send Anonymously <ins>Your email will not be recorded and you will not receive a response.</ins></label>
+				<label for="anonymous">Send Anonymously</label>
 			</div>
+			<ins>Your email will not be recorded and you will not receive a response.</ins>
 		</div>
 	@else
 		<div class="form-field">
