@@ -25,6 +25,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \SussexProjects\Http\Middleware\TrustProxies::class,
 		\SussexProjects\Http\Middleware\UserAgentStringCollector::class,
+		\SussexProjects\Http\Middleware\SetDepartment::class,
+		\SussexProjects\Http\Middleware\SetEducationLevel::class
 	];
 
 	/**
@@ -44,8 +46,6 @@ class Kernel extends HttpKernel
             \SussexProjects\Http\Middleware\RequiredCookies::class,
 			\SussexProjects\Http\Middleware\Language::class,
 			\SussexProjects\Http\Middleware\Accessibility::class,
-			\SussexProjects\Http\Middleware\SetDepartment::class,
-			\SussexProjects\Http\Middleware\SetEducationLevel::class
 		],
 
 		'api' => [

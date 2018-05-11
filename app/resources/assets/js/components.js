@@ -879,12 +879,6 @@
 				self.showDropdown($(this));
 			}
 		});
-
-		//on small screens, open navigation clicking on the menu icon
-		this.element.on('click', '.nav-trigger', function(event){
-			event.preventDefault();
-			self.element.toggleClass('nav-open');
-		});
 	};
 
 	morphDropdown.prototype.showDropdown = function(item) {
