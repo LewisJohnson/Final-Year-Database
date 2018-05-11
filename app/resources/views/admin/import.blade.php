@@ -11,8 +11,10 @@
 	<div class="card card--margin-vertical">
 		<h2>File Format</h2>
 
-		<p style="margin: 0">You can easily export spreadsheets to CSV, all versions of Microsoft Excel and LibreOffice Calc support this feature.</p>
+		<p style="margin: 0">You can export spreadsheets to CSV, all versions of Microsoft Excel and LibreOffice Calc support this feature.</p>
 		<p style="margin: 0">The CSV file must be encoded in UTF-8.</p>
+
+		<h4>Example Spreadsheet</h4>
 		<table style="max-width: 800px">
 			<thead>
 				<tr>
@@ -42,7 +44,7 @@
 			{{ csrf_field() }}
 			<div class="form-field">
 				<label>Select file to upload</label>
-				<input type="file" name="studentFile" class="file" required/>
+				<input type="file" accept=".csv" name="studentFile" class="file" required/>
 				<button class="button" type='submit'>Upload Test</button>
 			</div>
 		</form>
@@ -56,7 +58,7 @@
 			{{ csrf_field() }}
 			<div class="form-field">
 				<label>Select file to upload</label>
-				<input type="file" name="studentFile" class="file" required/>
+				<input type="file" accept=".csv" name="studentFile" class="file" required/>
 				<button class="button" type='submit'>Upload</button>
 			</div>
 			<div id="import-student-result"></div>

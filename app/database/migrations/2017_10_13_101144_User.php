@@ -22,7 +22,6 @@ class User extends Migration{
 			$projectAdminLevels.="'admin_".$level."',";
 		}
 
-
 		foreach(get_departments() as $key => $department) {
 			$tableName = $department.'_users';
 			Schema::create($tableName, function (Blueprint $table) {
@@ -42,6 +41,7 @@ class User extends Migration{
 			DB::statement($privilegesSql);
 		}
 
+		// Create test table
 		Schema::create("test_users", function (Blueprint $table) {
 			$table->uuid('id')->unique()->nullable(false);
 			$table->string('first_name', 128)->nullable(false);
@@ -54,9 +54,6 @@ class User extends Migration{
 			$table->rememberToken();
 			$table->primary('id');
 		});
-
-		$privilegesSql = "ALTER TABLE `test_users` ADD COLUMN `privileges` SET('student') NOT NULL AFTER `id`;";
-		DB::statement($privilegesSql);
 	}
 
 	/**

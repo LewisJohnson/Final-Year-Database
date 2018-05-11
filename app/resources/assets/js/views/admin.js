@@ -10,6 +10,11 @@
 	$(".import-student-form").on('submit', function(e){
 		e.preventDefault();
 
+		if($(this).find('.file').length < 1){
+			createToast('error', 'Something went wrong. Please refresh the page.');
+			return;
+		}
+
 		var fileData = $(this).find('.file').prop('files')[0];   
 		var requestType = $(this).data('type');
 		var formData = new FormData()
@@ -23,11 +28,16 @@
 			data: formData,
 			type: 'post',
 			success: function(response){
+				if(!response.successful){
+					createToast('error', response.message);
+					return;
+				}
+
 				if(requestType == "test"){
-					$('#import-student-test-result').html(response);
+					$('#import-student-test-result').html(response.message);
 					$('#import-student-test-result').addClass('fadeInUp animated');
 				} else {
-					$('#import-student-result').html(response);
+					$('#import-student-result').html(response.message);
 					$('#import-student-result').addClass('fadeInUp animated');
 				}
 			}

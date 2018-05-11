@@ -74,21 +74,31 @@ class AdminController extends Controller{
 		* @return \Illuminate\Http\Response
 	*/
 	public function importStudents(Request $request){
-		if($request->file('studentFile') === null){
-			return response()->json(array('successful' => false, 'message' => 'Please select a file.'));
+		$request->validate([
+			'studentFile' => 'required',
+		]);
+
+		if(strtolower($request->file('studentFile')->getClientOriginalExtension()) != "csv"){
+			return response()->json(array('successful' => false, 'message' => 'Invalid file format. Please upload a CSV file.'));
 		}
 
+		if(mb_detect_encoding($request->file('studentFile'), 'UTF-8', true) != 'UTF-8'){
+			return response()->json(array('successful' => false, 'message' => 'Invalid file encoding.'));
+		}
 
-		if ($request->file('studentFile')->isValid()) {
+		if($request->file('studentFile')->isValid()) {
 			$userUpload = $request->file('studentFile');
+
+			// Move uploaded file to temp dir
 			$file = file($userUpload->getRealPath());
 
+			// Map CSV data into array
+			$csv = array_map('str_getcsv', $file);
+
 			if($request->query('test') == 1){
-				return $this->testImportStudents($file);
+				return $this->testImportStudents($csv);
 			} else {
 				// Import to prod tables
-				// Map CSV data into array
-				$csv = array_map('str_getcsv', $file);
 
 				// Remove CSV header and tail
 				for ($i= 1; $i < count($csv) - 1; $i++) {
@@ -116,8 +126,8 @@ class AdminController extends Controller{
 
 				$users = User::where('privileges', 'student')->get();
 				$students = Student::all();
-
-				return view('admin.partials.import-student-table')->with('users', $users)->with('students', $students);
+				$view = view('admin.partials.import-student-table')->with('users', $users)->with('students', $students)->render();
+				return response()->json(array('successful' => true, 'message' => $view));
 			}
 		}
 
@@ -130,10 +140,7 @@ class AdminController extends Controller{
 		*
 		* @return \Illuminate\Http\Response
 	*/
-	public function testImportStudents($file){
-		// Map CSV data into array
-		$csv = array_map('str_getcsv', $file);
-
+	public function testImportStudents($csv){
 		// Empty test tables
 		DB::table('test_users')->truncate();
 		DB::table('test_students')->truncate();
@@ -161,10 +168,8 @@ class AdminController extends Controller{
 
 		$users = DB::table('test_users')->select('*')->get();
 		$students = DB::table('test_students')->select('*')->get();
-
-		return view('admin.partials.import-student-table')
-		->with('users', $users)
-		->with('students', $students);
+		$view = view('admin.partials.import-student-table')->with('users', $users)->with('students', $students)->render();
+		return response()->json(array('successful' => true, 'message' => $view));
 	}
 	/**
 		* System administrator dashboard view.
