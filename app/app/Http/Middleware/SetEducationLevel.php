@@ -21,10 +21,6 @@ class SetEducationLevel{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if(!Auth::check()){
-			return $next($request);
-		}
-
 		// Check to see if query param is set
 		if($request->query("educationLevel") != null){
 			// Check to see if they are allowed in this education level

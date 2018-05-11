@@ -13,13 +13,13 @@
 
 		<div class="button-group button-group--horizontal button-group--links">
 			@if(isset($_GET["unique"]))
-				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgent')}}">Only first visits</a>
+				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgentView')}}">Only first visits</a>
 			@else
-				<a class="chip active external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgent', 'unique=true') }}">Only first visits</a>
+				<a class="chip active external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgentView', 'unique=true') }}">Only first visits</a>
 			@endif
 		</div>
 
-		@if(!config_json('user_agent.collect_referrer.value'))
+		@if(!get_config_json('user_agent.collect_referrer.value'))
 			<div class="config-tip">
 				<p class="text-icon">&#128161;</p>
 				<p>Referral URLs are currently not being collected. You can turn it back on in the system dashboard.</p>

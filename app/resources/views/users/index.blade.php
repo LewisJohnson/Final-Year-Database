@@ -22,7 +22,7 @@
 
 
 		<div class="section horizontal card">
-			<h2>{{ Session::get('education_level')["longName"] }} Students</h2>
+			<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Students</h2>
 
 			<ol class="order-list-js last-name-header-list-js" id="studentList" sorted="false" style="list-style: none">
 				@foreach($students as $student)

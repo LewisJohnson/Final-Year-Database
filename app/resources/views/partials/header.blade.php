@@ -7,7 +7,7 @@
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 				{{ csrf_field() }}
 				<input type="hidden" name="department" value="{{ $department }}">
-				<button type="submit" class="button--small hover--light @if(Session('department') == $department)button--accent @endif" >{{ ucfirst($department) }}</button>
+				<button type="submit" class="button--small hover--light @if(Session::get('department') == $department)button--accent @endif" >{{ ucfirst($department) }}</button>
 			</form>
 		</li>
 		@endforeach

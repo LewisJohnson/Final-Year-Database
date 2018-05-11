@@ -28,7 +28,6 @@ class SetDepartment{
 				Session::put("department", $request->query("department"));
 			}
 		}
-
 		return $next($request);
 	}
 }

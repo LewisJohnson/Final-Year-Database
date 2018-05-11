@@ -80,7 +80,7 @@ function addLastNameHeadersToList(ul) {
 
 		if(i == 0){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 			continue;
 		}
 
@@ -90,7 +90,7 @@ function addLastNameHeadersToList(ul) {
 
 		if(firstCharOflastName != prevfirstCharOflastName){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 		}
 	}
 }
@@ -104,13 +104,13 @@ function addAlphaHeadersToList(ul) {
 
 		if(i == 0){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
 			continue;
 		}
 		var prevFirstChar = $(listitems[i - 1]).text().replace(/\s/g, '').charAt(0).toUpperCase();
 		if(firstChar != prevFirstChar){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
 		}
 	}
 }
@@ -125,7 +125,7 @@ function addTitleHeadersToList(ul) {
 
 		if(i == 0){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
 			continue;
 		}
 
@@ -134,7 +134,7 @@ function addTitleHeadersToList(ul) {
 
 		if(nameTitle != prevNameTitle){
 			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
-			links.append("<a href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
+			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
 		}
 	}
 }

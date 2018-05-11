@@ -278,7 +278,8 @@ ul.dot-menu{
 
 .blue-link{
 	color: rgb(103, 114, 229);
-
+	text-decoration: none;
+	
 	&:hover{
 		text-decoration: underline;
 	}

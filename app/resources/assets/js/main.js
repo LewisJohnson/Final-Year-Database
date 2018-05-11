@@ -46,14 +46,15 @@ import '../js/components';
 		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
 
-	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li').css("opacity", 0);
+	var animatedSelector = ".animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li";
+	$(animatedSelector).css("opacity", 0);
 
 	// Animate all cards
 	var animatedEntranceAnimationDelay = 0;
 
 	// So the scroll bar doesn't show
 	$('body').css('overflow-y', 'hidden');
-	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li').each(function(index, value) {
+	$(animatedSelector).each(function(index, value) {
 		animatedEntranceAnimationDelay += 50;
 		setTimeout(function(){
 			$(this).addClass("slideInUp animated");

@@ -235,7 +235,7 @@ class UserController extends Controller{
 		$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
 		DB::statement($replaced);
 
-		session()->flash('message', 'User was created.');
+		session()->flash('message', 'User was updated.');
 		session()->flash('message_type', 'success');
 		return redirect()->action('HomeController@index');
 	}

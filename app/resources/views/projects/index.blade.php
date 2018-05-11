@@ -44,7 +44,7 @@
 	@if($view == "search")
 		<h1>Project Search</h1>
 		<h3 style="margin-bottom: 5px; word-break: break-all;">We found {{count($projects)}} projects with the term "{{ $searchTerm }}".</h3>
-		<h5 style="margin-top: 0;">Search term limited to {{ session('search_filters') }}.</h5>
+		<h5 style="margin-top: 0;">Search term limited to {{ Session::get('search_filters') }}.</h5>
 		@include('projects.partials.search')
 	@endif
 
