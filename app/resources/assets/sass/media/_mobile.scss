@@ -4,7 +4,7 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-@media screen and (min-width: 720px){
+@media screen and (min-width: $mobile-width){
 	.mobile-nav-underlay{display: none !important;}
 
 	// Header & Navigation
@@ -86,7 +86,7 @@
 }
 
 
-@media screen and (max-width: 720px){
+@media screen and (max-width: $mobile-width){
 
 	.morph-dropdown-wrapper{
 		display: none;

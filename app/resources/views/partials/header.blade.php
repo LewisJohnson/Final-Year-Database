@@ -114,7 +114,7 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
-								<h3>Browse</h3>
+								<h4>Browse</h4>
 								<ul>
 									<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
 									<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
@@ -167,7 +167,7 @@
 						</li>
 
 						@if(Auth::user()->isProjectAdmin())
-							<li id="project-admin" class="dropdown links">
+							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">
 									<h4>Administrator</h4>

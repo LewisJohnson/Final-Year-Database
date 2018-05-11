@@ -46,14 +46,14 @@ import '../js/components';
 		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
 
-	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p').css("opacity", 0);
+	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li').css("opacity", 0);
 
 	// Animate all cards
 	var animatedEntranceAnimationDelay = 0;
 
 	// So the scroll bar doesn't show
 	$('body').css('overflow-y', 'hidden');
-	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p').each(function(index, value) {
+	$('.animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li').each(function(index, value) {
 		animatedEntranceAnimationDelay += 50;
 		setTimeout(function(){
 			$(this).addClass("slideInUp animated");
@@ -67,11 +67,6 @@ import '../js/components';
 
 	// So we can scroll again
 	$('body').css('overflow-y', 'scroll');
-
-	// Accessibility
-	$('.dropdown').attr('tabindex', '0');
-	$('.dropdown > button').attr('tabindex', '-1');
-	$('.dropdown .dropdown-content a').attr('tabindex', '0');
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));

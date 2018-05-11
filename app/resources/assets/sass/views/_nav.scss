@@ -379,14 +379,7 @@ $color-4: #548c7e; // Patina
 		}
 	}
 
-	.links-list a, .btn {
-		&:hover {
-			color: $color-1;
-		}
-	}
-
-	
-	@media screen and (min-width: 720px) {
+	@media screen and (min-width: $mobile-width) {
 		padding: 0;
 		text-align: center;
 
@@ -505,14 +498,9 @@ $color-4: #548c7e; // Patina
 			display: none;
 		}
 
-		.gallery .content {
-			/* you need to set a width for the .content elements because they have a position absolute */
-			width: 510px;
-			padding-bottom: .8em;
+		.wide .content {
+			width: 630px !important;
 
-			li {
-				margin-bottom: 1.8em;
-			}
 		}
 
 		.links .content,
