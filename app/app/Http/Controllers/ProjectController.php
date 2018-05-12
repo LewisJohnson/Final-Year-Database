@@ -269,7 +269,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
 			return response()->json(array('successful' => false));
 		}
 
@@ -322,7 +322,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Project $project) {
-		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
 			return response()->json(array('successful' => false));
 		}
 
