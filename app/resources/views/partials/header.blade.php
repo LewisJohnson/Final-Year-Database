@@ -114,11 +114,20 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
-								<h4>Browse</h4>
 								<ul>
-									<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
-									<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-									<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
+									<li>
+										<h4>Browse</h4>
+										<ul>	
+											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
+											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
+											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
+										</ul>
+									</li>
+									<li>
+										<ul>
+											<li style="opactiy: 0"></li>
+										</ul>
+									</li>
 								</ul>
 							</div>
 						</li>
@@ -196,7 +205,6 @@
 											</ul>
 										</li>
 										<li>
-
 											<ul class="links-list">
 												<li>
 													<a class="icon" href="/users/create">
@@ -221,23 +229,32 @@
 							<li id="student" class="dropdown links">
 								<a href="#0" class="label">Student</a>
 								<div class="content">
-									<h3>Student</h3>
 									<ul>
 										<li>
-											{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
-											@if(Auth::user()->student->project_status == "none")
-												<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
-											@elseif(Auth::user()->student->project_status == "proposed")
-												<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
-											@elseif(Auth::user()->student->project_status == "selected")
-												<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Selected Project</a>
-											@elseif(Auth::user()->student->project_status == "accepted")
-												<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Accepted Project</a>
-											@endif
-										</li>
+											<h4>Student</h4>
+											<ul>	
+												<li>
+													{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
+													@if(Auth::user()->student->project_status == "none")
+														<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
+													@elseif(Auth::user()->student->project_status == "proposed")
+														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
+													@elseif(Auth::user()->student->project_status == "selected")
+														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Selected Project</a>
+													@elseif(Auth::user()->student->project_status == "accepted")
+														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Accepted Project</a>
+													@endif
+												</li>
 
+												<li>
+													<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+												</li>
+											</ul>
+										</li>
 										<li>
-											<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+											<ul>
+												<li style="opactiy: 0"></li>
+											</ul>
 										</li>
 									</ul>
 								</div>

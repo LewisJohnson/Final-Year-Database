@@ -282,6 +282,7 @@
 	*/
 	var ColumnToggleTable = function ColumnToggleTable(element) {
 		this.element = $(element);
+		this.loader = this.showLoader();
 		this.head = $(element).find('> thead tr');
 		this.headers = $(element).find('> thead tr th');
 		this.bodyRows = $(element).find('> tbody tr');
@@ -346,6 +347,7 @@
 		refreshAll: function() {
 			$(ColumnToggleTable.prototype.Selectors_.TOGGLE_TABLE).each(function() {
 				ColumnToggleTable.prototype.functions.refresh(this.ColumnToggleTable);
+				this.ColumnToggleTable.hideLoader();
 			});
 		},
 	};
@@ -375,7 +377,11 @@
 		this.headers.each(function (){
 			var checked = $(this).data("default") ? "checked" : "";
 
-			if($(this).data("default") != true){
+			if($(this).data("default") == false){
+				$(this).attr("hidden", "true");
+			}
+
+			if($(this).data("default") == "desktop" && $(window).width() <= config.mobileWidth){
 				$(this).attr("hidden", "true");
 			}
 
@@ -392,6 +398,30 @@
 			var index = $('.column-toggle').index(this);
 			ColumnToggleTable.prototype.functions.toggleColumn(index, toggleTable, $(this).prop('checked'));
 		});
+	};
+
+	ColumnToggleTable.prototype.showLoader = function () {
+		if(!this.element.attr('id')){
+			console.log("ColumnToggleTable requires the table to have an unique ID.");
+			return;
+		}
+
+		var loaderId = this.element.attr('id') + '-loader';
+		this.element.before('<div id="' + loaderId +'" class="loader loader--large" style="display: block"></div>');
+		this.element.fadeOut(0);
+
+		return $('#' + loaderId);
+	};
+
+	ColumnToggleTable.prototype.hideLoader = function () {
+		if(!this.element.attr('id')){
+			console.log("ColumnToggleTable requires the table to have an unique ID.");
+			return;
+		}
+
+		this.loader.hide();
+		this.element.css('display', 'table');
+		this.element.fadeIn(800);
 	};
 
 	ColumnToggleTable.prototype.initAll = function () {

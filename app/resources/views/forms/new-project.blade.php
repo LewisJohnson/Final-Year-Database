@@ -32,14 +32,14 @@
 				<option value="archived">Archived</option>
 			</select>
 		</div>
+
+		<div class="form-field">
+			<label>Topics</label>
+			<p>You may add topics after the project has been created.</p>
+		</div>
 	@elseif($user_type == "student")
 		<input type="hidden" name="status" value="student-proposed">
 	@endif
-
-	<div class="form-field">
-		<label>Topics</label>
-		<p>You may add topics after the project has been created.</p>
-	</div>
 
 	@if($user_type == "student")
 		<div class="form-field">

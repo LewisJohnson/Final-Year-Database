@@ -12,8 +12,8 @@
 			<form class="form form--flex" role="form" method="POST" action="/login" accept-charset="utf-8">
 				{{ csrf_field() }}
 
-			<div id="login-username" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
-					<label for="username">Username/Email</label>
+			<div id="login-username" type="email" autocorrect="off" autocapitalize="none" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
+				<label for="username">Username/Email</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
 					<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
@@ -48,7 +48,7 @@
 			<form id="loginForm" class="form form--flex" role="form" method="POST" action="/login">
 				{{ csrf_field() }}
 
-				<div id="login-username" class="form-field">
+				<div type="email" autocorrect="off" autocapitalize="none" id="login-username" class="form-field">
 					<label for="username">Username/Email</label>
 					<input id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>

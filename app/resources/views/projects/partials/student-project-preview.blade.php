@@ -1,9 +1,19 @@
 <div class="project-preview project-preview--student">
 	<div class="project">
+		
 		<h1 class="title">{{ $project->title }}</h1>
-		<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
+
+		@if($view == "StudentProject")
+			<h2 class="supervisor">Proposed by {{ $project->student->getName() }} to {{ $project->supervisor->user->getFullName() }}</h2>
+		@else
+			<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
+		@endif
+
 		<h3>Description</h3>
-		<p>{!! html_entity_decode($project->description) !!}</p>
+		<div>
+			<p>{!! html_entity_decode($project->description) !!}</p>
+		</div>
+
 		<h3>Skills</h3>
 		<p>{{ $project->skills }}</p>
 		<h3>Topics</h3>

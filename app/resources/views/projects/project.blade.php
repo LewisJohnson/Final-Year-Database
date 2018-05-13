@@ -96,9 +96,6 @@
 				<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
 			</form> --}}
 		@endif
-
-
-
 	</div>
 </div>
 @endsection

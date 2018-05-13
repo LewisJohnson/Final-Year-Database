@@ -71,20 +71,22 @@ import '../js/components';
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
-	$('.topics-list li').css("opacity", 0);
+	if($('.topics-list .no-topics').length < 1){
+		$('.topics-list li').css("opacity", 0);
 
-	var animatedTopicsAnimationDelay = 0;
-	$('.topics-list li').each(function(index, value) {
-		animatedTopicsAnimationDelay += 200;
-		setTimeout(function(){
-			$(this).addClass("slideInRight animated");
+		var animatedTopicsAnimationDelay = 0;
+		$('.topics-list li').each(function(index, value) {
+			animatedTopicsAnimationDelay += 200;
+			setTimeout(function(){
+				$(this).addClass("slideInRight animated");
 
-			$(this).animate({
-				opacity: 1
-			}, 800);
+				$(this).animate({
+					opacity: 1
+				}, 800);
 
-		}.bind(this), animatedTopicsAnimationDelay);
-	});
+			}.bind(this), animatedTopicsAnimationDelay);
+		});
+	}
 
 	$('.order-list-js').each(function() {
 		var list = $(this);
