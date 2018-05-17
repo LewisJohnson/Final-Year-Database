@@ -3,7 +3,7 @@
 		
 		<h1 class="title">{{ $project->title }}</h1>
 
-		@if($view == "StudentProject")
+		@if($project->status == "StudentProject")
 			<h2 class="supervisor">Proposed by {{ $project->student->getName() }} to {{ $project->supervisor->user->getFullName() }}</h2>
 		@else
 			<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>

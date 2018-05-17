@@ -17,7 +17,7 @@ use Exception;
  * @see SussexProjects\Http\Controllers\topicController
 */
 class Topic extends Model{
-	// use Traits\Uuids;
+	use Traits\Uuids;
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
