@@ -16,11 +16,9 @@ class Student extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		$departments = get_departments();
-
 		foreach (get_departments() as $key => $department) {
 			foreach (get_education_levels() as $key => $level) {
-				Schema::create($department.'_students_'.$level['shortName'], function (Blueprint $table) use ($department){
+				Schema::create($department.'_students_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('id')->unique();
 					$table->string('registration_number')->unique();
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
@@ -30,7 +28,7 @@ class Student extends Migration{
 					$table->primary('id');
 
 					$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');
-					$table->foreign('project_id')->references('id')->on($department.'_project_'.$level['shortName'])->onDelete('cascade');
+					// $table->foreign('id')->references('project_id')->on($department.'_projects_'.$level['shortName'])->onDelete('set null');
 				});
 			}
 		}

@@ -11,11 +11,11 @@
 		@endif
 	@endif
 
-	@if($project->archived)
+	@if($project->status == 'archived')
 		<h1>This project is archived.</h1>
 	@endif
 
-	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->archived) ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
+	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->status == 'archived') ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
 		@if(Auth::user()->isStudent())
 			<div class="favourite-container pointer">
 				<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>
@@ -88,7 +88,7 @@
 				@endif
 			@endif
 		@endif
-		
+
 		@if($project->isOwnedByUser() && !Auth::user()->isStudent())
 			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 

@@ -7,7 +7,7 @@
 	</li>
 	<li>
 		<a class="icon" href="{{ action('SupervisorController@report') }}">
-			@include('svg.shield')
+			@include('svg.clipboard')
 			<p>Report by Supervisor</p>
 		</a>
 	</li>

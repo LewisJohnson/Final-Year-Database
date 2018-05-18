@@ -184,10 +184,10 @@ class StudentController extends Controller{
 				// Send accepted email
 				Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
 			} catch (\Exception $e) {
-				
+
 			}
 		}
-		
+
 		return redirect()->action('HomeController@index');
 	}
 
@@ -245,7 +245,7 @@ class StudentController extends Controller{
 					Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
 				}
 			} catch (\Exception $e) {
-				
+
 			}
 		}
 
@@ -263,6 +263,7 @@ class StudentController extends Controller{
 			return response()->json(array('error' => true, 'message' => "Something went wrong."));
 		}
 
+		// TODO: Add proposed
 		if(Auth::user()->student->project_status != 'selected'){
 			return response()->json(array('error' => true, 'message' => "Something went wrong."));
 		}
@@ -293,7 +294,7 @@ class StudentController extends Controller{
 					Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
 				}
 			} catch (\Exception $e) {
-				
+
 			}
 		}
 
@@ -308,7 +309,7 @@ class StudentController extends Controller{
 	*/
 	public function updateSecondMarker(Request $request) {
 		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level'))){
-			return redirect()->action('HomeController@index'); 
+			return redirect()->action('HomeController@index');
 		}
 
 		$result = DB::transaction(function() use ($request) {

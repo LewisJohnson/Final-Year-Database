@@ -98,7 +98,7 @@
 					@else
 						<p>You have accepted no students.</p>
 					@endif
-					
+
 					@if(count(Auth::user()->supervisor->getSecondSupervisingStudents()) > 0)
 						<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
 					@else
@@ -139,7 +139,7 @@
 
 			@if(Auth::user()->isStudent())
 				<div class="card card--margin-vertical">
-					@if(Auth::user()->student->project_status == 'selected')
+					@if(Auth::user()->student->project_status == 'selected'|| Auth::user()->student->project_status == 'proposed')
 						<a class="button button--danger student-undo-select fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
 					@endif
 

@@ -33,7 +33,7 @@
 		<div class="logo-container">
 			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 		</div>
-		
+
 		@if(Auth::check())
 			<div class="mobile-menu-container" role="button" aria-label="Toggles the mobile navigation menu.">
 				<ul class="mobile-menu">
@@ -56,7 +56,7 @@
 						<a href="{{ action('HomeController@index') }}">Home</a>
 					</li>
 				@endif
-				
+
 
 				@if(Auth::check())
 					<li class="has-dropdown links" data-content="browse">
@@ -106,7 +106,7 @@
 
 			</ul>
 		</nav>
-		
+
 		@if(Auth::check())
 			<div class="morph-dropdown-wrapper">
 				<div class="dropdown-list">
@@ -117,7 +117,7 @@
 								<ul>
 									<li>
 										<h4>Browse</h4>
-										<ul>	
+										<ul>
 											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
 											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
 											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
@@ -180,7 +180,6 @@
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">
 									<h4>Administrator</h4>
-									<a href="{{ action('AdminController@index') }}">Administrator Hub</a>
 									<ul>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
@@ -198,7 +197,7 @@
 									<h4>System Administrator</h4>
 									<ul>
 										<li>
-											<ul>	
+											<ul>
 												<li><a href="{{ action('AdminController@dashboard') }}">System Dashboard</a></li>
 												<li><a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a></li>
 												<li><a href="{{ action('AdminController@feedback') }}">User Feedback</a></li>
@@ -232,7 +231,7 @@
 									<ul>
 										<li>
 											<h4>Student</h4>
-											<ul>	
+											<ul>
 												<li>
 													{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
 													@if(Auth::user()->student->project_status == "none")

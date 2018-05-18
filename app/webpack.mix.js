@@ -12,6 +12,7 @@ var webpack = require('webpack');
  */
 
 mix.disableNotifications();
+
 // mix.sourceMaps();
 new webpack.ProvidePlugin({ $: 'jquery', Query: 'jquery' });
 
@@ -49,4 +50,4 @@ mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');
 
-mix.browserSync({proxy: 'localhost:8000', notify: false});
+// mix.browserSync({proxy: 'localhost:8000', notify: false});

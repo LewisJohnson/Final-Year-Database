@@ -2,9 +2,9 @@
 @section ('content')
 
 <div class="centered width--800">
-	
+
 	<div class="card">
-		<h1>Purpose Project</h1>
+		<h1>Propose Project</h1>
 		@include('forms.new-project', ['user_type' => 'student'])
 	</div>
 

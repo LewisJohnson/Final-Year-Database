@@ -31,7 +31,7 @@ use SussexProjects\UserAgentString;
 	* The admin controller.
 	*
 	* Methods in this controller are used for project and system administrators.
-	* 
+	*
 	* @see SussexProjects\User
 */
 class AdminController extends Controller{
@@ -204,7 +204,7 @@ class AdminController extends Controller{
 
 	/**
 		* Amend parameters view (mode)
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -214,7 +214,7 @@ class AdminController extends Controller{
 
 	/**
 		* Amend parameters view (mode)
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -252,9 +252,9 @@ class AdminController extends Controller{
 
 	/**
 		* The amend supervisor arrangements view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
-		* 
+		*
 		* @return \Illuminate\Http\Response
 	*/
 	public function amendSupervisorArrangementsView(Request $request){
@@ -265,7 +265,7 @@ class AdminController extends Controller{
 
 	/**
 		* The amend supervisor arrangements view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -278,7 +278,7 @@ class AdminController extends Controller{
 
 		foreach ($request->all() as $key => $value) {
 			if (strpos($key, 'supervisor-') === 0) {
-				$id = substr($key, 11); 
+				$id = substr($key, 11);
 				$supervisor = Supervisor::findOrFail($id);
 
 				if (isset($request->project_load)) {
@@ -295,7 +295,7 @@ class AdminController extends Controller{
 
 	/**
 		* The amend topics view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -307,7 +307,7 @@ class AdminController extends Controller{
 
 	/**
 		* The log-in as another user view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -336,7 +336,7 @@ class AdminController extends Controller{
 
 	/**
 		* Log-in the currently authenticated user as another user.
-		*	
+		*
 		* @param string $id User ID
 		* @return \Illuminate\Http\Response
 	*/
@@ -366,7 +366,7 @@ class AdminController extends Controller{
 
 	/**
 		* The end of year archive view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -376,13 +376,13 @@ class AdminController extends Controller{
 
 	/**
 		* Runs the end of year archive script
-		*	
+		*
 		* - Adds This student was undertaken by [STUDENT NAME]” to project description.
 		* - Set all projects status to archived.
 		* - Empty the student tables.
 		* - Empty the transaction tables.
 		* - Remove all students from the user table.
-		* 
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -408,7 +408,7 @@ class AdminController extends Controller{
 
 	/**
 		* The manual assign second marker view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -431,7 +431,7 @@ class AdminController extends Controller{
 
 	/**
 		* The automatic (Algorithmic) assign second marker view.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -441,7 +441,7 @@ class AdminController extends Controller{
 
 	/**
 		* Returns all the needed parameters for the automatic second marker assignment algorithm.
-		*	
+		*
 		* @return object[] slack, supervisors
 	*/
 	public function setupAutomaticSecondMarkerAssignment(){
@@ -466,7 +466,7 @@ class AdminController extends Controller{
 
 			// Determine who has max target load
 			if($supervisor->target_load >= $maxTargetLoad){
-					$maxTargetLoad = $supervisor->target_load;
+				$maxTargetLoad = $supervisor->target_load;
 			}
 
 			// Determine lazy score
@@ -488,13 +488,13 @@ class AdminController extends Controller{
 
 	/**
 		* The actual action of assigning second markers to students.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
-		* @return \Illuminate\Http\Response A HTML report of assigned markers 
+		* @return \Illuminate\Http\Response A HTML report of assigned markers
 	*/
 	public function calculateSecondMarkers(Request $request){
 		DB::table(Student::getTable())->update(array('marker_id' => null));
-		
+
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		// Assignment derived from slack
@@ -537,7 +537,7 @@ class AdminController extends Controller{
 
 	/**
 		* An overview of each automatically assigned second supervisor.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
@@ -552,7 +552,7 @@ class AdminController extends Controller{
 
 	/**
 		* An overview of each supervisor and which students they are second supervisor to.
-		*	
+		*
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/

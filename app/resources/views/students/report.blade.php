@@ -6,7 +6,7 @@
 		<h1>Report by Student</h1>
 		<h3>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h3>
 	</div>
-	
+
 	<div class="section-container">
 		@foreach(SussexProjects\Project::getAllStatuses() as $status)
 			@php
@@ -16,7 +16,7 @@
 			@if(count($sortedStudents) > 0)
 				<div class="section horizontal">
 						<div class="flex flex--row flex--no-wrap">
-							<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins>| {{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%</ins></p>
+							<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins> {{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%</ins></p>
 							<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($sortedStudents) }}</p>
 						</div>
 						<table class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">

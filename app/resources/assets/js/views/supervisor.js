@@ -181,7 +181,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			success: function(response){
 				if(response.successful){
 					tableRow.hide(400, function() { tableRow.remove(); });
-					
+
 					if(actionType === "accept"){
 						createToast('success', response.message);
 						updateAcceptedStudentsTable();
@@ -330,6 +330,25 @@ import Swappable from '@shopify/draggable/lib/swappable';
 								} else {
 									createToast('error', response.message);
 								}
+
+								// todo: check this
+								if(!response.email_successful){
+									var message = "The student was successful " + actionType + "ed. However, the confirmation email failed to send. We recommend you send one to them manually.";
+
+									$.confirm({
+										type: 'red',
+										icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div>',
+										theme: 'modern',
+										escapeKey: true,
+										animateFromElement : false,
+										backgroundDismiss: true,
+										title: 'Email Error',
+										content: message,
+										buttons: {
+											okay: {},
+										}
+									});
+								}
 							}
 						});
 					}
@@ -338,7 +357,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			}
 		});
 	});
-	
+
 	function updateAcceptedStudentsTable(){
 		$.ajax({
 			method: 'GET',

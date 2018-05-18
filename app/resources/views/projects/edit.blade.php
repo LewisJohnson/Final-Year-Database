@@ -49,7 +49,7 @@
 								</li>
 							@endif
 						@endforeach
-						<input list="topicsDataList" autocomplete="off" type="text" name="name" id="addTopicInput">
+						<input list="topicsDataList" type="text" name="name" id="addTopicInput">
 					</ul>
 					<div class="loader"></div>
 				</div>
@@ -65,7 +65,7 @@
 					</select>
 				</div>
 			@endif
-			
+
 			<div class="form-field">
 				<button class="button button--raised button--accent" type="submit" value="Submit">Update</button>
 			</div>
