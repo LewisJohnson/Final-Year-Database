@@ -162,6 +162,9 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	// Manually assign second marker
 	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
 
+	// Swap second marker view
+	Route::get('admin/marker-swap', 'AdminController@swapMarkerView');
+
 	/* LOGIN AS ROUTES */
 	// Login as another user view
 	Route::get('admin/login-as', 'AdminController@loginAsView');

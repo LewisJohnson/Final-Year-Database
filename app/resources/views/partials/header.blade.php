@@ -179,7 +179,7 @@
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">
-									<h4>Administrator</h4>
+									<h3>Administrator</h3>
 									<ul>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
@@ -191,20 +191,39 @@
 						@endif
 
 						@if(Auth::user()->isSystemAdmin())
-							<li id="system-admin" class="dropdown links">
+							<li id="system-admin" class="dropdown links wide-ish">
 								<a href="#0" class="label">System Administrator</a>
 								<div class="content">
-									<h4>System Administrator</h4>
+									<h3>System Administrator</h3>
 									<ul>
 										<li>
+											<h4>System</h4>
 											<ul>
-												<li><a href="{{ action('AdminController@dashboard') }}">System Dashboard</a></li>
-												<li><a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a></li>
-												<li><a href="{{ action('AdminController@feedback') }}">User Feedback</a></li>
+												<li>
+													<a class="icon" href="{{ action('AdminController@dashboard') }}">
+														@include('svg.tune')
+														<p>System Dashboard</p>
+													</a>
+												</li>
+
+												<li>
+													<a class="icon" href="{{ action('AdminController@userAgentView') }}">
+														@include('svg.monitor')
+														<p>User Agent Strings</p>
+													</a>
+												</li>
+
+												<li>
+													<a class="icon" href="{{ action('AdminController@feedback') }}">
+														@include('svg.message-bulleted')
+														<p>User Feedback</p>
+													</a>
+												</li>
 											</ul>
 										</li>
 										<li>
-											<ul class="links-list">
+											<h4>User</h4>
+											<ul>
 												<li>
 													<a class="icon" href="/users/create">
 														@include('svg.account-plus')

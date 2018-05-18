@@ -568,4 +568,18 @@ class AdminController extends Controller{
 
 		return response()->json(array('successful' => true, 'html' => $view->render()));
 	}
+
+	/**
+		* The amend supervisor arrangements view.
+		*
+		* @param \Illuminate\Http\Request $request
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function swapMarkerView(Request $request){
+		$students = Student::where('project_status', 'accepted');
+		return view('admin.swap-marker')
+			->with('students', $students);
+	}
+
 }

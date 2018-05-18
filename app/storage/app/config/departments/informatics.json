@@ -34,7 +34,7 @@
     },
     "footer": {
         "rainbow": {
-            "value": true,
+            "value": false,
             "type": [
                 true,
                 false

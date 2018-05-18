@@ -498,9 +498,12 @@ $color-4: #548c7e; // Patina
 			display: none;
 		}
 
+		.wide-ish .content {
+			width: 460px !important;
+		}
+		
 		.wide .content {
 			width: 630px !important;
-
 		}
 
 		.links .content,
