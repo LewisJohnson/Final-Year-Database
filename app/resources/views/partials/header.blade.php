@@ -141,13 +141,13 @@
 										<ul class="icon-list links-list">
 											<li>
 												<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
-													@include('svg.file')
+													@include('svg.file-account')
 													<p>My Projects</p>
 												</a>
 											</li>
 											<li>
 												<a class="icon" title="Create a new project" href="{{ action('ProjectController@create') }}">
-													@include('svg.account-multiple-plus')
+													@include('svg.file-plus')
 													<p>New Project</p>
 												</a>
 											</li>
@@ -159,7 +159,7 @@
 										<ul class="icon-list links-list">
 											<li>
 												<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
-													@include('svg.file')
+													@include('svg.file-multiple')
 													<p>Project Report</p>
 												</a>
 											</li>
@@ -244,34 +244,44 @@
 						@endif
 
 						@if(Auth::user()->isStudent())
-							<li id="student" class="dropdown links">
+							<li id="student" class="dropdown links wide-ish">
 								<a href="#0" class="label">Student</a>
 								<div class="content">
 									<ul>
 										<li>
-											<h4>Student</h4>
+											<h4>Project</h4>
 											<ul>
 												<li>
 													{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
 													@if(Auth::user()->student->project_status == "none")
-														<a href="{{ action('StudentController@proposeProjectView') }}" >Propose Project</a>
-													@elseif(Auth::user()->student->project_status == "proposed")
-														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Proposed Project</a>
-													@elseif(Auth::user()->student->project_status == "selected")
-														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Selected Project</a>
-													@elseif(Auth::user()->student->project_status == "accepted")
-														<a href="{{ action('ProjectController@show', Auth::user()->student->project) }}">Your Accepted Project</a>
+														<a class="icon" title="Propose a project to a supervisor" href="{{ action('StudentController@proposeProjectView') }}">
+															@include('svg.pencil')
+															<p>Propose Project</p>
+														</a>
+													@else
+														<a class="icon" title="See your selected project" href="{{ action('ProjectController@show', Auth::user()->student->project) }}">
+															@include('svg.creation')
+															@if(Auth::user()->student->project_status == "proposed")
+																<p>Your Proposed Project</p>
+															@elseif(Auth::user()->student->project_status == "selected")
+																<p>Your Selected Project</p>
+															@elseif(Auth::user()->student->project_status == "accepted")
+																<p>Your Accepted Project</p>
+															@endif
+														</a>
 													@endif
-												</li>
-
-												<li>
-													<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
 												</li>
 											</ul>
 										</li>
 										<li>
-											<ul>
-												<li style="opactiy: 0"></li>
+											<h4>Reports</h4>
+											<ul class="icon-list links-list">
+												<li>
+													<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
+														@include('svg.clipboard')
+														<p>Supervisor Report</p>
+													</a>
+												</li>
 											</ul>
 										</li>
 									</ul>

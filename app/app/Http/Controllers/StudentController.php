@@ -132,8 +132,8 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	*/
 	public function proposeProject(ProjectForm $request){
-		if(Mode::getStartDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getStartDate().'.');
+		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
+			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
 			session()->flash('message_type', 'danger');
 			return redirect()->action('HomeController@index');
 		}
@@ -206,7 +206,7 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response Home page
 	*/
 	public function selectProject(Request $request){
-		if(Mode::getStartDate()->gt(Carbon::now())){
+		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
 			session()->flash('message', 'You are not allowed to select a project until '.Mode::getStartDate(true).'.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectController@show', request('project_id'));

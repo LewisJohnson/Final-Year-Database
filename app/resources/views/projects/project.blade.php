@@ -5,8 +5,8 @@
 
 	@if($view != "StudentProject")
 		@if(Auth::user()->isStudent())
-			@if(SussexProjects\Mode::getStartDate()->gt(\Carbon\Carbon::now()))
-			<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getStartDate()->diffForHumans() }}.</p>
+			@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
+			<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
 			@endif
 		@endif
 	@endif
@@ -75,7 +75,7 @@
 		@if($view != "StudentProject")
 			@if(Auth::user()->isStudent())
 				@if(Auth::user()->student->project_status == 'none')
-					@if(SussexProjects\Mode::getStartDate()->lte(\Carbon\Carbon::now()))
+					@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
 						<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
 							{{ csrf_field() }}
 							{{ method_field('PATCH') }}

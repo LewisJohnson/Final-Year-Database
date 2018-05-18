@@ -20,7 +20,7 @@ use SussexProjects\Topic;
 use SussexProjects\ProjectTopic;
 use SussexProjects\Transaction;
 use SussexProjects\Supervisor;
-
+use SussexProjects\Mail\SupervisorEditedProposedProject;
 /**
  * The project controller.
  *
@@ -256,7 +256,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function edit(Project $project){
-		if($project->isOwnedByUser() && !Auth::user()->isStudent()){
+		if($project->isOwnedByUser()){
 			return view('projects.edit')->with('project', $project);
 		}
 		return redirect()->action('ProjectController@show', $project);
@@ -277,7 +277,7 @@ class ProjectController extends Controller{
 			$transaction = new Transaction;
 			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
-			// So student proposals can't be overridden
+			// So student proposals can't be overridden 
 			if($project->status == "student-proposed"){
 				$input->status = "student-proposed";
 			}
@@ -309,6 +309,14 @@ class ProjectController extends Controller{
 
 			$transaction->save();
 		});
+
+		if($project->status = "student-proposed"){
+			try {
+				Mail::to($student->user->email)->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));
+			} catch (\Exception $e) {
+				
+			}
+		}
 
 		session()->flash('message', '"'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');
