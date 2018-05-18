@@ -195,25 +195,9 @@ class Supervisor extends User{
 	 *
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
-	public function getSelectedStudents(){
-		$students = Student::all();
+	public function getIntrestedStudents(){
+		$students = Student::where('supervisor_id', $this->id)->where('project_status', 'selected');
 		$offers = array();
-
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
-
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'selected'){
-				return false;
-			}
-
-			return true;
-		});
 
 		foreach ($students as $key => $student) {
 			$ar = array();
@@ -231,24 +215,8 @@ class Supervisor extends User{
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
-		$students = Student::all();
+		$students = Student::where('project_status', 'accepted');
 		$offers = array();
-
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
-
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'accepted'){
-				return false;
-			}
-
-			return true;
-		});
 
 		foreach ($students as $key => $student) {
 			$ar = array();
@@ -266,28 +234,8 @@ class Supervisor extends User{
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
-		$students = Student::all();
+		$students = Student::where('supervisor_id', $this->id)->where('project_status', 'proposed');
 		$offers = array();
-
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
-
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'proposed'){
-				return false;
-			}
-
-			if($student->project->status !== 'student-proposed'){
-				return false;
-			}
-
-			return true;
-		});
 
 		foreach ($students as $key => $student) {
 			$ar = array();
@@ -305,16 +253,9 @@ class Supervisor extends User{
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
-		$students = Student::all();
+		$students = Student::where('marker_id', $this->id);
 		$offers = array();
-
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
-			return $student->project->marker_id == $this->id;
-		});
-
+		
 		foreach ($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;

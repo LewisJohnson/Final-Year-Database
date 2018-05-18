@@ -81,8 +81,8 @@
 						<p>You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</p>
 					@endif
 
-					@if(count(Auth::user()->supervisor->getSelectedStudents()) > 0)
-						<p>A total of {{ count(Auth::user()->supervisor->getSelectedStudents()) }} are awaiting approval.</p>
+					@if(count(Auth::user()->supervisor->getIntrestedStudents()) > 0)
+						<p>A total of {{ count(Auth::user()->supervisor->getIntrestedStudents()) }} are awaiting approval.</p>
 					@else
 						<p>No students are awaiting approval.</p>
 					@endif

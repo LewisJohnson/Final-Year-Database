@@ -15,7 +15,7 @@
 		<h5>Selected Students</h5>
 		<div class="responsive-table">
 			<table class="data-table sort-table supervisor-table table--dark-head">
-				@if(count(Auth::user()->supervisor->getSelectedStudents()))
+				@if(count(Auth::user()->supervisor->getIntrestedStudents()))
 					<thead>
 						<tr>
 							<th>
@@ -31,7 +31,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach(Auth::user()->supervisor->getSelectedStudents() as $offer)
+						@foreach(Auth::user()->supervisor->getIntrestedStudents() as $offer)
 							<tr data-student-id="{{ $offer['student']->id }}" data-project-id="{{ $offer['project']->id }}">
 								<td>
 									<div class="checkbox">

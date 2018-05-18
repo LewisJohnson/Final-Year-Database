@@ -492,8 +492,8 @@ import '../js/components';
 				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
 					emailString += $(value).data('email');
 					emailString += ",";
+					amountOfEmails++;
 				}
-				amountOfEmails++;
 			});
 
 			if(amountOfEmails > 100 && !dontRemindAgainAmoutMailtoLimit){
