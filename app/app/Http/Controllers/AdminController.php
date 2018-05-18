@@ -396,7 +396,7 @@ class AdminController extends Controller{
 
 			foreach ($projects as $key => $project) {
 				if($project->getAcceptedStudent() != null){
-					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName().")";
+					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear().")";
 				}
 
 				$project->status = 'archived';
