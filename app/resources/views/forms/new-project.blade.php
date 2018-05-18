@@ -45,7 +45,7 @@
 		<div class="form-field">
 			<label for="supervisor_id">Supervisor</label>
 			<select id="supervisor_id" name="supervisor_id">
-				@foreach(SussexProjects\Supervisor::all() as $supervisor)
+				@foreach($supervisors as $supervisor)
 					<option value="{{ $supervisor->user->id }}">{{ $supervisor->user->getFullName() }}</option>
 				@endforeach
 			</select>

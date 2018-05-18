@@ -22,19 +22,12 @@ class Mode extends Model{
 	public $timestamps = false;
 
 	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['project_year', 'start_date'];
-
-
-	/**
 	 * The columns to be parsed as dates.
 	 *
+	 * Laravel can not use the MySql 'Year' data type, so please do not add project year.
 	 * @var array
 	 */
-	protected $dates = ['start_date'];
+	protected $dates = ['project_selection', 'supervisor_accept'];
 
 
 	/**
@@ -80,7 +73,9 @@ class Mode extends Model{
 			$carbon = Carbon::now();
 
 			$newMode->project_year = $carbon->year;
-			$newMode->start_date = $carbon->addYear();
+			$newMode->project_selection = $carbon->addYear();
+			$newMode->supervisor_accept = $carbon->addYear();
+			$newMode->marker_released_to_staff = false;
 			$newMode->save();
 
 			return $newMode;
@@ -90,15 +85,28 @@ class Mode extends Model{
 	}
 
 	/**
-	 * Gets start date
+	 * Gets project selection date
 	 *
 	 * @return string
 	 */
-	public static function getStartDate($human = null){
+	public static function getProjectSelectionDate($human = null){
 		if($human){
-			return Mode::Instance()->start_date->toDayDateTimeString();
+			return Mode::Instance()->project_selection->toDayDateTimeString();
 		} else {
-			return Mode::Instance()->start_date;
+			return Mode::Instance()->project_selection;
+		}
+	}
+
+	/**
+	 * Gets supervisor accept date
+	 *
+	 * @return string
+	 */
+	public static function getSupervisorAcceptDate($human = null){
+		if($human){
+			return Mode::Instance()->supervisor_accept->toDayDateTimeString();
+		} else {
+			return Mode::Instance()->supervisor_accept;
 		}
 	}
 
@@ -109,5 +117,14 @@ class Mode extends Model{
 	 */
 	public static function getProjectYear(){
 		return Mode::Instance()->project_year;
+	}
+
+	/**
+	 * Gets project year
+	 *
+	 * @return string
+	 */
+	public static function isMarkerReleasedToStaff(){
+		return Mode::Instance()->marker_released_to_staff;
 	}
 }

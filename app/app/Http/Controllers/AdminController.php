@@ -221,8 +221,12 @@ class AdminController extends Controller{
 	public function amendParameters(Request $request){
 		$mode = Mode::all()->first();
 
-		if (isset($request->start_date)) {
-			$mode->start_date = $request->start_date;
+		if (isset($request->project_selection)) {
+			$mode->project_selection = $request->project_selection;
+		}
+
+		if (isset($request->supervisor_accept)) {
+			$mode->supervisor_accept = $request->supervisor_accept;
 		}
 
 		if (isset($request->project_year)) {

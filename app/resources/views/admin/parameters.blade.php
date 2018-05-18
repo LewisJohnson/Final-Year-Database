@@ -9,13 +9,13 @@
 			{{ csrf_field() }}
 
 			<div class="form-field">
-				<label for="start_date">Student Selection Date</label>
-				<input type="date" name="start_date" value="{{ SussexProjects\Mode::getStartDate()->toDateString() }}">
+				<label for="project_selection">Student Selection Date</label>
+				<input type="date" name="project_selection" value="{{ SussexProjects\Mode::getProjectSelectionDate()->toDateString() }}">
 			</div>
 
 			<div class="form-field">
-				<label for="start_date">Supervisor Accept Date</label>
-				<input type="date" name="start_date" value="{{ SussexProjects\Mode::getStartDate()->toDateString() }}">
+				<label for="supervisor_accept">Supervisor Accept Date</label>
+				<input type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
 			</div>
 
 			<div class="form-field">

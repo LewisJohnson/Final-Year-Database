@@ -114,9 +114,9 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
+								<h3>Browse</h3>
 								<ul>
 									<li>
-										<h4>Browse</h4>
 										<ul>
 											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
 											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
@@ -137,7 +137,7 @@
 							<div class="content">
 								<ul>
 									<li>
-										<h3>Projects</h3>
+										<h4>Projects</h4>
 										<ul class="icon-list links-list">
 											<li>
 												<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
@@ -155,7 +155,7 @@
 									</li>
 
 									<li>
-										<h3>Reports</h3>
+										<h4>Reports</h4>
 										<ul class="icon-list links-list">
 											<li>
 												<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
@@ -165,7 +165,7 @@
 											</li>
 											<li>
 												<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
-													@include('svg.account-multiple-plus')
+													@include('svg.clipboard')
 													<p>Supervisor Report</p>
 												</a>
 											</li>

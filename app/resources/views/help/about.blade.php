@@ -5,7 +5,7 @@
 		<div>
 			<p>@lang("help.about")</p>
 
-			<h2>Build with</h2>
+			<h2>Built with</h2>
 			<ul class="flex flex--wrap flex--row" style="list-style: none;">
 				<li style="width: 50%">
 					<a href="https://laravel.com" title="Laravel">

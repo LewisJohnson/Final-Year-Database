@@ -12,7 +12,7 @@
 
 	{{-- PROJECTS OFFER --}}
 	<div class="content" data-cookie-name="hide-selected-students" @if(!empty($_COOKIE["hide-selected-students"])) @if($_COOKIE["hide-selected-students"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
-		<h5>Project Offers</h5>
+		<h5>Selected Students</h5>
 		<div class="responsive-table">
 			<table class="data-table sort-table supervisor-table table--dark-head">
 				@if(count(Auth::user()->supervisor->getSelectedStudents()))

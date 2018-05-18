@@ -50,7 +50,7 @@
 
 	@if(count($projects) > 0)
 		<div class="table-responsive">
-			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }}">
+			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }} @if($view == "supervisor" || $view == "personal") sort-table @endif">
 				<thead>
 					<tr>
 						<th data-default="true">Topic</th>
@@ -58,7 +58,8 @@
 						<th data-default="false">Short Description</th>
 						<th data-default="false">Full Description</th>
 						<th data-default="desktop">Skills</th>
-						<th @if($view == "supervisor") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
+						<th @if($view != "supervisor" || $view != "personal") data-default="false" hidden @else data-default="true" @endif >Supervisor</th>
+						@if($view == "personal") <th data-default="true">Status</th> @endif
 					</tr>
 				</thead>
 

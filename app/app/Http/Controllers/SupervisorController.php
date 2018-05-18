@@ -20,7 +20,7 @@ use SussexProjects\Student;
 use SussexProjects\Transaction;
 use SussexProjects\Mail\StudentAccepted;
 use SussexProjects\Mail\StudentRejected;
-
+use SussexProjects\Mail\SupervisorUndo;
 /**
  * The supervisor controller.
  *
@@ -212,8 +212,9 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function undoStudent(Request $request){
-		DB::transaction(function() use ($request) {
-			$student = Student::findOrFail(request('student_id'));
+		$student = Student::findOrFail(request('student_id'));
+
+		DB::transaction(function() use ($request, $student) {
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
@@ -231,7 +232,20 @@ class SupervisorController extends Controller{
 			$student->save();
 		});
 
-		$message = $student->getName()." is no longer accepted.";
+		$emailError = false;
+		try {
+			// Send declined email
+			Mail::to($student->user->email)->send(new SupervisorUndo(Auth::user()->supervisor, $student, $project->id));
+		} catch (\Exception $e) {
+			$emailError = true;
+		}
+
+		$message = $student->getName()."is no longer accepted.";
+
+		if($emailError){
+			return response()->json(array('successful' => true, 'email_successful' => false, 'message' => $message));
+		}
+
 		return response()->json(array('successful' => true, 'message' => $message));
 	}
 }

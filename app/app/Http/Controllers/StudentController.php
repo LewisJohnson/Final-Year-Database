@@ -94,19 +94,6 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * The student propose a project view (Form).
-	 *
-	 * @return \Illuminate\Http\Response
-	*/
-	public function proposeProjectView(){
-		if(Auth::user()->student->project_status == "none"){
-			return view("students.propose-project");
-		} else {
-			return redirect()->action('HomeController@index');
-		}
-	}
-
-	/**
 	 * Updates the students share name to other students preference.
 	 *
 	 * @param \Illuminate\Http\Request
@@ -117,6 +104,25 @@ class StudentController extends Controller{
 		$student->share_name = isset($request->share_name);
 		$student->save();
 		return response()->json(array('share_name' => $student->share_name));
+	}
+
+	/**
+	 * The student propose a project view (Form).
+	 *
+	 * @return \Illuminate\Http\Response
+	*/
+	public function proposeProjectView(){
+		$supervisors = Supervisor::all();
+
+		$supervisors = $supervisors->sortBy(function ($supervisor, $key) {
+			return $supervisor->user->last_name;
+		});
+
+		if(Auth::user()->student->project_status == "none"){
+			return view("students.propose-project")->with('supervisors', $supervisors);
+		} else {
+			return redirect()->action('HomeController@index');
+		}
 	}
 
 	/**

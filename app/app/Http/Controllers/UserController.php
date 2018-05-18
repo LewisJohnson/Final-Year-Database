@@ -83,7 +83,7 @@ class UserController extends Controller{
 		}
 
 		$user = new User;
-		$result = DB::transaction(function() use ($request, $user) {
+		DB::transaction(function() use ($request, $user) {
 			$user->fill(array(
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
@@ -91,6 +91,7 @@ class UserController extends Controller{
 				'password' => bcrypt($request['password']),
 				'programme' => $request['programme'],
 				'email' => $request['email'],
+				'privileges' => 'student'
 			));
 
 			$user->save();
@@ -113,11 +114,12 @@ class UserController extends Controller{
 				]);
 				$supervisor->save();
 			}
+
+			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
+			$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+			DB::statement($replaced);
 		});
 
-		$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-		$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
-		DB::statement($replaced);
 
 		session()->flash('message', 'User was created.');
 		session()->flash('message_type', 'success');
@@ -147,11 +149,14 @@ class UserController extends Controller{
 			$view = 'supervisor';
 		}
 
-		//todo: add student proposed projects
-		$projects = Project::where('supervisor_id', $user->id)->get();
+		$projects = Project::where('supervisor_id', $user->id);
+
+		if($view = 'supervisor'){
+			$projects->where('status', 'on-offer');
+		}
 
 		return view('projects.index')
-			->with('projects', $projects)
+			->with('projects', $projects->get())
 			->with('owner', $user)
 			->with('view', $view);
 	}
@@ -178,14 +183,14 @@ class UserController extends Controller{
 			return;
 		}
 
-		$result = DB::transaction(function() use ($request, $user) {
+		DB::transaction(function() use ($request, $user) {
 			$user->fill(array(
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
 				'password' => bcrypt($request['password']),
 				'programme' => $request['programme'],
-				'email' => $request['email'],
+				'email' => $request['email']
 			));
 
 			if(in_array("student", $request->privileges)){
@@ -213,7 +218,6 @@ class UserController extends Controller{
 						'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
 						'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
 					]);
-
 					$user->supervisor->save();
 				} else {
 					// Else, create a new supervisor
@@ -227,13 +231,13 @@ class UserController extends Controller{
 					$supervisor->save();
 				}
 			}
+
+			$user->save();
+			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
+			$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+			DB::statement($replaced);
+
 		});
-
-		$user->save();
-
-		$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-		$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
-		DB::statement($replaced);
 
 		session()->flash('message', 'User was updated.');
 		session()->flash('message_type', 'success');

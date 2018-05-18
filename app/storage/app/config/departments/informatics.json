@@ -34,7 +34,7 @@
     },
     "footer": {
         "rainbow": {
-            "value": false,
+            "value": true,
             "type": [
                 true,
                 false
@@ -52,7 +52,7 @@
     },
     "user_agent": {
         "collect_user_agent": {
-            "value": false,
+            "value": true,
             "type": [
                 true,
                 false
@@ -60,7 +60,7 @@
             "description": "Determines if user agent strings are collected."
         },
         "collect_referrer": {
-            "value": false,
+            "value": true,
             "type": [
                 true,
                 false

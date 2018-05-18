@@ -101,3 +101,38 @@
 		text-decoration: none;
 	}
 }
+
+.html-editor--top-buttons{
+	label { font-size: 12px; }
+	.html{ margin-left: auto; }
+}
+
+.html-editor--preview{
+	padding-top: 10px;
+	border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+	img { width: 100%; }
+}
+
+.html-editor--toolbar {
+	padding: 0 !important;
+	margin-top: 5px;
+
+	li {
+		display: inline-block;
+		margin-right: 5px;
+	}
+
+	.break{
+		width: 1px;
+		background: rgb(0, 0, 0);
+		height: 10px;
+		display: inline-block;
+	}
+
+	.svg-container{
+		margin-right: 0;
+		max-width: 24px;
+		max-height: 24px;
+	}
+}
