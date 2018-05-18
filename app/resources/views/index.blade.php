@@ -29,7 +29,7 @@
 			@if(Auth::user()->isSupervisor())
 				<div class="card card--half">
 					<h2>Options</h2>
-					<p>You may opt-out from receiving emails.</p>
+					<p>Here you can change your email preferences.</p>
 					@foreach (get_education_levels() as $educationLevel)
 						<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form form form--flex" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
 							{{ csrf_field() }}
