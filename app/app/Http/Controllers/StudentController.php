@@ -269,8 +269,7 @@ class StudentController extends Controller{
 			return response()->json(array('error' => true, 'message' => "Something went wrong."));
 		}
 
-		// TODO: Add proposed
-		if(Auth::user()->student->project_status != 'selected'){
+		if(Auth::user()->student->project_status != 'selected' || Auth::user()->student->project_status != 'proposed'){
 			return response()->json(array('error' => true, 'message' => "Something went wrong."));
 		}
 

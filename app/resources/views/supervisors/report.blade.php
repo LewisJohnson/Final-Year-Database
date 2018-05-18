@@ -10,10 +10,22 @@
 
 	@include('supervisors.partials.supervisor-search')
 	<div class="button-group button-group--horizontal button-group--links">
-		@if(isset($_GET["excludeClosedToOffer"]))
-			<a class="chip external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report') }}">Closed to Offers</a>
+		@if(isset($_GET["includeClosedToOffer"]))
+			<div class="form-field form-field--toggle" onclick="window.location='{{ action("SupervisorController@report") }}';">
+				<p class="switch-label" for="iLoveYou">Include supervisors closed to offers</p>
+				<label class="toggle">
+					<input type="checkbox" name="iLoveYou" id="iLoveYou" checked>
+					<span class="slider"></span>
+				</label>
+			</div>
 		@else
-			<a class="chip active external-link" data-element-to-replace-with-loader-selector="#supervisor-report" href="{{ action('SupervisorController@report', 'excludeClosedToOffer=true') }}">Closed to Offers</a>
+			<div class="form-field form-field--toggle" onclick="window.location='{{ action("SupervisorController@report", "includeClosedToOffer=true") }}'">
+				<p class="switch-label" for="iLoveYou">Include supervisors closed to offers</p>
+				<label class="toggle">
+					<input type="checkbox" name="iLoveYou" id="iLoveYou">
+					<span class="slider"></span>
+				</label>
+			</div>
 		@endif
 	</div>
 	
@@ -25,11 +37,10 @@
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>
 						
 						@if($supervisor->getTakingStudents())
-							<th>@lang('messages.supervisor_open_to_offers')</th>
+							<th>Open to offers</th>
 						@else
-							<th>@lang('messages.supervisor_closed_to_offers')</th>
+							<th>Currently not accepting offers</th>
 						@endif
-
 						<th></th>
 					</tr>
 				</thead>
@@ -45,7 +56,7 @@
 					@endforeach
 
 					{{-- ACCEPTED STUDENTS --}}
-					@if(count($supervisor->getAcceptedStudents()))
+{{-- 					@if(count($supervisor->getAcceptedStudents()))
 						@foreach($supervisor->getAcceptedStudents() as $accepted)
 								<tr>
 									<td>@if($loop->iteration == 1)Accepted Projects ({{ count($supervisor->getAcceptedStudents()) }})@endif</td>
@@ -55,14 +66,14 @@
 						@endforeach
 					@else
 						<tr>
-							<td>@lang('messages.supervisor_no_accepted_students')</td>
+							<td>No students have been accepted yet.</td>
 							<td></td>
 							<td></td>
 						</tr>
-					@endif
+					@endif --}}
 
 					{{-- PROJECT OFFERS --}}
-					@if(count($supervisor->getSelectedStudents()))
+{{-- 					@if(count($supervisor->getSelectedStudents()))
 						@foreach($supervisor->getSelectedStudents() as $selected)
 							<tr>
 								<td>@if($loop->iteration == 1)Awaiting Approval ({{ count($supervisor->getSelectedStudents()) }})@endif</td>
@@ -72,20 +83,20 @@
 						@endforeach
 					@else
 						<tr>
-							<td>@lang('messages.supervisor_no_arrangements')</td>
+							<td>No arrangements to be decided.</td>
 							<td></td>
 							<td></td>
 						</tr>
 					@endif
-
+ --}}
 					{{-- PROJECT PROPOSALS --}}
-					@foreach($supervisor->getStudentProjectProposals() as $proposal)
+{{-- 					@foreach($supervisor->getStudentProjectProposals() as $proposal)
 						<tr>
 							<td>@if($loop->iteration == 1)Student Proposals ({{ count($supervisor->getStudentProjectProposals()) }})@endif</td>
 							<td><a href="{{ action('ProjectController@show', ['project' => $proposal['project']]) }}">{{ $proposal['project']->title }}</a></td>
 							<td>{{ $proposal['student']->getName() }}</td>
 						</tr>
-					@endforeach
+					@endforeach --}}
 				</tbody>
 			</table>
 		@endforeach

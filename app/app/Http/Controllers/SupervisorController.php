@@ -51,7 +51,7 @@ class SupervisorController extends Controller{
 	public function report(Request $request){
 		$supervisors = Supervisor::all();
 
-		if($request->query("excludeClosedToOffer") === "true"){
+		if($request->query("includeClosedToOffer") !== "true"){
 			$supervisors = $supervisors->filter(function ($supervisor, $key) {
 				return $supervisor['take_students_'.Session::get('education_level')["shortName"]];
 			});
