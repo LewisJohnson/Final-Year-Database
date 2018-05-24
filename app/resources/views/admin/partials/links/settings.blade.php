@@ -21,13 +21,19 @@
 	</li>
 	<li>
 		<a class="icon" href="{{ action('AdminController@amendTopicsView') }}">
-			@include('svg.spanner')
+			@include('svg.playlist-edit')
 			<p>Edit Topics</p>
 		</a>
 	</li>
 	<li>
+		<a class="icon" href="{{ action('AdminController@amendProgrammesView') }}">
+			@include('svg.playlist-edit')
+			<p>Edit Programmes</p>
+		</a>
+	</li>
+	<li>
 		<a class="icon" href="{{ action('AdminController@amendParametersView') }}">
-			@include('svg.globe')
+			@include('svg.spanner')
 			<p>Amend Parameters</p>
 		</a>
 	</li>

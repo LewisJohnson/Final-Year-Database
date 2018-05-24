@@ -9,7 +9,6 @@ namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use SussexProjects\Topic;
 use SussexProjects\ProjectTopic;

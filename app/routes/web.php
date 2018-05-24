@@ -193,17 +193,30 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
 
 	/* TOPIC ROUTES */
-	// Store new topic
-	Route::post('topics', 'TopicController@store');
-
 	// Update topic view
 	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
+
+	// Store new topic
+	Route::post('topics', 'TopicController@store');
 
 	// Update topic
 	Route::patch('topics', 'TopicController@update');
 
 	// Delete topic
 	Route::delete('topics', 'TopicController@destroy');
+
+	/* PROGRAMME ROUTES */
+	// Update topic view
+	Route::get('admin/programmes-amend', 'AdminController@amendProgrammesView');
+
+	// Store new topic
+	Route::post('programmes', 'ProgrammeController@store');
+
+	// Update topic
+	Route::patch('programmes', 'ProgrammeController@update');
+
+	// Delete topic
+	Route::delete('programmes', 'ProgrammeController@destroy');
 
 	/* STUDENT ROUTES */
 	// Store new student POST

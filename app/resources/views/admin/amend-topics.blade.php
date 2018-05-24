@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="centered card width--1000">
 	<h1>Amend {{ ucfirst(lang_sess("full_name")) }} Topics</h1>
 	<h3>Add Topic</h3>
@@ -13,9 +12,9 @@
 
 	<h3 style="margin-top: 3rem;">Edit Topics</h3>
 	<p>Deleting a topic will also remove it from any associated projects.</p>
-	<ul class="edit-topic-list" id="supervisorList" sorted="false">
+	<ul class="edit-topic-list edit-list" sorted="false">
 		@foreach($topics as $topic)
-			<li class="topic" data-topic-id="{{ $topic->id }}" data-original-topic-name="{{ $topic->name }}">
+			<li class="topic item" data-topic-id="{{ $topic->id }}" data-original-topic-name="{{ $topic->name }}">
 				<input spellcheck="true" name="name" type="text" value="{{ $topic->name }}"></input>
 				<button class="button edit-topic">Edit</button>
 				<button class="button delete-topic button--danger-text">Delete</button>

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UserAgentString extends Migration
-{
+class UserAgentString extends Migration {
+
 	/**
 	 * Run the migrations.
 	 *

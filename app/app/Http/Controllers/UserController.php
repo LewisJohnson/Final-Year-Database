@@ -18,8 +18,7 @@ use SussexProjects\User;
 use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Supervisor;
-// use SussexProjects\Http\Requests\StoreUser;
-
+use SussexProjects\Http\Requests\UserForm;
 /**
  * The user controller.
  *
@@ -74,10 +73,11 @@ class UserController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  StoreUser  $request
+	 * @param  UserForm  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request){
+	public function store(UserForm $request){
+		dd($request['programme']);
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return;
 		}
@@ -175,10 +175,10 @@ class UserController extends Controller{
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  UserForm  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(User $user, Request $request){
+	public function update(UserForm $user, Request $request){
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return;
 		}

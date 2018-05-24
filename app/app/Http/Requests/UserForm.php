@@ -10,16 +10,18 @@ namespace SussexProjects\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 use SussexProjects\Http\Controllers\UserController;
+use SussexProjects\Programme;
 
-class StoreUser extends FormRequest{
+class UserForm extends FormRequest{
 	/**
 	 * Determine if the user is authorized to make this request.
 	 *
 	 * @return bool
 	 */
 	public function authorize(){
-		if(Auth::user()->isProjectAdmin() || Auth::user()->isSystemAdmin() ){
+		if(Auth::user()->isProjectAdmin() || Auth::user()->isSystemAdmin()){
 			return true;
 		}
 		return false;
@@ -31,16 +33,19 @@ class StoreUser extends FormRequest{
 	 * @return array
 	 */
 	public function rules(){
-		// return [
-		// 	'username' => 'required|unique:users,username|max:32',
-		// 	'first_name' => 'required|max:128',
-		// 	'last_name' => 'required|max:128',
-		// 	'email' => 'required|unique:users,email|max:128',
-		// 	'password' => 'required|confirmed',
-		// 	'privileges' => 'required',
-		// 	'title' => 'max:6',
-		// 	'project_load_*' => 'min:0|max:255',
-		// ];
+		return [
+			'username' => 'required|max:32',
+			'first_name' => 'required|max:128',
+			'last_name' => 'required|max:128',
+			'email' => 'required|max:128',
+			'privileges' => 'required',
+			'title' => 'max:6',
+			'project_load_*' => 'min:0|max:255',
+			'programme' => [
+				'required',
+				Rule::in(Programme::pluck('name'))
+			],
+		];
 	}
 
 	/**

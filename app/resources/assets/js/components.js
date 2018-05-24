@@ -490,9 +490,9 @@
 		}
 	});
 
-	/* ========================
-	   6 Edit Topics [Admin]
-	   ======================== */
+	/* ==================================
+		6 Edit Topics [Project Admin]
+	================================== */
 
 	/**
 	* Class constructor for ajax functions.
@@ -512,7 +512,7 @@
 	window['EditTopic'] = EditTopic;
 
 	EditTopic.prototype.Selectors_ = {
-		EDIT_TOPIC: '.edit-topic-list .topic',
+		EDIT_TOPIC: '.edit-topic-list .item',
 	};
 
 	EditTopic.prototype.Urls_ = {
@@ -572,7 +572,7 @@
 		deleteTopic: function() {
 			var topic = this;
 			$.confirm({
-				title: 'Delete',
+				title: 'Delete Topic',
 				type: 'red',
 				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
 				theme: 'modern',
@@ -605,7 +605,7 @@
 		},
 
 		createEditTopicDOM: function(topicId, originalName){
-			var elem = $('<li class="topic" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
+			var elem = $('<li class="item" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
 			$(".edit-topic-list").prepend(elem);
 			elem.hide(0);
 			elem.show(400);
@@ -622,6 +622,141 @@
 	EditTopic.prototype.initAll = function () {
 		$(this.Selectors_.EDIT_TOPIC).each(function() {
 			this.EditTopic = new EditTopic(this);
+		});
+	};
+
+	/* ==================================
+		6 Edit Programmes [Project Admin]
+	================================== */
+
+	/**
+	* Class constructor for ajax functions.
+	*
+	* @param {HTMLElement} element The element that will be upgraded.
+	*/
+	var EditProgramme = function EditProgramme(element) {
+		this.element = $(element);
+		this.originalName = $(element).data("original-programme-name");
+		this.programmeId = $(element).data('programme-id');
+		this.programmeNameInput = $(element).find('input');
+		this.editButton = $(element).find('.edit-programme');
+		this.deleteButton = $(element).find('.delete-programme');
+		this.init();
+	};
+
+	window['EditProgramme'] = EditProgramme;
+
+	EditProgramme.prototype.Selectors_ = {
+		EDIT_PROGRAMME: '.edit-programme-list .item',
+	};
+
+	EditProgramme.prototype.Urls_ = {
+		DELETE_PROGRAMME: '/programmes/',
+		PATCH_PROGRAMME: '/programmes/',
+		NEW_PROGRAMME: '/programmes/'
+	};
+
+	EditProgramme.prototype.functions = {
+		EditProgramme: function() {
+			var programme = this;
+			if(programme.originalName == programme.programmeNameInput.val()){
+				return;
+			}
+			$.confirm({
+				title: 'Change Programme Name',
+				type: 'blue',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement : false,
+				content: 'Are you sure you want to change the programme name from <b>"' +  programme.originalName + '"</b> to <b>"' +  programme.programmeNameInput.val() +'"</b>?',
+				buttons: {
+					confirm: {
+						btnClass: 'btn-blue',
+						action: function(){
+							programme.programmeNameInput.prop('disabled', true);
+							programme.editButton.html('<div class="loader"></div>');
+							$('.loader', programme.element).css('display', 'block');
+
+							$.ajax({
+								method: 'PATCH',
+								url: programme.Urls_.DELETE_PROGRAMME,
+								context: programme,
+								data: {
+									programme_id: programme.programmeId,
+									programme_name : programme.programmeNameInput.val()
+								},
+							}).done(function(){
+								programme.programmeNameInput.prop('disabled', false);
+								programme.editButton.html('Edit');
+								programme.originalName = programme.programmeNameInput.val();
+							});
+						}
+					},
+					cancel: function(){
+						programme.programmeNameInput.val(programme.originalName);
+					}
+				},
+				backgroundDismiss: function(){
+					programme.programmeNameInput.val(programme.originalName);
+				},
+			});
+		},
+
+		deleteProgramme: function() {
+			var programme = this;
+			$.confirm({
+				title: 'Delete Programme',
+				type: 'red',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement : false,
+				content: 'Are you sure you want to delete <b>"' +  programme.programmeNameInput.val() + '"</b>?',
+				buttons: {
+					delete: {
+						btnClass: 'btn-red',
+						action: function(){
+							programme.programmeNameInput.prop('disabled', true);
+							$.ajax({
+								method: 'DELETE',
+								url: programme.Urls_.DELETE_PROGRAMME,
+								context: programme,
+								data: {
+									programme_id: programme.programmeId,
+								},
+								success: function(){
+									programme.element.hide(config.animtions.slow, function() {
+										programme.element.remove();
+									});
+								}
+							});
+						}
+					}
+				}
+			});
+		},
+
+		createEditProgrammeDOM: function(programmeId, originalName){
+			var elem = $('<li class="item" data-programme-id="' + programmeId +'" data-original-programme-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-programme" type="submit">Edit</button><button class="button delete-programme button--danger">Delete</button></li>');
+			$(".edit-programme-list").prepend(elem);
+			elem.hide(0);
+			elem.show(400);
+			EditProgramme.prototype.initAll();
+		}
+	};
+
+	EditProgramme.prototype.init = function () {
+		var EditProgramme = this;
+		this.editButton.on('click', $.proxy(this.functions.EditProgramme, this, EditProgramme));
+		this.deleteButton.on('click', $.proxy(this.functions.deleteProgramme, this, EditProgramme));
+	};
+
+	EditProgramme.prototype.initAll = function () {
+		$(this.Selectors_.EDIT_PROGRAMME).each(function() {
+			this.EditProgramme = new EditProgramme(this);
 		});
 	};
 
@@ -957,8 +1092,16 @@
 
 	morphDropdown.prototype.hideDropdown = function() {
 		this.mq = this.checkMq();
-		this.element.removeClass('is-dropdown-visible').find('.active').removeClass('active').end().find('.move-left').removeClass('move-left').end().find('.move-right').removeClass('move-right');
-		
+		this.element
+			.removeClass('is-dropdown-visible')
+			.find('.active')
+			.removeClass('active')
+			.end()
+			.find('.move-left')
+			.removeClass('move-left')
+			.end()
+			.find('.move-right')
+			.removeClass('move-right');
 	};
 
 	morphDropdown.prototype.resetDropdown = function() {
@@ -998,6 +1141,7 @@
 	DataTable.prototype.initAll();
 	ColumnToggleTable.prototype.initAll();
 	EditTopic.prototype.initAll();
+	EditProgramme.prototype.initAll();
 	Marker.prototype.initAll();
 	DotMenu.prototype.initAll();
 

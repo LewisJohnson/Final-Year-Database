@@ -157,6 +157,16 @@ button{
 	}
 }
 
+.checkbox{
+	input[disabled] + label {
+		color: #cacaca;
+	}
+
+	input[disabled] + label:before {
+		border: 2px solid #cacaca;
+	}
+}
+
 /* The switch - the box around the slider */
 
 .switch-label{

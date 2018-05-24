@@ -216,7 +216,28 @@ import '../js/components';
 			success:function(data){
 				data = JSON.parse(data);
 				var elem = EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
-				
+			},
+		}).done(function(){
+			$(this).find('input').val('');
+			$(this).find(':submit').html('Add');
+		});
+	});
+
+	$('#new-programme-form').on('submit', function(e) {
+		e.preventDefault();
+
+		var submitButton = $(this).find(':submit');
+		submitButton.html('<div class="loader"></div>');
+		$('.loader', submitButton).css('display', 'block');
+
+		$.ajax({
+			url: $(this).prop('action'),
+			type:'POST',
+			context: $(this),
+			data: $(this).serialize(),
+			success:function(data){
+				data = JSON.parse(data);
+				var elem = EditProgramme.prototype.functions.createEditProgrammeDOM(data["id"], data["name"]);
 			},
 		}).done(function(){
 			$(this).find('input').val('');
@@ -235,15 +256,17 @@ import '../js/components';
 
 	$('.user-form-supervisor').each(function() {
 		if($(this).prop('checked')){
-			supervisorForm.show();
+			supervisorForm.show(400);
 		}
 	});
 
 	$('.user-form-supervisor').on('change', function(){
 		if($(this).prop('checked')){
-			supervisorForm.show();
+			$('.user-form-student').attr('disabled', 'true');
+			supervisorForm.show(400);
 		} else {
 			var checked = false;
+			$('.user-form-student').removeAttr('disabled' 	);
 			$('.user-form-supervisor').each(function() {
 				if($(this).prop('checked')){
 					checked = true;
@@ -251,22 +274,24 @@ import '../js/components';
 			});
 
 			if(!checked){
-				supervisorForm.hide();
+				supervisorForm.hide(400);
 			}
 		}
 	});
 
 	$('.user-form-student').each(function() {
 		if($(this).prop('checked')){
-			studentForm.show();
+			studentForm.show(400);
 		}
 	});
 
 	$('.user-form-student').on('change', function(){
 		if($(this).prop('checked')){
-			studentForm.show();
+			studentForm.show(400);
+			$('.user-form-supervisor').attr('disabled', 'true');
 		} else {
 			var checked = false;
+			$('.user-form-supervisor').removeAttr('disabled');
 			$('.user-form-student').each(function() {
 				if($(this).prop('checked')){
 					checked = true;
@@ -274,7 +299,7 @@ import '../js/components';
 			});
 
 			if(!checked){
-				studentForm.hide();
+				studentForm.hide(400);
 			}
 		}
 	});

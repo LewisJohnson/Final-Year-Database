@@ -21,6 +21,7 @@ use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\Supervisor;
 use SussexProjects\Topic;
+use SussexProjects\Programme;
 use SussexProjects\Transaction;
 use SussexProjects\Mode;
 use SussexProjects\Feedback;
@@ -307,6 +308,18 @@ class AdminController extends Controller{
 		$topics = Topic::all();
 		return view('admin.amend-topics')
 			->with('topics', $topics);
+	}
+
+	/**
+		* The amend topics view.
+		*
+		* @param \Illuminate\Http\Request $request
+		* @return \Illuminate\Http\Response
+	*/
+	public function amendProgrammesView(Request $request){
+		$programmes = Programme::all();
+		return view('admin.amend-programmes')
+			->with('programmes', $programmes);
 	}
 
 	/**

@@ -30,11 +30,13 @@ class User extends Migration{
 				$table->string('last_name', 128)->nullable(false);
 				$table->string('username', 32)->unique()->nullable(false);
 				$table->string('password', 128)->nullable(false);
-				$table->string('programme');
+				$table->string('programme')->nullable(true);
 				$table->string('email', 128)->unique()->nullable(false);
 				$table->dateTimeTz('last_login')->nullable(true);
 				$table->rememberToken();
 				$table->primary('id');
+
+				$table->foreign('programme')->references('name')->on($department.'_programme')->onDelete('SET NULL');
 			});
 
 			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') NOT NULL AFTER `id`;";

@@ -66,7 +66,7 @@ class Topic extends Model{
 	 * Includes primary project pivot.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
-     */
+	 */
 	public function projects(){
 		// Needed to get the pivot table name
 		$projectTopic = new ProjectTopic;
