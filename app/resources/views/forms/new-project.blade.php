@@ -8,19 +8,20 @@
 
 	<div class="form-field">
 		<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
-		<input maxlength="255" type="text" name="title" id="title" autofocus="true" required>
+		<input maxlength="255" type="text" name="title" id="title" autofocus="true" value="{{ old('title') }}" required>
+		<p id="title-already-used" style="display: hidden" class="help-block">This project title is already in use.</p>
 	</div>
 
 	<div class="form-field">
 		<label style="float: left;" for="description">Description</label>
-			<div class="html-editor">
-				<textarea id="html-editor--input" required class="html-editor--input" maxlength="16777215" type="text" name="description" id="description"></textarea>
-			</div>
+		<div class="html-editor">
+			<textarea id="html-editor--input" required class="html-editor--input" maxlength="16777215" type="text" name="description" id="description">{{ old('description') }}</textarea>
+		</div>
 	</div>
 
 	<div class="form-field">
 		<label for="skills">Skills</label>
-		<input maxlength="255" type="text" name="skills" id="skills"></input>
+		<input maxlength="255" type="text" name="skills" id="skills" required value="{{ old('skills') }}"></input>
 	</div>
 
 	@if($user_type == "supervisor")
@@ -51,9 +52,10 @@
 			</select>
 		</div>
 	@endif
+
+	@include ('partials.errors')
+
 	<div class="form-field">
 		<button class="button button--raised button--accent" type="submit" value="Submit">Create</button>
 	</div>
-
-	@include ('partials.errors')
 </form>

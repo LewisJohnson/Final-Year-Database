@@ -299,6 +299,7 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
    ============================ */
 Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
+
 	Route::get('users/{user}/projects', 'UserController@projects');
 
 	/* PROJECT ROUTES */
@@ -322,6 +323,9 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Project search
 	Route::get('projects/search', 'ProjectController@search');
+
+	// Check already used project title
+	Route::post('projects/check-title', 'ProjectController@projectNameAlreadyExists');
 
 	/* PROJECT TOPIC ROUTES */
 	// Add topic to project

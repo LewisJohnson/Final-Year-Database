@@ -122,7 +122,6 @@ class ProjectController extends Controller{
 			->with('view', $view);
 	}
 
-
 	/**
 	 * Adds a topic to a project.
 	 *
@@ -377,6 +376,23 @@ class ProjectController extends Controller{
 	public function showSupervisors(){
 		$supervisor = Supervisor::all();
 		return view('projects.supervisors')->with('supervisors', $supervisor);
+	}
+
+	/**
+	 * Removes a topic to a project.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function projectNameAlreadyExists(Request $request){
+		$sameTitleCount = Project::select('title')
+			->where('title', $request->project_title)
+			->where('status', 'on-offer')
+			->count();
+
+		$sameTitle = $sameTitleCount > 0;
+
+		return response()->json(array('hasSameTitle' => $sameTitle));
 	}
 
 	/**

@@ -349,4 +349,17 @@ class StudentController extends Controller{
 	public static function getStudentWithoutSecondMarker(){
 		return $student = Student::whereNull('marker_id')->first();
 	}
+
+	/**
+	 * Returns the first student in the DB without a second marker.
+	 *
+	 * @return Student
+	 */
+	public static function checkAllStudentsHaveSecondMarker(){
+		if(Student::whereNull('marker_id')->first() == null){
+			return true;
+		}
+		return false;
+	}
+
 }

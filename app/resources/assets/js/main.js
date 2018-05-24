@@ -524,26 +524,46 @@ import '../js/components';
 		setTimeout(select($(this)), 2000);
 	});
 
+	// Check title name
 	if($('#title').length > 0){
 		var titleCharCount = $('#title-character-count');
-
-		checkTitle();
-		$('#title').on("keydown change",  function(){
+		var title = $('#title');
+		// Bind value
+		title.on("keydown change",  function(){
 			checkTitle();
 		});
 
-		function checkTitle(){
-			var length = $('#title').val().length;
-			titleCharCount.text(length + '/40');
-
-			if(length > 40){
-				titleCharCount.css('color', 'red');
-			} else {
-				titleCharCount.css('color', 'darkgray');
-			}
-		}
+		// Set initial value
+		checkTitle();
 	}
 
+	function checkTitle(){
+		var length = title.val().length;
+		titleCharCount.text(length + '/40');
+
+		if(length > 40){
+			titleCharCount.css('color', 'red');
+		} else {
+			titleCharCount.css('color', 'darkgray');
+		}
+
+		// Check already used titles
+		$.ajax({
+			url: '/projects/check-title',
+			type:'POST',
+			data: {
+				project_title: title.val()
+			},
+			success:function(result){
+				if(result.hasSameTitle){
+					$('#title-already-used').show();
+				} else {
+					$('#title-already-used').hide();
+				}
+			},
+		});
+		
+	}
 	/* ======================
 		 6. HTML EDITOR
 	   ====================== */
