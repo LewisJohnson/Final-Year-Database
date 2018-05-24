@@ -275,25 +275,17 @@ class AdminController extends Controller{
 		* @return \Illuminate\Http\Response
 	*/
 	public function amendSupervisorArrangements(Request $request){
-		if (isset($request->project_load)) {
-			$request->validate([
-				'project_load' => 'numeric',
-			]);
-		};
-
-		foreach ($request->all() as $key => $value) {
-			if (strpos($key, 'supervisor-') === 0) {
-				$id = substr($key, 11);
-				$supervisor = Supervisor::findOrFail($id);
-
-				if (isset($request->project_load)) {
-					$supervisor->setProjectLoad($request->project_load);
-				}
-
-				$supervisor->setTakingStudents(isset($request->take_students) ? 1 : 0);
-			}
-		}
 		$supervisors = Supervisor::all();
+
+		foreach ($supervisors as $supervisor) {
+			$project_load = $request[$supervisor->id."_project_load"];
+			$take_students = $request[$supervisor->id."_take_students"];
+			$supervisor->setProjectLoad($project_load);
+			$supervisor->setTakingStudents(isset($take_students) ? 1 : 0);
+		}
+
+		session()->flash('message', 'Supervisor arrangements updated successfully');
+		session()->flash('message_type', 'success');
 		return view('admin.arrangements')
 			->with('supervisors', $supervisors);
 	}
@@ -346,7 +338,7 @@ class AdminController extends Controller{
 		});
 
 		return view('admin.login-as')
-		->with('supervisors', $supervisors)
+			->with('supervisors', $supervisors)
 			->with('staff', $staffUsers)
 			->with('students', $students);
 	}

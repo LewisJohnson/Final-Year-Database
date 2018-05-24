@@ -98,25 +98,6 @@
 		}
 	}
 
-	.arrangements-container {
-		overflow-x: scroll;
-
-		table {
-			width: 100%;
-		}
-
-		.side-content {
-			position: fixed;
-			bottom: 0;
-			right: 5%;
-			margin-bottom: 5%;
-			z-index: 99;
-			width: auto;
-			height: auto;
-			top: auto;
-		}
-	}
-
 	ul.dot-menu{
 		.dot-menu__item--padded{
 			padding: 16px;

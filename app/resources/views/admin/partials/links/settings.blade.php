@@ -1,22 +1,22 @@
 <ul class="icon-list">
 	<li>
 		<a class="icon" href="{{ action('AdminController@assignMarkerAutomaticView') }}">
-			@include('svg.account-multiple-plus')
-			<p>Automatic Assign Second Marker</p>
+			@include('svg.memory')
+			<p>Compute Second Markers</p>
 		</a>
 	</li>
 
 	<li>
 		<a class="icon" href="{{ action('AdminController@swapMarkerView') }}">
 			@include('svg.swap')
-			<p>Swap Second Marker</p>
+			<p>Swap Second Markers</p>
 		</a>
 	</li>
 
 	<li>
 		<a class="icon" href="{{ action('AdminController@assignMarkerManualView') }}">
 			@include('svg.account-multiple-plus')
-			<p>Manual Assign Second Marker</p>
+			<p>Manually Assign Second Markers</p>
 		</a>
 	</li>
 	<li>

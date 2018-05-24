@@ -302,24 +302,6 @@ ul.dot-menu{
 	list-style: none;
 }
 
-.arrangements-container{
-	display: flex;
-
-	table{
-		width: 65%;
-		margin: 0;
-	}
-
-	.side-content{
-		position: sticky;
-		top: 70px;
-		width: 30%;
-		height: 100%;
-		margin: 0 auto;
-		background: white;
-	}
-}
-
 .underlay{
 	visibility: hidden;
 	position: fixed;
