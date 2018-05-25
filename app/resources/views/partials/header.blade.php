@@ -2,7 +2,7 @@
 
 <div class="flex flex--row" style="background: rgb(52, 61, 70); z-index: 9; position: relative;">
 	<ul class="hl header-department-list">
-		@foreach (get_departments() as $key => $department)
+		@foreach(get_departments() as $key => $department)
 		<li>
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 				{{ csrf_field() }}
@@ -14,7 +14,7 @@
 	</ul>
 	@if(Auth::check())
 		<ul class="hl ml-auto header-education-level-list">
-			@foreach (Auth::user()->allowedEducationLevel() as $key => $level)
+			@foreach(Auth::user()->allowedEducationLevel() as $key => $level)
 			<li>
 				<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
 			</li>
@@ -183,8 +183,9 @@
 									<ul>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
-										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Second Marker', 'links' => 'marker'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Settings', 'links' => 'settings'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])</li>
 									</ul>
 								</div>
 							</li>

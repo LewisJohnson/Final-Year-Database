@@ -16,8 +16,8 @@ class Student extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::create($department.'_students_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('id')->unique();
 					$table->string('registration_number')->unique();
@@ -50,8 +50,8 @@ class Student extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::dropIfExists($department.'_students_'.$level['shortName']);
 			}
 		}

@@ -111,7 +111,7 @@ class Project extends Model{
      * @return Topic
      */
     public function getPrimaryTopic(){
-		foreach ($this->topics as $key => $value) {
+		foreach($this->topics as $key => $value) {
 			if($value->pivot->primary){
 				return $value;
 			}

@@ -423,7 +423,7 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@index', $request);
 		}
 
-		foreach ($filters as $selected) {
+		foreach($filters as $selected) {
 			if ($selected !== end($filters)){
 				$selectedFilters .= $selected;
 				$selectedFilters .= ", ";
@@ -487,7 +487,7 @@ class ProjectController extends Controller{
 			$filteredByTopics = true;
 
 			$projects = $projects->filter(function($project, $key) use ($searchTerm) {
-				foreach ($project->topics as $key => $topic) {
+				foreach($project->topics as $key => $topic) {
 					if(strcasecmp($topic->name, $searchTerm) == 0){
 						return true;
 					}

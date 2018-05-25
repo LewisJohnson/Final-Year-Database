@@ -303,7 +303,7 @@
 	};
 
 	ColumnToggleTable.prototype.HtmlSnippets_ = {
-				// COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
+		// COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
 		COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-left:auto;">Columns</button>',
 		COLUMN_SELECTOR_MENU: '<ul class="dot-menu dot-menu--bottom-left"></ul>'
 	};
@@ -580,6 +580,7 @@
 				backgroundDismiss: true,
 				animateFromElement : false,
 				content: 'Are you sure you want to delete <b>"' +  topic.topicNameInput.val() + '"</b>?',
+				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
@@ -599,7 +600,8 @@
 								}
 							});
 						}
-					}
+					},
+					cancel: {},
 				}
 			});
 		},
@@ -715,6 +717,7 @@
 				backgroundDismiss: true,
 				animateFromElement : false,
 				content: 'Are you sure you want to delete <b>"' +  programme.programmeNameInput.val() + '"</b>?',
+				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
@@ -734,7 +737,8 @@
 								}
 							});
 						}
-					}
+					},
+					cancel: {},
 				}
 			});
 		},

@@ -304,7 +304,7 @@ import '../js/components';
 		}
 	});
 
-	$('.user-form #username').on('keydown', function(){
+	$('.user-form #username').on('keydown keyup change', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
@@ -428,9 +428,7 @@ import '../js/components';
 						});
 					}
 				},
-				cancel: function () {
-					//close
-				},
+				cancel: function () {},
 			},
 			onContentReady: function () {
 				$('#feedback-page').val(window.location.pathname);

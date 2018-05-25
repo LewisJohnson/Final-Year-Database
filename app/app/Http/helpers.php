@@ -58,7 +58,7 @@ if (!function_exists('get_education_levels')){
 
 		if($shortName){
 			$ar = array();
-			foreach (data_get($config, 'educationLevels') as $key => $level) {
+			foreach(data_get($config, 'educationLevels') as $key => $level) {
 				array_push($ar, $level['shortName']);
 			}
 			return $ar;
@@ -66,7 +66,7 @@ if (!function_exists('get_education_levels')){
 
 		if($longName){
 			$ar = array();
-			foreach (data_get($config, 'educationLevels') as $key => $level) {
+			foreach(data_get($config, 'educationLevels') as $key => $level) {
 				array_push($ar, $level['longName']);
 			}
 			return $ar;

@@ -16,8 +16,8 @@ class Mode extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::create($department.'_mode_'.$level['shortName'], function (Blueprint $table) {
 					$table->dateTimeTz('project_selection');
 					$table->dateTimeTz('supervisor_accept');
@@ -35,8 +35,8 @@ class Mode extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::dropIfExists($department.'_mode_'.$level['shortName']);
 			}
 		}

@@ -133,7 +133,7 @@ class Student extends Model{
 		$return = 'mailto:';
 		$students = Student::Where('project_status', $status)->get();
 
-		foreach ($students as $key => $student) {
+		foreach($students as $key => $student) {
 			$return .= $student->user->email;
 			$return .= ',';
 		}

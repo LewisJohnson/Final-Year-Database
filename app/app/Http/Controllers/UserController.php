@@ -272,7 +272,7 @@ class UserController extends Controller{
 
 		if(in_array("admin_system", $privileges)){ $amountOfAdminPrivileges++; }
 
-		foreach (get_education_levels(true) as $key => $level) {
+		foreach(get_education_levels(true) as $key => $level) {
 			if(in_array("admin_".$level, $privileges)){ $amountOfAdminPrivileges++; }
 			if(in_array("student_".$level, $privileges)){ $amountOfStudentPrivileges++; }
 		}
@@ -295,7 +295,7 @@ class UserController extends Controller{
 			throw $error;
 		}
 
-		foreach (get_education_levels() as $key => $level) {
+		foreach(get_education_levels() as $key => $level) {
 			if(!Auth::user()->isAdminOfEducationLevel($level["shortName"])){
 				if(!Auth::user()->isSystemAdmin()){
 					if(in_array("admin_".$level["shortName"], $privileges) || in_array("student_".$level["shortName"], $privileges)){

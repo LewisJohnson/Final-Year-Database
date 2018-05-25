@@ -91,7 +91,7 @@ class Topic extends Model{
 		$topicNames = Topic::pluck('name');
 
 		$rtnString = '<datalist id="topicsDataList">';
-		foreach ($topicNames as $name) {
+		foreach($topicNames as $name) {
 			$rtnString .= '<option value="'. $name.'">';
 		}
 		$rtnString .= '</datalist>';

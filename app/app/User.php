@@ -186,7 +186,7 @@ class User extends Authenticatable{
 	public function isProjectAdmin(){
 		$isProjectAdmin = false;
 
-		foreach (get_education_levels(true) as $key => $level) {
+		foreach(get_education_levels(true) as $key => $level) {
 			if(in_array("admin_".$level, $this->getPrivileges())){
 				$isProjectAdmin = true;
 			}
@@ -212,13 +212,13 @@ class User extends Authenticatable{
     public function allowedEducationLevel($shortName = null, $longName = null){
 		$allowedLevels = array();
 
-		foreach (get_education_levels() as $key => $level) {
+		foreach(get_education_levels() as $key => $level) {
 			if(in_array("admin_".$level["shortName"], $this->getPrivileges())){
 				$allowedLevels[$level["longName"]] = $level;
 			}
 		}
 
-		foreach (get_education_levels() as $key => $level) {
+		foreach(get_education_levels() as $key => $level) {
 			if(in_array("guest_".$level["shortName"], $this->getPrivileges())){
 				$allowedLevels[$level["longName"]] = $level;
 			}
@@ -226,7 +226,7 @@ class User extends Authenticatable{
 
 		if($this->isSupervisor()){
 			// Adds all education levels
-			foreach (get_education_levels() as $key => $level) {
+			foreach(get_education_levels() as $key => $level) {
 				if(!in_array($level, $allowedLevels)){
 					$allowedLevels[$level["longName"]] = $level;
 				}
@@ -239,7 +239,7 @@ class User extends Authenticatable{
 
 		if($shortName){
 			$shortAllowedLevels = array();
-			foreach ($allowedLevels as $key => $level) {
+			foreach($allowedLevels as $key => $level) {
 				array_push($shortAllowedLevels, $level["shortName"]);
 			}
 			return $shortAllowedLevels;
@@ -247,7 +247,7 @@ class User extends Authenticatable{
 
 		if($longName){
 			$longAllowedLevels = array();
-			foreach ($allowedLevels as $key => $level) {
+			foreach($allowedLevels as $key => $level) {
 				array_push($longAllowedLevels, $level["longName"]);
 			}
 			return $longAllowedLevels;
@@ -275,11 +275,11 @@ class User extends Authenticatable{
             5. system administrator
         */
 
-        foreach ($privileges as $key => $value) {
+        foreach($privileges as $key => $value) {
 			$value = str_replace('admin', 'administrator', $value);
 
 			// Replaces short-hand names with long-hand names (e.g. _ug to _undergraduate)
-			foreach (get_education_levels() as $key => $level) {
+			foreach(get_education_levels() as $key => $level) {
 				$value = str_replace('_'.$level["shortName"], '_'.$level["longName"], $value);
 			}
 

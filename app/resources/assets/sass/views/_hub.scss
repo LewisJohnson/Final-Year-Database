@@ -76,23 +76,21 @@
 .hub .section .content{
 	padding: 1rem;
 	overflow-x: auto;
-	.svg-container {
-		display: inline;
-		margin-right: 14px;
-
-		svg{
-			width: 25px;
-			height: auto;
-		}
-	}
 
 	.icon-list{
 		.icon{
-			padding: 0;
+			display: block;
+			margin-bottom: 5px;
+			text-decoration: none;
 
 			&:hover, &:focus{
 				outline: none;
 				color: black;
+
+				> p{
+					color: black;
+					text-decoration: underline;
+				}
 			}
 		}
 	}

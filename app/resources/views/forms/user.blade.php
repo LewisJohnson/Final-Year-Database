@@ -110,7 +110,7 @@
 			<hr>
 			
 			<div class="button-group flex--stretch-children">
-				@foreach (get_education_levels() as $educationLevel)
+				@foreach(get_education_levels() as $educationLevel)
 					@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 						<div class="checkbox">
 							<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
@@ -149,7 +149,7 @@
 
 		<label>Email preference</label>
 		<div class="button-group flex--stretch-children">
-			@foreach (get_education_levels() as $educationLevel)
+			@foreach(get_education_levels() as $educationLevel)
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 					<div class="checkbox">
 						<input type="checkbox" id="email-{{ $educationLevel['shortName'] }}" name="accept_email_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isSupervisor() && $user->supervisor->getAcceptingEmails($educationLevel['shortName'])) checked @endif @endif>
@@ -163,7 +163,7 @@
 
 		<label>Take students</label>
 		<div class="button-group flex--stretch-children">
-			@foreach (get_education_levels() as $educationLevel)
+			@foreach(get_education_levels() as $educationLevel)
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 					<div class="checkbox">
 						<input type="checkbox" id="take-students-{{ $educationLevel['shortName'] }}" name="take_students_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isSupervisor() && $user->supervisor->getTakingStudents($educationLevel['shortName'])) checked @endif @endif>
@@ -177,7 +177,7 @@
 
 		<label>Project Load</label>
 		<div class="button-group flex--stretch-children">
-			@foreach (get_education_levels() as $educationLevel)
+			@foreach(get_education_levels() as $educationLevel)
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 					<div class="form-field">
 						<label for="project-load-{{ $educationLevel['shortName'] }}">Masters project load</label>

@@ -18,18 +18,18 @@ use Traits\Uuids;
 	public $timestamps = false;
 
 	/**
-	 * The attributes that are not mass assignable.
+	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $guarded = ['id'];
+	public $fillable = ['name'];
 
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	public $fillable = ['name'];
+	public $id = ['name'];
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
@@ -57,14 +57,14 @@ use Traits\Uuids;
 	 * @return string
 	 */
 	public static function getSelectList($programme = null){
-		$topicNames = Programme::pluck('name');
+		$programmes = Programme::all();
 
 		$rtnString = '<select name="programme">';
-		foreach ($topicNames as $name) {
-			if($programme == $name){
-				$rtnString .= '<option selected value="'.$name.'">'.$name.'</option>';
+		foreach($programmes as $prog) {
+			if($programme == $prog){
+				$rtnString .= '<option selected value="'.$prog->name.'">'.$prog->name.'</option>';
 			} else{
-				$rtnString .= '<option value="'.$name.'">'.$name.'</option>';
+				$rtnString .= '<option value="'.$prog->name.'">'.$prog->name.'</option>';
 			}
 		}
 		$rtnString .= '</select>';

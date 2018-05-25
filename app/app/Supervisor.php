@@ -206,7 +206,7 @@ class Supervisor extends User{
 			->select($student->getTable().'.*', 'project.supervisor_id')
 			->get();
 
-		foreach ($students as $student) {
+		foreach($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -232,7 +232,7 @@ class Supervisor extends User{
 			->select($student->getTable().'.*', 'project.supervisor_id')
 			->get();
 
-		foreach ($students as $student) {
+		foreach($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -258,7 +258,7 @@ class Supervisor extends User{
 			->select($student->getTable().'.*', 'project.supervisor_id')
 			->get();
 
-		foreach ($students as $student) {
+		foreach($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -276,7 +276,7 @@ class Supervisor extends User{
 		$students = Student::where('marker_id', $this->id);
 		$offers = array();
 		
-		foreach ($students as $key => $student) {
+		foreach($students as $key => $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -296,7 +296,7 @@ class Supervisor extends User{
 		$supervisors = Supervisor::all();
 		$dataListHtml = '<datalist id="supervisor-datalist">';
 
-		foreach ($supervisors as $supervisor) {
+		foreach($supervisors as $supervisor) {
 			$dataListHtml .= '<option value="'. $supervisor->user->getFullName().'">';
 		}
 		

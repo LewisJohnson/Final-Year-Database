@@ -243,7 +243,7 @@ class AdminController extends Controller{
 	}
 
 	public function configure(Request $request){
-		foreach ($request->all() as $key => $value) {
+		foreach($request->all() as $key => $value) {
 			if (substr($key, -4, 4) != "json") {
 				// This is to convert strings to PHP booleans
 				if($value === "true"){ $value = true; }
@@ -277,7 +277,7 @@ class AdminController extends Controller{
 	public function amendSupervisorArrangements(Request $request){
 		$supervisors = Supervisor::all();
 
-		foreach ($supervisors as $supervisor) {
+		foreach($supervisors as $supervisor) {
 			$project_load = $request[$supervisor->id."_project_load"];
 			$take_students = $request[$supervisor->id."_take_students"];
 			$supervisor->setProjectLoad($project_load);
@@ -399,7 +399,7 @@ class AdminController extends Controller{
 		DB::transaction(function() {
 			$projects = Project::all();
 			$students = User::where('privileges', 'student')->get();
-			foreach ($projects as $project) {
+			foreach($projects as $project) {
 				if($project->getAcceptedStudent() != null){
 					$project->description = $project->description."(++ This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear()." ++)";
 				}
@@ -413,7 +413,7 @@ class AdminController extends Controller{
 				$project->save();
 			}
 
-			foreach ($students as $student) {
+			foreach($students as $student) {
 				$student->delete();
 			}
 
@@ -470,7 +470,7 @@ class AdminController extends Controller{
 		$studentCount = Student::count();
 		$projectCount = Project::count();
 
-		foreach ($supervisors as $key => $supervisor) {
+		foreach($supervisors as $key => $supervisor) {
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')["shortName"]];
 			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count;
@@ -516,7 +516,7 @@ class AdminController extends Controller{
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		// Assignment derived from slack
-		foreach ($assignmentSetup["supervisors"] as $key => $supervisor) {
+		foreach($assignmentSetup["supervisors"] as $key => $supervisor) {
 			if($supervisor->target_load == 0){ break; }
 
 			$studentsAssignedToThisSupervisor = 0;
@@ -542,7 +542,7 @@ class AdminController extends Controller{
 			// No more students left to assign
 			if($studentToAssign == null){ break; }
 
-			// foreach ($assignmentSetup["supervisors"] as $key => $supervisor) {
+			// foreach($assignmentSetup["supervisors"] as $key => $supervisor) {
 			// 	if($supervisor->target_load == 0){ break; }
 			// }
 			// todo: this;
@@ -584,7 +584,7 @@ class AdminController extends Controller{
 	}
 
 	/**
-		* The amend supervisor arrangements view.
+		* The swap marker (second supervisor) view.
 		*
 		* @param \Illuminate\Http\Request $request
 		*
@@ -596,4 +596,70 @@ class AdminController extends Controller{
 			->with('students', $students);
 	}
 
+	/**
+		* The amend supervisor arrangements view.
+		*
+		* @param \Illuminate\Http\Request $request
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function exportMarkerDataView(Request $request){
+		return view('admin.export-marker');
+	}
+
+	/**
+		* The amend supervisor arrangements view.
+		*
+		* @param \Illuminate\Http\Request $request
+		*
+		* @return \Illuminate\Http\Response
+	*/
+	public function exportMarkerData(Request $request){
+		$students = Student::all();
+		$output = array();
+
+		foreach($students as $student) {
+			$ar = array();
+			$ar["studentName"] = $student->user->getFullName();
+			$ar["projectTitle"] = $student->project->title;
+			$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
+			if($student->marker){
+				$ar["markerName"] = $student->marker->user->getFullName();
+			} else {
+				$ar["markerName"] = "None";
+			}
+			array_push($output, $ar);
+		}
+
+		if($request->type == "json"){
+			$filename = "SecondMarkerData.json";
+			$handle = fopen($filename, 'w+');
+			file_put_contents($filename, json_encode($output)); 
+			fclose($handle);
+
+			$headers = array(
+				'Content-Type' => 'text/json',
+			);
+
+			return response()->download($filename, 'SecondMarkerData.json', $headers);
+		}
+
+		if($request->type == "csv"){
+			$filename = "SecondMarkerData.csv";
+			$handle = fopen($filename, 'w+');
+			fputcsv($handle, array('Student Name', 'Project Title', 'Supervisor', 'Second Marker'));
+
+			foreach ($output as $out) {
+				fputcsv($handle, $out);
+			}
+
+			fclose($handle);
+
+			$headers = array(
+				'Content-Type' => 'text/csv',
+			);
+
+			return response()->download($filename, 'SecondMarkerData.csv', $headers);
+		}
+	}
 }

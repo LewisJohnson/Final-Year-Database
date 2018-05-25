@@ -17,7 +17,7 @@ class UserAgentString extends Migration {
 	 * @return void
 	 */
 	public function up(){
-		foreach (get_departments() as $key => $department) {
+		foreach(get_departments() as $key => $department) {
 			Schema::create($department.'_user_agent_strings', function (Blueprint $table) {
 				$table->uuid('id');
 				$table->text('user_agent');
@@ -34,7 +34,7 @@ class UserAgentString extends Migration {
 	 * @return void
 	 */
 	public function down(){
-		foreach (get_departments() as $key => $department) {
+		foreach(get_departments() as $key => $department) {
 			Schema::dropIfExists($department.'_user_agent_strings');
 		}
 	}

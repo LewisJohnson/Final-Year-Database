@@ -16,8 +16,8 @@ class ProjectTopic extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::create($department.'_project_topics_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('project_id');
 					$table->uuid('topic_id');
@@ -37,8 +37,8 @@ class ProjectTopic extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		foreach (get_departments() as $key => $department) {
-			foreach (get_education_levels() as $key => $level) {
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
 				Schema::dropIfExists($department.'_project_topics_'.$level['shortName']);
 			}
 		}

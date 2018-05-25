@@ -165,6 +165,11 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	// Swap second marker view
 	Route::get('admin/marker-swap', 'AdminController@swapMarkerView');
 
+	// Swap second marker view
+	Route::get('admin/marker-export', 'AdminController@exportMarkerDataView');
+
+	Route::get('admin/marker-export-download', 'AdminController@exportMarkerData');
+
 	/* LOGIN AS ROUTES */
 	// Login as another user view
 	Route::get('admin/login-as', 'AdminController@loginAsView');

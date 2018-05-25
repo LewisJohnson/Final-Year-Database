@@ -41,10 +41,7 @@ class UserForm extends FormRequest{
 			'privileges' => 'required',
 			'title' => 'max:6',
 			'project_load_*' => 'min:0|max:255',
-			'programme' => [
-				'required',
-				Rule::in(Programme::pluck('name'))
-			],
+			'programme' => 'required',
 		];
 	}
 
