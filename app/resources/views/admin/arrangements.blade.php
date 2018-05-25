@@ -2,7 +2,7 @@
 @section('content')
 <div class="centered width--1200">
 	<h1>Amend Supervisor Arrangements</h1>
-	<h3>{{ lang_sess('select_supervisor_arragments') }}</h3>
+	<h3>Edit the parameters of a supervisor then press submit</h3>
 	<form action="{{ action('AdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
 		<table class="data-table data-table--selectable shadow-2dp">

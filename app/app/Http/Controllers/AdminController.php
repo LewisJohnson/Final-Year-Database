@@ -284,7 +284,7 @@ class AdminController extends Controller{
 			$supervisor->setTakingStudents(isset($take_students) ? 1 : 0);
 		}
 
-		session()->flash('message', 'Supervisor arrangements updated successfully');
+		session()->flash('message', 'Supervisor arrangements have been updated successfully');
 		session()->flash('message_type', 'success');
 		return view('admin.arrangements')
 			->with('supervisors', $supervisors);
@@ -398,18 +398,27 @@ class AdminController extends Controller{
 	public function archive(Request $request){
 		DB::transaction(function() {
 			$projects = Project::all();
-
-			foreach ($projects as $key => $project) {
+			$students = User::where('privileges', 'student')->get();
+			foreach ($projects as $project) {
 				if($project->getAcceptedStudent() != null){
-					$project->description = $project->description."(This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear().")";
+					$project->description = $project->description."(++ This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear()." ++)";
 				}
+				$project->student_id = NULL;
 
+				if($project->status == 'student-proposed'){
+					$project->delete();
+				}
+				
 				$project->status = 'archived';
 				$project->save();
 			}
 
-			$student = new Student();
-			DB::table($student->getTable())->delete();
+			foreach ($students as $student) {
+				$student->delete();
+			}
+
+			$transaction = new Transaction();
+			DB::table($transaction->getTable())->delete();
 		});
 
 		return response()->json(array('successful' => true));

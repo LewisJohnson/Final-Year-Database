@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Project;
 use SussexProjects\Topic;
@@ -70,10 +71,10 @@ class ProjectController extends Controller{
 
 		if($request->query("page")){
 			$projects = Project::where('status', 'on-offer')
-			->whereNotNull('supervisor_id')->paginate($this->paginationCount);
+				->whereNotNull('supervisor_id')->paginate($this->paginationCount);
 		} else {
 			$projects = Project::where('status', 'on-offer')
-			->whereNotNull('supervisor_id')->get();
+				->whereNotNull('supervisor_id')->get();
 		}
 		
 		$filteredProjects = $projects->filter(function($project, $key) {
@@ -309,7 +310,7 @@ class ProjectController extends Controller{
 			$transaction->save();
 		});
 
-		if($project->status = "student-proposed"){
+		if($project->status == "student-proposed"){
 			try {
 				Mail::to($student->user->email)->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));
 			} catch (\Exception $e) {

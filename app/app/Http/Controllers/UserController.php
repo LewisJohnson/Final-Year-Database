@@ -77,7 +77,6 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(UserForm $request){
-		dd($request['programme']);
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return;
 		}
@@ -143,18 +142,17 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function projects(User $user){
+		$projects = Project::where('supervisor_id', $user->id);
+
 		if(Auth::user() == $user){
 			$view = 'personal';
 		} else {
 			$view = 'supervisor';
 		}
 
-		$projects = Project::where('supervisor_id', $user->id);
-
-		if($view = 'supervisor'){
+		if($view == 'supervisor'){
 			$projects->where('status', 'on-offer');
 		}
-
 		return view('projects.index')
 			->with('projects', $projects->get())
 			->with('owner', $user)

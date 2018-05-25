@@ -196,10 +196,17 @@ class Supervisor extends User{
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
 	public function getIntrestedStudents(){
-		$students = Student::where('supervisor_id', $this->id)->where('project_status', 'selected');
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		foreach ($students as $key => $student) {
+		$students = Student::where('project_status', 'selected')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')
+			->get();
+
+		foreach ($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -215,10 +222,17 @@ class Supervisor extends User{
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
-		$students = Student::where('project_status', 'accepted');
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		foreach ($students as $key => $student) {
+		$students = Student::where('project_status', 'accepted')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')
+			->get();
+
+		foreach ($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -234,16 +248,22 @@ class Supervisor extends User{
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
-		$students = Student::where('supervisor_id', $this->id)->where('project_status', 'proposed');
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		foreach ($students as $key => $student) {
+		$students = Student::where('project_status', 'proposed')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')
+			->get();
+
+		foreach ($students as $student) {
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
-
 		return $offers;
 	}
 

@@ -4,7 +4,6 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-
 .fancy-page{
 	> h1{
 		font-weight: 400;
@@ -20,6 +19,7 @@
 		text-align: center;
 	}
 }
+
 .loader-container{
 	margin: 0 auto;
 	text-align: center;
@@ -354,6 +354,28 @@ ul.dot-menu{
 			display: block;
 			margin: 0 auto;
 		}
+	}
+}
+
+.archive-list{
+	list-style: none;
+
+	li {
+		width: calc(50% - 10px);
+		padding: 1rem;
+		margin: 5px;
+	}
+
+	.archive-red{
+		border: 1px solid #d9534f;
+		border-radius: 2px;
+
+	}
+
+	.archive-blue{
+		border: 1px solid #1094ff;
+		border-radius: 2px;
+
 	}
 }
 

@@ -15,7 +15,7 @@
 		<h5>Selected Students</h5>
 		<div class="responsive-table">
 			<table class="data-table sort-table supervisor-table table--dark-head">
-				@if(count(Auth::user()->supervisor->getIntrestedStudents()))
+				@if(Auth::user()->supervisor->getIntrestedStudents())
 					<thead>
 						<tr>
 							<th>
@@ -62,43 +62,43 @@
 
 		<h5>Students Proposals</h5>
 		<div class="responsive-table">
-			<table class="data-table table--dark-head supervisor-table">
-				@if (count(Auth::user()->supervisor->getStudentProjectProposals()))
-				<thead>
-					<tr>
-						<th>
-							<div class="checkbox">
-								<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
-								<label for="selected-students" name="selected-students"></label>
-							</div>
-						</th>
-						<th>Student</th>
-						<th>Project</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $proposal)
-						<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
-							<td>
+			<table class="data-table sort-table supervisor-table table--dark-head">
+				@if(Auth::user()->supervisor->getStudentProjectProposals())
+					<thead>
+						<tr>
+							<th>
 								<div class="checkbox">
-									<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox">
-									<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
+									<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
+									<label for="selected-students" name="selected-students"></label>
 								</div>
-							</td>
-							<td><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
-							<td><a class="flex--stretch" href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a></td>
-							<td>
-								<button class="button offer-action button--danger-text" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
-							</td>
-							
-							<td>
-								<button class="button offer-action button--success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
-							</td>
+							</th>
+							<th class="pointer">Student</th>
+							<th class="pointer">Project</th>
+							<th></th>
+							<th></th>
 						</tr>
-					@endforeach
-				</tbody>
+					</thead>
+					<tbody>
+						@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $proposal)
+							<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
+								<td>
+									<div class="checkbox">
+										<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox">
+										<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
+									</div>
+								</td>
+								<td><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
+								<td><a href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a></td>
+								<td>
+									<button class="button offer-action button--danger-text" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
+								</td>
+								
+								<td>
+									<button class="button offer-action button--success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
+								</td>
+							</tr>
+						@endforeach
+					</tbody>
 				@else
 					<tfoot>
 						<tr><td>You have no student project proposals yet.</td></tr>

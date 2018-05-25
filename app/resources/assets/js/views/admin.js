@@ -71,7 +71,7 @@
 							type:'POST',
 							success:function(response){
 								if(response.successful){
-									container.html('<h2>Archive Complete</h2>');
+									container.html('<h1>Archive Complete</h1><p class="subtitle">The year is complete, on to the next!</p>');
 								} else {
 									container.html(oldContainerHtml);
 									createToast('error', response.message);
