@@ -73,8 +73,8 @@ class Kernel extends HttpKernel
 		'admin.system' => \SussexProjects\Http\Middleware\SystemAdmin::class,
 		'admin.project' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
-		'supervisor.admin' => \SussexProjects\Http\Middleware\SupervisorOrAdmin::class,
 		'student' => \SussexProjects\Http\Middleware\Student::class,
+		'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
 		'checkDepartment' => \SussexProjects\Http\Middleware\DepartmentCheck::class,
 		'adminPrivilegeCheck' => \SussexProjects\Http\Middleware\AdminPrivilegeCheck::class,
 	];

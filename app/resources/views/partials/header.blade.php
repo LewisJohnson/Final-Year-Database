@@ -87,6 +87,12 @@
 						</li>
 					@endif
 
+					@if(Auth::user()->isStaff())
+						<li class="has-dropdown links" data-content="staff">
+							<a href="#0">Staff</a>
+						</li>
+					@endif
+
 					<li class="has-dropdown links" data-content="help">
 						<a href="#0">Help</a>
 					</li>
@@ -132,49 +138,50 @@
 							</div>
 						</li>
 
-						<li id="supervisor" class="dropdown links">
-							<a href="#0" class="label">Supervisor</a>
-							<div class="content">
-								<ul>
-									<li>
-										<h4>Projects</h4>
-										<ul class="icon-list links-list">
-											<li>
-												<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
-													@include('svg.file-account')
-													<p>My Projects</p>
-												</a>
-											</li>
-											<li>
-												<a class="icon" title="Create a new project" href="{{ action('ProjectController@create') }}">
-													@include('svg.file-plus')
-													<p>New Project</p>
-												</a>
-											</li>
-										</ul>
-									</li>
+						@if(Auth::user()->isSupervisor())
+							<li id="supervisor" class="dropdown links">
+								<a href="#0" class="label">Supervisor</a>
+								<div class="content">
+									<ul>
+										<li>
+											<h4>Projects</h4>
+											<ul class="icon-list links-list">
+												<li>
+													<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
+														@include('svg.file-account')
+														<p>My Projects</p>
+													</a>
+												</li>
+												<li>
+													<a class="icon" title="Create a new project" href="{{ action('ProjectController@create') }}">
+														@include('svg.file-plus')
+														<p>New Project</p>
+													</a>
+												</li>
+											</ul>
+										</li>
 
-									<li>
-										<h4>Reports</h4>
-										<ul class="icon-list links-list">
-											<li>
-												<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
-													@include('svg.file-multiple')
-													<p>Project Report</p>
-												</a>
-											</li>
-											<li>
-												<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
-													@include('svg.clipboard')
-													<p>Supervisor Report</p>
-												</a>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</div>
-						</li>
-
+										<li>
+											<h4>Reports</h4>
+											<ul class="icon-list links-list">
+												<li>
+													<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
+														@include('svg.file-multiple')
+														<p>Project Report</p>
+													</a>
+												</li>
+												<li>
+													<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
+														@include('svg.clipboard')
+														<p>Supervisor Report</p>
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</li>
+						@endif
 						@if(Auth::user()->isProjectAdmin())
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
@@ -289,6 +296,28 @@
 								</div>
 							</li>
 						@endif
+
+						@if(Auth::user()->isStaff())
+							<li id="staff" class="dropdown links">
+								<a href="#0" class="label">Staff</a>
+								<div class="content">
+									<h3>Staff</h3>
+									<ul>
+										<li>
+											<ul>
+												<li><a href="{{ action('AdminController@swapMarkerView') }}" >Swap Second Markers</a></li>
+											</ul>
+										</li>
+										<li>
+											<ul>
+												<li style="opactiy: 0"></li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</li>
+						@endif
+
 						<li id="help" class="dropdown links">
 							<a href="#0" class="label">Help</a>
 							<div class="content">

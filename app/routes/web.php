@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
 | 1. Web Routes (Accessible by any request)
 | 2. System admin routes
 | 3. Project admin routes
-| 4. Project and system admin routes
-| 5. Project admin and system admin and supervisor routes
+| 4. Any admin routes
+| 5. Project admin or staff routes
 | 6. Supervisor routes
 | 7. Student routes
-| 8. Authenticated User routes (Anyone who is logged in)
+| 8. Authenticated user routes (Anyone who is logged in)
 |
 | Please follow the CRUD convention
 | Verb		URI						Action		Route Name
@@ -32,14 +32,6 @@ use Illuminate\Http\Request;
 | PUT/PATCH	/photos/{photo}			update		photos.update
 | DELETE	/photos/{photo}			destroy		photos.destroy
 */
-
-
-// This can be used to test mailables
-// Route::get('/mailable', function () {
-// 	$student = SussexProjects\Student::all()->first();
-// 	$supervisor = SussexProjects\Supervisor::all()->first();
-// 	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
-// });
 
 /* =============
    1. WEB ROUTES
@@ -122,9 +114,9 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 	Route::get('admin/feedback', 'AdminController@feedback');
 });
 
-/* ===============
+/* ========================
    3. PROJECT ADMIN ROUTES
-   =============== */
+   ======================== */
 Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'adminPrivilegeCheck']], function() {
 	
 	// Admin hub
@@ -161,14 +153,6 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	// Manually assign second marker
 	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
-
-	// Swap second marker view
-	Route::get('admin/marker-swap', 'AdminController@swapMarkerView');
-
-	// Swap second marker view
-	Route::get('admin/marker-export', 'AdminController@exportMarkerDataView');
-
-	Route::get('admin/marker-export-download', 'AdminController@exportMarkerData');
 
 	/* LOGIN AS ROUTES */
 	// Login as another user view
@@ -226,38 +210,56 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 	/* STUDENT ROUTES */
 	// Store new student POST
 	Route::post('students', 'StudentController@store');
-});
-
-/* ===================================
-   4. PROJECT AND SYSTEM ADMIN ROUTES
-   ================================== */
-
-Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
-
-	Route::get('users', 'UserController@index');
-	Route::get('users/create', 'UserController@create');
-
-	Route::post('users', 'UserController@store');
-	Route::get('users/{user}/edit', 'UserController@edit');
-	Route::patch('users/{user}', 'UserController@update');
-	Route::delete('users/{user}', 'UserController@destory');
-});
-
-/* ==============================
-   5. SUPERVISOR AND ADMIN ROUTES
-   ============================== */
-Route::group(['middleware' => ['web', 'supervisor.admin', 'checkDepartment']], function() {
-	// Project Transaction
-	Route::get('projects/{id}/transactions', 'ProjectController@transactions');
 
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
+});
+
+/* ===================================
+   4. PROJECT OR SYSTEM ADMIN ROUTES
+   ================================== */
+Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
+
+	// All users view
+	Route::get('users', 'UserController@index');
+
+	// Create user view
+	Route::get('users/create', 'UserController@create');
+
+	// Store user POST
+	Route::post('users', 'UserController@store');
+
+	// Update user view
+	Route::get('users/{user}/edit', 'UserController@edit');
+
+	// Update user POST
+	Route::patch('users/{user}', 'UserController@update');
+
+	// Delete user
+	Route::delete('users/{user}', 'UserController@destroy');
+});
+
+/* =================================
+   5. PROJECT ADMIN OR STAFF ROUTES
+   ================================= */
+Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
+	// Swap second marker view
+	Route::get('admin/marker-swap', 'AdminController@swapMarkerView');
+
+	// Export marker data view
+	Route::get('admin/marker-export', 'AdminController@exportMarkerDataView');
+
+	// Export marker data
+	Route::get('admin/marker-export-download', 'AdminController@exportMarkerData');
 });
 
 /* =================
    6. SUPERVISOR ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
+
+	// Student Report
+	Route::get('reports/student', 'StudentController@report');
 
 	// Receive emails form
 	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');

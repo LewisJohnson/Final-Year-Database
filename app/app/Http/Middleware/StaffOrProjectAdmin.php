@@ -10,7 +10,7 @@ namespace SussexProjects\Http\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class SupervisorOrAdmin{
+class StaffOrProjectAdmin{
 	
 	/**
 	 * Handle an incoming request.
@@ -18,10 +18,10 @@ class SupervisorOrAdmin{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @param  \Closure  $next
 	 * @return mixed
-	 */
+	*/
 	public function handle($request, Closure $next){
 		if (Auth::check()){
-			if(Auth::user()->isSupervisor() || Auth::user()->isSystemAdmin() || Auth::user()->isProjectAdmin()){
+			if(Auth::user()->isStaff() || Auth::user()->isProjectAdmin()){
 				return $next($request);
 			}
 		}

@@ -237,6 +237,12 @@ class User extends Authenticatable{
 			array_push($allowedLevels, $this->studentType());
 		}
 
+		if($this->isStaff()){
+			foreach(get_education_levels() as $key => $level) {
+				array_push($allowedLevels, $level);
+			}
+		}
+
 		if($shortName){
 			$shortAllowedLevels = array();
 			foreach($allowedLevels as $key => $level) {
@@ -285,9 +291,15 @@ class User extends Authenticatable{
 
 			$value = str_replace('_', ' ', $value);
 
-			$words = explode(' ', $value);
-			$words = array_reverse($words);
-			$words = implode(" ",$words);
+			if($value == "staff"){
+				// Replace staff with staff member
+				// You are a staff looks dumb
+				$words = str_replace('staff', 'staff member', $value);
+			} else {
+				$words = explode(' ', $value);
+				$words = array_reverse($words);
+				$words = implode(" ",$words);
+			}
 
 			if($count == 1){
 				$returnString.=$words;
@@ -301,6 +313,8 @@ class User extends Authenticatable{
 				$returnString.="and ";
 				$returnString.=$words;
 			}
+
+
 			$indx++;
 		}
 
