@@ -120,7 +120,7 @@
 						<p>{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator. Take a look at the hub to see what actions you can perform.</p>
 
 						<div class="footer">
-							<a class="button--small hover--dark td-none" href="{{ action('AdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
+							<a class="button--small hover--dark td-none" href="{{ action('ProjectAdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
 						</div>
 					</div>
 				@endif
@@ -132,7 +132,7 @@
 					<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see what actions you can perform.</p>
 
 					<div class="footer">
-						<a class="button--small hover--dark td-none" href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
+						<a class="button--small hover--dark td-none" href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
 					</div>
 				</div>
 			@endif

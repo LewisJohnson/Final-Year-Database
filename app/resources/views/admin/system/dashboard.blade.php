@@ -105,7 +105,7 @@
 					<button class="button open-tab">Display</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Display</h2>
-						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+						<form class="form form--flex" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
 							{{ csrf_field() }}
 
 							<label for="names">Names</label>
@@ -128,7 +128,7 @@
 					<button class="button open-tab">User Agent</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>User Agent</h2>
-						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+						<form class="form form--flex" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
 							{{ csrf_field() }}
 
 							<div class="form-field form-field--flex form-field--toggle">
@@ -162,7 +162,7 @@
 					<button class="button open-tab">Header</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Header</h2>
-						<form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+						<form class="form form--flex" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
 							{{ csrf_field() }}
 
 							<div class="form-field">
@@ -196,7 +196,7 @@
 					<button class="button open-tab">Footer</button>
 					<div class="content" aria-expanded="false" aria-hidden="true">
 						<h2>Footer</h2>
-						<form class="form" role="form" method="POST" action="{{ action('AdminController@configure') }}">
+						<form class="form" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
 							{{ csrf_field() }}
 
 							<div class="form-field form-field--flex form-field--toggle">

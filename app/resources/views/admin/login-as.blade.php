@@ -31,7 +31,7 @@
 				<ol class="order-list-js last-name-header-list-js" id="supervisorList" sorted="false" style="list-style: none">
 					@foreach($supervisors as $supervisor)
 						<li>
-							<a title="Log in as {{ $supervisor->user->getFullName() }}" href="{{ action('AdminController@loginAs', $supervisor->id) }}">{{ $supervisor->user->getFullName() }}</a>
+							<a title="Log in as {{ $supervisor->user->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $supervisor->id) }}">{{ $supervisor->user->getFullName() }}</a>
 						</li>
 					@endforeach
 				</ol>
@@ -44,7 +44,7 @@
 				<ol class="order-list-js last-name-header-list-js" id="studentList" sorted="false" style="list-style: none">
 					@foreach($students as $student)
 						<li>
-							<a title="Log in as {{ $student->getName() }}" href="{{ action('AdminController@loginAs', $student->user->id) }}">{{ $student->getName() }}</a>
+							<a title="Log in as {{ $student->getName() }}" href="{{ action('ProjectAdminController@loginAs', $student->user->id) }}">{{ $student->getName() }}</a>
 						</li>
 					@endforeach
 				</ol>
@@ -55,7 +55,7 @@
 				<ol class="order-list-js last-name-header-list-js" id="staffList" sorted="false" style="list-style: none">
 					@foreach($staff as $staffUser)
 						<li>
-							<a title="Log in as {{ $staffUser->getFullName() }}" href="{{ action('AdminController@loginAs', $staffUser->id) }}">{{ $staffUser->getFullName() }}</a>
+							<a title="Log in as {{ $staffUser->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $staffUser->id) }}">{{ $staffUser->getFullName() }}</a>
 						</li>
 					@endforeach
 				</ol>

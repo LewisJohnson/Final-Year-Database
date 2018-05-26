@@ -57,7 +57,7 @@
 
 	<div class="button-group button-group--horizontal ">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
-		<form id="endOfYearArchive" action="{{ action('AdminController@archive')}}" method="POST" accept-charset="utf-8">
+		<form id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
 			{{ csrf_field() }}
 			<button title="Start archiving" type="submit" class="button button--raised button--danger">Archive</button>
 		</form>

@@ -1,9 +1,9 @@
 <?php
 /**
-	* Copyright (C) University of Sussex 2018.
-	* Unauthorized copying of this file, via any medium is strictly prohibited
-	* Written by Lewis Johnson <lj234@sussex.com>
-	*/
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
 
 namespace SussexProjects\Http\Controllers;
 
@@ -24,9 +24,7 @@ use SussexProjects\Topic;
 use SussexProjects\Programme;
 use SussexProjects\Transaction;
 use SussexProjects\Mode;
-use SussexProjects\Feedback;
 use SussexProjects\User;
-use SussexProjects\UserAgentString;
 
 /**
 	* The admin controller.
@@ -35,7 +33,7 @@ use SussexProjects\UserAgentString;
 	*
 	* @see SussexProjects\User
 */
-class AdminController extends Controller{
+class ProjectAdminController extends Controller{
 
 	public function __construct(){
 		$this->middleware('auth');
@@ -48,16 +46,6 @@ class AdminController extends Controller{
 	*/
 	public function index(){
 		return view('admin.index');
-	}
-
-	/**
-		* User feedback view.
-		*
-		* @return \Illuminate\Http\Response
-	*/
-	public function feedback(){
-		return view('admin.feedback')
-		->with('feedback', Feedback::all());
 	}
 
 	/**
@@ -172,36 +160,6 @@ class AdminController extends Controller{
 		$view = view('admin.partials.import-student-table')->with('users', $users)->with('students', $students)->render();
 		return response()->json(array('successful' => true, 'message' => $view));
 	}
-	/**
-		* System administrator dashboard view.
-		*
-		* @return \Illuminate\Http\Response
-	*/
-	public function dashboard(){
-		return view('admin.system.dashboard');
-	}
-
-	/**
-		* User agent string view.
-		*
-		* @param \Illuminate\Http\Request $request
-		* @return \Illuminate\Http\Response
-	*/
-	public function userAgentView(Request $request){
-		if ($request->query("unique") == "1") {
-			$userAgents = UserAgentString::where('first_visit', 1);
-		} else {
-			$userAgents = UserAgentString::where('first_visit', 0);
-		}
-
-		if ($request->query("page")) {
-			return view('system.partials.user-agent-row')
-				->with('userAgents', $userAgents->paginate($this->paginationCount));
-		} else {
-			return view('system.user-agent')
-				->with('userAgents', $userAgents->paginate($this->paginationCount));
-		}
-	}
 
 	/**
 		* Amend parameters view (mode)
@@ -240,19 +198,6 @@ class AdminController extends Controller{
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('HomeController@index');
-	}
-
-	public function configure(Request $request){
-		foreach($request->all() as $key => $value) {
-			if (substr($key, -4, 4) != "json") {
-				// This is to convert strings to PHP booleans
-				if($value === "true"){ $value = true; }
-				if($value === "false"){ $value = false; }
-
-				get_config_json($request[$key . "-json"], $value);
-			}
-		}
-		return redirect(url('admin/dashboard'));
 	}
 
 	/**
@@ -430,7 +375,7 @@ class AdminController extends Controller{
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
-	public function assignMarkerManualView(Request $request){
+	public function manualSecondMarkerView(Request $request){
 		$supervisors = Supervisor::all();
 		$students = Student::all();
 
@@ -453,7 +398,7 @@ class AdminController extends Controller{
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
-	public function assignMarkerAutomaticView(Request $request){
+	public function computeSecondMarkerView(Request $request){
 		return view('admin.assign-marker-automatic');
 	}
 
@@ -550,7 +495,7 @@ class AdminController extends Controller{
 			$studentToAssign->save();
 		}
 
-		return $this->assignMarkerReportTable();
+		return $this->assignSecondMarkerReportTable();
 	}
 
 	/**
@@ -559,9 +504,9 @@ class AdminController extends Controller{
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
-	public function assignMarkerAutomaticTable(Request $request){
+	public function assignSecondMarkerAutomaticTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-		$view = view('admin.partials.automatic-second-marker-assignment-table')
+		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $assignmentSetup["supervisors"])
 			->with('slack', $assignmentSetup["slack"]);
 		return response()->json(array('successful' => true, 'html' => $view->render()));
@@ -574,7 +519,7 @@ class AdminController extends Controller{
 		* @param \Illuminate\Http\Request $request
 		* @return \Illuminate\Http\Response
 	*/
-	public function assignMarkerReportTable(Request $request){
+	public function assignSecondMarkerReportTable(Request $request){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.assignment-report-table')
@@ -590,7 +535,7 @@ class AdminController extends Controller{
 		*
 		* @return \Illuminate\Http\Response
 	*/
-	public function swapMarkerView(Request $request){
+	public function swapSecondMarkerView(Request $request){
 		$students = Student::where('project_status', 'accepted');
 		return view('admin.swap-marker')
 			->with('students', $students);
@@ -603,7 +548,7 @@ class AdminController extends Controller{
 		*
 		* @return \Illuminate\Http\Response
 	*/
-	public function exportMarkerDataView(Request $request){
+	public function exportSecondMarkerDataView(Request $request){
 		return view('admin.export-marker');
 	}
 
@@ -614,7 +559,7 @@ class AdminController extends Controller{
 		*
 		* @return \Illuminate\Http\Response
 	*/
-	public function exportMarkerData(Request $request){
+	public function exportSecondMarkerData(Request $request){
 		$students = Student::all();
 		$output = array();
 

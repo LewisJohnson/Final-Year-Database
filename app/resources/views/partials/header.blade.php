@@ -208,21 +208,21 @@
 											<h4>System</h4>
 											<ul>
 												<li>
-													<a class="icon" href="{{ action('AdminController@dashboard') }}">
+													<a class="icon" href="{{ action('SystemAdminController@systemDashboardView') }}">
 														@include('svg.tune')
 														<p>System Dashboard</p>
 													</a>
 												</li>
 
 												<li>
-													<a class="icon" href="{{ action('AdminController@userAgentView') }}">
+													<a class="icon" href="{{ action('SystemAdminController@userAgentView') }}">
 														@include('svg.monitor')
 														<p>User Agent Strings</p>
 													</a>
 												</li>
 
 												<li>
-													<a class="icon" href="{{ action('AdminController@feedback') }}">
+													<a class="icon" href="{{ action('SystemAdminController@feedback') }}">
 														@include('svg.message-bulleted')
 														<p>User Feedback</p>
 													</a>
@@ -305,7 +305,7 @@
 									<ul>
 										<li>
 											<ul>
-												<li><a href="{{ action('AdminController@swapMarkerView') }}" >Swap Second Markers</a></li>
+												<li><a href="{{ action('ProjectAdminController@swapSecondMarkerView') }}" >Swap Second Markers</a></li>
 											</ul>
 										</li>
 										<li>

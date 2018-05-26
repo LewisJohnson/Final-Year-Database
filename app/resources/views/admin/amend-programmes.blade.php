@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="centered card width--1000">
 	<h1>Amend {{ ucfirst(Session::get('department')) }} Programmes</h1>
 	<h3>Add Programme</h3>

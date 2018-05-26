@@ -99,19 +99,19 @@ Route::group(['middleware' => ['web']], function() {
 Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], function() {
 
 	// System admin dashboard
-	Route::get('admin/dashboard', 'AdminController@dashboard');
+	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
 
 	// Updated configuration post
-	Route::post('admin/dashboard/system', 'AdminController@configure');
+	Route::post('admin/dashboard/system', 'SystemSystemAdminController@updateSystemConfiguration');
 
 	// Add new department
-	Route::post('admin/system/new-department', 'AdminController@newDepartment');
+	Route::post('admin/system/new-department', 'SystemAdminController@newDepartment');
 
 	// User agent view
-	Route::get('system/user-agent', 'AdminController@userAgentView');
+	Route::get('system/user-agent', 'SystemAdminController@userAgentView');
 
 	// User feedback view
-	Route::get('admin/feedback', 'AdminController@feedback');
+	Route::get('admin/feedback', 'SystemAdminController@feedback');
 });
 
 /* ========================
@@ -120,59 +120,59 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'adminPrivilegeCheck']], function() {
 	
 	// Admin hub
-	Route::get('admin', 'AdminController@index');
+	Route::get('admin', 'ProjectAdminController@index');
 
 	// Import student view
-	Route::get('admin/students/import', 'AdminController@importStudentsView');
+	Route::get('admin/students/import', 'ProjectAdminController@importStudentsView');
 
 	// Import student form
-	Route::post('admin/students/import', 'AdminController@importStudents');
+	Route::post('admin/students/import', 'ProjectAdminController@importStudents');
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form
-	Route::get('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangementsView');
+	Route::get('admin/supervisor-arrangements-amend', 'ProjectAdminController@amendSupervisorArrangementsView');
 
 	// Updated supervisor arrangements POST
-	Route::post('admin/supervisor-arrangements-amend', 'AdminController@amendSupervisorArrangements');
+	Route::post('admin/supervisor-arrangements-amend', 'ProjectAdminController@amendSupervisorArrangements');
 
 	/* SECOND SUPERVISOR (Marker) ROUTES */
 	// Manual assign second marker view
-	Route::get('admin/marker-assign-manual', 'AdminController@assignMarkerManualView');
+	Route::get('admin/marker-assign-manual', 'ProjectAdminController@manualSecondMarkerView');
 
 	// Automatically assign second marker view
-	Route::get('admin/marker-assign-automatic', 'AdminController@assignMarkerAutomaticView');
+	Route::get('admin/marker-assign-automatic', 'ProjectAdminController@computeSecondMarkerView');
 
 	// Automatically assigned second markers table
-	Route::get('admin/marker-assign-automatic-table', 'AdminController@assignMarkerAutomaticTable');
+	Route::get('admin/marker-assign-automatic-table', 'ProjectAdminController@assignSecondMarkerAutomaticTable');
 
 	// Marker report
-	Route::get('admin/marker-assign-report-table', 'AdminController@assignMarkerReportTable');
+	Route::get('admin/marker-assign-report-table', 'ProjectAdminController@assignSecondMarkerReportTable');
 
 	// Perform automatic second marker assignment
-	Route::post('admin/marker-calculate', 'AdminController@calculateSecondMarkers');
+	Route::post('admin/marker-calculate', 'ProjectAdminController@calculateSecondMarkers');
 
 	// Manually assign second marker
 	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
 
 	/* LOGIN AS ROUTES */
 	// Login as another user view
-	Route::get('admin/login-as', 'AdminController@loginAsView');
+	Route::get('admin/login-as', 'ProjectAdminController@loginAsView');
 
 	// Perform login alias
-	Route::get('admin/login-as/{id}', 'AdminController@loginAs');
+	Route::get('admin/login-as/{id}', 'ProjectAdminController@loginAs');
 
 	/* CONFIGURATION ROUTES */
 	// Yearly parameters configuration view
-	Route::get('admin/parameters', 'AdminController@amendParametersView');
+	Route::get('admin/parameters', 'ProjectAdminController@computeSecondMarkerView');
 
 	// Yearly parameters form post
-	Route::post('admin/parameters', 'AdminController@amendParameters');
+	Route::post('admin/parameters', 'ProjectAdminController@computeSecondMarkerView');
 
 	// End-of-Year archive view
-	Route::get('admin/archive', 'AdminController@archiveView');
+	Route::get('admin/archive', 'ProjectAdminController@archiveView');
 
 	// Perform End-of-Year archive
-	Route::post('admin/archive', 'AdminController@archive');
+	Route::post('admin/archive', 'ProjectAdminController@archive');
 
 	/* TRANSACTIONS ROUTES */
 	// Transactions by time view
@@ -183,7 +183,7 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	/* TOPIC ROUTES */
 	// Update topic view
-	Route::get('admin/topics-amend', 'AdminController@amendTopicsView');
+	Route::get('admin/topics-amend', 'ProjectAdminController@amendTopicsView');
 
 	// Store new topic
 	Route::post('topics', 'TopicController@store');
@@ -196,7 +196,7 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	/* PROGRAMME ROUTES */
 	// Update topic view
-	Route::get('admin/programmes-amend', 'AdminController@amendProgrammesView');
+	Route::get('admin/programmes-amend', 'ProjectAdminController@amendProgrammesView');
 
 	// Store new topic
 	Route::post('programmes', 'ProgrammeController@store');
@@ -244,13 +244,13 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
    ================================= */
 Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
 	// Swap second marker view
-	Route::get('admin/marker-swap', 'AdminController@swapMarkerView');
+	Route::get('admin/marker-swap', 'ProjectAdminController@swapSecondMarkerView');
 
 	// Export marker data view
-	Route::get('admin/marker-export', 'AdminController@exportMarkerDataView');
+	Route::get('admin/marker-export', 'ProjectAdminController@exportSecondMarkerDataView');
 
 	// Export marker data
-	Route::get('admin/marker-export-download', 'AdminController@exportMarkerData');
+	Route::get('admin/marker-export-download', 'ProjectAdminController@exportSecondMarkerData');
 });
 
 /* =================

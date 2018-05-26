@@ -13,9 +13,9 @@
 
 		<div class="button-group button-group--horizontal button-group--links">
 			@if(isset($_GET["unique"]))
-				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgentView')}}">Only first visits</a>
+				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('SystemAdminController@userAgentView')}}">Only first visits</a>
 			@else
-				<a class="chip active external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('AdminController@userAgentView', 'unique=true') }}">Only first visits</a>
+				<a class="chip active external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('SystemAdminController@userAgentView', 'unique=true') }}">Only first visits</a>
 			@endif
 		</div>
 
@@ -47,7 +47,7 @@
 @else
 	<div class="centered width--800 fancy-page">
 		<h1>User agent string collection is disabled.</h1>
-		<p class="subtitle">You can turn it back on in the <a href="{{ action('AdminController@dashboard') }}">system dashboard</a>.</p>
+		<p class="subtitle">You can turn it back on in the <a href="{{ action('SystemAdminController@systemDashboardView') }}">system dashboard</a>.</p>
 	</div>
 @endif
 

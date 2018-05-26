@@ -14,9 +14,9 @@
 							</svg>
 						</div>
 						<div class="dropdown-content">
-							<a href="{{ action('AdminController@dashboard') }}">System Dashboard</a>
-							<a href="{{ action('AdminController@userAgentView') }}">User Agent Strings</a>
-							<a href="{{ action('AdminController@feedback') }}">User Feedback</a>
+							<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+							<a href="{{ action('SystemAdminController@userAgentView') }}">User Agent Strings</a>
+							<a href="{{ action('SystemAdminController@feedback') }}">User Feedback</a>
 						</div>
 					</div>
 				</li>
