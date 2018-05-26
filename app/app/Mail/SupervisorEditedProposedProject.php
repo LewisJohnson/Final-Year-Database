@@ -10,18 +10,17 @@ namespace SussexProjects\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SupervisorEditedProposedProject extends Mailable{
 	use Queueable, SerializesModels;
 
-/**
+	/**
 	 * The student instance.
 	 *
 	 * @var Supervisor
 	 */
 	public $supervisor;
-	
+
 	/**
 	 * The supervisor instance.
 	 *
@@ -35,7 +34,7 @@ class SupervisorEditedProposedProject extends Mailable{
 	 * @var Project
 	 */
 	public $project;
-	
+
 	/**
 	 * Create a new message instance.
 	 *
@@ -53,11 +52,9 @@ class SupervisorEditedProposedProject extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.student.changed')
-			->with([
-				'supervisor' => $this->supervisor,
-				'student' => $this->student,
-				'project' => $this->project
-			]);;
+		return $this->view('emails.student.changed')->with(['supervisor' => $this->supervisor,
+															'student' => $this->student,
+															'project' => $this->project
+		]);;
 	}
 }

@@ -7,32 +7,36 @@
 
 namespace SussexProjects;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Exception;
 
 /**
  * The transaction model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\TransactionController
-*/
+ */
 class Transaction extends Model{
 	use Traits\Uuids;
-	
+
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
 	 */
 	public $timestamps = false;
-	
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
 	/**
 	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
 	protected $guarded = ['id'];
-	
 	/**
 	 * The columns to be parsed as dates.
 	 *
@@ -41,16 +45,10 @@ class Transaction extends Model{
 	protected $dates = ['transaction_date'];
 
 	/**
-	 * Indicates if the IDs are auto-incrementing.
-	 *
-	 * @var bool
-	 */
-	public $incrementing = false;
-
-	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){

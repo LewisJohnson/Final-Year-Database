@@ -7,10 +7,10 @@
 
 namespace SussexProjects;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class Mode extends Model{
 
@@ -20,46 +20,41 @@ class Mode extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
-
-	/**
-	 * The columns to be parsed as dates.
-	 *
-	 * Laravel can not use the MySql 'Year' data type, so please do not add project year.
-	 * @var array
-	 */
-	protected $dates = ['project_selection', 'supervisor_accept'];
-
-
-	/**
-	 * The models primary key 
-	 * 
-	 * @var integer
-	 */
-	protected $primaryKey = 'project_year';
-
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
+	/**
+	 * The columns to be parsed as dates.
+	 * Laravel can not use the MySql 'Year' data type, so please do not add project year.
+	 *
+	 * @var array
+	 */
+	protected $dates = ['project_selection', 'supervisor_accept'];
+	/**
+	 * The models primary key
+	 *
+	 * @var integer
+	 */
+	protected $primaryKey = 'project_year';
 
 	/**
-	 * The table to retrieve data from.
+	 * Gets project selection date
 	 *
 	 * @return string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_mode_'.Session::get('education_level')["shortName"];
+	public static function getProjectSelectionDate($human = null){
+		if($human){
+			return Mode::Instance()->project_selection->toDayDateTimeString();
 		} else {
-			throw new Exception('Database not found.');
+			return Mode::Instance()->project_selection;
 		}
 	}
 
 	/**
 	 * Call this method to get singleton
-	 * 
 	 * ish...
 	 *
 	 * @return UserFactory
@@ -82,19 +77,6 @@ class Mode extends Model{
 		}
 
 		return $mode;
-	}
-
-	/**
-	 * Gets project selection date
-	 *
-	 * @return string
-	 */
-	public static function getProjectSelectionDate($human = null){
-		if($human){
-			return Mode::Instance()->project_selection->toDayDateTimeString();
-		} else {
-			return Mode::Instance()->project_selection;
-		}
 	}
 
 	/**
@@ -126,5 +108,19 @@ class Mode extends Model{
 	 */
 	public static function isMarkerReleasedToStaff(){
 		return Mode::Instance()->marker_released_to_staff;
+	}
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string Table string
+	 * @throws Exception Database not found
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_mode_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
 	}
 }

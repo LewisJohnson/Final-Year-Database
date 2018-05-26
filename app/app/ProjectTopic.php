@@ -7,34 +7,29 @@
 
 namespace SussexProjects;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use SussexProjects\Project;
-use SussexProjects\Topic;
-use Exception;
 
 /**
  * The project topic model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\ProjectTopic
-*/
+ */
 class ProjectTopic extends Model{
-	protected $primaryKey = ['project_id', 'topic_id'];
-
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
 	 */
 	public $timestamps = false;
-
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
-	
+	protected $primaryKey = ['project_id', 'topic_id'];
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -52,7 +47,8 @@ class ProjectTopic extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){

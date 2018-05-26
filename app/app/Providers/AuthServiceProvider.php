@@ -7,27 +7,22 @@
 
 namespace SussexProjects\Providers;
 
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
-{
+class AuthServiceProvider extends ServiceProvider{
 	/**
 	 * The policy mappings for the application.
 	 *
 	 * @var array
 	 */
-	protected $policies = [
-		'SussexProjects\Model' => 'SussexProjects\Policies\ModelPolicy',
-	];
+	protected $policies = ['SussexProjects\Model' => 'SussexProjects\Policies\ModelPolicy'];
 
 	/**
 	 * Register any authentication / authorization services.
 	 *
 	 * @return void
 	 */
-	public function boot()
-	{
+	public function boot(){
 		$this->registerPolicies();
 
 		//

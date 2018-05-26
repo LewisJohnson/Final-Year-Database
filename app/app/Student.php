@@ -7,17 +7,17 @@
 
 namespace SussexProjects;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 /**
  * The student model.
  *
  * @see SussexProjects\Http\Controllers\StudentController
-*/
+ */
 class Student extends Model{
 
 	/**
@@ -41,10 +41,23 @@ class Student extends Model{
 	 */
 	protected $guarded = [];
 
+	public static function getMailtoStringByProjectStatus($status){
+		$return = 'mailto:';
+		$students = Student::Where('project_status', $status)->get();
+
+		foreach($students as $key => $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
@@ -55,9 +68,7 @@ class Student extends Model{
 	}
 
 	/**
-	 *
 	 * The students name, hidden if they have they have their name hidden.
-	 *
 	 * The students name will also be visible to supervisors and administrators.
 	 *
 	 * @return string
@@ -77,6 +88,7 @@ class Student extends Model{
 				return $this->user->getFullName();
 			}
 		}
+
 		return "A Student";
 	}
 
@@ -114,33 +126,21 @@ class Student extends Model{
 	 */
 	public function getStatusString(){
 		$return = '';
-		switch($this->project_status) {
-			case 'none':
-				$return = 'You haven\'t selected a project.';
-				break;
-			case 'selected':
-			case 'proposed':
-				$return = 'You\'re awaiting supervisor approval.';
-				break;
-			case 'accepted':
-				$return = 'Congratulations. You\'ve been accepted.';
-				break;
-		}
-		return $return;
-	}
-
-	public static function getMailtoStringByProjectStatus($status){
-		$return = 'mailto:';
-		$students = Student::Where('project_status', $status)->get();
-
-		foreach($students as $key => $student) {
-			$return .= $student->user->email;
-			$return .= ',';
+		switch($this->project_status){
+		case 'none':
+			$return = 'You haven\'t selected a project.';
+			break;
+		case 'selected':
+		case 'proposed':
+			$return = 'You\'re awaiting supervisor approval.';
+			break;
+		case 'accepted':
+			$return = 'Congratulations. You\'ve been accepted.';
+			break;
 		}
 
 		return $return;
 	}
-
 
 	/**
 	 * Returns all favourite projects.
@@ -153,6 +153,7 @@ class Student extends Model{
 		} else {
 			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
 		}
+
 		return $projects;
 	}
 
@@ -160,6 +161,7 @@ class Student extends Model{
 	 * Returns a boolean whether the parameter project is a favourite project.
 	 *
 	 * @param $id Project ID
+	 *
 	 * @return boolean favourite project
 	 */
 	public function isFavouriteProject($id){
@@ -170,10 +172,11 @@ class Student extends Model{
 		if(Cookie::get('favourite_projects') != "null"){
 			$favProjects = unserialize(Cookie::get('favourite_projects'));
 
-			if (($key = array_search($id, $favProjects)) !== false) {
+			if(($key = array_search($id, $favProjects)) !== false){
 				return true;
 			}
 		}
+
 		return false;
 	}
 }

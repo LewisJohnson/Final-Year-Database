@@ -7,10 +7,8 @@
 
 namespace SussexProjects\Http\Controllers\Auth;
 
-use SussexProjects\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use SussexProjects\Http\Controllers\Controller;
 
 class LoginController extends Controller{
 	/*
@@ -34,6 +32,15 @@ class LoginController extends Controller{
 	protected $redirectTo = '/home';
 
 	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(){
+		$this->middleware('guest')->except('logout');
+	}
+
+	/**
 	 * Handle an authentication attempt.
 	 *
 	 * @return Response
@@ -42,15 +49,7 @@ class LoginController extends Controller{
 		$login = request()->input('username');
 		$field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 		request()->merge([$field => $login]);
-		return $field;
-	}
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct(){
-		$this->middleware('guest')->except('logout');
+		return $field;
 	}
 }

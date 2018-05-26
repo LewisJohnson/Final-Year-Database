@@ -7,13 +7,12 @@
 
 namespace SussexProjects;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
 class Programme extends Model{
 	use Traits\Uuids;
-
-use Traits\Uuids;
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -44,20 +43,9 @@ use Traits\Uuids;
 	public $incrementing = false;
 
 	/**
-	 * The table to retrieve data from.
-	 *
-	 * @return string
-	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_programme';
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
-
-	/**
 	 * A HTML data-list of all topics.
+	 *
+	 * @param null $programme
 	 *
 	 * @return string
 	 */
@@ -65,15 +53,29 @@ use Traits\Uuids;
 		$programmes = Programme::all();
 
 		$rtnString = '<select name="programme">';
-		foreach($programmes as $prog) {
+		foreach($programmes as $prog){
 			if($programme == $prog){
 				$rtnString .= '<option selected value="'.$prog->name.'">'.$prog->name.'</option>';
-			} else{
+			} else {
 				$rtnString .= '<option value="'.$prog->name.'">'.$prog->name.'</option>';
 			}
 		}
 		$rtnString .= '</select>';
 
 		return $rtnString;
+	}
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string Table string
+	 * @throws Exception Database not found
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_programme';
+		} else {
+			throw new Exception('Database not found.');
+		}
 	}
 }

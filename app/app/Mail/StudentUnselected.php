@@ -10,7 +10,6 @@ namespace SussexProjects\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
@@ -23,7 +22,7 @@ class StudentUnselected extends Mailable{
 	 * @var Supervisor
 	 */
 	public $supervisor;
-	
+
 	/**
 	 * The supervisor instance.
 	 *
@@ -48,7 +47,6 @@ class StudentUnselected extends Mailable{
 		$this->student = $student;
 		$this->project = $this->student->project;
 	}
-	
 
 	/**
 	 * Build the message.
@@ -56,11 +54,9 @@ class StudentUnselected extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.supervisor.student-unselected')
-			->with([
-				'supervisor' => $this->supervisor,
-				'student' => $this->student,
-				'project' => $this->project
-			]);;
+		return $this->view('emails.supervisor.student-unselected')->with(['supervisor' => $this->supervisor,
+																		  'student' => $this->student,
+																		  'project' => $this->project
+		]);;
 	}
 }

@@ -7,19 +7,18 @@
 
 namespace SussexProjects\Http\Middleware;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Db;
-use SussexProjects\UserAgentString;
 use Closure;
+use Illuminate\Support\Facades\Cookie;
+use SussexProjects\UserAgentString;
 
 class UserAgentStringCollector{
-	
+
 	/**
 	 * Handle an incoming request.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure                 $next
+	 *
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
@@ -28,7 +27,7 @@ class UserAgentStringCollector{
 		}
 
 		// Don't collect AJAX requests
-		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
 			return $next($request);
 		}
 
@@ -54,6 +53,7 @@ class UserAgentStringCollector{
 		}
 
 		$userAgentString->save();
+
 		return $next($request);
 	}
 }

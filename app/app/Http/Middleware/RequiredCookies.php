@@ -15,9 +15,9 @@ class RequiredCookies{
 	/**
 	 * Handle an incoming request.
 	 *
-	 * 
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure                 $next
+	 *
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
@@ -32,6 +32,7 @@ class RequiredCookies{
 		if(empty(Cookie::get('favourite_projects'))){
 			Cookie::queue('favourite_projects', null, 525600);
 		}
+
 		return $next($request);
 	}
 }

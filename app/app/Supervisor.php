@@ -7,16 +7,15 @@
 
 namespace SussexProjects;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 /**
  * The supervisor model.
  *
  * @see SussexProjects\Http\Controllers\SupervisorController
-*/
+ */
 class Supervisor extends User{
 
 	/**
@@ -33,7 +32,6 @@ class Supervisor extends User{
 	 */
 	public $incrementing = false;
 
-
 	/**
 	 * The attributes that are not mass assignable.
 	 *
@@ -42,10 +40,29 @@ class Supervisor extends User{
 	protected $guarded = [];
 
 	/**
+	 * A HTML 5 data list snippet containing all supervisors.
+	 * This is used for auto-complete.
+	 *
+	 * @return string The resulting HTML
+	 */
+	public static function getDatalist(){
+		$supervisors = Supervisor::all();
+		$dataListHtml = '<datalist id="supervisor-datalist">';
+
+		foreach($supervisors as $supervisor){
+			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
+		}
+
+		$dataListHtml .= '</datalist>';
+
+		return $dataListHtml;
+	}
+
+	/**
 	 * Returns the user related to this supervisor.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne User
-     */
+	 */
 	public function user(){
 		return $this->hasOne(User::class, 'id');
 	}
@@ -53,7 +70,8 @@ class Supervisor extends User{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
@@ -78,15 +96,15 @@ class Supervisor extends User{
 		}
 
 		$this->save();
+
 		return;
 	}
-	
+
 	/**
 	 * Sets taking student property.
 	 *
-	 *
-	 * @param Boolean $value Take students
-	 * @param String $educationLevel An optional education level parameter
+	 * @param Boolean $value          Take students
+	 * @param String  $educationLevel An optional education level parameter
 	 *
 	 * @return
 	 */
@@ -97,14 +115,14 @@ class Supervisor extends User{
 			$this["take_students_".Session::get('education_level')["shortName"]] = $value;
 		}
 		$this->save();
+
 		return;
 	}
 
 	/**
 	 * Sets the project load of the supervisor (Student load).
 	 *
-	 *
-	 * @param Int $value The project load
+	 * @param Int    $value          The project load
 	 * @param String $educationLevel An optional education level parameter
 	 *
 	 * @return
@@ -116,12 +134,12 @@ class Supervisor extends User{
 			$this["project_load_".Session::get('education_level')["shortName"]] = $value;
 		}
 		$this->save();
+
 		return;
 	}
 
 	/**
 	 * Determines if the superior is accepting emails.
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -138,7 +156,6 @@ class Supervisor extends User{
 
 	/**
 	 * Determines if the superior is taking students.
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -155,7 +172,6 @@ class Supervisor extends User{
 
 	/**
 	 * The project load of the supervisor (Student load).
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -179,17 +195,12 @@ class Supervisor extends User{
 	 */
 	public function getProjects($status = null){
 		if(isset($status)){
-			return Project::where("supervisor_id", $this->id)
-				->whereNull('student_id')
-				->where("status", "=", $status)
-				->get();
+			return Project::where("supervisor_id", $this->id)->whereNull('student_id')->where("status", "=", $status)->get();
 		}
 
-		return Project::where("supervisor_id", $this->id)
-			->orderBy('status', 'asc')
-			->whereNull('student_id')
-			->get();
+		return Project::where("supervisor_id", $this->id)->orderBy('status', 'asc')->whereNull('student_id')->get();
 	}
+
 	/**
 	 * A list of students who have selected a project from this supervisor.
 	 *
@@ -200,13 +211,9 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'selected')
-			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')
-			->get();
+		$students = Student::where('project_status', 'selected')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-		foreach($students as $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -226,13 +233,9 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'accepted')
-			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')
-			->get();
+		$students = Student::where('project_status', 'accepted')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-		foreach($students as $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -252,18 +255,15 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'proposed')
-			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')
-			->get();
+		$students = Student::where('project_status', 'proposed')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-		foreach($students as $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
 			array_push($offers, $ar);
 		}
+
 		return $offers;
 	}
 
@@ -275,8 +275,8 @@ class Supervisor extends User{
 	public function getSecondSupervisingStudents(){
 		$students = Student::where('marker_id', $this->id);
 		$offers = array();
-		
-		foreach($students as $key => $student) {
+
+		foreach($students as $key => $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -285,25 +285,5 @@ class Supervisor extends User{
 
 		return $offers;
 	}
-
-	/**
-	 * A HTML 5 data list snippet containing all supervisors.
-	 * This is used for auto-complete.
-	 *
-	 * @return string The resulting HTML
-	*/
-	public static function getDatalist(){
-		$supervisors = Supervisor::all();
-		$dataListHtml = '<datalist id="supervisor-datalist">';
-
-		foreach($supervisors as $supervisor) {
-			$dataListHtml .= '<option value="'. $supervisor->user->getFullName().'">';
-		}
-		
-		$dataListHtml .= '</datalist>';
-
-		return $dataListHtml;
-	}
-
 
 }

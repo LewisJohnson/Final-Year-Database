@@ -10,9 +10,7 @@ namespace SussexProjects\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Validation\Rule;
 use SussexProjects\Http\Controllers\UserController;
-use SussexProjects\Programme;
 
 class UserForm extends FormRequest{
 	/**
@@ -24,6 +22,7 @@ class UserForm extends FormRequest{
 		if(Auth::user()->isProjectAdmin() || Auth::user()->isSystemAdmin()){
 			return true;
 		}
+
 		return false;
 	}
 
@@ -33,26 +32,24 @@ class UserForm extends FormRequest{
 	 * @return array
 	 */
 	public function rules(){
-		return [
-			'username' => 'required|max:32',
-			'first_name' => 'required|max:128',
-			'last_name' => 'required|max:128',
-			'email' => 'required|max:128',
-			'privileges' => 'required',
-			'title' => 'max:6',
-			'project_load_*' => 'min:0|max:255',
-			'programme' => 'required',
+		return ['username' => 'required|max:32',
+				'first_name' => 'required|max:128',
+				'last_name' => 'required|max:128',
+				'email' => 'required|max:128', 'privileges' => 'required',
+				'title' => 'max:6', 'project_load_*' => 'min:0|max:255',
+				'programme' => 'required',
 		];
 	}
 
 	/**
 	 * Configure the validator instance.
 	 *
-	 * @param  \Illuminate\Validation\Validator  $validator
+	 * @param  \Illuminate\Validation\Validator $validator
+	 *
 	 * @return void
 	 */
 	public function withValidator($validator){
-		$validator->after(function ($validator) {
+		$validator->after(function($validator){
 			UserController::checkPrivilegeConditions(Request::get('privileges'));
 		});
 	}

@@ -7,15 +7,15 @@
 
 namespace SussexProjects;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Exception;
 
 /**
  * The topic model.
  *
  * @see SussexProjects\Http\Controllers\topicController
-*/
+ */
 class Topic extends Model{
 	use Traits\Uuids;
 
@@ -25,7 +25,18 @@ class Topic extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	public $fillable = ['name'];
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
 	/**
 	 * The attributes that are not mass assignable.
 	 *
@@ -34,23 +45,27 @@ class Topic extends Model{
 	protected $guarded = ['id'];
 
 	/**
-	 * The attributes that are mass assignable.
+	 * A HTML data-list of all topics.
 	 *
-	 * @var array
+	 * @return string
 	 */
-	public $fillable = ['name'];
+	public static function getDatalist(){
+		$topicNames = Topic::pluck('name');
 
-	/**
-	 * Indicates if the IDs are auto-incrementing.
-	 *
-	 * @var bool
-	 */
-	public $incrementing = false;
+		$rtnString = '<datalist id="topicsDataList">';
+		foreach($topicNames as $name){
+			$rtnString .= '<option value="'.$name.'">';
+		}
+		$rtnString .= '</datalist>';
+
+		return $rtnString;
+	}
 
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
@@ -62,7 +77,6 @@ class Topic extends Model{
 
 	/**
 	 * Returns all projects related to this topic.
-	 *
 	 * Includes primary project pivot.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
@@ -70,6 +84,7 @@ class Topic extends Model{
 	public function projects(){
 		// Needed to get the pivot table name
 		$projectTopic = new ProjectTopic;
+
 		return $this->belongsToMany(Project::class, $projectTopic->getTable(), 'topic_id', 'project_id')->withPivot('primary');
 	}
 
@@ -77,25 +92,8 @@ class Topic extends Model{
 	 * Returns all projects related to this topic which are on-offer to students.
 	 *
 	 * @return Project
-	*/
+	 */
 	public function getProjectsOnOffer(){
 		return $this->projects->where('status', 'on-offer');
-	}
-
-	/**
-	 * A HTML data-list of all topics.
-	 *
-	 * @return string
-	 */
-	public static function getDatalist(){
-		$topicNames = Topic::pluck('name');
-
-		$rtnString = '<datalist id="topicsDataList">';
-		foreach($topicNames as $name) {
-			$rtnString .= '<option value="'. $name.'">';
-		}
-		$rtnString .= '</datalist>';
-
-		return $rtnString;
 	}
 }

@@ -7,27 +7,26 @@
 
 namespace SussexProjects\Http\Controllers;
 
-use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Flash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Stevebauman\Purify\Facades\Purify;
 use SussexProjects\Http\Requests\ProjectForm;
-use SussexProjects\Project;
-use SussexProjects\Topic;
-use SussexProjects\ProjectTopic;
-use SussexProjects\Transaction;
-use SussexProjects\Supervisor;
 use SussexProjects\Mail\SupervisorEditedProposedProject;
+use SussexProjects\Project;
+use SussexProjects\ProjectTopic;
+use SussexProjects\Supervisor;
+use SussexProjects\Topic;
+use SussexProjects\Transaction;
+
 /**
  * The project controller.
- *
  * Handles all functions related to projects.
- *
-*/
+ */
 class ProjectController extends Controller{
 
 	/**
@@ -36,12 +35,11 @@ class ProjectController extends Controller{
 	 * @see http://htmlpurifier.org/live/configdoc/plain.html HTML purifier configuration documentation.
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
 	 * @var string[] ~HTML purifier configuration
-	*/
-	public static $descriptionPurifyConfig = [
-		'Core.CollectErrors' => true,
-		'Attr.ID.HTML5' => true,
-		'HTML.TargetBlank' => true,
-		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6,script,html,body'
+	 */
+	public static $descriptionPurifyConfig = ['Core.CollectErrors' => true,
+											  'Attr.ID.HTML5' => true,
+											  'HTML.TargetBlank' => true,
+											  'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6,script,html,body'
 	];
 
 	public function __construct(){
@@ -51,7 +49,6 @@ class ProjectController extends Controller{
 
 	/**
 	 * Display a listing of the resource.
-	 *
 	 * SELECT CONDITIONS
 	 * - Select if supervisor take_students is true
 	 * - Select if on-offer
@@ -59,7 +56,7 @@ class ProjectController extends Controller{
 	 * - select if NOT student proposed
 	 *
 	 * @return \Illuminate\View\View
-     */
+	 */
 	public function index(Request $request){
 		/* SELECT CONDITIONS
 			Select if supervisor take_students is true
@@ -70,29 +67,24 @@ class ProjectController extends Controller{
 		*/
 
 		if($request->query("page")){
-			$projects = Project::where('status', 'on-offer')
-				->whereNotNull('supervisor_id')->paginate($this->paginationCount);
+			$projects = Project::where('status', 'on-offer')->whereNotNull('supervisor_id')->paginate($this->paginationCount);
 		} else {
-			$projects = Project::where('status', 'on-offer')
-				->whereNotNull('supervisor_id')->get();
+			$projects = Project::where('status', 'on-offer')->whereNotNull('supervisor_id')->get();
 		}
-		
-		$filteredProjects = $projects->filter(function($project, $key) {
+
+		$filteredProjects = $projects->filter(function($project, $key){
 			if(!$project->supervisor->getTakingStudents()){
 				return false;
 			}
+
 			return true;
 		});
 
 		if($request->query("page")){
-			return view('projects.partials.pagination')
-				->with('projects', $filteredProjects)
-				->with('view', 'index');
+			return view('projects.partials.pagination')->with('projects', $filteredProjects)->with('view', 'index');
 		}
 
-		return view('projects.index')
-			->with('projects', $filteredProjects)
-			->with('view', 'index');
+		return view('projects.index')->with('projects', $filteredProjects)->with('view', 'index');
 
 	}
 
@@ -100,11 +92,11 @@ class ProjectController extends Controller{
 	 * Display the specified resource.
 	 *
 	 * @param \Illuminate\Http\Request $request
-	 * @param  UUID  $uuid
+	 * @param  UUID                    $uuid
 	 *
 	 * @return \Illuminate\View\View
-     */
-	public function show(Project $project) {
+	 */
+	public function show(Project $project){
 		$view = "SupervisorProject";
 		$studentName = "a student";
 
@@ -113,24 +105,21 @@ class ProjectController extends Controller{
 		}
 
 		if(request()->query("preview") == true){
-			return view('projects.partials.project-preview')
-				->with('project', $project)
-				->with('view', $view);
+			return view('projects.partials.project-preview')->with('project', $project)->with('view', $view);
 		}
 
-		return view('projects.project')
-			->with('project', $project)
-			->with('view', $view);
+		return view('projects.project')->with('project', $project)->with('view', $view);
 	}
 
 	/**
 	 * Adds a topic to a project.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return string The newly added topic's name
 	 */
 	public function addTopic(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$topic = Topic::where('name', request('topic_name'))->first();
 			$project = Project::findOrFail(request('project_id'));
 
@@ -140,7 +129,7 @@ class ProjectController extends Controller{
 				$topic->name = request('topic_name');
 				$topic->save();
 			}
-			
+
 			// Validate data
 			$projectTopic = new ProjectTopic;
 
@@ -150,16 +139,19 @@ class ProjectController extends Controller{
 			$projectTopic->project_id = $project->id;
 
 			$projectTopic->save();
+
 			return Topic::findOrFail($topic->id);
 		});
 
-		return response()->json(array('successful' => true, 'topic' => $result));
+		return response()->json(array('successful' => true, 'topic' => $result
+		));
 	}
 
 	/**
 	 * Removes a topic to a project.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function removeTopic(Request $request){
@@ -167,9 +159,7 @@ class ProjectController extends Controller{
 			$topic = Topic::findOrFail(request('topic_id'));
 			$project = Project::findOrFail(request('project_id'));
 
-			ProjectTopic::where('project_id', $project->id)
-				->where('topic_id', $topic->id)
-				->delete();
+			ProjectTopic::where('project_id', $project->id)->where('topic_id', $topic->id)->delete();
 		});
 
 		return response()->json(array('successful' => true));
@@ -179,10 +169,11 @@ class ProjectController extends Controller{
 	 * Updates the projects primary topic
 	 *
 	 * @param  \Illuminate\Http\Request $request Contains new primary project ID
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updatePrimaryTopic(Request $request){
-		DB::transaction(function() use ($request) {
+		DB::transaction(function() use ($request){
 			$topic = Topic::findOrFail(request('topic_id'));
 			$project = Project::findOrFail(request('project_id'));
 
@@ -190,9 +181,7 @@ class ProjectController extends Controller{
 			ProjectTopic::where('project_id', $project->id)->update(['primary' => 0]);
 
 			// Set new primary project
-			ProjectTopic::where('project_id', $project->id)
-				->where('topic_id', $topic->id)
-				->update(['primary' => 1]);
+			ProjectTopic::where('project_id', $project->id)->where('topic_id', $topic->id)->update(['primary' => 1]);
 		});
 
 		return response()->json(array('successful' => true));
@@ -210,31 +199,29 @@ class ProjectController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(ProjectForm $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$project = new Project;
 			$transaction = new Transaction;
 			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
-			$project->fill(array(
-				'title' => request('title'),
-				'description' => $clean_html,
-				'status' => request('status'),
-				'skills' => request('skills')
+			$project->fill(array('title' => request('title'),
+								 'description' => $clean_html,
+								 'status' => request('status'),
+								 'skills' => request('skills')
 			));
 
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
 
-			$transaction->fill(array(
-				'type' =>'project',
-				'action' =>'created',
-				'project' => $project->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
+			$transaction->fill(array('type' => 'project', 'action' => 'created',
+									 'project' => $project->id,
+									 'supervisor' => Auth::user()->supervisor->id,
+									 'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -252,20 +239,23 @@ class ProjectController extends Controller{
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  UUID  $uuid
+	 * @param  UUID $uuid
+	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+	 */
 	public function edit(Project $project){
 		if($project->isOwnedByUser()){
 			return view('projects.edit')->with('project', $project);
 		}
+
 		return redirect()->action('ProjectController@show', $project);
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
@@ -277,33 +267,30 @@ class ProjectController extends Controller{
 			$transaction = new Transaction;
 			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
-			// So student proposals can't be overridden 
+			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){
 				$input->status = "student-proposed";
 			}
 
-			$project->update([
-				'title' => $input->title,
-				'description' => $clean_html,
-				'status' => $input->status,
-				'skills' => $input->skills
+			$project->update(['title' => $input->title,
+							  'description' => $clean_html,
+							  'status' => $input->status,
+							  'skills' => $input->skills
 			]);
 
 			if($project->status == "student-proposed"){
-				$transaction->fill(array(
-					'type' =>'project',
-					'action' =>'updated',
-					'project' => $project->id,
-					'student' => Auth::user()->student->id,
-					'transaction_date' => new Carbon
+				$transaction->fill(array('type' => 'project',
+										 'action' => 'updated',
+										 'project' => $project->id,
+										 'student' => Auth::user()->student->id,
+										 'transaction_date' => new Carbon
 				));
 			} else {
-				$transaction->fill(array(
-					'type' =>'project',
-					'action' =>'updated',
-					'project' => $project->id,
-					'supervisor' => Auth::user()->supervisor->id,
-					'transaction_date' => new Carbon
+				$transaction->fill(array('type' => 'project',
+										 'action' => 'updated',
+										 'project' => $project->id,
+										 'supervisor' => Auth::user()->supervisor->id,
+										 'transaction_date' => new Carbon
 				));
 			}
 
@@ -311,37 +298,37 @@ class ProjectController extends Controller{
 		});
 
 		if($project->status == "student-proposed"){
-			try {
+			try{
 				Mail::to($student->user->email)->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));
-			} catch (\Exception $e) {
-				
+			} catch (\Exception $e){
+
 			}
 		}
 
 		session()->flash('message', '"'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');
+
 		return redirect()->action('ProjectController@show', $project);
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Project $project) {
+	public function destroy(Project $project){
 		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
 			return response()->json(array('successful' => false));
 		}
 
 		DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
-			$transaction->fill(array(
-				'type' =>'project',
-				'action' =>'deleted',
-				'project_id' => $id,
-				'supervisor_id' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
+			$transaction->fill(array('type' => 'project', 'action' => 'deleted',
+									 'project_id' => $id,
+									 'supervisor_id' => Auth::user()->supervisor->id,
+									 'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -351,45 +338,41 @@ class ProjectController extends Controller{
 		return response()->json(array('successful' => true));
 	}
 
-
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+	 */
 	public function showTopics(){
 		$topics = Topic::all();
+
 		return view('projects.topics')->with('topics', $topics);
 	}
 
 	public function byTopic(Topic $topic){
-		return view('projects.index')
-			->with('projects', $topic->getProjectsOnOffer())
-			->with('topic', $topic)
-			->with('view', 'topic');
+		return view('projects.index')->with('projects', $topic->getProjectsOnOffer())->with('topic', $topic)->with('view', 'topic');
 	}
 
 	/**
 	 * Displays all supervisors with projects on offer.
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+	 */
 	public function showSupervisors(){
 		$supervisor = Supervisor::all();
+
 		return view('projects.supervisors')->with('supervisors', $supervisor);
 	}
 
 	/**
 	 * Removes a topic to a project.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function projectNameAlreadyExists(Request $request){
-		$sameTitleCount = Project::select('title')
-			->where('title', $request->project_title)
-			->where('status', 'on-offer')
-			->count();
+		$sameTitleCount = Project::select('title')->where('title', $request->project_title)->where('status', 'on-offer')->count();
 
 		$sameTitle = $sameTitleCount > 0;
 
@@ -399,9 +382,10 @@ class ProjectController extends Controller{
 	/**
 	 * Searches through projects.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\View\View
-     */
+	 */
 	public function search(Request $request){
 
 		/* SELECT CONDITIONS
@@ -420,11 +404,12 @@ class ProjectController extends Controller{
 		if(is_null($request->get("searchTerm")) || is_null($request->get("filter"))){
 			session()->flash("message", "Sorry, something went wrong with that request.");
 			session()->flash('message_type', 'error');
+
 			return redirect()->action('ProjectController@index', $request);
 		}
 
-		foreach($filters as $selected) {
-			if ($selected !== end($filters)){
+		foreach($filters as $selected){
+			if($selected !== end($filters)){
 				$selectedFilters .= $selected;
 				$selectedFilters .= ", ";
 			} else {
@@ -441,10 +426,7 @@ class ProjectController extends Controller{
 
 		$sessionDbPrefix = Session::get('department')."_projects_".Session::get('education_level')["shortName"];
 
-		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"].'')
-			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')
-			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
-
+		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"].'')->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
 
 		$projects->where("status", "on-offer");
 
@@ -486,12 +468,13 @@ class ProjectController extends Controller{
 			$filteredAtLeastOnce = true;
 			$filteredByTopics = true;
 
-			$projects = $projects->filter(function($project, $key) use ($searchTerm) {
-				foreach($project->topics as $key => $topic) {
+			$projects = $projects->filter(function($project, $key) use ($searchTerm){
+				foreach($project->topics as $key => $topic){
 					if(strcasecmp($topic->name, $searchTerm) == 0){
 						return true;
 					}
 				}
+
 				return false;
 			});
 		}
@@ -499,10 +482,11 @@ class ProjectController extends Controller{
 		if(!$filteredAtLeastOnce || count($projects) == 0){
 			session()->flash("message", "We couldn't find anything for \"".$searchTerm."\".");
 			session()->flash('message_type', 'warning');
+
 			return redirect()->action('ProjectController@index');
 		}
 
-		if (count($projects) == 1) {
+		if(count($projects) == 1){
 			if($filteredByTopics){
 				$project = $projects->first();
 			} else {
@@ -510,16 +494,11 @@ class ProjectController extends Controller{
 			}
 			session()->flash('message', "We only found one project, it's this one.");
 
-			return view('projects.project')
-				->with('view', 'SupervisorProject')
-				->with('project', $project);
+			return view('projects.project')->with('view', 'SupervisorProject')->with('project', $project);
 		}
 
-		if (count($projects) > 1) {
-			return view('projects.index')
-				->with('projects', $projects)
-				->with('view', 'search')
-				->with('searchTerm', $searchTerm);
+		if(count($projects) > 1){
+			return view('projects.index')->with('projects', $projects)->with('view', 'search')->with('searchTerm', $searchTerm);
 		}
 	}
 }

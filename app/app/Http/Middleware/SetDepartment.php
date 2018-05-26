@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Session;
 class SetDepartment{
 	/**
 	 * Handle an incoming request.
-	 * 
 	 * This middleware is mainly for emails, so we can link to a set department
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure                 $next
+	 *
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
@@ -29,6 +29,7 @@ class SetDepartment{
 				Session::put("department", $request->query("department"));
 			}
 		}
+
 		return $next($request);
 	}
 }

@@ -7,22 +7,36 @@
 
 namespace SussexProjects;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use Exception;
 
 /**
  * The user agent model.
- * 
+ *
  * @see SussexProjects\Http\Controllers\UserAgentStringController
-*/
+ */
 class UserAgentString extends Model{
 	use Traits\Uuids;
 
 	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
+	public $timestamps = false;
+	/**
+	 * Indicates if the IDs are auto-incrementing.
+	 *
+	 * @var bool
+	 */
+	public $incrementing = false;
+
+	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
@@ -31,17 +45,4 @@ class UserAgentString extends Model{
 			throw new Exception('Database not found.');
 		}
 	}
-	/**
-	 * Indicates if Laravel default time-stamp columns are used.
-	 *
-	 * @var string
-	 */
-	public $timestamps = false;
-
-	/**
-	 * Indicates if the IDs are auto-incrementing.
-	 *
-	 * @var bool
-	 */
-	public $incrementing = false;
 }

@@ -20,12 +20,14 @@ class ProgrammeController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$programme = Programme::create(['name' => $request->programme_name]);
+
 			return $programme;
 		});
 
@@ -35,11 +37,12 @@ class ProgrammeController extends Controller{
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$programme = Programme::findOrFail($request->programme_id);
 			$programme->name = $request->programme_name;
 			$programme->save();
@@ -50,11 +53,13 @@ class ProgrammeController extends Controller{
 
 	/**
 	 * Remove the specified resource from storage.
-	 * @param  \Illuminate\Http\Request  $request
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$programme = Programme::findOrFail($request->programme_id);
 			$programme->delete();
 		});

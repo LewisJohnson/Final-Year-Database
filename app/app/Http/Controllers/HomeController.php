@@ -7,27 +7,24 @@
 
 namespace SussexProjects\Http\Controllers;
 
-use SussexProjects\Feedback;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use SussexProjects\Feedback;
 
 /**
  * The home controller.
- *
  * Handles all index based routes and pages.
  * Also handles cookie banner and database type.
- *
-*/
+ */
 class HomeController extends Controller{
 
 	/**
 	 * Displays the home page.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request){
@@ -37,7 +34,8 @@ class HomeController extends Controller{
 	/**
 	 * Displays the help page.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function help(Request $request){
@@ -47,7 +45,8 @@ class HomeController extends Controller{
 	/**
 	 * Displays the feedback form.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function showFeedbackForm(Request $request){
@@ -57,13 +56,12 @@ class HomeController extends Controller{
 	/**
 	 * Log feedback to database.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function feedback(Request $request){
-		$this->validate(request(), [
-			'comment' => 'required',
-		]);
+		$this->validate(request(), ['comment' => 'required',]);
 
 		$feedback = new Feedback;
 		$feedback->comment = request('comment');
@@ -93,22 +91,25 @@ class HomeController extends Controller{
 		}
 
 		$feedback->save();
-		return response()->json(array('successful' => true, 'message' => 'Thank you for your feedback.'));
+
+		return response()->json(array('successful' => true,
+									  'message' => 'Thank you for your feedback.'
+		));
 	}
 
 	/**
 	 * Checks the users password and puts them into sudo-mode.
-	 * 
-	 * @param  \Illuminate\Http\Request  $request
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sudo(Request $request){
-		$this->validate(request(), [
-			'password' => 'required',
-		]);
+		$this->validate(request(), ['password' => 'required',]);
 
-		if (Hash::check(request('password'), Auth::user()->password)) {
+		if(Hash::check(request('password'), Auth::user()->password)){
 			Session::put('sudo-mode', true);
+
 			return back();
 		}
 	}
@@ -116,20 +117,20 @@ class HomeController extends Controller{
 	/**
 	 * Displays the about page.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function about(Request $request){
 		return view('help.about');
 	}
 
-
 	/**
 	 * Gets a rendered HTML snippet.
-	 *
 	 * Snippets must be in the view/snippets directory.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function snippet(Request $request){
@@ -143,10 +144,10 @@ class HomeController extends Controller{
 
 	/**
 	 * Sets the department type.
-	 *
 	 * e.g. Informatics or engineering.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartmentView(Request $request){
@@ -155,10 +156,10 @@ class HomeController extends Controller{
 
 	/**
 	 * Sets the department type.
-	 *
 	 * e.g. Informatics or engineering.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartment(Request $request){

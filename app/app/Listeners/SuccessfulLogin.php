@@ -8,12 +8,8 @@
 namespace SussexProjects\Listeners;
 
 use Illuminate\Auth\Events\Login;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Auth;
 
 class SuccessfulLogin{
 	/**
@@ -21,12 +17,14 @@ class SuccessfulLogin{
 	 *
 	 * @return void
 	 */
-	public function __construct(){}
+	public function __construct(){
+	}
 
 	/**
 	 * Handles a successful login event.
 	 *
-	 * @param  Login  $event
+	 * @param  Login $event
+	 *
 	 * @return void
 	 */
 	public function handle(Login $event){

@@ -7,16 +7,12 @@
 
 namespace SussexProjects\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use SussexProjects\Transaction;
-use SussexProjects\Project;
 
 /**
  * The transaction controller.
- *
  * Handles most functions related to transactions.
- * 
-*/
+ */
 class TransactionController extends Controller{
 
 	public function __construct(){
@@ -34,16 +30,11 @@ class TransactionController extends Controller{
 		$studentTransactions = Transaction::where('type', 'student')->orderBy('transaction_date', 'desc')->get();
 		$markerTransactions = Transaction::where('type', 'marker')->orderBy('transaction_date', 'desc')->get();
 
-		return view('admin.transactions')
-		->with('topicTransactions', $topicTransactions)
-		->with('projectTransactions', $projectTransactions)
-		->with('studentTransactions', $studentTransactions)
-		->with('markerTransactions', $markerTransactions);
+		return view('admin.transactions')->with('topicTransactions', $topicTransactions)->with('projectTransactions', $projectTransactions)->with('studentTransactions', $studentTransactions)->with('markerTransactions', $markerTransactions);
 	}
 
 	/**
 	 * A list of all projects with transaction.
-	 * 
 	 * The user then selects a project to view it's transactions.
 	 *
 	 * @return \Illuminate\Http\Response
