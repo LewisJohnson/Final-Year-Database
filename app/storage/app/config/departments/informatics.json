@@ -52,7 +52,7 @@
     },
     "user_agent": {
         "collect_user_agent": {
-            "value": true,
+            "value": false,
             "type": [
                 true,
                 false
@@ -60,7 +60,7 @@
             "description": "Determines if user agent strings are collected."
         },
         "collect_referrer": {
-            "value": true,
+            "value": false,
             "type": [
                 true,
                 false

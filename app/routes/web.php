@@ -102,7 +102,7 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
 
 	// Updated configuration post
-	Route::post('admin/dashboard/system', 'SystemSystemAdminController@updateSystemConfiguration');
+	Route::post('admin/dashboard/system', 'SystemAdminController@updateSystemConfiguration');
 
 	// Add new department
 	Route::post('admin/system/new-department', 'SystemAdminController@newDepartment');
@@ -163,10 +163,10 @@ Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'admin
 
 	/* CONFIGURATION ROUTES */
 	// Yearly parameters configuration view
-	Route::get('admin/parameters', 'ProjectAdminController@computeSecondMarkerView');
+	Route::get('admin/parameters', 'ProjectAdminController@amendParametersView');
 
 	// Yearly parameters form post
-	Route::post('admin/parameters', 'ProjectAdminController@computeSecondMarkerView');
+	Route::post('admin/parameters', 'ProjectAdminController@amendParameters');
 
 	// End-of-Year archive view
 	Route::get('admin/archive', 'ProjectAdminController@archiveView');
@@ -245,6 +245,9 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
 	// Swap second marker view
 	Route::get('admin/marker-swap', 'ProjectAdminController@swapSecondMarkerView');
+
+	// Swap second marker POST
+	Route::patch('admin/marker-swap', 'ProjectAdminController@swapSecondMarker');
 
 	// Export marker data view
 	Route::get('admin/marker-export', 'ProjectAdminController@exportSecondMarkerDataView');

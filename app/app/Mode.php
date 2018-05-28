@@ -41,19 +41,6 @@ class Mode extends Model{
 	protected $primaryKey = 'project_year';
 
 	/**
-	 * Gets project selection date
-	 *
-	 * @return string
-	 */
-	public static function getProjectSelectionDate($human = null){
-		if($human){
-			return Mode::Instance()->project_selection->toDayDateTimeString();
-		} else {
-			return Mode::Instance()->project_selection;
-		}
-	}
-
-	/**
 	 * Call this method to get singleton
 	 * ish...
 	 *
@@ -77,6 +64,19 @@ class Mode extends Model{
 		}
 
 		return $mode;
+	}
+
+	/**
+	 * Gets project selection date
+	 *
+	 * @return string
+	 */
+	public static function getProjectSelectionDate($human = null){
+		if($human){
+			return Mode::Instance()->project_selection->toDayDateTimeString();
+		} else {
+			return Mode::Instance()->project_selection;
+		}
 	}
 
 	/**

@@ -521,8 +521,9 @@ class ProjectAdminController extends Controller{
 
 		$view = view('admin.partials.assignment-report-table')->with('supervisors', $assignmentSetup["supervisors"]);
 
-		return response()->json(array('successful' => true,
-									  'html' => $view->render()
+		return response()->json(array(
+			'successful' => true,
+			'html' => $view->render()
 		));
 	}
 
@@ -543,16 +544,39 @@ class ProjectAdminController extends Controller{
 	}
 
 	/**
-	 * The swap marker (second supervisor) view.
+	 * The swap second marker view.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function swapSecondMarkerView(Request $request){
-		$students = Student::where('project_status', 'accepted');
+		$students = Student::where('project_status', 'accepted')->get();
 
 		return view('admin.swap-marker')->with('students', $students);
+	}
+
+	/**
+	 * Swap student A and student B's second markers.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function swapSecondMarker(Request $request){
+		$studentA = Student::findOrFail($request->studentA);
+		$studentB = Student::findOrFail($request->studentB);
+
+		$MarkerA = $studentA->marker->id;
+		$MarkerB = $studentB->marker->id;
+
+		$studentA->marker_id = $MarkerB;
+		$studentB->marker_id = $MarkerA;
+
+		$studentA->save();
+		$studentB->save();
+
+		return response()->json(array('successful' => true));
 	}
 
 	/**

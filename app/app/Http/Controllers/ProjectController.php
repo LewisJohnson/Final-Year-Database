@@ -62,29 +62,22 @@ class ProjectController extends Controller{
 			Select if supervisor take_students is true
 			Select if on-offer
 			Select if NOT archived
-			Select if NOT archived
 			select if NOT student proposed
 		*/
+		$supervisorTable = new Supervisor();
+		$projectTable = new Project();
+		$projects = Project::where('status', 'on-offer')
+			->whereNotNull('supervisor_id')
+			->join($supervisorTable->getTable(). ' as supervisor', 'supervisor_id', '=', 'supervisor.id')
+			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
+			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
+			->paginate($this->paginationCount);
 
 		if($request->query("page")){
-			$projects = Project::where('status', 'on-offer')->whereNotNull('supervisor_id')->paginate($this->paginationCount);
-		} else {
-			$projects = Project::where('status', 'on-offer')->whereNotNull('supervisor_id')->get();
+			return view('projects.partials.pagination')->with('projects', $projects)->with('view', 'index');
 		}
 
-		$filteredProjects = $projects->filter(function($project, $key){
-			if(!$project->supervisor->getTakingStudents()){
-				return false;
-			}
-
-			return true;
-		});
-
-		if($request->query("page")){
-			return view('projects.partials.pagination')->with('projects', $filteredProjects)->with('view', 'index');
-		}
-
-		return view('projects.index')->with('projects', $filteredProjects)->with('view', 'index');
+		return view('projects.index')->with('projects', $projects)->with('view', 'index');
 
 	}
 

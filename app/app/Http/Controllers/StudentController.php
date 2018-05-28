@@ -168,15 +168,15 @@ class StudentController extends Controller{
 
 		$student = Auth::user()->student;
 
+		// Student has already selected a project
+		if($student->project_id != null){
+			session()->flash('message', 'You have already selected a project.');
+			session()->flash('message_type', 'error');
+
+			return redirect()->action('HomeController@index');
+		}
+
 		DB::transaction(function() use ($request, $student){
-			// Student has already selected a project
-			if($student->project_id != null){
-				session()->flash('message', 'You have already selected a project.');
-				session()->flash('message_type', 'error');
-
-				return redirect()->action('HomeController@index');
-			}
-
 			$project = new Project;
 			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
 
@@ -185,25 +185,28 @@ class StudentController extends Controller{
 
 			$project->supervisor_id = request('supervisor_id');
 			$project->student_id = Auth::user()->student->id;
-			$project->fill(array('title' => request('title'),
-								 'description' => $clean_html,
-								 'status' => "student-proposed",
-								 'skills' => request('skills')
+
+			$project->fill(array(
+				'title' => request('title'),
+				'description' => $clean_html,
+				'status' => "student-proposed",	 
+				'skills' => request('skills')
 			));
 
-			$project->save();
-
-			$transaction->fill(array('type' => 'project',
-									 'action' => 'proposed',
-									 'project' => $project->id,
-									 'student' => Auth::user()->student->id,
-									 'supervisor' => $supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project',
+				'action' => 'proposed',
+				'project' => $project->id,
+				'student' => Auth::user()->student->id,
+				'supervisor' => $supervisor->id,
+				'transaction_date' => new Carbon
 			));
+
 
 			$student->project_id = $project->id;
 			$student->project_status = 'proposed';
 
+			$project->save();
 			$student->save();
 			$transaction->save();
 
@@ -234,24 +237,32 @@ class StudentController extends Controller{
 	 */
 	public function selectProject(Request $request){
 		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to select a project until '.Mode::getStartDate(true).'.');
+			session()->flash('message', 'You are not allowed to select a project until '.Mode::getProjectSelectionDate(true).'.');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ProjectController@show', request('project_id'));
 		}
 
 		$student = Auth::user()->student;
-		DB::transaction(function() use ($request, $student){
 
-			// Student has already selected a project
-			if($student->project_id != null){
-				session()->flash('message', 'You have already selected a project.');
+		// Student has already selected a project
+		if($student->project_id != null){
+			session()->flash('message', 'You have already selected a project.');
+			session()->flash('message_type', 'error');
+
+			return redirect()->action('ProjectController@show', request('project_id'));
+		}
+
+		DB::transaction(function() use ($request, $student){
+			$project = Project::findOrFail(request('project_id'));
+
+			if($project->status != "on-offer"){
+				session()->flash('message', 'Sorry, this project is no longer on offer.');
 				session()->flash('message_type', 'error');
 
 				return redirect()->action('ProjectController@show', request('project_id'));
 			}
 
-			$project = Project::findOrFail(request('project_id'));
 			$transaction = new Transaction;
 
 			$student->project_id = $project->id;
@@ -346,23 +357,25 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level'))){
+		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
 			return redirect()->action('HomeController@index');
 		}
 
-		$result = DB::transaction(function() use ($request){
+		DB::transaction(function() use ($request){
 			$project = Project::findOrFail(request('project_id'));
 			$student = Student::findOrFail(request('student_id'));
 			$transaction = new Transaction;
 			$marker = Supervisor::findOrFail(request('marker_id'));
-			$transaction->fill(array('type' => 'project',
-									 'action' => 'marker-assigned',
-									 'project' => $project->id,
-									 'student' => $student->id,
-									 'supervisor' => $project->supervisor_id,
-									 'marker' => $marker->id,
-									 'admin' => Auth::user()->supervisor->id,
-									 'transaction_date' => new Carbon
+
+			$transaction->fill(array(
+				'type' => 'project',
+				'action' => 'marker-assigned',
+				'project' => $project->id,
+				'student' => $student->id,
+				'supervisor' => $project->supervisor_id,
+				'marker' => $marker->id,
+				'admin' => Auth::user()->id,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -370,7 +383,7 @@ class StudentController extends Controller{
 			$student->save();
 		});
 
-		return $result;
+		return response()->json(array('successful' => true));
 	}
 
 }

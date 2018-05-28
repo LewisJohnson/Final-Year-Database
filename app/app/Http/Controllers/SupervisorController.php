@@ -20,6 +20,7 @@ use SussexProjects\Project;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 use SussexProjects\Transaction;
+use SussexProjects\Mode;
 
 /**
  * The supervisor controller.
@@ -48,12 +49,10 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function report(Request $request){
-		$supervisors = Supervisor::all();
-
-		if($request->query("includeClosedToOffer") !== "true"){
-			$supervisors = $supervisors->filter(function($supervisor, $key){
-				return $supervisor['take_students_'.Session::get('education_level')["shortName"]];
-			});
+		if($request->query("includeClosedToOffer") === "true"){
+			$supervisors = Supervisor::all();
+		} else {
+			$supervisors = Supervisor::where('take_students_'.Session::get('education_level')["shortName"], true)->get();
 		}
 
 		return view('supervisors.report')->with("supervisors", $supervisors);
@@ -78,6 +77,13 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function acceptStudent(Request $request){
+		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
+			session()->flash('message', 'You are not allowed to accept students until '.Mode::getSupervisorAcceptDate(true).'.');
+			session()->flash('message_type', 'error');
+
+			return redirect()->action('SupervisorController@projectReport');
+		}
+
 		$this->validate(request(), ['student_id' => 'required',
 									'project_id' => 'required',
 		]);
@@ -106,8 +112,9 @@ class SupervisorController extends Controller{
 											  'message' => 'You must reject all other students before accepting '.$student->user->first_name
 				));
 			}
-
+			$project->status = 'withdrawn';
 			$student->project_status = 'accepted';
+			$project->save();
 			$student->save();
 
 			$transaction->fill(array('type' => 'project',
@@ -148,6 +155,13 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function rejectStudent(Request $request){
+		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
+			session()->flash('message', 'You are not allowed to reject students until '.Mode::getSupervisorAcceptDate(true).'.');
+			session()->flash('message_type', 'error');
+
+			return redirect()->action('SupervisorController@projectReport');
+		}
+
 		$student = Student::findOrFail(request('student_id'));
 
 		// We need to store this for the email

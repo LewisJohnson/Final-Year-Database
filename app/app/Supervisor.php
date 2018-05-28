@@ -233,7 +233,11 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'accepted')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
+		$students = Student::where('project_status', 'accepted')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')
+			->get();
 
 		foreach($students as $student){
 			$ar = array();

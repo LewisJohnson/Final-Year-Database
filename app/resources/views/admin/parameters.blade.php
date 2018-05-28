@@ -5,7 +5,7 @@
 	<div class="card">
 		<h1>Parameters</h1>
 
-		<form class="form form--flex" method="POST" action="{{ action('ProjectAdminController@computeSecondMarkerView') }}">
+		<form class="form form--flex" method="POST" action="{{ action('ProjectAdminController@amendParameters') }}">
 			{{ csrf_field() }}
 
 			<div class="form-field">

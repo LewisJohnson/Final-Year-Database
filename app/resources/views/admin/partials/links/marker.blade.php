@@ -1,6 +1,6 @@
 <ul class="icon-list">
 	<li>
-		<a class="icon" href="{{ action('AdminController@computeSecondMarkerView') }}">
+		<a class="icon" href="{{ action('ProjectAdminController@computeSecondMarkerView') }}">
 			@include('svg.memory')
 			<p>Compute Second Markers</p>
 		</a>

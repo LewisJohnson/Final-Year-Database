@@ -6,13 +6,13 @@
 	@if($view != "StudentProject")
 		@if(Auth::user()->isStudent())
 			@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
-			<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
+				<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
 			@endif
 		@endif
 	@endif
 
-	@if($project->status == 'archived')
-		<h1>This project is archived.</h1>
+	@if($project->status != 'on-offer')
+		<p class="config-danger">This project is {{ $project->status }}.</p>
 	@endif
 
 	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->status == 'archived') ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
@@ -42,13 +42,14 @@
 
 		<h3>Topics</h3>
 		<ul class="topics-list">
-			@if (count($project->topics))
+			@if(count($project->topics))
 				@foreach($project->topics as $topic)
 					<li class="pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
 						<a title="Browse projects with the topic {{ $topic->name }}" href="{{ action('ProjectController@byTopic', $topic->id) }}">{{$topic->name}}</a>
 					</li>
 				@endforeach
 			@endif
+
 			@if(!count($project->topics))
 				<li class="no-topics">
 					<svg style="width:24px;height:24px;position: relative;top: 5px;" viewBox="0 0 24 24">
@@ -70,22 +71,24 @@
 
 	<div class="button-group button-group--horizontal ">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
-		{{-- STUDENT SELECT --}}
 
+		{{-- STUDENT SELECT --}}
 		@if($view != "StudentProject")
-			@if(Auth::user()->isStudent())
-				@if(Auth::user()->student->project_status == 'none')
-					@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
-						<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
-							{{ csrf_field() }}
-							{{ method_field('PATCH') }}
-							<input type="hidden" name="project_id" value="{{ $project->id }}">
-							<button class="button button--raised button--accent">Select project</button>
-						</form>
+			@if($project->status == "on-offer")
+				@if(Auth::user()->isStudent())
+					@if(Auth::user()->student->project_status == 'none')
+						@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
+							<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+								{{ csrf_field() }}
+								{{ method_field('PATCH') }}
+								<input type="hidden" name="project_id" value="{{ $project->id }}">
+								<button class="button button--raised button--accent">Select project</button>
+							</form>
+						@endif
 					@endif
-				@else
-					<button class="button button--raised button--accent" disabled>Select project</button>
 				@endif
+			@else
+				<button class="button button--raised button--accent" disabled>Select project</button>
 			@endif
 		@endif
 

@@ -12,7 +12,7 @@
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@computeSecondMarkerView') }}">
+		<a class="icon" href="{{ action('ProjectAdminController@amendParametersView') }}">
 			@include('svg.spanner')
 			<p>Amend Parameters</p>
 		</a>

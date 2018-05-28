@@ -25,6 +25,7 @@ class CreateTransactionsTable extends Migration{
 					$table->string('project')->nullable('true');
 					$table->string('student')->nullable('true');
 					$table->string('supervisor')->nullable('true');
+					$table->string('marker')->nullable('true');
 					$table->string('topic')->nullable('true');
 					$table->string('admin')->nullable('true');
 					$table->dateTimeTz('transaction_date');

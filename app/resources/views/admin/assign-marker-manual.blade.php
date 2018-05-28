@@ -12,24 +12,23 @@
 				<tr>
 					<th>Student</th>
 					<th>Project Title</th>
-					<th>Status</th>
+					<th>Supervisor</th>
+					<th>Marker</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($students as $student)
-					@if(!is_null($student->project))
-						@if(!is_null($student->project->supervisor))
-							<tr class="pointer" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" data-project="{{ $student->project->toJson() }}">
-								<td>{{ $student->getName() }}</td>
-								<td>{{ $student->project->title }}</td>
-								<td>{{ $student->project_status }}</td>
-							</tr>
-						@endif
-					@else
-						<tr class="pointer" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}">
+					@if(!is_null($student->project) && !is_null($student->project->supervisor))
+						<tr class="pointer" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" data-project="{{ $student->project->toJson() }}">
 							<td>{{ $student->getName() }}</td>
-							<td>-</td>
-							<td>None</td>
+							<td>{{ $student->project->title }}</td>
+							<td>{{ $student->project->supervisor->user->getFullName() }}</td>
+
+							@if($student->marker != null)
+								<td>{{ $student->marker->user->getFullName() }}</td>
+							@else
+								<td>None</td>
+							@endif
 						</tr>
 					@endif
 				@endforeach
@@ -59,7 +58,7 @@
 </div>
 </div>
 
-<div id="assign-dialog" class="dialog assign" data-dialog="assign">
+<div id="assign-dialog" class="dialog assign marker-dialog" data-dialog="assign">
 	<div class="header">
 		<h2>ASSIGN</h2>
 	</div>

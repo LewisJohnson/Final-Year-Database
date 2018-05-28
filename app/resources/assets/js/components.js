@@ -881,8 +881,7 @@
 
 	/* ==================
 		5. Second Marker
-	   ================== */
-
+	===================== */
 	var Marker = function Marker() {
 		if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
 			return;
@@ -985,7 +984,6 @@
 		}).done(function(data){
 			$("#assign-dialog")[0].dialog.hideDialog();
 			$("#assign-dialog")[0].dialog.hideLoader();
-			marker.selectedStudent.remove();
 			marker.resetView(marker);
 		});
 	});
@@ -1001,6 +999,121 @@
 	}
 
 
+	/* ==================
+		5. Second Marker
+	===================== */
+	var Swap = function Swap() {
+		if($("#swap-marker-student-table").length < 1){
+			return;
+		}
+		this.studentA = null;
+		this.studentB = null;
+		this.markerTable = $("#swap-marker-student-table");
+		this.markerDataTable = this.markerTable[0].dataTable;
+		this.init();
+	};
+
+	Swap.prototype.Urls_ = {
+		SWAP_MARKER: '/admin/marker-swap',
+	};
+
+	Swap.prototype.selectStudent = function(studentRowDOM, swap){
+		var row = $(studentRowDOM);
+
+		if(swap.studentA == null){
+			row.addClass("is-selected");
+			swap.studentA = $(row);
+		}else if(swap.studentB == null){
+			row.addClass("is-selected");
+			swap.studentB = $(row);
+		}
+
+		if(swap.studentA != null && swap.studentB != null){
+			Swap.prototype.showDialog(
+				swap.studentA.data('student-name'),
+				swap.studentB.data('student-name'),
+				swap.studentA.data('marker-name'),
+				swap.studentB.data('marker-name'));
+		}
+
+		// swap.unselectAll(swap);
+
+
+		// $(swap.supervisorDataTable.bodyRows).each(function() {
+		// 	if($(this).data('marker-id') == row.data('supervisor-id')){
+		// 		$(this).attr('disabled', true);
+		// 	} else {
+		// 		$(this).attr('disabled', false);
+		// 	}
+		// });
+	}
+
+	Swap.prototype.resetView = function(swap){
+		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
+		swap.studentA = null;
+		swap.studentB = null;
+	}
+
+	Swap.prototype.unselectAll = function(swap){
+		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
+	}
+
+	Swap.prototype.showDialog = function(studentAName, studentBName, studentAMarker, studentBMarker){
+		$("#studentA-name").text(studentAName);
+		$("#studentA-marker").text(studentAMarker);
+		$("#studentB-name").text(studentBName);
+		$("#studentB-marker").text(studentBMarker);
+		$("#swap-dialog")[0].dialog.showDialog();
+	}
+
+	$('#submitSwapMarker').on('click', function(){
+		var swap = window['Swap'];
+
+		if(swap.studentA == null || swap.studentB == null){
+			$("#swap-dialog")[0].dialog.hideDialog();
+			return;
+		};
+
+		$("#swap-dialog")[0].dialog.showLoader();
+
+		$.ajax({
+			type: "PATCH",
+			url: swap.Urls_.SWAP_MARKER,
+			data: {
+				studentA: swap.studentA.data('student-id'),
+				studentB: swap.studentB.data('student-id'),
+			},
+			success: function(response){
+				if(response.successful){
+					var markerATemp = swap.studentA.find('td').eq(3).text();
+					var markerBTemp = swap.studentB.find('td').eq(3).text();
+
+					swap.studentA.find('td').eq(3).text(markerBTemp);
+					swap.studentB.find('td').eq(3).text(markerATemp);
+					swap.resetView(swap);
+
+					createToast('success', 'Second markers have been swapped.');
+				}
+			},
+		}).done(function(response){
+			$("#swap-dialog")[0].dialog.hideDialog();
+			$("#swap-dialog")[0].dialog.hideLoader();
+			swap.resetView(swap);
+		});
+	});
+
+	Swap.prototype.init = function(){
+		var swap = this;
+		$(swap.markerDataTable.bodyRows).on('click', function() { Swap.prototype.selectStudent(this, swap); });
+	}
+
+	Swap.prototype.initAll = function(){
+		window['Swap'] = new Swap();
+	}
+
+	/* ==================
+		MORPH
+	   ================== */
 	function morphDropdown( element ) {
 		this.element = element;
 		this.mainNavigation = this.element.find('.main-nav');
@@ -1147,6 +1260,7 @@
 	EditTopic.prototype.initAll();
 	EditProgramme.prototype.initAll();
 	Marker.prototype.initAll();
+	Swap.prototype.initAll();
 	DotMenu.prototype.initAll();
 
 });
