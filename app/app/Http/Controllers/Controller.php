@@ -27,7 +27,6 @@ class Controller extends BaseController{
 	public $paginationCount;
 
 	public function __construct(){
-		$this->paginationCount = 25;
 
 		$this->middleware(function($request, $next){
 			return $next($request);

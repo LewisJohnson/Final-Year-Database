@@ -20,13 +20,14 @@ use SussexProjects\UserAgentString;
 class SystemAdminController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
 	/**
 	 * User feedback view.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function feedback(){
 		return view('admin.feedback')->with('feedback', Feedback::all());
@@ -44,6 +45,8 @@ class SystemAdminController extends Controller{
 	/**
 	 * Updates the system configuration
 	 * The view for this request is systemDashboard()
+	 *
+	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -70,7 +73,7 @@ class SystemAdminController extends Controller{
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function userAgentView(Request $request){
 		if($request->query("unique") == "1"){

@@ -96,7 +96,7 @@ Route::group(['middleware' => ['web']], function() {
 /* ===============
    2. SYSTEM ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'SystemAdministrator', 'checkDepartment']], function() {
 
 	// System admin dashboard
 	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
@@ -117,7 +117,7 @@ Route::group(['middleware' => ['web', 'admin.system', 'checkDepartment']], funct
 /* ========================
    3. PROJECT ADMIN ROUTES
    ======================== */
-Route::group(['middleware' => ['web', 'admin.project', 'checkDepartment', 'adminPrivilegeCheck']], function() {
+Route::group(['middleware' => ['web', 'ProjectAdministrator', 'checkDepartment', 'adminPrivilegeCheck']], function() {
 	
 	// Admin hub
 	Route::get('admin', 'ProjectAdminController@index');

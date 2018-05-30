@@ -26,7 +26,9 @@ class AdminPrivilegeCheck{
 	 */
 	public function handle($request, Closure $next){
 		if(Auth::check()){
-			if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+			if(Auth::user()
+				->isAdminOfEducationLevel(Session::get('education_level')["shortName"])
+			){
 				return $next($request);
 			}
 		}

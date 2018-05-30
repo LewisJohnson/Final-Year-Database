@@ -21,6 +21,7 @@ use SussexProjects\Transaction;
 class TopicController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
@@ -36,9 +37,9 @@ class TopicController extends Controller{
 			$topic = Topic::create(['name' => $request->topic_name]);
 			$transaction = new Transaction;
 
-			$transaction->fill(array('type' => 'topic', 'action' => 'created',
-									 'topic' => $topic->name,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'topic', 'action' => 'created',
+				'topic' => $topic->name, 'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -61,9 +62,9 @@ class TopicController extends Controller{
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
-			$transaction->fill(array('type' => 'topic', 'action' => 'updated',
-									 'topic' => $topic->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'topic', 'action' => 'updated', 'topic' => $topic->id,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -88,9 +89,9 @@ class TopicController extends Controller{
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
-			$transaction->fill(array('type' => 'topic', 'action' => 'deleted',
-									 'topic' => $topic->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'topic', 'action' => 'deleted', 'topic' => $topic->id,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();

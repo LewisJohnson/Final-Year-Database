@@ -38,7 +38,9 @@ class SupervisorEditedProposedProject extends Mailable{
 	/**
 	 * Create a new message instance.
 	 *
-	 * @return void
+	 * @param Supervisor $supervisor
+	 * @param Student    $student
+	 * @param            $projectId
 	 */
 	public function __construct(Supervisor $supervisor, Student $student, $projectId){
 		$this->supervisor = $supervisor;
@@ -52,9 +54,9 @@ class SupervisorEditedProposedProject extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.student.changed')->with(['supervisor' => $this->supervisor,
-															'student' => $this->student,
-															'project' => $this->project
-		]);;
+		return $this->view('emails.student.changed')->with([
+			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'project' => $this->project
+		]);
 	}
 }

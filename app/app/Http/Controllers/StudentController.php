@@ -34,6 +34,7 @@ use SussexProjects\Transaction;
 class StudentController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
@@ -49,7 +50,7 @@ class StudentController extends Controller{
 	/**
 	 * Returns the first student in the DB without a second marker.
 	 *
-	 * @return Student
+	 * @return bool
 	 */
 	public static function checkAllStudentsHaveSecondMarker(){
 		if(Student::whereNull('marker_id')->first() == null){
@@ -62,7 +63,7 @@ class StudentController extends Controller{
 	/**
 	 * The student report view.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function report(){
 		return view('students.report')->with('studentCount', Student::count());
@@ -71,11 +72,9 @@ class StudentController extends Controller{
 	/**
 	 * Adds project to favourite projects.
 	 *
-	 * @param \Illuminate\Http\Request $request includes project to add
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return void * @internal param Request $request includes project to add
 	 */
-	public function addFavouriteProject(Request $request){
+	public function addFavouriteProject(){
 		$project = Project::findOrFail(request('project_id'));
 
 		if(Cookie::get('favourite_projects') === "null" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
@@ -100,11 +99,9 @@ class StudentController extends Controller{
 	/**
 	 * Removes project to favourite projects.
 	 *
-	 * @param \Illuminate\Http\Request $request includes project to remove
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return void * @internal param Request $request includes project to remove
 	 */
-	public function removeFavouriteProject(Request $request){
+	public function removeFavouriteProject(){
 		$project = Project::findOrFail(request('project_id'));
 		$favProjects = unserialize(Cookie::get('favourite_projects'));
 
@@ -135,12 +132,12 @@ class StudentController extends Controller{
 	/**
 	 * The student propose a project view (Form).
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function proposeProjectView(){
 		$supervisors = Supervisor::all();
 
-		$supervisors = $supervisors->sortBy(function($supervisor, $key){
+		$supervisors = $supervisors->sortBy(function($supervisor){
 			return $supervisor->user->last_name;
 		});
 
@@ -154,7 +151,7 @@ class StudentController extends Controller{
 	/**
 	 * Adds student proposed project to the database
 	 *
-	 * @param \Illuminate\Http\Request $request Student proposed project
+	 * @param Request|ProjectForm $request Student proposed project
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -187,21 +184,17 @@ class StudentController extends Controller{
 			$project->student_id = Auth::user()->student->id;
 
 			$project->fill(array(
-				'title' => request('title'),
-				'description' => $clean_html,
-				'status' => "student-proposed",	 
-				'skills' => request('skills')
+				'title' => request('title'), 'description' => $clean_html,
+				'status' => "student-proposed", 'skills' => request('skills')
 			));
 
 			$transaction->fill(array(
-				'type' => 'project',
-				'action' => 'proposed',
+				'type' => 'project', 'action' => 'proposed',
 				'project' => $project->id,
 				'student' => Auth::user()->student->id,
 				'supervisor' => $supervisor->id,
 				'transaction_date' => new Carbon
 			));
-
 
 			$student->project_id = $project->id;
 			$student->project_status = 'proposed';
@@ -218,7 +211,8 @@ class StudentController extends Controller{
 		if($student->project->supervisor->getAcceptingEmails()){
 			try{
 				// Send accepted email
-				Mail::to($student->project->supervisor->user->email)->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+				Mail::to($student->project->supervisor->user->email)
+					->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
 			} catch (\Exception $e){
 
 			}
@@ -269,24 +263,27 @@ class StudentController extends Controller{
 			$student->project_status = 'selected';
 			$student->save();
 
-			$transaction->fill(array('type' => 'project',
-									 'action' => 'selected',
-									 'project' => request('project_id'),
-									 'student' => Auth::user()->student->id,
-									 'supervisor' => $project->supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project', 'action' => 'selected',
+				'project' => request('project_id'),
+				'student' => Auth::user()->student->id,
+				'supervisor' => $project->supervisor->id,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
 			session()->flash('message', 'You have selected "'.$project->title.'".');
 			session()->flash('message_type', 'success');
+
+			return true;
 		});
 
 		if($student->project->supervisor->getAcceptingEmails()){
 			try{
 				// Send selected email
 				if($student->project->supervisor->getAcceptingEmails()){
-					Mail::to($student->project->supervisor->user->email)->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+					Mail::to($student->project->supervisor->user->email)
+						->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
 				}
 			} catch (\Exception $e){
 
@@ -305,14 +302,14 @@ class StudentController extends Controller{
 	 */
 	public function undoSelectedProject(Request $request){
 		if(Auth::user()->student->project == null){
-			return response()->json(array('error' => true,
-										  'message' => "Something went wrong."
+			return response()->json(array(
+				'error' => true, 'message' => "Something went wrong."
 			));
 		}
 
 		if(Auth::user()->student->project_status != 'selected' || Auth::user()->student->project_status != 'proposed'){
-			return response()->json(array('error' => true,
-										  'message' => "Something went wrong."
+			return response()->json(array(
+				'error' => true, 'message' => "Something went wrong."
 			));
 		}
 
@@ -320,11 +317,11 @@ class StudentController extends Controller{
 
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
-			$transaction->fill(array('type' => 'project', 'action' => 'undo',
-									 'project' => $student->project->id,
-									 'student' => $student->id,
-									 'supervisor' => $student->project->supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project', 'action' => 'undo',
+				'project' => $student->project->id, 'student' => $student->id,
+				'supervisor' => $student->project->supervisor->id,
+				'transaction_date' => new Carbon
 			));
 			$transaction->save();
 
@@ -337,15 +334,16 @@ class StudentController extends Controller{
 			try{
 				// Send selected email
 				if($student->project->supervisor->getAcceptingEmails()){
-					Mail::to($student->project->supervisor->user->email)->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+					Mail::to($student->project->supervisor->user->email)
+						->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
 				}
 			} catch (\Exception $e){
 
 			}
 		}
 
-		return response()->json(array('successful' => true,
-									  'message' => "You have un-selected a project."
+		return response()->json(array(
+			'successful' => true, 'message' => "You have un-selected a project."
 		));
 	}
 
@@ -357,7 +355,9 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+		if(!Auth::user()
+			->isAdminOfEducationLevel(Session::get('education_level')["shortName"])
+		){
 			return redirect()->action('HomeController@index');
 		}
 
@@ -368,13 +368,10 @@ class StudentController extends Controller{
 			$marker = Supervisor::findOrFail(request('marker_id'));
 
 			$transaction->fill(array(
-				'type' => 'project',
-				'action' => 'marker-assigned',
-				'project' => $project->id,
-				'student' => $student->id,
+				'type' => 'project', 'action' => 'marker-assigned',
+				'project' => $project->id, 'student' => $student->id,
 				'supervisor' => $project->supervisor_id,
-				'marker' => $marker->id,
-				'admin' => Auth::user()->id,
+				'marker' => $marker->id, 'admin' => Auth::user()->id,
 				'transaction_date' => new Carbon
 			));
 

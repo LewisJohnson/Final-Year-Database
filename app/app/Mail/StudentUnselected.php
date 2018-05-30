@@ -40,7 +40,8 @@ class StudentUnselected extends Mailable{
 	/**
 	 * Create a new message instance.
 	 *
-	 * @return void
+	 * @param Supervisor $supervisor
+	 * @param Student    $student
 	 */
 	public function __construct(Supervisor $supervisor, Student $student){
 		$this->supervisor = $supervisor;
@@ -54,9 +55,9 @@ class StudentUnselected extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.supervisor.student-unselected')->with(['supervisor' => $this->supervisor,
-																		  'student' => $this->student,
-																		  'project' => $this->project
-		]);;
+		return $this->view('emails.supervisor.student-unselected')->with([
+			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'project' => $this->project
+		]);
 	}
 }

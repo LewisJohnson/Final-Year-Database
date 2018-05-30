@@ -32,12 +32,11 @@ class UserForm extends FormRequest{
 	 * @return array
 	 */
 	public function rules(){
-		return ['username' => 'required|max:32',
-				'first_name' => 'required|max:128',
-				'last_name' => 'required|max:128',
-				'email' => 'required|max:128', 'privileges' => 'required',
-				'title' => 'max:6', 'project_load_*' => 'min:0|max:255',
-				'programme' => 'required',
+		return [
+			'username' => 'required|max:32', 'first_name' => 'required|max:128',
+			'last_name' => 'required|max:128', 'email' => 'required|max:128',
+			'privileges' => 'required', 'title' => 'max:6',
+			'project_load_*' => 'min:0|max:255', 'programme' => 'required',
 		];
 	}
 
@@ -49,7 +48,7 @@ class UserForm extends FormRequest{
 	 * @return void
 	 */
 	public function withValidator($validator){
-		$validator->after(function($validator){
+		$validator->after(function(){
 			UserController::checkPrivilegeConditions(Request::get('privileges'));
 		});
 	}

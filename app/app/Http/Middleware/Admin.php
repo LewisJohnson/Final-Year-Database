@@ -27,6 +27,6 @@ class Admin{
 			}
 		}
 
-		abort(404);
+		return abort(404);
 	}
 }

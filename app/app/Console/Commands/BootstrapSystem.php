@@ -26,8 +26,6 @@ class BootstrapSystem extends Command{
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct(){
 		parent::__construct();
@@ -39,7 +37,8 @@ class BootstrapSystem extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		//todo: this once IDAP is set up 
+		//todo: this once LDAP is set up
 		// https://laravel.com/docs/5.6/artisan#writing-commands
+		return true;
 	}
 }

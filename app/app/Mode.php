@@ -44,7 +44,7 @@ class Mode extends Model{
 	 * Call this method to get singleton
 	 * ish...
 	 *
-	 * @return UserFactory
+	 * @return Mode
 	 */
 	public static function Instance(){
 		$mode = Mode::all()->first();
@@ -69,6 +69,8 @@ class Mode extends Model{
 	/**
 	 * Gets project selection date
 	 *
+	 * @param null $human
+	 *
 	 * @return string
 	 */
 	public static function getProjectSelectionDate($human = null){
@@ -81,6 +83,8 @@ class Mode extends Model{
 
 	/**
 	 * Gets supervisor accept date
+	 *
+	 * @param null $human
 	 *
 	 * @return string
 	 */

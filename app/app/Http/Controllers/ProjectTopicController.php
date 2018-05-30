@@ -18,6 +18,7 @@ use SussexProjects\ProjectTopic;
 class ProjectTopicController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 

@@ -85,7 +85,8 @@ class Topic extends Model{
 		// Needed to get the pivot table name
 		$projectTopic = new ProjectTopic;
 
-		return $this->belongsToMany(Project::class, $projectTopic->getTable(), 'topic_id', 'project_id')->withPivot('primary');
+		return $this->belongsToMany(Project::class, $projectTopic->getTable(), 'topic_id', 'project_id')
+			->withPivot('primary');
 	}
 
 	/**

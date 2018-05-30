@@ -29,6 +29,7 @@ use SussexProjects\User;
 class ProjectAdminController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
@@ -53,20 +54,25 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The import students view.
 	 *
+	 * @param Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function importStudents(Request $request){
-		$request->validate(['studentFile' => 'required',]);
+		$request->validate(['studentFile' => 'required']);
 
-		if(strtolower($request->file('studentFile')->getClientOriginalExtension()) != "csv"){
-			return response()->json(array('successful' => false,
-										  'message' => 'Invalid file format. Please upload a CSV file.'
+		if(strtolower($request->file('studentFile')
+				->getClientOriginalExtension()) != "csv"
+		){
+			return response()->json(array(
+				'successful' => false,
+				'message' => 'Invalid file format. Please upload a CSV file.'
 			));
 		}
 
 		if(mb_detect_encoding($request->file('studentFile'), 'UTF-8', true) != 'UTF-8'){
-			return response()->json(array('successful' => false,
-										  'message' => 'Invalid file encoding.'
+			return response()->json(array(
+				'successful' => false, 'message' => 'Invalid file encoding.'
 			));
 		}
 
@@ -83,24 +89,22 @@ class ProjectAdminController extends Controller{
 				return $this->testImportStudents($csv);
 			} else {
 				// Import to prod tables
-
 				// Remove CSV header and tail
 				for($i = 1; $i < count($csv) - 1; $i++){
 					$user = new User;
 					$student = new Student;
 
-					$user->fill(array('privileges' => 'student',
-									  'first_name' => $csv[$i][2],
-									  'last_name' => $csv[$i][1],
-									  'username' => $csv[$i][4],
-									  'password' => bcrypt("password"),
-									  'programme' => $csv[$i][3],
-									  'email' => $csv[$i][4]."@sussex.ac.uk"
+					$user->fill(array(
+						'privileges' => 'student', 'first_name' => $csv[$i][2],
+						'last_name' => $csv[$i][1], 'username' => $csv[$i][4],
+						'password' => bcrypt("password"),
+						'programme' => $csv[$i][3],
+						'email' => $csv[$i][4]."@sussex.ac.uk"
 					));
 					$user->save();
 
-					$student->fill(array('id' => $user->id,
-										 'registration_number' => $csv[$i][0]
+					$student->fill(array(
+						'id' => $user->id, 'registration_number' => $csv[$i][0]
 					));
 
 					$student->save();
@@ -108,21 +112,25 @@ class ProjectAdminController extends Controller{
 
 				$users = User::where('privileges', 'student')->get();
 				$students = Student::all();
-				$view = view('admin.partials.import-student-table')->with('users', $users)->with('students', $students)->render();
+				$view = view('admin.partials.import-student-table')
+					->with('users', $users)->with('students', $students)
+					->render();
 
-				return response()->json(array('successful' => true,
-											  'message' => $view
+				return response()->json(array(
+					'successful' => true, 'message' => $view
 				));
 			}
 		}
 
-		return response()->json(array('successful' => false,
-									  'message' => 'Invalid file.'
+		return response()->json(array(
+			'successful' => false, 'message' => 'Invalid file.'
 		));
 	}
 
 	/**
 	 * The import students view.
+	 *
+	 * @param $csv
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -134,36 +142,35 @@ class ProjectAdminController extends Controller{
 		// Remove CSV header and tail
 		for($i = 1; $i < count($csv) - 1; $i++){
 			$id = $i;
-			DB::table('test_users')->insert(array('id' => $id,
-												  'first_name' => $csv[$i][2],
-												  'last_name' => $csv[$i][1],
-												  'username' => $csv[$i][4],
-												  'password' => bcrypt("password"),
-												  'programme' => $csv[$i][3],
-												  'email' => $csv[$i][4]."@sussex.ac.uk"
+			DB::table('test_users')->insert(array(
+				'id' => $id, 'first_name' => $csv[$i][2],
+				'last_name' => $csv[$i][1], 'username' => $csv[$i][4],
+				'password' => bcrypt("password"), 'programme' => $csv[$i][3],
+				'email' => $csv[$i][4]."@sussex.ac.uk"
 			));
 
-			DB::table('test_students')->insert(array('id' => $id,
-													 'registration_number' => $csv[$i][0]
+			DB::table('test_students')->insert(array(
+				'id' => $id, 'registration_number' => $csv[$i][0]
 			));
 		}
 
 		$users = DB::table('test_users')->select('*')->get();
 		$students = DB::table('test_students')->select('*')->get();
-		$view = view('admin.partials.import-student-table')->with('users', $users)->with('students', $students)->render();
+		$view = view('admin.partials.import-student-table')
+			->with('users', $users)->with('students', $students)->render();
 
-		return response()->json(array('successful' => true, 'message' => $view
+		return response()->json(array(
+			'successful' => true, 'message' => $view
 		));
 	}
 
 	/**
 	 * Amend parameters view (mode)
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function amendParametersView(Request $request){
+	public function amendParametersView(){
 		return view('admin.parameters');
 	}
 
@@ -200,11 +207,9 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The amend supervisor arrangements view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
 	 */
-	public function amendSupervisorArrangementsView(Request $request){
+	public function amendSupervisorArrangementsView(){
 		$supervisors = Supervisor::all();
 
 		return view('admin.arrangements')->with('supervisors', $supervisors);
@@ -215,7 +220,7 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function amendSupervisorArrangements(Request $request){
 		$supervisors = Supervisor::all();
@@ -236,11 +241,9 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The amend topics view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
 	 */
-	public function amendTopicsView(Request $request){
+	public function amendTopicsView(){
 		$topics = Topic::all();
 
 		return view('admin.amend-topics')->with('topics', $topics);
@@ -249,11 +252,9 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The amend topics view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
 	 */
-	public function amendProgrammesView(Request $request){
+	public function amendProgrammesView(){
 		$programmes = Programme::all();
 
 		return view('admin.amend-programmes')->with('programmes', $programmes);
@@ -262,28 +263,27 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The log-in as another user view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View * @internal param Request $request
 	 */
-	public function loginAsView(Request $request){
+	public function loginAsView(){
 		$students = Student::all();
 		$supervisors = Supervisor::all();
 		$staffUsers = User::Where('privileges', 'staff')->get();
 
-		$students = $students->sortBy(function($student, $key){
+		$students = $students->sortBy(function($student){
 			return $student->user->last_name;
 		});
 
-		$supervisors = $supervisors->sortBy(function($supervisor, $key){
+		$supervisors = $supervisors->sortBy(function($supervisor){
 			return $supervisor->user->last_name;
 		});
 
-		$staffUsers = $staffUsers->sortBy(function($staff, $key){
+		$staffUsers = $staffUsers->sortBy(function($staff){
 			return $staff->last_name;
 		});
 
-		return view('admin.login-as')->with('supervisors', $supervisors)->with('staff', $staffUsers)->with('students', $students);
+		return view('admin.login-as')->with('supervisors', $supervisors)
+			->with('staff', $staffUsers)->with('students', $students);
 	}
 
 	/**
@@ -291,7 +291,7 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @param string $id User ID
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return bool
 	 */
 	public function loginAs($id){
 		if(Session::get('sudo-mode') == null || Session::get('sudo-mode') == false){
@@ -322,11 +322,10 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The end of year archive view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function archiveView(Request $request){
+	public function archiveView(){
 		return view('admin.archive');
 	}
 
@@ -338,11 +337,10 @@ class ProjectAdminController extends Controller{
 	 * - Empty the transaction tables.
 	 * - Remove all students from the user table.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function archive(Request $request){
+	public function archive(){
 		DB::transaction(function(){
 			$projects = Project::all();
 			$students = User::where('privileges', 'student')->get();
@@ -376,43 +374,47 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function manualSecondMarkerView(Request $request){
 		$supervisors = Supervisor::all();
 		$students = Student::all();
 
-		$sorted = $students->sortBy(function($student, $key) use ($request){
+		$sorted = $students->sortBy(function($student) use ($request){
 			if($request->query("sort") === "firstname"){
 				return $student->user->first_name;
 			} elseif($request->query("sort") === "lastname") {
 				return $student->user->last_name;
 			}
+
+			return true;
 		});
 
-		return view('admin.assign-marker-manual')->with('supervisors', $supervisors)->with('students', $sorted);
+		return view('admin.assign-marker-manual')
+			->with('supervisors', $supervisors)->with('students', $sorted);
 	}
 
 	/**
 	 * The automatic (Algorithmic) assign second marker view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function computeSecondMarkerView(Request $request){
+	public function computeSecondMarkerView(){
 		return view('admin.assign-marker-automatic');
 	}
 
 	/**
 	 * The actual action of assigning second markers to students.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
+	 * @internal param Request $request
 	 */
-	public function calculateSecondMarkers(Request $request){
-		DB::table(Student::getTable())->update(array('marker_id' => null));
+	public function calculateSecondMarkers(){
+		$studentTable = new Student;
+		DB::table($studentTable->getTable())->update(array(
+			'marker_id' => null
+		));
 
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
@@ -427,8 +429,9 @@ class ProjectAdminController extends Controller{
 				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
 
 				if(is_null($studentToAssign)){
-					return response()->json(array('successful' => false,
-												  'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.'
+					return response()->json(array(
+						'successful' => false,
+						'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.'
 					));
 				} else {
 					$studentToAssign->marker_id = $supervisor->id;
@@ -469,7 +472,6 @@ class ProjectAdminController extends Controller{
 		$supervisors = Supervisor::all();
 		$supervisorLoadTotal = 0;
 		$maxTargetLoad = 0;
-		$slack = 0;
 		$studentCount = Student::count();
 		$projectCount = Project::count();
 
@@ -501,8 +503,9 @@ class ProjectAdminController extends Controller{
 		$slack = $maxTargetLoad / $studentCount;
 
 		if($projectCount > $supervisorLoadTotal){
-			return response()->json(array('successful' => false,
-										  'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.'
+			return response()->json(array(
+				'successful' => false,
+				'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.'
 			));
 		}
 
@@ -512,45 +515,41 @@ class ProjectAdminController extends Controller{
 	/**
 	 * An overview of each supervisor and which students they are second supervisor to.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function assignSecondMarkerReportTable(Request $request){
+	public function assignSecondMarkerReportTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
 
 		$view = view('admin.partials.assignment-report-table')->with('supervisors', $assignmentSetup["supervisors"]);
 
 		return response()->json(array(
-			'successful' => true,
-			'html' => $view->render()
+			'successful' => true, 'html' => $view->render()
 		));
 	}
 
 	/**
 	 * An overview of each automatically assigned second supervisor.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function assignSecondMarkerAutomaticTable(Request $request){
+	public function assignSecondMarkerAutomaticTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-		$view = view('admin.partials.automatic-marker-assignment-table')->with('supervisors', $assignmentSetup["supervisors"])->with('slack', $assignmentSetup["slack"]);
+		$view = view('admin.partials.automatic-marker-assignment-table')
+			->with('supervisors', $assignmentSetup["supervisors"])
+			->with('slack', $assignmentSetup["slack"]);
 
-		return response()->json(array('successful' => true,
-									  'html' => $view->render()
+		return response()->json(array(
+			'successful' => true, 'html' => $view->render()
 		));
 	}
 
 	/**
 	 * The swap second marker view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
 	 */
-	public function swapSecondMarkerView(Request $request){
+	public function swapSecondMarkerView(){
 		$students = Student::where('project_status', 'accepted')->get();
 
 		return view('admin.swap-marker')->with('students', $students);
@@ -582,11 +581,10 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The amend supervisor arrangements view.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function exportSecondMarkerDataView(Request $request){
+	public function exportSecondMarkerDataView(){
 		return view('admin.export-marker');
 	}
 
@@ -628,8 +626,8 @@ class ProjectAdminController extends Controller{
 		if($request->type == "csv"){
 			$filename = "SecondMarkerData.csv";
 			$handle = fopen($filename, 'w+');
-			fputcsv($handle, array('Student Name', 'Project Title',
-								   'Supervisor', 'Second Marker'
+			fputcsv($handle, array(
+				'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
 			));
 
 			foreach($output as $out){
@@ -642,5 +640,7 @@ class ProjectAdminController extends Controller{
 
 			return response()->download($filename, 'SecondMarkerData.csv', $headers);
 		}
+
+		return abort(404);
 	}
 }

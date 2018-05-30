@@ -27,6 +27,6 @@ class StaffOrProjectAdmin{
 			}
 		}
 
-		abort(404);
+		return abort(404);
 	}
 }

@@ -16,11 +16,17 @@ class Kernel extends HttpKernel{
 	 *
 	 * @var array
 	 */
-	protected $middleware = [\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-							 \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-							 \SussexProjects\Http\Middleware\TrimStrings::class,
-							 \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-							 \SussexProjects\Http\Middleware\TrustProxies::class,
+	protected /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		$middleware = [
+		\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+		\Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+		\SussexProjects\Http\Middleware\TrimStrings::class,
+		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+		\SussexProjects\Http\Middleware\TrustProxies::class,
 
 	];
 
@@ -29,22 +35,37 @@ class Kernel extends HttpKernel{
 	 *
 	 * @var array
 	 */
-	protected $middlewareGroups = ['web' => [\SussexProjects\Http\Middleware\EncryptCookies::class,
-											 \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-											 \Illuminate\Session\Middleware\StartSession::class,
-											 \Illuminate\Session\Middleware\AuthenticateSession::class,
-											 \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-											 \SussexProjects\Http\Middleware\VerifyCsrfToken::class,
-											 \Illuminate\Routing\Middleware\SubstituteBindings::class,
-											 \SussexProjects\Http\Middleware\RequiredCookies::class,
-											 \SussexProjects\Http\Middleware\Language::class,
-											 \SussexProjects\Http\Middleware\Accessibility::class,
-											 \SussexProjects\Http\Middleware\UserAgentStringCollector::class,
-											 \SussexProjects\Http\Middleware\SetDepartment::class,
-											 \SussexProjects\Http\Middleware\SetEducationLevel::class
-	],
+	protected /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		$middlewareGroups = [
+		'web' => [
+			\SussexProjects\Http\Middleware\EncryptCookies::class,
+			\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+			\Illuminate\Session\Middleware\StartSession::class,
+			\Illuminate\Session\Middleware\AuthenticateSession::class,
+			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
+			\SussexProjects\Http\Middleware\VerifyCsrfToken::class,
+			\Illuminate\Routing\Middleware\SubstituteBindings::class,
+			\SussexProjects\Http\Middleware\RequiredCookies::class,
+			\SussexProjects\Http\Middleware\Language::class,
+			\SussexProjects\Http\Middleware\Accessibility::class,
+			\SussexProjects\Http\Middleware\UserAgentStringCollector::class,
+			\SussexProjects\Http\Middleware\SetDepartment::class,
+			\SussexProjects\Http\Middleware\SetEducationLevel::class
+		],
 
-								   'api' => ['throttle:5,1', 'bindings',]
+		'api' => ['throttle:5,1', 'bindings']
 	];
 
 	/**
@@ -53,19 +74,34 @@ class Kernel extends HttpKernel{
 	 *
 	 * @var array
 	 */
-	protected $routeMiddleware = ['auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-								  'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-								  'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-								  'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-								  'can' => \Illuminate\Auth\Middleware\Authorize::class,
-								  'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
-								  'admin' => \SussexProjects\Http\Middleware\Admin::class,
-								  'admin.system' => \SussexProjects\Http\Middleware\SystemAdmin::class,
-								  'admin.project' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
-								  'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
-								  'student' => \SussexProjects\Http\Middleware\Student::class,
-								  'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
-								  'checkDepartment' => \SussexProjects\Http\Middleware\DepartmentCheck::class,
-								  'adminPrivilegeCheck' => \SussexProjects\Http\Middleware\AdminPrivilegeCheck::class,
+	protected /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		$routeMiddleware = [
+		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+		'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+		'can' => \Illuminate\Auth\Middleware\Authorize::class,
+		'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
+		'admin' => \SussexProjects\Http\Middleware\Admin::class,
+		'SystemAdministrator' => \SussexProjects\Http\Middleware\SystemAdmin::class,
+		'ProjectAdministrator' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
+		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
+		'student' => \SussexProjects\Http\Middleware\Student::class,
+		'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
+		'checkDepartment' => \SussexProjects\Http\Middleware\DepartmentCheck::class,
+		'adminPrivilegeCheck' => \SussexProjects\Http\Middleware\AdminPrivilegeCheck::class,
 	];
 }

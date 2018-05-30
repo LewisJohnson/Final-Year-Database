@@ -25,16 +25,18 @@ class ProjectForm extends FormRequest{
 	 * @return array
 	 */
 	public function rules(){
-		return ['title' => 'required|max:255',
-				'description' => 'required|max:16777215',
-				'skills' => 'required|max:255', 'status' => 'required',
+		return [
+			'title' => 'required|max:255',
+			'description' => 'required|max:16777215',
+			'skills' => 'required|max:255', 'status' => 'required',
 		];
 	}
 
 	public function update(){
-		return ['title' => 'required|max:255',
-				'description' => 'required|max:16777215',
-				'skills' => 'required|max:255', 'status' => 'required',
+		return [
+			'title' => 'required|max:255',
+			'description' => 'required|max:16777215',
+			'skills' => 'required|max:255', 'status' => 'required',
 		];
 	}
 }

@@ -23,45 +23,38 @@ class HomeController extends Controller{
 	/**
 	 * Displays the home page.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Request $request){
+	public function index(){
 		return view('index');
 	}
 
 	/**
 	 * Displays the help page.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function help(Request $request){
+	public function help(){
 		return view('help.help');
 	}
 
 	/**
 	 * Displays the feedback form.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function showFeedbackForm(Request $request){
+	public function showFeedbackForm(){
 		return view('forms.feedback');
 	}
 
 	/**
 	 * Log feedback to database.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function feedback(Request $request){
-		$this->validate(request(), ['comment' => 'required',]);
+	public function feedback(){
+		$this->validate(request(), ['comment' => 'required']);
 
 		$feedback = new Feedback;
 		$feedback->comment = request('comment');
@@ -92,8 +85,8 @@ class HomeController extends Controller{
 
 		$feedback->save();
 
-		return response()->json(array('successful' => true,
-									  'message' => 'Thank you for your feedback.'
+		return response()->json(array(
+			'successful' => true, 'message' => 'Thank you for your feedback.'
 		));
 	}
 
@@ -105,23 +98,22 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sudo(Request $request){
-		$this->validate(request(), ['password' => 'required',]);
+		$this->validate($request, ['password' => 'required']);
 
-		if(Hash::check(request('password'), Auth::user()->password)){
+		if(Hash::check($request->password, Auth::user()->password)){
 			Session::put('sudo-mode', true);
-
-			return back();
 		}
+
+		return back();
 	}
 
 	/**
 	 * Displays the about page.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function about(Request $request){
+	public function about(){
 		return view('help.about');
 	}
 
@@ -139,18 +131,17 @@ class HomeController extends Controller{
 			return view('snippets.'.$snippetName);
 		}
 
-		abort(404);
+		return abort(404);
 	}
 
 	/**
 	 * Sets the department type.
 	 * e.g. Informatics or engineering.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
-	public function setDepartmentView(Request $request){
+	public function setDepartmentView(){
 		return view('set-department');
 	}
 

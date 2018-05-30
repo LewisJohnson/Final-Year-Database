@@ -151,7 +151,8 @@ class Student extends Model{
 		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
 			return null;
 		} else {
-			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get();
+			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))
+				->get();
 		}
 
 		return $projects;

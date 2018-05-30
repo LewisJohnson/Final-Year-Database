@@ -84,9 +84,10 @@ class Supervisor extends User{
 	/**
 	 * Sets the superior's email preference.
 	 *
+	 * @param        $value
 	 * @param String $educationLevel An optional education level parameter
 	 *
-	 * @return boolean Is supervisor accepting emails
+	 * @return void
 	 */
 	public function setAcceptingEmails($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -105,8 +106,6 @@ class Supervisor extends User{
 	 *
 	 * @param Boolean $value          Take students
 	 * @param String  $educationLevel An optional education level parameter
-	 *
-	 * @return
 	 */
 	public function setTakingStudents($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -124,8 +123,6 @@ class Supervisor extends User{
 	 *
 	 * @param Int    $value          The project load
 	 * @param String $educationLevel An optional education level parameter
-	 *
-	 * @return
 	 */
 	public function setProjectLoad($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -195,10 +192,12 @@ class Supervisor extends User{
 	 */
 	public function getProjects($status = null){
 		if(isset($status)){
-			return Project::where("supervisor_id", $this->id)->whereNull('student_id')->where("status", "=", $status)->get();
+			return Project::where("supervisor_id", $this->id)
+				->whereNull('student_id')->where("status", "=", $status)->get();
 		}
 
-		return Project::where("supervisor_id", $this->id)->orderBy('status', 'asc')->whereNull('student_id')->get();
+		return Project::where("supervisor_id", $this->id)
+			->orderBy('status', 'asc')->whereNull('student_id')->get();
 	}
 
 	/**
@@ -211,7 +210,10 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'selected')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
+		$students = Student::where('project_status', 'selected')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){
 			$ar = array();
@@ -236,8 +238,7 @@ class Supervisor extends User{
 		$students = Student::where('project_status', 'accepted')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
 			->where('project.supervisor_id', '=', Auth::user()->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')
-			->get();
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){
 			$ar = array();
@@ -259,7 +260,10 @@ class Supervisor extends User{
 		$student = new Student;
 		$offers = array();
 
-		$students = Student::where('project_status', 'proposed')->join($project->getTable().' as project', 'project_id', '=', 'project.id')->where('project.supervisor_id', '=', Auth::user()->id)->select($student->getTable().'.*', 'project.supervisor_id')->get();
+		$students = Student::where('project_status', 'proposed')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', '=', Auth::user()->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){
 			$ar = array();

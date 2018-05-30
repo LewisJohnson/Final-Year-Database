@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Session;
 use SussexProjects\Mail\StudentAccepted;
 use SussexProjects\Mail\StudentRejected;
 use SussexProjects\Mail\SupervisorUndo;
+use SussexProjects\Mode;
 use SussexProjects\Project;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 use SussexProjects\Transaction;
-use SussexProjects\Mode;
 
 /**
  * The supervisor controller.
@@ -29,6 +29,7 @@ use SussexProjects\Mode;
 class SupervisorController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
@@ -46,13 +47,14 @@ class SupervisorController extends Controller{
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function report(Request $request){
 		if($request->query("includeClosedToOffer") === "true"){
 			$supervisors = Supervisor::all();
 		} else {
-			$supervisors = Supervisor::where('take_students_'.Session::get('education_level')["shortName"], true)->get();
+			$supervisors = Supervisor::where('take_students_'.Session::get('education_level')["shortName"], true)
+				->get();
 		}
 
 		return view('supervisors.report')->with("supervisors", $supervisors);
@@ -61,9 +63,8 @@ class SupervisorController extends Controller{
 	/**
 	 * A table of all accepted students.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
 	 * @return \Illuminate\Http\Response
+	 * @internal param Request $request
 	 */
 	public function acceptedStudentTable(){
 		return view('supervisors.partials.accepted-students-table');
@@ -84,8 +85,8 @@ class SupervisorController extends Controller{
 			return redirect()->action('SupervisorController@projectReport');
 		}
 
-		$this->validate(request(), ['student_id' => 'required',
-									'project_id' => 'required',
+		$this->validate(request(), [
+			'student_id' => 'required', 'project_id' => 'required',
 		]);
 
 		$student = Student::findOrFail(request('student_id'));
@@ -96,20 +97,23 @@ class SupervisorController extends Controller{
 			$transaction = new Transaction;
 
 			if($project->id != $student->project_id){
-				return response()->json(array('successful' => false,
-											  'message' => 'Project ID and student project ID do not match up.'
+				return response()->json(array(
+					'successful' => false,
+					'message' => 'Project ID and student project ID do not match up.'
 				));
 			}
 
 			if($project->getAcceptedStudent() != null){
-				return response()->json(array('successful' => false,
-											  'message' => 'This project has already been allocated to another student.'
+				return response()->json(array(
+					'successful' => false,
+					'message' => 'This project has already been allocated to another student.'
 				));
 			}
 
 			if(count($project->getStudentsWithProjectSelected()) > 1){
-				return response()->json(array('successful' => false,
-											  'message' => 'You must reject all other students before accepting '.$student->user->first_name
+				return response()->json(array(
+					'successful' => false,
+					'message' => 'You must reject all other students before accepting '.$student->user->first_name
 				));
 			}
 			$project->status = 'withdrawn';
@@ -117,15 +121,16 @@ class SupervisorController extends Controller{
 			$project->save();
 			$student->save();
 
-			$transaction->fill(array('type' => 'project',
-									 'action' => 'accepted',
-									 'project' => $student->project_id,
-									 'student' => $student->id,
-									 'supervisor' => Auth::user()->supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project', 'action' => 'accepted',
+				'project' => $student->project_id, 'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
+
+			return true;
 		});
 
 		if($error != null){
@@ -134,16 +139,18 @@ class SupervisorController extends Controller{
 
 		try{
 			// Send accepted email
-			Mail::to($student->user->email)->send(new StudentAccepted(Auth::user()->supervisor, $student));
+			Mail::to($student->user->email)
+				->send(new StudentAccepted(Auth::user()->supervisor, $student));
 		} catch (\Exception $e){
-			return response()->json(array('successful' => true,
-										  'email_successful' => false,
-										  'message' => $student->user->first_name.'was accepted. However, the confirmation email failed to send.'
+			return response()->json(array(
+				'successful' => true, 'email_successful' => false,
+				'message' => $student->user->first_name.'was accepted. However, the confirmation email failed to send.'
 			));
 		}
 
-		return response()->json(array('successful' => true,
-									  'message' => $student->user->first_name.' has been accepted.'
+		return response()->json(array(
+			'successful' => true,
+			'message' => $student->user->first_name.' has been accepted.'
 		));
 	}
 
@@ -169,12 +176,11 @@ class SupervisorController extends Controller{
 
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
-			$transaction->fill(array('type' => 'project',
-									 'action' => 'rejected',
-									 'project' => $student->project_id,
-									 'student' => $student->id,
-									 'supervisor' => Auth::user()->supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project', 'action' => 'rejected',
+				'project' => $student->project_id, 'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
 			));
 			$transaction->save();
 
@@ -186,27 +192,28 @@ class SupervisorController extends Controller{
 		$emailError = false;
 		try{
 			// Send declined email
-			Mail::to($student->user->email)->send(new StudentRejected(Auth::user()->supervisor, $student, $project->id));
+			Mail::to($student->user->email)
+				->send(new StudentRejected(Auth::user()->supervisor, $student, $project->id));
 		} catch (\Exception $e){
 			$emailError = true;
 		}
 
 		if($project->status == "student-proposed"){
-			$project->supervisor == null;
-			$project->student == null;
+			$project->supervisor = null;
+			$project->student = null;
 			$project->save();
 			$project->delete();
 		}
 
 		if($emailError){
-			return response()->json(array('successful' => true,
-										  'email_successful' => false,
-										  'message' => $student.' has been rejected.'
+			return response()->json(array(
+				'successful' => true, 'email_successful' => false,
+				'message' => $student.' has been rejected.'
 			));
 		}
 
-		return response()->json(array('successful' => true,
-									  'message' => 'Student rejected'
+		return response()->json(array(
+			'successful' => true, 'message' => 'Student rejected'
 		));
 	}
 
@@ -223,8 +230,8 @@ class SupervisorController extends Controller{
 		if(in_array($request->education_level, $educationLevels)){
 			Auth::user()->supervisor->setAcceptingEmails(isset($request["accept_emails_".$request->education_level]) ? 1 : 0, $request->education_level);
 		} else {
-			return response()->json(array('successful' => false,
-										  'message' => 'Incorrect parameters.'
+			return response()->json(array(
+				'successful' => false, 'message' => 'Incorrect parameters.'
 			));
 		}
 
@@ -234,8 +241,8 @@ class SupervisorController extends Controller{
 			$message = "You have opted out of ".$request->education_level." emails.";
 		}
 
-		return response()->json(array('successful' => true,
-									  'message' => $message
+		return response()->json(array(
+			'successful' => true, 'message' => $message
 		));
 	}
 
@@ -252,11 +259,11 @@ class SupervisorController extends Controller{
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
 
-			$transaction->fill(array('type' => 'project', 'action' => 'undo',
-									 'project' => $student->project_id,
-									 'student' => $student->id,
-									 'supervisor' => Auth::user()->supervisor->id,
-									 'transaction_date' => new Carbon
+			$transaction->fill(array(
+				'type' => 'project', 'action' => 'undo',
+				'project' => $student->project_id, 'student' => $student->id,
+				'supervisor' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
 			));
 			$transaction->save();
 
@@ -268,7 +275,8 @@ class SupervisorController extends Controller{
 		$emailError = false;
 		try{
 			// Send declined email
-			Mail::to($student->user->email)->send(new SupervisorUndo(Auth::user()->supervisor, $student, $project->id));
+			Mail::to($student->user->email)
+				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $project->id));
 		} catch (\Exception $e){
 			$emailError = true;
 		}
@@ -276,14 +284,14 @@ class SupervisorController extends Controller{
 		$message = $student->getName()."is no longer accepted.";
 
 		if($emailError){
-			return response()->json(array('successful' => true,
-										  'email_successful' => false,
-										  'message' => $message
+			return response()->json(array(
+				'successful' => true, 'email_successful' => false,
+				'message' => $message
 			));
 		}
 
-		return response()->json(array('successful' => true,
-									  'message' => $message
+		return response()->json(array(
+			'successful' => true, 'message' => $message
 		));
 	}
 }

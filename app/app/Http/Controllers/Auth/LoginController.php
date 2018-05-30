@@ -33,17 +33,16 @@ class LoginController extends Controller{
 
 	/**
 	 * Create a new controller instance.
-	 *
-	 * @return void
 	 */
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('guest')->except('logout');
 	}
 
 	/**
 	 * Handle an authentication attempt.
 	 *
-	 * @return Response
+	 * @return string
 	 */
 	public function username(){
 		$login = request()->input('username');

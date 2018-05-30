@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel{
 	 *
 	 * @return void
 	 */
-	protected function schedule(Schedule $schedule){}
+	protected function schedule(Schedule $schedule){ }
 
 	/**
 	 * Register the commands for the application.
@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel{
 	protected function commands(){
 		$this->load(__DIR__.'/Commands');
 
+		/** @noinspection PhpIncludeInspection */
 		require base_path('routes/console.php');
 	}
 }

@@ -25,6 +25,6 @@ class SystemAdmin{
 			return $next($request);
 		}
 
-		abort(404);
+		return abort(404);
 	}
 }

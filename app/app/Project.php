@@ -91,7 +91,8 @@ class Project extends Model{
 	public function topics(){
 		$projectTopic = new ProjectTopic;
 
-		return $this->belongsToMany(Topic::class, $projectTopic->getTable(), 'project_id', 'topic_id')->withPivot('primary');
+		return $this->belongsToMany(Topic::class, $projectTopic->getTable(), 'project_id', 'topic_id')
+			->withPivot('primary');
 	}
 
 	/**
@@ -134,7 +135,8 @@ class Project extends Model{
 	 * @return Student
 	 */
 	public function getStudentsWithProjectSelected(){
-		return Student::where('project_id', $this->id)->where('project_status', 'selected')->get();
+		return Student::where('project_id', $this->id)
+			->where('project_status', 'selected')->get();
 	}
 
 	/**
@@ -143,7 +145,8 @@ class Project extends Model{
 	 * @return Student
 	 */
 	public function getAcceptedStudent(){
-		return Student::where('project_id', $this->id)->where('project_status', 'accepted')->first();
+		return Student::where('project_id', $this->id)
+			->where('project_status', 'accepted')->first();
 	}
 
 	/**
@@ -157,5 +160,7 @@ class Project extends Model{
 		} elseif(Auth::user()->isStudent()) {
 			return $this->student_id === Auth::user()->student->id;
 		}
+
+		return false;
 	}
 }

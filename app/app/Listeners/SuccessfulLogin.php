@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Session;
 class SuccessfulLogin{
 	/**
 	 * Create the event listener.
-	 *
-	 * @return void
 	 */
 	public function __construct(){
 	}

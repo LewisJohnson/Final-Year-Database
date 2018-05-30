@@ -38,8 +38,9 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['privileges', 'first_name', 'last_name', 'username',
-						   'password', 'programme', 'email'
+	protected $fillable = [
+		'privileges', 'first_name', 'last_name', 'username', 'password',
+		'programme', 'email'
 	];
 	/**
 	 * The attributes that are not mass assignable.
@@ -187,6 +188,9 @@ class User extends Authenticatable{
 	/**
 	 * An array of all education levels the user has permission too
 	 *
+	 * @param null $shortName
+	 * @param null $longName
+	 *
 	 * @return array Short-name array of education levels (e.g. [ug, pg])
 	 */
 	public function allowedEducationLevel($shortName = null, $longName = null){
@@ -310,22 +314,22 @@ class User extends Authenticatable{
 			5. system administrator
 		*/
 
-		foreach($privileges as $key => $value){
-			$value = str_replace('admin', 'administrator', $value);
+		foreach($privileges as $privilege){
+			$privilege = str_replace('admin', 'administrator', $privilege);
 
 			// Replaces short-hand names with long-hand names (e.g. _ug to _undergraduate)
-			foreach(get_education_levels() as $key => $level){
-				$value = str_replace('_'.$level["shortName"], '_'.$level["longName"], $value);
+			foreach(get_education_levels() as $level){
+				$privilege = str_replace('_'.$level["shortName"], '_'.$level["longName"], $privilege);
 			}
 
-			$value = str_replace('_', ' ', $value);
+			$privilege = str_replace('_', ' ', $privilege);
 
-			if($value == "staff"){
+			if($privilege == "staff"){
 				// Replace staff with staff member
 				// You are a staff looks dumb
-				$words = str_replace('staff', 'staff member', $value);
+				$words = str_replace('staff', 'staff member', $privilege);
 			} else {
-				$words = explode(' ', $value);
+				$words = explode(' ', $privilege);
 				$words = array_reverse($words);
 				$words = implode(" ", $words);
 			}

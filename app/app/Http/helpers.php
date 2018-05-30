@@ -26,7 +26,8 @@ if(!function_exists('lang_sess')){
 if(!function_exists('get_config_json')){
 	function get_config_json($key = null, $value = null){
 		if(Session::get('department') == null){
-			$config = json_decode(Storage::disk('local')->get(config("app.default_department_config_file")), true);
+			$config = json_decode(Storage::disk('local')
+				->get(config("app.default_department_config_file")), true);
 		} else {
 			$fileDir = config("app.department_config_dir")."\\".Session::get('department').".json";
 			$config = json_decode(Storage::disk('local')->get($fileDir), true);
@@ -46,16 +47,20 @@ if(!function_exists('get_config_json')){
 			// If key and value, set value
 			$key .= ".value";
 			data_set($config, $key, $value);
-			Storage::disk('local')->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
+			Storage::disk('local')
+				->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
 
-			return;
+			return true;
 		}
+
+		return null;
 	}
 }
 
 if(!function_exists('get_education_levels')){
 	function get_education_levels($shortName = null, $longName = null){
-		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
+		$config = json_decode(Storage::disk('local')
+			->get(config("app.system_config_file")), true);
 
 		if($shortName){
 			$ar = array();
@@ -83,7 +88,10 @@ if(!function_exists('get_education_level')){
 	/**
 	 * Alias of get_education_levels
 	 *
-	 * @return see get_education_levels
+	 * @param null $shortName
+	 * @param null $longName
+	 *
+	 * @return string education level
 	 */
 	function get_education_level($shortName = null, $longName = null){
 		return call_user_func_array('get_education_level', func_get_args());
@@ -92,7 +100,8 @@ if(!function_exists('get_education_level')){
 
 if(!function_exists('get_departments')){
 	function get_departments(){
-		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
+		$config = json_decode(Storage::disk('local')
+			->get(config("app.system_config_file")), true);
 
 		return data_get($config, 'departments');
 	}
