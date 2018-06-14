@@ -87,7 +87,7 @@ class UserController extends Controller{
 				'username' => $request['username'],
 				'password' => bcrypt($request['password']),
 				'programme' => $request['programme'],
-				'email' => $request['email'], 'privileges' => 'student'
+				'email' => $request['email']
 			));
 
 			$user->save();

@@ -468,6 +468,7 @@ class ProjectController extends Controller{
 		}
 
 		$projects = $projects->get();
+
 		if(in_array("topics", $filters)){
 			$filteredAtLeastOnce = true;
 			$filteredByTopics = true;

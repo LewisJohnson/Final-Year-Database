@@ -24,7 +24,7 @@ class User extends Migration{
 
 		foreach(get_departments() as $key => $department) {
 			$tableName = $department.'_users';
-			Schema::create($tableName, function (Blueprint $table) {
+			Schema::create($tableName, function (Blueprint $table) use ($department) {
 				$table->uuid('id')->unique()->nullable(false);
 				$table->string('first_name', 128)->nullable(false);
 				$table->string('last_name', 128)->nullable(false);
@@ -39,7 +39,7 @@ class User extends Migration{
 				$table->foreign('programme')->references('name')->on($department.'_programme')->onDelete('SET NULL');
 			});
 
-			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') NOT NULL AFTER `id`;";
+			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') AFTER `id`;";
 			DB::statement($privilegesSql);
 		}
 
@@ -65,6 +65,5 @@ class User extends Migration{
 	 */
 	public function down(){
 		Schema::dropIfExists('users');
-
 	}
 }
