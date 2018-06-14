@@ -37,7 +37,7 @@ rm app/serve.bat
 ```
 
 ### Step 6 - Enviroment
-Copy the exmaple enviroment file
+Copy the example enviroment file
 `cp .env.example .env`
 
 Then open and edit the enviroment file
