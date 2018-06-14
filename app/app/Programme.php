@@ -73,7 +73,7 @@ class Programme extends Model{
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
-			return Session::get('department').'_programme';
+			return Session::get('department').'_programmes';
 		} else {
 			throw new Exception('Database not found.');
 		}

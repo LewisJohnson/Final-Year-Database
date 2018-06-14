@@ -144,8 +144,7 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		// todo: CHECK WITH IDAP
-		return false;
+		return Session::get('is-guest');
 	}
 
 	/**

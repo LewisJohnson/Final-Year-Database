@@ -35,6 +35,6 @@ class Feedback extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		//
+		Schema::dropIfExists('feedback');
 	}
 }

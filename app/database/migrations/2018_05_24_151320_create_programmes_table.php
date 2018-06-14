@@ -18,7 +18,7 @@ class CreateProgrammesTable extends Migration {
 	 */
 	public function up(){
 		foreach(get_departments() as $key => $department) {
-			Schema::create($department.'_programme', function (Blueprint $table) {
+			Schema::create($department.'_programmes', function (Blueprint $table) {
 				$table->string('name')->unique();
 				$table->primary('name');
 			});
@@ -33,7 +33,7 @@ class CreateProgrammesTable extends Migration {
 	public function down(){
 		foreach(get_departments() as $key => $department) {
 			foreach(get_education_levels() as $key => $level) {
-				Schema::dropIfExists($department.'_programme');
+				Schema::dropIfExists($department.'_programmes');
 			}
 		}
 	}

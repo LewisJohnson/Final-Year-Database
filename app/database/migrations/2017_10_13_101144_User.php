@@ -29,14 +29,13 @@ class User extends Migration{
 				$table->string('first_name', 128)->nullable(false);
 				$table->string('last_name', 128)->nullable(false);
 				$table->string('username', 32)->unique()->nullable(false);
-				$table->string('password', 128)->nullable(false);
 				$table->string('programme')->nullable(true);
 				$table->string('email', 128)->unique()->nullable(false);
 				$table->dateTimeTz('last_login')->nullable(true);
 				$table->rememberToken();
 				$table->primary('id');
 
-				$table->foreign('programme')->references('name')->on($department.'_programme')->onDelete('SET NULL');
+				// $table->foreign('programme')->references('name')->on($department.'_programmes');
 			});
 
 			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') AFTER `id`;";
@@ -49,7 +48,6 @@ class User extends Migration{
 			$table->string('first_name', 128)->nullable(false);
 			$table->string('last_name', 128)->nullable(false);
 			$table->string('username', 32)->unique()->nullable(false);
-			$table->string('password', 128)->nullable(false);
 			$table->string('programme');
 			$table->string('email', 128)->unique()->nullable(false);
 			$table->dateTimeTz('last_login')->nullable(true);
@@ -64,6 +62,9 @@ class User extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('users');
+		foreach(get_departments() as $key => $department) {
+			Schema::dropIfExists($department.'_users');
+		}
+		Schema::dropIfExists('test_users');
 	}
 }

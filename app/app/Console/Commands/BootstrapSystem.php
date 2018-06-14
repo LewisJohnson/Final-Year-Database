@@ -37,7 +37,7 @@ class BootstrapSystem extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		//todo: this once LDAP is set up
+		//todo: this
 		// https://laravel.com/docs/5.6/artisan#writing-commands
 		return true;
 	}

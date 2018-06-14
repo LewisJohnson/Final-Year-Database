@@ -47,8 +47,7 @@ if(!function_exists('get_config_json')){
 			// If key and value, set value
 			$key .= ".value";
 			data_set($config, $key, $value);
-			Storage::disk('local')
-				->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
+			Storage::disk('local')->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
 
 			return true;
 		}
@@ -59,8 +58,7 @@ if(!function_exists('get_config_json')){
 
 if(!function_exists('get_education_levels')){
 	function get_education_levels($shortName = null, $longName = null){
-		$config = json_decode(Storage::disk('local')
-			->get(config("app.system_config_file")), true);
+		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
 		if($shortName){
 			$ar = array();
@@ -100,8 +98,7 @@ if(!function_exists('get_education_level')){
 
 if(!function_exists('get_departments')){
 	function get_departments(){
-		$config = json_decode(Storage::disk('local')
-			->get(config("app.system_config_file")), true);
+		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
 		return data_get($config, 'departments');
 	}

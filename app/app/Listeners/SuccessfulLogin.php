@@ -12,11 +12,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 
 class SuccessfulLogin{
+
 	/**
 	 * Create the event listener.
 	 */
-	public function __construct(){
-	}
+	public function __construct(){}
 
 	/**
 	 * Handles a successful login event.
@@ -26,9 +26,6 @@ class SuccessfulLogin{
 	 * @return void
 	 */
 	public function handle(Login $event){
-		// todo: CHECK WITH IDAP to see if they are guest
-		// todo: Set education level with IDAP
-
 		// Set education level
 		Session::put('education_level', current($event->user->allowedEducationLevel()));
 
