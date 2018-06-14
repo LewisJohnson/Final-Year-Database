@@ -42,5 +42,17 @@ Copy the example enviroment file
 
 Then open and edit the enviroment file
 
-### Step 7 - Install Dependencies
+### Step 7 - Install Back-End Dependencies
 `php ../../composer.phar update`
+
+### Step 8 - Install NodeJs
+We need npm, a JavaScript package manager.
+The only way to get npm is to download nodeJs.
+
+`sudo yum -y install nodejs`
+
+### Step 9 - Install Front-End Dependencies
+`npm install`
+
+### Step 10 - Compile JS and SASS
+`npm run prod`
