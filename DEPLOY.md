@@ -10,6 +10,7 @@ yum install php-xml
 yum install php-bcmath
 yum install php-pdo
 yum install php-pdo_mysql
+yum install php-ldap
 ```
 
 ### Step 2 - Navigate
