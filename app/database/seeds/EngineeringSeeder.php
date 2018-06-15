@@ -29,6 +29,6 @@ class EngineeringSeeder extends Seeder{
 		factory(SussexProjects\ProjectTopic::class, 800)->states('extra')->create();
 
 		// $eng_adminId = (string) Str::orderedUuid();
-		// DB::statement("INSERT INTO `engineering_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('".$eng_adminId."', 'admin_ug,admin_pg', 'Admin', 'Account', 'admin', '".bcrypt('password')."', 'none', 'admin@susx.com');");
+		// DB::statement("INSERT INTO `engineering_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `programme`, `email`) VALUES ('".$eng_adminId."', 'admin_ug,admin_pg', 'Admin', 'Account', 'admin', 'none', 'admin@susx.com');");
 	}
 }

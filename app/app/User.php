@@ -40,7 +40,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'password', 'programme', 'email' ];
+	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email'];
 
 	/**
 	 * The attributes that are not mass assignable.
@@ -61,7 +61,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['password', 'remember_token'];
+	protected $hidden = ['remember_token'];
 
 	/**
 	 * The table to retrieve data from.
@@ -141,7 +141,7 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		return Session::get('is-guest');
+		return $this->privileges == null;
 	}
 
 	/**

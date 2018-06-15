@@ -85,7 +85,6 @@ class UserController extends Controller{
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
-				'password' => bcrypt($request['password']),
 				'programme' => $request['programme'],
 				'email' => $request['email']
 			));
@@ -270,7 +269,6 @@ class UserController extends Controller{
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
-				'password' => bcrypt($request['password']),
 				'programme' => $request['programme'],
 				'email' => $request['email']
 			));

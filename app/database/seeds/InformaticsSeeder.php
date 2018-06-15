@@ -28,6 +28,6 @@ class InformaticsSeeder extends Seeder{
 
 		$inf_adminId = (string) Str::orderedUuid();
 
-		DB::statement("INSERT INTO `informatics_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `password`, `programme`, `email`) VALUES ('".$inf_adminId."', 'admin_ug, admin_pg, admin_system', 'Admin', 'Account', 'admin', '".bcrypt('password')."', 'none', 'admin@susx.com');");
+		DB::statement("INSERT INTO `informatics_users` (`id`, `privileges`, `first_name`, `last_name`, `username`, `programme`, `email`) VALUES ('".$inf_adminId."', 'admin_ug, admin_pg, admin_system', 'Admin', 'Account', 'admin', 'none', 'admin@susx.com');");
 	}
 }

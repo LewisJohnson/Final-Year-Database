@@ -9,6 +9,7 @@ namespace SussexProjects\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Http\Controllers\Controller;
@@ -64,17 +65,27 @@ class LoginController extends Controller{
 			$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
 
 			if ($ldapbind){
-				ldap_unbind($ldapConn);
+					ldap_unbind($ldapConn);
 
 				$user = User::where('username', $username)->first();
+
 				if($user == null){
+					$user = new User;
+
+					DB::transaction(function() use ($username, $user){
+						$user->fill(array(
+							'first_name' => 'Guest',
+							'last_name' => 'Guest',
+							'username' => $username,
+							'email' => $username.'@sussex.ac.uk'
+						));
+
+						$user->save();
+						return true;
+					});
+
 					session()->flash('message', 'Logged in as guest.');
 					session()->flash('message_type', 'success');
-
-					Auth::loginUsingId('guest');
-					Session::put('is-guest', true);
-				} else {
-					Auth::login($user, $request->filled('remember'));
 				}
 			} else {
 				ldap_unbind($ldapConn);
@@ -83,6 +94,31 @@ class LoginController extends Controller{
 			}
 		}
 
+		Auth::login($user, $request->filled('remember'));
+		Session::put('education_level', current($user->allowedEducationLevel()));
+		
+		return redirect()->action('HomeController@index');
+	}
+
+	/**
+	 * Log the user out of the application.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function logout(Request $request){
+		$department = Session::get('department');
+		$user = Auth::user();
+
+		if($user->isGuest()){
+			$user->delete();
+		} else {
+			$this->guard()->logout();
+		}
+		
+		$request->session()->invalidate();
+
+		Session::put('department', $department);
 		return redirect()->action('HomeController@index');
 	}
 

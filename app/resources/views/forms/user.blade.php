@@ -19,19 +19,6 @@
 		@include('forms.partials.error-block', ['name' => 'username'])
 	</div>
 
-	@if($view === "new")
-		<div class="form-field{{ $errors->has('password') ? ' has-error' : '' }}">
-			<label for="password">Password</label>
-			<input id="password" type="password" class="form-control" name="password" required>
-			@include('forms.partials.error-block', ['name' => 'password'])
-		</div>
-
-		<div class="form-field">
-			<label for="password-confirm">Confirm Password</label>
-			<input id="password-confirm" type="password" name="password_confirmation" required>
-		</div>
-	@endif
-
 	<div class="form-field{{ $errors->has('first_name') ? ' has-error' : '' }}">
 		<label for="first_name">First Name</label>
 
