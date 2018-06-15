@@ -27,33 +27,35 @@ class User extends Authenticatable{
 	 * @var string
 	 */
 	public $timestamps = false;
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable = [
-		'privileges', 'first_name', 'last_name', 'username', 'password',
-		'programme', 'email'
-	];
+	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'password', 'programme', 'email' ];
+
 	/**
 	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
 	protected $guarded = ['id'];
+
 	/**
 	 * The columns to be parsed as dates.
 	 *
 	 * @var array
 	 */
 	protected $dates = ['last_login'];
+
 	/**
 	 * The attributes that should be hidden for arrays.
 	 *
@@ -94,21 +96,16 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Indicates if authenticated used is a supervisor.
-	 *
-	 * @return boolean
-	 */
-	public function isSupervisor(){
-		return in_array("supervisor", $this->getPrivileges());
-	}
-
-	/**
 	 * Returns authenticated users privileges as a a PHP array.
 	 *
 	 * @return string[]
 	 */
 	public function getPrivileges(){
-		return explode(',', $this->privileges);
+		if($this->isGuest()){
+			return ['guest'];
+		} else {
+			return explode(',', $this->privileges);
+		}
 	}
 
 	/**
@@ -148,16 +145,14 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Indicates if authenticated used is an administrator of the parameters education level.
-	 *
-	 * @param string ShortName of an education level
+	 * Indicates if authenticated used is a supervisor.
 	 *
 	 * @return boolean
 	 */
-	public function isAdminOfEducationLevel($educationLevel){
-		return in_array("admin_".$educationLevel, $this->getPrivileges());
+	public function isSupervisor(){
+		return in_array("supervisor", $this->getPrivileges());
 	}
-
+	
 	/**
 	 * Indicates if authenticated used is a project administrator.
 	 *
@@ -184,6 +179,35 @@ class User extends Authenticatable{
 		return in_array("admin_system", $this->getPrivileges());
 	}
 
+		/**
+	 * Indicates if authenticated used is a student.
+	 *
+	 * @return boolean
+	 */
+	public function isStudent(){
+		return in_array("student", $this->getPrivileges());
+	}
+
+	/**
+	 * Indicates if authenticated used is a staff member.
+	 *
+	 * @return boolean
+	 */
+	public function isStaff(){
+		return in_array("staff", $this->getPrivileges());
+	}
+
+	/**
+	 * Indicates if authenticated used is an administrator of the parameters education level.
+	 *
+	 * @param string ShortName of an education level
+	 *
+	 * @return boolean
+	 */
+	public function isAdminOfEducationLevel($educationLevel){
+		return in_array("admin_".$educationLevel, $this->getPrivileges());
+	}
+
 	/**
 	 * An array of all education levels the user has permission too
 	 *
@@ -207,7 +231,7 @@ class User extends Authenticatable{
 			}
 		}
 
-		if($this->isSupervisor()){
+		if($this->isSupervisor() || $this->isGuest()){
 			// Adds all education levels
 			foreach(get_education_levels() as $key => $level){
 				if(!in_array($level, $allowedLevels)){
@@ -248,15 +272,6 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Indicates if authenticated used is a student.
-	 *
-	 * @return boolean
-	 */
-	public function isStudent(){
-		return in_array("student", $this->getPrivileges());
-	}
-
-	/**
 	 * Returns student type (undergraduate or postgraduate).
 	 * Do not try to move this to the student model.
 	 * It will cause an exception and no students will be able to log in.
@@ -283,15 +298,6 @@ class User extends Authenticatable{
 
 		// We couldn't find them in any student database
 		return null;
-	}
-
-	/**
-	 * Indicates if authenticated used is a staff member.
-	 *
-	 * @return boolean
-	 */
-	public function isStaff(){
-		return in_array("staff", $this->getPrivileges());
 	}
 
 	/**

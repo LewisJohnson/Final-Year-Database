@@ -9,7 +9,10 @@ namespace SussexProjects\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use SussexProjects\Http\Controllers\Controller;
+use SussexProjects\User;
 
 class LoginController extends Controller{
 	/*
@@ -49,31 +52,38 @@ class LoginController extends Controller{
 			$username = $request->input('username');
 		}
 
-		$userDN = $username."@ad.susx.ac.uk";
-		$password = $request->input('password');
+		$ldapUsername = $username."@ad.susx.ac.uk";
+		$ldapPassword = $request->input('password');
 		$ldapUrl = env('LDAP_URL');
 
-		$ds = ldap_connect($ldapUrl);
-		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
+		$ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
+		ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
 
-		if ($status = @ldap_bind($ds, $userDN, $password)) {
+		if($ldapConn){
+			$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
 
-			ldap_unbind($ds);
+			if ($ldapbind){
+				ldap_unbind($ldapConn);
 
-			$user = User::where('username', $username)->first();
+				$user = User::where('username', $username)->first();
+				if($user == null){
+					session()->flash('message', 'Logged in as guest.');
+					session()->flash('message_type', 'success');
 
-			if($user == null){
-				Auth::loginUsingId('guest');
-				Session::put('is-guest', true);
+					Auth::loginUsingId('guest');
+					Session::put('is-guest', true);
+				} else {
+					Auth::login($user, $request->filled('remember'));
+				}
 			} else {
-				Auth::login($user, $request->filled('remember'));
+				ldap_unbind($ldapConn);
+				session()->flash('message', 'Something went wrong.');
+				session()->flash('message_type', 'error');
 			}
-		} else {
-			ldap_unbind($ds);
 		}
 
-		return redirect()->intended();
+		return redirect()->action('HomeController@index');
 	}
 
 	/**
