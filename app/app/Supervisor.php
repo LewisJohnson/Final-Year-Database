@@ -8,6 +8,7 @@
 namespace SussexProjects;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\SupervisorController
  */
-class Supervisor extends User{
+class Supervisor extends Model{
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.

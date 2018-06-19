@@ -40,10 +40,10 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email'];
+	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email', 'temporary_account'];
 
 	/**
-	 * The attributes that are not mass assignable.
+	 * The attributes that are not mass assignable. 
 	 *
 	 * @var array
 	 */
@@ -141,7 +141,7 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		return $this->privileges == null;
+		return $this->temporary_account || $this->privileges == null;
 	}
 
 	/**
@@ -231,8 +231,8 @@ class User extends Authenticatable{
 			}
 		}
 
-		if($this->isSupervisor() || $this->isGuest()){
-			// Adds all education levels
+		// Adds all education levels for supervisors, guests and system administrators
+		if($this->isSupervisor() || $this->isGuest() || $this->isSystemAdmin()){
 			foreach(get_education_levels() as $key => $level){
 				if(!in_array($level, $allowedLevels)){
 					$allowedLevels[$level["longName"]] = $level;

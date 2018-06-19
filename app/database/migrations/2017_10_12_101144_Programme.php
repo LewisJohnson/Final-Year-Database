@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProgrammesTable extends Migration {
+class Programme extends Migration {
 
 	/**
 	 * Run the migrations.

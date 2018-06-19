@@ -20,7 +20,6 @@
 			</ol>
 		</div>
 
-
 		<div class="section horizontal card">
 			<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Students</h2>
 
@@ -43,6 +42,19 @@
 				@endforeach
 			</ol>
 		</div>
+
+		@if(Auth::user()->isSystemAdmin())
+			<div class="section horizontal card">
+				<h2>Administrators</h2>
+				<ol class="order-list-js last-name-header-list-js" id="adminList" sorted="false" style="list-style: none">
+					@foreach($admins as $admin)
+						<li>
+							<a title="Edit {{ $admin->getFullName() }}" href="{{ action('UserController@edit', $admin) }}">{{ $admin->getFullName() }}</a>
+						</li>
+					@endforeach
+				</ol>
+			</div>
+		@endif
 	</div>
 </div>
 @endsection

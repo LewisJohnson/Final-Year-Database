@@ -19,11 +19,11 @@ class Feedback extends Migration{
 	public function up(){
 		Schema::create('feedback', function (Blueprint $table) {
 			$table->uuid('id');
-			$table->text('comment')->nullable(false);
-			$table->string('email', 128)->nullable(true);
-			$table->string('page', 256)->nullable(true);
-			$table->string('department', 256)->nullable(true);
-			$table->string('education_level', 256)->nullable(true);
+			$table->text('comment');
+			$table->string('email')->nullable();
+			$table->string('page')->nullable();
+			$table->string('department')->nullable();
+			$table->string('education_level')->nullable();
 			$table->primary('id');
 		});
 

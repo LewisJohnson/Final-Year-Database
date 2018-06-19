@@ -13,12 +13,12 @@
 				<input type="checkbox" id="anonymous" name="anonymous" class="checkbox-input">
 				<label for="anonymous">Send Anonymously</label>
 			</div>
-			<ins>Your email will not be recorded and you will not receive a response.</ins>
+			<ins>Your email will not be recorded.</ins>
 		</div>
 	@else
 		<div class="form-field">
 			<label>Email</label>
-			<input type="text" name="email" placeholder="Optional - only if you would like a response"/>
+			<input type="text" name="email" placeholder="Optional"/>
 		</div>
 	@endif
 

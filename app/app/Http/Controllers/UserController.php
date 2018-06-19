@@ -39,7 +39,8 @@ class UserController extends Controller{
 	public function index(Request $request){
 		$students = Student::all();
 		$supervisors = Supervisor::all();
-		$staffUsers = User::Where('privileges', 'staff')->get();
+		$staffUsers = User::where('privileges', 'staff')->get();
+		$admins = [];
 
 		$students = $students->sortBy(function($student){
 			return $student->user->last_name;
@@ -53,8 +54,25 @@ class UserController extends Controller{
 			return $staff->last_name;
 		});
 
-		return view('users.index')->with('supervisors', $supervisors)
-			->with('staff', $staffUsers)->with('students', $students)
+		if(Auth::user()->isSystemAdmin()){
+			$admins = User::where('privileges', 'LIKE', '%admin_system%');
+
+			foreach (get_education_levels() as $education_level) {
+				$admins->orWhere('privileges', 'admin_'.$education_level["shortName"]);
+			}
+
+			$admins = $admins->get();
+
+			$admins = $admins->sortBy(function($admin){
+				return $admin->last_name;
+			});
+		}
+
+		return view('users.index')
+			->with('supervisors', $supervisors)
+			->with('staff', $staffUsers)
+			->with('students', $students)
+			->with('admins', $admins)
 			->with('view', $request->query("view"));
 	}
 
@@ -91,30 +109,34 @@ class UserController extends Controller{
 
 			$user->save();
 
-			if(in_array("student", $request->privileges)){
-				$student = Student::create([
-					'id' => $user->id,
-					'registration_number' => $request['registration_number'],
-				]);
-				$student->save();
-			}
+			// No privileges selected
+			if (!empty($privileges) && is_array($privileges) && $privileges instanceof Countable){
+				if(in_array("student", $request->privileges)){
+					$student = Student::create([
+						'id' => $user->id,
+						'registration_number' => $request['registration_number'],
+					]);
+					$student->save();
+				}
 
-			if(in_array("supervisor", $request->privileges)){
-				$supervisor = Supervisor::create([
-					'id' => $user->id, 'title' => $request['title'],
-					'project_load_'.Session::get('education_level')['shortName'] => $request['project_load_'.Session::get('education_level')['shortName']],
-					'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
-					'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
-				]);
-				$supervisor->save();
-			}
+				if(in_array("supervisor", $request->privileges)){
+					$supervisor = new Supervisor();
+					$supervisor['id'] = $user->id;
+					$supervisor['title'] = $request['title'];
 
-			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-			$replaced = str_replace_array('?', [
-				Session::get("department").'_users',
-				implode(",", $request->privileges), $user->id
-			], $string);
-			DB::statement($replaced);
+					foreach (get_education_levels() as $education_level) {
+						$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+						$supervisor['take_students_'.$education_level['shortName']] = empty($request['take_students_'.$education_level['shortName']]);
+						$supervisor['accept_email_'.$education_level['shortName']] = empty($request['accept_email_'.$education_level['shortName']]);
+					}
+
+					$supervisor->save();
+				}
+
+				$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
+				$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+				DB::statement($replaced);
+			}
 
 			return true;
 		});
@@ -145,6 +167,11 @@ class UserController extends Controller{
 	 * @return boolean Returns true if all conditions passed
 	 */
 	public static function checkPrivilegeConditions($privileges){
+		if (empty($privileges) || !(is_array($privileges) || $privileges instanceof Countable)){
+			// No privileges selected
+			return true;
+		}
+
 		$amountOfPrivileges = count($privileges);
 		$amountOfAdminPrivileges = 0;
 		$amountOfStudentPrivileges = 0;
@@ -259,20 +286,36 @@ class UserController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(UserForm $user, Request $request){
+	public function update(UserForm $userForm){
+		$request = request();
+		$user = User::where('username', $userForm->username)->first();
+
+		// No privileges selected
+		if (empty($privileges) || !(is_array($privileges) || $privileges instanceof Countable)){
+			$user->privileges = null;
+			$user->save();
+
+			session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
+			session()->flash('message_type', 'success');
+
+			return redirect()->action('HomeController@index');
+		}
+
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return redirect()->action('HomeController@index');
 		}
 
 		DB::transaction(function() use ($request, $user){
-			$user->fill(array(
+			$user->update(array(
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
 				'programme' => $request['programme'],
-				'email' => $request['email']
+				'email' => $request['email'],
+				'temporary_account' => false
 			));
 
+			// Update student privilege
 			if(in_array("student", $request->privileges)){
 				if($user->isStudent()){
 					// If they are a student already, update
@@ -288,52 +331,47 @@ class UserController extends Controller{
 				}
 			}
 
+			// If a user was a student and they had their student privilege revoked
+			// Delete the student model (Remove them from student table)
+			if(!in_array("student", $request->privileges) && $user->isStudent()){
+				$user->student->delete();
+			}
+
+			// Update student supervisor
 			if(in_array("supervisor", $request->privileges)){
 				if($user->isSupervisor()){
-					// If they are a student already, update
-					$user->supervisor->fill([
-						'id' => $user->id, 'title' => $request['title'],
-						'project_load_'.Session::get('education_level')['shortName'] => $request['project_load_'.Session::get('education_level')['shortName']],
-						'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
-						'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
-					]);
-					$user->supervisor->save();
+					$supervisor = $user->supervisor;
 				} else {
-					// Else, create a new supervisor
-					$supervisor = Supervisor::create([
-						'id' => $user->id, 'title' => $request['title'],
-						'project_load_'.Session::get('education_level')['shortName'] => $request['project_load_'.Session::get('education_level')['shortName']],
-						'take_students_'.Session::get('education_level')['shortName'] => $request['take_students_'.Session::get('education_level')['shortName']],
-						'accept_email_'.Session::get('education_level')['shortName'] => $request['accept_email_'.Session::get('education_level')['shortName']]
-					]);
-					$supervisor->save();
+					$supervisor = new Supervisor();
+					$supervisor['id'] = $user->id;
 				}
+
+				$supervisor['title'] = $request['title'];
+
+				foreach (get_education_levels() as $education_level) {
+					$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+					$supervisor['take_students_'.$education_level['shortName']] = empty($request['take_students_'.$education_level['shortName']]);
+					$supervisor['accept_email_'.$education_level['shortName']] = empty($request['accept_email_'.$education_level['shortName']]);
+				}
+
+				$supervisor->save();
+			}
+
+			// If a user was a supervisor and they had their supervisor privilege revoked
+			// Delete the supervisor model (Remove them from supervisor table)
+			if(!in_array("supervisor", $request->privileges) && $user->isSupervisor()){
+				$user->supervisor->delete();
 			}
 
 			$user->save();
 			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-			$replaced = str_replace_array('?', [
-				Session::get("department").'_users',
-				implode(",", $request->privileges), $user->id
-			], $string);
+			$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
 			DB::statement($replaced);
-
 		});
 
-		session()->flash('message', 'User was updated.');
+		session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('HomeController@index');
 	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \SussexProjects\User $user
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	//	public function destroy(User $user){
-	//		//
-	//	}
 }

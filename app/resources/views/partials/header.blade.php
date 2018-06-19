@@ -69,7 +69,7 @@
 						</li>
 					@endif
 
-					@if(Auth::user()->isProjectAdmin() || Auth::user()->isSystemAdmin())
+					@if(Auth::user()->isProjectAdmin())
 						<li class="has-dropdown links" data-content="project-admin">
 							<a href="#0">Admin</a>
 						</li>

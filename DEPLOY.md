@@ -57,3 +57,12 @@ The only way to get npm is to download nodeJs.
 
 ### Step 10 - Compile JS and SASS
 `npm run prod`
+
+### Step 11 - Create System Administrator
+After the server is fully configured and running, it's time to bootstrap the system with a system administrator. Simply enter the command and follow the on-screen instructions.
+
+`php artisan make:admin`
+
+If you make a mistake while creating the system administrator, run the following command to empty all the tables:
+
+`php artisan migrate:fresh`

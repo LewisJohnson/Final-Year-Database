@@ -21,7 +21,7 @@ class UserAgentString extends Migration {
 			Schema::create($department.'_user_agent_strings', function (Blueprint $table) {
 				$table->uuid('id');
 				$table->text('user_agent');
-				$table->text('referrer')->nullable(true);
+				$table->text('referrer')->nullable();
 				$table->boolean('first_visit');
 				$table->primary('id');
 			});

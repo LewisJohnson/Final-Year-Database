@@ -9,6 +9,7 @@ namespace SussexProjects\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -53,47 +54,66 @@ class LoginController extends Controller{
 			$username = $request->input('username');
 		}
 
-		$ldapUsername = $username."@ad.susx.ac.uk";
-		$ldapPassword = $request->input('password');
-		$ldapUrl = env('LDAP_URL');
+		// $ldapUsername = $username."@ad.susx.ac.uk";
+		// $ldapPassword = $request->input('password');
+		// $ldapUrl = env('LDAP_URL');
 
-		$ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
-		ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
+		// $ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
+		// ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		// ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
 
-		if($ldapConn){
-			$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
+		// if($ldapConn){
+		// 	$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
 
-			if ($ldapbind){
-					ldap_unbind($ldapConn);
+		// 	if ($ldapbind){
+		// 		ldap_unbind($ldapConn);
+		// 		$user = User::where('username', $username)->first();
 
-				$user = User::where('username', $username)->first();
+		// 		if($user == null){
+		// 			$user = new User;
+		// 			$username = (string) Str::uuid();
+		// 			DB::transaction(function() use ($username, $user){
+		// 				$user->fill(array(
+		// 					'first_name' => 'Guest',
+		// 					'last_name' => 'Guest',
+		// 					'username' => $username,
+		// 					'email' => $username.'@no-one.biz.org',
+		// 					'temporary_account' => true
+		// 				));
 
-				if($user == null){
-					$user = new User;
+		// 				$user->save();
+		// 				return true;
+		// 			});
 
-					DB::transaction(function() use ($username, $user){
-						$user->fill(array(
-							'first_name' => 'Guest',
-							'last_name' => 'Guest',
-							'username' => $username,
-							'email' => $username.'@sussex.ac.uk'
-						));
+		// 			session()->flash('message', 'Logged in as guest.');
+		// 			session()->flash('message_type', 'success');
+		// 		}
+		// 	} else {
+		// 		ldap_unbind($ldapConn);
+		// 		session()->flash('message', 'Something went wrong.');
+		// 		session()->flash('message_type', 'error');
+		// 	}
+		// }
 
-						$user->save();
-						return true;
-					});
+		$user = new User;
+		$username = (string) Str::uuid();
+		DB::transaction(function() use ($username, $user){
+			$user->fill(array(
+				'first_name' => 'Guest',
+				'last_name' => 'Guest',
+				'username' => $username,
+				'email' => $username,
+				'temporary_account' => true
+			));
 
-					session()->flash('message', 'Logged in as guest.');
-					session()->flash('message_type', 'success');
-				}
-			} else {
-				ldap_unbind($ldapConn);
-				session()->flash('message', 'Something went wrong.');
-				session()->flash('message_type', 'error');
-			}
-		}
+			$user->save();
+			return true;
+		});
 
+		session()->flash('message', 'Logged in as guest.');
+		session()->flash('message_type', 'success');
+		
+		$user = User::where('username', $username)->first();
 		Auth::login($user, $request->filled('remember'));
 		Session::put('education_level', current($user->allowedEducationLevel()));
 		
@@ -110,7 +130,7 @@ class LoginController extends Controller{
 		$department = Session::get('department');
 		$user = Auth::user();
 
-		if($user->isGuest()){
+		if($user->temporary_account){
 			$user->delete();
 		} else {
 			$this->guard()->logout();

@@ -294,17 +294,10 @@ class ProjectAdminController extends Controller{
 	 * @return bool
 	 */
 	public function loginAs($id){
-		if(Session::get('sudo-mode') == null || Session::get('sudo-mode') == false){
-			session()->flash('message', 'Something went wrong');
-			session()->flash('message_type', 'error');
-
-			return false;
-		}
-
 		$user = User::findOrFail($id);
 
 		if($user->isSystemAdmin() || $user->isProjectAdmin()){
-			session()->flash('message', 'You may not log in as an administrator');
+			session()->flash('message', 'You may not log in as an administrator.');
 			session()->flash('message_type', 'error');
 
 			return false;

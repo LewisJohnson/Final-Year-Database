@@ -22,9 +22,9 @@ class Student extends Migration{
 					$table->uuid('id')->unique();
 					$table->string('registration_number')->unique();
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-					$table->uuid('project_id')->nullable(true);
+					$table->uuid('project_id');
 					$table->boolean('share_name')->default(1);
-					$table->uuid('marker_id')->nullable(true);
+					$table->uuid('marker_id');
 					$table->primary('id');
 
 					$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');

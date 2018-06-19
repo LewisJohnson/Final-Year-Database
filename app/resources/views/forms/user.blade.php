@@ -131,7 +131,7 @@
 		<div class="form-field">
 			<label for="title">Title</label>
 			@include('forms.partials.error-block', ['name' => 'title'])
-		<input id="title" type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
+			<input id="title" placeholder="Dr." type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
 		</div>
 
 		<label>Email preference</label>
@@ -167,8 +167,8 @@
 			@foreach(get_education_levels() as $educationLevel)
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 					<div class="form-field">
-						<label for="project-load-{{ $educationLevel['shortName'] }}">Masters project load</label>
-						<input id="project-load-{{ $educationLevel['shortName'] }}" type="number" name="project_load_{{ $educationLevel['shortName'] }}" min="0" max="255" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->getProjectLoad($educationLevel['shortName']) }}" @endif @endif>
+						<label for="project-load-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} project load</label>
+						<input id="project-load-{{ $educationLevel['shortName'] }}" type="number" name="project_load_{{ $educationLevel['shortName'] }}" min="0" max="255" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->getProjectLoad($educationLevel['shortName']) }}" @else value="1" @endif @endif>
 					</div>
 				@endif
 			@endforeach
@@ -177,8 +177,20 @@
 		{{-- END SUPERVISOR FORM --}}
 	</div>
 
-	<div class="form-field">
-		<button type="submit" class="button button--raised button--accent">{{ $view == "new" ? 'Register' : 'Update User'}}</button>
-	</div>
+	@if($view == "new")
+		<div class="form-field">
+			<button type="submit" class="button button--raised button--accent">Register</button>
+		</div>
+	@else
+		<div class="button-group button-group--horizontal">
+			<div class="form-field">
+				<button type="submit" class="button button--raised button--accent">Update user</button>
+			</div>
+
+			<div class="form-field">
+				<button type="submit" class="button button--raised button--danger">Delete user</button>
+			</div>
+		</div>
+	@endif
 {{-- END USER FORM --}}
 </form>

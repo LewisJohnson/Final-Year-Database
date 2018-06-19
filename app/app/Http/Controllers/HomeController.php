@@ -91,23 +91,6 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Checks the users password and puts them into sudo-mode.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function sudo(Request $request){
-		$this->validate($request, ['password' => 'required']);
-
-		if(Hash::check($request->password, Auth::user()->password)){
-			Session::put('sudo-mode', true);
-		}
-
-		return back();
-	}
-
-	/**
 	 * Displays the about page.
 	 *
 	 * @return \Illuminate\Http\Response

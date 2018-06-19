@@ -35,8 +35,8 @@ class UserForm extends FormRequest{
 		return [
 			'username' => 'required|max:32', 'first_name' => 'required|max:128',
 			'last_name' => 'required|max:128', 'email' => 'required|max:128',
-			'privileges' => 'required', 'title' => 'max:6',
-			'project_load_*' => 'min:0|max:255', 'programme' => 'required',
+			'title' => 'max:6',
+			'project_load_*' => 'min:0|max:255',
 		];
 	}
 
