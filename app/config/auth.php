@@ -71,7 +71,7 @@ return [
 
 	'providers' => [
 		'users' => [
-			'driver' => 'eloquent',
+			'driver' => 'adldap',
 			'model' => SussexProjects\User::class,
 		],
 	],
