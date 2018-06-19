@@ -126,7 +126,7 @@ return [
                 |
                 */
 
-                'domain_controllers' => explode(' ', env('ADLDAP_CONTROLLERS', 'ldaps://ad.susx.ac.uk')),
+                'domain_controllers' => explode(' ', env('ADLDAP_CONTROLLERS', 'ad.susx.ac.uk')),
 
                 /*
                 |--------------------------------------------------------------------------
