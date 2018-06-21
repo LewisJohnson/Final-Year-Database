@@ -15,7 +15,6 @@ $factory->define(SussexProjects\User::class, function (Faker $faker){
 		'first_name' => $faker->firstName,
 		'last_name' => $faker->lastName,
 		'username' => $username,
-		'password' => bcrypt('password'),
 		'programme' => 'Computer Science',
 		'email' => $username.'@susx.ac.uk'
 	];

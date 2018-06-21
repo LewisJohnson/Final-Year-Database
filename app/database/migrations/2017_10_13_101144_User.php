@@ -25,18 +25,17 @@ class User extends Migration{
 		foreach(get_departments() as $key => $department) {
 			$tableName = $department.'_users';
 			Schema::create($tableName, function (Blueprint $table) use ($department) {
-				$table->uuid('id')->unique();;
+				$table->uuid('id')->unique();
 				$table->string('first_name');
 				$table->string('last_name');
-				$table->string('username');
-				$table->string('email');
+				$table->string('username')->unique();
+				$table->string('email')->unique();
 				$table->string('programme')->nullable();
 				$table->dateTimeTz('last_login')->nullable();
-				$table->boolean('temporary_account')->default(false);
 				$table->rememberToken();
 
 				$table->primary('id');
-				$table->foreign('programme')->references('name')->on($department.'_programmes')->onDelete('cascade');
+				$table->foreign('programme')->references('id')->on($department.'_programmes');
 			});
 
 			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') AFTER `id`;";

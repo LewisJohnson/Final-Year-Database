@@ -40,7 +40,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email', 'temporary_account'];
+	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email'];
 
 	/**
 	 * The attributes that are not mass assignable. 
@@ -111,6 +111,15 @@ class User extends Authenticatable{
 	/**
 	 * Returns the student related to this user.
 	 *
+	 * @return Programme
+	 */
+	public function programme(){
+		return $this->hasOne(Programme::class, 'id');
+	}
+
+	/**
+	 * Returns the student related to this user.
+	 *
 	 * @return Student
 	 */
 	public function student(){
@@ -141,7 +150,7 @@ class User extends Authenticatable{
 	 * @return boolean
 	 */
 	public function isGuest(){
-		return $this->temporary_account || $this->privileges == null;
+		return $this->privileges == null;
 	}
 
 	/**
@@ -221,13 +230,7 @@ class User extends Authenticatable{
 
 		foreach(get_education_levels() as $key => $level){
 			if(in_array("admin_".$level["shortName"], $this->getPrivileges())){
-				$allowedLevels[$level["longName"]] = $level;
-			}
-		}
-
-		foreach(get_education_levels() as $key => $level){
-			if(in_array("guest_".$level["shortName"], $this->getPrivileges())){
-				$allowedLevels[$level["longName"]] = $level;
+				array_push($allowedLevels, $level);
 			}
 		}
 
@@ -235,7 +238,7 @@ class User extends Authenticatable{
 		if($this->isSupervisor() || $this->isGuest() || $this->isSystemAdmin()){
 			foreach(get_education_levels() as $key => $level){
 				if(!in_array($level, $allowedLevels)){
-					$allowedLevels[$level["longName"]] = $level;
+					array_push($allowedLevels, $level);
 				}
 			}
 		}
@@ -250,6 +253,7 @@ class User extends Authenticatable{
 			}
 		}
 
+		$allowedLevels = array_unique($allowedLevels);
 		if($shortName){
 			$shortAllowedLevels = array();
 			foreach($allowedLevels as $key => $level){

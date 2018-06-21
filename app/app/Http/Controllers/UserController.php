@@ -99,6 +99,10 @@ class UserController extends Controller{
 
 		$user = new User;
 		DB::transaction(function() use ($request, $user){
+			if ($request['programme'] === '') {
+				$request['programme'] = null;
+			}
+			
 			$user->fill(array(
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
@@ -109,8 +113,7 @@ class UserController extends Controller{
 
 			$user->save();
 
-			// No privileges selected
-			if (!empty($privileges) && is_array($privileges) && $privileges instanceof Countable){
+			if (!empty($request->privileges) && is_array($request->privileges)){
 				if(in_array("student", $request->privileges)){
 					$student = Student::create([
 						'id' => $user->id,
@@ -122,7 +125,7 @@ class UserController extends Controller{
 				if(in_array("supervisor", $request->privileges)){
 					$supervisor = new Supervisor();
 					$supervisor['id'] = $user->id;
-					$supervisor['title'] = $request['title'];
+					$supervisor['title'] = $request->title;
 
 					foreach (get_education_levels() as $education_level) {
 						$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
@@ -167,7 +170,7 @@ class UserController extends Controller{
 	 * @return boolean Returns true if all conditions passed
 	 */
 	public static function checkPrivilegeConditions($privileges){
-		if (empty($privileges) || !(is_array($privileges) || $privileges instanceof Countable)){
+		if (empty($privileges) || !(is_array($privileges))){
 			// No privileges selected
 			return true;
 		}
@@ -291,7 +294,7 @@ class UserController extends Controller{
 		$user = User::where('username', $userForm->username)->first();
 
 		// No privileges selected
-		if (empty($privileges) || !(is_array($privileges) || $privileges instanceof Countable)){
+		if (empty($request->privileges) || !(is_array($request->privileges))){
 			$user->privileges = null;
 			$user->save();
 
@@ -306,13 +309,16 @@ class UserController extends Controller{
 		}
 
 		DB::transaction(function() use ($request, $user){
+			if ($request['programme'] === '') {
+				$request['programme'] = null;
+			}
+
 			$user->update(array(
 				'first_name' => $request['first_name'],
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
 				'programme' => $request['programme'],
-				'email' => $request['email'],
-				'temporary_account' => false
+				'email' => $request['email']
 			));
 
 			// Update student privilege

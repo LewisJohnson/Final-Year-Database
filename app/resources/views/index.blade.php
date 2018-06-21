@@ -20,7 +20,6 @@
 								<input onChange="$('#share-name-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
 								<label for="share_name">Share name</label>
 							</div>
-
 						</div>
 					</form>
 				</div>

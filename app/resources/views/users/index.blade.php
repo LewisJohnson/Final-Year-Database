@@ -5,7 +5,8 @@
 
 	@if($view === "edit")
 		<h1>Edit Users</h1>
-		<p>Select a user to edit.</p>
+		<p>Select a user to edit or <a href="{{ action('UserController@edit', Auth::user()) }}">edit your account</a>.</p>
+		
 	@endif
 	
 	<div class="section-container section-user-selector">

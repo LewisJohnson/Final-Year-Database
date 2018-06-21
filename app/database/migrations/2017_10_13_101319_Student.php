@@ -22,13 +22,13 @@ class Student extends Migration{
 					$table->uuid('id')->unique();
 					$table->string('registration_number')->unique();
 					$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-					$table->uuid('project_id');
+					$table->uuid('project_id')->nullable();
 					$table->boolean('share_name')->default(1);
-					$table->uuid('marker_id');
+					$table->uuid('marker_id')->nullable();
 					$table->primary('id');
 
 					$table->foreign('id')->references('id')->on($department.'_users')->onDelete('cascade');
-					// $table->foreign('id')->references('project_id')->on($department.'_projects_'.$level['shortName'])->onDelete('set null');
+					// $table->foreign('project_id')->references('id')->on($department.'_projects_'.$level['shortName'])->onDelete('SET NULL');
 				});
 			}
 		}
@@ -37,9 +37,9 @@ class Student extends Migration{
 			$table->uuid('id')->unique();
 			$table->string('registration_number');
 			$table->enum('project_status', ['none', 'selected', 'proposed', 'accepted'])->default('none');
-			$table->uuid('project_id')->nullable(true);
+			$table->uuid('project_id')->nullable();
 			$table->boolean('share_name')->default(1);
-			$table->uuid('marker_id')->nullable(true);
+			$table->uuid('marker_id')->nullable();
 			$table->primary('id');
 		});
 	}

@@ -19,8 +19,9 @@ class Programme extends Migration {
 	public function up(){
 		foreach(get_departments() as $key => $department) {
 			Schema::create($department.'_programmes', function (Blueprint $table) {
+				$table->uuid('id');
 				$table->string('name')->unique();
-				$table->primary('name');
+				$table->primary('id');
 			});
 		}
 	}

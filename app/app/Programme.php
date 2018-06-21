@@ -29,13 +29,6 @@ class Programme extends Model{
 	public $fillable = ['name'];
 
 	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	public $id = ['name'];
-
-	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
@@ -45,19 +38,20 @@ class Programme extends Model{
 	/**
 	 * A HTML data-list of all topics.
 	 *
-	 * @param null $programme
+	 * @param null $userProgrammeId
 	 *
 	 * @return string
 	 */
-	public static function getSelectList($programme = null){
+	public static function getSelectList($userProgrammeId = null){
 		$programmes = Programme::all();
 
 		$rtnString = '<select name="programme">';
+		$rtnString .= '<option value="">None</option>';
 		foreach($programmes as $prog){
-			if($programme == $prog){
-				$rtnString .= '<option selected value="'.$prog->name.'">'.$prog->name.'</option>';
+			if($userProgrammeId == $prog->id){
+				$rtnString .= '<option selected value="'.$prog->id.'">'.$prog->name.'</option>';
 			} else {
-				$rtnString .= '<option value="'.$prog->name.'">'.$prog->name.'</option>';
+				$rtnString .= '<option value="'.$prog->id.'">'.$prog->name.'</option>';
 			}
 		}
 		$rtnString .= '</select>';

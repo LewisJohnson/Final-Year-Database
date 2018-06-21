@@ -120,10 +120,10 @@ Route::group(['middleware' => ['web', 'ProjectAdministrator', 'checkDepartment',
 	Route::get('admin', 'ProjectAdminController@index');
 
 	// Import student view
-	Route::get('admin/students/import', 'ProjectAdminController@importStudentsView');
+	Route::get('admin/students/import', 'StudentController@importStudentsView');
 
 	// Import student form
-	Route::post('admin/students/import', 'ProjectAdminController@importStudents');
+	Route::post('admin/students/import', 'StudentController@importStudents');
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form

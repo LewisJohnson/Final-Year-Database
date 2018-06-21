@@ -13,7 +13,7 @@
 				{{ csrf_field() }}
 
 			<div id="login-username" type="email" autocorrect="off" autocapitalize="none" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
-				<label for="username">Username/Email</label>
+				<label for="username">Username</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
 					<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
@@ -49,7 +49,7 @@
 				{{ csrf_field() }}
 
 				<div type="email" autocorrect="off" autocapitalize="none" id="login-username" class="form-field">
-					<label for="username">Username/Email</label>
+					<label for="username">Username</label>
 					<input id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>
 

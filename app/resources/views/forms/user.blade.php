@@ -56,7 +56,7 @@
 
 	<div class="form-field{{ $errors->has('programme') ? ' has-error' : '' }}">
 		<label for="programme">Programme</label>
-		@if($view === "new")
+		@if($view === "new" || empty($user->programme))
 			{!! SussexProjects\Programme::getSelectList() !!}
 		@elseif($view === "edit")
 			{!! SussexProjects\Programme::getSelectList($user->programme) !!}
