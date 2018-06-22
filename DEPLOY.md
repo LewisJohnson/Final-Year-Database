@@ -37,11 +37,12 @@ rm -r docs
 rm app/serve.bat
 ```
 
-### Step 6 - Enviroment
+### Step 6 - Setup Enviroment File
 Copy the example enviroment file
+
 `cp .env.example .env`
 
-Then open and edit the enviroment file
+Then open and edit the enviroment file to your liking.
 
 ### Step 7 - Install Back-End Dependencies
 `php ../../composer.phar update`
@@ -58,11 +59,20 @@ The only way to get npm is to download nodeJs.
 ### Step 10 - Compile JS and SASS
 `npm run prod`
 
-### Step 11 - Create System Administrator
+### Step 11 - Create Database
+
+**WARNING: THIS STEP WILL DROP ALL TABLES IN THE DATABASE**
+
+Double check you have set the `.env` enviroment file correctly before doing this step.
+Run the command
+
+`php artisan migrate:fresh`
+
+Running this command will create all the tables needed for the system.
+
+### Step 12 - Create System Administrator
 After the server is fully configured and running, it's time to bootstrap the system with a system administrator. Simply enter the command and follow the on-screen instructions.
 
 `php artisan make:admin`
 
-If you make a mistake while creating the system administrator, run the following command to empty all the tables:
-
-`php artisan migrate:fresh`
+If you make a mistake, repeat step.
