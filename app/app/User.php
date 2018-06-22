@@ -253,7 +253,7 @@ class User extends Authenticatable{
 			}
 		}
 
-		$allowedLevels = array_unique($allowedLevels);
+		$allowedLevels = array_unique($allowedLevels, SORT_REGULAR);
 		if($shortName){
 			$shortAllowedLevels = array();
 			foreach($allowedLevels as $key => $level){

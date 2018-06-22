@@ -279,111 +279,112 @@ function wrapTextWithTag(areaId, tag) {
 }
 
 function sortTable(header, table) {
-		var i, shouldSwitch, switchcount = 0;
-		var rows, x, y = $();
-		var switching = true;
-		var dir = "asc";
+	var i, shouldSwitch, switchcount = 0;
+	var rows, x, y = $();
+	var switching = true;
+	var dir = "asc";
 
-		if(!(header instanceof jQuery)){
-			header = $(header);
+	if(!(header instanceof jQuery)){
+		header = $(header);
+	}
+
+	if(!(table instanceof jQuery)){
+		table = $(table);
+	}
+
+	// If the header is a checkbox, ignore it
+	if(header.find('.checkbox').length > 0){
+		return;
+	}
+
+	table.find('th').each(function(key, th) {
+		if(!$(th).is(header)){
+			$(th).find('span').remove();
 		}
+	});
 
-		if(!(table instanceof jQuery)){
-			table = $(table);
-		}
-
-		// If the header is a checkbox, ignore it
-		if(header.find('.checkbox').length > 0){
-			return;
-		}
-
-		table.find('th').each(function(key, th) {
-			if(!$(th).is(header)){
-				$(th).find('span').remove();
-			}
-		});
-
-		if(header.find('span').length < 1){
-			header.append('<span>&#x25B2;</span>');
+	if(header.find('span').length < 1){
+		header.append('<span>&#x25B2;</span>');
+		header.attr('data-asc', '');
+	} else {
+		if(header.attr('data-asc') == ""){
+			header.removeAttr('data-asc');
+			header.attr('data-desc', '');
+			header.find('span').remove();
+			header.append('<span>&#x25BC;</span>');
+		} else if(header.attr('data-desc') == ""){
+			header.removeAttr('data-desc');
 			header.attr('data-asc', '');
-		} else {
-			if(header.attr('data-asc') == ""){
-				header.removeAttr('data-asc');
-				header.attr('data-desc', '');
-				header.find('span').remove();
-				header.append('<span>&#x25BC;</span>');
-			} else if(header.attr('data-desc') == ""){
-				header.removeAttr('data-desc');
-				header.attr('data-asc', '');
-				header.find('span').remove();
-				header.append('<span>&#x25B2;</span>');
-			}
-
+			header.find('span').remove();
+			header.append('<span>&#x25B2;</span>');
 		}
 
-		/* Make a loop that will continue until
-		no switching has been done: */
-		while (switching){
-			// Start by saying: no switching is done:
-			switching = false;
-			rows = table.find("TR");
-			/* Loop through all table rows (except the
-			first, which contains table headers): */
-			for (i = 1; i < (rows.length - 1); i++) {
-				// Start by saying there should be no switching:
-				shouldSwitch = false;
-				/* Get the two elements you want to compare,
-				one from current row and one from the next: */
-				x = rows.eq(i).find("TD").eq(header.index());
-				y = rows.eq(i + 1).find("TD").eq(header.index());
+	}
 
-				/* Check if the two rows should switch place,
-				based on the direction, asc or desc: */
-				if (dir == "asc") {
-					if(typeof x.data('use-hover-value') !== 'undefined'){
-						if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == 1) {
-							// If so, mark as a switch and break the loop:
-							shouldSwitch= true;
-							break;
-						}
-					}
+	/* Make a loop that will continue until
+	no switching has been done: */
+	while (switching){
+		// Start by saying: no switching is done:
+		switching = false;
+		rows = table.find("TR");
+		/* Loop through all table rows (except the
+		first, which contains table headers): */
+		for (i = 1; i < (rows.length - 1); i++) {
+			// Start by saying there should be no switching:
+			shouldSwitch = false;
+			/* Get the two elements you want to compare,
+			one from current row and one from the next: */
+			x = rows.eq(i).find("TD").eq(header.index());
+			y = rows.eq(i + 1).find("TD").eq(header.index());
 
-					if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == 1) {
+			/* Check if the two rows should switch place,
+			based on the direction, asc or desc: */
+			if (dir == "asc") {
+				if(typeof x.data('use-hover-value') !== 'undefined'){
+					if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == 1) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
 						break;
 					}
-				} else if (dir == "desc") {
-					if(typeof x.data('use-hover-value') !== 'undefined'){
-						if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == -1) {
-							// If so, mark as a switch and break the loop:
-							shouldSwitch= true;
-							break;
-						}
-					}
+				}
 
-					if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == -1) {
+				if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == 1) {
+					// If so, mark as a switch and break the loop:
+					shouldSwitch= true;
+					break;
+				}
+			} else if (dir == "desc") {
+				if(typeof x.data('use-hover-value') !== 'undefined'){
+					if (x.data('hover').toLowerCase().localeCompare(y.data('hover').toLowerCase()) == -1) {
 						// If so, mark as a switch and break the loop:
 						shouldSwitch= true;
 						break;
 					}
+				}
+
+				if (x.text().toLowerCase().localeCompare(y.text().toLowerCase()) == -1) {
+					// If so, mark as a switch and break the loop:
+					shouldSwitch= true;
+					break;
 				}
 			}
-			if (shouldSwitch) {
-				/* If a switch has been marked, make the switch
-				and mark that a switch has been done: */
-				rows.eq(i).before(rows.eq(i + 1));
+		}
+		if (shouldSwitch) {
+			/* If a switch has been marked, make the switch
+			and mark that a switch has been done: */
+			rows.eq(i).before(rows.eq(i + 1));
 
+			switching = true;
+			// Each time a switch is done, increase this count by 1:
+			switchcount ++; 
+		} else {
+			/* If no switching has been done AND the direction is "asc",
+			set the direction to "desc" and run the while loop again. */
+			if (switchcount == 0 && dir == "asc") {
+				dir = "desc";
 				switching = true;
-				// Each time a switch is done, increase this count by 1:
-				switchcount ++; 
-			} else {
-				/* If no switching has been done AND the direction is "asc",
-				set the direction to "desc" and run the while loop again. */
-				if (switchcount == 0 && dir == "asc") {
-					dir = "desc";
-					switching = true;
-				}
 			}
 		}
 	}
+}
+
