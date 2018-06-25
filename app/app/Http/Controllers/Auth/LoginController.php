@@ -9,10 +9,10 @@ namespace SussexProjects\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use SussexProjects\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB; // todo: Remove
-use Illuminate\Support\Facades\Auth; // todo: Remove
-use Illuminate\Support\Facades\Session; // todo: Remove
-use SussexProjects\User; // todo: Remove
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use SussexProjects\User;
 
 class LoginController extends Controller{
 	/*
@@ -41,6 +41,62 @@ class LoginController extends Controller{
 	public function __construct(){
 		parent::__construct();
 		$this->middleware('guest')->except('logout');
+	}
+
+	protected function attemptLogin(Request $request){
+		// If they entered an email, retrieve their username
+		if (preg_match('/@/', $request->input('username'))){
+			$parts = explode("@", $request->input('username'));
+			$username = $parts[0];
+		} else {
+			$username = $request->input('username');
+		}
+
+		$ldapUsername = $username.env('LDAP_HOST');
+		$ldapPassword = $request->input('password');
+		$ldapUrl = env('LDAP_URL');
+
+		$ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
+		ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
+
+		if($ldapConn){
+			$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
+
+			if ($ldapbind){
+				ldap_unbind($ldapConn);
+
+				$user = User::where('username', $username)->first();
+
+				// if($user == null){
+				// 	$user = new User;
+
+				// 	DB::transaction(function() use ($username, $user){
+				// 		$user->fill(array(
+				// 			'first_name' => 'Guest',
+				// 			'last_name' => 'Guest',
+				// 			'username' => $username,
+				// 			'email' => $username.'@sussex.ac.uk'
+				// 		));
+
+				// 		$user->save();
+				// 		return true;
+				// 	});
+
+				// 	session()->flash('message', 'Logged in as guest.');
+				// 	session()->flash('message_type', 'success');
+				// }
+
+				ldap_unbind($ldapConn);
+				Auth::login($user, $request->filled('remember'));
+				Session::put('education_level', current($user->allowedEducationLevel()));
+			} else {
+				session()->flash('message', 'Something went wrong.');
+				session()->flash('message_type', 'error');
+			}
+		}
+		
+		return redirect()->action('HomeController@index');
 	}
 
 	/**

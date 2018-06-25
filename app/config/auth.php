@@ -65,13 +65,13 @@ return [
 	| sources which represent each model / table. These sources may then
 	| be assigned to any extra authentication guards you have defined.
 	|
-	| Supported: "database", "eloquent", "adldap"
+	| Supported: "database", "eloquent"
 	|
 	*/
 
 	'providers' => [
 		'users' => [
-			'driver' => 'adldap',
+			'driver' => 'eloquent',
 			'model' => SussexProjects\User::class,
 		],
 	],
