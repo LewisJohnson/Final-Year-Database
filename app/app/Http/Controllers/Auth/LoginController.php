@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller{
 	/*
@@ -61,14 +63,13 @@ class LoginController extends Controller{
 		ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
 
 		if($ldapConn){
-			$ldapbind = ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
-
+			$ldapbind = @ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
 			if ($ldapbind){
 				ldap_unbind($ldapConn);
 
 				$user = User::where('username', $username)->first();
 
-				// if($user == null){
+				 if($user == null){
 				// 	$user = new User;
 
 				// 	DB::transaction(function() use ($username, $user){
@@ -83,11 +84,10 @@ class LoginController extends Controller{
 				// 		return true;
 				// 	});
 
-				// 	session()->flash('message', 'Logged in as guest.');
-				// 	session()->flash('message_type', 'success');
-				// }
+				 	session()->flash('message', 'Logged in as guest.');
+				 	session()->flash('message_type', 'success');
+				 }
 
-				ldap_unbind($ldapConn);
 				Auth::login($user, $request->filled('remember'));
 				Session::put('education_level', current($user->allowedEducationLevel()));
 			} else {
