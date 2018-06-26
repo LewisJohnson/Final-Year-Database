@@ -18,13 +18,15 @@
 	@endif
 
 	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->status == 'archived') ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
-		@if(Auth::user()->isStudent())
-			<div class="favourite-container pointer">
-				<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>
-					<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
-				</svg>
-				<div class="loader"></div>
-			</div>
+		@if(Auth::check())
+			@if(Auth::user()->isStudent())
+				<div class="favourite-container pointer">
+					<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>
+						<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
+					</svg>
+					<div class="loader"></div>
+				</div>
+			@endif
 		@endif
 		<h1 class="title">{{ $project->title }}</h1>
 
@@ -90,10 +92,10 @@
 							@endif
 						@endif
 					@endif
-				@else
-					<button class="button button--raised button--accent" disabled>Select project</button>
-				@endif
+			@else
+				<button class="button button--raised button--accent" disabled>Select project</button>
 			@endif
+		@endif
 
 			@if($project->isOwnedByUser() && !Auth::user()->isStudent())
 				<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>

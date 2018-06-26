@@ -85,6 +85,12 @@ class LoginController extends Controller{
 				session()->flash('message_type', 'error');
 			}
 		}
+
+		Session::put('ldap_guest', true);
+		Session::put('education_level', current(User::guestEducationLevel()));
+		session()->flash('ldap_guest_message', true);
+		session()->flash('message', 'Logged in as guest.');
+		session()->flash('message_type', 'success');
 		
 		return redirect()->action('HomeController@index');
 	}
