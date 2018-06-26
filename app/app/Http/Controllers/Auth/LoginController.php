@@ -46,6 +46,7 @@ class LoginController extends Controller{
 	}
 
 	protected function attemptLogin(Request $request){
+		Session::forget('ldap_guest');
 		// If they entered an email, retrieve their username
 		if (preg_match('/@/', $request->input('username'))){
 			$parts = explode("@", $request->input('username'));

@@ -271,6 +271,10 @@
 }
 
 @media screen and (max-width: 342px){
+	.nav.mobile h3{
+		padding-left: 0;
+	}
+	
 	header{
 		> a {
 			width: 100%;

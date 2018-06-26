@@ -111,7 +111,10 @@
 				</div>
 			@endif
 
-			<div style="display: none" class="card card--half"></div>
+			@if(!Auth::user()->isSystemAdmin())
+				<div style="display: none" class="card card--half"></div>
+			@endif
+
 			@foreach(get_education_levels() as $level)
 				@if(Auth::user()->isAdminOfEducationLevel($level["shortName"]))
 					<div class="card card--half">

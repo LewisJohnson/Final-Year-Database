@@ -44,7 +44,7 @@
 			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 		</div>
 
-		@if(Auth::check())
+		@if(Auth::check() || ldap_guest())
 			<div class="mobile-menu-container" role="button" aria-label="Toggles the mobile navigation menu.">
 				<ul class="mobile-menu">
 					<li></li>
@@ -393,6 +393,6 @@
 	</header>
 </div>
 
-@if(Auth::check())
+@if(Auth::check() || ldap_guest())
 	@include('partials.header.mobile-navigation')
 @endif
