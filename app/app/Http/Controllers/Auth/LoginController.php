@@ -71,14 +71,15 @@ class LoginController extends Controller{
 
 				 if($user == null){
 					Session::put('ldap_guest', true);
+				 	Session::put('education_level', current(User::guestEducationLevel()));
 					session()->flash('ldap_guest', true);
 				 	session()->flash('message', 'Logged in as guest.');
 				 	session()->flash('message_type', 'success');
 				 } else {
 					Auth::login($user, $request->filled('remember'));
+					Session::put('education_level', current($user->allowedEducationLevel()));
 				 }
 
-				Session::put('education_level', current($user->allowedEducationLevel()));
 			} else {
 				session()->flash('message', 'Something went wrong.');
 				session()->flash('message_type', 'error');

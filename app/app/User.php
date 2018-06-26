@@ -276,6 +276,43 @@ class User extends Authenticatable{
 	}
 
 	/**
+	 * An array of all education levels an Ldap guest can use.
+	 *
+	 * @param null $shortName
+	 * @param null $longName
+	 *
+	 * @return array Short-name array of education levels (e.g. [ug, pg])
+	 */
+	public static function guestEducationLevel($shortName = null, $longName = null){
+		$allowedLevels = array();
+
+		foreach(get_education_levels() as $key => $level){
+			array_push($allowedLevels, $level);
+		}
+
+		$allowedLevels = array_unique($allowedLevels, SORT_REGULAR);
+		if($shortName){
+			$shortAllowedLevels = array();
+			foreach($allowedLevels as $key => $level){
+				array_push($shortAllowedLevels, $level["shortName"]);
+			}
+
+			return $shortAllowedLevels;
+		}
+
+		if($longName){
+			$longAllowedLevels = array();
+			foreach($allowedLevels as $key => $level){
+				array_push($longAllowedLevels, $level["longName"]);
+			}
+
+			return $longAllowedLevels;
+		}
+
+		return $allowedLevels;
+	}
+
+	/**
 	 * Returns student type (undergraduate or postgraduate).
 	 * Do not try to move this to the student model.
 	 * It will cause an exception and no students will be able to log in.
