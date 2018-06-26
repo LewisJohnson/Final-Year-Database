@@ -38,8 +38,10 @@ class TopicController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'topic', 'action' => 'created',
-				'topic' => $topic->name, 'transaction_date' => new Carbon
+				'type' => 'topic',
+				'action' => 'created',
+				'topic' => $topic->name,
+				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
@@ -63,7 +65,9 @@ class TopicController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'topic', 'action' => 'updated', 'topic' => $topic->id,
+				'type' => 'topic',
+				'action' => 'updated',
+				'topic' => $topic->id,
 				'transaction_date' => new Carbon
 			));
 
@@ -90,7 +94,9 @@ class TopicController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'topic', 'action' => 'deleted', 'topic' => $topic->id,
+				'type' => 'topic',
+				'action' => 'deleted',
+				'topic' => $topic->id,
 				'transaction_date' => new Carbon
 			));
 

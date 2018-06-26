@@ -255,7 +255,6 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
    6. SUPERVISOR ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
-
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
 
@@ -276,6 +275,9 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Undo student's accepted project
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
+
+	// Delete project
+	Route::delete('projects/{project}', 'ProjectController@destroy');
 
 	// Update project 
 	Route::patch('projects/{project}/edit', 'ProjectController@update');
@@ -354,9 +356,6 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
-
-	// Delete project
-	Route::delete('projects/{project}/delete', 'ProjectController@destroy');
 
 	/* REPORT ROUTES */
 	// Supervisor report

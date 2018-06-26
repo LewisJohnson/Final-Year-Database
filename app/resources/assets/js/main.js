@@ -308,6 +308,42 @@ import '../js/components';
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
+	$('form.delete-project').on('submit', function(e) {
+		e.preventDefault();
+		var form = $(this);
+		var projectName = form.data('project-title');
+
+		$.confirm({
+			title: 'Delete',
+			type: 'red',
+			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			content: 'Are you sure you want to delete <b>' + projectName + '</b>?',
+			buttons: {
+				confirm: {
+					btnClass: 'btn-red',
+					action: function(){
+						$.ajax({
+							method: 'DELETE',
+							url: form.prop('action'),
+							success:function(response){
+								if(response.successful){
+									window.location.href = response.url;
+								} else {
+									createToast('error', response.message);
+								}
+							}
+						});
+					}
+				},
+				cancel: {},
+			}
+		});
+	});
+
 	/* ======================
 		 4. CLICK EVENTS
 	   ====================== */

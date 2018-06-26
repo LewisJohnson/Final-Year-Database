@@ -22,6 +22,8 @@ use SussexProjects\ProjectTopic;
 use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
+use SussexProjects\User;
+
 
 /**
  * The project controller.
@@ -319,20 +321,28 @@ class ProjectController extends Controller{
 			return response()->json(array('successful' => false));
 		}
 
+		if($project->getStudentsWithProjectSelected() != null){
+			return response()->json(array('successful' => false, 'message' => 'Students have this project selected.'));
+		}
+
+		if($project->getAcceptedStudent() != null){
+			return response()->json(array('successful' => false, 'message' => 'A student has been accepted for this project.'));
+		}
+
 		DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'deleted',
-				'project_id' => $project->id,
-				'supervisor_id' => Auth::user()->supervisor->id,
+				'type' => 'project',
+				'action' => 'deleted',
+				'project' => $project->id,
+				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
 			$project->delete();
 		});
-
-		return response()->json(array('successful' => true));
+		return response()->json(array('successful' => true, 'url' => action('UserController@projects', Auth::user())));
 	}
 
 	/**

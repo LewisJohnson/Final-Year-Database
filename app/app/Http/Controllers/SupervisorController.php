@@ -122,8 +122,10 @@ class SupervisorController extends Controller{
 			$student->save();
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'accepted',
-				'project' => $student->project_id, 'student' => $student->id,
+				'type' => 'project',
+				'action' => 'accepted',
+				'project' => $student->project_id,
+				'student' => $student->id,
 				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
@@ -260,8 +262,10 @@ class SupervisorController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'undo',
-				'project' => $student->project_id, 'student' => $student->id,
+				'type' => 'project',
+				'action' => 'undo',
+				'project' => $student->project_id,
+				'student' => $student->id,
 				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));

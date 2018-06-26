@@ -190,7 +190,8 @@ class StudentController extends Controller{
 			));
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'proposed',
+				'type' => 'project',
+				'action' => 'proposed',
 				'project' => $project->id,
 				'student' => Auth::user()->student->id,
 				'supervisor' => $supervisor->id,
@@ -319,8 +320,10 @@ class StudentController extends Controller{
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'undo',
-				'project' => $student->project->id, 'student' => $student->id,
+				'type' => 'project',
+				'action' =>'undo',
+				'project' => $student->project->id,
+				'student' => $student->id,
 				'supervisor' => $student->project->supervisor->id,
 				'transaction_date' => new Carbon
 			));
@@ -369,10 +372,13 @@ class StudentController extends Controller{
 			$marker = Supervisor::findOrFail(request('marker_id'));
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'marker-assigned',
-				'project' => $project->id, 'student' => $student->id,
+				'type' => 'project',
+				'action' => 'marker-assigned',
+				'project' => $project->id,
+				'student' => $student->id,
 				'supervisor' => $project->supervisor_id,
-				'marker' => $marker->id, 'admin' => Auth::user()->id,
+				'marker' => $marker->id,
+				'admin' => Auth::user()->id,
 				'transaction_date' => new Carbon
 			));
 
