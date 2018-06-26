@@ -1,4 +1,4 @@
-@if(isset($view))
+@if(isset($view) && $view == "main")
 	@include ('partials.html-head')
 	@include ('partials.header')
 
@@ -12,8 +12,8 @@
 			<form class="form form--flex" role="form" method="POST" action="/login" accept-charset="utf-8">
 				{{ csrf_field() }}
 
-			<div id="login-username" type="email" autocorrect="off" autocapitalize="none" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
-				<label for="username">Username/Email</label>
+				<div id="login-username" type="email" autocorrect="off" autocapitalize="none" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
+					<label for="username">Username/Email</label>
 					@include('forms.partials.error-block', ['name' => 'username'])
 					<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 				</div>

@@ -107,7 +107,7 @@ if(!function_exists('get_departments')){
 
 if(!function_exists('ldap_guest')){
 	function ldap_guest(){
-		if(empty(Session::get('auth_guest'))){
+		if(empty(Session::get('ldap_guest'))){
 			return false;
 		}
 
@@ -115,6 +115,6 @@ if(!function_exists('ldap_guest')){
 			return false;
 		}
 
-		return Session::get('auth_guest');
+		return Session::get('ldap_guest');
 	}
 }

@@ -1,6 +1,4 @@
 @extends('layouts.app')
-@section ('content')
-
 @section('scripts')
 	<script src="{{ asset('js/views/project-preview.js') }}"></script>
 
@@ -9,6 +7,7 @@
 	@endif
 @endsection
 
+@section ('content')
 <div class="centered width--1200 show--scroll-to-top">
 	@if($view == "index")
 		<h1>Projects</h1>

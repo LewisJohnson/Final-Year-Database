@@ -47,9 +47,6 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	// Perform login
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
 
-	// Perform logout
-	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
-
 	/* ROOT ROUTES */
 	// Index page alias
 	Route::get('index', 'HomeController@index');
@@ -320,8 +317,6 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
    ============================ */
 Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
-	Route::get('users/{user}/projects', 'UserController@projects');
-
 	/* PROJECT ROUTES */
 	// Project page
 	Route::get('projects', 'ProjectController@index');
@@ -368,9 +363,14 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });
 
+Route::group(['middleware' => ['web', 'auth']], function() {
+	// Perform logout
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+});
+	
 /* ============================
    9. LDAP GUESTS
-   ============================ */
+============================ */
 Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function() {
 
 	Route::get('users/{user}/projects', 'UserController@projects');

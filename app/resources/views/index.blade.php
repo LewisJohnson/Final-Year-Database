@@ -2,7 +2,7 @@
 @section('content')
 <div class="centered animated-entrance width--1000">
 	@if(Auth::check())
-		<h1>Welcome, {{ Auth::user()->first_name }}.</h1>
+		<h1>Hello, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
 			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
@@ -177,13 +177,20 @@
 			</div>
 		@endif
 	@else
-		<h1>Welcome.</h1>
-		<div class="card card--margin-vertical">
-			<h2>@lang("messages.homepage_introduction_header")</h2>
-			<p>@lang("messages.homepage_introduction_body")</p>
-			<h2>@lang("messages.homepage_overview_header")</h2>
-			<p>@lang("messages.homepage_overview_body")</p>
-		</div>
+		@if(ldap_guest())
+			<h1>Hello, Guest.</h1>
+			<div class="card card--margin-vertical">
+				<p>You are in Guest Mode. This means you are a member of the University of Sussex, however, you do not have an account on the system. You can only perform basic tasks such as browsing projects.</p>
+			</div>
+		@else
+			<h1>Welcome.</h1>
+			<div class="card card--margin-vertical">
+				<h2>@lang("messages.homepage_introduction_header")</h2>
+				<p>@lang("messages.homepage_introduction_body")</p>
+				<h2>@lang("messages.homepage_overview_header")</h2>
+				<p>@lang("messages.homepage_overview_body")</p>
+			</div>
+		@endif
 	@endif
 </div>
 @endsection

@@ -8,6 +8,7 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class LdapGuest{
 
@@ -22,8 +23,10 @@ class LdapGuest{
 	 * @throws \Illuminate\Auth\AuthenticationException
 	 */
 	public function handle($request, Closure $next){
-		if(ldap_guest()){
+		if(ldap_guest() || Auth::check()){
 			return $next($request);
 		}
+
+		return redirect()->action('HomeController@index');
 	}
 }

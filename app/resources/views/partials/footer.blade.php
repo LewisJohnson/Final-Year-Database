@@ -9,12 +9,6 @@
 						<a class="button--small td-none hover--light" href="?largeFont=true">Large Font</a>
 					@endif
 				</li>
-
-				@if(ldap_guest())
-					<li>
-						<p>Guest Mode</p>
-					</li>
-				@endif
 				
 				<li>
 					@if(Cookie::get('accessibility-contrast') == "true")
@@ -23,6 +17,12 @@
 						<a class="button--small td-none hover--light" href="?highContrast=true">High Contrast</a>
 					@endif
 				</li>
+
+				@if(ldap_guest())
+					<li class="ml-auto">
+						<p class="hover--light">Guest Mode</p>
+					</li>
+				@endif
 			</ul>
 		</div>
 	@endif

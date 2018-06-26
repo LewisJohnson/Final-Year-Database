@@ -31,5 +31,4 @@
 	
 	@yield('scripts')
 	<script src="{{ asset('js/main.js') }}" async></script>
-
 </head>
