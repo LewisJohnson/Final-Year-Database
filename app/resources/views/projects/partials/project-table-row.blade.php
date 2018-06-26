@@ -7,10 +7,10 @@
 		<td>-</td>
 	@endif
 
-	<td class="pointer" onclick="window.location='http://ce0ebc19.eu.ngrok.io/projects/8b1f596c-102f-44b6-a977-a1e1dbc39df0';">{{ $project->title }}</td>
-	<td class="short-description" class="pointer" onclick="window.location='http://ce0ebc19.eu.ngrok.io/projects/8b1f596c-102f-44b6-a977-a1e1dbc39df0';">{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
-	<td class="pointer" onclick="window.location='http://ce0ebc19.eu.ngrok.io/projects/8b1f596c-102f-44b6-a977-a1e1dbc39df0';" >{!! html_entity_decode($project->description) !!}</td>
-	<td class="pointer" onclick="window.location='http://ce0ebc19.eu.ngrok.io/projects/8b1f596c-102f-44b6-a977-a1e1dbc39df0';">{{ $project->skills }}</td>
+	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</td>
+	<td class="short-description" onclick="{{ action('ProjectController@show', $project) }}" class="pointer" >{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
+	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}" >{!! html_entity_decode($project->description) !!}</td>
+	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}" >{{ $project->skills }}</td>
 
 	@if($view != "supervisor" || $view != "personal")
 		<td>
