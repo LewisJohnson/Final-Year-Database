@@ -54,43 +54,37 @@ class LoginController extends Controller{
 			$username = $request->input('username');
 		}
 
-		// $ldapUsername = $username.env('LDAP_HOST');
-		// $ldapPassword = $request->input('password');
-		// $ldapUrl = env('LDAP_URL');
+		$ldapUsername = $username.env('LDAP_HOST');
+		$ldapPassword = $request->input('password');
+		$ldapUrl = env('LDAP_URL');
 
-		// $ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
-		// ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
-		// ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
+		$ldapConn = ldap_connect($ldapUrl) or die("Could not connect to LDAP server.");
+		ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
 
-		// if($ldapConn){
-		// 	$ldapbind = @ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
-		// 	if ($ldapbind){
-		// 		ldap_unbind($ldapConn);
+		if($ldapConn){
+			$ldapbind = @ldap_bind($ldapConn, $ldapUsername, $ldapPassword);
+			if ($ldapbind){
+				ldap_unbind($ldapConn);
 
-		// 		$user = User::where('username', $username)->first();
+				$user = User::where('username', $username)->first();
 
-		// 		if($user == null){
-		// 			Session::put('ldap_guest', true);
-		// 			Session::put('education_level', current(User::guestEducationLevel()));
-		// 			session()->flash('ldap_guest_message', true);
-		// 			session()->flash('message', 'Logged in as guest.');
-		// 			session()->flash('message_type', 'success');
-		// 		} else {
-		// 			Auth::login($user, $request->filled('remember'));
-		// 			Session::put('education_level', current($user->allowedEducationLevel()));
-		// 		}
+				if($user == null){
+					Session::put('ldap_guest', true);
+					Session::put('education_level', current(User::guestEducationLevel()));
+					session()->flash('ldap_guest_message', true);
+					session()->flash('message', 'Logged in as guest.');
+					session()->flash('message_type', 'success');
+				} else {
+					Auth::login($user, $request->filled('remember'));
+					Session::put('education_level', current($user->allowedEducationLevel()));
+				}
 
-		// 	} else {
-		// 		session()->flash('message', 'Something went wrong.');
-		// 		session()->flash('message_type', 'error');
-		// 	}
-		// }
-
-		Session::put('ldap_guest', true);
-		Session::put('education_level', current(User::guestEducationLevel()));
-		session()->flash('ldap_guest_message', true);
-		session()->flash('message', 'Logged in as guest.');
-		session()->flash('message_type', 'success');
+			} else {
+				session()->flash('message', 'Something went wrong.');
+				session()->flash('message_type', 'error');
+			}
+		}
 		
 		return redirect()->action('HomeController@index');
 	}
