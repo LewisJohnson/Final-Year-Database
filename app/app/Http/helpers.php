@@ -7,6 +7,7 @@
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 if(!function_exists('lang_sess')){
 	function lang_sess($key = null){
@@ -101,5 +102,19 @@ if(!function_exists('get_departments')){
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
 		return data_get($config, 'departments');
+	}
+}
+
+if(!function_exists('ldap_guest')){
+	function ldap_guest(){
+		if(empty(Session::get('auth_guest'))){
+			return false;
+		}
+
+		if(Auth::check()){
+			return false;
+		}
+
+		return Session::get('auth_guest');
 	}
 }

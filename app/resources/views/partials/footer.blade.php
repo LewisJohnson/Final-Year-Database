@@ -10,6 +10,12 @@
 					@endif
 				</li>
 
+				@if(ldap_guest())
+					<li>
+						<p>Guest Mode</p>
+					</li>
+				@endif
+				
 				<li>
 					@if(Cookie::get('accessibility-contrast') == "true")
 						<a class="button--small button--accent td-none" href="?highContrast=false">High Contrast</a>

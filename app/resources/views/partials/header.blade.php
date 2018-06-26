@@ -12,12 +12,12 @@
 		</li>
 		@endforeach
 	</ul>
-	@if(Auth::check())
+	@if(Auth::check() || ldap_guest())
 		<ul class="hl ml-auto header-education-level-list">
 			@foreach(Auth::user()->allowedEducationLevel() as $key => $level)
-			<li>
-				<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
-			</li>
+				<li>
+					<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
+				</li>
 			@endforeach
 		</ul>
 	@endif
@@ -57,12 +57,15 @@
 					</li>
 				@endif
 
-
-				@if(Auth::check())
+				{{-- LDAP GUEST HEADER --}}
+				@if(ldap_guest())
 					<li class="has-dropdown links" data-content="browse">
 						<a href="#0">Browse</a>
 					</li>
+				@endif
 
+				{{-- AUTH USER HEADER --}}
+				@if(Auth::check())
 					@if(Auth::user()->isSupervisor())
 						<li class="has-dropdown links" data-content="supervisor">
 							<a href="#0">Supervisor</a>
@@ -113,6 +116,36 @@
 			</ul>
 		</nav>
 
+		@if(ldap_guest())
+			<div class="morph-dropdown-wrapper">
+				<div class="dropdown-list">
+					<ul>
+						<li id="browse" class="dropdown links">
+							<a href="#0" class="label">Browse</a>
+							<div class="content">
+								<h3>Browse</h3>
+								<ul>
+									<li>
+										<ul>
+											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
+											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
+											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
+										</ul>
+									</li>
+									<li>
+										<ul>
+											<li style="opactiy: 0"></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+					<div class="bg-layer" aria-hidden="true" style="transform: scaleX(510) scaleY(213);"></div>
+				</div>
+			</div>
+		@endif
+		
 		@if(Auth::check())
 			<div class="morph-dropdown-wrapper">
 				<div class="dropdown-list">

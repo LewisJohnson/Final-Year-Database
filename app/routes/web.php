@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 | 6. Supervisor routes
 | 7. Student routes
 | 8. Authenticated user routes (Anyone who is logged in)
+| 9. LDAP Guest
 |
 | Please follow the CRUD convention
 | Verb		URI						Action		Route Name
@@ -93,7 +94,7 @@ Route::group(['middleware' => ['web']], function() {
 /* ===============
    2. SYSTEM ADMIN ROUTES
    =============== */
-Route::group(['middleware' => ['web', 'SystemAdministrator', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']], function() {
 
 	// System admin dashboard
 	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
@@ -114,7 +115,7 @@ Route::group(['middleware' => ['web', 'SystemAdministrator', 'checkDepartment']]
 /* ========================
    3. PROJECT ADMIN ROUTES
    ======================== */
-Route::group(['middleware' => ['web', 'ProjectAdministrator', 'checkDepartment', 'adminPrivilegeCheck']], function() {
+Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment', 'adminPrivilegeCheck']], function() {
 	
 	// Admin hub
 	Route::get('admin', 'ProjectAdminController@index');
@@ -319,7 +320,6 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
    ============================ */
 Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
-
 	Route::get('users/{user}/projects', 'UserController@projects');
 
 	/* PROJECT ROUTES */
@@ -366,4 +366,31 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	/* REPORT ROUTES */
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
+});
+
+/* ============================
+   9. LDAP GUESTS
+   ============================ */
+Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function() {
+
+	Route::get('users/{user}/projects', 'UserController@projects');
+
+	/* PROJECT ROUTES */
+	// Project page
+	Route::get('projects', 'ProjectController@index');
+
+	// Projects by Supervisor
+	Route::get('projects/by-supervisor', 'ProjectController@showSupervisors');
+
+	// Projects by Topic
+	Route::get('projects/by-topic', 'ProjectController@showTopics');
+
+	// All projects with this topic
+	Route::get('projects/by-topic/{topic}', 'ProjectController@byTopic');
+
+	// Project search
+	Route::get('projects/search', 'ProjectController@search');
+
+	// Show project
+	Route::get('projects/{project}', 'ProjectController@show');
 });

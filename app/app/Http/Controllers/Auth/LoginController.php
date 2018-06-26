@@ -70,25 +70,14 @@ class LoginController extends Controller{
 				$user = User::where('username', $username)->first();
 
 				 if($user == null){
-				// 	$user = new User;
-
-				// 	DB::transaction(function() use ($username, $user){
-				// 		$user->fill(array(
-				// 			'first_name' => 'Guest',
-				// 			'last_name' => 'Guest',
-				// 			'username' => $username,
-				// 			'email' => $username.'@sussex.ac.uk'
-				// 		));
-
-				// 		$user->save();
-				// 		return true;
-				// 	});
-
+					Session::put('ldap_guest', true);
+					session()->flash('ldap_guest', true);
 				 	session()->flash('message', 'Logged in as guest.');
 				 	session()->flash('message_type', 'success');
+				 } else {
+					Auth::login($user, $request->filled('remember'));
 				 }
 
-				Auth::login($user, $request->filled('remember'));
 				Session::put('education_level', current($user->allowedEducationLevel()));
 			} else {
 				session()->flash('message', 'Something went wrong.');
