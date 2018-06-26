@@ -7,10 +7,10 @@
 		<td>-</td>
 	@endif
 
-	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</td>
-	<td class="short-description" onclick="{{ action('ProjectController@show', $project) }}" class="pointer" >{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
-	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}" >{!! html_entity_decode($project->description) !!}</td>
-	<td class="pointer" onclick="{{ action('ProjectController@show', $project) }}" >{{ $project->skills }}</td>
+	<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
+	<td class="short-description" >{!! substr(html_entity_decode($project->description), 0, 100) !!}@if(strlen($project->description) > 100)...@endif</td>
+	<td>{!! html_entity_decode($project->description) !!}</td>
+	<td>{{ $project->skills }}</td>
 
 	@if($view != "supervisor" || $view != "personal")
 		<td>

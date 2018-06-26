@@ -4,9 +4,11 @@
 <div class="centered width--800">
 
 	@if($view != "StudentProject")
-		@if(Auth::user()->isStudent())
-			@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
-				<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
+		@if(Auth::check())
+			@if(Auth::user()->isStudent())
+				@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
+					<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
+				@endif
 			@endif
 		@endif
 	@endif
@@ -73,31 +75,33 @@
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 
 		{{-- STUDENT SELECT --}}
-		@if($view != "StudentProject")
-			@if($project->status == "on-offer")
-				@if(Auth::user()->isStudent())
-					@if(Auth::user()->student->project_status == 'none')
-						@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
-							<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
-								{{ csrf_field() }}
-								{{ method_field('PATCH') }}
-								<input type="hidden" name="project_id" value="{{ $project->id }}">
-								<button class="button button--raised button--accent">Select project</button>
-							</form>
+		@if(Auth::check())
+			@if($view != "StudentProject")
+				@if($project->status == "on-offer")
+					@if(Auth::user()->isStudent())
+						@if(Auth::user()->student->project_status == 'none')
+							@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
+								<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+									{{ csrf_field() }}
+									{{ method_field('PATCH') }}
+									<input type="hidden" name="project_id" value="{{ $project->id }}">
+									<button class="button button--raised button--accent">Select project</button>
+								</form>
+							@endif
 						@endif
 					@endif
+				@else
+					<button class="button button--raised button--accent" disabled>Select project</button>
 				@endif
-			@else
-				<button class="button button--raised button--accent" disabled>Select project</button>
 			@endif
-		@endif
 
-		@if($project->isOwnedByUser() && !Auth::user()->isStudent())
-			<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
+			@if($project->isOwnedByUser() && !Auth::user()->isStudent())
+				<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
-			{{-- <form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
-				<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
-			</form> --}}
+				{{-- <form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
+					<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
+				</form> --}}
+			@endif
 		@endif
 	</div>
 </div>
