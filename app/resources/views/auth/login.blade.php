@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="content">
-			<form class="form form--flex" role="form" method="POST" action="/login" accept-charset="utf-8">
+			<form class="form form--flex" role="form" method="POST" action="{{ action('Auth\LoginController@login')}}" accept-charset="utf-8">
 				{{ csrf_field() }}
 
 				<div id="login-username" type="email" autocorrect="off" autocapitalize="none" class="form-field {{ $errors->has('username') ? ' has-error' : '' }}">
@@ -51,7 +51,7 @@
 		</div>
 
 		<div class="content">
-			<form id="loginForm" class="form form--flex" role="form" method="POST" action="/login">
+			<form id="loginForm" class="form form--flex" role="form" method="POST" action="{{ action('Auth\LoginController@login')}}">
 				{{ csrf_field() }}
 
 				<div type="email" autocorrect="off" autocapitalize="none" id="login-username" class="form-field">
