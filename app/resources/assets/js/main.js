@@ -400,7 +400,7 @@ import '../js/components';
 					action: function(){
 						$.ajax({
 							method: 'PATCH',
-							url: '/students/undo-selected-project',
+							url: 'students/undo-selected-project',
 							success:function(response){
 								if(response.successful){
 									card.hide(400, function() { card.remove(); });
@@ -424,7 +424,7 @@ import '../js/components';
 			content: function () {
 				var self = this;
 				return $.ajax({
-					url: '/feedback',
+					url: 'feedback',
 					dataType: 'html',
 					method: 'GET',
 				}).done(function (response) {
@@ -451,7 +451,7 @@ import '../js/components';
 						}
 
 						$.ajax({
-							url: '/feedback',
+							url: 'feedback',
 							method: 'POST',
 							data: this.$content.find('form').serialize(),
 							success:function(response){
@@ -504,11 +504,11 @@ import '../js/components';
 
 		if(svg.hasClass('favourite')){
 			var action = 'remove';
-			var ajaxUrl = '/students/remove-favourite';
+			var ajaxUrl = 'students/remove-favourite';
 
 		} else {
 			var action = 'add';
-			var ajaxUrl = '/students/add-favourite';
+			var ajaxUrl = 'students/add-favourite';
 		}
 
 		$.ajax({
@@ -608,7 +608,7 @@ import '../js/components';
 
 		// Check already used titles
 		$.ajax({
-			url: '/projects/check-title',
+			url: 'projects/check-title',
 			type:'POST',
 			data: {
 				project_title: title.val()
@@ -628,7 +628,7 @@ import '../js/components';
 	   ====================== */
 	$('.html-editor').each(function(index, value){
 		$.ajax({
-			url: '/snippet?snippet=html-editor-toolbar',
+			url: 'snippet?snippet=html-editor-toolbar',
 			type:'GET',
 			success:function(result){
 				$('.html-editor--input').after(result);

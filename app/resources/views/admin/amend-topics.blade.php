@@ -4,7 +4,7 @@
 	<h1>Amend {{ ucfirst(lang_sess("full_name")) }} Topics</h1>
 	<h3>Add Topic</h3>
 	<div>
-		<form id="new-topic-form" class="form form--flex form--flex-row" action="/topics/" method="POST" accept-charset="utf-8">
+		<form id="new-topic-form" class="form form--flex form--flex-row" action="{{ action('TopicController@store') }}" method="POST" accept-charset="utf-8">
 			<input name="topic_name" id="topic_name" placeholder="Topic name" spellcheck="true" type="text"></input>
 			<button class="add-topic button button--raised" type="submit">Add</button>
 		</form>

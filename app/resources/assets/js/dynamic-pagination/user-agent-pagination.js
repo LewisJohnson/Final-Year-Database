@@ -17,9 +17,9 @@ var agents_pageNumber = 2,
 				$(".loader.user-agent").show();
 				agents_awaitingResponse = true;
 				if($('#show-fv-only').prop('checked')){
-					var ajaxUrl = "/system/user-agent?unique=1?page=" + agents_pageNumber;
+					var ajaxUrl = "system/user-agent?unique=1?page=" + agents_pageNumber;
 				} else {
-					var ajaxUrl = "/system/user-agent?page=" + agents_pageNumber;
+					var ajaxUrl = "system/user-agent?page=" + agents_pageNumber;
 				}
 				$.ajax({
 					type : 'GET',

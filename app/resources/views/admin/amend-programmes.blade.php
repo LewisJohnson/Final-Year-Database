@@ -6,7 +6,7 @@
 	
 	<h3>Add Programme</h3>
 	<div>
-		<form id="new-programme-form" class="form form--flex form--flex-row" action="/programmes/" method="POST" accept-charset="utf-8">
+		<form id="new-programme-form" class="form form--flex form--flex-row" action="{{ action('ProgrammeController@store') }}" method="POST" accept-charset="utf-8">
 			<input name="programme_name" id="programme_name" placeholder="Programme name" spellcheck="true" type="text"></input>
 			<button class="add-programme button button--raised" type="submit">Add</button>
 		</form>

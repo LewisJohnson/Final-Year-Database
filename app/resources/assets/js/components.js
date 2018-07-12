@@ -516,9 +516,9 @@
 	};
 
 	EditTopic.prototype.Urls_ = {
-		DELETE_TOPIC: '/topics/',
-		PATCH_TOPIC: '/topics/',
-		NEW_TOPIC: '/topics/'
+		DELETE_TOPIC: 'topics/',
+		PATCH_TOPIC: 'topics/',
+		NEW_TOPIC: 'topics/'
 	};
 
 	EditTopic.prototype.functions = {
@@ -653,9 +653,9 @@
 	};
 
 	EditProgramme.prototype.Urls_ = {
-		DELETE_PROGRAMME: '/programmes/',
-		PATCH_PROGRAMME: '/programmes/',
-		NEW_PROGRAMME: '/programmes/'
+		DELETE_PROGRAMME: 'programmes/',
+		PATCH_PROGRAMME: 'programmes/',
+		NEW_PROGRAMME: 'programmes/'
 	};
 
 	EditProgramme.prototype.functions = {
@@ -896,7 +896,7 @@
 	};
 
 	Marker.prototype.Urls_ = {
-		ASSIGN_MARKER: '/admin/marker-assign',
+		ASSIGN_MARKER: 'admin/marker-assign',
 	};
 
 	Marker.prototype.selectStudent = function(studentRowDOM, marker){
@@ -1014,7 +1014,7 @@
 	};
 
 	Swap.prototype.Urls_ = {
-		SWAP_MARKER: '/admin/marker-swap',
+		SWAP_MARKER: 'admin/marker-swap',
 	};
 
 	Swap.prototype.selectStudent = function(studentRowDOM, swap){

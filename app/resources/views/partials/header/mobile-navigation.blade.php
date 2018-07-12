@@ -61,7 +61,7 @@
 									</div>
 									<div class="dropdown-content">
 										<a href="{{ action('UserController@index', 'view=edit') }}">Edit User</a>
-										<a href="/users/create">Add User</a>
+										<a href="{{ action('UserController@create') }}">Add User</a>
 									</div>
 								</div>
 							</li>
@@ -74,7 +74,7 @@
 					<div class="left-links">
 						<h4>Project Administrator</h4>
 						<li class="nav-button">
-							<a href="/admin" title="Administrator">Administrator Hub</a>
+							<a href="{{ action('ProjectAdminController@index') }}" title="Administrator">Administrator Hub</a>
 						</li>
 					</div>
 					<hr>

@@ -43,7 +43,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	ProjectTopics.prototype.functions = {
 		addTopicToProject: function (projectId, topicName) {
 			$('.loader').show(0);
-			var ajaxUrl = "/projects/topic-add";
+			var ajaxUrl = "projects/topic-add";
 			$.ajax({
 				type: "POST",
 				url: ajaxUrl,
@@ -68,7 +68,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 		removeTopicFromProject: function (projectId, topicId) {
 			$(".loader").show(0);
-			var ajaxUrl = "/projects/topic-remove";
+			var ajaxUrl = "projects/topic-remove";
 			$.ajax({
 				type: "DELETE",
 				url: ajaxUrl,
@@ -90,7 +90,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 		updateProjectPrimaryTopic: function (projectId, topicId) {
 			$(".loader").show(0);
-			var ajaxUrl = "/projects/topic-update-primary";
+			var ajaxUrl = "projects/topic-update-primary";
 			$.ajax({
 				type: "PATCH",
 				url: ajaxUrl,

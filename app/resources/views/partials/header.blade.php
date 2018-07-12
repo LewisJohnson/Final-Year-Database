@@ -276,7 +276,7 @@
 											<h4>User</h4>
 											<ul>
 												<li>
-													<a class="icon" href="/users/create">
+													<a class="icon" href="{{ action('UserController@create') }}">
 														@include('svg.account-plus')
 														<p>Add User</p>
 													</a>

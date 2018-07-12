@@ -1,4 +1,4 @@
-<form class="form form--flex" method="POST" action="/feedback">
+<form class="form form--flex" method="POST" action="{{ action('HomeController@feedback') }}">
 	{{ csrf_field() }}
 	<p>Please send us any comments, feedback, or problems you may be experiencing.</p>
 

@@ -57,7 +57,7 @@
 		$('#automatic-assign-container .loader-container p').text('Getting second marker table...');
 
 		$.ajax({
-			url: '/admin/marker-assign-report-table',
+			url: 'admin/marker-assign-report-table',
 			type:'GET',
 			success:function(response){
 				response = JSON.parse(response);
