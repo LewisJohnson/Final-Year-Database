@@ -67,8 +67,7 @@
 					</li>
 				@endif
 
-				{{-- LDAP GUEST HEADER --}}
-				@if(ldap_guest())
+				@if(Auth::check() || ldap_guest())
 					<li class="has-dropdown links" data-content="browse">
 						<a href="#0">Browse</a>
 					</li>
