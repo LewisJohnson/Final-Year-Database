@@ -1,4 +1,4 @@
-<form class="form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="{{ action('StudentController@proposeProject') }}" @elseif($user_type == "supervisor") action="/projects" @endif>
+<form class="form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="{{ action('StudentController@proposeProject') }}" @elseif($user_type == "supervisor") action="{{ action('ProjectController@store') }}" @endif>
 	{{ csrf_field() }}
 	@if($user_type == "supervisor")
 		<p><b>Supervisor:</b> {{ Auth::user()->getFullName() }}</p>
