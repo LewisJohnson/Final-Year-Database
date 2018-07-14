@@ -39,7 +39,7 @@ import '../js/components';
 	});
 
 	$(document).ajaxSend(function(event, jqxhr, request) {
-		if(!request.toLowerCase().includes(config.ajaxBaseUrl)){
+		if(!request.url.toLowerCase().includes(config.ajaxBaseUrl.toLowerCase())){
 			request.url = config.ajaxBaseUrl + request.url;
 		}
 	});
