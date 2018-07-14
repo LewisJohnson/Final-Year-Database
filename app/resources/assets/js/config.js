@@ -47,7 +47,9 @@ var config = {
 	// How long should a user have to hold to show project preview
 	// Used on "on-offer" project page
 	// In milliseconds
-	tapHeldTime: 500
+	tapHeldTime: 500,
+
+	ajaxBaseUrl: "https://www.informatics.sussex.ac.uk/courses/Final-Year-Database/app/public"
 }
 
 // Make config available to all files

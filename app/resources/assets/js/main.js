@@ -38,6 +38,10 @@ import '../js/components';
 		}
 	});
 
+	$(document).ajaxSend(function(event, jqxhr, request) {
+		request.url = config.ajaxBaseUrl + request.url;
+	});
+
 	/* ========================
 		2. HTML Modifications
 	   ======================== */

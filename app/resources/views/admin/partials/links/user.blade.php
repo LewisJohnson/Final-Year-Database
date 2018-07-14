@@ -24,7 +24,7 @@
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action(ProjectAdminController@loginAsView)}}">
+		<a class="icon" href="{{ action('ProjectAdminController@loginAsView')}}">
 			@include('svg.login')
 			<p>Log in as Another User</p>
 		</a>
