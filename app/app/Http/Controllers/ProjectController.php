@@ -211,7 +211,6 @@ class ProjectController extends Controller{
 			$project = new Project;
 			$transaction = new Transaction;
 
-			$purifier = new HTMLPurifier($config);
 			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
 
 			$project->fill(array(
