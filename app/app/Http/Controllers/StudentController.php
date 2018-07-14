@@ -176,7 +176,8 @@ class StudentController extends Controller{
 
 		DB::transaction(function() use ($request, $student){
 			$project = new Project;
-			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
+			$projectController = new ProjectController;
+			$clean_html = Purify::clean(request('description'), $projectController->descriptionPurifyConfig);
 
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));

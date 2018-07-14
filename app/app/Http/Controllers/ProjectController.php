@@ -38,15 +38,20 @@ class ProjectController extends Controller{
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
 	 * @var string[] ~HTML purifier configuration
 	 */
-	public static $descriptionPurifyConfig = [
-		'Core.CollectErrors' => true, 'Attr.ID.HTML5' => true,
-		'HTML.TargetBlank' => true,
-		'HTML.ForbiddenElements' => 'h1,h2,h3,h4,h5,h6,script,html,body'
-	];
+	public $htmlPurifyConfig;
 
 	public function __construct(){
 		parent::__construct();
 		$this->paginationCount = 25;
+
+		// Set up purify config
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core.CollectErrors', true);
+		$config->set('Attr.ID.HTML5', true);
+		$config->set('HTML.TargetBlank', true);
+		$config->set('HTML.ForbiddenElements', 'h1,h2,h3,h4,h5,h6,script,html,body');
+		$config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
+		$htmlPurifyConfig = $config;
 	}
 
 	/**
@@ -204,7 +209,9 @@ class ProjectController extends Controller{
 		$result = DB::transaction(function() use ($request){
 			$project = new Project;
 			$transaction = new Transaction;
-			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
+
+			$purifier = new HTMLPurifier($config);
+			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
 
 			$project->fill(array(
 				'title' => request('title'), 'description' => $clean_html,
@@ -263,7 +270,7 @@ class ProjectController extends Controller{
 
 		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
-			$clean_html = Purify::clean(request('description'), ProjectController::$descriptionPurifyConfig);
+			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
 
 			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){
