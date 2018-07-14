@@ -44,8 +44,9 @@ class ProjectController extends Controller{
 		parent::__construct();
 		$this->paginationCount = 25;
 
-		// Set up purify config
-		$config = HTMLPurifier_Config::createDefault();
+		$purifier = Purify::getPurifier();
+		$config = $purifier->config;
+
 		$config->set('Core.CollectErrors', true);
 		$config->set('Attr.ID.HTML5', true);
 		$config->set('HTML.TargetBlank', true);
