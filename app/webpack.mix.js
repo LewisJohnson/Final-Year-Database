@@ -13,8 +13,8 @@ var webpack = require('webpack');
 
 mix.disableNotifications();
 
-mix.sourceMaps();
-mix.browserSync({proxy: 'localhost:8000', notify: false});
+//mix.sourceMaps();
+//mix.browserSync({proxy: 'localhost:8000', notify: false});
 new webpack.ProvidePlugin({ $: 'jquery', Query: 'jquery' });
 
 // JAVASCRIPT
