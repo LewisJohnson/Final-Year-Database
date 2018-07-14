@@ -39,7 +39,7 @@ import '../js/components';
 	});
 
 	$(document).ajaxSend(function(event, jqxhr, request) {
-		if(!str.toLowerCase().includes(config.ajaxBaseUrl)){
+		if(!request.toLowerCase().includes(config.ajaxBaseUrl)){
 			request.url = config.ajaxBaseUrl + request.url;
 		}
 	});
@@ -52,28 +52,30 @@ import '../js/components';
 		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
 
-	var animatedSelector = ".animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li";
-	$(animatedSelector).css("opacity", 0);
+	if(config.fancyAnimations){
+		var animatedSelector = ".animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li";
+		$(animatedSelector).css("opacity", 0);
 
-	// Animate all cards
-	var animatedEntranceAnimationDelay = 0;
+		// Animate all cards
+		var animatedEntranceAnimationDelay = 0;
 
-	// So the scroll bar doesn't show
-	$('body').css('overflow-y', 'hidden');
-	$(animatedSelector).each(function(index, value) {
-		animatedEntranceAnimationDelay += 50;
-		setTimeout(function(){
-			$(this).addClass("slideInUp animated");
+		// So the scroll bar doesn't show
+		$('body').css('overflow-y', 'hidden');
+		$(animatedSelector).each(function(index, value) {
+			animatedEntranceAnimationDelay += 50;
+			setTimeout(function(){
+				$(this).addClass("slideInUp animated");
 
-			$(this).animate({
-				opacity: 1
-			}, 800);
+				$(this).animate({
+					opacity: 1
+				}, 800);
 
-		}.bind(this), animatedEntranceAnimationDelay);
-	});
+			}.bind(this), animatedEntranceAnimationDelay);
+		});
 
-	// So we can scroll again
-	$('body').css('overflow-y', 'scroll');
+		// So we can scroll again
+		$('body').css('overflow-y', 'scroll');
+	}
 
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
