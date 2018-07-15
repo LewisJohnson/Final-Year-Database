@@ -16,63 +16,63 @@ yum install php-ldap
 ### Step 2 - Navigate
 Navigate to the root directory of the server (Or whichever folder you wish to be the pubic root)
 
-### Step 3 - Install Composer
-You can find the installation instructions at https://getcomposer.org/download/
+### Step 3 - Clone Repository
+Before doing this, double check you are in the directory you wish to be public.
+A folder named Final-Year-Database will be made in the current directory.
 
-### Step 4 - Install Laravel
-`php composer.phar global require "laravel/installer"`
-
-### Step 5 - Clone Repository
-Before doing this, double check you are in the directory you wish to be public
 `git clone https://github.com/LewisJohnson/Final-Year-Database.git`
 
-After cloning, you may want to remove some files you probably don't want
+After this navigate to the *app* folder
 
-```bash
-cd Final-Year-Database/
-rm DEPLOY.md
-rm Report.pdf
-rm RouteList.txt
-rm -r docs
-rm app/serve.bat
-```
+### Step 4 - Install Back-End Dependencies
+`sudo php ../composer.phar install --no-dev`
 
-### Step 6 - Setup Enviroment File
-Copy the example enviroment file
-
-`cp .env.example .env`
-
-Then open and edit the enviroment file to your liking.
-
-### Step 7 - Install Back-End Dependencies
-`php ../../composer.phar update`
-
-### Step 8 - Install NodeJs
+### Step 5 - Install NodeJs
 We need npm, a JavaScript package manager.
 The only way to get npm is to download nodeJs.
 
 `sudo yum -y install nodejs`
 
-### Step 9 - Install Front-End Dependencies
-`npm install`
+### Step 6 - Install Front-End Dependencies
+`sudo npm install`
 
-### Step 10 - Compile JS and SASS
-`npm run prod`
+### Step 7 - Compile JS and SASS
+`sudo npm run prod`
 
-### Step 11 - Create Database
+### Step 8 - Setup Environment File
+Copy the example environment file
+
+`cp .env.example .env`
+
+One you have copied the .env file, you will need a random key;
+
+`php artisan key:generate`
+
+Now you may edit the environment file to your liking.
+
+APP_URL is very important, make sure to set it to the app folder e.g
+https://www.example.com/Final-Year-Database/app/
+
+### Step 9 - Permissions
+sudo chgrp -R apache /var/www/html/courses/Final-Year-Database/app
+sudo chmod -R 775 /var/www/html/courses/Final-Year-Database/app/storage
+
+### Step 9 - Create Database
 
 **WARNING: THIS STEP WILL DROP ALL TABLES IN THE DATABASE**
 
-Double check you have set the `.env` enviroment file correctly before doing this step.
+Double check you have set the `.env` environment file correctly before doing this step.
 Run the command
 
 `php artisan migrate:fresh`
 
 Running this command will create all the tables needed for the system.
 
-### Step 12 - Create System Administrator
+### Step 10 - Create System Administrator
 After the server is fully configured and running, it's time to bootstrap the system with a system administrator. Simply enter the command and follow the on-screen instructions.
 
 `php artisan make:admin`
 
 If you make a mistake, repeat step.
+
+
