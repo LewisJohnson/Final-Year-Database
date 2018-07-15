@@ -20,6 +20,12 @@
 	var previousHeight = null;
 	var helpFooterSnippet = null;
 
+	$(document).ajaxSend(function(event, jqxhr, request) {
+		if(!request.url.toLowerCase().includes(config.ajaxBaseUrl.toLowerCase())){
+			request.url = config.ajaxBaseUrl + request.url;
+		}
+	});
+	
 	// Get help footer snippet using ajax
 	if(tabContainer.data("help-footer") && config.showHelpFooter){
 		$.ajax({

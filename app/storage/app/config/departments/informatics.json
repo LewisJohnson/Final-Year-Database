@@ -13,7 +13,7 @@
     },
     "header": {
         "logo_url": {
-            "value": "\/images\/logo.png",
+            "value": "https:\/\/www.informatics.sussex.ac.uk\/courses\/Final-Year-Database\/app\/public\/images\/logo.png",
             "type": [
                 "Relative URL",
                 "Absolute URL"

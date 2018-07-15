@@ -8,7 +8,7 @@
 namespace SussexProjects\Traits;
 
 use Illuminate\Support\Str;
-use Webpatser\Uuid;
+use Webpatser\Uuid\Uuid;
 
 trait Uuids{
 	/**
