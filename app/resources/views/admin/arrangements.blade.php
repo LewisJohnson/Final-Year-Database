@@ -19,9 +19,9 @@
 					<tr>
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ $supervisor->user->username }}</td>
-						<td><input type="number" name="{{ $supervisor->user->username }}_project_load" id="{{ $supervisor->user->username }}_project_load" value="{{ $supervisor->getProjectLoad() }}"></td>
+						<td><input type="number" id="{{ $supervisor->user->id }}_project_load" name="{{ $supervisor->user->id }}_project_load" value="{{ $supervisor->getProjectLoad() }}"></td>
 						<td>
-							<input id="{{ $supervisor->user->username }}_take_students" name="{{ $supervisor->user->username }}_take_students" type="checkbox" @if($supervisor->getTakingStudents()) checked @endif>
+							<input id="{{ $supervisor->user->id }}_take_students" name="{{ $supervisor->user->id }}_take_students" type="checkbox" @if($supervisor->getTakingStudents()) checked @endif>
 						</td>
 					</tr>
 				@endforeach
