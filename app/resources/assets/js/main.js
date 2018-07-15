@@ -26,24 +26,24 @@
 
 import '../js/components';
 
+/* ================
+	1. AJAX Setup
+	================ */
+$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	}
+});
+
+$(document).ajaxSend(function(event, jqxhr, request) {
+	if(!request.url.toLowerCase().includes(config.ajaxBaseUrl.toLowerCase())){
+		request.url = config.ajaxBaseUrl + request.url;
+	}
+});
+
+// DOC READY
 "use strict";
 ;$(function() {
-
-	/* ================
-		1. AJAX Setup
-	   ================ */
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-		}
-	});
-
-	$(document).ajaxSend(function(event, jqxhr, request) {
-		if(!request.url.toLowerCase().includes(config.ajaxBaseUrl.toLowerCase())){
-			request.url = config.ajaxBaseUrl + request.url;
-		}
-	});
-
 	/* ========================
 		2. HTML Modifications
 	   ======================== */

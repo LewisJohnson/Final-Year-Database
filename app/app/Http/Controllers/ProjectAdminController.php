@@ -106,7 +106,12 @@ class ProjectAdminController extends Controller{
 		foreach($supervisors as $supervisor){
 			$project_load = $request[$supervisor->id."_project_load"];
 			$take_students = $request[$supervisor->id."_take_students"];
-			$supervisor->setProjectLoad($project_load);
+
+			if($project_load != null){
+				$supervisor->setProjectLoad($project_load);
+			} else {
+				$supervisor->setProjectLoad(0);
+			}
 			$supervisor->setTakingStudents(isset($take_students) ? 1 : 0);
 		}
 
