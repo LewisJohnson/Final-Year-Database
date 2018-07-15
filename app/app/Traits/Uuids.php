@@ -8,6 +8,7 @@
 namespace SussexProjects\Traits;
 
 use Illuminate\Support\Str;
+use Webpatser\Uuid;
 
 trait Uuids{
 	/**
@@ -17,7 +18,7 @@ trait Uuids{
 		parent::boot();
 
 		static::creating(function($model){
-			$model->{$model->getKeyName()} = (string) Str::orderedUuid();
+			$model->{$model->getKeyName()} = (string) Uuid::generate(4);;
 		});
 	}
 }

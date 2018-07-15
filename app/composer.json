@@ -10,6 +10,7 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "moontoast/math": "*",
+        "webpatser/laravel-uuid": "^3.0",
         "stevebauman/purify": "2.0.*"
     },
     "require-dev": {
