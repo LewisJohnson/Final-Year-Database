@@ -21,7 +21,11 @@
 							<td>{{ $user->first_name }}</td>
 							<td>{{ $user->last_name }}</td>
 							<td>{{ $user->email }}</td>
-							<td>{{ $user->programme_relationship->name }}</td>
+							@if($user->programme_relationship != null)
+								<td>{{ $user->programme_relationship->name }}</td>
+							@else
+								<td>{{ $user->programme }}</td>
+							@endif
 						</tr>
 					@endforeach
 				</tbody>
