@@ -21,13 +21,15 @@
 	var helpFooterSnippet = null;
 
 	// Get help footer snippet using ajax
-	$.ajax({
-		url: '/snippet?snippet=card-help-footer',
-		type:'GET',
-		success:function(result){
-			helpFooterSnippet = result;
-		},
-	});
+	if(tabContainer.data("help-footer") && config.showHelpFooter){
+		$.ajax({
+			url: '/snippet?snippet=card-help-footer',
+			type:'GET',
+			success:function(result){
+				helpFooterSnippet = result;
+			},
+		});
+	}
 
 	$(".open-tab").on('click', function() {
 		var currentTab = $(this).parent();
