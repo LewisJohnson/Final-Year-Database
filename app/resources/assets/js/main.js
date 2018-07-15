@@ -592,7 +592,7 @@ import '../js/components';
 	});
 
 	// Check title name
-	if($('#title').length > 0){
+	if($('.project-title').length > 0){
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
 		// Bind value

@@ -8,7 +8,7 @@
 
 	<div class="form-field">
 		<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
-		<input maxlength="255" type="text" name="title" id="title" autofocus="true" value="{{ old('title') }}" required>
+		<input class="project-title" maxlength="255" type="text" name="title" id="title" autofocus="true" value="{{ old('title') }}" required>
 		<p id="title-already-used" style="display: hidden" class="help-block">This project title is already in use.</p>
 	</div>
 
