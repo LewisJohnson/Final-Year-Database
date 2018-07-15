@@ -15,11 +15,14 @@
 			return;
 		}
 
-		var fileData = $(this).find('.file').prop('files')[0];   
+		var fileData = $(this).find('.file').prop('files')[0];
 		var requestType = $(this).data('type');
-		var formData = new FormData()
+		var formData = new FormData();
 
 		formData.append('studentFile', fileData);
+		formData.append('empty_programmes', $(this).find('#empty_programmes'));
+		formData.append('auto_programmes', $(this).find('#auto_programmes'));
+		formData.append('empty_students', $(this).find('#empty_students'));
 		$.ajax({
 			url: $(this).prop('action'),
 			cache: false,

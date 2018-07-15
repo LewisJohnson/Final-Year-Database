@@ -57,10 +57,31 @@
 		<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ Session::get('education_level')["longName"] }} student table.</p>
 		<form class="import-student-form" data-type="prod" action="{{ action('StudentController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 			{{ csrf_field() }}
+
 			<div class="form-field">
 				<label>Select file to upload</label>
 				<input type="file" accept=".csv" name="studentFile" class="file" required/>
-				<button class="button" type='submit'>Upload</button>
+			</div>
+			<div class="form-field">
+				<div class="checkbox">
+					<input type="checkbox" name="empty_programmes" value="empty_programmes" id="empty_programmes">
+					<label for="empty_programmes">Empty programmes table <span style="color:red">(This will reset everybody's programme)</span></label>
+				</div>
+			</div>
+			<div class="form-field">
+				<div class="checkbox">
+					<input type="checkbox" name="empty_students" value="empty_students" id="empty_students">
+					<label for="empty_students">Empty students table <span style="color:red">(This remove all students)</span></label>
+				</div>
+			</div>
+			<div class="form-field">
+				<div class="checkbox">
+					<input type="checkbox" name="auto_programmes" value="auto_programmes" id="auto_programmes">
+					<label for="auto_programmes">Auto import programmes</label>
+				</div>
+			</div>
+			<div class="form-field">
+				<button class="button" type='submit'>Import</button>
 			</div>
 			<div id="import-student-result"></div>
 		</form>

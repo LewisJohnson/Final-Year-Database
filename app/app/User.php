@@ -109,12 +109,12 @@ class User extends Authenticatable{
 	}
 
 	/**
-	 * Returns the student related to this user.
+	 * Returns the programme related to this user.
 	 *
 	 * @return Programme
 	 */
-	public function programme(){
-		return $this->hasOne(Programme::class, 'id');
+	public function programme_relationship(){
+		return $this->hasOne(Programme::class, 'id', 'programme');
 	}
 
 	/**

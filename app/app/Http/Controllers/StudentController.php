@@ -22,6 +22,7 @@ use SussexProjects\Mail\StudentUnselected;
 use SussexProjects\Mode;
 use SussexProjects\User;
 use SussexProjects\Project;
+use SussexProjects\Programme;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 use SussexProjects\Transaction;
@@ -360,9 +361,7 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()
-			->isAdminOfEducationLevel(Session::get('education_level')["shortName"])
-		){
+		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
 			return redirect()->action('HomeController@index');
 		}
 
@@ -410,9 +409,7 @@ class StudentController extends Controller{
 	public function importStudents(Request $request){
 		$request->validate(['studentFile' => 'required']);
 
-		if(strtolower($request->file('studentFile')
-				->getClientOriginalExtension()) != "csv"
-		){
+		if(strtolower($request->file('studentFile')->getClientOriginalExtension()) != "csv"){
 			return response()->json(array(
 				'successful' => false,
 				'message' => 'Invalid file format. Please upload a CSV file.'
@@ -438,25 +435,58 @@ class StudentController extends Controller{
 				return $this->testImportStudents($csv);
 			} else {
 				// Import to prod tables
-				// Remove CSV header and tail
-				for($i = 1; $i < count($csv) - 1; $i++){
-					$user = new User;
-					$student = new Student;
-
-					$user->fill(array(
-						'privileges' => 'student', 'first_name' => $csv[$i][2],
-						'last_name' => $csv[$i][1], 'username' => $csv[$i][4],
-						'programme' => $csv[$i][3],
-						'email' => $csv[$i][4]."@sussex.ac.uk"
-					));
-					$user->save();
-
-					$student->fill(array(
-						'id' => $user->id, 'registration_number' => $csv[$i][0]
-					));
-
-					$student->save();
+				if(isset($request->empty_students)){
+					$students = User::where('privileges', 'student');
+					$students->delete();
 				}
+
+				if(isset($request->empty_programmes)){
+					$userTable = new User;
+					DB::table($userTable->getTable())->update(array(
+						'programme' => null
+					));
+
+					DB::statement("SET foreign_key_checks=0");
+					Programme::truncate();
+					DB::statement("SET foreign_key_checks=1");
+				}
+
+				DB::transaction(function() use ($request, $csv){
+					// Remove CSV header and tail
+					for($i = 1; $i < count($csv) - 1; $i++){
+						unset($user, $student, $studentProgramme, $studentProgrammeModel, $autoProgramme);
+
+						$user = new User;
+						$student = new Student;
+						$studentProgramme = $csv[$i][3];
+
+						if(isset($request->auto_programmes)){
+							if(Programme::where('name', $studentProgramme)->first() == null){
+								$autoProgramme = new Programme;
+								$autoProgramme->name = $studentProgramme;
+								$autoProgramme->save();
+							}
+						}
+
+						$studentProgrammeModel = Programme::where('name', $studentProgramme)->first();
+
+						$user->fill(array(
+							'privileges' => 'student',
+							'first_name' => $csv[$i][2],
+							'last_name' => $csv[$i][1],
+							'username' => $csv[$i][4],
+							'programme' => $studentProgrammeModel->id,
+							'email' => $csv[$i][4]."@sussex.ac.uk"
+						));
+						$user->save();
+
+						$student->fill(array(
+							'id' => $user->id, 'registration_number' => $csv[$i][0]
+						));
+
+						$student->save();
+					}
+				});
 
 				$users = User::where('privileges', 'student')->get();
 				$students = Student::all();

@@ -21,7 +21,7 @@
 							<td>{{ $user->first_name }}</td>
 							<td>{{ $user->last_name }}</td>
 							<td>{{ $user->email }}</td>
-							<td>{{ $user->programme }}</td>
+							<td>{{ $user->programme_relationship->name }}</td>
 						</tr>
 					@endforeach
 				</tbody>
