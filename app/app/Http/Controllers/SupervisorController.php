@@ -53,9 +53,12 @@ class SupervisorController extends Controller{
 		if($request->query("includeClosedToOffer") === "true"){
 			$supervisors = Supervisor::all();
 		} else {
-			$supervisors = Supervisor::where('take_students_'.Session::get('education_level')["shortName"], true)
-				->get();
+			$supervisors = Supervisor::where('take_students_'.Session::get('education_level')["shortName"], true)->get();
 		}
+
+		$supervisors = $supervisors->filter(function($supervisor){
+			return $supervisor->user->isSupervisor();
+		});
 
 		return view('supervisors.report')->with("supervisors", $supervisors);
 	}

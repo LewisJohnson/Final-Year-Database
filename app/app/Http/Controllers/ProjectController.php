@@ -69,10 +69,13 @@ class ProjectController extends Controller{
 	 */
 	public function index(Request $request){
 		$supervisorTable = new Supervisor();
+		$userTable = new User();
 		$projectTable = new Project();
 		$projects = Project::where('status', 'on-offer')
 			->whereNotNull('supervisor_id')
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
+			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
+			->where('user.privileges', 'LIKE', '%supervisor%')
 			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
 			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
 			->orderBy('title', 'asc')

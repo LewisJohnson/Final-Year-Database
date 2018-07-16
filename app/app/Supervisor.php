@@ -196,9 +196,8 @@ class Supervisor extends Model{
 	 * @return Project A collection of projects
 	 */
 	public function getProjects($status = null){
-		// They can be in the supervisor database, but not have the supervisor privilege
-		if($this->user->isSupervisor()){
-			return;
+		if(!$this->user->isSupervisor()){
+			return [];
 		}
 
 		if(isset($status)){
@@ -216,6 +215,10 @@ class Supervisor extends Model{
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
 	public function getIntrestedStudents(){
+		if(!$this->user->isSupervisor()){
+			return [];
+		}
+
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -241,6 +244,10 @@ class Supervisor extends Model{
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
+		if(!$this->user->isSupervisor()){
+			return [];
+		}
+
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -266,6 +273,10 @@ class Supervisor extends Model{
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
+		if(!$this->user->isSupervisor()){
+			return [];
+		}
+
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -291,6 +302,10 @@ class Supervisor extends Model{
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
+		if(!$this->user->isSupervisor()){
+			return [];
+		}
+		
 		$students = Student::where('marker_id', $this->id);
 		$offers = array();
 
