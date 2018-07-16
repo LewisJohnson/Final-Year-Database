@@ -50,6 +50,10 @@ class Supervisor extends Model{
 		$supervisors = Supervisor::all();
 		$dataListHtml = '<datalist id="supervisor-datalist">';
 
+		$supervisors = $supervisors->sortBy(function($supervisor){
+			return $supervisor->user->last_name;
+		});
+		
 		foreach($supervisors as $supervisor){
 			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
 		}

@@ -90,6 +90,9 @@ class ProjectAdminController extends Controller{
 	public function amendSupervisorArrangementsView(){
 		$supervisors = Supervisor::all();
 
+		$supervisors = $supervisors->sortBy(function($supervisor){
+			return $supervisor->user->last_name;
+		});
 		return view('admin.arrangements')->with('supervisors', $supervisors);
 	}
 

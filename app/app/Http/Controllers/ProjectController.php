@@ -377,6 +377,10 @@ class ProjectController extends Controller{
 	public function showSupervisors(){
 		$supervisor = Supervisor::all();
 
+		$supervisors = $supervisors->sortBy(function($supervisor){
+			return $supervisor->user->last_name;
+		});
+
 		return view('projects.supervisors')->with('supervisors', $supervisor);
 	}
 
