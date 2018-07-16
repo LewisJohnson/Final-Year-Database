@@ -381,7 +381,7 @@ class ProjectController extends Controller{
 			return $supervisor->user->last_name;
 		});
 
-		return view('projects.supervisors')->with('supervisors', $supervisor);
+		return view('projects.supervisors')->with('supervisors', $supervisors);
 	}
 
 	/**
