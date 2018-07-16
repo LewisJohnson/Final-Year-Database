@@ -73,6 +73,12 @@
 					</li>
 				@endif
 
+				@if(ldap_guest())
+					<li class="has-dropdown links" data-content="help">
+						<a href="#0">Help</a>
+					</li>
+				@endif
+
 				{{-- AUTH USER HEADER --}}
 				@if(Auth::check())
 					@if(Auth::user()->isSupervisor())
@@ -144,6 +150,30 @@
 									<li>
 										<ul>
 											<li style="opactiy: 0"></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li id="help" class="dropdown links">
+							<a href="#0" class="label">Help</a>
+							<div class="content">
+								<ul>
+									<li>
+										<h4>Help</h4>
+										<ul class="links-list">
+											<li><a href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
+											<li><a href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
+										</ul>
+									</li>
+
+									<li>
+										<div class="icon">
+											<h4>External Links</h4>
+											@include('svg.external')
+										</div>
+										<ul class="links-list">
+											@include('partials.header.help-links', ['platform' => 'desktop'])
 										</ul>
 									</li>
 								</ul>

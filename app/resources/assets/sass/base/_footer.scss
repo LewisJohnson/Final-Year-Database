@@ -17,10 +17,11 @@ footer{
 
 	a, p{
 		@include transition--medium();
-		// color: white;
+		color: gainsboro;
 		display: inline-block;
 		margin: 0;
 		padding: 4px 4px !important;
+		font-size: 13.4px !important;
 	}
 
 	.footer-left{ margin-right: auto; }

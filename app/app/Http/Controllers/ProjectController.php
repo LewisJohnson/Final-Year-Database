@@ -75,6 +75,7 @@ class ProjectController extends Controller{
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
 			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
+			->orderBy('title', 'asc')
 			->paginate($this->paginationCount);
 
 		if($request->query("page")){

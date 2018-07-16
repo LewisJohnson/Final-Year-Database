@@ -28,6 +28,26 @@
 						</li>
 					</div>
 				</div>
+
+				<div class="flex flex--row flex--stretch-children" style="padding: 1rem 1rem 0rem 1rem;">
+					<div>
+						<h4 style="padding-left: 0rem;">Help</h4>
+						<div class="flex flex--col">
+							<li class="nav-button">
+								<a href="{{ action('HomeController@help') }}" title="System Help">System Help</a>
+							</li>
+
+							<li class="nav-button">
+								<a href="{{ action('HomeController@about') }}" title="About this software">About</a>
+							</li>
+						</div>
+					</div>
+
+					<div>
+						<h4 style="padding-left: 0">Links</h4>
+						@include('partials.header.help-links', ['platform' => 'mobile'])
+					</div>
+				</div>
 			@endif
 			@if(Auth::check())
 				@if(Auth::user()->isSystemAdmin())
