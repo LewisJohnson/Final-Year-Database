@@ -37,12 +37,21 @@
 				<p>Why not create a project for students right now? Just <a href="{{ action('ProjectController@create') }}">click here</a> to create a new project.</p>
 			</div>
 		@endif
+
+		<a class="form-field--toggle" style="position: relative;top: 35px;" @if(isset($_GET["hide_archived"]) && $_GET["hide_archived"] == false) href="{{ action('UserController@projects', [Auth::user(), 'hide_archived'=> true]) }}" @else href="{{ action('UserController@projects', [Auth::user(), 'hide_archived'=> false]) }}" @endif>
+			<p class="switch-label" for="collect_referrer">Hide archived projects</p>
+			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">
+				<input type="checkbox" class="checkbox" @if(isset($_GET["hide_archived"]) && $_GET["hide_archived"] == true) checked @endif>
+				<span class="slider"></span>
+			</label>
+		</a>
+
 	@endif
 
 	{{-- We have search results--}}
 	@if($view == "search")
 		<h1>Project Search</h1>
-		<h3 style="margin-bottom: 5px; word-break: break-all;">We found {{count($projects)}} projects with the term "{{ $searchTerm }}".</h3>
+		<h3 style="margin-bottom: 5px; word-break: break-all;">We found {{ count($projects) }} projects with the term "{{ $searchTerm }}".</h3>
 		<h5 style="margin-top: 0;">Search term limited to {{ Session::get('search_filters') }}.</h5>
 		@include('projects.partials.search')
 	@endif

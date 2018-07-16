@@ -252,7 +252,7 @@ class UserController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function projects(User $user){
+	public function projects(User $user, Request $request){
 		$projects = Project::where('supervisor_id', $user->id);
 
 		if(Auth::user() == $user){
@@ -265,8 +265,18 @@ class UserController extends Controller{
 			$projects->where('status', 'on-offer');
 		}
 
-		return view('projects.index')->with('projects', $projects->get())
-			->with('owner', $user)->with('view', $view);
+		if($view == 'personal'){
+			if(isset($request->hide_archived)){
+				if($request->hide_archived == true){
+					$projects->where('status', '!=', 'archived');
+				}
+			}
+		}
+
+		return view('projects.index')
+			->with('projects', $projects->get())
+			->with('owner', $user)
+			->with('view', $view);
 	}
 
 	/**
