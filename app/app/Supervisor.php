@@ -196,10 +196,9 @@ class Supervisor extends Model{
 	 * @return Project A collection of projects
 	 */
 	public function getProjects($status = null){
-
 		// They can be in the supervisor database, but not have the supervisor privilege
 		if($this->user->isSupervisor()){
-			return null;
+			return;
 		}
 
 		if(isset($status)){
