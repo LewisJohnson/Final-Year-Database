@@ -452,35 +452,35 @@ class ProjectController extends Controller{
 
 		// Title filter
 		if(in_array("title", $filters)){
-			$filteredAtLeastOnce = true;
-
-			if(count($filters) == 1){
+			if(count($filters) == 1 || !$filteredAtLeastOnce){
 				$projects->where($sessionDbPrefix."."."title", "LIKE", '%'.$searchTerm.'%');
 			} else {
 				$projects->orWhere($sessionDbPrefix."."."title", "LIKE", '%'.$searchTerm.'%');
 			}
+
+			$filteredAtLeastOnce = true;
 		}
 
 		// Skills filter
 		if(in_array("skills", $filters)){
-			$filteredAtLeastOnce = true;
-
-			if(count($filters) == 1){
+			if(count($filters) == 1 || !$filteredAtLeastOnce){
 				$projects->where("skills", "LIKE", '%'.$searchTerm.'%');
 			} else {
 				$projects->orWhere("skills", "LIKE", '%'.$searchTerm.'%');
 			}
+
+			$filteredAtLeastOnce = true;
 		}
 
 		// Description filter
 		if(in_array("description", $filters)){
-			$filteredAtLeastOnce = true;
-
-			if(count($filters) == 1){
+			if(count($filters) == 1 || !$filteredAtLeastOnce){
 				$projects->where("description", "LIKE", '%'.$searchTerm.'%');
 			} else {
 				$projects->orWhere("description", "LIKE", ' %'.$searchTerm.'% ');
 			}
+
+			$filteredAtLeastOnce = true;
 		}
 
 		$projects = $projects->get();
@@ -520,8 +520,10 @@ class ProjectController extends Controller{
 		}
 
 		if(count($projects) > 1){
-			return view('projects.index')->with('projects', $projects)
-				->with('view', 'search')->with('searchTerm', $searchTerm);
+			return view('projects.index')
+				->with('projects', $projects)
+				->with('view', 'search')
+				->with('searchTerm', $searchTerm);
 		}
 
 		return redirect()->action('ProjectController@index');
