@@ -24,11 +24,11 @@
 					<tr>
 						<td data-hover="{{ $transaction->id }}">{{ substr($transaction->id, 0, 7) }}</td>
 						<td>{{ ucfirst($transaction->action) }}</td>
-						<td data-hover="{{ $transaction->project }}">@if(!empty($transaction->project)) {{ SussexProjects\Project::find($transaction->project)->title }} @endif</td>
-						<td data-hover="{{ $transaction->student }}">@if(!empty($transaction->student)) {{ SussexProjects\Student::find($transaction->student)->user->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->supervisor }}">@if(!empty($transaction->supervisor)) {{ SussexProjects\Supervisor::find($transaction->supervisor)->user->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->marker }}">@if(!empty($transaction->marker)) {{ SussexProjects\User::find($transaction->marker)->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->admin }}">@if(!empty($transaction->admin)) {{ SussexProjects\User::find($transaction->admin)->getFullName() }} @endif</td>
+						<td data-hover="{{ $transaction->project }}">@if(isset($transaction->project)) {{ SussexProjects\Project::find($transaction->project)->title }} @endif</td>
+						<td data-hover="{{ $transaction->student }}">@if(isset($transaction->student)) {{ SussexProjects\Student::find($transaction->student)->user->getFullName() }} @endif</td>
+						<td data-hover="{{ $transaction->supervisor }}">@if(isset($transaction->supervisor)) {{ SussexProjects\Supervisor::find($transaction->supervisor)->user->getFullName() }} @endif</td>
+						<td data-hover="{{ $transaction->marker }}">@if(isset($transaction->marker)) {{ SussexProjects\User::find($transaction->marker)->getFullName() }} @endif</td>
+						<td data-hover="{{ $transaction->admin }}">@if(isset($transaction->admin)) {{ SussexProjects\User::find($transaction->admin)->getFullName() }} @endif</td>
 						<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->toFormattedDateString() }}</td>
 					</tr>
 				@endforeach
