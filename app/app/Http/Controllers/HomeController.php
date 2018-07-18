@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Feedback;
+use SussexProjects\Project;
 
 /**
  * The home controller.

@@ -34,7 +34,7 @@
 			</div>
 
 			<div class="form-field">
-				<label>Topics</label>
+				<label>Topics<ins style="font-size: 12px;">Press ENTER to save topic.</ins></label>
 				<div id="new-topic-input-container" class="fake-input">
 					<ul class="topics-list edit">
 						@foreach($project->topics as $topic)
