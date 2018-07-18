@@ -398,7 +398,7 @@ class ProjectController extends Controller{
 	public function projectNameAlreadyExists(Request $request){
 		$sameTitleCount = Project::select('title')
 			->where('title', $request->project_title)
-			->where('id', '!=', $request->project_id)
+			->where('id', '<>', $request->project_id)
 			->where('status', 'on-offer')->count();
 
 		$sameTitle = $sameTitleCount > 0;

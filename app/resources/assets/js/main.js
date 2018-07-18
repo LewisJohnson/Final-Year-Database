@@ -598,12 +598,12 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		var projectId = $('#editProjectForm').data('project-id');
 
 		// Bind value
-		title.on("keydown change",  function(){
-			checkTitle();
+		title.on("blur",  function(){
+			checkTitle(projectId);
 		});
 
 		// Set initial value
-		checkTitle();
+		checkTitle(projectId);
 	}
 
 	function checkTitle(projectId){

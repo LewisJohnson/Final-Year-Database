@@ -282,7 +282,7 @@ class UserController extends Controller{
 		if($view == 'personal'){
 			if(isset($request->hide_archived)){
 				if($request->hide_archived == true){
-					$projects->where('status', '!=', 'archived');
+					$projects->where('status', '<>', 'archived');
 				}
 			}
 		}
