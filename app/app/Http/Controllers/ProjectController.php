@@ -379,7 +379,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function showSupervisors(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
 		$supervisors = $supervisors->sortBy(function($supervisor){
 			return $supervisor->user->last_name;

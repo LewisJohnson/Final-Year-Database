@@ -88,7 +88,7 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
 	 */
 	public function amendSupervisorArrangementsView(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
 		$supervisors = $supervisors->sortBy(function($supervisor){
 			return $supervisor->user->last_name;
@@ -104,7 +104,7 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function amendSupervisorArrangements(Request $request){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
 		foreach($supervisors as $supervisor){
 			$project_load = $request[$supervisor->id."_project_load"];
@@ -256,7 +256,7 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function manualSecondMarkerView(Request $request){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$students = Student::all();
 
 		$sorted = $students->sortBy(function($student) use ($request){
@@ -348,7 +348,7 @@ class ProjectAdminController extends Controller{
 	 * @return object[] slack, supervisors
 	 */
 	public function setupAutomaticSecondMarkerAssignment(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$supervisorLoadTotal = 0;
 		$maxTargetLoad = 0;
 		$studentCount = Student::count();

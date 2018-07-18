@@ -1,3 +1,5 @@
+{!! SussexProjects\Supervisor::getTitleDatalist() !!}
+
 @if($view === "new")
 	<form class="form form--flex user-form" role="form" method="POST" action="{{ action('UserController@store') }}">
 @elseif($view === "edit")
@@ -131,7 +133,7 @@
 		<div class="form-field">
 			<label for="title">Title</label>
 			@include('forms.partials.error-block', ['name' => 'title'])
-			<input id="title" placeholder="Dr." type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
+			<input list="titleDataList" id="title" type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
 		</div>
 
 		<label>Email preference</label>

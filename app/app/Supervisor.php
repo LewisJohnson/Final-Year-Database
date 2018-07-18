@@ -47,7 +47,7 @@ class Supervisor extends Model{
 	 * @return string The resulting HTML
 	 */
 	public static function getDatalist(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$dataListHtml = '<datalist id="supervisor-datalist">';
 
 		$supervisors = $supervisors->sortBy(function($supervisor){
@@ -196,10 +196,6 @@ class Supervisor extends Model{
 	 * @return Project A collection of projects
 	 */
 	public function getProjects($status = null){
-		if(!$this->user->isSupervisor()){
-			return [];
-		}
-
 		if(isset($status)){
 			return Project::where("supervisor_id", $this->id)
 				->whereNull('student_id')->where("status", "=", $status)->get();
@@ -215,10 +211,6 @@ class Supervisor extends Model{
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
 	public function getIntrestedStudents(){
-		if(!$this->user->isSupervisor()){
-			return [];
-		}
-
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -244,10 +236,6 @@ class Supervisor extends Model{
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
-		if(!$this->user->isSupervisor()){
-			return [];
-		}
-
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -273,10 +261,6 @@ class Supervisor extends Model{
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
-		if(!$this->user->isSupervisor()){
-			return [];
-		}
-
 		$project = new Project;
 		$student = new Student;
 		$offers = array();
@@ -302,10 +286,6 @@ class Supervisor extends Model{
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
-		if(!$this->user->isSupervisor()){
-			return [];
-		}
-		
 		$students = Student::where('marker_id', $this->id);
 		$offers = array();
 
@@ -319,4 +299,29 @@ class Supervisor extends Model{
 		return $offers;
 	}
 
+	public static function getAllSupervisorsQuery(){
+		$userTable = new User();
+		$supervisorTable = new Supervisor();
+
+		return Supervisor::join($userTable->getTable().' as user', 'user.id', '=', $supervisorTable->getTable().'.id')
+				->select($supervisorTable->getTable().'.*')
+				->where('user.privileges', 'LIKE', '%supervisor%');
+	}
+
+	/**
+	 * A HTML data-list of all titles.
+	 *
+	 * @return string
+	 */
+	public static function getTitleDatalist(){
+		$titles = Supervisor::groupBy('title')->pluck('title');
+
+		$rtnString = '<datalist id="titleDataList">';
+		foreach($titles as $title){
+			$rtnString .= '<option value="'.$title.'">';
+		}
+		$rtnString .= '</datalist>';
+
+		return $rtnString;
+	}
 }
