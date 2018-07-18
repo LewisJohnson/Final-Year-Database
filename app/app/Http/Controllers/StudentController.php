@@ -202,6 +202,13 @@ class StudentController extends Controller{
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
+			if(!$supervisor->user->isSupervisor()){
+				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
+				session()->flash('message_type', 'error');
+
+				return redirect()->action('HomeController@index');
+			}
+
 			$project->supervisor_id = request('supervisor_id');
 			$project->student_id = Auth::user()->student->id;
 
@@ -269,7 +276,7 @@ class StudentController extends Controller{
 
 			return redirect()->action('ProjectController@show', request('project_id'));
 		}
-
+		
 		DB::transaction(function() use ($request, $student){
 			$project = Project::findOrFail(request('project_id'));
 
@@ -278,6 +285,13 @@ class StudentController extends Controller{
 				session()->flash('message_type', 'error');
 
 				return redirect()->action('ProjectController@show', request('project_id'));
+			}
+
+			if(!$project->supervisor->user->isSupervisor()){
+				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
+				session()->flash('message_type', 'error');
+
+				return redirect()->action('HomeController@index');
 			}
 
 			$transaction = new Transaction;
@@ -326,13 +340,13 @@ class StudentController extends Controller{
 	public function undoSelectedProject(Request $request){
 		if(Auth::user()->student->project == null){
 			return response()->json(array(
-				'error' => true, 'message' => "Something went wrong."
+				'error' => true, 'message' => "You don't have a project selected."
 			));
 		}
 
 		if(Auth::user()->student->project_status != 'selected' || Auth::user()->student->project_status != 'proposed'){
 			return response()->json(array(
-				'error' => true, 'message' => "Something went wrong."
+				'error' => true, 'message' => "You have already selected/proposed a project.."
 			));
 		}
 
