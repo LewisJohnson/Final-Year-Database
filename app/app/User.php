@@ -207,6 +207,15 @@ class User extends Authenticatable{
 	}
 
 	/**
+	 * Indicates if authenticated used is a staff member.
+	 *
+	 * @return boolean
+	 */
+	public function isOnlyStaff(){
+		return $this->privileges == "staff";
+	}
+
+	/**
 	 * Indicates if authenticated used is an administrator of the parameters education level.
 	 *
 	 * @param string ShortName of an education level

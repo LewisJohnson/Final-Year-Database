@@ -22,7 +22,7 @@ class StaffOrProjectAdmin{
 	 */
 	public function handle($request, Closure $next){
 		if(Auth::check()){
-			if(Auth::user()->isStaff() || Auth::user()->isProjectAdmin()){
+			if(Auth::user()->isOnlyStaff() || Auth::user()->isProjectAdmin()){
 				return $next($request);
 			}
 		}
