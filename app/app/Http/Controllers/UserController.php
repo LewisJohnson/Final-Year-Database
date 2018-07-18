@@ -92,6 +92,23 @@ class UserController extends Controller{
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store(UserForm $request){
+		// Validate Student
+		if(in_array("student", $request->privileges)){
+			$request->validate([
+				'registration_number' => 'required'
+			]);
+		}
+
+		// Validate Supervisor
+		if(in_array("supervisor", $request->privileges)){
+			$request->validate([
+				'title' => 'required|max:6',
+				'project_load_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'take_students_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'accept_email_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+			]);
+		}
+
 		if(!$this->checkPrivilegeConditions($request->privileges)){
 			return redirect()->action('HomeController@index');
 		}
@@ -302,6 +319,23 @@ class UserController extends Controller{
 		$request = request();
 		$user = User::where('username', $userForm->username)->first();
 
+		// Validate Student
+		if(in_array("student", $request->privileges)){
+			$request->validate([
+				'registration_number' => 'required'
+			]);
+		}
+
+		// Validate Supervisor
+		if(in_array("supervisor", $request->privileges)){
+			$request->validate([
+				'title' => 'required|max:6',
+				'project_load_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'take_students_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'accept_email_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+			]);
+		}
+
 		// No privileges selected
 		if (empty($request->privileges) || !(is_array($request->privileges))){
 			$user->privileges = null;
@@ -370,12 +404,6 @@ class UserController extends Controller{
 				}
 
 				$supervisor->save();
-			}
-
-			// If a user was a supervisor and they had their supervisor privilege revoked
-			// Delete the supervisor model (Remove them from supervisor table)
-			if(!in_array("supervisor", $request->privileges) && $user->isSupervisor()){
-				$user->supervisor->delete();
 			}
 
 			$user->save();
