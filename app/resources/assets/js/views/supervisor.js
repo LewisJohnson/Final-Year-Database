@@ -70,7 +70,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			$(".loader").show(0);
 			var ajaxUrl = "projects/topic-remove";
 			$.ajax({
-				type: "DELETE",
+				type: "PATCH",
 				url: ajaxUrl,
 				data: {
 					topic_id : topicId,

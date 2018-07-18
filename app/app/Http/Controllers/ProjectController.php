@@ -166,7 +166,7 @@ class ProjectController extends Controller{
 			ProjectTopic::where('project_id', $project->id)
 				->where('topic_id', $topic->id)->delete();
 		});
-
+		
 		return response()->json(array('successful' => true));
 	}
 

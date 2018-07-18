@@ -349,7 +349,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
 
 	// Remove topic from project
-	Route::delete('projects/topic-remove', 'ProjectController@removeTopic');
+	Route::patch('projects/topic-remove', 'ProjectController@removeTopic');
 
 	// Update project primary topic
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
