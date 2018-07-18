@@ -25,6 +25,21 @@ class HomeController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+	public function dbFixView(){
+		$projects = Project::all();
+
+		$projects = $projects->filter(function ($project) {
+			return preg_match('/‘*/', $project->description);
+		});
+
+		return view('dbfix')->with('projects', $projects);
+	}
+
+	/**
+	 * Displays the home page.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 	public function index(){
 		return view('index');
 	}
