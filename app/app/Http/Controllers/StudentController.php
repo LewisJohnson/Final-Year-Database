@@ -213,9 +213,15 @@ class StudentController extends Controller{
 			$project->student_id = Auth::user()->student->id;
 
 			$project->fill(array(
-				'title' => request('title'), 'description' => $clean_html,
-				'status' => "student-proposed", 'skills' => request('skills')
+				'title' => request('title'),
+				'description' => $clean_html,
+				'status' => "student-proposed",
+				'skills' => request('skills')
 			));
+
+			$project->save();
+			$student->save();
+			$transaction->save();
 
 			$transaction->fill(array(
 				'type' => 'project',
@@ -228,10 +234,6 @@ class StudentController extends Controller{
 
 			$student->project_id = $project->id;
 			$student->project_status = 'proposed';
-
-			$project->save();
-			$student->save();
-			$transaction->save();
 
 			session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
