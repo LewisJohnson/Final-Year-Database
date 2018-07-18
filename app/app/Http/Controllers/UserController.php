@@ -102,13 +102,7 @@ class UserController extends Controller{
 		// Validate Supervisor
 		if(in_array("supervisor", $request->privileges)){
 			$request->validate([
-				'title' => 'required|max:6',
-				'project_load_ug' => 'required_without_all:project_load_pg',
-				'take_students_ug' => 'required_without_all:take_students_pg',
-				'accept_email_ug' => 'required_without_all:accept_email_pg',
-				'project_load_pg' => 'required_without_all:project_load_ug',
-				'take_students_pg' => 'required_without_all:take_students_ug',
-				'accept_email_pg' => 'required_without_all:accept_email_ug',
+				'title' => 'required|max:6'
 			]);
 		}
 
@@ -332,13 +326,7 @@ class UserController extends Controller{
 		// Validate Supervisor
 		if(in_array("supervisor", $request->privileges)){
 			$request->validate([
-				'title' => 'required|max:6',
-				'project_load_ug' => 'required_without_all:project_load_pg',
-				'take_students_ug' => 'required_without_all:take_students_pg',
-				'accept_email_ug' => 'required_without_all:accept_email_pg',
-				'project_load_pg' => 'required_without_all:project_load_ug',
-				'take_students_pg' => 'required_without_all:take_students_ug',
-				'accept_email_pg' => 'required_without_all:accept_email_ug',
+				'title' => 'required|max:6'
 			]);
 		}
 

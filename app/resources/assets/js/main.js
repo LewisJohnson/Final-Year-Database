@@ -595,6 +595,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	if($('.project-title').length > 0){
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
+		var projectId = $('#project-card').data('project-id');
+
 		// Bind value
 		title.on("keydown change",  function(){
 			checkTitle();
@@ -604,7 +606,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		checkTitle();
 	}
 
-	function checkTitle(){
+	function checkTitle(projectId){
 		var length = title.val().length;
 		titleCharCount.text(length + '/40');
 
@@ -619,7 +621,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			url: 'projects/check-title',
 			type:'POST',
 			data: {
-				project_title: title.val()
+				project_title: title.val(),
+				project_id: projectId
 			},
 			success:function(result){
 				if(result.hasSameTitle){

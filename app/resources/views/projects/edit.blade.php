@@ -10,7 +10,7 @@
 <div class="centered width--800">
 	<h1>You are editing "{{ $project->title }}".</h1>
 
-	<div class="card project-card card--margin-vertical">
+	<div id="project-card" class="card project-card card--margin-vertical" data-project-id="{{ $project->id }}">
 		<form id="editProjectForm" class="form form--flex" role="form" method="POST" onkeypress="return event.keyCode != 13;" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
