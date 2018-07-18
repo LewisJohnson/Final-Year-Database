@@ -107,7 +107,7 @@ class UserController extends Controller{
 				'take_students_ug' => 'required_without_all:take_students_pg',
 				'accept_email_ug' => 'required_without_all:accept_email_pg',
 				'project_load_pg' => 'required_without_all:project_load_ug',
-				'take_students_pg'==> 'required_without_all:take_students_ug',
+				'take_students_pg' => 'required_without_all:take_students_ug',
 				'accept_email_pg' => 'required_without_all:accept_email_ug',
 			]);
 		}
