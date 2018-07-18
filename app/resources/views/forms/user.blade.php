@@ -170,7 +170,7 @@
 				@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 					<div class="form-field">
 						<label for="project-load-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} project load</label>
-						<input id="project-load-{{ $educationLevel['shortName'] }}" type="number" name="project_load_{{ $educationLevel['shortName'] }}" min="0" max="255" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->getProjectLoad($educationLevel['shortName']) }}" @else value="1" @endif @endif>
+						<input id="project-load-{{ $educationLevel['shortName'] }}" type="number" name="project_load_{{ $educationLevel['shortName'] }}" min="0" max="255" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->getProjectLoad($educationLevel['shortName']) }}" @endif @else value="0" @endif>
 					</div>
 				@endif
 			@endforeach

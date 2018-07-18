@@ -10,6 +10,9 @@ namespace SussexProjects;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use SussexProjects\User;
+use SussexProjects\Supervisor;
+
 
 /**
  * The topic model.
@@ -95,6 +98,13 @@ class Topic extends Model{
 	 * @return Project
 	 */
 	public function getProjectsOnOffer(){
-		return $this->projects->where('status', 'on-offer');
+
+		return $this->projects->filter(function ($project) {
+			if($project->status != "on-offer"){
+				return false;
+			}
+
+			return strpos($project->supervisor->user->privileges, 'supervisor') !== false;
+		});
 	}
 }
