@@ -98,12 +98,9 @@ class Topic extends Model{
 	 * @return Project
 	 */
 	public function getProjectsOnOffer(){
+		$projects = $this->projects->where('status', 'on-offer');
 
-		return $this->projects->filter(function ($project) {
-			if($project->status != "on-offer"){
-				return false;
-			}
-
+		return $projects->filter(function ($project) {
 			return strpos($project->supervisor->user->privileges, 'supervisor') !== false;
 		});
 	}
