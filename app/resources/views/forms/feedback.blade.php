@@ -1,6 +1,6 @@
 <form class="form form--flex" method="POST" action="{{ action('HomeController@feedback') }}">
 	{{ csrf_field() }}
-	<p>Please send us any comments, feedback, or problems you may be experiencing.</p>
+	<p>Please send us any comments or feedback, or problems you may be experiencing. <br>For bugs, please reprt the issue <a href="https://github.com/LewisJohnson/Final-Year-Database/issues">here</a></p>
 
 	<div class="form-field">
 		<label>Comment</label>
