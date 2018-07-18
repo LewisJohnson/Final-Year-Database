@@ -136,3 +136,15 @@
 		max-height: 24px;
 	}
 }
+
+.project-status--on-offer{
+	color: $project-on-offer-color;
+}
+
+.project-status--withdrawn{
+	color: $project-withdrawn-color;
+}
+
+.project-status--archived{
+	color: $project-archived-color;
+}

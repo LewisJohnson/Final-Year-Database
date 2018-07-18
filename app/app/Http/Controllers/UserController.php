@@ -103,9 +103,12 @@ class UserController extends Controller{
 		if(in_array("supervisor", $request->privileges)){
 			$request->validate([
 				'title' => 'required|max:6',
-				'project_load_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
-				'take_students_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
-				'accept_email_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'project_load_ug'= => 'required_without_all:project_load_pg',
+				'take_students_ug'= => 'required_without_all:take_students_pg',
+				'accept_email_ug'= => 'required_without_all:accept_email_pg',
+				'project_load_pg'= => 'required_without_all:project_load_ug',
+				'take_students_pg'= => 'required_without_all:take_students_ug',
+				'accept_email_pg'= => 'required_without_all:accept_email_ug',
 			]);
 		}
 
@@ -330,9 +333,12 @@ class UserController extends Controller{
 		if(in_array("supervisor", $request->privileges)){
 			$request->validate([
 				'title' => 'required|max:6',
-				'project_load_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
-				'take_students_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
-				'accept_email_'.Session::get('education_level')["shortName"] => 'required|min:0|max:255',
+				'project_load_ug'= => 'required_without_all:project_load_pg',
+				'take_students_ug'= => 'required_without_all:take_students_pg',
+				'accept_email_ug'= => 'required_without_all:accept_email_pg',
+				'project_load_pg'= => 'required_without_all:project_load_ug',
+				'take_students_pg'= => 'required_without_all:take_students_ug',
+				'accept_email_pg'= => 'required_without_all:accept_email_ug',
 			]);
 		}
 

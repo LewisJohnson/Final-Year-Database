@@ -19,6 +19,6 @@
 	 @endif
 
 	 @if($view == "personal")
-	 	<td>{{ $project->status }}</td>
+	 	<td class="project-status--{{ $project->status }}">{{ $project->status }}</td>
 	 @endif
 </tr>
