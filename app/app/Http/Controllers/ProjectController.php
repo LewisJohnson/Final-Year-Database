@@ -226,7 +226,8 @@ class ProjectController extends Controller{
 			$project->save();
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'created',
+				'type' => 'project',
+				'action' => 'created',
 				'project' => $project->id,
 				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
@@ -429,10 +430,17 @@ class ProjectController extends Controller{
 		$filteredByTopics = false;
 
 		if(is_null($request->get("searchTerm")) || is_null($request->get("filter"))){
-			session()->flash("message", "Sorry, something went wrong with that request.");
+			session()->flash("message", "Please enter a search term.");
 			session()->flash('message_type', 'error');
 
-			return redirect()->action('ProjectController@index', $request);
+			return redirect()->action('ProjectController@index');
+		}
+
+		if(strlen($request->get("searchTerm")) < 3){
+			session()->flash("message", "Please enter a longer search term.");
+			session()->flash('message_type', 'error');
+
+			return redirect()->action('ProjectController@index');
 		}
 
 		foreach($filters as $selected){
