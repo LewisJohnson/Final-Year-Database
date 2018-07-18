@@ -595,7 +595,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	if($('.project-title').length > 0){
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
-		var projectId = $('#project-card').data('project-id');
+		var projectId = $('#editProjectForm').data('project-id');
 
 		// Bind value
 		title.on("keydown change",  function(){
