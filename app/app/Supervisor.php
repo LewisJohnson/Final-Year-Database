@@ -314,7 +314,9 @@ class Supervisor extends Model{
 	 * @return string
 	 */
 	public static function getTitleDatalist(){
-		$titles = Supervisor::groupBy('title')->pluck('title');
+		$titles = Supervisor::groupBy('title')
+			->where("take_students_".Session::get('education_level')["shortName"], true)
+			->pluck('title');
 
 		$rtnString = '<datalist id="titleDataList">';
 		foreach($titles as $title){
