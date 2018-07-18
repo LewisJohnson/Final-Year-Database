@@ -65,7 +65,7 @@
 						<th data-default="true">Title</th>
 						<th data-default="false">Short Description</th>
 						<th data-default="false">Full Description</th>
-						<th data-default="true">Skills</th>
+						<th data-default="desktop">Skills</th>
 						@if($view == "index" || $view == "topic" || $view == "transaction")<th data-default="true" >Supervisor</th>@endif
 						@if($view == "personal") <th data-default="true">Status</th> @endif
 					</tr>
