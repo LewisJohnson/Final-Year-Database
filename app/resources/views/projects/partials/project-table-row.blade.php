@@ -16,9 +16,9 @@
 		<td>
 			<a href="{{ action('UserController@projects', $project->supervisor->user) }}">{{ $project->supervisor->user->getFullName() }}</a>
 		</td>
-	 @endif
+	@endif
 
-	 @if($view == "personal")
-	 	<td class="project-status--{{ $project->status }}">{{ $project->status }}</td>
-	 @endif
+	@if($view == "personal")
+		<td class="project-status--{{ $project->status }}">{{ $project->status }}</td>
+	@endif
 </tr>
