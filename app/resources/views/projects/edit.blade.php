@@ -16,7 +16,7 @@
 			{{ method_field('PATCH') }}
 
 			<div class="form-field">
-				<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
+				<label for="title">Title <ins style="margin-left:5px; font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
 				<input class="project-title" maxlength="255" type="text" name="title" id="title" value="{{ $project->title }}">
 				<p id="title-already-used" style="display: hidden" class="help-block">This project title is already in use.</p>
 			</div>
@@ -34,7 +34,7 @@
 			</div>
 
 			<div class="form-field">
-				<label>Topics<ins style="font-size: 12px;">Press ENTER to save topic.</ins></label>
+				<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press ENTER to save topic.</ins></label>
 				<div id="new-topic-input-container" class="fake-input">
 					<ul class="topics-list edit">
 						@foreach($project->topics as $topic)

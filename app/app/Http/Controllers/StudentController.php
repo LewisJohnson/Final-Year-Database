@@ -35,9 +35,28 @@ use SussexProjects\Transaction;
  */
 class StudentController extends Controller{
 
+	/**
+	 * The HTML purifier configuration used for the project description.
+	 *
+	 * @see http://htmlpurifier.org/live/configdoc/plain.html HTML purifier configuration documentation.
+	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
+	 * @var string[] ~HTML purifier configuration
+	 */
+	public $htmlPurifyConfig;
+
 	public function __construct(){
 		parent::__construct();
 		$this->middleware('auth');
+
+		$purifier = Purify::getPurifier();
+		$config = $purifier->config;
+
+		$config->set('Core.CollectErrors', true);
+		$config->set('Attr.ID.HTML5', true);
+		$config->set('HTML.TargetBlank', true);
+		$config->set('HTML.ForbiddenElements', 'h1,h2,h3,h4,h5,h6,script,html,body');
+		$config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
+		$htmlPurifyConfig = $config;
 	}
 
 	/**
@@ -178,7 +197,7 @@ class StudentController extends Controller{
 		DB::transaction(function() use ($request, $student){
 			$project = new Project;
 			$projectController = new ProjectController;
-			$clean_html = Purify::clean(request('description'), $projectController->descriptionPurifyConfig);
+			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
 
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));

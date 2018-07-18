@@ -63,8 +63,6 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 
 	// Help page view
 	Route::get('help', 'HomeController@help');
-
-	Route::get('db-fix', 'HomeController@dbFixView');
 });
 
 // Without department check
