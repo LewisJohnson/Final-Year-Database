@@ -598,24 +598,21 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		var projectId = $('#editProjectForm').data('project-id');
 
 		// Bind value
+		// Only bind blur to not spam DB
 		title.on("blur",  function(){
-			checkTitle(projectId);
+			checkTitleInDatabase(projectId);
+		});
+
+		title.on("blur keydown change",  function(){
+			checkTitleLength();
 		});
 
 		// Set initial value
-		checkTitle(projectId);
+		checkTitleLength(projectId);
+		checkTitleInDatabase(projectId);
 	}
 
-	function checkTitle(projectId){
-		var length = title.val().length;
-		titleCharCount.text(length + '/40');
-
-		if(length > 40){
-			titleCharCount.css('color', 'red');
-		} else {
-			titleCharCount.css('color', 'darkgray');
-		}
-
+	function checkTitleInDatabase(projectId){
 		// Check already used titles
 		$.ajax({
 			url: 'projects/check-title',
@@ -632,8 +629,19 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 				}
 			},
 		});
-		
 	}
+
+	function checkTitleLength(){
+		var length = title.val().length;
+		titleCharCount.text(length + '/40');
+
+		if(length > 40){
+			titleCharCount.css('color', 'red');
+		} else {
+			titleCharCount.css('color', 'darkgray');
+		}
+	}
+
 	/* ======================
 		 6. HTML EDITOR
 	   ====================== */
