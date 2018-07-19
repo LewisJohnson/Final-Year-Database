@@ -32,6 +32,12 @@
 	<div id="supervisor-report" style="overflow: auto;">
 		@foreach($supervisors as $supervisor)
 			@php
+				unset(
+					$onOfferProjects, $onOfferProjectsCount,
+					$acceptedStudents, $acceptedStudentsCount
+					$intrestedStudents, $intrestedStudentsCount
+					$proposals, $proposalsCount);
+
 				$onOfferProjects = $supervisor->getProjects('on-offer');
 				$onOfferProjectsCount = count($onOfferProjects) ?? 0;
 
