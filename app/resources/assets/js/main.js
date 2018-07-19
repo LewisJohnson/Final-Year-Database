@@ -337,6 +337,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 						$.ajax({
 							method: 'DELETE',
 							url: form.prop('action'),
+							data: {
+								project_id: form.data('project-id'),
+							},
 							success:function(response){
 								if(response.successful){
 									window.location.href = response.url;

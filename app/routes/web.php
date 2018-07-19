@@ -276,12 +276,6 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	// Undo student's accepted project
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 
-	// Delete project
-	Route::delete('projects/{project}', 'ProjectController@destroy');
-
-	// Update project 
-	Route::patch('projects/{project}/edit', 'ProjectController@update');
-
 	// Show update project form
 	Route::get('projects/{project}/edit', 'ProjectController@edit');
 });
@@ -317,12 +311,6 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 
 	// Remove project from favourites
 	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
-
-	// Delete project
-	Route::delete('projects/{project}', 'ProjectController@destroy');
-
-	// Update project 
-	Route::patch('projects/{project}/edit', 'ProjectController@update');;
 });
 
 
@@ -337,6 +325,12 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Store new project POST
 	Route::post('projects', 'ProjectController@store');
+
+	// Delete project
+	Route::delete('projects/{project}', 'ProjectController@destroy');
+
+	// Update project 
+	Route::patch('projects/{project}/edit', 'ProjectController@update');
 
 	// New project form
 	Route::get('projects/create', 'ProjectController@create');
