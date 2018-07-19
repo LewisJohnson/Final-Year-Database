@@ -186,7 +186,7 @@ class ProjectAdminController extends Controller{
 			session()->flash('message', 'You may not log in as an administrator.');
 			session()->flash('message_type', 'error');
 
-			return false;
+			return redirect()->action('ProjectAdminController@loginAsView');
 		}
 
 		Auth::login($user);
@@ -194,6 +194,7 @@ class ProjectAdminController extends Controller{
 		// Redirect
 		session()->flash('message', 'You have logged in as '.$user->getFullName());
 		session()->flash('message_type', 'success');
+		Session::put('logged_in_as', true);
 
 		return redirect()->action('HomeController@index');
 	}

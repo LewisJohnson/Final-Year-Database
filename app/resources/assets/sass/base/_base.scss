@@ -43,11 +43,11 @@ code{
 	padding: 1rem;
 	background: darken($space-grey, 5%);
 
-	a, button{
+	a, p, button{
 		color: white;
 	}
 
-	a{
+	a, p{
 		padding-right: 1rem;
 	}
 

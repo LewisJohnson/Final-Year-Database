@@ -1,5 +1,14 @@
 @include('partials.cookie-banner')
 
+@if(isset(Session::get('logged_in_as')) && Session::get('logged_in_as'))
+	<div class="cookie-banner flex flex--row">
+		<div style="color: white; width: 30px;">
+			@include('svg.account')
+		</div>
+
+		<p>You are logged in as another user.</p>
+	</div>
+@endif
 <div class="flex flex--row" style="background: rgb(52, 61, 70); z-index: 9; position: relative;">
 	<ul class="hl header-department-list">
 		@foreach(get_departments() as $key => $department)
