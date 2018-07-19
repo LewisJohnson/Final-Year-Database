@@ -340,15 +340,15 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function undoSelectedProject(Request $request){
-		if(Auth::user()->student->project == null){
+		if(Auth::user()->student->project == null || Auth::user()->student->project_status == 'none'){
 			return response()->json(array(
-				'error' => true, 'message' => "You don't have a project selected."
+				'error' => true, 'message' => "You currently have no project selected."
 			));
 		}
 
-		if(Auth::user()->student->project_status != 'selected' || Auth::user()->student->project_status != 'proposed'){
+		if(Auth::user()->student->project_status == 'accepted'){
 			return response()->json(array(
-				'error' => true, 'message' => "You have already selected/proposed a project.."
+				'error' => true, 'message' => "You have already accepted for a project."
 			));
 		}
 
