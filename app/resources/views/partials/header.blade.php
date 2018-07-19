@@ -1,12 +1,12 @@
 @include('partials.cookie-banner')
 
 @if(Session::get('logged_in_as') != null)
-	<div class="cookie-banner flex flex--row">
+	<div class="cookie-banner flex flex--row" style="background: #ff3434">
 		<div style="color: white; width: 30px;">
 			@include('svg.account')
 		</div>
 
-		<p>You are logged in as another user.</p>
+		<p style="margin: 0 auto;">You are logged in as another user.</p>
 	</div>
 @endif
 <div class="flex flex--row" style="background: rgb(52, 61, 70); z-index: 9; position: relative;">
