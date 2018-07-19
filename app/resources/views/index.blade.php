@@ -157,21 +157,20 @@
 					@endif
 				</div>
 
-				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor() > 0))
+				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0)
 					<h2>Your Proposed Projects (Without a supervisor)</h2>
 					@foreach($projects as $project)
-							<div class="card">
-								<div class="favourite-container index pointer" data-project-id="{{ $project->id }}">
-									<svg title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24" class="favourite">
-										<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
-									</svg>
-									<div class="loader loader--tiny"></div>
-								</div>
-								<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
-								{{-- todo: add delete --}}
-								{{-- todo: add assign to supervisor --}}
-							</div>
-						@endforeach
+						<div class="card">
+							<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+							<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a>
+							<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
+								{{ csrf_field() }}
+								{{ method_field('DELETE') }}
+								<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete</button>
+							</form>
+							<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Proposed to supervisor</a>
+						</div>
+					@endforeach
 				@endif 
 
 				<div style="width: 100%;" class="fancy-page card--margin-vertical">
