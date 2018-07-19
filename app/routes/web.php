@@ -301,7 +301,7 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 	Route::get('students/project-propose-existing/{project}', 'StudentController@proposeExistingProjectView');
 
 	// Propose existing project POST
-	Route::post('students/project-propose', 'StudentController@proposeExistingProject');
+	Route::post('students/project-propose-existing', 'StudentController@proposeExistingProject');
 
 	// Project selection
 	Route::patch('students/project-select', 'StudentController@selectProject');
