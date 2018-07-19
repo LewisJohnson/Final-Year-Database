@@ -146,9 +146,9 @@
 					@endif
 
 					@if(Auth::user()->student->project_status == 'proposed')
-						<h2>Your Proposed Project</h2>
+						<h2 style="width: 90%;">Your Proposed Project</h2>
 					@else
-						<h2>Your Project</h2>
+						<h2 style="width: 90%;">Your Project</h2>
 					@endif
 					<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
 

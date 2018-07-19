@@ -219,10 +219,6 @@ class StudentController extends Controller{
 				'skills' => request('skills')
 			));
 
-			$project->save();
-			$student->save();
-			$transaction->save();
-
 			$transaction->fill(array(
 				'type' => 'project',
 				'action' => 'proposed',
@@ -231,6 +227,10 @@ class StudentController extends Controller{
 				'supervisor' => $supervisor->id,
 				'transaction_date' => new Carbon
 			));
+
+			$project->save();
+			$student->save();
+			$transaction->save();
 
 			$student->project_id = $project->id;
 			$student->project_status = 'proposed';
@@ -303,7 +303,8 @@ class StudentController extends Controller{
 			$student->save();
 
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'selected',
+				'type' => 'project',
+				'action' => 'selected',
 				'project' => request('project_id'),
 				'student' => Auth::user()->student->id,
 				'supervisor' => $project->supervisor->id,
