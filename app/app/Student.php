@@ -41,17 +41,6 @@ class Student extends Model{
 	 */
 	protected $guarded = [];
 
-	public static function getMailtoStringByProjectStatus($status){
-		$return = 'mailto:';
-		$students = Student::Where('project_status', $status)->get();
-
-		foreach($students as $key => $student){
-			$return .= $student->user->email;
-			$return .= ',';
-		}
-
-		return $return;
-	}
 
 	/**
 	 * The table to retrieve data from.
@@ -65,6 +54,39 @@ class Student extends Model{
 		} else {
 			throw new Exception('Database not found.');
 		}
+	}
+
+	public static function getMailtoStringByProjectStatus($status){
+		$return = 'mailto:';
+		$students = Student::Where('project_status', $status)->get();
+
+		foreach($students as $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
+	public static function getAllStudentsWithoutProjectMailtoString(){
+		$return = 'mailto:';
+		$students = Student::Where('project_status', '<>', 'accepted')->get();
+
+		foreach($students as $key => $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
+	/**
+	 * A list of all potential student project statues.
+	 *
+	 * @return string[] An array of all statues'.
+	 */
+	public static function getAllStatuses(){
+		return ['none', 'proposed', 'selected', 'accepted'];
 	}
 
 	/**

@@ -3,12 +3,14 @@
 
 <div class="centered width--1600">
 	<div id="report-header">
+		<a style="float: right" class="button button--raised" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students without project</a>
+
 		<h1>Report by Student</h1>
 		<h3>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h3>
 	</div>
 
 	<div class="section-container">
-		@foreach(SussexProjects\Project::getAllStatuses() as $status)
+		@foreach(SussexProjects\Student::getAllStatuses() as $status)
 			@php
 				$students = SussexProjects\Student::Where('project_status', $status)->get();
 				$sortedStudents = $students->sortBy(function ($student, $key) { return $student->user->last_name; });
