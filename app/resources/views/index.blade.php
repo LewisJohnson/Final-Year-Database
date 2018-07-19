@@ -159,16 +159,10 @@
 
 				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0)
 					<h2>Your Proposed Projects (Without a supervisor)</h2>
-					@foreach($projects as $project)
-						<div class="card">
-							<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
-							<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit</a>
-							<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
-								{{ csrf_field() }}
-								{{ method_field('DELETE') }}
-								<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete</button>
-							</form>
-							<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Proposed to supervisor</a>
+					@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
+						<div class="card proposed-project flex flex--row">
+							<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+							<a class="ml-auto button button--raised" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Propose to supervisor</a>
 						</div>
 					@endforeach
 				@endif 

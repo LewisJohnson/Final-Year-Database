@@ -31,7 +31,11 @@
 		<h1 class="title">{{ $project->title }}</h1>
 
 		@if($view == "StudentProject")
-			<h2 class="supervisor">Proposed by {{ $project->student->getName() }} to {{ $project->supervisor->user->getFullName() }}</h2>
+			@if($project->supervisor == null)
+				<h2 class="supervisor">Created by {{ $project->student->getName() }}</h2>
+			@else
+				<h2 class="supervisor">Proposed by {{ $project->student->getName() }} to {{ $project->supervisor->user->getFullName() }}</h2>
+			@endif
 		@else
 			<h2 class="supervisor">{{ $project->supervisor->user->getFullName() }}</h2>
 		@endif
@@ -101,9 +105,8 @@
 				<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
 				@if($project->isOwnedByUser())
-					<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
+					<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" data-project-id="{{ $project->id }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
-						{{ method_field('DELETE') }}
 						<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
 					</form>
 				@endif

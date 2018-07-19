@@ -297,6 +297,12 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 	// Propose project POST
 	Route::post('students/project-propose', 'StudentController@proposeProject');
 
+	// Propose existing project view
+	Route::get('students/project-propose-existing/{project}', 'StudentController@proposeExistingProjectView');
+
+	// Propose existing project POST
+	Route::post('students/project-propose', 'StudentController@proposeExistingProject');
+
 	// Project selection
 	Route::patch('students/project-select', 'StudentController@selectProject');
 
@@ -311,6 +317,12 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 
 	// Remove project from favourites
 	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
+
+	// Delete project
+	Route::delete('projects/{project}', 'ProjectController@destroy');
+
+	// Update project 
+	Route::patch('projects/{project}/edit', 'ProjectController@update');;
 });
 
 

@@ -345,24 +345,41 @@ class ProjectController extends Controller{
 			return response()->json(array('successful' => false, 'message' => 'A student has been accepted for this project.'));
 		}
 
-		DB::Transaction(function() use ($project){
-			if(Auth::user()->isStudent()){
-				Auth::user()->student->undoSelectedProject();
+		if(Auth::user()->isStudent()){
+			if($project->supervisor_id != null){
+				return response()->json(array('successful' => false, 'message' => 'You must undo your proposal before deleting this project.'));
 			}
+		}
 
+		DB::Transaction(function() use ($project){
 			$transaction = new Transaction;
-			$transaction->fill(array(
-				'type' => 'project',
-				'action' => 'deleted',
-				'project' => $project->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
+
+			if($project->status == "student-proposed"){
+				$transaction->fill(array(
+					'type' => 'project',
+					'action' => 'deleted',
+					'project' => $project->id,
+					'student' => Auth::user()->student->id,
+					'transaction_date' => new Carbon
+				));
+			} else {
+				$transaction->fill(array(
+					'type' => 'project',
+					'action' => 'deleted',
+					'project' => $project->id,
+					'supervisor' => Auth::user()->supervisor->id,
+					'transaction_date' => new Carbon
+				));
+			}
 
 			$transaction->save();
 			$project->delete();
 		});
-		return response()->json(array('successful' => true, 'url' => action('UserController@projects', Auth::user())));
+		if($project->status == "student-proposed"){
+			return response()->json(array('successful' => true, 'url' => action('HomeController@index')));
+		} else {
+			return response()->json(array('successful' => true, 'url' => action('UserController@projects', Auth::user())));
+		}
 	}
 
 	/**

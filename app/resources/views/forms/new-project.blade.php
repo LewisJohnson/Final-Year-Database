@@ -1,3 +1,14 @@
+@if($user_type == "student")
+	@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
+		<p class="config-tip">You may not propose a project until {{ SussexProjects\Mode::getSupervisorAcceptDate(true) }}.</p>
+		<script>
+			$(function() {
+				$('.form-field *').attr('disabled', true);
+			});
+		</script>
+	@endif
+@endif
+
 <form class="form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="{{ action('StudentController@proposeProject') }}" @elseif($user_type == "supervisor") action="{{ action('ProjectController@store') }}" @endif>
 	{{ csrf_field() }}
 	@if($user_type == "supervisor")
