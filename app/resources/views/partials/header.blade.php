@@ -1,6 +1,6 @@
 @include('partials.cookie-banner')
 
-@if(isset(Session::get('logged_in_as')) && Session::get('logged_in_as'))
+@if(Session::get('logged_in_as') != null)
 	<div class="cookie-banner flex flex--row">
 		<div style="color: white; width: 30px;">
 			@include('svg.account')
