@@ -229,11 +229,12 @@ class StudentController extends Controller{
 			));
 
 			$project->save();
-			$student->save();
 			$transaction->save();
 
 			$student->project_id = $project->id;
 			$student->project_status = 'proposed';
+			
+			$student->save();
 
 			session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
