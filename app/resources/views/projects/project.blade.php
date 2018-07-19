@@ -97,14 +97,16 @@
 			@endif
 		@endif
 
-			@if($project->isOwnedByUser() && !Auth::user()->isStudent())
+			@if($project->isOwnedByUser() || $project->isUserSupervisorOfProject())
 				<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 
-				<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
-					{{ csrf_field() }}
-					{{ method_field('DELETE') }}
-					<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
-				</form>
+				@if($project->isOwnedByUser())
+					<form class="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" method="DELETE" accept-charset="utf-8">
+						{{ csrf_field() }}
+						{{ method_field('DELETE') }}
+						<button type="submit" class="button button--raised button--danger" title="Delete {{ $project->title }}">Delete Project</button>
+					</form>
+				@endif
 			@endif
 		@endif
 	</div>

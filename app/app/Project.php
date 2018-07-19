@@ -155,10 +155,23 @@ class Project extends Model{
 	 * @return boolean
 	 */
 	public function isOwnedByUser(){
-		if(Auth::user()->isSupervisor()){
+		if(Auth::user()->isSupervisor() && $this->status != "student-proposed"){
 			return $this->supervisor_id === Auth::user()->supervisor->id;
 		} elseif(Auth::user()->isStudent()) {
 			return $this->student_id === Auth::user()->student->id;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determines if current user is supervisor of project.
+	 *
+	 * @return boolean
+	 */
+	public function isUserSupervisorOfProject(){
+		if(Auth::user()->isSupervisor()){
+			return $this->supervisor_id === Auth::user()->supervisor->id;
 		}
 
 		return false;

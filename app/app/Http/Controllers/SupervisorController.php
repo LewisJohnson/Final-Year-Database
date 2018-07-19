@@ -88,7 +88,8 @@ class SupervisorController extends Controller{
 		}
 
 		$this->validate(request(), [
-			'student_id' => 'required', 'project_id' => 'required',
+			'student_id' => 'required',
+			'project_id' => 'required',
 		]);
 
 		$student = Student::findOrFail(request('student_id'));
@@ -147,7 +148,8 @@ class SupervisorController extends Controller{
 				->send(new StudentAccepted(Auth::user()->supervisor, $student));
 		} catch (\Exception $e){
 			return response()->json(array(
-				'successful' => true, 'email_successful' => false,
+				'successful' => true,
+				'email_successful' => false,
 				'message' => $student->user->first_name.'was accepted. However, the confirmation email failed to send.'
 			));
 		}

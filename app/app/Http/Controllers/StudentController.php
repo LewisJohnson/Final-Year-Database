@@ -341,7 +341,7 @@ class StudentController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response JSON
 	 */
-	public function undoSelectedProject(Request $request){
+	public function undoSelectedProject(){
 		if(Auth::user()->student->project == null || Auth::user()->student->project_status == 'none'){
 			return response()->json(array(
 				'error' => true, 'message' => "You currently have no project selected."
@@ -356,7 +356,7 @@ class StudentController extends Controller{
 
 		$student = Auth::user()->student;
 
-		DB::transaction(function() use ($request, $student){
+		DB::transaction(function() use ($student){
 			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' => 'project',
@@ -371,6 +371,12 @@ class StudentController extends Controller{
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
+
+			if($student->project->status == "student-proposed"){
+				$student->project->supervisor_id = null;
+			}
+
+			$student->project->save();
 		});
 
 		if($student->project->supervisor->getAcceptingEmails()){
@@ -386,7 +392,8 @@ class StudentController extends Controller{
 		}
 
 		return response()->json(array(
-			'successful' => true, 'message' => "You have un-selected a project."
+			'successful' => true,
+			'message' => "You have un-selected a project."
 		));
 	}
 

@@ -159,6 +159,19 @@ class Student extends Model{
 	}
 
 	/**
+	 * Returns proposed projects without a supervisor.
+	 *
+	 * @return Project Projects
+	 */
+	public function getProposedProjectsWithoutSupervisor(){
+		return Project::
+				where('status', 'student-proposed')
+				->where('student_id', $this->id)
+				->whereNull('supervisor_id')
+				->get();
+	}
+
+	/**
 	 * Returns a boolean whether the parameter project is a favourite project.
 	 *
 	 * @param $id Project ID

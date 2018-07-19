@@ -218,8 +218,10 @@ class ProjectController extends Controller{
 			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
 
 			$project->fill(array(
-				'title' => request('title'), 'description' => $clean_html,
-				'status' => request('status'), 'skills' => request('skills')
+				'title' => request('title'),
+				'description' => $clean_html,
+				'status' => request('status'),
+				'skills' => request('skills')
 			));
 
 			$project->supervisor_id = Auth::user()->supervisor->id;
@@ -283,8 +285,10 @@ class ProjectController extends Controller{
 			}
 
 			$project->update([
-				'title' => $input->title, 'description' => $clean_html,
-				'status' => $input->status, 'skills' => $input->skills
+				'title' => $input->title,
+				'description' => $clean_html,
+				'status' => $input->status,
+				'skills' => $input->skills
 			]);
 
 			if($project->status == "student-proposed"){
@@ -329,7 +333,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Project $project){
-		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
+		if(!$project->isOwnedByUser()){
 			return response()->json(array('successful' => false));
 		}
 
@@ -342,6 +346,10 @@ class ProjectController extends Controller{
 		}
 
 		DB::Transaction(function() use ($project){
+			if(Auth::user()->isStudent()){
+				Auth::user()->student->undoSelectedProject();
+			}
+
 			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' => 'project',
