@@ -293,7 +293,8 @@ class SupervisorController extends Controller{
 
 		if($emailError){
 			return response()->json(array(
-				'successful' => true, 'email_successful' => false,
+				'successful' => true,
+				'email_successful' => false,
 				'message' => $message
 			));
 		}
