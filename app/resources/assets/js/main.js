@@ -36,7 +36,7 @@ $.ajaxSetup({
 });
 
 $(document).ajaxSend(function(event, jqxhr, request) {
-	if(!request.url.toLowerCase().includes(config.ajaxBaseUrl.toLowerCase())){
+	if(!request.url.toLowerCase().includes('http')){
 		request.url = config.ajaxBaseUrl + request.url;
 	}
 });

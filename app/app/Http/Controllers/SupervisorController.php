@@ -197,7 +197,7 @@ class SupervisorController extends Controller{
 			$student->save();
 
 			if($project->status == "student-proposed"){
-				$project->supervisor = null;
+				$project->supervisor_id = null;
 				$project->save();
 			}
 		});
