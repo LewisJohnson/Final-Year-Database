@@ -71,19 +71,8 @@ class ProjectController extends Controller{
 		$supervisorTable = new Supervisor();
 		$userTable = new User();
 		$projectTable = new Project();
-		$projects = Project::whereNotNull('supervisor_id');
-
-		if(Auth::check()){
-			if(!Auth::user()->isSupervisor()){
-				$projects->where('status', 'on-offer');
-			}
-		}
-
-		if(ldap_guest()){
-			$projects->where('status', 'on-offer');
-		}
-
-		$projects
+		$projects = Project::where('status', 'on-offer')
+			->whereNotNull('supervisor_id')
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
 			->where('user.privileges', 'LIKE', '%supervisor%')
@@ -158,8 +147,7 @@ class ProjectController extends Controller{
 		});
 
 		return response()->json(array(
-			'successful' => true,
-			'topic' => $result
+			'successful' => true, 'topic' => $result
 		));
 	}
 
@@ -502,15 +490,7 @@ class ProjectController extends Controller{
 			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')
 			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
 
-		if(Auth::check()){
-			if(!Auth::user()->isSupervisor()){
-				$projects->where("status", "on-offer");
-			}
-		}
-
-		if(ldap_guest()){
-			$projects->where("status", "on-offer");
-		}
+		$projects->where("status", "on-offer");
 
 		// Title filter
 		if(in_array("title", $filters)){
