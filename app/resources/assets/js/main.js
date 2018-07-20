@@ -549,7 +549,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	$("body").on("change", ".email-table .checkbox input", function() {
 		var select = function(dom){
 			var status = dom.parents().eq(4).data('status');
-			var adminEmail = dom.data('admin-email');
+			var adminEmail = dom.parents().eq(4).data('admin-email');
 			var emailString = "mailto:" + adminEmail + "?bcc=";
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 			var emailButtonselector = ".email-selected." + status;
