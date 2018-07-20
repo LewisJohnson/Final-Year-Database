@@ -749,11 +749,15 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		 7. OTHER
 	   ====================== */
 	$('[data-hover]').on('mouseenter', function(){
-		$(this).attr('data-original', $(this).text());
-		$(this).text($(this).data('hover'));
+		if($('#showTransactionDetailOnHover').prop("checked")){
+			$(this).attr('data-original', $(this).html());
+			$(this).html($(this).data('hover'));
+		}
 	});
 
 	$('[data-hover]').on('mouseleave', function(){
-		$(this).text($(this).data('original'));
+		if($('#showTransactionDetailOnHover').prop("checked")){
+			$(this).html($(this).data('original'));
+		}
 	});
 });

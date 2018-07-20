@@ -27,6 +27,13 @@ class Feedback extends Model{
 	public $incrementing = false;
 
 	/**
+	 * The columns to be parsed as dates.
+	 *
+	 * @var array
+	 */
+	protected $dates = ['date'];
+
+	/**
 	 * The table to retrieve data from.
 	 *
 	 * @return string

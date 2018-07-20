@@ -7,6 +7,7 @@
 
 namespace SussexProjects\Http\Controllers;
 
+use Illuminate\Http\Request;
 use SussexProjects\Transaction;
 
 /**
@@ -25,33 +26,15 @@ class TransactionController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function index(){
-		$topicTransactions = Transaction::where('type', 'topic')
-			->orderBy('transaction_date', 'desc')->get();
-		$projectTransactions = Transaction::where('type', 'project')
-			->orderBy('transaction_date', 'desc')->get();
-		$studentTransactions = Transaction::where('type', 'student')
-			->orderBy('transaction_date', 'desc')->get();
-		$markerTransactions = Transaction::where('type', 'marker')
+	public function index(Request $request){
+		$type = $request->query('type') ?? 'project';
+
+		$transactions = Transaction::where('type', $type)
 			->orderBy('transaction_date', 'desc')->get();
 
 		return view('admin.transactions')
-			->with('topicTransactions', $topicTransactions)
-			->with('projectTransactions', $projectTransactions)
-			->with('studentTransactions', $studentTransactions)
-			->with('markerTransactions', $markerTransactions);
+			->with('transactions', $transactions)
+			->with('transaction_type', ucfirst($type));
 	}
 
-	/**
-	 * A list of all projects with transaction.
-	 * The user then selects a project to view it's transactions.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	//	public function byProject(){
-	//		// $projects = Project::all();
-	//		// return view('projects.index')
-	//		// 	->with('projects', $projects)
-	//		// 	->with('view', 'transaction');
-	//	}
 }

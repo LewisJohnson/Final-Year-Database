@@ -107,6 +107,10 @@ Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']]
 
 	// User feedback view
 	Route::get('admin/feedback', 'SystemAdminController@feedback');
+
+	// User feedback view
+	Route::delete('admin/feedback', 'SystemAdminController@destroyFeedback');
+	
 });
 
 /* ========================

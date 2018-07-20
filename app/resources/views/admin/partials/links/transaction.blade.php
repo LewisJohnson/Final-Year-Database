@@ -1,14 +1,8 @@
 <ul class="icon-list">
-{{-- 	<li>
-		<a class="icon" href="">
-			@include('svg.file')
-			<p>Browse Transactions by Project</p>
-		</a>
-	</li> --}}
 	<li>
 		<a class="icon" href="{{ action('TransactionController@index') }}">
-			@include('svg.clock')
-			<p>Browse Transactions by Time</p>
+			@include('svg.database')
+			<p>Browse Transactions</p>
 		</a>
 	</li>
 	<li>

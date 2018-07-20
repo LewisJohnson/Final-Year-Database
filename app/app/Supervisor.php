@@ -217,7 +217,7 @@ class Supervisor extends Model{
 
 		$students = Student::where('project_status', 'selected')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
+			->where('project.supervisor_id', Auth::user()->id)
 			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){
@@ -242,7 +242,7 @@ class Supervisor extends Model{
 
 		$students = Student::where('project_status', 'accepted')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
+			->where('project.supervisor_id', Auth::user()->id)
 			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){
@@ -267,7 +267,7 @@ class Supervisor extends Model{
 
 		$students = Student::where('project_status', 'proposed')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
-			->where('project.supervisor_id', '=', Auth::user()->id)
+			->where('project.supervisor_id', Auth::user()->id)
 			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
 		foreach($students as $student){

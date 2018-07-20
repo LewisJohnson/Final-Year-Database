@@ -25,18 +25,21 @@ class Transaction extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
+	
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
+
 	/**
 	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
 	protected $guarded = ['id'];
+
 	/**
 	 * The columns to be parsed as dates.
 	 *
@@ -56,5 +59,25 @@ class Transaction extends Model{
 		} else {
 			throw new Exception('Database not found.');
 		}
+	}
+
+	public function getProjectTitle(){
+		$project = Project::find($this->project);
+
+		if($project != null){
+			return $project->title;
+		} else {
+			return "-";
+		}		
+	}
+
+	public function getName($userId){
+		$user = User::find($userId);
+
+		if($user != null){
+			return $user->getFullName();
+		} else {
+			return "-";
+		}	
 	}
 }

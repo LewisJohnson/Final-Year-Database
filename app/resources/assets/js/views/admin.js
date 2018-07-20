@@ -6,6 +6,61 @@
 
 ;$(function() {
 	"use strict";
+	var dontRemindAgain = false;
+
+	$(".delete-feedback").on('click', function(e){
+		e.preventDefault();
+		var deleteButton = $(this);
+
+		if(dontRemindAgain){
+			deleteFeedback(deleteButton);
+		} else {
+			$.confirm({
+				title: 'Delete Comment',
+				type: 'red',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement : false,
+				content: 'Are you sure you want to delete this piece of feedback?',
+				buttons: {
+					yes: {
+						btnClass: 'btn-red',
+						action: function(){
+							deleteFeedback(deleteButton);
+						}
+					},
+					neveragain: {
+						text: "Yes, don't ask again",
+						btnClass: 'btn-red-text',
+						action: function(){
+							dontRemindAgain = true;
+							deleteFeedback(deleteButton);
+						}
+					},
+					cancel: {},
+				}
+			});
+		}
+	});
+
+	function deleteFeedback(button){
+		$.ajax({
+			url: button.prop('href'),
+			type: 'DELETE',
+			data: {
+				feedback_id: button.data('id'),
+			},
+			success:function(){
+				createToast('', "Feedback deleted");
+				
+				button.parent().parent().hide(config.animtions.slow, function() {
+					button.parent().parent().remove();
+				});
+			}
+		});
+	};
 
 	$(".import-student-form").on('submit', function(e){
 		e.preventDefault();

@@ -46,8 +46,7 @@ return [
 		<li>Overall Parameters - The selection of year and earliest dates.</li>
 		<li>Add User - The ability to manually add a new student or supervisor.</li>
 		<li>Edit User Details - Manually change a users\' details.</li>
-		<li>Browse Transactions by Project - examine project transactions. </li>
-		<li>Browse Transactions by Time - examine all transactions by date.</li>
+		<li>Browse Transactions - examine all transactions by date.</li>
 		<li>Amend Topics - amend or delete project topics.</li>
 		<li>End of Year Archive - archive old data at the end of an academic year.</li>
 		<li>Import New Students - Imports an XML file of new students.</li>

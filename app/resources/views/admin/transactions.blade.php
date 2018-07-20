@@ -1,10 +1,20 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered width--1400">
-	<h1>Transactions</h1>
-	<ins>Hover over table rows for more detail</ins>
+	<h1>{{ $transaction_type }} Transactions</h1>
 
-	<h3>Project Transactions</h3>
+	<div class="button-group button-group--horizontal" style="position: relative;">
+		<a class="button @if($transaction_type == "Project") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=project') }}">Project</a>
+		<a class="button @if($transaction_type == "Topic") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=topic') }}">Topic</a>
+		<a class="button @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}">Student</a>
+		<a class="button @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}">Marker</a>
+
+		<div class="checkbox" style="position: absolute; top: 75px;">
+			<input type="checkbox" id="showTransactionDetailOnHover" checked>
+			<label style="margin-left: 5px;" for="showTransactionDetailOnHover">Enable detail on hover</label>
+		</div>
+	</div>
+
 	<div class="table-responsive">
 		<table id="transations-project" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
 			<thead>
@@ -20,78 +30,21 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($projectTransactions as $transaction)
+				@foreach($transactions as $transaction)
 					<tr>
 						<td data-hover="{{ $transaction->id }}">{{ substr($transaction->id, 0, 7) }}</td>
 						<td>{{ ucfirst($transaction->action) }}</td>
-						<td data-hover="{{ $transaction->project }}">@if(isset($transaction->project)) {{ SussexProjects\Project::find($transaction->project)->title }} @endif</td>
-						<td data-hover="{{ $transaction->student }}">@if(isset($transaction->student)) {{ SussexProjects\Student::find($transaction->student)->user->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->supervisor }}">@if(isset($transaction->supervisor)) {{ SussexProjects\Supervisor::find($transaction->supervisor)->user->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->marker }}">@if(isset($transaction->marker)) {{ SussexProjects\User::find($transaction->marker)->getFullName() }} @endif</td>
-						<td data-hover="{{ $transaction->admin }}">@if(isset($transaction->admin)) {{ SussexProjects\User::find($transaction->admin)->getFullName() }} @endif</td>
-						<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->toFormattedDateString() }}</td>
-					</tr>
-				@endforeach
-			</tbody>
-		</table>
-	</div>
 
-	<h3>Student Transactions</h3>
-	<div class="table-responsive">
-		<table id="transations-student" class="data-table table-column-toggle shadow-2dp">
-			<thead>
-				<tr>
-					<th data-default="false" >Id</th>
-					<th data-default="true" >Action</th>
-					<th data-default="true" >Project</th>
-					<th data-default="true" >Student</th>
-					<th data-default="true" >Supervisor</th>
-					<th data-default="true" >Marker</th>
-					<th data-default="true" >Admin</th>
-					<th data-default="true" >Date</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($studentTransactions as $transaction)
-					<tr>
-						<td>{{ $transaction->id }}</td>
-						<td>{{ $transaction->action }}</td>
-						<td>{{ $transaction->project }}</td>
-						<td>{{ $transaction->student }}</td>
-						<td>{{ $transaction->supervisor }}</td>
-						<td>{{ $transaction->marker }}</td>
-						<td>{{ $transaction->admin }}</td>
-						<td>{{ $transaction->transaction_date }}</td>
-					</tr>
-				@endforeach
-			</tbody>
-		</table>
-	</div>
-
-	<h3>Topic Transactions</h3>
-	<div class="table-responsive">
-		<table id="transations-topic" class="data-table table-column-toggle shadow-2dp">
-			<thead>
-				<tr>
-					<th data-default="false" >Id</th>
-					<th data-default="true" >Action</th>
-					<th data-default="true" >Project</th>
-					<th data-default="true" >Supervisor</th>
-					<th data-default="true" >Admin</th>
-					<th data-default="true" >Topic</th>
-					<th data-default="true" >Date</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($topicTransactions as $transaction)
-					<tr>
-						<td>{{ $transaction->id }}</td>
-						<td>{{ $transaction->action }}</td>
-						<td>{{ $transaction->project }}</td>
-						<td>{{ $transaction->supervisor }}</td>
-						<td>{{ $transaction->admin }}</td>
-						<td>{{ $transaction->topic }}</td>
-						<td>{{ $transaction->transaction_date }}</td>
+						@if($transaction->getProjectTitle() != '-')
+							<td data-hover="{{ $transaction->project }}"><a href="{{ action('ProjectController@show', $transaction->project) }}">{{ $transaction->getProjectTitle() }}</a></td>
+						@else
+							<td data-hover="{{ $transaction->project }}">{{ $transaction->getProjectTitle() }}</td>
+						@endif
+						<td data-hover="{{ $transaction->student }}">{{ $transaction->getName($transaction->student) }}</td>
+						<td data-hover="{{ $transaction->supervisor }}">{{ $transaction->getName($transaction->supervisor) }}</td>
+						<td data-hover="{{ $transaction->marker }}"	>{{  $transaction->getName($transaction->marker) }}</td>
+						<td data-hover="{{ $transaction->admin }}">{{ $transaction->getName($transaction->admin) }}</td>
+						<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->format('M j, H:i') }}</td>
 					</tr>
 				@endforeach
 			</tbody>

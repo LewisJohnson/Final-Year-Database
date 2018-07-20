@@ -24,6 +24,7 @@ class Feedback extends Migration{
 			$table->string('page')->nullable();
 			$table->string('department')->nullable();
 			$table->string('education_level')->nullable();
+			$table->dateTimeTz('date');
 			$table->primary('id');
 		});
 
