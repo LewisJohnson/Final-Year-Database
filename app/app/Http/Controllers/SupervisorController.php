@@ -183,8 +183,10 @@ class SupervisorController extends Controller{
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
 			$transaction->fill(array(
-				'type' => 'project', 'action' => 'rejected',
-				'project' => $student->project_id, 'student' => $student->id,
+				'type' => 'project',
+				'action' => 'rejected',
+				'project' => $student->project_id,
+				'student' => $student->id,
 				'supervisor' => Auth::user()->supervisor->id,
 				'transaction_date' => new Carbon
 			));
@@ -213,13 +215,15 @@ class SupervisorController extends Controller{
 
 		if($emailError){
 			return response()->json(array(
-				'successful' => true, 'email_successful' => false,
-				'message' => $student.' has been rejected.'
+				'successful' => true,
+				'email_successful' => false,
+				'message' => $student->user->first_name.' has been rejected.'
 			));
 		}
 
 		return response()->json(array(
-			'successful' => true, 'message' => 'Student rejected'
+			'successful' => true,
+			'message' => 'Student rejected'
 		));
 	}
 
@@ -248,7 +252,8 @@ class SupervisorController extends Controller{
 		}
 
 		return response()->json(array(
-			'successful' => true, 'message' => $message
+			'successful' => true,
+			'message' => $message
 		));
 	}
 

@@ -33,20 +33,22 @@
 					<tbody>
 						@foreach(Auth::user()->supervisor->getIntrestedStudents() as $offer)
 							<tr data-student-id="{{ $offer['student']->id }}" data-project-id="{{ $offer['project']->id }}">
-								<td>
+								<td style="width: 6%;">
 									<div class="checkbox">
 										<input class="checkbox-input" id="offer-{{ $offer['student']->user->getFullName() }}" type="checkbox">
 										<label for="offer-{{ $offer['student']->user->getFullName() }}" name="offer-{{ $offer['student']->user->getFullName() }}"></label>
 									</div>
 								</td>
-								<td><a href="mailto:{{ $offer['student']->user->email }}">{{ $offer['student']->user->getFullName() }}</a></td>
+
+								<td style="width:20%"><a href="mailto:{{ $offer['student']->user->email }}">{{ $offer['student']->user->getFullName() }}</a></td>
+
 								<td><a href="{{ action('ProjectController@show', $offer['project']) }}">{{ $offer['project']->title }}</a></td>
 
-								<td>
+								<td style="width: 14%;">
 									<button class="button offer-action button--danger-text" title="Reject {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="reject">Reject</button>
 								</td>
 								
-								<td>
+								<td style="width: 14%;">
 									<button class="button offer-action button--success" title="Accept {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="accept">Accept</button>
 								</td>
 							</tr>
@@ -80,20 +82,23 @@
 					</thead>
 					<tbody>
 						@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $proposal)
-							<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
+							<tr style="width: 6%;" data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
 								<td>
 									<div class="checkbox">
 										<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox">
 										<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
 									</div>
 								</td>
-								<td><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
+
+								<td style="width:20%"><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a></td>
+
 								<td><a href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a></td>
-								<td>
+
+								<td style="width: 14%;">
 									<button class="button offer-action button--danger-text" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
 								</td>
 								
-								<td>
+								<td style="width: 14%;">
 									<button class="button offer-action button--success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
 								</td>
 							</tr>

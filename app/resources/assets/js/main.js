@@ -416,7 +416,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 								if(response.successful){
 									card.hide(400, function() { card.remove(); });
 									createToast('success', 'Undo successful.');
-								} else {
+									setTimeout(function(){ location.reload(); }, 3000);
+								} else {location.reload();
 									createToast('error', response.message);
 								}
 							}
