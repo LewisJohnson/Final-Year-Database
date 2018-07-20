@@ -176,9 +176,7 @@ class SupervisorController extends Controller{
 		}
 
 		$student = Student::findOrFail(request('student_id'));
-
-		// We need to store this for the email
-		$project = $student->project;
+		$projectId = $student->project->id;
 
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
@@ -192,21 +190,22 @@ class SupervisorController extends Controller{
 			));
 			$transaction->save();
 
+			if($student->project->status == "student-proposed"){
+				$student->project->supervisor_id = null;
+				$student->project->save();
+			}
+
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
 
-			if($project->status == "student-proposed"){
-				$project->supervisor_id = null;
-				$project->save();
-			}
 		});
 
 		$emailError = false;
 		try{
 			// Send declined email
 			Mail::to($student->user->email)
-				->send(new StudentRejected(Auth::user()->supervisor, $student, $project->id));
+				->send(new StudentRejected(Auth::user()->supervisor, $student, $projectId));
 		} catch (\Exception $e){
 			$emailError = true;
 		}
@@ -264,7 +263,7 @@ class SupervisorController extends Controller{
 	 */
 	public function undoStudent(Request $request){
 		$student = Student::findOrFail(request('student_id'));
-
+		$projectId = $student->project->id;
 		DB::transaction(function() use ($request, $student){
 			$transaction = new Transaction;
 
@@ -278,7 +277,13 @@ class SupervisorController extends Controller{
 			));
 			$transaction->save();
 
-			$student->project_id = null;
+			if($student->project->status == "student-proposed"){
+				$student->project->supervisor_id = null;
+				$student->project->save();
+			} else {
+				$student->project_id = null;
+			}
+
 			$student->project_status = 'none';
 			$student->save();
 		});
@@ -287,7 +292,7 @@ class SupervisorController extends Controller{
 		try{
 			// Send declined email
 			Mail::to($student->user->email)
-				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $project->id));
+				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $projectId));
 		} catch (\Exception $e){
 			$emailError = true;
 		}
