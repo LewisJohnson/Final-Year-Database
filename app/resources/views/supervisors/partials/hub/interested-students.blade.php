@@ -82,8 +82,8 @@
 					</thead>
 					<tbody>
 						@foreach(Auth::user()->supervisor->getStudentProjectProposals() as $proposal)
-							<tr style="width: 6%;" data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
-								<td>
+							<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
+								<td style="width: 6%;">
 									<div class="checkbox">
 										<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox">
 										<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>

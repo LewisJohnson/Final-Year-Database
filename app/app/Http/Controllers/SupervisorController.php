@@ -208,9 +208,7 @@ class SupervisorController extends Controller{
 
 		if($project->status == "student-proposed"){
 			$project->supervisor = null;
-			$project->student = null;
 			$project->save();
-			$project->delete();
 		}
 
 		if($emailError){
