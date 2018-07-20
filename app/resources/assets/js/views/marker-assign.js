@@ -9,7 +9,7 @@
 
 	// Get help footer snippet using ajax
 	$.ajax({
-		url: '/admin/marker-assign-automatic-table',
+		url: 'admin/marker-assign-automatic-table',
 		type:'GET',
 		success:function(response){
 			$('#automatic-assign-container .content').addClass('animated fadeInUp');

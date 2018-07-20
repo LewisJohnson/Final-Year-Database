@@ -23,7 +23,7 @@
 	// Get help footer snippet using ajax
 	if(tabContainer.data("help-footer") && config.showHelpFooter){
 		$.ajax({
-			url: '/snippet?snippet=card-help-footer',
+			url: 'snippet?snippet=card-help-footer',
 			type:'GET',
 			success:function(result){
 				helpFooterSnippet = result;

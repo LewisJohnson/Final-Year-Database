@@ -135,7 +135,7 @@ class SupervisorController extends Controller{
 
 			$transaction->save();
 
-			return true;
+			return null;
 		});
 
 		if($error != null){
@@ -195,6 +195,11 @@ class SupervisorController extends Controller{
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
+
+			if($project->status == "student-proposed"){
+				$project->supervisor = null;
+				$project->save();
+			}
 		});
 
 		$emailError = false;
@@ -204,11 +209,6 @@ class SupervisorController extends Controller{
 				->send(new StudentRejected(Auth::user()->supervisor, $student, $project->id));
 		} catch (\Exception $e){
 			$emailError = true;
-		}
-
-		if($project->status == "student-proposed"){
-			$project->supervisor = null;
-			$project->save();
 		}
 
 		if($emailError){

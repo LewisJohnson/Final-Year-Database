@@ -161,9 +161,9 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		$('.loader', actionButton).css('display', 'block');
 
 		if(actionType === "accept"){
-			var ajaxUrl = '/supervisor/student-accept';
+			var ajaxUrl = 'supervisor/student-accept';
 		} else if (actionType === "reject"){
-			var ajaxUrl = '/supervisor/student-reject';
+			var ajaxUrl = 'supervisor/student-reject';
 		}
 
 		if(ajaxUrl == null){
@@ -295,7 +295,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	function updateAcceptedStudentsTable(){
 		$.ajax({
 			method: 'GET',
-			url: '/supervisor/accepted-students-table',
+			url: 'supervisor/accepted-students-table',
 			success: function(data){
 				$("#supervisor-accepted-students-table").html(data);
 			}
