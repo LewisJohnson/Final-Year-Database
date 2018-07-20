@@ -157,7 +157,7 @@
 					@endif
 				</div>
 
-				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0)
+				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->status == 'none')
 					<h2>Your Proposed Projects (Without a supervisor)</h2>
 					@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
 						<div class="card proposed-project flex flex--row">
