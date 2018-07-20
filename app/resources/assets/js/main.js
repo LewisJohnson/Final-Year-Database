@@ -549,7 +549,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	$("body").on("change", ".email-table .checkbox input", function() {
 		var select = function(dom){
 			var status = dom.parents().eq(4).data('status');
-			var emailString = "mailto:";
+			var adminEmail = dom.data('admin-email');
+			var emailString = "mailto:" + adminEmail + "?bcc=";
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 			var emailButtonselector = ".email-selected." + status;
 			var amountOfEmails = 0;

@@ -57,8 +57,9 @@ class Student extends Model{
 	}
 
 	public static function getMailtoStringByProjectStatus($status){
-		$return = 'mailto:';
 		$students = Student::Where('project_status', $status)->get();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
 
 		foreach($students as $student){
 			$return .= $student->user->email;
@@ -69,8 +70,9 @@ class Student extends Model{
 	}
 
 	public static function getAllStudentsWithoutProjectMailtoString(){
-		$return = 'mailto:';
 		$students = Student::Where('project_status', '<>', 'accepted')->get();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
 
 		foreach($students as $key => $student){
 			$return .= $student->user->email;

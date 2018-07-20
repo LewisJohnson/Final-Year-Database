@@ -21,7 +21,7 @@
 							<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins> {{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%</ins></p>
 							<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($sortedStudents) }}</p>
 						</div>
-						<table class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">
+						<table data-admin-email="{{ Auth::user()->email }}" class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">
 							<thead>
 								<tr>
 									<th>
