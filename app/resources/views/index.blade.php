@@ -157,14 +157,16 @@
 					@endif
 				</div>
 
-				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->status == 'none')
-					<h2>Your Proposed Projects (Without a supervisor)</h2>
-					@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
-						<div class="card proposed-project flex flex--row">
-							<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
-							<a class="ml-auto button button--raised" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Propose to supervisor</a>
-						</div>
-					@endforeach
+				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->project_status == 'none')
+					<div class="card card--margin-vertical">
+						<h2>Your Proposed Projects (Without a supervisor)</h2>
+						@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
+							<div class="card proposed-project flex flex--row">
+								<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+								<a class="ml-auto button button--raised" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Propose to supervisor</a>
+							</div>
+						@endforeach
+					</div>
 				@endif 
 
 				<div style="width: 100%;" class="fancy-page card--margin-vertical">
