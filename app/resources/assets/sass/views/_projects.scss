@@ -155,11 +155,19 @@
 	color: $project-archived-color;
 }
 
+.project-row--student-proposed{
+	color: $project-student-color;
+}
+
 
 .project-row--withdrawn{
-	background: rgba($project-withdrawn-color, .15);
+	background: rgba($project-withdrawn-color, .05);
 }
 
 .project-row--archived{
-	background: rgba($project-archived-color, .15);
+	background: rgba($project-archived-color, .05);
+}
+
+.project-row--student-proposed{
+	background: rgba($project-student-color, .05);
 }
