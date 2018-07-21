@@ -158,10 +158,11 @@
 				</div>
 
 				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->project_status == 'none')
-					<div class="card card--margin-vertical">
-						<h2>Your Proposed Projects (Without a supervisor)</h2>
+					<div style="width: 100%;" class="fancy-page card--margin-vertical">
+						<h2 style="margin-bottom: 5px;">Your Proposed Projects</h2>
+						<p style="margin-top: 0;" class="subtitle">Without a supervisor.</p>
 						@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
-							<div class="card proposed-project flex flex--row">
+							<div class="card card--full proposed-project flex flex--row">
 								<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
 								<a class="ml-auto button button--raised" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Propose to supervisor</a>
 							</div>

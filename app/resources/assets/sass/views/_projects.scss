@@ -154,3 +154,12 @@
 .project-status--archived{
 	color: $project-archived-color;
 }
+
+
+.project-row--withdrawn{
+	background: rgba($project-withdrawn-color, .15);
+}
+
+.project-row--archived{
+	background: rgba($project-archived-color, .15);
+}
