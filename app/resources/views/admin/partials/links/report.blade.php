@@ -2,13 +2,13 @@
 	<li>
 		<a class="icon" href="{{ action('StudentController@report') }}">
 			@include('svg.school')
-			<p>Report by Student</p>
+			<p>Student Report</p>
 		</a>
 	</li>
 	<li>
 		<a class="icon" href="{{ action('SupervisorController@report') }}">
 			@include('svg.clipboard')
-			<p>Report by Supervisor</p>
+			<p>Supervisor Report</p>
 		</a>
 	</li>
 </ul>

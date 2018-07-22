@@ -153,7 +153,7 @@
 										<ul>
 											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
 											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
+											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
 										</ul>
 									</li>
 									<li>
@@ -207,7 +207,7 @@
 										<ul>
 											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
 											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topics</a></li>
+											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
 										</ul>
 									</li>
 									<li>

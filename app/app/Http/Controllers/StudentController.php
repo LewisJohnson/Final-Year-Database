@@ -221,6 +221,8 @@ class StudentController extends Controller{
 				'skills' => request('skills')
 			));
 
+			$project->save();
+			
 			$transaction->fill(array(
 				'type' => 'project',
 				'action' => 'proposed',
@@ -230,7 +232,6 @@ class StudentController extends Controller{
 				'transaction_date' => new Carbon
 			));
 
-			$project->save();
 			$transaction->save();
 
 			$student->project_id = $project->id;

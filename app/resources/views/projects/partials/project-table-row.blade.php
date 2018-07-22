@@ -1,4 +1,4 @@
-<tr class="pointer project-row--{{ $project->status }} project-row" tabindex="0" data-project-id="{{ $project->id }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" >
+<tr class="pointer @if($view != "personal") project-row--{{ $project->status }} @endif project-row" tabindex="0" data-project-id="{{ $project->id }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" >
 	@if($project->getPrimaryTopic() != null)
 		<td>
 			<a class="blue-link" href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>

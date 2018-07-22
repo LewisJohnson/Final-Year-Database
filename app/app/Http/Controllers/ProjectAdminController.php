@@ -482,12 +482,19 @@ class ProjectAdminController extends Controller{
 		foreach($students as $student){
 			$ar = array();
 			$ar["studentName"] = $student->user->getFullName();
-			$ar["projectTitle"] = $student->project->title;
-			$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
+
+			if($student->project != null){
+				$ar["projectTitle"] = $student->project->title;
+				$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
+			} else {
+				$ar["projectTitle"] = "-";
+				$ar["supervisorName"] = "-";
+			}
+
 			if($student->marker){
 				$ar["markerName"] = $student->marker->user->getFullName();
 			} else {
-				$ar["markerName"] = "None";
+				$ar["markerName"] = "-";
 			}
 			array_push($output, $ar);
 		}

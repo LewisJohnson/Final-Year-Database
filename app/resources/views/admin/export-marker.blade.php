@@ -2,6 +2,7 @@
 @section('content')
 <div class="centered width--1200">
 	<h1>Export Second Marker Data</h1>
+	<p>The data that will downloaded includes the student name, their project, their supervisor and their second marker.</p>
 
 	<form class="form form--flex" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
 		{{ csrf_field() }}

@@ -27,6 +27,17 @@
 			@endfor
 
 			@if(Auth::check())
+				<li><hr style="opacity: 0.2;"></li>
+				@if(Auth::user()->isStudent())
+					<li class="tab" data-tab-name="@lang('help.help_tab_student')">
+						<button class="button open-tab">@lang("help.help_tab_student")</button>
+						<div class="content" aria-expanded="false" aria-hidden="true">
+							<h2>@lang("help.help_tab_student")</h2>
+							@lang("help.help_tab_student_content")
+						</div>
+					</li>
+				@endif
+
 				@if(Auth::user()->isSupervisor())
 					<li class="tab" data-tab-name="@lang('help.help_tab_supervisor')">
 						<button class="button open-tab">@lang("help.help_tab_supervisor")</button>
@@ -38,11 +49,21 @@
 				@endif
 
 				@if(Auth::user()->isProjectAdmin())
-					<li class="tab" data-tab-name="@lang('help.help_tab_admin')">
-						<button class="button open-tab">@lang("help.help_tab_admin")</button>
+					<li class="tab" data-tab-name="@lang('help.help_tab_project_admin')">
+						<button class="button open-tab">@lang("help.help_tab_project_admin")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
-							<h2>@lang("help.help_tab_admin")</h2>
-							@lang("help.help_tab_admin_content")
+							<h2>@lang("help.help_tab_project_admin")</h2>
+							@lang("help.help_tab_project_admin_content")
+						</div>
+					</li>
+				@endif
+
+				@if(Auth::user()->isSystemAdmin())
+					<li class="tab" data-tab-name="@lang('help.help_tab_system_admin')">
+						<button class="button open-tab">@lang("help.help_tab_system_admin")</button>
+						<div class="content" aria-expanded="false" aria-hidden="true">
+							<h2>@lang("help.help_tab_system_admin")</h2>
+							@lang("help.help_tab_system_admin_content")
 						</div>
 					</li>
 				@endif
