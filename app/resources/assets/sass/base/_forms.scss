@@ -75,9 +75,14 @@ button{
 	outline: none;
 	user-select: none;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+
 	.switch-label{
 		top: -2.5px;
 	}
+}
+
+.form-field--toggle{
+	text-decoration: none;
 }
 
 .vertical-select{
