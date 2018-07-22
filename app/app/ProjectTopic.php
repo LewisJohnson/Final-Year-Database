@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Session;
  * @see SussexProjects\Http\Controllers\ProjectTopic
  */
 class ProjectTopic extends Model{
+	
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
@@ -29,7 +30,14 @@ class ProjectTopic extends Model{
 	 * @var bool
 	 */
 	public $incrementing = false;
+
+	/**
+	 * The models primary key
+	 *
+	 * @var integer
+	 */
 	protected $primaryKey = ['project_id', 'topic_id'];
+
 	/**
 	 * The attributes that are mass assignable.
 	 *

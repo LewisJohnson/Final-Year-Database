@@ -491,7 +491,7 @@ class ProjectAdminController extends Controller{
 				$ar["supervisorName"] = "-";
 			}
 
-			if($student->marker){
+			if($student->marker != null){
 				$ar["markerName"] = $student->marker->user->getFullName();
 			} else {
 				$ar["markerName"] = "-";

@@ -388,3 +388,5 @@ function sortTable(header, table) {
 	}
 }
 
+// string.includes polyfill for IE
+String.prototype.includes||(String.prototype.includes=function(a,b){'use strict';return'number'!=typeof b&&(b=0),!(b+a.length>this.length)&&-1!==this.indexOf(a,b)});

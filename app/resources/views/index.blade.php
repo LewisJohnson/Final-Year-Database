@@ -81,13 +81,13 @@
 					@endif
 
 					@if(count(Auth::user()->supervisor->getIntrestedStudents()) > 0)
-						<p>A total of {{ count(Auth::user()->supervisor->getIntrestedStudents()) }} are awaiting approval.</p>
+						<p>A total of {{ count(Auth::user()->supervisor->getIntrestedStudents()) }} student(s) are awaiting approval.</p>
 					@else
 						<p>No students are awaiting approval.</p>
 					@endif
 
 					@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
-						<p>A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} have proposed a project to you.</p>
+						<p>A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} student(s) have proposed a project to you.</p>
 					@else
 						<p>No students have currently proposed a project to you.</p>
 					@endif

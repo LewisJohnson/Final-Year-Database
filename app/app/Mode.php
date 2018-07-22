@@ -20,12 +20,14 @@ class Mode extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
+	
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
+
 	/**
 	 * The columns to be parsed as dates.
 	 * Laravel can not use the MySql 'Year' data type, so please do not add project year.
@@ -33,6 +35,7 @@ class Mode extends Model{
 	 * @var array
 	 */
 	protected $dates = ['project_selection', 'supervisor_accept'];
+
 	/**
 	 * The models primary key
 	 *

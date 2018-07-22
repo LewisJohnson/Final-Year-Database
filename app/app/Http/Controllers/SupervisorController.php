@@ -123,7 +123,11 @@ class SupervisorController extends Controller{
 					'message' => 'You must reject all other students before accepting '.$student->user->first_name
 				));
 			}
-			$project->status = 'withdrawn';
+
+			if($project->status != "student-proposed"){
+				$project->status = 'withdrawn';
+			}
+			
 			$student->project_status = 'accepted';
 			$project->save();
 			$student->save();

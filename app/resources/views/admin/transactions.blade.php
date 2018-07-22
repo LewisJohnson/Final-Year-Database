@@ -9,7 +9,7 @@
 		<a class="button @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}">Student</a>
 		<a class="button @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}">Marker</a>
 
-		<div class="checkbox" style="position: absolute; top: 75px;">
+		<div class="checkbox" style="position: absolute; top: 65px; left: 0px">
 			<input type="checkbox" id="showTransactionDetailOnHover" checked>
 			<label style="margin-left: 5px;" for="showTransactionDetailOnHover">Enable detail on hover</label>
 		</div>
