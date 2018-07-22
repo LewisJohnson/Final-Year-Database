@@ -33,6 +33,10 @@ class RequiredCookies{
 			Cookie::queue('favourite_projects', null, 525600);
 		}
 
+		if(Cookie::get('hide_archived') == null){
+			Cookie::queue('hide_archived', false, 525600);
+		}
+
 		return $next($request);
 	}
 }

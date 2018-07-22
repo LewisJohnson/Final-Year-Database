@@ -280,6 +280,11 @@ return [
 				<td>hide-offers</td>
 				<td><b>Supervisors only</b> - Determines if the tab "Offers" supervisor tab is hidden.</td>
 			</tr>
+			<tr>
+				<td>Usability</td>
+				<td>hide_archived</td>
+				<td><b>Supervisors only</b> - Determines if the user is displaying archived projects in "My Projects".</td>
+			</tr>
 		</tbody>
 	</table>
 

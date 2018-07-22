@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 use SussexProjects\Http\Requests\UserForm;
 use SussexProjects\Project;
@@ -281,16 +282,21 @@ class UserController extends Controller{
 
 		if($view == 'personal'){
 			if(isset($request->hide_archived)){
-				if($request->hide_archived == true){
-					$projects->where('status', '<>', 'archived');
-				}
+				Cookie::queue('hide_archived', $request->hide_archived, 525600);
+			} else {
+				$request->hide_archived =  Cookie::get('hide_archived');
+			}
+
+			if($request->hide_archived){
+				$projects->where('status', '<>', 'archived');
 			}
 		}
 
 		return view('projects.index')
 			->with('projects', $projects->get())
 			->with('owner', $user)
-			->with('view', $view);
+			->with('view', $view)
+			->with('hide_archived', $request->hide_archived);
 	}
 
 	/**
