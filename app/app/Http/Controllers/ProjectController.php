@@ -297,7 +297,7 @@ class ProjectController extends Controller{
 			if($project->status == "student-proposed"){
 				$status = "student-proposed";
 			} else {
-				$status = $project->status;
+				$status = $input->status;
 			}
 
 			$project->update([
