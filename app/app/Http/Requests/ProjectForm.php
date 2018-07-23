@@ -32,12 +32,4 @@ class ProjectForm extends FormRequest{
 			'status' => 'required',
 		];
 	}
-
-	public function update(){
-		return [
-			'title' => 'required|max:255',
-			'description' => 'required|max:16777215',
-			'skills' => 'required|max:255'
-		];
-	}
 }

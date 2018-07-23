@@ -217,6 +217,12 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(ProjectForm $request){
+
+		// Not included in ProjectForm because of update 
+		$this->validate(request(), [
+			'status' => 'required'
+		]);
+
 		$result = DB::transaction(function() use ($request){
 			$project = new Project;
 			$transaction = new Transaction;
