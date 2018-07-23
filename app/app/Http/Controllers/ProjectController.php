@@ -261,7 +261,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit(Project $project){
-		if($project->isOwnedByUser()){
+		if($project->isOwnedByUser() || $project->isUserSupervisorOfProject()){
 			return view('projects.edit')->with('project', $project);
 		}
 
@@ -277,8 +277,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
-			return response()->json(array('successful' => false));
+		if(!$project->isOwnedByUser()){
+			if(!$project->isUserSupervisorOfProject()){
+				return response()->json(array('successful' => false));
+			}
 		}
 
 		DB::Transaction(function() use ($input, $project){
