@@ -295,13 +295,15 @@ class ProjectController extends Controller{
 
 			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){
-				$input->status = "student-proposed";
+				$status = "student-proposed";
+			} else {
+				$status = $project->status;
 			}
 
 			$project->update([
 				'title' => $input->title,
 				'description' => $clean_html,
-				'status' => $input->status,
+				'status' => $status,
 				'skills' => $input->skills
 			]);
 
