@@ -28,8 +28,7 @@ class ProjectForm extends FormRequest{
 		return [
 			'title' => 'required|max:255',
 			'description' => 'required|max:16777215',
-			'skills' => 'required|max:255',
-			'status' => 'required',
+			'skills' => 'required|max:255'
 		];
 	}
 }
