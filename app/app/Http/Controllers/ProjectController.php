@@ -283,9 +283,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if($project->isOwnedByUser() || $project->isUserSupervisorOfProject()){
-
-		} else {
+		if(!($project->isOwnedByUser() || $project->isUserSupervisorOfProject())){
 			session()->flash('message', 'You are not allowed to edit "'.$project->title.'".');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectController@show', $project);
@@ -328,7 +326,7 @@ class ProjectController extends Controller{
 			$transaction->save();
 		});
 
-		if($project->status == "student-proposed"){
+		if($project->status == "student-proposed" && Auth::user()->isSupervisor()){
 			try{
 				Mail::to($project->student->user->email)
 					->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));

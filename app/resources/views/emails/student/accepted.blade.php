@@ -1,7 +1,7 @@
 @extends('emails.base')
 
 @section('body')
-<h1>You've been accepted</h1>
+<h1>You've been accepted.</h1>
 
 <p>Hi {{ $student->user->first_name }},</p>
 <p>You've been accepted to undertake <a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a> by {{ $supervisor->user->getFullName() }}.</p>
