@@ -283,7 +283,9 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if(!($project->isOwnedByUser() || $project->isUserSupervisorOfProject())){
+		if($project->isOwnedByUser() || $project->isUserSupervisorOfProject()){
+
+		} else {
 			session()->flash('message', 'You are not allowed to edit "'.$project->title.'".');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectController@show', $project);
