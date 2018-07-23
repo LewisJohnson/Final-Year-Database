@@ -1,7 +1,7 @@
 @extends('emails.base')
 
 @section('body')
-<h1>Your application has been unsuccessful</h1>
+<h1>Your application has been unsuccessful.</h1>
 
 <p>Hi {{ $student->user->first_name }},</p>
 <p>{{ $supervisor->user->getFullName() }} has decided to 'undo' your selected project.</p>

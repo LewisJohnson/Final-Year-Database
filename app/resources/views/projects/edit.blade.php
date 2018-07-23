@@ -33,38 +33,42 @@
 				<input maxlength="255" type="text" name="skills" id="skills" value="{{ $project->skills }}"></input>
 			</div>
 
-			<div class="form-field">
-				<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press ENTER to save topic.</ins></label>
-				<div id="new-topic-input-container" class="fake-input">
-					<ul class="topics-list edit">
-						@foreach($project->topics as $topic)
-							@if($project->getPrimaryTopic())
-								<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
-									<button type="button" class="topic-remove">X</button>
-									<p class="topic-name">{{ $topic->name }}</p>
-								</li>
-							@else
-								<li class="topic" data-topic-id="{{ $topic->id }}">
-									<button type="button" class="topic-remove">X</button>
-									<p class="topic-name">{{ $topic->name }}</p>
-								</li>
-							@endif
-						@endforeach
-						<input list="topicsDataList" type="text" name="name" id="addTopicInput">
-					</ul>
-					<div class="loader"></div>
-				</div>
-			</div>
-
 			@if(!Auth::user()->isStudent())
 				<div class="form-field">
-					<label for="status">Project Status</label>
-					<select name="status">
-						<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
-						<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
-						<option @if($project->status == "archived") selected @endif value="archived">Archived</option>
-					</select>
+					<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press ENTER to save topic.</ins></label>
+					<div id="new-topic-input-container" class="fake-input">
+						<ul class="topics-list edit">
+							@foreach($project->topics as $topic)
+								@if($project->getPrimaryTopic())
+									<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
+										<button type="button" class="topic-remove">X</button>
+										<p class="topic-name">{{ $topic->name }}</p>
+									</li>
+								@else
+									<li class="topic" data-topic-id="{{ $topic->id }}">
+										<button type="button" class="topic-remove">X</button>
+										<p class="topic-name">{{ $topic->name }}</p>
+									</li>
+								@endif
+							@endforeach
+							<input list="topicsDataList" type="text" name="name" id="addTopicInput">
+						</ul>
+						<div class="loader"></div>
+					</div>
 				</div>
+			@endif
+
+			@if(!Auth::user()->isStudent())
+				@if($project->status != "student-proposed")
+					<div class="form-field">
+						<label for="status">Project Status</label>
+						<select name="status">
+							<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
+							<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
+							<option @if($project->status == "archived") selected @endif value="archived">Archived</option>
+						</select>
+					</div>
+				@endif
 			@endif
 
 			<div class="form-field">

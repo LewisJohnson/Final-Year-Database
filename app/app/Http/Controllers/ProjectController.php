@@ -217,6 +217,12 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(ProjectForm $request){
+
+		// Not included in ProjectForm because of update 
+		$this->validate(request(), [
+			'status' => 'required'
+		]);
+
 		$result = DB::transaction(function() use ($request){
 			$project = new Project;
 			$transaction = new Transaction;
@@ -261,7 +267,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit(Project $project){
-		if($project->isOwnedByUser()){
+		if($project->isOwnedByUser() || $project->isUserSupervisorOfProject()){
 			return view('projects.edit')->with('project', $project);
 		}
 
@@ -277,8 +283,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if(!$project->isOwnedByUser() || Auth::user()->isStudent()){
-			return response()->json(array('successful' => false));
+		if(!($project->isOwnedByUser() || $project->isUserSupervisorOfProject())){
+			session()->flash('message', 'You are not allowed to edit "'.$project->title.'".');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@show', $project);
 		}
 
 		DB::Transaction(function() use ($input, $project){
@@ -287,13 +295,15 @@ class ProjectController extends Controller{
 
 			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){
-				$input->status = "student-proposed";
+				$status = "student-proposed";
+			} else {
+				$status = $input->status;
 			}
 
 			$project->update([
 				'title' => $input->title,
 				'description' => $clean_html,
-				'status' => $input->status,
+				'status' => $status,
 				'skills' => $input->skills
 			]);
 
@@ -316,7 +326,7 @@ class ProjectController extends Controller{
 			$transaction->save();
 		});
 
-		if($project->status == "student-proposed"){
+		if($project->status == "student-proposed" && Auth::user()->isSupervisor()){
 			try{
 				Mail::to($project->student->user->email)
 					->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));

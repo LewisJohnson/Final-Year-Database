@@ -13,14 +13,37 @@
 	border-radius: 0px !important;
 }
 
-
-input, textarea, .button{
+input, textarea{
 	border: 1px solid black !important;
 	border-radius: 0px !important;
 }
 
+.button{
+	background: black !important;
+	color: white !important;
+}
+
 a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6{
 	color: black;
+}
+
+.card .footer {
+	background: black !important;
+	color: white !important;
+}
+
+.card .footer a, .card .footer p{
+	color: white !important;
+	text-decoration: underline !important;
+}
+
+.checkbox input[type=checkbox]:checked+label:before{
+	background: black !important;
+}
+
+footer {
+	background: black;
+	color: white;
 }
 
 svg{
@@ -33,7 +56,7 @@ svg{
 }
 
 tr:hover{
-	background: rgb(160,160,160) !important;
+	background: black !important;
 	color: white !important;
 
 	* {
