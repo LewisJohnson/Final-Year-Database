@@ -283,10 +283,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(ProjectForm $input, Project $project){
-		if(!$project->isOwnedByUser()){
-			if(!$project->isUserSupervisorOfProject()){
-				return response()->json(array('successful' => false));
-			}
+		if(!($project->isOwnedByUser() || $project->isUserSupervisorOfProject())){
+			session()->flash('message', 'You are not allowed to edit "'.$project->title.'".');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@show', $project);
 		}
 
 		DB::Transaction(function() use ($input, $project){
