@@ -56,15 +56,17 @@
 				</div>
 			</div>
 
-			@if(!Auth::user()->isStudent() || $project->status != "student-proposed")
-				<div class="form-field">
-					<label for="status">Project Status</label>
-					<select name="status">
-						<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
-						<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
-						<option @if($project->status == "archived") selected @endif value="archived">Archived</option>
-					</select>
-				</div>
+			@if(!Auth::user()->isStudent())
+				@if($project->status != "student-proposed")
+					<div class="form-field">
+						<label for="status">Project Status</label>
+						<select name="status">
+							<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
+							<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
+							<option @if($project->status == "archived") selected @endif value="archived">Archived</option>
+						</select>
+					</div>
+				@endif
 			@endif
 
 			<div class="form-field">
