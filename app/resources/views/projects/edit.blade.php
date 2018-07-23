@@ -56,7 +56,7 @@
 				</div>
 			</div>
 
-			@if(!Auth::user()->isStudent())
+			@if(!Auth::user()->isStudent() || $project->status == "student-proposed")
 				<div class="form-field">
 					<label for="status">Project Status</label>
 					<select name="status">

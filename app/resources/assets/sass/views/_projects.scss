@@ -159,15 +159,14 @@
 	color: $project-student-color;
 }
 
-
 .project-row--withdrawn{
-	background: rgba($project-withdrawn-color, .05);
+	border-left: 10px solid $project-withdrawn-color;
 }
 
 .project-row--archived{
-	background: rgba($project-archived-color, .05);
+	border-left: 10px solid $project-archived-color;
 }
 
 .project-row--student-proposed{
-	background: rgba($project-student-color, .05);
+	border-left: 10px solid $project-student-color;
 }
