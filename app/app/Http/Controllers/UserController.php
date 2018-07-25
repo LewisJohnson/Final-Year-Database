@@ -280,6 +280,10 @@ class UserController extends Controller{
 			$projects->where('status', 'on-offer');
 		}
 
+		if(Auth::user()->isSupervisor()){
+			$projects->where('status', '<>' , 'student-proposed');
+		}
+
 		if($view == 'personal'){
 			if(isset($request->hide_archived)){
 				Cookie::queue('hide_archived', $request->hide_archived, 525600);
