@@ -707,6 +707,9 @@ class StudentController extends Controller{
 						if($csv[$i][4] === NULL){
 							throw new Exception("Student at row:".$i." has an invalid username.");
 						}
+						if(User::where('username', $csv[$i][4])->first() !== null){
+							throw new Exception("Student at row:".$i.". The username \"" + $csv[$i][4] +"\" is already in use.");
+						}
 
 						$user = new User;
 						$student = new Student;
@@ -734,7 +737,7 @@ class StudentController extends Controller{
 
 						$student->save();
 					}
-					
+
 					DB::commit();
 				} catch (\Illuminate\Database\QueryException $e) {
 					return response()->json(array(
@@ -800,7 +803,8 @@ class StudentController extends Controller{
 			));
 
 			DB::table('test_students')->insert(array(
-				'id' => $id, 'registration_number' => $csv[$i][0]
+				'id' => $id,
+				'registration_number' => $csv[$i][0]
 			));
 		}
 
