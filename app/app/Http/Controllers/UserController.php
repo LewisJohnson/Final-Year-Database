@@ -38,8 +38,9 @@ class UserController extends Controller{
 	 */
 	public function index(Request $request){
 		$students = Student::all();
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$staffUsers = User::where('privileges', 'staff')->get();
+		$noPrivilegesUsers = User::whereNull('privileges')->get();
 		$admins = [];
 
 		$students = $students->sortBy(function($student){
@@ -52,6 +53,10 @@ class UserController extends Controller{
 
 		$staffUsers = $staffUsers->sortBy(function($staff){
 			return $staff->last_name;
+		});
+
+		$noPrivilegesUsers = $noPrivilegesUsers->sortBy(function($user){
+			return $user->last_name;
 		});
 
 		if(Auth::user()->isSystemAdmin()){
@@ -73,6 +78,7 @@ class UserController extends Controller{
 			->with('staff', $staffUsers)
 			->with('students', $students)
 			->with('admins', $admins)
+			->with('noPrivilegesUsers', $noPrivilegesUsers)
 			->with('view', $request->query("view"));
 	}
 

@@ -40,6 +40,16 @@
 						<a title="Edit {{ $staffUser->getFullName() }}" href="{{ action('UserController@edit', $staffUser) }}">{{ $staffUser->getFullName() }}</a>
 					</li>
 				@endforeach
+
+				@if(count($noPrivilegesUsers) > 0)
+					<li><hr></li>
+					<li><h4>Users without privileges</h4></li>
+					@foreach($user as $noPrivilegesUsers)
+						<li>
+							<a title="Edit {{ $user->getFullName() }}" href="{{ action('UserController@edit', $user) }}">{{ $user->getFullName() }}</a>
+						</li>
+					@endforeach
+				@endif
 			</ol>
 		</div>
 

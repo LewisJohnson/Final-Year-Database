@@ -153,7 +153,7 @@ class ProjectAdminController extends Controller{
 	 */
 	public function loginAsView(){
 		$students = Student::all();
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$staffUsers = User::Where('privileges', 'staff')->get();
 
 		$students = $students->sortBy(function($student){
