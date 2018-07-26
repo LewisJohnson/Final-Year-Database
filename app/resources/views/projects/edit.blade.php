@@ -11,7 +11,7 @@
 	<h1>You are editing "{{ $project->title }}".</h1>
 
 	<div id="project-card" class="card project-card card--margin-vertical">
-		<form id="editProjectForm" class="form form--flex" role="form" method="POST" onkeypress="return event.keyCode != 13;" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
+		<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 
@@ -35,7 +35,7 @@
 
 			@if(!Auth::user()->isStudent())
 				<div class="form-field">
-					<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press ENTER to save topic.</ins></label>
+					<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press COMMA to save topic.</ins></label>
 					<div id="new-topic-input-container" class="fake-input">
 						<ul class="topics-list edit">
 							@foreach($project->topics as $topic)

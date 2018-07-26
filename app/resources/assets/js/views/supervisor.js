@@ -35,7 +35,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	ProjectTopics.prototype.Keys_ = {
 		SPACE: 32,
 		ENTER: 13,
-		COMMA: 45
+		COMMA: 188
 	};
 
 	var projectTopics = new ProjectTopics();
@@ -132,7 +132,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 	// Add new topic
 	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function(e) {
-		if (e.which == projectTopics.Keys_.ENTER) {
+		if (e.which == projectTopics.Keys_.COMMA) {
 			var projectId = $("#editProjectForm").data('project-id');
 			projectTopics.functions.addTopicToProject(projectId, $(this).val());
 		}

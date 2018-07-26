@@ -696,6 +696,9 @@ class StudentController extends Controller{
 					for($i = 1; $i < count($csv) - 1; $i++){
 						unset($user, $student, $studentProgramme, $studentProgrammeModel);
 
+						if($csv[$i][0] == null){
+							continue;
+						}
 						if($csv[$i][1] === NULL){
 							throw new Exception("Student at row:".$i." has an invalid last name.");
 						}
