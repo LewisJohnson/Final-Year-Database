@@ -659,6 +659,7 @@ class StudentController extends Controller{
 								throw new Exception("Student at row:".$i." has an invalid programme.");
 							}
 							$studentProgramme = $csv[$i][3];
+							$studentProgramme = trim($studentProgramme);
 
 							if(Programme::where('name', $studentProgramme)->first() == null){
 								$autoProgramme = new Programme;
