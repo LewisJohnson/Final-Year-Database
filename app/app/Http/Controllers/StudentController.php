@@ -652,7 +652,7 @@ class StudentController extends Controller{
 
 					try{
 						// Remove CSV header and tail
-						for($i = 1; $i < count($csv) - 1; $i++){
+						for($i = 1; $i < count($csv); $i++){
 							unset($studentProgramme, $autoProgramme);
 
 							if($csv[$i][3] === NULL){
@@ -693,7 +693,7 @@ class StudentController extends Controller{
 				DB::beginTransaction();
 				try{
 					// Remove CSV header and tail
-					for($i = 1; $i < count($csv) - 1; $i++){
+					for($i = 1; $i < count($csv); $i++){
 						unset($user, $student, $studentProgramme, $studentProgrammeModel);
 
 						if($csv[$i][0] == null){
@@ -795,7 +795,7 @@ class StudentController extends Controller{
 		DB::table('test_students')->truncate();
 
 		// Remove CSV header and tail
-		for($i = 1; $i < count($csv) - 1; $i++){
+		for($i = 1; $i < count($csv); $i++){
 			$id = $i;
 			if($csv[$i][0] == null){
 				continue;
