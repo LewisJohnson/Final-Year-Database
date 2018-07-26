@@ -7,6 +7,7 @@
 
 namespace SussexProjects\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -249,7 +250,7 @@ class StudentController extends Controller{
 				// Send accepted email
 				Mail::to($student->project->supervisor->user->email)
 					->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
-			} catch (\Exception $e){
+			} catch (Exception $e){
 
 			}
 		}
@@ -370,7 +371,7 @@ class StudentController extends Controller{
 				// Send accepted email
 				Mail::to($student->project->supervisor->user->email)
 					->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
-			} catch (\Exception $e){
+			} catch (Exception $e){
 
 			}
 		}
@@ -450,7 +451,7 @@ class StudentController extends Controller{
 					Mail::to($student->project->supervisor->user->email)
 						->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
 				}
-			} catch (\Exception $e){
+			} catch (Exception $e){
 
 			}
 		}
@@ -510,7 +511,7 @@ class StudentController extends Controller{
 					Mail::to($student->project->supervisor->user->email)
 						->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
 				}
-			} catch (\Exception $e){
+			} catch (Exception $e){
 
 			}
 		}
@@ -630,7 +631,7 @@ class StudentController extends Controller{
 							'message' => 'Error with emptying programmes. Query Exception: '.$e
 						));
 						DB::rollBack();
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Error with emptying programmes. Genereal Exception: '.$e
@@ -673,7 +674,7 @@ class StudentController extends Controller{
 							'message' => 'Query Exception: '.$e
 						));
 						DB::rollBack();
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Genereal Exception: '.$e
@@ -745,7 +746,7 @@ class StudentController extends Controller{
 						'message' => 'Query Exception: '.$e
 					));
 					DB::rollBack();
-				} catch (\Exception $e) {
+				} catch (Exception $e) {
 					return response()->json(array(
 						'successful' => false,
 						'message' => 'Genereal Exception: '.$e
