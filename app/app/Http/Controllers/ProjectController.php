@@ -227,7 +227,8 @@ class ProjectController extends Controller{
 			$project = new Project;
 			$transaction = new Transaction;
 
-			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
+			$newlineFixedDescription = nl2br(request('description'));
+			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
 
 			$project->fill(array(
 				'title' => request('title'),
@@ -291,7 +292,8 @@ class ProjectController extends Controller{
 
 		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
-			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
+			$newlineFixedDescription = nl2br(request('description'));
+			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
 
 			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){

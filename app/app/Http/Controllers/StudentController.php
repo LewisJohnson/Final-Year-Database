@@ -200,7 +200,8 @@ class StudentController extends Controller{
 		DB::transaction(function() use ($request, $student){
 			$project = new Project;
 			$projectController = new ProjectController;
-			$clean_html = Purify::clean(request('description'), $this->htmlPurifyConfig);
+			$newlineFixedDescription = nl2br(request('description'));
+			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
 
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));

@@ -670,7 +670,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	});
 
 	$('.html-editor--input').on('change', function(){
-		$('.html-editor--preview').html($(this).val());
+		var val = $(this).val().replace('/\r|\n/gmi', '<br>');
+		$('.html-editor--preview').html(val);
 	});
 
 	$('.html-editor--top-buttons .html').on('click', function(){
