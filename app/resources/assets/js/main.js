@@ -670,7 +670,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	});
 
 	$('.html-editor--input').on('change', function(){
-		var val = $(this).val().replace('/\r|\n/gmi', '<br>');
+		var val = $(this).val().replace(/(?:\r\n|\r|\n)/g, '<br>');
 		$('.html-editor--preview').html(val);
 	});
 
