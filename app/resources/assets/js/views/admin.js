@@ -87,7 +87,7 @@
 			type: 'post',
 			success: function(response){
 				if(!response.successful){
-					createToast('error', response.message);
+					$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b>' + response.message + '</p>');
 					return;
 				}
 
@@ -100,7 +100,6 @@
 				}
 			},
 			error: function(response){
-				createToast('success', response.responseText);
 				$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b> This is likely caused by a foreign key constraint failure. Have you added all the programmes in the uploaded file to the database?</p>');
 			},
 		 });

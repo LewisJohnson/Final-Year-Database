@@ -586,7 +586,8 @@ class StudentController extends Controller{
 
 		if(mb_detect_encoding($request->file('studentFile'), 'UTF-8', true) != 'UTF-8'){
 			return response()->json(array(
-				'successful' => false, 'message' => 'Invalid file encoding.'
+				'successful' => false,
+				'message' => 'Invalid file encoding.'
 			));
 		}
 
@@ -603,28 +604,59 @@ class StudentController extends Controller{
 				return $this->testImportStudents($csv);
 			} else {
 				// Import to prod tables
+
+				// EMPTY STUDENTS
 				if(isset($request->empty_students)){
 					$students = User::where('privileges', 'student');
 					$students->delete();
 				}
 
+				// EMPTY PROGRAMMES
 				if(isset($request->empty_programmes)){
 					$userTable = new User;
-					DB::table($userTable->getTable())->update(array(
-						'programme' => null
-					));
 
-					DB::statement("SET foreign_key_checks=0");
-					Programme::truncate();
-					DB::statement("SET foreign_key_checks=1");
+					DB::beginTransaction();
+
+					try{
+						DB::table($userTable->getTable())->update(array('programme' => null));
+						DB::statement("SET foreign_key_checks=0");
+						Programme::truncate();
+						DB::statement("SET foreign_key_checks=1");
+
+						DB::commit();
+					} catch (\Illuminate\Database\QueryException $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Error with emptying programmes. Query Exception: '.$e
+						));
+						DB::rollBack();
+					} catch (\Exception $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Error with emptying programmes. Genereal Exception: '.$e
+						));
+						DB::rollBack();
+					} catch (Throwable $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Error with emptying programmes. Throwable Exception: '.$e
+						));
+						DB::rollBack();
+					}
 				}
 
+				// AUTO PROGRAMMES
 				if(isset($request->auto_programmes)){
-					DB::transaction(function() use ($request, $csv){
+					DB::beginTransaction();
+
+					try{
 						// Remove CSV header and tail
 						for($i = 1; $i < count($csv) - 1; $i++){
 							unset($studentProgramme, $autoProgramme);
 
+							if($csv[$i][3] === NULL){
+								throw new Exception("Student at row:".$i." has an invalid programme.");
+							}
 							$studentProgramme = $csv[$i][3];
 
 							if(Programme::where('name', $studentProgramme)->first() == null){
@@ -633,18 +665,57 @@ class StudentController extends Controller{
 								$autoProgramme->save();
 							}
 						}
-					});
+
+						DB::commit();
+					} catch (\Illuminate\Database\QueryException $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Query Exception: '.$e
+						));
+						DB::rollBack();
+					} catch (\Exception $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Genereal Exception: '.$e
+						));
+						DB::rollBack();
+					} catch (Throwable $e) {
+						return response()->json(array(
+							'successful' => false,
+							'message' => 'Throwable Exception: '.$e
+						));
+						DB::rollBack();
+					}
 				}
 
-				DB::transaction(function() use ($request, $csv){
+				// ACTUALLY IMPORT STUDENTS
+				DB::beginTransaction();
+				try{
 					// Remove CSV header and tail
 					for($i = 1; $i < count($csv) - 1; $i++){
-						unset($user, $student, $studentProgramme, $studentProgrammeModel, $autoProgramme);
+						unset($user, $student, $studentProgramme, $studentProgrammeModel);
+
+						if($csv[$i][1] === NULL){
+							throw new Exception("Student at row:".$i." has an invalid last name.");
+						}
+						if($csv[$i][2] === NULL){
+							throw new Exception("Student at row:".$i." has an invalid first name.");
+						}
+						if($csv[$i][3] === NULL){
+							throw new Exception("Student at row:".$i." has an invalid programme.");
+						}
+						if($csv[$i][4] === NULL){
+							throw new Exception("Student at row:".$i." has an invalid username.");
+						}
 
 						$user = new User;
 						$student = new Student;
 						$studentProgramme = $csv[$i][3];
 						$studentProgrammeModel = Programme::where('name', $studentProgramme)->first();
+
+						if($studentProgrammeModel === NULL){
+							throw new Exception("There was a problem at row:".$i.". The programme name \"" + $studentProgrammeModel + "\" could not be imported.");
+						}
 
 						$user->fill(array(
 							'privileges' => 'student',
@@ -657,12 +728,33 @@ class StudentController extends Controller{
 						$user->save();
 
 						$student->fill(array(
-							'id' => $user->id, 'registration_number' => $csv[$i][0]
+							'id' => $user->id,
+							'registration_number' => $csv[$i][0]
 						));
 
 						$student->save();
 					}
-				});
+					
+					DB::commit();
+				} catch (\Illuminate\Database\QueryException $e) {
+					return response()->json(array(
+						'successful' => false,
+						'message' => 'Query Exception: '.$e
+					));
+					DB::rollBack();
+				} catch (\Exception $e) {
+					return response()->json(array(
+						'successful' => false,
+						'message' => 'Genereal Exception: '.$e
+					));
+					DB::rollBack();
+				} catch (Throwable $e) {
+					return response()->json(array(
+						'successful' => false,
+						'message' => 'Throwable Exception: '.$e
+					));
+					DB::rollBack();
+				}
 
 				$users = User::where('privileges', 'student')->get();
 				$students = Student::all();
@@ -671,13 +763,15 @@ class StudentController extends Controller{
 					->render();
 
 				return response()->json(array(
-					'successful' => true, 'message' => $view
+					'successful' => true,
+					'message' => $view
 				));
 			}
 		}
 
 		return response()->json(array(
-			'successful' => false, 'message' => 'Invalid file.'
+			'successful' => false,
+			'message' => 'Invalid file.'
 		));
 	}
 
