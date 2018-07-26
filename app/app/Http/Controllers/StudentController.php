@@ -797,6 +797,9 @@ class StudentController extends Controller{
 		// Remove CSV header and tail
 		for($i = 1; $i < count($csv) - 1; $i++){
 			$id = $i;
+			if($csv[$i][0] == null){
+				continue;
+			}
 			DB::table('test_users')->insert(array(
 				'id' => $id, 
 				'last_name' => $csv[$i][1],
