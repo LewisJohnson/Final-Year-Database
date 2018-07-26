@@ -32,12 +32,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
 	};
 
-	ProjectTopics.prototype.Keys_ = {
-		SPACE: 32,
-		ENTER: 13,
-		COMMA: 188
-	};
-
 	var projectTopics = new ProjectTopics();
 
 	ProjectTopics.prototype.functions = {
@@ -132,7 +126,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 	// Add new topic
 	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function(e) {
-		if (e.which == projectTopics.Keys_.COMMA) {
+		if (e.which == 44 || e.keyCode == 188) {
 			var projectId = $("#editProjectForm").data('project-id');
 			projectTopics.functions.addTopicToProject(projectId, $(this).val());
 		}
