@@ -619,6 +619,23 @@ class StudentController extends Controller{
 					DB::statement("SET foreign_key_checks=1");
 				}
 
+				if(isset($request->auto_programmes)){
+					DB::transaction(function() use ($request, $csv){
+						// Remove CSV header and tail
+						for($i = 1; $i < count($csv) - 1; $i++){
+							unset($studentProgramme, $autoProgramme);
+
+							$studentProgramme = $csv[$i][3];
+
+							if(Programme::where('name', $studentProgramme)->first() == null){
+								$autoProgramme = new Programme;
+								$autoProgramme->name = $studentProgramme;
+								$autoProgramme->save();
+							}
+						}
+					});
+				}
+
 				DB::transaction(function() use ($request, $csv){
 					// Remove CSV header and tail
 					for($i = 1; $i < count($csv) - 1; $i++){
@@ -627,15 +644,6 @@ class StudentController extends Controller{
 						$user = new User;
 						$student = new Student;
 						$studentProgramme = $csv[$i][3];
-
-						if(isset($request->auto_programmes)){
-							if(Programme::where('name', $studentProgramme)->first() == null){
-								$autoProgramme = new Programme;
-								$autoProgramme->name = $studentProgramme;
-								$autoProgramme->save();
-							}
-						}
-
 						$studentProgrammeModel = Programme::where('name', $studentProgramme)->first();
 
 						$user->fill(array(
