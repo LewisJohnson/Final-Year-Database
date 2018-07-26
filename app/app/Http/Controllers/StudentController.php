@@ -626,23 +626,23 @@ class StudentController extends Controller{
 
 						DB::commit();
 					} catch (\Illuminate\Database\QueryException $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Error with emptying programmes. Query Exception: '.$e
 						));
-						DB::rollBack();
 					} catch (Exception $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Error with emptying programmes. Genereal Exception: '.$e
 						));
-						DB::rollBack();
 					} catch (Throwable $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Error with emptying programmes. Throwable Exception: '.$e
 						));
-						DB::rollBack();
 					}
 				}
 
@@ -669,23 +669,23 @@ class StudentController extends Controller{
 
 						DB::commit();
 					} catch (\Illuminate\Database\QueryException $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Query Exception: '.$e
 						));
-						DB::rollBack();
 					} catch (Exception $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Genereal Exception: '.$e
 						));
-						DB::rollBack();
 					} catch (Throwable $e) {
+						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
 							'message' => 'Throwable Exception: '.$e
 						));
-						DB::rollBack();
 					}
 				}
 
@@ -744,23 +744,23 @@ class StudentController extends Controller{
 
 					DB::commit();
 				} catch (\Illuminate\Database\QueryException $e) {
+					DB::rollBack();
 					return response()->json(array(
 						'successful' => false,
 						'message' => 'Query Exception: '.$e
 					));
-					DB::rollBack();
 				} catch (Exception $e) {
+					DB::rollBack();
 					return response()->json(array(
 						'successful' => false,
 						'message' => 'Genereal Exception: '.$e
 					));
-					DB::rollBack();
 				} catch (Throwable $e) {
+					DB::rollBack();
 					return response()->json(array(
 						'successful' => false,
 						'message' => 'Throwable Exception: '.$e
 					));
-					DB::rollBack();
 				}
 
 				$users = User::where('privileges', 'student')->get();
