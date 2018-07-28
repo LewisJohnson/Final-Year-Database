@@ -37,7 +37,7 @@ function createToast(type, message){
 	setTimeout(function() {
 		// Delete toast
 		$(toast).remove();
-	}, 3000);
+	}, 4000);
 }
 
 
@@ -79,7 +79,7 @@ function addLastNameHeadersToList(ul) {
 		var firstCharOflastName = nameSplit[nameSplit.length - 1].charAt(0);
 
 		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 			continue;
 		}
@@ -89,7 +89,7 @@ function addLastNameHeadersToList(ul) {
 		var prevfirstCharOflastName = prevNameSplit[prevNameSplit.length - 1].charAt(0);
 
 		if(firstCharOflastName != prevfirstCharOflastName){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h3>" + firstCharOflastName + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 		}
 	}
@@ -103,13 +103,13 @@ function addAlphaHeadersToList(ul) {
 		var firstChar = $(listitems[i]).text().replace(/\s/g, '').charAt(0).toUpperCase();
 
 		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h4>" + firstChar + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
 			continue;
 		}
 		var prevFirstChar = $(listitems[i - 1]).text().replace(/\s/g, '').charAt(0).toUpperCase();
 		if(firstChar != prevFirstChar){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h3>" + firstChar + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h4>" + firstChar + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
 		}
 	}
@@ -124,7 +124,7 @@ function addTitleHeadersToList(ul) {
 		var nameTitle = /[^[, ]*]*/.exec(t)[0].toUpperCase().replace(/\s/g, '');
 
 		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h4>" + nameTitle + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
 			continue;
 		}
@@ -133,7 +133,7 @@ function addTitleHeadersToList(ul) {
 		var prevNameTitle = /[^[, ]*]*/.exec(pt)[0].toUpperCase().replace(/\s/g, '');
 
 		if(nameTitle != prevNameTitle){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h3>" + nameTitle + "</h3</li>");
+			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h4>" + nameTitle + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
 		}
 	}

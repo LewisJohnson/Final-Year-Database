@@ -78,8 +78,7 @@ class UserController extends Controller{
 			->with('staff', $staffUsers)
 			->with('students', $students)
 			->with('admins', $admins)
-			->with('noPrivilegesUsers', $noPrivilegesUsers)
-			->with('view', $request->query("view"));
+			->with('noPrivilegesUsers', $noPrivilegesUsers);
 	}
 
 	/**
@@ -426,5 +425,118 @@ class UserController extends Controller{
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('HomeController@index');
+	}
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function info(Request $request){
+		$user = User::findOrFail($request->id);
+
+		$infoString = "<h4>Information about \"".$user->getFullName()."\"</h4>";
+
+		$infoString .= "<ul>";
+
+		if($user->isStudent()){
+			$infoString .= "<li>They are a student.</li>";
+			$infoString .= "<li>Their project status is ".$user->student->project_status.".</li>";
+
+			if($user->student->project == null){
+				$infoString .= "<li>They do not have a project associated with them.</li>";
+			} else {
+				$infoString .= "<li>The project associated with them is titled \"".$user->student->project->title."\".</li>";
+			}
+
+			$infoString .= "<li>They have ".count($user->student->getProposedProjectsWithoutSupervisor())." proposed projects without a supervisor.</li>";
+			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
+		}
+
+		if($user->isSupervisor()){
+			$infoString .= "<li>They are a supervisor.</li>";
+			$infoString .= "<li>They have ".count($user->supervisor->getProjects())." projects.</li>";
+			$infoString .= "<li>They have ".count($user->supervisor->getIntrestedStudents())." interested students.</li>";
+			$infoString .= "<li>They have ".count($user->supervisor->getAcceptedStudents())." accepted students.</li>";
+			$infoString .= "<li>They have ".count($user->supervisor->getStudentProjectProposals())." students who have proposed a project to them.</li>";
+			$infoString .= "<li>They are second supervisor to ".count($user->supervisor->getSecondSupervisingStudents())." students.</li>";
+			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
+		}
+
+		if($user->isProjectAdmin()){
+			$infoString .= "<li>They are a project administrator.</li>";
+			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
+		}
+
+		if($user->isSystemAdmin()){
+			$infoString .= "<li>They are a system administrator.</li>";
+			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
+		}
+
+		if($user->isStaff()){
+			$infoString .= "<li>They are a staff member.</li>";
+		}
+
+		$infoString .= "</ul>";
+
+		return response()->json(array('message' => $infoString));
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(Request $request){
+		$result = DB::transaction(function() use ($request){
+			$user = User::findOrFail($request->id);
+
+			if($user->isSupervisor()){
+				foreach($user->supervisor->getIntrestedStudents() as $interested) {
+					$student = $interested['student'];
+					$student->project_id = null;
+					$student->project_status = 'none';
+					$student->save();
+				}
+
+				foreach($user->supervisor->getAcceptedStudents() as $accepted) {
+					$student = $accepted['student'];
+					$student->project_id = null;
+					$student->project_status = 'none';
+					$student->save();
+				}
+
+				foreach($user->supervisor->getStudentProjectProposals() as $proposed) {
+					$student = $proposed['student'];
+					$student->project_id = null;
+					$student->project_status = 'none';
+					$student->project->supervisor_id = null;
+					$student->project->save();
+					$student->save();
+				}
+
+				foreach($user->supervisor->getSecondSupervisingStudents() as $second) {
+					$student = $second['student'];
+					$student->marker_id = null;
+					$student->save();
+				}
+
+				$projects = Project::where('supervisor_id', $user->id)->delete();
+			}
+
+			if($user->isStudent()){
+				$projects = Project::where('student_id', $user->id)->delete();
+			}
+			$user->delete();
+
+			return response()->json(array('successful' => true, 'message' => 'User has been deleted.'));
+		});
+
+		return $result;
 	}
 }

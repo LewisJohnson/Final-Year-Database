@@ -8,7 +8,6 @@
 @endif
 
 	{{ csrf_field() }}
-
 	<div class="form-field{{ $errors->has('username') ? ' has-error' : '' }}">
 		<label for="username">Username</label>
 
@@ -187,10 +186,6 @@
 		<div class="button-group button-group--horizontal">
 			<div class="form-field">
 				<button type="submit" class="button button--raised button--accent">Update user</button>
-			</div>
-
-			<div class="form-field">
-				<button type="submit" class="button button--raised button--danger">Delete user</button>
 			</div>
 		</div>
 	@endif

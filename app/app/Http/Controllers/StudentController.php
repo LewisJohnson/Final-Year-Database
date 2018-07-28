@@ -714,7 +714,7 @@ class StudentController extends Controller{
 							throw new Exception("Student at row:".$i." has an invalid username.");
 						}
 						if(User::where('username', $csv[$i][4])->first() !== null){
-							throw new Exception("Student at row:".$i.". The username \"" + $csv[$i][4] +"\" is already in use.");
+							throw new Exception("Student at row:".$i.". The username \"".$csv[$i][4]."\" is already in use.");
 						}
 
 						$user = new User;
@@ -723,7 +723,7 @@ class StudentController extends Controller{
 						$studentProgrammeModel = Programme::where('name', $studentProgramme)->first();
 
 						if($studentProgrammeModel === NULL){
-							throw new Exception("There was a problem at row:".$i.". The programme name \"" + $studentProgrammeModel + "\" could not be imported.");
+							throw new Exception("There was a problem at row:".$i.". The programme name \"".$studentProgrammeModel."\" could not be imported.");
 						}
 
 						$user->fill(array(

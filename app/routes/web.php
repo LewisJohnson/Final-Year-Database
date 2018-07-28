@@ -234,8 +234,11 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 	// Update user POST
 	Route::patch('users/{user}', 'UserController@update');
 
-	// Delete user
-	Route::delete('users/{user}', 'UserController@destroy');
+	// User information
+	Route::get('users/info', 'UserController@info');
+
+	// Delete user POST
+	Route::delete('users', 'UserController@destroy');
 });
 
 /* =================================

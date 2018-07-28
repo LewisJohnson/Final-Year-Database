@@ -177,14 +177,14 @@ ul.dot-menu{
 
 		a {
 			text-decoration: none;
-			transition: 0.2s all;
+			transition: 0.1s all;
 			outline: none;
 		}
 
-		a:hover, a:focus{
+		a:first-of-type:hover, a:first-of-type:focus{
 			padding-left: 5px;
-			font-size: 110%;
 			text-decoration: underline;
+			color: rgb(103, 114, 229) !important;
 		}
 	}
 
@@ -225,9 +225,9 @@ ul.dot-menu{
 	padding: 1rem 0;
 	padding-bottom: 5px;
 	background: white;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
-	h3{
+	h4{
 		margin: 0;
 	}
 }
@@ -293,7 +293,7 @@ ul.dot-menu{
 }
 
 .td-none{
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 .icon-list{
@@ -377,6 +377,11 @@ ul.dot-menu{
 		border-radius: 2px;
 
 	}
+}
+
+.delete-user{
+	color: red;
+	float: right;
 }
 
 // FLEX

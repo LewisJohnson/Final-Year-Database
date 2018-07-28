@@ -80,7 +80,7 @@
 										</svg>
 									</div>
 									<div class="dropdown-content">
-										<a href="{{ action('UserController@index', 'view=edit') }}">Edit User</a>
+										<a href="{{ action('UserController@index') }}">Edit User</a>
 										<a href="{{ action('UserController@create') }}">Add User</a>
 									</div>
 								</div>
