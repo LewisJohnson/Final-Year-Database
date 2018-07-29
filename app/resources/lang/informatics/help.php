@@ -209,8 +209,8 @@ return [
 	// HELP TAB 4
 	'help_tab_4' => 'Feedback',
 	'help_tab_4_content' =>
-	'<p>You may have noticed, this website is brand new (Depending on when you read this...). Like very new system, there might be a problem here or there.
-	We would appreciate it if you used the in-built feedback system to report your problem or issues, or to leave general feedback.</p>
+	'<p>You may have noticed, this website is new and different from the previous website. Because of this there, is a feedback system.
+	We would appreciate it if you used the in-built feedback system to leave general comments or report your problems and issues.</p>
 	<p>The button for leaving feedback is just below, in the footer, labelled "<b>Leave Feedback</b>".</p>',
 
 	// HELP TAB 5
