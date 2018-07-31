@@ -13,6 +13,9 @@ use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
+/**
+ * The email sent to the supervisor when a student un-selects one of their projects.
+ */
 class StudentUnselected extends Mailable{
 	use Queueable, SerializesModels;
 

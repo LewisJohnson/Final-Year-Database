@@ -7,17 +7,17 @@
 
 namespace SussexProjects;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 /**
  * The supervisor model.
  *
  * @see SussexProjects\Http\Controllers\SupervisorController
-*/
-class Supervisor extends User{
+ */
+class Supervisor extends Model{
 
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
@@ -33,7 +33,6 @@ class Supervisor extends User{
 	 */
 	public $incrementing = false;
 
-
 	/**
 	 * The attributes that are not mass assignable.
 	 *
@@ -42,10 +41,29 @@ class Supervisor extends User{
 	protected $guarded = [];
 
 	/**
+	 * A HTML 5 data list snippet containing all supervisors.
+	 * This is used for auto-complete.
+	 *
+	 * @return string The resulting HTML
+	 */
+	public static function getDatalist(){
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+		$dataListHtml = '<datalist id="supervisor-datalist">';
+		
+		foreach($supervisors as $supervisor){
+			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
+		}
+
+		$dataListHtml .= '</datalist>';
+
+		return $dataListHtml;
+	}
+
+	/**
 	 * Returns the user related to this supervisor.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne User
-     */
+	 */
 	public function user(){
 		return $this->hasOne(User::class, 'id');
 	}
@@ -53,7 +71,8 @@ class Supervisor extends User{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string
+	 * @return string Table string
+	 * @throws Exception Database not found
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
@@ -66,9 +85,10 @@ class Supervisor extends User{
 	/**
 	 * Sets the superior's email preference.
 	 *
+	 * @param        $value
 	 * @param String $educationLevel An optional education level parameter
 	 *
-	 * @return boolean Is supervisor accepting emails
+	 * @return void
 	 */
 	public function setAcceptingEmails($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -78,17 +98,15 @@ class Supervisor extends User{
 		}
 
 		$this->save();
+
 		return;
 	}
-	
+
 	/**
 	 * Sets taking student property.
 	 *
-	 *
-	 * @param Boolean $value Take students
-	 * @param String $educationLevel An optional education level parameter
-	 *
-	 * @return
+	 * @param Boolean $value          Take students
+	 * @param String  $educationLevel An optional education level parameter
 	 */
 	public function setTakingStudents($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -97,17 +115,15 @@ class Supervisor extends User{
 			$this["take_students_".Session::get('education_level')["shortName"]] = $value;
 		}
 		$this->save();
+
 		return;
 	}
 
 	/**
 	 * Sets the project load of the supervisor (Student load).
 	 *
-	 *
-	 * @param Int $value The project load
+	 * @param Int    $value          The project load
 	 * @param String $educationLevel An optional education level parameter
-	 *
-	 * @return
 	 */
 	public function setProjectLoad($value, $educationLevel = null){
 		if(isset($educationLevel)){
@@ -116,12 +132,12 @@ class Supervisor extends User{
 			$this["project_load_".Session::get('education_level')["shortName"]] = $value;
 		}
 		$this->save();
+
 		return;
 	}
 
 	/**
 	 * Determines if the superior is accepting emails.
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -138,7 +154,6 @@ class Supervisor extends User{
 
 	/**
 	 * Determines if the superior is taking students.
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -155,7 +170,6 @@ class Supervisor extends User{
 
 	/**
 	 * The project load of the supervisor (Student load).
-	 *
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -180,42 +194,29 @@ class Supervisor extends User{
 	public function getProjects($status = null){
 		if(isset($status)){
 			return Project::where("supervisor_id", $this->id)
-				->whereNull('student_id')
-				->where("status", "=", $status)
-				->get();
+				->whereNull('student_id')->where("status", "=", $status)->get();
 		}
 
 		return Project::where("supervisor_id", $this->id)
-			->orderBy('status', 'asc')
-			->whereNull('student_id')
-			->get();
+			->orderBy('status', 'asc')->whereNull('student_id')->get();
 	}
+
 	/**
 	 * A list of students who have selected a project from this supervisor.
 	 *
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
-	public function getSelectedStudents(){
-		$students = Student::all();
+	public function getIntrestedStudents(){
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
+		$students = Student::where('project_status', 'selected')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', $this->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'selected'){
-				return false;
-			}
-
-			return true;
-		});
-
-		foreach ($students as $key => $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -231,26 +232,16 @@ class Supervisor extends User{
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
 	public function getAcceptedStudents(){
-		$students = Student::all();
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
+		$students = Student::where('project_status', 'accepted')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', $this->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'accepted'){
-				return false;
-			}
-
-			return true;
-		});
-
-		foreach ($students as $key => $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -266,30 +257,16 @@ class Supervisor extends User{
 	 * @return array Array A key/value array where the key is the student and the value is their proposed project
 	 */
 	public function getStudentProjectProposals(){
-		$students = Student::all();
+		$project = new Project;
+		$student = new Student;
 		$offers = array();
 
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
+		$students = Student::where('project_status', 'proposed')
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', $this->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
 
-			if($student->project->supervisor_id !== $this->id){
-				return false;
-			}
-
-			if($student->project_status !== 'proposed'){
-				return false;
-			}
-
-			if($student->project->status !== 'student-proposed'){
-				return false;
-			}
-
-			return true;
-		});
-
-		foreach ($students as $key => $student) {
+		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -305,17 +282,10 @@ class Supervisor extends User{
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
-		$students = Student::all();
+		$students = Student::where('marker_id', $this->id);
 		$offers = array();
 
-		$students = $students->filter(function($student, $key) {
-			if($student->project == null){
-				return false;
-			}
-			return $student->project->marker_id == $this->id;
-		});
-
-		foreach ($students as $key => $student) {
+		foreach($students as $key => $student){
 			$ar = array();
 			$ar["student"] = $student;
 			$ar["project"] = $student->project;
@@ -326,23 +296,38 @@ class Supervisor extends User{
 	}
 
 	/**
-	 * A HTML 5 data list snippet containing all supervisors.
-	 * This is used for auto-complete.
+	 * A list of supervisors with the supervisor privilege.
 	 *
-	 * @return string The resulting HTML
-	*/
-	public static function getDatalist(){
-		$supervisors = Supervisor::all();
-		$dataListHtml = '<datalist id="supervisor-datalist">';
+	 * @return QueryBuilder A query builder of all supervisors.
+	 */
+	public static function getAllSupervisorsQuery(){
+		$userTable = new User();
+		$supervisorTable = new Supervisor();
 
-		foreach ($supervisors as $supervisor) {
-			$dataListHtml .= '<option value="'. $supervisor->user->getFullName().'">';
-		}
+		$query = Supervisor::join($userTable->getTable().' as user', 'user.id', '=', $supervisorTable->getTable().'.id')
+				->select($supervisorTable->getTable().'.*')
+				->where('user.privileges', 'LIKE', '%supervisor%')
+				->orderBy('user.last_name', 'asc');
 		
-		$dataListHtml .= '</datalist>';
-
-		return $dataListHtml;
+		return $query;
 	}
 
+	/**
+	 * A HTML data-list of all titles.
+	 *
+	 * @return string
+	 */
+	public static function getTitleDatalist(){
+		$titles = Supervisor::groupBy('title')
+			->where("take_students_".Session::get('education_level')["shortName"], true)
+			->pluck('title');
 
+		$rtnString = '<datalist id="titleDataList">';
+		foreach($titles as $title){
+			$rtnString .= '<option value="'.$title.'">';
+		}
+		$rtnString .= '</datalist>';
+
+		return $rtnString;
+	}
 }

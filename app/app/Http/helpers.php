@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 if(!function_exists('lang_sess')){
+	/**
+	 * Returns the education level specific language key 
+	 * associated to the parameters key.
+	 * 
+	 * @param string $key The key to search for.
+	 *
+	 * @return string|null The located language string, otherwise the key name.
+	 */
 	function lang_sess($key = null){
 		$key = str_replace('"', '', $key);
 		$key = str_replace('\'', '', $key);
@@ -25,6 +33,15 @@ if(!function_exists('lang_sess')){
 }
 
 if(!function_exists('get_config_json')){
+	/**
+	 * This function is used to get or set the department 
+	 * specific JSON configuration file or a value in the said file.
+	 * 
+	 * @param string $key The key to search for.
+	 * @param string $value The value to set.
+	 *
+	 * @return string|boolean|null If $key is null, the whole file is returned. If $value is null, the key-value is returned. If $key and $value is set, a boolean is returned.
+	 */
 	function get_config_json($key = null, $value = null){
 		if(Session::get('department') == null){
 			$config = json_decode(Storage::disk('local')
@@ -58,6 +75,14 @@ if(!function_exists('get_config_json')){
 }
 
 if(!function_exists('get_education_levels')){
+	/**
+	 * Retrieves a list of education levels configured in the system configuration file.
+	 * 
+	 * @param boolean $shortName If only the short-hand names should be returned.
+	 * @param boolean $longName If only the long-hand names should be returned.
+	 *
+	 * @return string[] A list of education levels.
+	 */
 	function get_education_levels($shortName = null, $longName = null){
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
@@ -85,12 +110,12 @@ if(!function_exists('get_education_levels')){
 
 if(!function_exists('get_education_level')){
 	/**
-	 * Alias of get_education_levels
+	 * Alias of get_education_levels.
 	 *
-	 * @param null $shortName
-	 * @param null $longName
+	 * @param boolean $shortName If only the short-hand names should be returned.
+	 * @param boolean $longName If only the long-hand names should be returned.
 	 *
-	 * @return string education level
+	 * @return string[] A list of education levels.
 	 */
 	function get_education_level($shortName = null, $longName = null){
 		return call_user_func_array('get_education_level', func_get_args());
@@ -98,6 +123,11 @@ if(!function_exists('get_education_level')){
 }
 
 if(!function_exists('get_departments')){
+	/**
+	 * Retrieves a list of departments configured in the system configuration file.
+	 * 
+	 * @return string[] A list of departments.
+	 */
 	function get_departments(){
 		$config = json_decode(Storage::disk('local')->get(config("app.system_config_file")), true);
 
@@ -106,6 +136,11 @@ if(!function_exists('get_departments')){
 }
 
 if(!function_exists('ldap_guest')){
+	/**
+	 * Determines if the current user is an exclusively LDAP authenticated guest.
+	 * 
+	 * @return boolean True if LDAP guest, false otherwise
+	 */
 	function ldap_guest(){
 		if(empty(Session::get('ldap_guest'))){
 			return false;

@@ -57,16 +57,16 @@
 
 	@if(count($projects) > 0)
 		<div class="table-responsive">
-			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }} @if($view == "supervisor" || $view == "personal") sort-table @endif">
+			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }} @if($view != "index") sort-table @endif">
 				<thead>
 					<tr>
-						<th data-default="true">Topic</th>
-						<th data-default="true">Title</th>
-						<th data-default="false">Short Description</th>
-						<th data-default="false">Full Description</th>
-						<th data-default="desktop">Skills</th>
-						@if($view == "index" || $view == "topic" || $view == "transaction")<th data-default="true" >Supervisor</th>@endif
-						@if($view == "personal") <th data-default="true">Status</th> @endif
+						<th @if($view != "index") class="pointer" @endif data-default="true">Topic</th>
+						<th @if($view != "index") class="pointer" @endif data-default="true">Title</th>
+						<th @if($view != "index") class="pointer" @endif data-default="false">Short Description</th>
+						<th @if($view != "index") class="pointer" @endif data-default="false">Full Description</th>
+						<th @if($view != "index") class="pointer" @endif data-default="desktop">Skills</th>
+						@if($view != "supervisor")<th @if($view != "index") class="pointer" @endif data-default="true">Supervisor</th>@endif
+						@if($view == "personal") <th @if($view != "index") class="pointer" @endif data-default="true">Status</th> @endif
 					</tr>
 				</thead>
 

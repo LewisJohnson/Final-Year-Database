@@ -7,11 +7,16 @@
 
 namespace SussexProjects;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
 
+/**
+ * The mode singleton model.
+ *
+ * @see SussexProjects\Http\Controllers\ModeController
+ */
 class Mode extends Model{
 
 	/**
@@ -20,30 +25,7 @@ class Mode extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
-
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['project_year', 'start_date'];
-
-
-	/**
-	 * The columns to be parsed as dates.
-	 *
-	 * @var array
-	 */
-	protected $dates = ['start_date'];
-
-
-	/**
-	 * The models primary key 
-	 * 
-	 * @var integer
-	 */
-	protected $primaryKey = 'project_year';
-
+	
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -52,24 +34,25 @@ class Mode extends Model{
 	public $incrementing = false;
 
 	/**
-	 * The table to retrieve data from.
+	 * The columns to be parsed as dates.
+	 * Laravel can not use the MySql 'Year' data type, so please do not add project year.
 	 *
-	 * @return string
+	 * @var array
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_mode_'.Session::get('education_level')["shortName"];
-		} else {
-			throw new Exception('Database not found.');
-		}
-	}
+	protected $dates = ['project_selection', 'supervisor_accept'];
+
+	/**
+	 * The models primary key
+	 *
+	 * @var integer
+	 */
+	protected $primaryKey = 'project_year';
 
 	/**
 	 * Call this method to get singleton
-	 * 
 	 * ish...
 	 *
-	 * @return UserFactory
+	 * @return Mode
 	 */
 	public static function Instance(){
 		$mode = Mode::all()->first();
@@ -80,7 +63,9 @@ class Mode extends Model{
 			$carbon = Carbon::now();
 
 			$newMode->project_year = $carbon->year;
-			$newMode->start_date = $carbon->addYear();
+			$newMode->project_selection = $carbon->addYear();
+			$newMode->supervisor_accept = $carbon->addYear();
+			$newMode->marker_released_to_staff = false;
 			$newMode->save();
 
 			return $newMode;
@@ -90,15 +75,32 @@ class Mode extends Model{
 	}
 
 	/**
-	 * Gets start date
+	 * Gets project selection date
+	 *
+	 * @param null $human
 	 *
 	 * @return string
 	 */
-	public static function getStartDate($human = null){
+	public static function getProjectSelectionDate($human = null){
 		if($human){
-			return Mode::Instance()->start_date->toDayDateTimeString();
+			return Mode::Instance()->project_selection->toDayDateTimeString();
 		} else {
-			return Mode::Instance()->start_date;
+			return Mode::Instance()->project_selection;
+		}
+	}
+
+	/**
+	 * Gets supervisor accept date
+	 *
+	 * @param null $human
+	 *
+	 * @return string
+	 */
+	public static function getSupervisorAcceptDate($human = null){
+		if($human){
+			return Mode::Instance()->supervisor_accept->toDayDateTimeString();
+		} else {
+			return Mode::Instance()->supervisor_accept;
 		}
 	}
 
@@ -110,5 +112,27 @@ class Mode extends Model{
 	public static function getProjectYear(){
 		return Mode::Instance()->project_year;
 	}
-}
 
+	/**
+	 * Gets project year
+	 *
+	 * @return string
+	 */
+	public static function isMarkerReleasedToStaff(){
+		return Mode::Instance()->marker_released_to_staff;
+	}
+
+	/**
+	 * The table to retrieve data from.
+	 *
+	 * @return string Table string
+	 * @throws Exception Database not found
+	 */
+	public function getTable(){
+		if(Session::get('department') !== null){
+			return Session::get('department').'_mode_'.Session::get('education_level')["shortName"];
+		} else {
+			throw new Exception('Database not found.');
+		}
+	}
+}

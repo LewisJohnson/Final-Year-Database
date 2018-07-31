@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * The mode singleton model.
+ *
+ * @see SussexProjects\Http\Controllers\ModeController
+ */
 class Mode extends Model{
 
 	/**

@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Session;
  * The project topic model.
  *
  * @see SussexProjects\Http\Controllers\ProjectTopic
+ * @see SussexProjects\Http\Controllers\ProjectController
+ * @see SussexProjects\Http\Controllers\TopicController
+ * @see Project
+ * @see Topic
  */
 class ProjectTopic extends Model{
 	

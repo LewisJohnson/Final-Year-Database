@@ -37,7 +37,7 @@ use SussexProjects\Transaction;
 class StudentController extends Controller{
 
 	/**
-	 * The HTML purifier configuration used for the project description.
+	 * The HTML purifier configuration used to sanitise project descriptions.
 	 *
 	 * @see http://htmlpurifier.org/live/configdoc/plain.html HTML purifier configuration documentation.
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
@@ -63,7 +63,7 @@ class StudentController extends Controller{
 	/**
 	 * Returns the first student in the DB without a second marker.
 	 *
-	 * @return Student
+	 * @return Student The next student without a second marker assigned to them.
 	 */
 	public static function getStudentWithoutSecondMarker(){
 		return $student = Student::whereNull('marker_id')->first();
@@ -72,7 +72,7 @@ class StudentController extends Controller{
 	/**
 	 * Returns the first student in the DB without a second marker.
 	 *
-	 * @return bool
+	 * @return boolean Returns true if every students has a second marker, false otherwise.
 	 */
 	public static function checkAllStudentsHaveSecondMarker(){
 		if(Student::whereNull('marker_id')->first() == null){
@@ -85,20 +85,22 @@ class StudentController extends Controller{
 	/**
 	 * The student report view.
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @return \Illuminate\View\View
 	 */
 	public function report(){
-		return view('students.report')->with('studentCount', Student::count());
+		return view('students.report')
+			->with('studentCount', Student::count());
 	}
 
 	/**
-	 * Adds project to favourite projects.
+	 * Adds project to the students favourite projects list.
 	 *
-	 * @return void * @internal param Request $request includes project to add
+	 * @return void
 	 */
-	public function addFavouriteProject(){
-		$project = Project::findOrFail(request('project_id'));
+	public function addFavouriteProject(Request $request){
+		$project = Project::findOrFail($request->project_id);
 
+		// It works.
 		if(Cookie::get('favourite_projects') === "null" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
 			Cookie::queue('favourite_projects', serialize(array($project->id)), 525600);
 		} else {
@@ -119,12 +121,12 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Removes project to favourite projects.
+	 * Removes a project from the students favourite projects list.
 	 *
-	 * @return void * @internal param Request $request includes project to remove
+	 * @return void
 	 */
-	public function removeFavouriteProject(){
-		$project = Project::findOrFail(request('project_id'));
+	public function removeFavouriteProject(Request $request){
+		$project = Project::findOrFail($request->project_id);
 		$favProjects = unserialize(Cookie::get('favourite_projects'));
 
 		if(($key = array_search($project->id, $favProjects)) !== false){
@@ -139,7 +141,7 @@ class StudentController extends Controller{
 	/**
 	 * Updates the students share name to other students preference.
 	 *
-	 * @param \Illuminate\Http\Request
+	 * @param \Illuminate\Http\Request $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -154,14 +156,10 @@ class StudentController extends Controller{
 	/**
 	 * The student propose a project view (Form).
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @return \Illuminate\View\View|\Illuminate\Http\Response
 	 */
 	public function proposeProjectView(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
 
 		if(Auth::user()->student->project_status == "none"){
 			return view("students.propose-project")->with('supervisors', $supervisors);
@@ -173,9 +171,9 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Adds student proposed project to the database
+	 * Adds student proposed project to the database.
 	 *
-	 * @param Request|ProjectForm $request Student proposed project
+	 * @param ProjectForm $request Student proposed project
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -267,10 +265,6 @@ class StudentController extends Controller{
 	public function proposeExistingProjectView(Project $project){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
-
 		if(Auth::user()->student->project_status == "none"){
 			return view("students.propose-existing-project")->with('project', $project)->with('supervisors', $supervisors);
 		} else {
@@ -281,7 +275,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Adds student proposed project to the database
+	 * Adds student proposed project to the database.
 	 *
 	 * @param Request|ProjectForm $request Student proposed project
 	 *
@@ -382,9 +376,9 @@ class StudentController extends Controller{
 
 	/**
 	 * Selects the requested project.
-	 * The student will now have to wait to be approved or rejected.
+	 * If successful, the student will now have to wait to be approved or rejected.
 	 *
-	 * @param \Illuminate\Http\Request $request Included project ID
+	 * @param \Illuminate\Http\Request $request
 	 *
 	 * @return \Illuminate\Http\Response Home page
 	 */
@@ -461,7 +455,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Undoes selected project.
+	 * Undoes a selected project.
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 *
@@ -524,7 +518,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Updates the students second marker
+	 * Updates the students second marker.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
@@ -561,7 +555,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Import students view.
+	 * The import students view.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -570,7 +564,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * The import students view.
+	 * Import students to the production or test database.
 	 *
 	 * @param Request $request
 	 *
@@ -636,7 +630,7 @@ class StudentController extends Controller{
 						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
-							'message' => 'Error with emptying programmes. Genereal Exception: '.$e
+							'message' => 'Error with emptying programmes. General Exception: '.$e
 						));
 					} catch (Throwable $e) {
 						DB::rollBack();
@@ -680,7 +674,7 @@ class StudentController extends Controller{
 						DB::rollBack();
 						return response()->json(array(
 							'successful' => false,
-							'message' => 'Genereal Exception: '.$e
+							'message' => 'General Exception: '.$e
 						));
 					} catch (Throwable $e) {
 						DB::rollBack();
@@ -755,7 +749,7 @@ class StudentController extends Controller{
 					DB::rollBack();
 					return response()->json(array(
 						'successful' => false,
-						'message' => 'Genereal Exception: '.$e
+						'message' => 'General Exception: '.$e
 					));
 				} catch (Throwable $e) {
 					DB::rollBack();
@@ -785,7 +779,7 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * The import students view.
+	 * Imports the students to the test database.
 	 *
 	 * @param $csv
 	 *
@@ -817,13 +811,22 @@ class StudentController extends Controller{
 			));
 		}
 
-		$users = DB::table('test_users')->select('*')->get();
-		$students = DB::table('test_students')->select('*')->get();
+		$users = DB::table('test_users')
+		->select('*')
+		->get();
+
+		$students = DB::table('test_students')
+		->select('*')
+		->get();
+
 		$view = view('admin.partials.import-student-table')
-			->with('users', $users)->with('students', $students)->render();
+			->with('users', $users)
+			->with('students', $students)
+			->render();
 
 		return response()->json(array(
-			'successful' => true, 'message' => $view
+			'successful' => true,
+			'message' => $view
 		));
 	}
 }

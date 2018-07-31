@@ -13,6 +13,9 @@ use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
+/**
+ * The email sent to the student when a supervisor undoes their project selection.
+ */
 class SupervisorUndo extends Mailable{
 	use Queueable, SerializesModels;
 
@@ -56,7 +59,8 @@ class SupervisorUndo extends Mailable{
 	 */
 	public function build(){
 		return $this->view('emails.student.undo')->with([
-			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'supervisor' => $this->supervisor,
+			'student' => $this->student,
 			'project' => $this->project
 		]);
 	}

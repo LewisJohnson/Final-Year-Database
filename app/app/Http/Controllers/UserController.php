@@ -47,10 +47,6 @@ class UserController extends Controller{
 			return $student->user->last_name;
 		});
 
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
-
 		$staffUsers = $staffUsers->sortBy(function($staff){
 			return $staff->last_name;
 		});

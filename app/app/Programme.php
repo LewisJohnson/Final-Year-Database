@@ -11,6 +11,11 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * The programme model.
+ *
+ * @see SussexProjects\Http\Controllers\ProgrammeController
+ */
 class Programme extends Model{
 	use Traits\Uuids;
 

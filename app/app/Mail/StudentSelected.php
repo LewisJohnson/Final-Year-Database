@@ -13,6 +13,9 @@ use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
+/**
+ * The email sent to the supervisor when a student selected one of their projects.
+ */
 class StudentSelected extends Mailable{
 	use Queueable, SerializesModels;
 
@@ -56,7 +59,8 @@ class StudentSelected extends Mailable{
 	 */
 	public function build(){
 		return $this->view('emails.supervisor.student-selected')->with([
-			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'supervisor' => $this->supervisor,
+			'student' => $this->student,
 			'project' => $this->project
 		]);
 	}

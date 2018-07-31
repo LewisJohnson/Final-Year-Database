@@ -49,10 +49,6 @@ class Supervisor extends Model{
 	public static function getDatalist(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$dataListHtml = '<datalist id="supervisor-datalist">';
-
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
 		
 		foreach($supervisors as $supervisor){
 			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
@@ -299,13 +295,19 @@ class Supervisor extends Model{
 		return $offers;
 	}
 
+	/**
+	 * A list of supervisors with the supervisor privilege.
+	 *
+	 * @return QueryBuilder A query builder of all supervisors.
+	 */
 	public static function getAllSupervisorsQuery(){
 		$userTable = new User();
 		$supervisorTable = new Supervisor();
 
 		return Supervisor::join($userTable->getTable().' as user', 'user.id', '=', $supervisorTable->getTable().'.id')
 				->select($supervisorTable->getTable().'.*')
-				->where('user.privileges', 'LIKE', '%supervisor%');
+				->where('user.privileges', 'LIKE', '%supervisor%')
+				->orderBy('user.last_name', 'asc');
 	}
 
 	/**

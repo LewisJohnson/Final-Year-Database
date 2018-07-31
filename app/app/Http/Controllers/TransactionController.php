@@ -30,7 +30,8 @@ class TransactionController extends Controller{
 		$type = $request->query('type') ?? 'project';
 
 		$transactions = Transaction::where('type', $type)
-			->orderBy('transaction_date', 'desc')->get();
+			->orderBy('transaction_date', 'desc')
+			->get();
 
 		return view('admin.transactions')
 			->with('transactions', $transactions)

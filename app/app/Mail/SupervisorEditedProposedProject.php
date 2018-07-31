@@ -11,6 +11,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * The email sent to the student when a supervisor edits their proposed project.
+ */
 class SupervisorEditedProposedProject extends Mailable{
 	use Queueable, SerializesModels;
 
@@ -55,7 +58,8 @@ class SupervisorEditedProposedProject extends Mailable{
 	 */
 	public function build(){
 		return $this->view('emails.student.changed')->with([
-			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'supervisor' => $this->supervisor,
+			'student' => $this->student,
 			'project' => $this->project
 		]);
 	}

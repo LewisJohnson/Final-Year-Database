@@ -13,11 +13,10 @@ use Illuminate\Support\Facades\Session;
 use SussexProjects\User;
 use SussexProjects\Supervisor;
 
-
 /**
  * The topic model.
  *
- * @see SussexProjects\Http\Controllers\topicController
+ * @see SussexProjects\Http\Controllers\TopicController
  */
 class Topic extends Model{
 	use Traits\Uuids;

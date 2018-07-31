@@ -9,6 +9,11 @@ namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * The feedback model.
+ *
+ * @see SussexProjects\Http\Controllers\HomeController
+ */
 class Feedback extends Model{
 	use Traits\Uuids;
 

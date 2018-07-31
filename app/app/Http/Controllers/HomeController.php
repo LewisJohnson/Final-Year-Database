@@ -24,7 +24,7 @@ class HomeController extends Controller{
 	/**
 	 * Displays the home page.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function index(){
 		return view('index');
@@ -33,7 +33,7 @@ class HomeController extends Controller{
 	/**
 	 * Displays the help page.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function help(){
 		return view('help.help');
@@ -42,7 +42,7 @@ class HomeController extends Controller{
 	/**
 	 * Displays the feedback form.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function showFeedbackForm(){
 		return view('forms.feedback');
@@ -52,7 +52,6 @@ class HomeController extends Controller{
 	 * Log feedback to database.
 	 *
 	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
 	 */
 	public function feedback(){
 		$this->validate(request(), ['comment' => 'required']);
@@ -94,8 +93,7 @@ class HomeController extends Controller{
 	/**
 	 * Displays the about page.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function about(){
 		return view('help.about');
@@ -107,7 +105,7 @@ class HomeController extends Controller{
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function snippet(Request $request){
 		$snippetName = $request->query('snippet');
@@ -119,11 +117,10 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Sets the department type.
+	 * A view where the user can select a department.
 	 * e.g. Informatics or engineering.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function setDepartmentView(){
 		return view('set-department');
@@ -146,7 +143,7 @@ class HomeController extends Controller{
 			}
 			Session::put("department", $request->department);
 		} else {
-			session()->flash("message", "Sorry, something went wrong.");
+			session()->flash("message", "The department you selected was invalid.");
 			session()->flash('message_type', 'error');
 		}
 

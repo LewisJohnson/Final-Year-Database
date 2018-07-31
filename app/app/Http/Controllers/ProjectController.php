@@ -72,14 +72,17 @@ class ProjectController extends Controller{
 		$userTable = new User();
 		$projectTable = new Project();
 		$projects = Project::whereNotNull('supervisor_id');
+
 		if(Auth::check()){
 			if(!Auth::user()->isSupervisor()){
 				$projects->where('status', 'on-offer');
 			}
 		}
+
 		if(ldap_guest()){
 			$projects->where('status', 'on-offer');
 		}
+
 		$projects
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
@@ -98,7 +101,7 @@ class ProjectController extends Controller{
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Displays the specified project.
 	 *
 	 * @param Project $project
 	 *
@@ -153,7 +156,8 @@ class ProjectController extends Controller{
 		});
 
 		return response()->json(array(
-			'successful' => true, 'topic' => $result
+			'successful' => true,
+			'topic' => $result
 		));
 	}
 
@@ -177,7 +181,7 @@ class ProjectController extends Controller{
 	}
 
 	/**
-	 * Updates the projects primary topic
+	 * Updates a projects primary topic
 	 *
 	 * @param  \Illuminate\Http\Request $request Contains new primary project ID
 	 *
@@ -203,7 +207,7 @@ class ProjectController extends Controller{
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function create(){
 		return view('projects.create');
@@ -212,7 +216,7 @@ class ProjectController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param Request|ProjectForm $request
+	 * @param ProjectForm $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -227,6 +231,7 @@ class ProjectController extends Controller{
 			$project = new Project;
 			$transaction = new Transaction;
 
+			// Converts ASCII newlines (/r/n) to HTML <br>
 			$newlineFixedDescription = nl2br(request('description'));
 			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
 
@@ -292,6 +297,8 @@ class ProjectController extends Controller{
 
 		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
+
+			// Converts ASCII newlines (/r/n) to HTML <br>
 			$newlineFixedDescription = nl2br(request('description'));
 			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
 
@@ -401,7 +408,7 @@ class ProjectController extends Controller{
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Displays all topics with the number of projects associated with it.
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -411,6 +418,13 @@ class ProjectController extends Controller{
 		return view('projects.topics')->with('topics', $topics);
 	}
 
+	/**
+	 * Displays all projects with the parameter topic.
+	 * 
+	 * @param Topic $topic
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
 	public function byTopic(Topic $topic){
 		return view('projects.index')
 			->with('projects', $topic->getProjectsOnOffer())
@@ -424,10 +438,6 @@ class ProjectController extends Controller{
 	 */
 	public function showSupervisors(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
 
 		return view('projects.supervisors')->with('supervisors', $supervisors);
 	}
@@ -445,27 +455,23 @@ class ProjectController extends Controller{
 			->where('id', '<>', $request->project_id)
 			->where('status', 'on-offer')->count();
 
-		$sameTitle = $sameTitleCount > 0;
-
-		return response()->json(array('hasSameTitle' => $sameTitle));
+		return response()->json(array('hasSameTitle' => $sameTitleCount > 0));
 	}
 
 	/**
 	 * Searches through projects.
 	 *
+	 * SELECT CONDITIONS
+	 *		Select if supervisor take_students is true
+	 *		Select if on-offer
+	 *		Select if NOT archived
+	 *		select if NOT student proposed
+	 * 
 	 * @param  \Illuminate\Http\Request $request
 	 *
 	 * @return \Illuminate\View\View
 	 */
 	public function search(Request $request){
-
-		/* SELECT CONDITIONS
-			Select if supervisor take_students is true
-			Select if on-offer
-			Select if NOT archived
-			select if NOT student proposed
-		*/
-
 		$searchTerm = $request->get("searchTerm");
 		$filters = $request->get("filter");
 		$selectedFilters = "";
@@ -486,6 +492,7 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@index');
 		}
 
+		// Create a string of the filters used (Only used to give the user feedback).
 		foreach($filters as $selected){
 			if($selected !== end($filters)){
 				$selectedFilters .= $selected;
@@ -500,6 +507,7 @@ class ProjectController extends Controller{
 			}
 		}
 
+		// So we can display which filters were selected.
 		session()->flash('search_filters', $selectedFilters);
 
 		$sessionDbPrefix = Session::get('department')."_projects_".Session::get('education_level')["shortName"];
@@ -568,6 +576,7 @@ class ProjectController extends Controller{
 			});
 		}
 
+		// There was no projects to be found
 		if(!$filteredAtLeastOnce || count($projects) == 0){
 			session()->flash("message", 'We couldn\'t find anything for "'.$searchTerm.'" .');
 			session()->flash('message_type', 'warning');
@@ -575,6 +584,7 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@index');
 		}
 
+		// Only 1 project was found by the search, so show this project.
 		if(count($projects) == 1){
 			if($filteredByTopics){
 				$project = $projects->first();
@@ -587,6 +597,7 @@ class ProjectController extends Controller{
 				->with('project', $project);
 		}
 
+		// Returns all the projects found by the search.
 		if(count($projects) > 1){
 			return view('projects.index')
 				->with('projects', $projects)
@@ -594,6 +605,7 @@ class ProjectController extends Controller{
 				->with('searchTerm', $searchTerm);
 		}
 
+		// Fallback
 		return redirect()->action('ProjectController@index');
 	}
 }

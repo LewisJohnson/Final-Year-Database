@@ -9,43 +9,43 @@ namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use SussexProjects\Topic;
 use SussexProjects\ProjectTopic;
+use SussexProjects\Topic;
 use SussexProjects\Transaction;
 
 /**
  * The topic controller.
- *
  * Handles all functions related to topics.
- * 
-*/
+ */
 class TopicController extends Controller{
 
 	public function __construct(){
+		parent::__construct();
 		$this->middleware('auth');
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$topic = Topic::create(['name' => $request->topic_name]);
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' =>'topic',
-				'action' =>'created',
+				'type' => 'topic',
+				'action' => 'created',
 				'topic' => $topic->name,
 				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
+
 			return $topic;
 		});
 
@@ -55,17 +55,18 @@ class TopicController extends Controller{
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' =>'topic',
-				'action' =>'updated',
+				'type' => 'topic',
+				'action' => 'updated',
 				'topic' => $topic->id,
 				'transaction_date' => new Carbon
 			));
@@ -81,18 +82,20 @@ class TopicController extends Controller{
 
 	/**
 	 * Remove the specified resource from storage.
-	 * @param  \Illuminate\Http\Request  $request
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Request $request){
-		$result = DB::transaction(function() use ($request) {
+		$result = DB::transaction(function() use ($request){
 			$projectTopic = ProjectTopic::where('topic_id', $request->topic_id);
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' =>'topic',
-				'action' =>'deleted',
+				'type' => 'topic',
+				'action' => 'deleted',
 				'topic' => $topic->id,
 				'transaction_date' => new Carbon
 			));

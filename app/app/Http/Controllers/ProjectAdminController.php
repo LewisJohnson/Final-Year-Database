@@ -35,25 +35,25 @@ class ProjectAdminController extends Controller{
 
 	/**
 	 * Administrator hub view.
+	 * This is mainly used for mobile.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\View\View
 	 */
 	public function index(){
 		return view('admin.index');
 	}
 
 	/**
-	 * Amend parameters view (mode)
+	 * Amend parameters view.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function amendParametersView(){
 		return view('admin.parameters');
 	}
 
 	/**
-	 * Amend parameters view (mode)
+	 * Amend parameters.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
@@ -84,24 +84,21 @@ class ProjectAdminController extends Controller{
 
 	/**
 	 * The amend supervisor arrangements view.
-	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
+	 * 
+	 * @return \Illuminate\View\View
 	 */
 	public function amendSupervisorArrangementsView(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
 		return view('admin.arrangements')->with('supervisors', $supervisors);
 	}
 
 	/**
-	 * The amend supervisor arrangements view.
+	 * Amends supervisor arrangements.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @return \Illuminate\View\View
 	 */
 	public function amendSupervisorArrangements(Request $request){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
@@ -127,7 +124,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The amend topics view.
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function amendTopicsView(){
 		$topics = Topic::all();
@@ -136,9 +133,9 @@ class ProjectAdminController extends Controller{
 	}
 
 	/**
-	 * The amend topics view.
+	 * The amend programmes view.
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function amendProgrammesView(){
 		$programmes = Programme::all();
@@ -149,7 +146,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The log-in as another user view.
 	 *
-	 * @return \Illuminate\View\View * @internal param Request $request
+	 * @return \Illuminate\View\View 
 	 */
 	public function loginAsView(){
 		$students = Student::all();
@@ -158,10 +155,6 @@ class ProjectAdminController extends Controller{
 
 		$students = $students->sortBy(function($student){
 			return $student->user->last_name;
-		});
-
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
 		});
 
 		$staffUsers = $staffUsers->sortBy(function($staff){
@@ -177,7 +170,7 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @param string $id User ID
 	 *
-	 * @return bool
+	 * @return \Illuminate\View\View
 	 */
 	public function loginAs($id){
 		$user = User::findOrFail($id);
@@ -202,8 +195,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The end of year archive view.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function archiveView(){
 		return view('admin.archive');
@@ -218,7 +210,6 @@ class ProjectAdminController extends Controller{
 	 * - Remove all students from the user table.
 	 *
 	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
 	 */
 	public function archive(){
 		DB::transaction(function(){
@@ -261,13 +252,7 @@ class ProjectAdminController extends Controller{
 		$students = Student::all();
 
 		$sorted = $students->sortBy(function($student) use ($request){
-			if($request->query("sort") === "firstname"){
-				return $student->user->first_name;
-			} elseif($request->query("sort") === "lastname") {
-				return $student->user->last_name;
-			}
-
-			return true;
+			return $student->user->last_name;
 		});
 
 		return view('admin.assign-marker-manual')
@@ -277,8 +262,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The automatic (Algorithmic) assign second marker view.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function computeSecondMarkerView(){
 		return view('admin.assign-marker-automatic');
@@ -288,7 +272,6 @@ class ProjectAdminController extends Controller{
 	 * The actual action of assigning second markers to students.
 	 *
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
-	 * @internal param Request $request
 	 */
 	public function calculateSecondMarkers(){
 		$studentTable = new Student;
@@ -411,7 +394,7 @@ class ProjectAdminController extends Controller{
 	 * An overview of each automatically assigned second supervisor.
 	 *
 	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 
 	 */
 	public function assignSecondMarkerAutomaticTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
@@ -427,7 +410,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The swap second marker view.
 	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View * @internal param Request $request
+	 * @return \Illuminate\View\View 
 	 */
 	public function swapSecondMarkerView(){
 		$students = Student::where('project_status', 'accepted')->get();
@@ -459,21 +442,20 @@ class ProjectAdminController extends Controller{
 	}
 
 	/**
-	 * The amend supervisor arrangements view.
+	 * The export second marker data view.
 	 *
-	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 * @return \Illuminate\View\View
 	 */
 	public function exportSecondMarkerDataView(){
 		return view('admin.export-marker');
 	}
 
 	/**
-	 * The amend supervisor arrangements view.
+	 * Exports the second marker data to either JSON or CSV.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\Response The second marker data.
 	 */
 	public function exportSecondMarkerData(Request $request){
 		$students = Student::all();

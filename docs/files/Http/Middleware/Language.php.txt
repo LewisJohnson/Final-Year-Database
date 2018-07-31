@@ -8,22 +8,24 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
-class Language {
+class Language{
 
 	/**
 	 * Handle an incoming request.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure                 $next
+	 *
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
 		if(Session::has('department')){
 			App::setLocale(Session::get('department'));
 		}
+
 		return $next($request);
 	}
 }

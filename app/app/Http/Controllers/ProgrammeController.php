@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SussexProjects\Programme;
 
+/**
+ * The programme controller.
+ * Handles all functions related to programmes.
+ */
 class ProgrammeController extends Controller{
 
 	public function __construct(){

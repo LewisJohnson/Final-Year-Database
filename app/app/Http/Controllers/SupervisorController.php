@@ -70,7 +70,7 @@ class SupervisorController extends Controller{
 	 * A table of all accepted students.
 	 *
 	 * @return \Illuminate\Http\Response
-	 * @internal param Request $request
+	 
 	 */
 	public function acceptedStudentTable(){
 		return view('supervisors.partials.accepted-students-table');

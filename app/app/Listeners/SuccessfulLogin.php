@@ -11,6 +11,9 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Successful login is called after a successful login event has occurred.
+ */
 class SuccessfulLogin{
 
 	/**
@@ -19,7 +22,7 @@ class SuccessfulLogin{
 	public function __construct(){}
 
 	/**
-	 * Handles a successful login event.
+	 * Sets the users education level and updates their last login time.
 	 *
 	 * @param  Login $event
 	 *

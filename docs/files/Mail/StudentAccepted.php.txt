@@ -1,13 +1,21 @@
 <?php
+/**
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
 namespace SussexProjects\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
 
+/**
+ * The email sent to the student when they are accepted.
+ */
 class StudentAccepted extends Mailable{
 	use Queueable, SerializesModels;
 
@@ -17,7 +25,7 @@ class StudentAccepted extends Mailable{
 	 * @var Supervisor
 	 */
 	public $supervisor;
-	
+
 	/**
 	 * The supervisor instance.
 	 *
@@ -31,11 +39,12 @@ class StudentAccepted extends Mailable{
 	 * @var Project
 	 */
 	public $project;
-	
+
 	/**
 	 * Create a new message instance.
 	 *
-	 * @return void
+	 * @param Supervisor $supervisor
+	 * @param Student    $student
 	 */
 	public function __construct(Supervisor $supervisor, Student $student){
 		$this->supervisor = $supervisor;
@@ -49,12 +58,11 @@ class StudentAccepted extends Mailable{
 	 * @return $this
 	 */
 	public function build(){
-		return $this->view('emails.student.accepted')
-			->with([
-				'supervisor' => $this->supervisor,
-				'student' => $this->student,
-				'project' => $this->project
-			]);;
+		return $this->view('emails.student.accepted')->with([
+			'supervisor' => $this->supervisor,
+			'student' => $this->student,
+			'project' => $this->project
+		]);
 	}
 }
 
