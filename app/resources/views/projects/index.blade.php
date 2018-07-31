@@ -65,7 +65,7 @@
 						<th @if($view != "index") class="pointer" @endif data-default="false">Short Description</th>
 						<th @if($view != "index") class="pointer" @endif data-default="false">Full Description</th>
 						<th @if($view != "index") class="pointer" @endif data-default="desktop">Skills</th>
-						@if($view != "supervisor")<th @if($view != "index") class="pointer" @endif data-default="true">Supervisor</th>@endif
+						@if(!($view == "supervisor" || $view == "personal"))<th @if($view != "index") class="pointer" @endif data-default="true">Supervisor</th>@endif
 						@if($view == "personal") <th @if($view != "index") class="pointer" @endif data-default="true">Status</th> @endif
 					</tr>
 				</thead>

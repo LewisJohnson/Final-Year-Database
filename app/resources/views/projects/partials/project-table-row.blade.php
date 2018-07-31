@@ -16,7 +16,7 @@
 	<td>{!! html_entity_decode($project->description) !!}</td>
 	<td>{{ $project->skills }}</td>
 
-	@if($view != "supervisor")
+	@if(!($view == "supervisor" || $view == "personal"))
 		<td>
 			<a href="{{ action('UserController@projects', $project->supervisor->user) }}">{{ $project->supervisor->user->getFullName() }}</a>
 		</td>
