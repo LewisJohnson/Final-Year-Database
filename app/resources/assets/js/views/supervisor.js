@@ -27,14 +27,47 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		IS_SELECTED: 'is-selected'
 	};
 
+
 	ProjectTopics.prototype.Selectors_ = {
-		ADD_TOPIC_INPUT: '#addTopicInput',
-		NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
+		EDIT__ADD_TOPIC_INPUT: '#add-topic-input',
+		EDIT__NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
+		EDIT__PROJECT_FORM : '#edit-project-form',
+		
+		CREATE__ADD_TOPIC_INPUT: '#create-project-add-topic-input',
+		CREATE__NEW_TOPIC_INPUT_CONTAINER: '#create-topic-input-container',
+		CREATE__PROJECT_FORM : '#create-project-form',
 	};
 
 	var projectTopics = new ProjectTopics();
 
 	ProjectTopics.prototype.functions = {
+		addTopicToProjectBeingCreated: function (topicName) {
+			if($(".topics-list.create li.topic:last").length > 0){
+				$(".topics-list.create li.topic:last").after('<li class="topic" data-topic-id="' + topicName + '"><button type="button" class="topic-remove">X</button><input type="text" readonly name="topics[]" class="topic-name" size="' + topicName.length + '" value="' + topicName +' "></li>');
+			} else {
+				$(".topics-list.create").prepend('<li class="topic first" data-topic-id="' + topicName + '"><button type="button" class="topic-remove">X</button><input type="text" readonly name="topics[]" class="topic-name" size="' + topicName.length + '" value="' + topicName +' "></li>');
+			}
+		},
+
+		removeTopicToProjectBeingCreated: function (topicId) {
+			$(".topics-list.create li.topic").each(function(i, obj) {
+				if($(this).data("topic-id") == topicId){
+					$(this).remove();
+				}
+			});
+		},
+
+		updateProjectPrimaryTopicToProjectBeingCreated: function (topicId) {
+			$(".topics-list.create li.topic").each(function(i, obj) {
+				if($(this).data("topic-id") == topicId){
+					$(this).addClass("first");
+				} else {
+					$(this).removeClass("first");
+				}
+			});
+		},
+
+		// EXISTING PROJECT
 		addTopicToProject: function (projectId, topicName) {
 			$('.loader').show(0);
 			var ajaxUrl = "projects/topic-add";
@@ -46,16 +79,19 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					project_id: projectId
 				},
 				success: function(response){
-					$(projectTopics.Selectors_.ADD_TOPIC_INPUT).val('');
+					$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).val('');
 
-					if($(".topics-list.edit li.topic:last").length > 0){
-						$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+					if(response.successful){
+						if($(".topics-list.edit li.topic:last").length > 0){
+							$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+						} else {
+							$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+						}
 					} else {
-						$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+						createToast('error', response.message);
 					}
 				}
-			}).done(function(response){
-				$('body').append(response);
+			}).always(function(data){
 				$('.loader').hide(0);
 			});
 		},
@@ -77,7 +113,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 						}
 					});
 				},
-			}).done(function(){
+			}).always(function(){
 				$(".loader").hide(0);
 			});
 		},
@@ -93,7 +129,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					project_id: projectId
 				},
 				success: function(){
-					$("#editProjectForm").attr("data-project-id", topicId);
 					$(".topics-list.edit li.topic").each(function(i, obj) {
 						if($(this).data("topic-id") == topicId){
 							$(this).addClass("first");
@@ -102,45 +137,84 @@ import Swappable from '@shopify/draggable/lib/swappable';
 						}
 					});
 				},
-			}).done(function(){
+			}).always(function(){
 				$(".loader").hide(0);
 			});
-		},
+		}
 	};
 
-	const swappable = new Swappable(document.querySelectorAll(".topics-list.edit"), {
+	/*
+		=================
+		  CREATE PROJECT
+		=================
+	*/
+	const createSwappable = new Swappable(document.querySelectorAll(".topics-list.create"), {
 		draggable: ".topic",
 	});
 
-	window["swappable"] = swappable;
-
-	swappable.on('swappable:swapped', function(){
-		var projectId = $('#editProjectForm').data('project-id');
-		var originalPrimaryTopicId = $('#editProjectForm').data('primary-topic-id');
-		var topicId = $(".topics-list.edit li:first-child").data('topic-id');
+	createSwappable.on('swappable:swapped', function(){
+		var originalPrimaryTopicId = $(projectTopics.Selectors_.CREATE__PROJECT_FORM).data('primary-topic-id');
+		var topicId = $(".topics-list.create li:first-child").data('topic-id');
 
 		if(topicId != originalPrimaryTopicId){
-			projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
+			projectTopics.functions.updateProjectPrimaryTopicToProjectBeingCreated(topicId);
 		}
 	});
 
 	// Add new topic
-	$(projectTopics.Selectors_.ADD_TOPIC_INPUT).keypress(function(e) {
+	$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).keypress(function(e) {
 		if (e.which == 44 || e.keyCode == 188) {
-			var projectId = $("#editProjectForm").data('project-id');
+			e.preventDefault();
+			projectTopics.functions.addTopicToProjectBeingCreated($(this).val());
+			$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).val('');
+		}
+
+	});
+
+	// Remove topic
+	$('.topics-list.create').on('click', '.topic .topic-remove', function(){
+		var topicId = $(this).parent('li').data('topic-id');
+		projectTopics.functions.removeTopicToProjectBeingCreated(topicId);
+	});
+
+	$(projectTopics.Selectors_.CREATE__NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
+		$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).focus();
+	});
+
+	/*
+		=================
+		  EDIT PROJECT
+		=================
+	*/
+	const editSwappable = new Swappable(document.querySelectorAll(".topics-list.edit"), {
+		draggable: ".topic",
+	});
+
+
+	editSwappable.on('swappable:stop', function(){
+		var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
+		var topicId = $(".topics-list.edit li:first-child").data('topic-id');
+
+		projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
+	});
+
+	// Add new topic
+	$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).keypress(function(e) {
+		if (e.which == 44 || e.keyCode == 188) {
+			var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
 			projectTopics.functions.addTopicToProject(projectId, $(this).val());
 		}
 	});
 
 	// Remove topic
 	$('.topics-list.edit').on('click', '.topic .topic-remove', function(){
-		var projectId = $("#editProjectForm").data('project-id');
+		var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
 		var topicId = $(this).parent('li').data('topic-id');
 		projectTopics.functions.removeTopicFromProject(projectId, topicId);
 	});
 
-	$(projectTopics.Selectors_.NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
-		$(projectTopics.Selectors_.ADD_TOPIC_INPUT).focus();
+	$(projectTopics.Selectors_.EDIT__NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
+		$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).focus();
 	});
 
 	/* ========

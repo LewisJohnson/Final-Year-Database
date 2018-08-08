@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\QueryException;
 use Stevebauman\Purify\Facades\Purify;
 use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Mail\SupervisorEditedProposedProject;
@@ -46,12 +47,17 @@ class ProjectController extends Controller{
 
 		$purifier = Purify::getPurifier();
 		$config = $purifier->config;
-
-		$config->set('Core.CollectErrors', true);
+		
+		$config->set('Core.RemoveProcessingInstructions', true);		
 		$config->set('Attr.ID.HTML5', true);
+		$config->set('AutoFormat.Linkify', true);
 		$config->set('HTML.TargetBlank', true);
+		$config->set('HTML.SafeObject', true);
+		$config->set('HTML.SafeScripting', '');
 		$config->set('HTML.ForbiddenElements', 'h1,h2,h3,h4,h5,h6,script,html,body');
+		$config->set('Output.FlashCompat', true);
 		$config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
+
 		$htmlPurifyConfig = $config;
 	}
 
@@ -132,13 +138,13 @@ class ProjectController extends Controller{
 	 */
 	public function addTopic(Request $request){
 		$result = DB::transaction(function() use ($request){
-			$topic = Topic::where('name', request('topic_name'))->first();
-			$project = Project::findOrFail(request('project_id'));
+			$topic = Topic::where('name', $request->topic_name)->first();
+			$project = Project::findOrFail($request->project_id);
 
 			// If topic isn't in the relevant topic database, create a new one.
 			if($topic == null){
 				$topic = new Topic;
-				$topic->name = request('topic_name');
+				$topic->name = $request->topic_name;
 				$topic->save();
 			}
 
@@ -150,15 +156,26 @@ class ProjectController extends Controller{
 			$projectTopic->topic_id = $topic->id;
 			$projectTopic->project_id = $project->id;
 
-			$projectTopic->save();
+			try{
+				$projectTopic->save();
+			} catch (QueryException $e){
+				return false;
+			}
 
 			return Topic::findOrFail($topic->id);
 		});
 
-		return response()->json(array(
-			'successful' => true,
-			'topic' => $result
-		));
+		if(!$result){
+			return response()->json(array(
+					'successful' => false,
+					'message' => 'Topic "'.$request->topic_name.'" already belongs to the project.'
+				));
+		} else {
+			return response()->json(array(
+				'successful' => true,
+				'topic' => $result
+			));
+		}
 	}
 
 	/**
@@ -170,8 +187,8 @@ class ProjectController extends Controller{
 	 */
 	public function removeTopic(Request $request){
 		DB::transaction(function() use ($request){
-			$topic = Topic::findOrFail(request('topic_id'));
-			$project = Project::findOrFail(request('project_id'));
+			$topic = Topic::findOrFail($request->topic_id);
+			$project = Project::findOrFail($request->project_id);
 
 			ProjectTopic::where('project_id', $project->id)
 				->where('topic_id', $topic->id)->delete();
@@ -189,8 +206,8 @@ class ProjectController extends Controller{
 	 */
 	public function updatePrimaryTopic(Request $request){
 		DB::transaction(function() use ($request){
-			$topic = Topic::findOrFail(request('topic_id'));
-			$project = Project::findOrFail(request('project_id'));
+			$topic = Topic::findOrFail($request->topic_id);
+			$project = Project::findOrFail($request->project_id);
 
 			// Clear primary
 			ProjectTopic::where('project_id', $project->id)
@@ -198,7 +215,8 @@ class ProjectController extends Controller{
 
 			// Set new primary project
 			ProjectTopic::where('project_id', $project->id)
-				->where('topic_id', $topic->id)->update(['primary' => 1]);
+				->where('topic_id', $topic->id)
+				->update(['primary' => 1]);
 		});
 
 		return response()->json(array('successful' => true));
@@ -221,7 +239,6 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(ProjectForm $request){
-
 		// Not included in ProjectForm because of update 
 		$this->validate(request(), [
 			'status' => 'required'
@@ -230,20 +247,40 @@ class ProjectController extends Controller{
 		$result = DB::transaction(function() use ($request){
 			$project = new Project;
 			$transaction = new Transaction;
-
-			// Converts ASCII newlines (/r/n) to HTML <br>
-			$newlineFixedDescription = nl2br(request('description'));
-			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
+			$cleanHtml = Purify::clean($request->description, $this->htmlPurifyConfig);
 
 			$project->fill(array(
-				'title' => request('title'),
-				'description' => $clean_html,
-				'status' => request('status'),
-				'skills' => request('skills')
+				'title' => $request->title,
+				'description' => $cleanHtml,
+				'status' => $request->status,
+				'skills' => $request->skills
 			));
 
 			$project->supervisor_id = Auth::user()->supervisor->id;
 			$project->save();
+
+			if(!empty($request->topics)){
+				foreach ($request->topics as $createTopicName) {
+					$topic = Topic::where('name', $createTopicName)->first();
+
+					// If topic isn't in the relevant topic database, create a new one.
+					if($topic == null){
+						$topic = new Topic;
+						$topic->name = $createTopicName;
+						$topic->save();
+					}
+
+					// Validate data
+					$projectTopic = new ProjectTopic;
+
+					// the project has no other topics, so make it's first topic the primary topic
+					$projectTopic->primary = count($project->topics) == 0;
+					$projectTopic->topic_id = $topic->id;
+					$projectTopic->project_id = $project->id;
+
+					$projectTopic->save();
+				}
+			}
 
 			$transaction->fill(array(
 				'type' => 'project',
@@ -297,10 +334,7 @@ class ProjectController extends Controller{
 
 		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
-
-			// Converts ASCII newlines (/r/n) to HTML <br>
-			$newlineFixedDescription = nl2br(request('description'));
-			$clean_html = Purify::clean($newlineFixedDescription, $this->htmlPurifyConfig);
+			$cleanHtml = Purify::clean($input->description, $this->htmlPurifyConfig);
 
 			// So student proposals can't be overridden
 			if($project->status == "student-proposed"){
@@ -311,21 +345,23 @@ class ProjectController extends Controller{
 
 			$project->update([
 				'title' => $input->title,
-				'description' => $clean_html,
+				'description' => $cleanHtml,
 				'status' => $status,
 				'skills' => $input->skills
 			]);
 
 			if($project->status == "student-proposed"){
 				$transaction->fill(array(
-					'type' => 'project', 'action' => 'updated',
+					'type' => 'project',
+					'action' => 'updated',
 					'project' => $project->id,
 					'student' => Auth::user()->student->id,
 					'transaction_date' => new Carbon
 				));
 			} else {
 				$transaction->fill(array(
-					'type' => 'project', 'action' => 'updated',
+					'type' => 'project',
+					'action' => 'updated',
 					'project' => $project->id,
 					'supervisor' => Auth::user()->supervisor->id,
 					'transaction_date' => new Carbon
@@ -443,7 +479,7 @@ class ProjectController extends Controller{
 	}
 
 	/**
-	 * Removes a topic to a project.
+	 * Checks to see if a project name is already in-use by on a on-offer project. 
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 *
@@ -455,7 +491,35 @@ class ProjectController extends Controller{
 			->where('id', '<>', $request->project_id)
 			->where('status', 'on-offer')->count();
 
-		return response()->json(array('hasSameTitle' => $sameTitleCount > 0));
+		$similiarTitleCount = 0;
+		if(strlen($request->project_title) > 10){
+			$similiarTitleCount = Project::select('title')
+				->where('title', 'LIKE', $request->project_title.'%')
+				->where('id', '<>', $request->project_id)
+				->where('status', 'on-offer')->count();
+		}
+
+		return response()->json(array(
+			'hasSameTitle' => $sameTitleCount > 0,
+			'hasSimiliarTitle' => $similiarTitleCount > 0
+		));
+	}
+
+	/**
+	 * Checks to see if a project name is already in-use by on a on-offer project. 
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function projectDescriptionPreview(Request $request){
+		if(strlen($request->description) < 1){
+			$returnString = "<p style='padding:2rem;text-align:center;'>Nothing to see here yet...</p>";
+		} else {
+			$returnString = Purify::clean($request->description, $this->htmlPurifyConfig);
+		}
+
+		return response()->json(array('message' => $returnString ));
 	}
 
 	/**

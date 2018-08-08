@@ -8,12 +8,8 @@
 	@endif
 
 	<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-		@php
-			$s = html_entity_decode($project->description);
-			$sub = substr($s, 0, 100);
-		@endphp
-	<td class="short-description" >{!! htmlentities($sub) !!}@if(strlen($project->description) > 100)...@endif</td>
-	<td>{!! html_entity_decode($project->description) !!}</td>
+	<td class="short-description" >{{ $project->getShortDescription() }}</td>
+	<td>{!! html_entity_decode($project->description, ENT_HTML5 | ENT_COMPAT) !!}</td>
 	<td>{{ $project->skills }}</td>
 
 	@if(!($view == "supervisor" || $view == "personal"))

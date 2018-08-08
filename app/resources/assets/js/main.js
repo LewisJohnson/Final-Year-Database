@@ -80,10 +80,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	// Makes primary topic first
 	$('.topics-list').prepend($('.first'));
 	if($('.topics-list .no-topics').length < 1){
-		$('.topics-list li').css("opacity", 0);
+		$('[class="topics-list"] li').css("opacity", 0);
 
 		var animatedTopicsAnimationDelay = 0;
-		$('.topics-list li').each(function(index, value) {
+		$('[class="topics-list"] li').each(function(index, value) {
 			animatedTopicsAnimationDelay += 200;
 			setTimeout(function(){
 				$(this).addClass("slideInRight animated");
@@ -274,7 +274,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			supervisorForm.show(400);
 		} else {
 			var checked = false;
-			$('.user-form-student').removeAttr('disabled' 	);
+			$('.user-form-student').removeAttr('disabled');
 			$('.user-form-supervisor').each(function() {
 				if($(this).prop('checked')){
 					checked = true;
@@ -600,7 +600,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	if($('.project-title').length > 0){
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
-		var projectId = $('#editProjectForm').data('project-id');
+		var projectId = $('.project-form').data('project-id');
 
 		// Bind value
 		// Only bind blur to not spam DB
@@ -628,9 +628,16 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			},
 			success:function(result){
 				if(result.hasSameTitle){
-					$('#title-already-used').show();
+					$('#title-already-used').fadeIn(config.animtions.medium);
+					$('#similar-title-already-used').fadeOut(config.animtions.medium);
 				} else {
-					$('#title-already-used').hide();
+					$('#title-already-used').fadeOut(config.animtions.medium);
+
+					if(result.hasSimiliarTitle){
+						$('#similar-title-already-used').fadeIn(config.animtions.medium);
+					} else {
+						$('#similar-title-already-used').fadeOut(config.animtions.medium);
+					}
 				}
 			},
 		});
@@ -666,25 +673,44 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		$('.html-editor').after(previewHtml);
 
 		$('.html-editor--preview-container').hide();
-		$('.html-editor--preview').html($('.html-editor--input').val());
-	});
-
-	$('.html-editor--input').on('change', function(){
-		var val = $(this).val().replace(/(?:\r\n|\r|\n)/g, '<br>');
-		$('.html-editor--preview').html(val);
+		$('.html-editor--top-buttons .html').addClass('active');
 	});
 
 	$('.html-editor--top-buttons .html').on('click', function(){
+		$(this).addClass('active');
+		$('.html-editor--top-buttons .preview').removeClass('active');
+
 		$('.html-editor--input').show();
 		$('.html-editor--toolbar').show();
 		$('.html-editor--preview-container').hide();
 	});
 
 	$('.html-editor--top-buttons .preview').on('click', function(){
+		if($(this).hasClass('active')){
+			return;
+		}
+
+		$(this).addClass('active');
+		$('.html-editor--top-buttons .html').removeClass('active');
+		$('.html-editor--preview').html('<div style="display: block;margin: 70px auto;" class="loader loader--large"></div>');
 		$('.html-editor--input').hide();
 		$('.html-editor--toolbar').hide();
 		$('.html-editor--preview-container').show();
+		updateProjectPreview();
 	});
+
+	function updateProjectPreview(){
+		$.ajax({
+			url: 'projects/description-preview',
+			type:'POST',
+			data: {
+				'description': $('.html-editor--input').val()
+			},
+			success: function(result){
+				$('.html-editor--preview').html(result.message);
+			}
+		});
+	}
 
 	// Toggle label flips toggle
 	$(".html-editor").on("click", ".html-editor--toolbar li button",  function(e) {
@@ -713,6 +739,18 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 				wrapTextWithTag('html-editor--input', 'u');
 				break;
 
+			case "strike":
+				wrapTextWithTag('html-editor--input', 's');
+				break;
+				
+			case "video":
+				var inputUrl = prompt("Enter the video URL", "https://www.");
+				var html = '<video controls>\n';
+					html += '<source src="'+ inputUrl +'" type="video/mp4">\n';
+					html += '</video>\n';
+				insertAtCaret('html-editor--input', html);
+				break;
+
 			case "img":
 				var inputUrl = prompt("Enter the image URL", "https://www.");
 				var inputAlt = prompt("Enter alt text", "Image of Sussex campus");
@@ -739,8 +777,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 					escapeKey: true,
 					animateFromElement : false,
 					backgroundDismiss: true,
-					title: 'HTML Editor Info',
-					content: 'All links you add will open in a new tab. All HTML 5 elements are valid for the description field, excluding; <br><br> <ul><li>Script tags</li><li>Heading tags</li><li>HTML root tags</li><li>Body tags</li></ul>',
+					title: 'HTML Editor',
+					content: 'Here are some notes to... note about the HTML editor. <ul style="text-align: left;padding-top: 15px;"><li>All external links will open in a new tab.</li><li>All HTML 5 elements are valid for the description field, excluding;<ul><li>Script tags.</li><li>Heading tags.</li><li>HTML document tags.</li><li>Body tags.</li></li></ul></ul>',
 				});
 				break;
 		}

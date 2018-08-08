@@ -1,24 +1,25 @@
 @extends('layouts.app')
-@section ('content')
 
 @section('scripts')
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>
 @endsection
 
+@section ('content')
 {!! SussexProjects\Topic::getDatalist() !!}
 
 <div class="centered width--800">
 	<h1>You are editing "{{ $project->title }}".</h1>
 
 	<div id="project-card" class="card project-card card--margin-vertical">
-		<form id="editProjectForm" class="form form--flex" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
+		<form id="edit-project-form" class="form form--flex project-form" role="form" method="POST" action="{{ action('ProjectController@edit', $project->id)}}" data-project-id="{{ $project->id }}" @if($project->getPrimaryTopic()) data-primary-topic-id="{{ $project->getPrimaryTopic()->id }}" @endif >
 			{{ csrf_field() }}
 			{{ method_field('PATCH') }}
 
 			<div class="form-field">
 				<label for="title">Title <ins style="margin-left:5px; font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
 				<input class="project-title" maxlength="255" type="text" name="title" id="title" value="{{ $project->title }}">
-				<p id="title-already-used" style="display: hidden" class="help-block">This project title is already in use.</p>
+				<p id="title-already-used" style="display: none;" class="inline-error-block">This project title is already in use.</p>
+				<p id="similar-title-already-used" style="display: none;" class="inline-info-block">A similar project title is already in use.</p>
 			</div>
 
 			<div class="form-field">
@@ -51,7 +52,7 @@
 									</li>
 								@endif
 							@endforeach
-							<input list="topicsDataList" type="text" name="name" id="addTopicInput">
+							<input list="topicsDataList" type="text" name="name" id="add-topic-input">
 						</ul>
 						<div class="loader"></div>
 					</div>

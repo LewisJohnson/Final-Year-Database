@@ -1,6 +1,10 @@
 @extends('layouts.app')
-@section ('content')
 
+@section('scripts')
+	<script src="{{ asset('js/views/supervisor.js') }}"></script>
+@endsection
+
+@section ('content')
 <div class="centered width--800">
 	<div class="card">
 		<h1>Create New Project</h1>
@@ -10,5 +14,4 @@
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 	</div>
 </div>
-
 @endsection

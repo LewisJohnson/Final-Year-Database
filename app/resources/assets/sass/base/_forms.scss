@@ -53,6 +53,7 @@ button{
 		resize: vertical;
 		min-height: 36px;
 		height: 150px;
+		display: block;
 	}
 }
 
@@ -401,6 +402,22 @@ a.button--small{
 	margin-bottom: 1.2rem;
 	color: red;
 	font-weight: 900;
+}
+
+.inline-error-block{
+	margin: 0;
+	color: white;
+	padding: 5px;
+	background: $error-bg;
+	font-weight: 500;
+}
+
+.inline-info-block{
+	margin: 0;
+	color: white;
+	padding: 5px;
+	background: $accent-tip-background;
+	font-weight: 500;
 }
 
 .chip{

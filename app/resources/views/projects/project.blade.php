@@ -41,8 +41,8 @@
 		@endif
 
 		<h3>Description</h3>
-		<div>
-			<p>{!! html_entity_decode($project->description) !!}</p>
+		<div class="description">
+			<p>{!! html_entity_decode($project->description, ENT_HTML5 | ENT_COMPAT) !!}</p>
 		</div>
 
 		<h3>Skills</h3>

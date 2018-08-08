@@ -288,7 +288,6 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
    7. STUDENT ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function() {
-
 	// Propose project view
 	Route::get('students/project-propose', 'StudentController@proposeProjectView');
 
@@ -357,6 +356,9 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Check already used project title
 	Route::post('projects/check-title', 'ProjectController@projectNameAlreadyExists');
 
+	// Convert html using purify
+	Route::post('projects/description-preview', 'ProjectController@projectDescriptionPreview');
+
 	/* PROJECT TOPIC ROUTES */
 	// Add topic to project
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
@@ -385,6 +387,7 @@ Route::group(['middleware' => ['web', 'auth']], function() {
 ============================ */
 Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function() {
 
+	/* USER ROUTES */
 	Route::get('users/{user}/projects', 'UserController@projects');
 
 	/* PROJECT ROUTES */

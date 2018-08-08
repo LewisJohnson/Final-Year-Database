@@ -68,7 +68,7 @@ ul.topics-list {
 	}
 }
 
-.topics-list.edit {
+.topics-list.edit, .topics-list.create {
 	display: inline-block;
 
 	.topic-remove {
@@ -78,7 +78,7 @@ ul.topics-list {
 		width: 30px;
 		text-align: center;
 		border: none;
-		border-right: 1px solid white;
+		border-right: 1px solid #969696;
 	}
 
 	.topic{
@@ -87,8 +87,9 @@ ul.topics-list {
 		cursor: -moz-grab;
 		cursor: -webkit-grab;
 		user-select: none;
+		overflow: hidden;
 
-		&:active{
+		&:active, &:focus{
 			cursor: grabbing;
 			cursor: -moz-grabbing;
 			cursor: -webkit-grabbing;
@@ -111,9 +112,26 @@ ul.topics-list {
 	}
 }
 
-#addTopicInput{
+.topics-list.create{
+	.topic{
+		input{
+			width: auto;
+			background: none;
+			border: none;
+			clear: none;
+			display: inline-block;
+			text-decoration: none;
+			color: inherit;
+			margin: 0;
+			padding: 5px;
+		}
+	}
+}
+
+#add-topic-input, #create-project-add-topic-input{
 	outline: none;
 	display: inline-block;
 	width: auto;
 	border: none;
+	vertical-align: top;
 }

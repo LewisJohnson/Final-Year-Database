@@ -176,4 +176,26 @@ class Project extends Model{
 
 		return false;
 	}
+
+	/**
+	 * Gets a text only version of the projects description.
+	 *
+	 * @return boolean
+	 */
+	public function getShortDescription(){
+		$returnString = strip_tags($this->description);
+		$longString = false;
+
+		if(strlen($returnString) > 70){
+			$longString = true;
+		}
+
+		$returnString = substr($returnString, 0, 70);
+
+		if($longString){
+			$returnString .= "...";
+		}
+
+		return $returnString;
+	}
 }

@@ -9,18 +9,19 @@
 	@endif
 @endif
 
-<form class="form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="{{ action('StudentController@proposeProject') }}" @elseif($user_type == "supervisor") action="{{ action('ProjectController@store') }}" @endif>
+<form id="create-project-form" class="project-form form form--flex" method="POST" autocomplete="off" @if($user_type == "student") action="{{ action('StudentController@proposeProject') }}" @elseif($user_type == "supervisor") action="{{ action('ProjectController@store') }}" @endif>
 	{{ csrf_field() }}
 	@if($user_type == "supervisor")
-		<p><b>Supervisor:</b> {{ Auth::user()->getFullName() }}</p>
+		<p><b>Supervisor: </b>{{ Auth::user()->getFullName() }}</p>
 	@elseif($user_type == "student")
-		<p><b>Student:</b> {{ Auth::user()->getFullName() }}</p>
+		<p><b>Student: </b>{{ Auth::user()->getFullName() }}</p>
 	@endif
 
 	<div class="form-field">
 		<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
 		<input class="project-title" maxlength="255" type="text" name="title" id="title" autofocus="true" value="{{ old('title') }}" required>
-		<p id="title-already-used" style="display: hidden" class="help-block">This project title is already in use.</p>
+		<p id="title-already-used" style="display: none;" class="inline-error-block">This project title is already in use.</p>
+		<p id="similar-title-already-used" style="display: none;" class="inline-info-block">A similar project title is already in use.</p>
 	</div>
 
 	<div class="form-field">
@@ -37,17 +38,22 @@
 
 	@if($user_type == "supervisor")
 		<div class="form-field">
+			<label>Topics <ins style="margin-left:5px; font-size: 12px;">Press COMMA to save topic.</ins></label>
+			<div id="create-topic-input-container" class="fake-input">
+				<ul class="topics-list create">
+					<input list="topicsDataList" type="text" id="create-project-add-topic-input">
+				</ul>
+				<div class="loader"></div>
+			</div>
+		</div>
+
+		<div class="form-field">
 			<label for="skills">Status</label>
 			<select name="status" id="status">
 				<option value="on-offer">On Offer</option>
 				<option value="withdrawn">Withdrawn</option>
 				<option value="archived">Archived</option>
 			</select>
-		</div>
-
-		<div class="form-field">
-			<label>Topics</label>
-			<p>You may add topics after the project has been created.</p>
 		</div>
 	@elseif($user_type == "student")
 		<input type="hidden" name="status" value="student-proposed">

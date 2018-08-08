@@ -52,11 +52,16 @@ class StudentController extends Controller{
 		$purifier = Purify::getPurifier();
 		$config = $purifier->config;
 
-		$config->set('Core.CollectErrors', true);
+		$config->set('Core.RemoveProcessingInstructions', true);		
 		$config->set('Attr.ID.HTML5', true);
+		$config->set('AutoFormat.Linkify', true);
 		$config->set('HTML.TargetBlank', true);
+		$config->set('HTML.SafeObject', true);
+		$config->set('HTML.SafeScripting', '');
 		$config->set('HTML.ForbiddenElements', 'h1,h2,h3,h4,h5,h6,script,html,body');
+		$config->set('Output.FlashCompat', true);
 		$config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
+		
 		$htmlPurifyConfig = $config;
 	}
 
