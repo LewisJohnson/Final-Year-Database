@@ -63,7 +63,7 @@
 			</div>
 		@elseif(!empty(Session::get('department')) && Request::path() !== 'set-department')
 			<div class="mobile-menu-container" role="button">
-				<button class="button" style="margin-top: 5px; color: rgb(255, 255, 255);" data-activator="true" data-dialog="login">Login</button>
+				<button class="button" style="margin-top: 8px; color: white;" data-activator="true" data-dialog="login">Login</button>
 			</div>
 		@endif
 

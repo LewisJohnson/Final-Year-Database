@@ -359,7 +359,12 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		 4. CLICK EVENTS
 	   ====================== */
 	// External links give an illusion of AJAX
+	var alreadyChangingDocument = false;
 	$("body").on("click", ".external-link",  function(e) {
+		if(alreadyChangingDocument){
+			return;
+		}
+		alreadyChangingDocument = true;
 		var elemToHideSelector = $($(this).data('element-to-hide-selector'));
 		var elemToReplace = $($(this).data('element-to-replace-with-loader-selector'));
 
@@ -374,22 +379,32 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 	$('nav.mobile .sub-dropdown').on('click', function(){
 		var dropdown = $(this);
+		var linkContainer = $(this).parent().parent();
 		var content = dropdown.find('.dropdown-content');
 
 		if(dropdown.attr("aria-expanded") == "true"){
 			dropdown.attr("aria-expanded", false);
-			content.attr("aria-hidden", true);
-
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
 			dropdown.removeClass("active");
-			content.hide(config.animtions.medium);
+			
+			content.attr("aria-hidden", true);
+			content.removeClass("active");
+
+			linkContainer.find('li').slideDown(config.animtions.slow);
+
 		} else {
 			dropdown.attr("aria-expanded", true);
-			content.attr("aria-hidden", false);
-
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
 			dropdown.addClass("active");
-			content.show(config.animtions.medium);
+			
+			content.attr("aria-hidden", false);
+			content.addClass("active");
+			
+			linkContainer.find('li').each(function(index) {
+				if($(this).index() != dropdown.parent().index()){
+					$(this).slideUp(config.animtions.slow);
+				}
+			});
 		}
 	});
 

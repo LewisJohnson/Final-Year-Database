@@ -1,24 +1,30 @@
 @extends('layouts.app')
 @section ('content')
-	<div class="centered fancy-page width--800">
+	<div class="centered fancy-page about-page animated-entrance width--800">
 		<h1>About</h1>
-		<div>
+		
+		<div class="card card--margin-vertical">
 			<p>@lang("help.about")</p>
-
-			<h2>Built with</h2>
-			<ul class="flex flex--wrap flex--row" style="list-style: none;">
-				<li style="width: 50%">
-					<a href="https://laravel.com" title="Laravel">
-						<img style="width: 100%; padding: 0 15%;" src="{{ asset('images/laravel-text-logo.png') }}" alt="">
-					</a>
-				</li>
-
-				<li style="width: 50%">
-					<a href="https://nodejs.org" title="NodeJs">
-						<img style="width: 100%; padding: 0 15%;" src="{{ asset('images/nodejs-logo.png') }}" alt="">
-					</a>
-				</li>
-			</ul>
 		</div>
+
+		<ul class="flex flex--wrap flex--row card card--margin-vertical">
+			<li>
+				<a href="https://github.com/lewisJohnson/Final-Year-Database" title="Laravel">
+					<img src="{{ asset('images/github-logo.png') }}" alt="">
+				</a>
+			</li>
+
+			<li>
+				<a href="https://laravel.com" title="Laravel">
+					<img src="{{ asset('images/laravel-text-logo.png') }}" alt="">
+				</a>
+			</li>
+
+			<li>
+				<a href="https://nodejs.org" title="NodeJs">
+					<img src="{{ asset('images/nodejs-logo.png') }}" alt="">
+				</a>
+			</li>
+		</ul>
 	</div>
 @endsection

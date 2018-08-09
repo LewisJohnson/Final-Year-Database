@@ -50,49 +50,10 @@
 				</div>
 			@endif
 			@if(Auth::check())
-				@if(Auth::user()->isSystemAdmin())
-					<div class="left-links">
-						<h4>System Administrator</h4>
-
-						<div class="flex flex--row flex--stretch-children flex--wrap">
-							<li class="nav-button">
-								<div class="sub-dropdown" tab-index="0">
-									<h3>System</h3>
-									<div class="svg-container pointer">
-										<svg viewBox="0 0 24 24">
-											<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-										</svg>
-									</div>
-									<div class="dropdown-content">
-										<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
-										<a href="{{ action('SystemAdminController@userAgentView') }}">User Agent Strings</a>
-										<a href="{{ action('SystemAdminController@feedback') }}">User Feedback</a>
-									</div>
-								</div>
-							</li>
-
-							<li class="nav-button">
-								<div class="sub-dropdown" tab-index="0">
-									<h3>Users</h3>
-									<div class="svg-container pointer">
-										<svg class="transition--medium" viewBox="0 0 24 24">
-											<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-										</svg>
-									</div>
-									<div class="dropdown-content">
-										<a href="{{ action('UserController@index') }}">Edit User</a>
-										<a href="{{ action('UserController@create') }}">Add User</a>
-									</div>
-								</div>
-							</li>
-						</div>
-					</div>
-					<hr>
-				@endif
-			
 				@if(Auth::user()->isProjectAdmin())
 					<div class="left-links">
 						<h4>Project Administrator</h4>
+
 						<li class="nav-button">
 							<a href="{{ action('ProjectAdminController@index') }}" title="Administrator">Administrator Hub</a>
 						</li>
@@ -100,41 +61,77 @@
 					<hr>
 				@endif
 
+				@if(Auth::user()->isSystemAdmin())
+					<div class="left-links">
+						<h4>System Administrator</h4>
+
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>System</h3>
+								<div class="svg-container pointer">
+									<svg viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
+								</div>
+								<div class="dropdown-content">
+									<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+									<a href="{{ action('SystemAdminController@userAgentView') }}">User Agent Strings</a>
+									<a href="{{ action('SystemAdminController@feedback') }}">User Feedback</a>
+								</div>
+							</div>
+						</li>
+
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>Users</h3>
+								<div class="svg-container pointer">
+									<svg class="transition--medium" viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
+								</div>
+								<div class="dropdown-content">
+									<a href="{{ action('UserController@index') }}">Edit User</a>
+									<a href="{{ action('UserController@create') }}">Add User</a>
+								</div>
+							</div>
+						</li>
+					</div>
+					<hr>
+				@endif
+			
 				@if(Auth::user()->isSupervisor())
 					<div class="left-links">
 						<h4>Supervisor</h4>
 
-						<div class="flex flex--row flex--stretch-children">
-							<li class="nav-button">
-								<div class="sub-dropdown" tab-index="0">
-									<h3>Projects</h3>
-									<div class="svg-container pointer">
-										<svg viewBox="0 0 24 24">
-											<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-										</svg>
-									</div>
-									<div class="dropdown-content flex flex--row flex--stretch-children">
-										<a title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">My Projects</a>
-										<a title="Create a new project" href="{{ action('ProjectController@create') }}">New Project</a>
-									</div>
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>Projects</h3>
+								<div class="svg-container pointer">
+									<svg viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
 								</div>
-							</li>
+								<div class="dropdown-content">
+									<a title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">My Projects</a>
+									<a title="Create a new project" href="{{ action('ProjectController@create') }}">New Project</a>
+								</div>
+							</div>
+						</li>
 
-							<li class="nav-button">
-								<div class="sub-dropdown" tab-index="0">
-									<h3>Reports</h3>
-									<div class="svg-container pointer">
-										<svg viewBox="0 0 24 24">
-											<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
-										</svg>
-									</div>
-									<div class="dropdown-content">
-										<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">Project Report</a>
-										<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
-									</div>
+						<li class="nav-button">
+							<div class="sub-dropdown" tab-index="0">
+								<h3>Reports</h3>
+								<div class="svg-container pointer">
+									<svg viewBox="0 0 24 24">
+										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+									</svg>
 								</div>
-							</li>
-						</div>
+								<div class="dropdown-content">
+									<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">Project Report</a>
+									<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
+								</div>
+							</div>
+						</li>
 					</div>
 					<hr>
 				@endif

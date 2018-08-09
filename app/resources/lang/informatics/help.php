@@ -154,15 +154,26 @@ return [
 
 	/* 5. ABOUT PAGE */
 	'about' =>
-		'This software manages project selection and allocation for final year and masters students at the University of Sussex. 
+		'This website manages project selection and allocation for final year and masters students at the University of Sussex. 
 		<br><br>
-		Final year and masters projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavours to match student and supervisor requirements. Supervisors can propose projects that students can accept and, additionally, students can propose their own projects either generally or to a specific supervisor. 
+
+		Final year and masters projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavours to match student and supervisor requirements.
+		Supervisors can propose projects that students can accept and, additionally, students can propose their own projects to a supervisor. 
 		<br><br>
-		The current system had not been maintained for several years and needed updating. This update took the form of adding new functionality and a general overhaul of both look and feel. The updating of capabilities due to advances in software and browser technologies has also been addressed. 
+
+		The old website had not been updated to support the modern web and lacked compatibility for modern browsers.
+		This new website took inspiration for the old website in terms of functionality, 
+		but was crafted from the ground to be fast and support mobile devices.
 		<br><br>
-		This website is hosted by the department of Engineering and Informatics. It was written using Laravel, MySQL and other technologies. The source code is available <a href="https://github.com/lewisJohnson/Final-Year-Database">on Github.</a> 
+
+		This project is open-source, which means the source code is freely available for you to browse on Github.
+		The backend of this website is written in PHP and uses the popular framework Laravel,
+		while the frontend is <i>mostly</i> written in jQuery, styled with SASS and LESS.
+		This website is hosted by the department of Engineering and Informatics.
 		<br><br>
+
 		This website was created in 2017/2018 as a final year project by <a href="http://www.lewisdavidjohnson.com">Lewis Johnson</a> under the supervision of <a href="http://www.sussex.ac.uk/profiles/115097">Dr. Bernhard Reus.</a>',
+
 	/*
 	| 6. Help Tabs
 	| You may add up to 20 help tabs.

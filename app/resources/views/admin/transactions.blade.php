@@ -4,10 +4,10 @@
 	<h1>{{ $transaction_type }} Transactions</h1>
 
 	<div class="button-group button-group--horizontal" style="position: relative;">
-		<a class="button @if($transaction_type == "Project") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=project') }}">Project</a>
-		<a class="button @if($transaction_type == "Topic") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=topic') }}">Topic</a>
-		<a class="button @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}">Student</a>
-		<a class="button @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}">Marker</a>
+		<a class="button external-link @if($transaction_type == "Project") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
+		<a class="button external-link @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
+		<a class="button external-link @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
+		<a class="button external-link @if($transaction_type == "Topic") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
 
 		<div class="checkbox" style="position: absolute; top: 65px; left: 0px">
 			<input type="checkbox" id="showTransactionDetailOnHover" checked>
@@ -15,8 +15,8 @@
 		</div>
 	</div>
 
-	<div class="table-responsive">
-		<table id="transations-project" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
+	<div class="table-responsive"  id="responsive-table">
+		<table id="transaction-table" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
 			<thead>
 				<tr>
 					<th data-default="false" class="pointer">Id</th>

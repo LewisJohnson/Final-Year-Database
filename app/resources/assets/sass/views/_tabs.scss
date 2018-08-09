@@ -4,39 +4,68 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-ul.tab-container{
+ul.tab-container {
 	list-style: none;
 	padding: 0px !important;
 	display: flex;
 	flex-direction: row;
 }
 
-.tab-card{
+.tab-card {
 	overflow: hidden;
 
-	.content-host{
+	.content-host {
 		width: 100%;
-		h2:first-of-type {margin-top: 0; }
-		h2 { margin: 1rem 0; }
-		h3 { margin: 0.5rem 0; }
-		ul{ padding-left: 2rem; }
-		li { margin-bottom: 3px; }
-		select { width: 100%; }
+
+		h2:first-of-type {
+			margin-top: 0; 
+		}
+
+		h2 { 
+			margin: 1rem 0; 
+		}
+
+		h3 { 
+			margin: 0.5rem 0; 
+		}
+
+		ul { 
+			padding-left: 2rem; 
+		}
+
+		li { 
+			margin-bottom: 3px; 
+		}
+
+		select { 
+			width: 100%; 
+		}
+
+		.content {
+			padding-top: 2rem;
+		}
 	}
 
-	.description{
+	.description {
 		font-size: 14px;
 		color: #b5b5b5;
 	}
 
-	button[type="submit"]{
+	button[type="submit"] {
 		margin-top: 1.2rem;
 	}
 }
 
-.tab{
+.tab {
 	display: inline-block;
-	.content{ display: none; }
+
+	.content { 
+		display: none;
+	}
+
+	button:hover {
+			background: #e6e6e6;
+	}
 }
 
 li.sub-help {

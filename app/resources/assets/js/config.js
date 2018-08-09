@@ -19,9 +19,9 @@
 var config = {
 	// Animations
 	animtions: {
-		slow: 400,
-		medium: 300,
-		fast: 200,
+		slow: 480,
+		medium: 240,
+		fast: 120,
 		superFast: 100,
 	},
 
