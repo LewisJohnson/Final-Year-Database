@@ -122,7 +122,7 @@ nav.mobile {
 		margin: 0;
 	}
 
-	.centre-links, .left-links{
+	.centre-links, .left-links {
 		padding: 1rem 1rem 0rem 1rem;
 	}
 
@@ -157,7 +157,7 @@ nav.mobile {
 			margin-bottom: 10px;
 			color: rgb(103, 114, 229);
 
-			&:hover{
+			&:hover {
 				text-decoration: underline;
 			}
 		}
@@ -225,57 +225,55 @@ $color-2: #DB6356; // Roman
 $color-4: #548c7e; // Patina
 
 @mixin center($xy:xy) {
-  @if $xy == xy {
-    left: 50%;
-    top: 50%;
-    bottom: auto;
-    right: auto;
-    transform: translateX(-50%) translateY(-50%);
-  }
-  @else if $xy == x {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
-  @else if $xy == y {
-    top: 50%;
-    bottom: auto;
-    transform: translateY(-50%);
-  }
+	@if $xy == xy {
+		left: 50%;
+		top: 50%;
+		bottom: auto;
+		right: auto;
+		transform: translateX(-50%) translateY(-50%);
+	} @else if $xy == x {
+		left: 50%;
+		right: auto;
+		transform: translateX(-50%);
+	} @else if $xy == y {
+		top: 50%;
+		bottom: auto;
+		transform: translateY(-50%);
+	}
 }
 
 // border radius
 @mixin border-radius($radius:.25em) {
-  border-radius: $radius;
+	border-radius: $radius;
 }
 
 // anti-aliasing mode font rendering
 @mixin font-smoothing {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 // clear fix
 @mixin clearfix {
-  &::after {
-    clear: both;
-    content: "";
-    display: block;
-  }
+	&::after {
+		clear: both;
+		content: "";
+		display: block;
+	}
 }
 
 // colour tint and shade
 @function shade($color, $percent) {
-  @return mix(#000, $color, $percent);
+	@return mix(#000, $color, $percent);
 }
 
 @function tint($color, $percent) {
-  @return mix(#fff, $color, $percent);
+	@return mix(#fff, $color, $percent);
 }
 
 @mixin column($percentage, $float-direction:left) {
-  width: 100% * $percentage;
-  float: $float-direction;
+	width: 100% * $percentage;
+	float: $float-direction;
 }
 
 .cd-morph-dropdown {
@@ -312,10 +310,10 @@ $color-4: #548c7e; // Patina
 			margin: 20px 0 10px 14px;
 		}
 
-		ul{	
+		ul {
 			list-style: none;
 
-			li{
+			li {
 				margin-bottom: 20px;
 			}
 
@@ -323,7 +321,7 @@ $color-4: #548c7e; // Patina
 				color: rgb(103, 114, 229);
 				text-decoration: none;
 
-				&:hover{
+				&:hover {
 					text-decoration: underline;
 				}
 			}
@@ -345,7 +343,7 @@ $color-4: #548c7e; // Patina
 
 	.gallery .content a {
 		display: block;
-		
+
 		&::before {
 			/* icon on the left */
 			content: '';
@@ -502,7 +500,7 @@ $color-4: #548c7e; // Patina
 		.wide-ish .content {
 			width: 460px !important;
 		}
-		
+
 		.wide .content {
 			width: 630px !important;
 		}

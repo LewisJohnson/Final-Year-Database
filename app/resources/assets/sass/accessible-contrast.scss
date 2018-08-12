@@ -4,26 +4,26 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.card{
+.card {
 	border: 1px solid black !important;
 }
 
-.section{
-	border: 1px solid black !important;
-	border-radius: 0px !important;
-}
-
-input, textarea{
+.section {
 	border: 1px solid black !important;
 	border-radius: 0px !important;
 }
 
-.button{
+input, textarea {
+	border: 1px solid black !important;
+	border-radius: 0px !important;
+}
+
+.button {
 	background: black !important;
 	color: white !important;
 }
 
-a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6{
+a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6 {
 	color: black;
 }
 
@@ -32,12 +32,12 @@ a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6{
 	color: white !important;
 }
 
-.card .footer a, .card .footer p{
+.card .footer a, .card .footer p {
 	color: white !important;
 	text-decoration: underline !important;
 }
 
-.checkbox input[type=checkbox]:checked+label:before{
+.checkbox input[type=checkbox]:checked + label:before {
 	background: black !important;
 }
 
@@ -46,16 +46,16 @@ footer {
 	color: white;
 }
 
-svg{
+svg {
 	fill: black !important;
 }
 
-*{
+* {
 	transition: none !important;
 	animation-duration: 0s !important;
 }
 
-tr:hover{
+tr:hover {
 	background: black !important;
 	color: white !important;
 

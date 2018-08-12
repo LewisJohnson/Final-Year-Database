@@ -52,7 +52,6 @@
 	}
 }
 
-
 .favourite-container {
 	position: relative;
 	float: right;
@@ -62,7 +61,7 @@
 		fill-opacity: 0.3;
 		fill: $text-color;
 
-		:hover { 
+		:hover {
 			fill-opacity: 0.6;
 		}
 
@@ -109,16 +108,16 @@
 		border-bottom: 3px solid $brand-primary;
 	}
 
-	button{
+	button {
 		padding: 5px 10px;
 	}
 
-	label { 
-		font-size: 12px; 
+	label {
+		font-size: 12px;
 	}
-	
-	.html { 
-		margin-left: auto; 
+
+	.html {
+		margin-left: auto;
 	}
 }
 

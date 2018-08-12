@@ -4,27 +4,27 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.search-container{
+.search-container {
 	display: flex;
 	flex-wrap: wrap;
 	transition: 0.14s box-shadow;
 
-	&.focus{
+	&.focus {
 		box-shadow: 3px 5px 2px 0 rgba(0, 0, 0, 0.14), 5px 5px 1px -2px rgba(0, 0, 0, 0.2), 7px 7px 5px 0 rgba(0, 0, 0, 0.12);
 	}
 
-	button, input{
+	button, input {
 		margin: 0;
 	}
 }
 
-#search-filter-button{
-	&.active{
+#search-filter-button {
+	&.active {
 		background: rgba(0, 0, 0, 0.1);
 	}
 }
 
-.search-filter-container{
+.search-filter-container {
 	visibility: hidden;
 	max-height: 0;
 	overflow: hidden;
@@ -33,7 +33,7 @@
 	transition: visibility 0s, .28s all cubic-bezier(0.19, 0.49, 0.35, 0.76);
 	will-change: visibility, max-height, border-right, border-left, border-bottom, padding;
 
-	&.active{
+	&.active {
 		visibility: visible;
 		max-height: 52px;
 		border-right: 1px solid $form-border-color;
@@ -43,7 +43,7 @@
 	}
 }
 
-.search-filter{
+.search-filter {
 	li {
 		display: inline-block;
 		margin: 0px 0px 0px 10px;

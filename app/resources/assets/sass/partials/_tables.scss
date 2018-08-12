@@ -4,11 +4,11 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-table{
+table {
 	position: relative;
 	width: 100%;
-	border: 1px solid rgba(0,0,0,.12);
-	background-color: rgb(255,255,255);
+	border: 1px solid rgba(0, 0, 0, .12);
+	background-color: rgb(255, 255, 255);
 	border-collapse: collapse;
 	font-size: 13px;
 	margin-top: 1rem;
@@ -19,13 +19,13 @@ table a, table p {
 	display: inline;
 }
 
-thead{
+thead {
 	font-size: 14px;
 	padding-bottom: 3px;
 }
 
-tbody{
-	border: 1px solid rgba(0,0,0,.12);
+tbody {
+	border: 1px solid rgba(0, 0, 0, .12);
 	font-weight: normal;
 }
 
@@ -35,36 +35,36 @@ th, td {
 	-webkit-font-smoothing: antialiased;
 }
 
-tr{
-	transition: background-color .28s cubic-bezier(0.4,0,0.2,1);
+tr {
+	transition: background-color .28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-tr[disabled]{
+tr[disabled] {
 	background: #f4f4f4;
 	color: darken(#f4f4f4, 20%);
 	cursor: default;
 }
 
-tbody tr:hover:not([disabled]), 
-tbody tr:focus:not([disabled]), 
-tbody tr:active:not([disabled]){
+tbody tr:hover:not([disabled]),
+tbody tr:focus:not([disabled]),
+tbody tr:active:not([disabled]) {
 	background-color: #eee;
 }
- 
-tbody tr.is-selected:not([disabled]){
+
+tbody tr.is-selected:not([disabled]) {
 	background-color: darken(#eee, 5%);
 }
 
-td{
+td {
 	position: relative;
-	border-bottom: 1px solid rgba(0,0,0,0.12);
-	border-top: 1px solid rgba(0,0,0,0.12);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+	border-top: 1px solid rgba(0, 0, 0, 0.12);
 	vertical-align: middle;
 	height: 48px;
 	padding-top: 12px;
 }
 
-th{
+th {
 	position: relative;
 	vertical-align: bottom;
 	text-overflow: ellipsis;
@@ -81,32 +81,32 @@ td:first-of-type, th:first-of-type {
 }
 
 td:last-of-type, th:last-of-type {
-	padding-right: 24px; 
+	padding-right: 24px;
 	text-align: right;
 }
 
-.table--dark-head{
-	thead{
+.table--dark-head {
+	thead {
 		background: rgba(0, 0, 0, 0.02);
 		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	}
 }
 
-.table--small{
+.table--small {
 	th, td {
 		padding: 0 9px 6px 9px;
 	}
 
-	td{
+	td {
 		height: 25px;
 		line-height: 25px;
 	}
 
-	.checkbox{
-			margin-top: 5px;
+	.checkbox {
+		margin-top: 5px;
 	}
 }
 
-.data-table{
+.data-table {
 	transition: all .25s;
 }

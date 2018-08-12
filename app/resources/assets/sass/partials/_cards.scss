@@ -4,7 +4,7 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.card{
+.card {
 	@include shadow-2dp();
 	border: 1px solid rgba(0, 0, 0, 0.12);
 	padding: 1rem;
@@ -12,10 +12,14 @@
 	width: 100%;
 	border-radius: 2px;
 
-	h2 { margin-top: 5px; }
-	ul{ padding-left: 40px;}
+	h2 {
+		margin-top: 5px;
+	}
+	ul {
+		padding-left: 40px;
+	}
 
-	.footer{
+	.footer {
 		margin: -1rem;
 		margin-top: 20px;
 		padding: 5px;
@@ -25,45 +29,44 @@
 		z-index: 1;
 		color: $text-color;
 
-		.svg-container{
-			max-height: auto; 
-			max-width: 16px; 
+		.svg-container {
+			max-height: auto;
+			max-width: 16px;
 			margin: 0;
 		}
 
-		p{
-			display: inline-block; 
-			margin: 0; 
+		p {
+			display: inline-block;
+			margin: 0;
 		}
 	}
 }
 
-.card--half{
+.card--half {
 	width: 100%;
-	// border-top: 2px solid #1d4289;
 	border-top: 2px solid rgba(29, 66, 137, 0.25);
 
-	&:nth-child(even){
+	&:nth-child(even) {
 		margin-left: auto;
 	}
 }
 
-.card-container{
+.card-container {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 
-	.card{
+	.card {
 		margin-bottom: 20px;
 	}
 }
 
-.card-slim-content{
-	p{
+.card-slim-content {
+	p {
 		margin: 2px;
 	}
 }
 
-.card--margin-vertical{
+.card--margin-vertical {
 	margin: 1rem 0;
 }

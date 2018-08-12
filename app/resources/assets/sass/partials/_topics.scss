@@ -20,7 +20,7 @@ ul.topics-list {
 		margin-right: 5px;
 		margin-bottom: 5px;
 
-		&.primary{
+		&.primary {
 			background: $topic-primary-bg;
 			border-color: darken($topic-primary-bg, 5%);
 			color: $topic-primary-color;
@@ -29,7 +29,7 @@ ul.topics-list {
 				padding-left: 8px;
 			}
 
-			&:hover{
+			&:hover {
 				background: lighten($topic-primary-bg, 10%);
 			}
 		}
@@ -42,7 +42,7 @@ ul.topics-list {
 			padding: 5px;
 		}
 
-		&:hover{
+		&:hover {
 			background: lighten($topic-bg, 10%);
 		}
 	}
@@ -55,12 +55,12 @@ ul.topics-list {
 		color: white;
 		opacity: 0.2;
 		@include transition--medium();
-		
-		&:hover{
+
+		&:hover {
 			opacity: 0.8;
 		}
 
-		svg, p{
+		svg, p {
 			display: inline-block;
 			margin: 0;
 			color: inherit;
@@ -81,7 +81,7 @@ ul.topics-list {
 		border-right: 1px solid #969696;
 	}
 
-	.topic{
+	.topic {
 		cursor: move; /* fallback if grab cursor is unsupported */
 		cursor: grab;
 		cursor: -moz-grab;
@@ -89,14 +89,14 @@ ul.topics-list {
 		user-select: none;
 		overflow: hidden;
 
-		&:active, &:focus{
+		&:active, &:focus {
 			cursor: grabbing;
 			cursor: -moz-grabbing;
 			cursor: -webkit-grabbing;
 		}
 	}
 
-	.topic:first-child.first{
+	.topic:first-child.first {
 		background: #ffd700;
 		border-color: darken(#ffd700, 5%);
 		color: black;
@@ -112,9 +112,9 @@ ul.topics-list {
 	}
 }
 
-.topics-list.create{
-	.topic{
-		input{
+.topics-list.create {
+	.topic {
+		input {
 			width: auto;
 			background: none;
 			border: none;
@@ -128,7 +128,7 @@ ul.topics-list {
 	}
 }
 
-#add-topic-input, #create-project-add-topic-input{
+#add-topic-input, #create-project-add-topic-input {
 	outline: none;
 	display: inline-block;
 	width: auto;

@@ -18,10 +18,9 @@
 @import "base/base";
 @import "base/typography";
 
-.email-body{
+.email-body {
 	max-width: 800px;
-	margin: 0 auto;
-	margin-top: 1rem;
+	margin: 1rem auto 0;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity),
 				0 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity),
 				0 1px 5px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
@@ -30,14 +29,20 @@
 	word-wrap: break-word;
 	border-radius: 2px;
 
-	p, a{ margin: 5px 0px; }
-	h2{ margin-top: 5px; }
-	ul{ padding-left: 40px;}
-	
-	.footer{
+	p, a {
+		margin: 5px 0;
+	}
+	h2 {
+		margin-top: 5px;
+	}
+	ul {
+		padding-left: 40px;
+	}
+
+	.footer {
 		img {
 			padding-right: 5px;
-			width: 75px; 
+			width: 75px;
 			float: left;
 		}
 
@@ -50,6 +55,8 @@
 		z-index: 1;
 		color: #757575;
 
-		p{ margin: 0; }
+		p {
+			margin: 0;
+		}
 	}
 }

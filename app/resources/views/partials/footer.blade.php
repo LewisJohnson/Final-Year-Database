@@ -32,11 +32,11 @@
 			<li>
 				<a id="leave-feedback-button" class="button--small td-none hover--light" href="#" data-is-guest="{{ Auth::guest() ? 'true' : 'false' }}">Leave Feedback</a>
 			</li>
-			<li><p class="seperator">|</p></li>
+			<li><p class="separator">|</p></li>
 			<li>
 				<a class="button--small td-none hover--light" target="_blank" href="@lang("messages.footer_link_url")">@lang("messages.footer_link_text")</a>
 			</li>
-			<li><p class="seperator">|</p></li>
+			<li><p class="separator">|</p></li>
 			<li>
 				@if(Session::get('education_level') != null)
 					<p class="hover--light">{{ lang_sess("footer_maintainer_text") }}</p>

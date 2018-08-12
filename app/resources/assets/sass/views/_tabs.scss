@@ -18,27 +18,27 @@ ul.tab-container {
 		width: 100%;
 
 		h2:first-of-type {
-			margin-top: 0; 
+			margin-top: 0;
 		}
 
-		h2 { 
-			margin: 1rem 0; 
+		h2 {
+			margin: 1rem 0;
 		}
 
-		h3 { 
-			margin: 0.5rem 0; 
+		h3 {
+			margin: 0.5rem 0;
 		}
 
-		ul { 
-			padding-left: 2rem; 
+		ul {
+			padding-left: 2rem;
 		}
 
-		li { 
-			margin-bottom: 3px; 
+		li {
+			margin-bottom: 3px;
 		}
 
-		select { 
-			width: 100%; 
+		select {
+			width: 100%;
 		}
 
 		.content {
@@ -59,12 +59,12 @@ ul.tab-container {
 .tab {
 	display: inline-block;
 
-	.content { 
+	.content {
 		display: none;
 	}
 
 	button:hover {
-			background: #e6e6e6;
+		background: #e6e6e6;
 	}
 }
 

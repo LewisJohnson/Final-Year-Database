@@ -4,13 +4,13 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.header-container{
+.header-container {
 	position: relative;
 	top: 0;
 	z-index: 2;
 }
 
-header{
+header {
 	background: $header-background;
 	z-index: 3;
 
@@ -22,7 +22,7 @@ header{
 		margin-right: auto;
 		padding-left: 20px;
 
-		h1{
+		h1 {
 			color: white;
 			margin: 0;
 			font-size: 120%;
@@ -31,7 +31,7 @@ header{
 		}
 	}
 
-	.logo-container{
+	.logo-container {
 		position: relative;
 		visibility: hidden;
 		@include transition--slow-cb();
@@ -43,7 +43,7 @@ header{
 		left: 40px;
 		opacity: 0;
 
-		.logo{
+		.logo {
 			display: block;
 			background-position: 50%;
 			background-repeat: no-repeat;
@@ -54,8 +54,8 @@ header{
 	}
 }
 
-header.error{	
-	.logo-container{
+header.error {
+	.logo-container {
 		visibility: visible;
 		left: 0;
 		max-width: 50px;
@@ -63,14 +63,14 @@ header.error{
 	}
 }
 
-.mobile-menu-container{
+.mobile-menu-container {
 	// max-width: 50px;
 	overflow: hidden;
 	visibility: visible;
 	@include transition--slow-cb();
 }
 
-.mobile-menu{
+.mobile-menu {
 	padding: 1rem;
 	cursor: pointer;
 	list-style: none;

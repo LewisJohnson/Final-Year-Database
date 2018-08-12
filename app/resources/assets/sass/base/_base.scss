@@ -4,17 +4,16 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-body{
-	margin: 0;
+body {
 	position: relative;
 
 	// Makes sure footer is always on the bottom
 	min-height: calc(100% - 50px);
-	margin-bottom: 50px;
+	margin: 0 0 50px;
 }
 
 // Normalise
-ul{
+ul {
 	padding: 0;
 	margin: 0;
 }
@@ -24,7 +23,7 @@ html {
 	box-sizing: border-box;
 }
 
-code{
+code {
 	background: rgba(0, 0, 0, 0.03);
 	padding: 5px;
 	display: inline-block;
@@ -34,24 +33,24 @@ code{
 	box-sizing: inherit;
 }
 
-.main-content{
+.main-content {
 	@include transition--medium();
 	padding: 3rem 0;
 }
 
-.cookie-banner{
+.cookie-banner {
 	padding: 1rem;
 	background: darken($space-grey, 5%);
 
-	a, p, button{
+	a, p, button {
 		color: white;
 	}
 
-	a, p{
+	a, p {
 		padding-right: 1rem;
 	}
 
-	button{
+	button {
 		margin-left: auto;
 	}
 }
@@ -78,7 +77,7 @@ code{
 	padding: 3px;
 	font: 13px "Lucida Grande", Sans-Serif;
 }
-    
+
 .datalist-polyfill__active {
 	background: #3875d7;
 	color: white;

@@ -4,7 +4,7 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.notification{
+.notification {
 	position: fixed;
 	bottom: 0;
 	padding: 8px 16px;
@@ -20,7 +20,7 @@
 	pointer-events: none;
 	font-size: 20px;
 
-	@if $notification-fullscreen{
+	@if $notification-fullscreen {
 		top: 0;
 
 		p {
@@ -29,26 +29,26 @@
 		}
 	}
 
-	p{
+	p {
 		text-align: center;
 		margin: 0;
 	}
 
-	&.error, &.danger{
+	&.error, &.danger {
 		background: $notification-error-bg;
 		p {
 			color: white;
 		}
 	}
 
-	&.warning{
+	&.warning {
 		background: $notification-warning-bg;
 		p {
 			color: black;
 		}
 	}
 
-	&.success{
+	&.success {
 		background: $notification-success-bg;
 		p {
 			color: white;
@@ -56,10 +56,20 @@
 	}
 }
 
-
 @keyframes flash-message {
-	0% {bottom: -5%;}
-	10% {opacity: 1; bottom: 0%}
-	90% {opacity: 1; bottom: 0%}
-	100% {opacity: 0; bottom: -5%;}
+	0% {
+		bottom: -5%;
+	}
+	10% {
+		opacity: 1;
+		bottom: 0%
+	}
+	90% {
+		opacity: 1;
+		bottom: 0%
+	}
+	100% {
+		opacity: 0;
+		bottom: -5%;
+	}
 }

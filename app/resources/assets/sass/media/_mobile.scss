@@ -4,13 +4,13 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-@media screen and (min-width: $mobile-width){
+@media screen and (min-width: $mobile-width) {
 	// Header & Navigation
-	.mobile-nav-underlay{
+	.mobile-nav-underlay {
 		display: none !important;
 	}
 
-	nav.mobile { 
+	nav.mobile {
 		display: none;
 	}
 
@@ -71,8 +71,8 @@
 			flex-direction: column;
 			flex-shrink: 0;
 			overflow: hidden;
-			background: rgba(0,0,0,0.01);
-			box-shadow: 2px 0px 6px 0px rgba(0,0,0,0.1);
+			background: rgba(0, 0, 0, 0.01);
+			box-shadow: 2px 0px 6px 0px rgba(0, 0, 0, 0.1);
 
 			button.button {
 				text-align: left;
@@ -119,11 +119,11 @@
 		}
 	}
 
-	.mask { 
+	.mask {
 		display: block;
 	}
 
-	ul.tab-container { 
+	ul.tab-container {
 		overflow-x: scroll;
 	}
 
@@ -141,7 +141,7 @@
 		overflow-x: scroll;
 	}
 
-	.section-container{
+	.section-container {
 		flex-wrap: wrap;
 
 		.section {
@@ -200,7 +200,7 @@
 	}
 
 	// SEARCH
-	.search-filter-container.active{
+	.search-filter-container.active {
 		max-height: 170px;
 	}
 
@@ -233,7 +233,7 @@
 		height: auto;
 		padding: 10px;
 
-		.footer-right, .footer-left{
+		.footer-right, .footer-left {
 			position: relative;
 			width: 100%;
 		}
@@ -251,13 +251,13 @@
 			display: block;
 		}
 
-		.seperator {
+		.separator {
 			display: none;
 		}
 	}
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 	.header-education-level-list {
 		text-align: right;
 
@@ -273,24 +273,22 @@
 	}
 }
 
-
-
-@media screen and (max-width: 410px){
+@media screen and (max-width: 410px) {
 	.nav.mobile h3 {
 		padding-left: 0;
 	}
-	
+
 	header {
 		> a {
 			width: 100%;
 			padding: 0;
 			margin: 0;
-			h1{
+			h1 {
 				text-align: center;
 			}
 		}
 
-		.logo-container{
+		.logo-container {
 			display: none;
 		}
 	}
@@ -299,7 +297,7 @@
 		display: none;
 	}
 
-	.mobile-menu-container  {
+	.mobile-menu-container {
 		margin: 0 auto;
 		max-width: none;
 	}
