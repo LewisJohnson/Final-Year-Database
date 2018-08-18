@@ -114,6 +114,22 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function show(Project $project){
+
+		//Updates project view count
+		if(Auth::check()){
+			if(Auth::user()->isStudent()){
+				DB::transaction(function() use ($project){
+					// We don't want to update the updated_at timestamp.
+					$project->timestamps = false;
+					$project->view_count = ++$project->view_count;
+					$project->save();
+
+					// Re-enabled timestamps
+					$project->timestamps = true;
+				});
+			}
+		}
+
 		$view = "SupervisorProject";
 
 		if($project->status === "student-proposed"){

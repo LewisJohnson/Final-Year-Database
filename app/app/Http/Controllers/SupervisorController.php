@@ -44,6 +44,16 @@ class SupervisorController extends Controller{
 	}
 
 	/**
+	 * Display the most popular projects.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function projectPopularity(){
+		return view('supervisors.project-popularity')
+			->with("projects", Auth::user()->supervisor->getPopularProjects());
+	}
+
+	/**
 	 * The supervisor report.
 	 *
 	 * @param  \Illuminate\Http\Request $request
@@ -203,6 +213,7 @@ class SupervisorController extends Controller{
 				$student->project->save();
 			}
 
+			$student->reject_count = ++$student->reject_count;
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();

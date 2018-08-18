@@ -4,7 +4,7 @@
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>
 @endsection
 
-@section ('content')
+@section('content')
 	<div class="centered width--1000">
 		<div class="fancy-page">
 			<h1>{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor</h1>

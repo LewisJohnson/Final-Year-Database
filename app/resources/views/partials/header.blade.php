@@ -257,6 +257,12 @@
 														<p>Supervisor Report</p>
 													</a>
 												</li>
+												<li>
+													<a class="icon" title="Show my most popular projects" href="{{ action('SupervisorController@projectPopularity') }}">
+														@include('svg.fire')
+														<p>Project Popularity</p>
+													</a>
+												</li>
 											</ul>
 										</li>
 									</ul>

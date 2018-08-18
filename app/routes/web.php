@@ -265,6 +265,9 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');
 
+	// Project popularity
+	Route::get('supervisor/project-popularity', 'SupervisorController@projectPopularity');
+
 	// Receive emails form
 	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');
 

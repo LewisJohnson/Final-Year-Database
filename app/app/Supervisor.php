@@ -193,12 +193,29 @@ class Supervisor extends Model{
 	 */
 	public function getProjects($status = null){
 		if(isset($status)){
-			return Project::where("supervisor_id", $this->id)
-				->whereNull('student_id')->where("status", "=", $status)->get();
+			return Project::where('supervisor_id', $this->id)
+				->whereNull('student_id')->where('status', $status)->get();
 		}
 
-		return Project::where("supervisor_id", $this->id)
+		return Project::where('supervisor_id', $this->id)
 			->orderBy('status', 'asc')->whereNull('student_id')->get();
+	}
+
+	/**
+	 * A list of projects the supervisor has created (Owner).
+	 *
+	 * @param String $status A project status to add the where clause
+	 *
+	 * @return Project A collection of projects
+	 */
+	public function getPopularProjects(){
+		return Project::where('supervisor_id', $this->id)
+			->whereNull('student_id')
+			->where('status', 'on-offer')
+			->where('view_count', '>' , 10)
+			->limit(10)
+			->orderBy('view_count', 'desc')
+			->get();
 	}
 
 	/**

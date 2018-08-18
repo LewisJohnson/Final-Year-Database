@@ -31,6 +31,7 @@
 										</div>
 									</th>
 									<th>Name</th>
+									<th>Reject Count</th>
 									<th>Last Login</th>
 								</tr>
 							</thead>

@@ -26,6 +26,7 @@
 							</th>
 							<th class="pointer">Student</th>
 							<th class="pointer">Project</th>
+							<th class="pointer">Reject Count</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -43,6 +44,8 @@
 								<td style="width:20%"><a href="mailto:{{ $offer['student']->user->email }}">{{ $offer['student']->user->getFullName() }}</a></td>
 
 								<td><a href="{{ action('ProjectController@show', $offer['project']) }}">{{ $offer['project']->title }}</a></td>
+
+								<td style="width:14%">{{ $offer['student']->reject_count }}</td>
 
 								<td style="width: 14%;">
 									<button class="button offer-action button--danger-text" title="Reject {{ $offer['student']->user->getFullName() }} for {{ $offer['project']->title }}" data-action-type="reject">Reject</button>

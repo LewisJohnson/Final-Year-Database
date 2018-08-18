@@ -6,6 +6,7 @@
 		</div>
 	</td>
 	<td><a href="mailto:{{ $student->user->email }}">{{ $student->user->first_name }} {{ $student->user->last_name }}</a></td>
+	<td>{{ $student->reject_count }}</td>
 	@if($student->user->last_login)
 		<td>{{ $student->user->last_login->diffForHumans() }}</td>
 	@else
