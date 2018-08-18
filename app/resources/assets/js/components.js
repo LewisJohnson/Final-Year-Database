@@ -38,7 +38,7 @@
 		*
 		* @param {HTMLElement} element The element that will be upgraded.
 	*/
-	var MobileMenu =  function MobileMenu(element) {
+	var MobileMenu = function MobileMenu(element) {
 		if(window['MobileMenu'] == null){
 			window['MobileMenu'] = this;
 			this.element = $(element);
@@ -441,7 +441,7 @@
 	*
 	* @param {HTMLElement} element The element that will be upgraded.
 	*/
-	var AjaxFunctions =  function AjaxFunctions() {};
+	var AjaxFunctions = function AjaxFunctions() {};
 	window['AjaxFunctions'] = AjaxFunctions;
 
 	AjaxFunctions.prototype.CssClasses_ = {
@@ -464,13 +464,13 @@
 	};
 
 	// Project page search focus
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus',  function(e){
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function(e){
 		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
 	});
 
 	// Project page search focus out
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout',  function(e){
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function(e){
 		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
 	});
@@ -535,7 +535,7 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to change the topic name from <b>"' +  topic.originalName + '"</b> to <b>"' +  topic.topicNameInput.val() +'"</b>?',
+				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.topicNameInput.val() +'"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
@@ -579,7 +579,7 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to delete <b>"' +  topic.topicNameInput.val() + '"</b>?',
+				content: 'Are you sure you want to delete <b>"' + topic.topicNameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
@@ -672,7 +672,7 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to change the programme name from <b>"' +  programme.originalName + '"</b> to <b>"' +  programme.programmeNameInput.val() +'"</b>?',
+				content: 'Are you sure you want to change the programme name from <b>"' + programme.originalName + '"</b> to <b>"' + programme.programmeNameInput.val() +'"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
@@ -716,7 +716,7 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to delete <b>"' +  programme.programmeNameInput.val() + '"</b>?',
+				content: 'Are you sure you want to delete <b>"' + programme.programmeNameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
@@ -1189,8 +1189,8 @@
 
 	morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left) {
 		this.dropdownList.css({
-		    '-moz-transform': 'translateX(' + left + 'px)',
-		    '-webkit-transform': 'translateX(' + left + 'px)',
+			'-moz-transform': 'translateX(' + left + 'px)',
+			'-webkit-transform': 'translateX(' + left + 'px)',
 			'-ms-transform': 'translateX(' + left + 'px)',
 			'-o-transform': 'translateX(' + left + 'px)',
 			'transform': 'translateX(' + left + 'px)',
@@ -1200,7 +1200,7 @@
 
 		this.dropdownBg.css({
 			'-moz-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
-		    '-webkit-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+			'-webkit-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
 			'-ms-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
 			'-o-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
 			'transform': 'scaleX(' + width + ') scaleY(' + height + ')'
@@ -1238,7 +1238,7 @@
 		updateDropdownPosition();
 		$(window).on('resize', function(){
 			if( !resizing ) {
-				resizing =  true;
+				resizing = true;
 				(!window.requestAnimationFrame) ? setTimeout(updateDropdownPosition, 300) : window.requestAnimationFrame(updateDropdownPosition);
 			}
 		});

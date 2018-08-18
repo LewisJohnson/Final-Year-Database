@@ -19,7 +19,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	*
 	* @param {HTMLElement} element The element that will be upgraded.
 	*/
-	var ProjectTopics =  function ProjectTopics() {};
+	var ProjectTopics = function ProjectTopics() {};
 	window["ProjectTopics"] = ProjectTopics;
 
 	ProjectTopics.prototype.CssClasses_ = {
