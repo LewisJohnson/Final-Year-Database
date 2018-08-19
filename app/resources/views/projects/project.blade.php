@@ -14,7 +14,7 @@
 	@endif
 
 	@if($project->status != 'on-offer')
-		<p class="config-danger">This project is {{ $project->status }}.</p>
+		<p class="config-tip">This project is {{ $project->status }}.</p>
 	@endif
 
 	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->status == 'archived') ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
