@@ -147,7 +147,7 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
-								<h3>Browse</h3>
+								<h4>Browse</h4>
 								<ul>
 									<li>
 										<ul>

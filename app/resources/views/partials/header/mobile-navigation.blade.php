@@ -154,7 +154,7 @@
 							</li>
 
 							<li class="nav-button">
-								<a href="{{ action('SupervisorController@report') }}">Report by Supervisor</a>
+								<a href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
 							</li>
 						</div>
 					</div>

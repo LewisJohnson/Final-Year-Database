@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="centered width--1000 show--scroll-to-top">
-	<h1>Report by Supervisor</h1>
+	<h1>Supervisor Report</h1>
 
 	@include('supervisors.partials.supervisor-search')
 	<div class="button-group button-group--horizontal button-group--links">
