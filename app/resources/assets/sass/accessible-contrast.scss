@@ -4,9 +4,6 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.card {
-	border: 1px solid black !important;
-}
 
 .section {
 	border: 1px solid black !important;
@@ -21,21 +18,34 @@ input, textarea {
 .button {
 	background: black !important;
 	color: white !important;
+
+	&.button--accent{
+		background: blue !important;
+	}
 }
 
-a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6 {
+a, p, li, tr, th, td, h1, h2, h3, h4, h5, h6, label, ins {
 	color: black;
 }
 
-.card .footer {
-	background: black !important;
-	color: white !important;
+.tab-card .content-host li.sub-help{
+	color: black !important;
 }
 
-.card .footer a, .card .footer p {
-	color: white !important;
-	text-decoration: underline !important;
+.card {
+	border: 1px solid black !important;
+
+	.footer {
+		background: black !important;
+		color: white !important;
+
+		a, p {
+			color: white !important;
+			text-decoration: underline !important;
+		}
+	}
 }
+
 
 .checkbox input[type=checkbox]:checked + label:before {
 	background: black !important;

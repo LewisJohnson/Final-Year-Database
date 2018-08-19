@@ -4,12 +4,12 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-h1, h2 {
-	font-size: xx-large !important;
+h1 {
+	font-size: 200% !important;
 }
 
-h1 {
-	font-size: -webkit-xxx-large !important;
+h2 {
+	font-size: xx-large !important;
 }
 
 h3, h4, h5, h6 {
@@ -18,4 +18,15 @@ h3, h4, h5, h6 {
 
 p, a, li, td, tr, label, input, button {
 	font-size: large !important;
+}
+
+.card.tab-card {
+
+	.content-host {
+		flex: 0 0 70% !important;
+	}
+
+	ul.tab-container {
+		flex: 0 0 30% !important;
+	}
 }
