@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('scripts')
+	<script type="text/javascript">
+		Window["pageEnabled"] = {{ count($projects) >= 10 ? 'true' : 'false' }};
+	</script>
 	<script src="{{ asset('js/views/project-popularity.js') }}"></script>
 @endsection
 
@@ -10,6 +13,12 @@
 			<div class="fancy-page">
 				<h1>Project Popularity</h1>
 				<p class="subtitle">We need to gather a little bit more data before showing you this page, check back soon.</p>
+
+				<div id="cogs">
+					<div class="cog cog--large">@include('svg.cog')</div>
+					<div class="cog cog--medium">@include('svg.cog')</div>
+					<div class="cog cog--small">@include('svg.cog')</div>
+				</div>
 			</div>
 		</div>
 	@else

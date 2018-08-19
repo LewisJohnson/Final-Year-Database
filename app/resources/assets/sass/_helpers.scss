@@ -271,19 +271,8 @@ ul.dot-menu {
 }
 
 .icon {
-	// white-space: nowrap;
-	// margin: 0;
-	// padding: 1rem;
-	// width: 100%;
-	// display: block;
-	// text-decoration: none;
-
 	p, h1, h2, h3, h4, h5, h6 {
-		// margin-left: 5px;
-		// line-height: 32px;
-		// margin: 0;
 		display: inline-block;
-		// color: inherit;
 	}
 
 	p {
@@ -308,7 +297,7 @@ ul.dot-menu {
 	}
 }
 
-// horizontal list
+// Horizontal list
 .hl {
 	li {
 		display: inline-block;
@@ -405,6 +394,66 @@ ul.dot-menu {
 .delete-user {
 	color: red;
 	float: right;
+}
+
+// COGS
+#cogs {
+	max-width: 200px;
+	margin: 0 auto;
+
+	.cog--large {
+		position: relative;
+		z-index: 3;
+		animation: cogSpin 4s linear infinite;
+		color: #a0a0a0;
+	}
+
+	.cog--medium {
+		position: relative;
+		float: left;
+		z-index: 2;
+		top: -59px;
+		left: 100px;
+		animation: cogSpin 2.2s linear infinite;
+		animation-direction: reverse;
+		color: grey;
+	}
+
+	.cog--small {
+		position: relative;
+		float: left;
+		z-index: 1;
+		top: -99px;
+		left: 30px;
+		animation: cogSpin 1.8s linear infinite;
+		color: #6b6b6b;
+	}
+}
+
+.cog {
+	&.cog--large {
+		.svg-container {
+			margin-right: 0px;
+			max-height: 200px;
+			max-width: 200px;
+		}
+	}
+
+	&.cog--medium {
+		.svg-container {
+			margin-right: 0px;
+			max-height: 125px;
+			max-width: 125px;
+		}
+	}
+
+	&.cog--small {
+		.svg-container {
+			margin-right: 0px;
+			max-height: 75px;
+			max-width: 75px;
+		}
+	}
 }
 
 // FLEX
@@ -601,6 +650,15 @@ ul.dot-menu {
 	}
 }
 
+@keyframes cogSpin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 @keyframes showDotMenu {
 	from {
 		transform: scale3d(0.9, 0.9, 1);
@@ -624,6 +682,6 @@ ul.dot-menu {
 		height: 0;
 	}
 	to {
-		height: calc(100% - 250px);
+		height: 100%;
 	}
 }

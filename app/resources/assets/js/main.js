@@ -59,8 +59,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		// Animate all cards
 		var animatedEntranceAnimationDelay = 0;
 
-		// So the scroll bar doesn't show
-		$('body').css('overflow-y', 'hidden');
 		$(animatedSelector).each(function(index, value) {
 			animatedEntranceAnimationDelay += 50;
 			setTimeout(function(){
@@ -73,8 +71,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			}.bind(this), animatedEntranceAnimationDelay);
 		});
 
-		// So we can scroll again
-		$('body').css('overflow-y', 'scroll');
 	}
 
 	// Makes primary topic first

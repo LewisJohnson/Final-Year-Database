@@ -13,9 +13,15 @@
 
 <script>
 	$(function() {
-		var tea = $('.tea');
+		// Set body height
+		$('body').css({
+			'height': '100vh',
+			'overflow-y': 'hidden'
+		});
+
+		var flowingTea = $('.tea');
 		var teafill = $('.tea-fill');
-		var teapot = tea.prev();
+		var teapot = flowingTea.prev();
 		var animPlayed = false;
 
 		$('.tea-error').on('click', function(){
@@ -27,9 +33,9 @@
 			teapot.addClass('teapot-anim');
 
 			setTimeout(function (){
-				tea.css('display', 'block');
-				tea.animate({
-					height: window.innerHeight - tea.offset().top
+				flowingTea.css('display', 'block');
+				flowingTea.animate({
+					height: window.innerHeight - flowingTea.offset().top
 				}, 2000);
 
 			}, 600);
@@ -40,19 +46,20 @@
 			}, 2600);
 
 			setTimeout(function (){
-				tea.animate({ height: 0 }, 1600);
+				flowingTea.animate({ height: 0 }, 1600);
 			}, 6400);
 
 			setTimeout(function (){
 				teapot.removeClass('teapot-anim');
 				teapot.addClass('shake animated');
-			}, 8200);
+				teafill.animate({ opacity: 0 }, 300);
+			}, 8400);
 		});
 
 		function positionTea(){
 			var teapotPos = teapot[0].getBoundingClientRect();
-			tea.css('left', teapotPos.right + 3);
-			tea.css('top', teapotPos.top + 60);
+			flowingTea.css('left', teapotPos.right + 3);
+			flowingTea.css('top', teapotPos.top + 60);
 		}
 	});
 </script>
