@@ -20,7 +20,7 @@
 	@endif
 
 	<div class="form-field">
-		<label for="title">Title <ins style="font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px"></ins></label>
+		<label for="title">Title<ins style="margin-left:8px; font-size: 12px">We recommended a maximum of 40 characters.</ins> <ins id="title-character-count" style="font-size: 12px; float: right"></ins></label>
 		<input class="project-title" maxlength="255" type="text" name="title" id="title" autofocus="true" value="{{ old('title') }}" required>
 		<p id="title-already-used" style="display: none;" class="inline-error-block">This project title is already in use.</p>
 		<p id="similar-title-already-used" style="display: none;" class="inline-info-block">A similar project title is already in use.</p>

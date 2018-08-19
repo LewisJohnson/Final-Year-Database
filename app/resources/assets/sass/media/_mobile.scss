@@ -124,7 +124,7 @@
 	}
 
 	ul.tab-container {
-		overflow-x: scroll;
+		overflow-x: auto;
 	}
 
 	.table-action-header, .table-action {
@@ -138,7 +138,7 @@
 	.main-content {
 		padding: 0 1rem;
 		padding-bottom: 7rem !important;
-		overflow-x: scroll;
+		overflow-x: auto;
 	}
 
 	.section-container {
