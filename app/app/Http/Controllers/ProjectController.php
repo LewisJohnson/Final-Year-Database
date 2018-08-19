@@ -452,6 +452,10 @@ class ProjectController extends Controller{
 			$transaction->save();
 			$project->delete();
 		});
+
+		session()->flash("message", "Project has been deleted.");
+		session()->flash('message_type', 'success');
+
 		if($project->status == "student-proposed"){
 			return response()->json(array('successful' => true, 'url' => action('HomeController@index')));
 		} else {
