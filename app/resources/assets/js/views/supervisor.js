@@ -27,7 +27,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		IS_SELECTED: 'is-selected'
 	};
 
-
 	ProjectTopics.prototype.Selectors_ = {
 		EDIT__ADD_TOPIC_INPUT: '#add-topic-input',
 		EDIT__NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',

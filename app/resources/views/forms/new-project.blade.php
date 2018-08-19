@@ -1,3 +1,5 @@
+{!! SussexProjects\Topic::getDatalist() !!}
+
 @if($user_type == "student")
 	@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
 		<p class="config-tip">You may not propose a project until {{ SussexProjects\Mode::getSupervisorAcceptDate(true) }}.</p>

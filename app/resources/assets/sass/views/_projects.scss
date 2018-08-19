@@ -104,20 +104,20 @@
 }
 
 .html-editor--top-buttons {
-	.active {
-		border-bottom: 3px solid $brand-primary;
-	}
-
 	button {
 		padding: 5px 10px;
+
+		&:first-of-type{
+			margin-left: auto;
+		}
+
+		&.active {
+			border-bottom: 3px solid $brand-primary;
+		}
 	}
 
 	label {
 		font-size: 12px;
-	}
-
-	.html {
-		margin-left: auto;
 	}
 }
 
@@ -139,18 +139,21 @@
 		@include transition--medium-cb();
 	}
 
-	li:hover, li:focus {
-		background: whitesmoke;
-
-		.svg-container {
-			color: #313131;
-		}
-	}
-
 	button {
 		height: 40px;
 		width: 40px;
 		padding: 4px;
+		border-bottom: 1px solid transparent;
+		@include transition--medium-cb();
+
+		&:hover, &:focus {
+			background: whitesmoke;
+			border-bottom: 1px solid #aa9fff;
+			
+			.svg-container {
+				color: #aa9fff;
+			}
+		}
 	}
 
 	.break {
