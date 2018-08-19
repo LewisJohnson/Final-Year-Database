@@ -21,20 +21,25 @@
 	});
 
 	function scrollToSupervisor(){
+		if(input.val() === '' || !input.val().replace(/\s/g, '').length){
+			createToast('error', 'Invalid search term.');
+			return;
+		}
+
 		var supervisor = $('#' +  input.val().replace(/[\s.]+/g, ''));
 
 		if(supervisor.length < 1){
-			createToast("error", 'Supervisor "' + input.val() + '" can not be found.');
+			createToast('error', 'Supervisor "' + input.val() + '" can not be found.');
 		} else {
-			supervisor.removeClass("animated shake");
-			$("html, body").animate({
-				scrollTop: supervisor.offset().top - 150 }, 600,
+			supervisor.removeClass("animated flash");
+			$("html, body").animate({ scrollTop: supervisor.offset().top - 150 }, 600,
 				function() {
-					supervisor.addClass("animated shake");
+					supervisor.addClass("animated flash");
 					supervisor.focus();
-			});
+				}
+			);
 		}
 
-		input.val("");
+		input.val('');
 	}
 });
