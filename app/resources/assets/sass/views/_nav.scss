@@ -32,7 +32,6 @@ nav.desktop {
 	position: relative;
 	background: $nav-background;
 	padding: 0px 10px;
-	@include transition--slow-cb();
 	visibility: hidden;
 	max-height: 0;
 	z-index: 2;

@@ -67,7 +67,7 @@
 			</div>
 		@endif
 
-		<nav class="main-nav flex--full desktop">
+		<nav class="main-nav flex--full flex--wrap flex--row desktop">
 			<ul>
 
 				@if(!empty(Session::get('department')) && Request::path() !== 'set-department')

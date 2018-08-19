@@ -2,7 +2,7 @@
 @section('content')
 <div class="centered animated-entrance width--1000">
 	@if(Auth::check())
-		<h1>Hello, {{ Auth::user()->first_name }}.</h1>
+		<h1 style="text-align: center;">Hello, {{ Auth::user()->first_name }}.</h1>
 		<div class="card-container card--margin-vertical">
 			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
