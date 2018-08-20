@@ -28,6 +28,7 @@
 				</div>
 			@endif
 		@endif
+
 		<h1 class="title">{{ $project->title }}</h1>
 
 		@if($view == "StudentProject")
@@ -77,29 +78,27 @@
 		</ul>
 	</div>
 
-	<div class="button-group button-group--horizontal ">
+	<div class="button-group button-group--horizontal">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 
 		{{-- STUDENT SELECT --}}
 		@if(Auth::check())
 			@if($view != "StudentProject")
-				@if($project->status == "on-offer")
-					@if(Auth::user()->isStudent())
-						@if(Auth::user()->student->project_status == 'none')
-							@if(SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()))
-								<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
-									{{ csrf_field() }}
-									{{ method_field('PATCH') }}
-									<input type="hidden" name="project_id" value="{{ $project->id }}">
-									<button class="button button--raised button--accent">Select project</button>
-								</form>
-							@endif
-						@endif
+				@if(Auth::user()->isStudent())
+					@if(Auth::user()->student->project_status == 'none' 
+						&& SussexProjects\Mode::getProjectSelectionDate()->lte(\Carbon\Carbon::now()) 
+						&& $project->status == "on-offer")
+						<form class="form form--flex" action="{{ action('StudentController@selectProject') }}" role="form" method="POST" >
+							{{ csrf_field() }}
+							{{ method_field('PATCH') }}
+							<input type="hidden" name="project_id" value="{{ $project->id }}">
+							<button class="button button--raised button--accent">Select project</button>
+						</form>
+					@else
+						<button class="button" disabled>Select project</button>
 					@endif
-			@else
-				<button class="button button--raised button--accent" disabled>Select project</button>
+				@endif
 			@endif
-		@endif
 
 			@if($project->isOwnedByUser() || $project->isUserSupervisorOfProject())
 				<a class="button button--raised" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
