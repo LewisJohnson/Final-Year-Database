@@ -12,9 +12,10 @@
 		<div style="overflow-x: auto;">
 			@include ('supervisors.partials.accepted-students-table')
 		</div>
-		@if (count(Auth::user()->supervisor->getAcceptedStudents()))
+		@if(count(Auth::user()->supervisor->getAcceptedStudents()))
 			<div class="button-group">
-				<button class="button button--raised" type="button">Email Selected</button>
+				{{-- <button class="button button--raised" type="button">Email Selected</button> --}}
+				<a class="button button--raised" href="{{ Auth::user()->supervisor->getMailtoStringByProjectStatus("accepted") }}">Email Accepted</a>
 			</div>
 		@endif
 	</div>

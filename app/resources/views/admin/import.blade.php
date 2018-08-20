@@ -46,7 +46,7 @@
 			<div class="form-field">
 				<label>Select file to upload</label>
 				<input type="file" accept=".csv" name="studentFile" class="file" required/>
-				<button class="button" type='submit'>Upload Test</button>
+				<button class="button button--raised" type='submit'>Upload Test</button>
 			</div>
 		</form>
 		<div id="import-student-test-result"></div>
@@ -81,7 +81,7 @@
 				</div>
 			</div>
 			<div class="form-field">
-				<button class="button" type='submit'>Import</button>
+				<button class="button button--raised button--danger" type='submit'>Import</button>
 			</div>
 			<div id="import-student-result"></div>
 		</form>

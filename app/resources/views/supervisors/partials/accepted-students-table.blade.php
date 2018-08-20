@@ -2,12 +2,12 @@
 	@if(Auth::user()->supervisor->getAcceptedStudents())
 		<thead>
 			<tr>
-				<th>
+{{-- 				<th>
 					<div class="checkbox">
 						<input class="checkbox-input master-checkbox" id="accepted" type="checkbox">
 						<label for="accepted" name="accepted"></label>
 					</div>
-				</th>
+				</th> --}}
 				<th class="pointer">Student Name</th>
 				<th class="pointer">Second Marker</th>
 				<th class="pointer">Project Title</th>
@@ -17,12 +17,12 @@
 		<tbody>
 			@foreach(Auth::user()->supervisor->getAcceptedStudents() as $accepted)
 				<tr>
-					<td>
+{{-- 					<td>
 						<div class="checkbox">
 							<input class="checkbox-input" id="accepted-{{ $accepted['student']->user->getFullName() }}" type="checkbox">
 							<label for="accepted-{{ $accepted['student']->user->getFullName() }}" name="accepted-{{ $accepted['student']->user->getFullName() }}"></label>
 						</div>
-					</td>
+					</td> --}}
 					<td><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a></td>
 					@if($accepted['student']->marker)
 						<td>{{ $accepted['student']->marker->user->getFullName() }}</td>
