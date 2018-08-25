@@ -180,23 +180,26 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		e.preventDefault();
 
 		$('.help-block', '#loginForm').css("display", "none");
-		$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
+
+		if($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined){
+			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
+		}
 
 		$.ajax({
 			url: $(this).prop('action'),
 			type:'POST',
 			data: $(this).serialize(),
-			success:function(){
-				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).hide();
-				location.reload(true);
-			},
-			error: function (data) {
+			success: function(response){
+				if(response.successful){
+					location.reload(true);
+				} else {
+					$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_FORM).show();
+					$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_FORM).text(response.message);
+				}
+			}
+		}).done(function(response){
+			if($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined){
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
-
-				$('#login-username', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).addClass("has-error");
-
-				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).show();
-				$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG).text(data.responseJSON.message);
 			}
 		});
 	});

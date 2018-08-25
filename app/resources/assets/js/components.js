@@ -455,6 +455,7 @@
 		SEARCH_FILTER_CONTAINER: '.search-filter-container',
 		SEARCH_FILTER_BUTTON: '#search-filter-button',
 		LOG_IN_DIALOG: '.login.dialog',
+		LOG_IN_FORM: '#loginForm',
 	};
 
 	AjaxFunctions.prototype.Keys_ = {

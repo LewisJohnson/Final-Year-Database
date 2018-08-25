@@ -45,8 +45,15 @@ class LoginController extends Controller{
 		$this->middleware('guest')->except('logout');
 	}
 
+	/**
+	 * Get the login attempt request.
+	 *
+	 * @param \Illuminate\Http\Request  $request
+	 * @return boolean Successful login
+	 */
 	protected function attemptLogin(Request $request){
 		Session::forget('ldap_guest');
+
 		// If they entered an email, retrieve their username
 		if (preg_match('/@/', $request->input('username'))){
 			$parts = explode("@", $request->input('username'));
@@ -81,13 +88,36 @@ class LoginController extends Controller{
 					Session::put('education_level', current($user->allowedEducationLevel()));
 				}
 
-			} else {
-				session()->flash('message', 'Something went wrong.');
-				session()->flash('message_type', 'error');
+				return true;
 			}
 		}
-		
-		return redirect()->action('HomeController@index');
+
+		return false;
+	}
+
+	/**
+	 * Get the failed login response instance.
+	 *
+	 * @param \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	protected function sendFailedLoginResponse(Request $request){
+		return response()->json(array(
+			'successful' => false, 
+			'message' => 'Incorrect username and/or password.'
+		));
+	}
+
+	/**
+	 * Get the successful login response instance.
+	 *
+	 * @param \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	protected function authenticated(Request $request, $user){
+		return response()->json(array(
+			'successful' => true
+		));
 	}
 
 	/**
