@@ -226,3 +226,5 @@ pip-log.txt
 .mr.developer.cfg
 app/.phpintel/
 app/ngrok.exe
+*.lock
+app/package-lock.json

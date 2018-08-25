@@ -312,6 +312,26 @@ class Supervisor extends Model{
 		return $offers;
 	}
 
+	public function getMailtoStringByProjectStatus($status){
+		$project = new Project;
+		$student = new Student;
+
+		$students = Student::where('project_status', $status)
+			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->where('project.supervisor_id', $this->id)
+			->select($student->getTable().'.*', 'project.supervisor_id')->get();
+
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($students as $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
 	/**
 	 * A list of supervisors with the supervisor privilege.
 	 *
