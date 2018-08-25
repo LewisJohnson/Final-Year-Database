@@ -1,5 +1,9 @@
 @include('partials.cookie-banner')
 
+@if(preg_match('~MSIE|Internet Explorer~i', @$_SERVER['HTTP_USER_AGENT']) || (strpos(@$_SERVER['HTTP_USER_AGENT'], 'Trident/7.0; rv:11.0') !== false))
+	@include('partials.ie-banner')
+@endif
+
 @if(Session::get('logged_in_as') != null)
 	<div class="cookie-banner flex flex--row" style="background: #ff3434">
 		<div style="color: white; width: 30px;">

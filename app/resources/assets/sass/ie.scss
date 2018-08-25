@@ -1,0 +1,31 @@
+/*!
+ * Copyright (C) University of Sussex 2018.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Written by Lewis Johnson <lj234@sussex.com>
+ */
+
+// A few hacks to improve IE 11 compatibility.
+
+@import "variables";
+
+.svg-container {
+	svg {
+		height: 20px !important;
+	}
+}
+
+#cogs {
+	display: none;
+}
+
+@media screen and (min-width: $mobile-width) {
+	.dialog {
+		left: 33.3%;
+	}
+	// Tab
+	.card.tab-card {
+		.content-host {
+			flex: 0 0 76%;
+		}
+	}
+}
