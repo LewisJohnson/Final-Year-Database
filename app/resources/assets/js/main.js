@@ -813,4 +813,13 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			$(this).html($(this).data('original'));
 		}
 	});
+
+	const tilt = $('.js-tilt').tilt({
+		maxTilt: 10,
+		perspective: 800,
+		scale: 1.05,
+		speed: 800,
+		glare: true,
+		maxGlare: 0.4 
+	});
 });

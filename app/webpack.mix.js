@@ -19,7 +19,7 @@ new webpack.ProvidePlugin({ $: 'jquery', Query: 'jquery' });
 
 // JAVASCRIPT
 mix.js([
-	'resources/assets/js/jquery-3.2.1.js',
+	'resources/assets/js/jquery.js',
 	'resources/assets/js/jquery-taphold.js',
 	'resources/assets/js/jquery-confirm.js'
 ], 'public/js/jquery-bundle.js');
