@@ -393,7 +393,7 @@ class UserController extends Controller{
 
 			// Update student supervisor
 			if(in_array("supervisor", $request->privileges)){
-				if($user->isSupervisor()){
+			if($user->isSupervisor()){
 					$supervisor = $user->supervisor;
 				} else {
 					$supervisor = new Supervisor();
@@ -402,10 +402,10 @@ class UserController extends Controller{
 
 				$supervisor['title'] = $request['title'];
 
-			foreach (get_education_levels() as $education_level) {
+				foreach (get_education_levels() as $education_level) {
 					$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
-					$supervisor['take_students_'.$education_level['shortName']] = empty($request['take_students_'.$education_level['shortName']]);
-					$supervisor['accept_email_'.$education_level['shortName']] = empty($request['accept_email_'.$education_level['shortName']]);
+					$supervisor['take_students_'.$education_level['shortName']] = isset($request['take_students_'.$education_level['shortName']]);
+					$supervisor['accept_email_'.$education_level['shortName']] = isset($request['accept_email_'.$education_level['shortName']]);
 				}
 
 				$supervisor->save();
@@ -420,7 +420,7 @@ class UserController extends Controller{
 		session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('HomeController@index');
+		return redirect()->action('UserController@edit', ['user' => $user]);
 	}
 
 
