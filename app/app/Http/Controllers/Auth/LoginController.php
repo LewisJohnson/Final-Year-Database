@@ -120,7 +120,7 @@ class LoginController extends Controller{
 			Session::forget('after_login');
 		}
 
-		if(!is_null($url)){
+		if(!empty($url)){
 			return response()->json(array(
 				'successful' => true,
 				'url' => $url
