@@ -111,6 +111,8 @@
 		this.isClosable = true;
 		this.activatorButtons = [];
 		this.init();
+
+		window[this.dialogName + 'Dialog'] = this;
 	};
 
 	Dialog.prototype.HtmlSnippets_ = {
@@ -553,7 +555,7 @@
 									topic_id: topic.topicId,
 									topic_name : topic.topicNameInput.val()
 								},
-							}).done(function(){
+							}).always(function(){
 								topic.topicNameInput.prop('disabled', false);
 								topic.editButton.html('Edit');
 								topic.originalName = topic.topicNameInput.val();
@@ -690,7 +692,7 @@
 									programme_id: programme.programmeId,
 									programme_name : programme.programmeNameInput.val()
 								},
-							}).done(function(){
+							}).always(function(){
 								programme.programmeNameInput.prop('disabled', false);
 								programme.editButton.html('Edit');
 								programme.originalName = programme.programmeNameInput.val();
@@ -982,7 +984,7 @@
 			success: function(data){
 
 			},
-		}).done(function(data){
+		}).always(function(data){
 			$("#assign-dialog")[0].dialog.hideDialog();
 			$("#assign-dialog")[0].dialog.hideLoader();
 			marker.resetView(marker);
@@ -1096,7 +1098,7 @@
 					createToast('success', 'Second markers have been swapped.');
 				}
 			},
-		}).done(function(response){
+		}).always(function(response){
 			$("#swap-dialog")[0].dialog.hideDialog();
 			$("#swap-dialog")[0].dialog.hideLoader();
 			swap.resetView(swap);
@@ -1263,5 +1265,11 @@
 	Marker.prototype.initAll();
 	Swap.prototype.initAll();
 	DotMenu.prototype.initAll();
+
+	if(window["showLoginDialog"] == true){
+		window["loginDialog"].showDialog();
+		$("#redirect-block p").text(window["redirectUrl"]);
+		$("#redirect-block").show();
+	}
 
 });

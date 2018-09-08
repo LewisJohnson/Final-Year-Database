@@ -30,14 +30,24 @@
 				</div>
 
 				<p class="help-block" style="display: none;"></p>
+				<div id="redirect-block" style="display: none;">
+					<h3 style="margin-bottom: 5px">After login, you will be redirected to</h3>
+					<p style="margin-top: 0"></p>
+				</div>
 
 				<div class="flex flex--row">
 					<button class="button button--raised button--accent" type="submit">LOG IN</button>
 				</div>
 			</form>
 		</div>
-
 	</div>
+
+	<script>
+		@if(Session::get("after_login") != null)
+			$("#redirect-block p").text("{{ Session::get('after_login') }}");
+			$("#redirect-block").show();
+		@endif
+	</script>
 @else
 	<div id="login-dialog" data-type="ajax" class="dialog login" data-dialog="login">
 		<div class="header">
@@ -67,6 +77,10 @@
 				</div>
 
 				<p class="help-block" style="display: none;"></p>
+				<div id="redirect-block" style="display: none;">
+					<h3 style="margin-bottom: 5px">After login, you will be redirected to</h3>
+					<p style="margin-top: 0"></p>
+				</div>
 
 				<div class="footer footer--dark">
 					<button class="button button--raised button--accent" type="submit">LOG IN</button>

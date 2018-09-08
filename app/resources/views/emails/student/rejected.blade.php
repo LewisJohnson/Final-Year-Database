@@ -8,5 +8,5 @@
 
 <br>
 
-<p>Your project status has been reset, so you may <a href="{{ action('Auth\LoginController@showLoginForm', ['educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">Log In</a> to select a new project.</p>
+<p>Your project status has been reset, so you may <a href="{{ action('Auth\LoginController@showLoginForm', ['educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department'), 'utm_medium' => 'email']) }}">Log In</a> to select a new project.</p>
 @endsection

@@ -115,6 +115,18 @@ class LoginController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function authenticated(Request $request, $user){
+		if(Session::get('after_login') != null){
+			$url = url(Session::get('after_login'));
+			Session::forget('after_login');
+		}
+
+		if(!is_null($url)){
+			return response()->json(array(
+				'successful' => true,
+				'url' => $url
+			));
+		}
+
 		return response()->json(array(
 			'successful' => true
 		));

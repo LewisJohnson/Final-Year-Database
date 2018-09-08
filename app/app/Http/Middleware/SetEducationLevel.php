@@ -36,21 +36,29 @@ class SetEducationLevel{
 						}
 					}
 				}
+			} else if(ldap_guest()) {
+				if(in_array($request->query("educationLevel"), User::guestEducationLevel(true))){
+					// Check to see if the education level is valid
+					// We can't use in_array because we need the value to put into the session data
+					foreach(get_education_levels() as $key => $level){
+						if($request->query("educationLevel") == $level["shortName"]){
+							Session::put("education_level", $level);
+						}
+					}
+				}
 			} else {
-				if(ldap_guest()){
-					if(in_array($request->query("educationLevel"), User::guestEducationLevel(true))){
-						// Check to see if the education level is valid
-						// We can't use in_array because we need the value to put into the session data
-						foreach(get_education_levels() as $key => $level){
-							if($request->query("educationLevel") == $level["shortName"]){
-								Session::put("education_level", $level);
-							}
+				
+				if(in_array($request->query("educationLevel"), User::guestEducationLevel(true))){
+					// Check to see if the education level is valid
+					// We can't use in_array because we need the value to put into the session data
+					foreach(get_education_levels() as $key => $level){
+						if($request->query("educationLevel") == $level["shortName"]){
+							Session::put("education_level", $level);
 						}
 					}
 				}
 			}
 		}
-
 		return $next($request);
 	}
 }

@@ -10,10 +10,11 @@ namespace SussexProjects\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Session;
 
-class DepartmentCheck{
+class CheckDepartment{
 
 	/**
-	 * Handle an incoming request.
+	 * This middleware checks to see if a department is set.
+	 * Redirects if it is not
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 * @param  \Closure                 $next

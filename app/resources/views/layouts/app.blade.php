@@ -7,6 +7,13 @@
 
 		@include('partials.header')
 
+		@if(Session::get("after_login") != null)
+			<script>
+				window["showLoginDialog"] = true;
+				window["redirectUrl"] = "{{ Session::get('after_login') }}";
+			</script>
+		@endif
+
 		@if(Auth::check())
 			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
 		@else

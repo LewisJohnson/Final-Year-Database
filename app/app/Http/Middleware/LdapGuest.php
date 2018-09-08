@@ -10,7 +10,7 @@ namespace SussexProjects\Http\Middleware;
 use Closure;
 use Auth;
 
-class LdapGuest{
+class LdapGuest {
 
 	/**
 	 * Handle an incoming request.

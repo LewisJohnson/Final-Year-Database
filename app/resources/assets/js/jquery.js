@@ -13,7 +13,4 @@
 |
 */
 
-window.$ = 
-window.jQuery = 
-		require("jquery"), 
-		require("tilt.js");
+window.$ = window.jQuery = require("jquery");
