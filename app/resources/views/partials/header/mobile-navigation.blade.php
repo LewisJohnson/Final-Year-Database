@@ -127,7 +127,6 @@
 									</svg>
 								</div>
 								<div class="dropdown-content">
-									<a title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">Project Report</a>
 									<a title="Create a new project" href="{{ action('SupervisorController@report') }}">Supervisor Report</a>
 									<a title="Show my most popular projects" href="{{ action('SupervisorController@projectPopularity') }}">Project Popularity</a>
 								</div>

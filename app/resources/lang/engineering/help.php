@@ -237,12 +237,12 @@ return [
 		<tbody>
 			<tr>
 				<td>Accessibility</td>
-				<td>highContrast</td>
+				<td>high_contrast</td>
 				<td>Determines if high contrast is enabled</td>
 			</tr>
 			<tr>
 				<td>Accessibility</td>
-				<td>largeFont</td>
+				<td>large_font</td>
 				<td>Determines if large font is enabled.</td>
 			</tr>
 			<tr>
@@ -262,7 +262,7 @@ return [
 			</tr>
 			<tr>
 				<td>Analytics</td>
-				<td>seen-cookie-banner</td>
+				<td>seen_cookie_banner</td>
 				<td>Determines if you have acknowledged the cookie banner.</td>
 			</tr>
 			<tr>
@@ -272,12 +272,12 @@ return [
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>hide-accepted</td>
+				<td>hide_accepted</td>
 				<td><b>Supervisors only</b> - Determines if the tab "Accepted Students" supervisor tab is hidden.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>hide-offers</td>
+				<td>hide_offers</td>
 				<td><b>Supervisors only</b> - Determines if the tab "Offers" supervisor tab is hidden.</td>
 			</tr>
 			<tr>

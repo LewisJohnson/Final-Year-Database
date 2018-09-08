@@ -64,8 +64,8 @@ class SupervisorController extends Controller{
 		if($request->query("includeClosedToOffer") === "true"){
 			$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		} else {
-			$supervisors = Supervisor::getAllSupervisorsQuery()->
-				where('take_students_'.Session::get('education_level')["shortName"], true)
+			$supervisors = Supervisor::getAllSupervisorsQuery()
+				->where('take_students_'.Session::get('education_level')["shortName"], true)
 				->get();
 		}
 
@@ -130,7 +130,7 @@ class SupervisorController extends Controller{
 			if(count($project->getStudentsWithProjectSelected()) > 1){
 				return response()->json(array(
 					'successful' => false,
-					'message' => 'You must reject all other students before accepting '.$student->user->first_name
+					'message' => 'You must reject all other students for "'.$project->title.'" before accepting '.$student->user->getFullName()
 				));
 			}
 
@@ -326,7 +326,8 @@ class SupervisorController extends Controller{
 		}
 
 		return response()->json(array(
-			'successful' => true, 'message' => $message
+			'successful' => true,
+			'message' => $message
 		));
 	}
 }

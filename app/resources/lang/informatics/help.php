@@ -248,12 +248,12 @@ return [
 		<tbody>
 			<tr>
 				<td>Accessibility</td>
-				<td>highContrast</td>
+				<td>high_contrast</td>
 				<td>Determines if high contrast is enabled</td>
 			</tr>
 			<tr>
 				<td>Accessibility</td>
-				<td>largeFont</td>
+				<td>large_font</td>
 				<td>Determines if large font is enabled.</td>
 			</tr>
 			<tr>
@@ -273,28 +273,33 @@ return [
 			</tr>
 			<tr>
 				<td>Analytics</td>
-				<td>seen-cookie-banner</td>
+				<td>seen_cookie_banner</td>
 				<td>Determines if you have acknowledged the cookie banner.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>favourite_projects</td>
-				<td><b>Students only</b> - A list of your favourite projects.</td>
+				<td><b>Students only</b><br>A list of your favourite projects.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>hide-accepted</td>
-				<td><b>Supervisors only</b> - Determines if the tab "Accepted Students" supervisor tab is hidden.</td>
+				<td>hide_accepted</td>
+				<td><b>Supervisors only</b><br>Determines if the table "Accepted Students" is hidden.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>hide-offers</td>
-				<td><b>Supervisors only</b> - Determines if the tab "Offers" supervisor tab is hidden.</td>
+				<td>hide_offers</td>
+				<td><b>Supervisors only</b><br>Determines if the table "Interested Students" is hidden.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>hide_archived</td>
-				<td><b>Supervisors only</b> - Determines if the user is displaying archived projects in "My Projects".</td>
+				<td><b>Supervisors only</b><br>Determines if the user is displaying archived projects in "My Projects".</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td><b>Temporary</b><br>seen_supervisor_notice</td>
+				<td><b>Supervisors only</b><br>Determines if the user has seen the 08/09/2018 "Some things have moved" notice.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -326,7 +331,7 @@ return [
 			<tr>
 				<td>Usability</td>
 				<td>cadt</td>
-				<td><b>System administrators only</b> - The current tab selected in the administrator dashboard.</td>
+				<td><b>System administrators only</b><br>The current tab selected in the administrator dashboard.</td>
 			</tr>
 		</tbody>
 	</table>

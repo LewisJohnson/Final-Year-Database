@@ -21,8 +21,8 @@ class CookieTest extends DuskTestCase{
 	public function testRequiredCookies(){
 		// $this->browse(function (Browser $browser) {
 		// 	$browser->visit('/')
-		// 		->assertHasCookie("accessibility-font")
-		// 		->assertHasCookie("accessibility-contrast")
+		// 		->assertHasCookie("accessibility_font")
+		// 		->assertHasCookie("accessibility_contrast")
 		// 		->assertHasCookie("favourite_projects");
 		// });
 	}

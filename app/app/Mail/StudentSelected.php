@@ -12,6 +12,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
+use SussexProjects\Mode;
 
 /**
  * The email sent to the supervisor when a student selected one of their projects.
@@ -61,7 +62,9 @@ class StudentSelected extends Mailable{
 		return $this->view('emails.supervisor.student-selected')->with([
 			'supervisor' => $this->supervisor,
 			'student' => $this->student,
-			'project' => $this->project
+			'project' => $this->project,
+			'supervisorAcceptDateIsInFuture' => Mode::getSupervisorAcceptDate()->gt(\Carbon\Carbon::now()),
+			'supervisorAcceptDate' => Mode::getSupervisorAcceptDate(true)
 		]);
 	}
 }

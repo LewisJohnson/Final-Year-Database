@@ -32,11 +32,20 @@
 	p, a {
 		margin: 5px 0;
 	}
+
 	h2 {
 		margin-top: 5px;
 	}
+
 	ul {
 		padding-left: 40px;
+	}
+
+	.accept-date-in-future {
+		background: #ff7777;
+		color: white;
+		padding: 1rem;
+		margin-top: 1rem;
 	}
 
 	.footer {

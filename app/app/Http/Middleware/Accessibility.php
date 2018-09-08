@@ -21,12 +21,12 @@ class Accessibility{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if($request->query("largeFont") != null){
-			Cookie::queue('accessibility-font', $request->query("largeFont"), 525600);
+		if($request->query("large_font") != null){
+			Cookie::queue('accessibility_font', $request->query("large_font"), 525600);
 		}
 
-		if($request->query("highContrast") != null){
-			Cookie::queue('accessibility-contrast', $request->query("highContrast"), 525600);
+		if($request->query("high_contrast") != null){
+			Cookie::queue('accessibility_contrast', $request->query("high_contrast"), 525600);
 		}
 
 		return $next($request);

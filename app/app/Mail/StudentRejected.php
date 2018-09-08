@@ -10,9 +10,9 @@ namespace SussexProjects\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use SussexProjects\Project;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
+use SussexProjects\Project;
 
 /**
  * The email sent to the student when they are rejected.

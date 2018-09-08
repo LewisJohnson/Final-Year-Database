@@ -46,10 +46,10 @@ class StudentUnselected extends Mailable{
 	 * @param Supervisor $supervisor
 	 * @param Student    $student
 	 */
-	public function __construct(Supervisor $supervisor, Student $student){
+	public function __construct(Supervisor $supervisor, Student $student, $projectId){
 		$this->supervisor = $supervisor;
 		$this->student = $student;
-		$this->project = $this->student->project;
+		$this->project = Project::findOrFail($projectId);
 	}
 
 	/**
@@ -59,7 +59,8 @@ class StudentUnselected extends Mailable{
 	 */
 	public function build(){
 		return $this->view('emails.supervisor.student-unselected')->with([
-			'supervisor' => $this->supervisor, 'student' => $this->student,
+			'supervisor' => $this->supervisor,
+			'student' => $this->student,
 			'project' => $this->project
 		]);
 	}

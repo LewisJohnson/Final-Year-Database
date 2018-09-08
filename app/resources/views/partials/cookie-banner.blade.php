@@ -1,4 +1,4 @@
-@if(empty($_COOKIE['cookie-banner-seen']))
+@if(empty($_COOKIE['seen_cookie_banner']))
 	<div class="cookie-banner flex flex--row">
 		<div style="color: white; width: 30px;">
 			@include('svg.cookie')

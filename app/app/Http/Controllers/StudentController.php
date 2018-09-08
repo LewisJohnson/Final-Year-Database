@@ -475,13 +475,14 @@ class StudentController extends Controller{
 
 		if(Auth::user()->student->project_status == 'accepted'){
 			return response()->json(array(
-				'error' => true, 'message' => "You have already accepted for a project."
+				'error' => true, 'message' => "You have already been accepted for this project."
 			));
 		}
 
 		$student = Auth::user()->student;
+		$projectId = Auth::user()->student->project_id;
 
-		DB::transaction(function() use ($student){
+		DB::transaction(function() use ($student, $projectId){
 			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' => 'project',
@@ -509,7 +510,7 @@ class StudentController extends Controller{
 				// Send selected email
 				if($student->project->supervisor->getAcceptingEmails()){
 					Mail::to($student->project->supervisor->user->email)
-						->send(new StudentUnselected($student->project->supervisor, Auth::user()->student));
+						->send(new StudentUnselected($student->project->supervisor, Auth::user()->student, $projectId));
 				}
 			} catch (Exception $e){
 

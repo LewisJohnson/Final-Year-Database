@@ -75,7 +75,7 @@ $(function() {
 		* Hides banner when clicked.
 	*/
 	$(".cookie-banner").on("click", "button",  function(e) {
-		setCookie('cookie-banner-seen', true, 365);
+		setCookie('seen_cookie_banner', true, 365);
 		$(this).parent().hide(config.animtions.medium);
 	});
 

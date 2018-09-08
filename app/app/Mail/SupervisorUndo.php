@@ -12,6 +12,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
+use SussexProjects\Project;
 
 /**
  * The email sent to the student when a supervisor undoes their project selection.
@@ -46,10 +47,10 @@ class SupervisorUndo extends Mailable{
 	 * @param Supervisor $supervisor
 	 * @param Student    $student
 	 */
-	public function __construct(Supervisor $supervisor, Student $student){
+	public function __construct(Supervisor $supervisor, Student $student, $projectId){
 		$this->supervisor = $supervisor;
 		$this->student = $student;
-		$this->project = $this->student->project;
+		$this->project = Project::findOrFail($projectId);
 	}
 
 	/**

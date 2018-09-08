@@ -1,12 +1,16 @@
 @extends('emails.base')
 
 @section('body')
-<h1>You've been accepted.</h1>
+<h1>You've been accepted!</h1>
 
 <p>Hi {{ $student->user->first_name }},</p>
-<p>You've been accepted to undertake <a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a> by {{ $supervisor->user->getFullName() }}.</p>
 
-<p style="margin-top: 1rem;">Here are some links to help you get started</p>
+<br>
+
+<p>You've been accepted to undertake the project <b><a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a></b> by <b>{{ $supervisor->user->getFullName() }}</b>.</p>
+<p>Your supervisor should be in-touch with you in the coming weeks to discuss the next steps.</p>
+
+<p style="margin-top: 1rem;">In the meantime, here are some links to help you get started</p>
 <ul>
 	@include('partials.header.help-links', ['platform' => 'email'])
 </ul>

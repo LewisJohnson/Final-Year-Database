@@ -10,6 +10,9 @@ namespace SussexProjects\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use SussexProjects\Student;
+use SussexProjects\Supervisor;
+use SussexProjects\Project;
 
 /**
  * The email sent to the student when a supervisor edits their proposed project.
@@ -45,10 +48,10 @@ class SupervisorEditedProposedProject extends Mailable{
 	 * @param Student    $student
 	 * @param            $projectId
 	 */
-	public function __construct(Supervisor $supervisor, Student $student, $projectId){
+	public function __construct(Supervisor $supervisor, Student $student, Project $project){
 		$this->supervisor = $supervisor;
 		$this->student = $student;
-		$this->project = Project::findOrFail($projectId);
+		$this->project = $project;
 	}
 
 	/**

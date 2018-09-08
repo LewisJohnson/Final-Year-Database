@@ -250,12 +250,6 @@
 											<h4>Reports</h4>
 											<ul class="icon-list links-list">
 												<li>
-													<a class="icon" title="Show my projects" href="{{ action('SupervisorController@projectReport') }}">
-														@include('svg.file-multiple')
-														<p>Project Report</p>
-													</a>
-												</li>
-												<li>
 													<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
 														@include('svg.clipboard')
 														<p>Supervisor Report</p>

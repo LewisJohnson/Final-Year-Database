@@ -281,13 +281,33 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		});
 	});
 
+	$("body").on("change", ".supervisor-table .checkbox input", function() {
+		var select = function(dom){
+			var status = dom.parents().eq(4).data('status');
+			var supervisorEmail = dom.parents().eq(4).data('supervisor-email');
+			var emailString = "mailto:" + supervisorEmail + "?bcc=";
+			var checkboxSelector = '.supervisor-table.' + status + ' .checkbox input';
+			var emailButtonselector = ".email-selected." + status;
+
+			$(checkboxSelector).each(function(index, value) {
+				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
+					emailString += $(value).data('email');
+					emailString += ",";
+				}
+			});
+
+			$(emailButtonselector).prop('href', emailString);
+		};
+		setTimeout(select($(this)), 2000);
+	});
+
 	$('.expand').on('click', function(e) {
 		var content = $(this).parents().eq(1).find('.content');
 
 		if(content.attr("aria-expanded") == "true"){
 			$(this).parent().removeClass("active");
 			$(this).find("svg").css("transform", "rotateZ(0deg)");
-			content.hide(200);
+			content.slideUp(200);
 			content.attr("aria-expanded", "false");
 			setCookie(content.data("cookie-name"), true, 365);
 

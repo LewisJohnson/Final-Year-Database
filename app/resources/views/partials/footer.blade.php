@@ -3,18 +3,18 @@
 		<div class="footer-left">
 			<ul class="hl">
 				<li>
-					@if(Cookie::get('accessibility-font') == "true")
-						<a class="button--small button--accent td-none" href="?largeFont=false">Large Font</a>
+					@if(Cookie::get('accessibility_font') == "true")
+						<a class="button--small button--accent td-none" href="?large_font=false">Large Font</a>
 					@else
-						<a class="button--small td-none hover--light" href="?largeFont=true">Large Font</a>
+						<a class="button--small td-none hover--light" href="?large_font=true">Large Font</a>
 					@endif
 				</li>
 				
 				<li>
-					@if(Cookie::get('accessibility-contrast') == "true")
-						<a class="button--small button--accent td-none" href="?highContrast=false">High Contrast</a>
+					@if(Cookie::get('accessibility_contrast') == "true")
+						<a class="button--small button--accent td-none" href="?high_contrast=false">High Contrast</a>
 					@else
-						<a class="button--small td-none hover--light" href="?highContrast=true">High Contrast</a>
+						<a class="button--small td-none hover--light" href="?high_contrast=true">High Contrast</a>
 					@endif
 				</li>
 

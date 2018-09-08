@@ -35,11 +35,12 @@ use Illuminate\Http\Request;
 */
 
 // This can be used to test mailables
-Route::get('/mailable', function () {
-	$student = SussexProjects\Student::all()->first();
-	$supervisor = SussexProjects\Supervisor::all()->first();
-	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
-});
+// Route::get('/mailable', function () {
+// 	$student = SussexProjects\Student::all()->first();
+// 	$supervisor = SussexProjects\Supervisor::all()->first();
+// 	$project = SussexProjects\Project::all()->first();
+// 	return new SussexProjects\Mail\SupervisorEditedProposedProject($supervisor, $student, $project);
+// });
 
 /* =============
    1. WEB ROUTES

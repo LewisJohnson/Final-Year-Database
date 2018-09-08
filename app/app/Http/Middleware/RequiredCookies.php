@@ -21,12 +21,12 @@ class RequiredCookies{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if(Cookie::get('accessibility-font') == null){
-			Cookie::queue('accessibility-font', false, 525600);
+		if(Cookie::get('accessibility_font') == null){
+			Cookie::queue('accessibility_font', false, 525600);
 		}
 
-		if(Cookie::get('accessibility-contrast') == null){
-			Cookie::queue('accessibility-contrast', false, 525600);
+		if(Cookie::get('accessibility_contrast') == null){
+			Cookie::queue('accessibility_contrast', false, 525600);
 		}
 
 		if(empty(Cookie::get('favourite_projects'))){
@@ -35,6 +35,11 @@ class RequiredCookies{
 
 		if(Cookie::get('hide_archived') == null){
 			Cookie::queue('hide_archived', false, 525600);
+		}
+
+		// TEMP COOKIES
+		if(Cookie::get('seen_supervisor_notice') == null){
+			Cookie::queue('seen_supervisor_notice', false, 525600);
 		}
 
 		return $next($request);

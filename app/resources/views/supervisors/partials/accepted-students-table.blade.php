@@ -1,4 +1,4 @@
-<table class="data-table sort-table table--dark-head" id="supervisor-accepted-students-table">
+<table class="data-table sort-table table--dark-head supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
 	@if(Auth::user()->supervisor->getAcceptedStudents())
 		<thead>
 			<tr>
@@ -19,7 +19,7 @@
 				<tr>
 					<td>
 						<div class="checkbox">
-							<input class="checkbox-input" id="accepted-{{ $accepted['student']->user->getFullName() }}" type="checkbox">
+							<input class="checkbox-input" id="accepted-{{ $accepted['student']->user->getFullName() }}" type="checkbox" data-email="{{ $accepted['student']->user->email }}">
 							<label for="accepted-{{ $accepted['student']->user->getFullName() }}" name="accepted-{{ $accepted['student']->user->getFullName() }}"></label>
 						</div>
 					</td>
