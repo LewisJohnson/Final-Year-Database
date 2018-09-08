@@ -157,26 +157,27 @@
 				</div>
 
 				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->project_status == 'none')
-					<div style="width: 100%;" class="fancy-page card--margin-vertical">
+					<div style="width: 100%;" class="card fancy-page card--margin-vertical">
 						<h2 style="margin-bottom: 5px;">Your Proposed Projects</h2>
 						<p style="margin-top: 0;" class="subtitle">Without a supervisor.</p>
+
 						@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
-							<div class="card card--full proposed-project flex flex--row">
+							<div class="proposed-project flex flex--row">
 								<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
-								<a class="ml-auto button button--raised" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Propose to supervisor</a>
+								<a class="ml-auto button" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Re-propose</a>
 							</div>
 						@endforeach
 					</div>
 				@endif 
 
-				<div style="width: 100%;" class="fancy-page card--margin-vertical">
+				<div style="width: 100%;" class="fancy-page card card--margin-vertical">
 					<h2>Your Favourite Projects</h2>
 					@if($projects = Auth::user()->student->getFavouriteProjects())
 						<div class="favourite-projects flex flex--row flex--wrap">
 							@foreach($projects as $project)
-								<div class="card">
+								<div>
 									<div class="favourite-container index pointer" data-project-id="{{ $project->id }}">
-										<svg title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24" class="favourite">
+										<svg class="favourite" title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24">
 											<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 										</svg>
 										<div class="loader loader--tiny"></div>

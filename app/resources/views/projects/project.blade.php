@@ -7,7 +7,7 @@
 		@if(Auth::check())
 			@if(Auth::user()->isStudent())
 				@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
-					<p style="width: 100%; margin: 0;">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
+					<p class="config-tip">You may select this project {{ SussexProjects\Mode::getProjectSelectionDate()->diffForHumans() }}.</p>
 				@endif
 			@endif
 		@endif
