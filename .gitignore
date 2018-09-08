@@ -226,9 +226,5 @@ pip-log.txt
 .mr.developer.cfg
 
 #Custom
-*.lock
 .phpintel/
 ngrok.exe
-package-lock.json
-mix-manifest.json
-composer.lock
