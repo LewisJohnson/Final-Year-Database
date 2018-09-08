@@ -4,7 +4,7 @@
 <div class="centered width--800">
 
 @if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
-		<p class="config-tip">You may not propose a project until {{ SussexProjects\Mode::getSupervisorAcceptDate(true) }}.</p>
+		<p class="config-tip">You may not propose a project until {{ SussexProjects\Mode::getProjectSelectionDate(true) }}.</p>
 		<script>
 			$(function() {
 				$('.form-field *').attr('disabled', true);
