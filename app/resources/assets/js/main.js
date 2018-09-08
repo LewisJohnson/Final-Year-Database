@@ -432,9 +432,11 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 							url: 'students/undo-selected-project',
 							success:function(response){
 								if(response.successful){
-									card.hide(400, function() { card.remove(); });
 									createToast('success', 'Undo successful.');
-									setTimeout(function(){ location.reload(); }, 3000);
+									card.slideUp(400, function() { 
+										location.reload();
+									});
+
 								} else {location.reload();
 									createToast('error', response.message);
 								}

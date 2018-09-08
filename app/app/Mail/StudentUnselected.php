@@ -12,6 +12,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use SussexProjects\Student;
 use SussexProjects\Supervisor;
+use SussexProjects\Project;
 
 /**
  * The email sent to the supervisor when a student un-selects one of their projects.
