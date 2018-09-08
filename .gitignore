@@ -224,8 +224,11 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-app/.phpintel/
-app/ngrok.exe
+
+#Custom
 *.lock
-app/package-lock.json
-app/resources/assets/js/config.js
+.phpintel/
+ngrok.exe
+package-lock.json
+mix-manifest.json
+config.js

@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 | 6. Supervisor routes
 | 7. Student routes
 | 8. Authenticated user routes (Anyone who is logged in)
-| 9. LDAP Guest
+| 9. Authenticated or LDAP Guest
 |
 | Please follow the CRUD convention
 | Verb		URI						Action		Route Name
@@ -33,6 +33,13 @@ use Illuminate\Http\Request;
 | PUT/PATCH	/photos/{photo}			update		photos.update
 | DELETE	/photos/{photo}			destroy		photos.destroy
 */
+
+// This can be used to test mailables
+Route::get('/mailable', function () {
+	$student = SussexProjects\Student::all()->first();
+	$supervisor = SussexProjects\Supervisor::all()->first();
+	return new SussexProjects\Mail\StudentSelected($supervisor, $student);
+});
 
 /* =============
    1. WEB ROUTES
@@ -324,9 +331,6 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	/* PROJECT ROUTES */
-	// Project page
-	Route::get('projects', 'ProjectController@index');
-
 	// Store new project POST
 	Route::post('projects', 'ProjectController@store');
 
@@ -341,18 +345,6 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Show update project form
 	Route::get('projects/{project}/edit', 'ProjectController@edit');
-
-	// Projects by Supervisor
-	Route::get('projects/by-supervisor', 'ProjectController@showSupervisors');
-
-	// Projects by Topic
-	Route::get('projects/by-topic', 'ProjectController@showTopics');
-
-	// All projects with this topic
-	Route::get('projects/by-topic/{topic}', 'ProjectController@byTopic');
-
-	// Project search
-	Route::get('projects/search', 'ProjectController@search');
 
 	// Check already used project title
 	Route::post('projects/check-title', 'ProjectController@projectNameAlreadyExists');
@@ -370,22 +362,14 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Update project primary topic
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	// Show project
-	Route::get('projects/{project}', 'ProjectController@show');
-
 	/* REPORT ROUTES */
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });
-
-Route::group(['middleware' => ['web', 'auth']], function() {
-	// Perform logout
-	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
-});
 	
-/* ============================
-   9. LDAP GUESTS
-============================ */
+/* ===============================
+   9. AUTHENTICATED OR LDAP GUESTS
+================================== */
 Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function() {
 
 	/* USER ROUTES */
@@ -409,4 +393,9 @@ Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
+});
+
+Route::group(['middleware' => ['web', 'auth']], function() {
+	// Perform logout
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 });
