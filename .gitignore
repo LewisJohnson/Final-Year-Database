@@ -228,3 +228,4 @@ app/.phpintel/
 app/ngrok.exe
 *.lock
 app/package-lock.json
+app/resources/assets/js/config.js

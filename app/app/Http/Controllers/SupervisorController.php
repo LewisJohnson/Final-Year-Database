@@ -95,10 +95,10 @@ class SupervisorController extends Controller{
 	 */
 	public function acceptStudent(Request $request){
 		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to accept students until '.Mode::getSupervisorAcceptDate(true).'.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('SupervisorController@projectReport');
+			return response()->json(array(
+				'successful' => false,
+				'message' => 'You are not allowed to accept students until '.Mode::getSupervisorAcceptDate(true).'.'
+			));
 		}
 
 		$this->validate(request(), [
@@ -187,10 +187,10 @@ class SupervisorController extends Controller{
 	 */
 	public function rejectStudent(Request $request){
 		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to reject students until '.Mode::getSupervisorAcceptDate(true).'.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('SupervisorController@projectReport');
+			return response()->json(array(
+				'successful' => false,
+				'message' => 'You are not allowed to reject students until '.Mode::getSupervisorAcceptDate(true).'.'
+			));
 		}
 
 		$student = Student::findOrFail(request('student_id'));
