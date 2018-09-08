@@ -401,7 +401,7 @@
 										</li>
 										<li>
 											<ul>
-												<li style="opactiy: 0"></li>
+												<li><a href="{{ action('StudentController@report') }}">Student Report</a></li>
 											</ul>
 										</li>
 									</ul>

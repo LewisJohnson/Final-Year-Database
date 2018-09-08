@@ -209,9 +209,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	/* STUDENT ROUTES */
 	// Store new student POST
 	Route::post('students', 'StudentController@store');
-
-	// Student Report
-	Route::get('reports/student', 'StudentController@report');
 });
 
 /* ===================================
@@ -245,6 +242,10 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
    5. PROJECT ADMIN OR STAFF ROUTES
    ================================= */
 Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
+
+	// Student Report
+	Route::get('reports/student', 'StudentController@report');
+
 	// Swap second marker view
 	Route::get('admin/marker-swap', 'ProjectAdminController@swapSecondMarkerView');
 
@@ -262,9 +263,6 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
    6. SUPERVISOR ROUTES
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
-	// Student Report
-	Route::get('reports/student', 'StudentController@report');
-
 	// Project popularity
 	Route::get('supervisor/project-popularity', 'SupervisorController@projectPopularity');
 
