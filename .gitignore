@@ -231,4 +231,4 @@ pip-log.txt
 ngrok.exe
 package-lock.json
 mix-manifest.json
-config.js
+composer.lock
