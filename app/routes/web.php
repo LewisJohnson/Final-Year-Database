@@ -277,9 +277,6 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	// Receive emails form
 	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');
 
-	// Project report view
-	Route::get('supervisor/project-report', 'SupervisorController@projectReport');
-
 	// Accepted student table (Used with AJAX)
 	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
 

@@ -28,14 +28,14 @@ return [
 	'help_tab_supervisor_content' =>
 	'<p>A user logged in with supervisor permission will have the "Supervisor" menu displayed, this will make the following pages available: </p>
 	<ul>
+		<li><b>Pending Decisions</b> - Here is where you can see your project load. It is also the page where you can accept or reject interested students. You may also undo accepted students, which will remove them from your accepted students, and they will have to find a new project.</li>
+		<li class="sub-help">Homepage</li>
+
 		<li><b>My Projects</b> - Displays all the projects you have created. The projects are sorted by status and are colour coded. From here you can click on a project title, then you can edit (Where you may add topics) and delete your project.</li>
 		<li class="sub-help">Supervisor > My Projects</li>
 
 		<li><b>New Project</b> - Allows you to create a new project.</li>
 		<li class="sub-help">Supervisor > New Project</li>
-
-		<li><b>Project Report</b> - Here is where you can see your project load. It is also the page where you can accept or reject interested students. You may also undo accepted students, which will remove them from your accepted students, and they will have to find a new project.</li>
-		<li class="sub-help">Supervisor > Project Report</li>
 
 		<li><b>Supervisor Report</b> - A list of all supervisors, their projects, their project load and what/whom they supervise.</li>
 		<li class="sub-help">Supervisor > Supervisor Report</li>
@@ -154,15 +154,26 @@ return [
 
 	/* 5. ABOUT PAGE */
 	'about' =>
-		'This software manages project selection and allocation for final year and masters students at the University of Sussex. 
+		'This website manages project selection and allocation for final year and masters students at the University of Sussex. 
 		<br><br>
-		Final year and masters projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavours to match student and supervisor requirements. Supervisors can propose projects that students can accept and, additionally, students can propose their own projects either generally or to a specific supervisor. 
+
+		Final year and masters projects are managed by a member of staff, the Project Coordinator, by means of a system that endeavours to match student and supervisor requirements.
+		Supervisors can propose projects that students can accept and, additionally, students can propose their own projects to a supervisor. 
 		<br><br>
-		The current system had not been maintained for several years and needed updating. This update took the form of adding new functionality and a general overhaul of both look and feel. The updating of capabilities due to advances in software and browser technologies has also been addressed. 
+
+		The old website had not been updated to support the modern web and lacked compatibility for modern browsers.
+		This new website took inspiration for the old website in terms of functionality, 
+		but was crafted from the ground to be fast and support mobile devices.
 		<br><br>
-		This website is hosted by the department of Engineering and Informatics. It was written using Laravel, MySQL and other technologies. The source code is available <a href="https://github.com/lewisJohnson/Final-Year-Database">on Github.</a> 
+
+		This project is open-source, which means the source code is freely available for you to browse on Github.
+		The backend of this website is written in PHP and uses the popular framework Laravel,
+		while the frontend is <i>mostly</i> written in jQuery, styled with SASS and LESS.
+		This website is hosted by the department of Engineering and Informatics.
 		<br><br>
+
 		This website was created in 2017/2018 as a final year project by <a href="http://www.lewisdavidjohnson.com">Lewis Johnson</a> under the supervision of <a href="http://www.sussex.ac.uk/profiles/115097">Dr. Bernhard Reus.</a>',
+
 	/*
 	| 6. Help Tabs
 	| You may add up to 20 help tabs.
@@ -268,22 +279,27 @@ return [
 			<tr>
 				<td>Usability</td>
 				<td>favourite_projects</td>
-				<td><b>Students only</b> - A list of your favourite projects.</td>
+				<td><b>Students only</b><br>A list of your favourite projects.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>hide_accepted</td>
-				<td><b>Supervisors only</b> - Determines if the tab "Accepted Students" supervisor tab is hidden.</td>
+				<td><b>Supervisors only</b><br>Determines if the table "Accepted Students" is hidden.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>hide_offers</td>
-				<td><b>Supervisors only</b> - Determines if the tab "Offers" supervisor tab is hidden.</td>
+				<td><b>Supervisors only</b><br>Determines if the table "Interested Students" is hidden.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
 				<td>hide_archived</td>
-				<td><b>Supervisors only</b> - Determines if the user is displaying archived projects in "My Projects".</td>
+				<td><b>Supervisors only</b><br>Determines if the user is displaying archived projects in "My Projects".</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
+				<td><b>Temporary</b><br>seen_supervisor_notice</td>
+				<td><b>Supervisors only</b><br>Determines if the user has seen the 08/09/2018 "Some things have moved" notice.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -315,7 +331,7 @@ return [
 			<tr>
 				<td>Usability</td>
 				<td>cadt</td>
-				<td><b>System administrators only</b> - The current tab selected in the administrator dashboard.</td>
+				<td><b>System administrators only</b><br>The current tab selected in the administrator dashboard.</td>
 			</tr>
 		</tbody>
 	</table>

@@ -28,14 +28,14 @@ return [
 	'help_tab_supervisor_content' =>
 	'<p>A user logged in with supervisor permission will have the "Supervisor" menu displayed, this will make the following pages available: </p>
 	<ul>
+		<li><b>Pending Decisions</b> - Here is where you can see your project load. It is also the page where you can accept or reject interested students. You may also undo accepted students, which will remove them from your accepted students, and they will have to find a new project.</li>
+		<li class="sub-help">Homepage</li>
+
 		<li><b>My Projects</b> - Displays all the projects you have created. The projects are sorted by status and are colour coded. From here you can click on a project title, then you can edit (Where you may add topics) and delete your project.</li>
 		<li class="sub-help">Supervisor > My Projects</li>
 
 		<li><b>New Project</b> - Allows you to create a new project.</li>
 		<li class="sub-help">Supervisor > New Project</li>
-
-		<li><b>Project Report</b> - Here is where you can see your project load. It is also the page where you can accept or reject interested students. You may also undo accepted students, which will remove them from your accepted students, and they will have to find a new project.</li>
-		<li class="sub-help">Supervisor > Project Report</li>
 
 		<li><b>Supervisor Report</b> - A list of all supervisors, their projects, their project load and what/whom they supervise.</li>
 		<li class="sub-help">Supervisor > Supervisor Report</li>

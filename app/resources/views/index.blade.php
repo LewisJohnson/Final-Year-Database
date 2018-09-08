@@ -106,7 +106,6 @@
 
 					<div class="footer">
 						<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
-						<a class="button--small hover--dark td-none" href="{{ action('SupervisorController@projectReport', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">Project Report</a>
 					</div>
 				</div>
 			@endif

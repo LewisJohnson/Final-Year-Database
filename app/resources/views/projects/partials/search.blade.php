@@ -35,12 +35,6 @@
 						<label for="search-skills-checkbox">Skills</label>
 					</div>
 				</li>
-				<li title="Results may take some time.">
-					<div class="checkbox">
-						<input class="remember-with-cookie" id="search-topics-checkbox" type="checkbox" name="filter[]" value="topics">
-						<label for="search-topics-checkbox">Topics</label>
-					</div>
-				</li>
 			</ul>
 		</div>
 	</div>

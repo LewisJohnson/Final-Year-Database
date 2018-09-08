@@ -645,21 +645,6 @@ class ProjectController extends Controller{
 
 		$projects = $projects->get();
 
-		if(in_array("topics", $filters)){
-			$filteredAtLeastOnce = true;
-			$filteredByTopics = true;
-
-			$projects = $projects->filter(function($project) use ($searchTerm){
-				foreach($project->topics as $key => $topic){
-					if(strcasecmp($topic->name, $searchTerm) == 0){
-						return true;
-					}
-				}
-
-				return false;
-			});
-		}
-
 		// There was no projects to be found
 		if(!$filteredAtLeastOnce || count($projects) == 0){
 			session()->flash("message", 'We couldn\'t find anything for "'.$searchTerm.'" .');
@@ -677,7 +662,8 @@ class ProjectController extends Controller{
 			}
 			session()->flash('message', "We only found one project, it's this one.");
 
-			return view('projects.project')->with('view', 'SupervisorProject')
+			return view('projects.project')
+				->with('view', 'SupervisorProject')
 				->with('project', $project);
 		}
 
