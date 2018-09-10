@@ -164,7 +164,9 @@ class StudentController extends Controller{
 	 * @return \Illuminate\View\View|\Illuminate\Http\Response
 	 */
 	public function proposeProjectView(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+			->where("take_students_".Session::get('education_level')["shortName"], true)
+			->get();
 
 		if(Auth::user()->student->project_status == "none"){
 			return view("students.propose-project")->with('supervisors', $supervisors);
@@ -273,7 +275,9 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function proposeExistingProjectView(Project $project){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+						->where("take_students_".Session::get('education_level')["shortName"], true)
+						->get();
 
 		if(Auth::user()->student->project_status == "none"){
 			return view("students.propose-existing-project")->with('project', $project)->with('supervisors', $supervisors);
