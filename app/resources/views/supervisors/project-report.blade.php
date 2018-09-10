@@ -2,7 +2,6 @@
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>
 @endsection
 
-
 <div class="card card--full">
 	<div class="fancy-page">
 		<h1>Pending Decisions</h1>

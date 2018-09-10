@@ -31,9 +31,13 @@
 					@endif
 					<td><a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a></td>
 
-					<td>
-						<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
-					</td>
+					@if(Session::get('logged_in_as') != null)
+						<td>
+							<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
+						</td>
+					@else
+						<td></td>
+					@endif
 				</tr>
 			@endforeach
 		</tbody>

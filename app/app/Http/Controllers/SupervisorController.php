@@ -196,7 +196,7 @@ class SupervisorController extends Controller{
 		$student = Student::findOrFail(request('student_id'));
 		$projectId = $student->project->id;
 
-		DB::transaction(function() use ($request, $student){
+		DB::transaction(function() use ($request, $student, $projectId){
 			$transaction = new Transaction;
 			$transaction->fill(array(
 				'type' => 'project',
@@ -281,9 +281,19 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function undoStudent(Request $request){
+
+		if(Session::get('logged_in_as') == null){
+			return response()->json(array(
+				'successful' => false,
+				'email_successful' => true,
+				'message' => "You are not allowed to perform this action."
+			));
+		}
+
 		$student = Student::findOrFail(request('student_id'));
 		$projectId = $student->project->id;
-		DB::transaction(function() use ($request, $student){
+
+		DB::transaction(function() use ($request, $student, $projectId){
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
@@ -315,7 +325,7 @@ class SupervisorController extends Controller{
 			$emailError = true;
 		}
 
-		$message = $student->getName()."is no longer accepted.";
+		$message = $student->getName()." is no longer accepted.";
 
 		if($emailError){
 			return response()->json(array(
