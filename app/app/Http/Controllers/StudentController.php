@@ -183,24 +183,9 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function proposeProject(ProjectForm $request){
-		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('HomeController@index');
-		}
 
 		$student = Auth::user()->student;
-
-		// Student has already selected a project
-		if($student->project_id != null){
-			session()->flash('message', 'You have already selected a project.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('HomeController@index');
-		}
-
-		DB::transaction(function() use ($request, $student){
+		$result = DB::transaction(function() use ($request, $student){
 			$project = new Project;
 			$projectController = new ProjectController;
 			$newlineFixedDescription = nl2br(request('description'));
@@ -209,11 +194,28 @@ class StudentController extends Controller{
 			$transaction = new Transaction;
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
+			if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
+				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
 			if(!$supervisor->user->isSupervisor()){
 				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
 				session()->flash('message_type', 'error');
+				return false;
+			}
 
-				return redirect()->action('HomeController@index');
+			if($student->project_status != 'none' || $student->project_id != null){
+				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
+			if(!$supervisor->getTakingStudents()){
+				session()->flash('message', 'Sorry, this supervisor is no longer accepting students.');
+				session()->flash('message_type', 'error');
+				return false;
 			}
 
 			$project->supervisor_id = request('supervisor_id');
@@ -246,16 +248,19 @@ class StudentController extends Controller{
 
 			session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
+			return true;
 		});
 
 		// Send student proposed email
-		if($student->project->supervisor->getAcceptingEmails()){
-			try{
-				// Send accepted email
-				Mail::to($student->project->supervisor->user->email)
-					->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
-			} catch (Exception $e){
+		if($result){
+			if($student->project->supervisor->getAcceptingEmails()){
+				try{
+					// Send accepted email
+					Mail::to($student->project->supervisor->user->email)
+						->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+				} catch (Exception $e){
 
+				}
 			}
 		}
 
@@ -292,54 +297,52 @@ class StudentController extends Controller{
 			'supervisor_id' => 'required'
 		]);
 
-		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('HomeController@index');
-		}
-
 		$student = Auth::user()->student;
-
-		// Student has already selected a project
-		if($student->project_id != null){
-			session()->flash('message', 'You have already selected a project.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('HomeController@index');
-		}
-
-		DB::transaction(function() use ($request, $student){
+		$result = DB::transaction(function() use ($request, $student){
 			$project = Project::findOrFail(request('project_id'));
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 			$transaction = new Transaction;
 
+			if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
+				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
+			if($student->project_status != 'none' || $student->project_id != null){
+				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
 			if(!$supervisor->user->isSupervisor()){
 				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
 				session()->flash('message_type', 'error');
-
-				return redirect()->action('HomeController@index');
+				return false;
 			}
 
 			if($project->supervisor_id != null){
 				session()->flash('message', 'You have already proposed this project to someone.');
 				session()->flash('message_type', 'error');
-
-				return redirect()->action('HomeController@index');
+				return false;
 			}
 
 			if($project->status != 'student-proposed'){
 				session()->flash('message', 'This project is not a student proposed project.');
 				session()->flash('message_type', 'error');
-
-				return redirect()->action('HomeController@index');
+				return false;
 			}
 
 			if(!$project->isOwnedByUser()){
 				session()->flash('message', 'This project does not belong to you.');
 				session()->flash('message_type', 'error');
+				return false;
+			}
 
-				return redirect()->action('HomeController@index');
+			if(!$supervisor->getTakingStudents()){
+				session()->flash('message', 'Sorry, this supervisor is no longer accepting students.');
+				session()->flash('message_type', 'error');
+				return false;
 			}
 
 			$project->supervisor_id = $supervisor->id;
@@ -363,16 +366,19 @@ class StudentController extends Controller{
 
 			session()->flash('message', 'You have proposed "'.$project->title.'" to '.$supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
+			return true;
 		});
 
-		// Send student proposed email
-		if($student->project->supervisor->getAcceptingEmails()){
-			try{
-				// Send accepted email
-				Mail::to($student->project->supervisor->user->email)
-					->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
-			} catch (Exception $e){
+		if($result){
+			// Send student proposed email
+			if($student->project->supervisor->getAcceptingEmails()){
+				try{
+					// Send accepted email
+					Mail::to($student->project->supervisor->user->email)
+						->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
+				} catch (Exception $e){
 
+				}
 			}
 		}
 
@@ -388,38 +394,43 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response Home page
 	 */
 	public function selectProject(Request $request){
-		if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-			session()->flash('message', 'You are not allowed to select a project until '.Mode::getProjectSelectionDate(true).'.');
-			session()->flash('message_type', 'error');
 
-			return redirect()->action('ProjectController@show', request('project_id'));
-		}
+		$request->validate([
+			'project_id' => 'required'
+		]);
 
 		$student = Auth::user()->student;
-
-		// Student has already selected a project
-		if($student->project_id != null){
-			session()->flash('message', 'You have already selected a project.');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('ProjectController@show', request('project_id'));
-		}
-		
-		DB::transaction(function() use ($request, $student){
+		$result = DB::transaction(function() use ($request, $student){
 			$project = Project::findOrFail(request('project_id'));
+
+			if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
+				session()->flash('message', 'You are not allowed to select a project until '.Mode::getProjectSelectionDate(true).'.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
+			if($student->project_status != 'none' || $student->project_id != null){
+				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
 
 			if($project->status != "on-offer"){
 				session()->flash('message', 'Sorry, this project is no longer on offer.');
 				session()->flash('message_type', 'error');
-
-				return redirect()->action('ProjectController@show', request('project_id'));
+				return false;
 			}
 
 			if(!$project->supervisor->user->isSupervisor()){
 				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
 				session()->flash('message_type', 'error');
+				return false;
+			}
 
-				return redirect()->action('HomeController@index');
+			if(!$project->supervisor->getTakingStudents()){
+				session()->flash('message', 'Sorry, this supervisor is no longer accepting students.');
+				session()->flash('message_type', 'error');
+				return false;
 			}
 
 			$transaction = new Transaction;
@@ -444,15 +455,17 @@ class StudentController extends Controller{
 			return true;
 		});
 
-		if($student->project->supervisor->getAcceptingEmails()){
-			try{
-				// Send selected email
-				if($student->project->supervisor->getAcceptingEmails()){
-					Mail::to($student->project->supervisor->user->email)
-						->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
-				}
-			} catch (Exception $e){
+		if($result){
+			if($student->project->supervisor->getAcceptingEmails()){
+				try{
+					// Send selected email
+					if($student->project->supervisor->getAcceptingEmails()){
+						Mail::to($student->project->supervisor->user->email)
+							->send(new StudentSelected($student->project->supervisor, Auth::user()->student));
+					}
+				} catch (Exception $e){
 
+				}
 			}
 		}
 
@@ -469,13 +482,15 @@ class StudentController extends Controller{
 	public function undoSelectedProject(){
 		if(Auth::user()->student->project == null || Auth::user()->student->project_status == 'none'){
 			return response()->json(array(
-				'error' => true, 'message' => "You currently have no project selected."
+				'error' => true,
+				'message' => "You currently have no project selected."
 			));
 		}
 
 		if(Auth::user()->student->project_status == 'accepted'){
 			return response()->json(array(
-				'error' => true, 'message' => "You have already been accepted for this project."
+				'error' => true,
+				'message' => "You have already been accepted for this project."
 			));
 		}
 
@@ -510,7 +525,7 @@ class StudentController extends Controller{
 				// Send selected email
 				if($student->project->supervisor->getAcceptingEmails()){
 					Mail::to($student->project->supervisor->user->email)
-						->send(new StudentUnselected($student->project->supervisor, Auth::user()->student, $projectId));
+						->send(new StudentUnselected($student->project->supervisor, $student, $projectId));
 				}
 			} catch (Exception $e){
 
@@ -532,14 +547,16 @@ class StudentController extends Controller{
 	 */
 	public function updateSecondMarker(Request $request){
 		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
 		}
 
 		DB::transaction(function() use ($request){
 			$project = Project::findOrFail(request('project_id'));
 			$student = Student::findOrFail(request('student_id'));
-			$transaction = new Transaction;
 			$marker = Supervisor::findOrFail(request('marker_id'));
+			$transaction = new Transaction;
 
 			$transaction->fill(array(
 				'type' => 'project',
