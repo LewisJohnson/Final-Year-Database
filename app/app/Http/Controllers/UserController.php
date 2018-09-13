@@ -327,6 +327,17 @@ class UserController extends Controller{
 		$request = request();
 		$user = User::where('username', $userForm->username)->first();
 
+		// No privileges selected
+		if (empty($request->privileges) || !(is_array($request->privileges))){
+			$user->privileges = null;
+			$user->save();
+
+			session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
+			session()->flash('message_type', 'success');
+
+			return redirect()->action('HomeController@index');
+		}
+
 		// Validate Student
 		if(in_array("student", $request->privileges)){
 			$request->validate([
@@ -339,17 +350,6 @@ class UserController extends Controller{
 			$request->validate([
 				'title' => 'required|max:6'
 			]);
-		}
-
-		// No privileges selected
-		if (empty($request->privileges) || !(is_array($request->privileges))){
-			$user->privileges = null;
-			$user->save();
-
-			session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
-			session()->flash('message_type', 'success');
-
-			return redirect()->action('HomeController@index');
 		}
 
 		if(!$this->checkPrivilegeConditions($request->privileges)){
@@ -393,11 +393,15 @@ class UserController extends Controller{
 
 			// Update student supervisor
 			if(in_array("supervisor", $request->privileges)){
-			if($user->isSupervisor()){
+				if($user->isSupervisor()){
 					$supervisor = $user->supervisor;
 				} else {
-					$supervisor = new Supervisor();
-					$supervisor['id'] = $user->id;
+					$supervisor = Supervisor::find($user->id);
+					
+					if($supervisor == null) {
+						$supervisor = new Supervisor();
+						$supervisor['id'] = $user->id;
+					}
 				}
 
 				$supervisor['title'] = $request['title'];

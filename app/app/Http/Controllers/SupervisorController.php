@@ -168,7 +168,7 @@ class SupervisorController extends Controller{
 			return response()->json(array(
 				'successful' => true,
 				'email_successful' => false,
-				'message' => $student->user->first_name.'was accepted. However, the confirmation email failed to send.'
+				'message' => $student->user->first_name.' was accepted. However, the confirmation email failed to send.'
 			));
 		}
 
@@ -257,7 +257,8 @@ class SupervisorController extends Controller{
 			Auth::user()->supervisor->setAcceptingEmails(isset($request["accept_emails_".$request->education_level]) ? 1 : 0, $request->education_level);
 		} else {
 			return response()->json(array(
-				'successful' => false, 'message' => 'Incorrect parameters.'
+				'successful' => false,
+				'message' => 'Incorrect parameters.'
 			));
 		}
 
