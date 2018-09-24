@@ -239,7 +239,8 @@ class SupervisorController extends Controller{
 
 		return response()->json(array(
 			'successful' => true,
-			'message' => 'Student rejected'
+			'email_successful' => true,
+			'message' => $student->user->first_name.' has been rejected.'
 		));
 	}
 
@@ -338,6 +339,7 @@ class SupervisorController extends Controller{
 
 		return response()->json(array(
 			'successful' => true,
+			'email_successful' => true,
 			'message' => $message
 		));
 	}
