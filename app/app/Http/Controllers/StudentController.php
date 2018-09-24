@@ -197,19 +197,19 @@ class StudentController extends Controller{
 			$supervisor = Supervisor::findOrFail(request('supervisor_id'));
 
 			if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
-				session()->flash('message_type', 'error');
-				return false;
-			}
-
-			if(!$supervisor->user->isSupervisor()){
-				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
+				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate(true).'.');
 				session()->flash('message_type', 'error');
 				return false;
 			}
 
 			if($student->project_status != 'none' || $student->project_id != null){
 				session()->flash('message', 'You have already selected a project.');
+				session()->flash('message_type', 'error');
+				return false;
+			}
+
+			if(!$supervisor->user->isSupervisor()){
+				session()->flash('message', 'Sorry, you\'re not allowed to propose a project to this supervisor.');
 				session()->flash('message_type', 'error');
 				return false;
 			}
@@ -308,7 +308,7 @@ class StudentController extends Controller{
 			$transaction = new Transaction;
 
 			if(Mode::getProjectSelectionDate()->gt(Carbon::now())){
-				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate().'.');
+				session()->flash('message', 'You are not allowed to propose a project until '.Mode::getProjectSelectionDate(true).'.');
 				session()->flash('message_type', 'error');
 				return false;
 			}
@@ -337,14 +337,14 @@ class StudentController extends Controller{
 				return false;
 			}
 
-			if(!$project->isOwnedByUser()){
-				session()->flash('message', 'This project does not belong to you.');
+			if(!$supervisor->getTakingStudents()){
+				session()->flash('message', 'Sorry, this supervisor is no longer accepting students.');
 				session()->flash('message_type', 'error');
 				return false;
 			}
 
-			if(!$supervisor->getTakingStudents()){
-				session()->flash('message', 'Sorry, this supervisor is no longer accepting students.');
+			if(!$project->isOwnedByUser()){
+				session()->flash('message', 'This project does not belong to you.');
 				session()->flash('message_type', 'error');
 				return false;
 			}
