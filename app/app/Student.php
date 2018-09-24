@@ -135,7 +135,7 @@ class Student extends Model{
 	}
 
 	/**
-	 * The students second supervisor (Marker)
+	 * The students second marker.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
 	 */

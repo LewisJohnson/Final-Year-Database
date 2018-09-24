@@ -376,7 +376,7 @@ class ProjectAdminController extends Controller{
 	}
 
 	/**
-	 * An overview of each supervisor and which students they are second supervisor to.
+	 * An overview of each supervisor and which students they are second marker to.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -391,7 +391,7 @@ class ProjectAdminController extends Controller{
 	}
 
 	/**
-	 * An overview of each automatically assigned second supervisor.
+	 * An overview of each automatically assigned second marker.
 	 *
 	 * @return \Illuminate\Http\Response
 	 

@@ -142,7 +142,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	// Updated supervisor arrangements POST
 	Route::post('admin/supervisor-arrangements-amend', 'ProjectAdminController@amendSupervisorArrangements');
 
-	/* SECOND SUPERVISOR (Marker) ROUTES */
+	/* SECOND MARKER ROUTES */
 	// Manual assign second marker view
 	Route::get('admin/marker-assign-manual', 'ProjectAdminController@manualSecondMarkerView');
 

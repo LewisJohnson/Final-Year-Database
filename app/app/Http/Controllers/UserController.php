@@ -462,7 +462,7 @@ class UserController extends Controller{
 			$infoString .= "<li>They have ".count($user->supervisor->getIntrestedStudents())." interested students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getAcceptedStudents())." accepted students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getStudentProjectProposals())." students who have proposed a project to them.</li>";
-			$infoString .= "<li>They are second supervisor to ".count($user->supervisor->getSecondSupervisingStudents())." students.</li>";
+			$infoString .= "<li>They are second marker to ".count($user->supervisor->getSecondSupervisingStudents())." students.</li>";
 			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
 		}
 

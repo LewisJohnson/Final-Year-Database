@@ -99,9 +99,9 @@
 					@endif
 
 					@if(count(Auth::user()->supervisor->getSecondSupervisingStudents()) > 0)
-						<p>You are second supervisor to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
+						<p>You are second marker to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
 					@else
-						<p>You have not been assigned as second supervisor to any students.</p>
+						<p>You have not been assigned as second marker to any students.</p>
 					@endif
 
 					<div class="footer">
@@ -210,24 +210,4 @@
 	@endif
 </div>
 
-@if(Auth::check())
-	@if(Cookie::get('seen_supervisor_notice') != true && Auth::user()->isSupervisor())
-		<script>
-			$.confirm({
-				theme: 'modern',
-				escapeKey: false,
-				animateFromElement : false,
-				backgroundDismiss: false,
-				title: 'Some things have moved!',
-				content: 'As a result of user feedback we\'ve moved some things around.<br><br>The <b>"Project Report"</b> that used to be found in the supervisor tab has been removed. You can now find <b>"Pending Decisions"</b> on your homepage. Here you can accept or reject students, and also see students you\'ve already accepted. <br><br>Note: You can click the arrow to collapse a section.<br><br>Thank you for your feedback, and remember you can leave comments using the feedback button found in the footer.',
-				buttons: {
-					Okay: {
-
-					}
-				}
-			});
-		</script>
-		{{ Cookie::queue('seen_supervisor_notice', true) }}
-	@endif
-@endif
 @endsection

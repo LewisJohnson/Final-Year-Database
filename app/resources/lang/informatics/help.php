@@ -296,11 +296,6 @@ return [
 				<td>hide_archived</td>
 				<td><b>Supervisors only</b><br>Determines if the user is displaying archived projects in "My Projects".</td>
 			</tr>
-			<tr>
-				<td>Usability</td>
-				<td><b>Temporary</b><br>seen_supervisor_notice</td>
-				<td><b>Supervisors only</b><br>Determines if the user has seen the 08/09/2018 "Some things have moved" notice.</td>
-			</tr>
 		</tbody>
 	</table>
 

@@ -226,12 +226,16 @@ class Supervisor extends Model{
 	public function getIntrestedStudents(){
 		$project = new Project;
 		$student = new Student;
+		$user = new User;
 		$offers = array();
 
-		$students = Student::where('project_status', 'selected')
+		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('project_status', 'selected')
 			->where('project.supervisor_id', $this->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')->get();
+			->orderBy('user.last_name', 'asc')
+			->get();
 
 		foreach($students as $student){
 			$ar = array();
@@ -251,12 +255,16 @@ class Supervisor extends Model{
 	public function getAcceptedStudents(){
 		$project = new Project;
 		$student = new Student;
+		$user = new User;
 		$offers = array();
 
-		$students = Student::where('project_status', 'accepted')
+		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('project_status', 'accepted')
 			->where('project.supervisor_id', $this->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')->get();
+			->orderBy('user.last_name', 'asc')
+			->get();
 
 		foreach($students as $student){
 			$ar = array();
@@ -276,13 +284,17 @@ class Supervisor extends Model{
 	public function getStudentProjectProposals(){
 		$project = new Project;
 		$student = new Student;
+		$user = new User;
 		$offers = array();
 
-		$students = Student::where('project_status', 'proposed')
+		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
+			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('project_status', 'proposed')
 			->where('project.supervisor_id', $this->id)
-			->select($student->getTable().'.*', 'project.supervisor_id')->get();
-
+			->orderBy('user.last_name', 'asc')
+			->get();
+			
 		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
@@ -294,7 +306,7 @@ class Supervisor extends Model{
 	}
 
 	/**
-	 * A list of students this supervisor is second supervisor (marker) too.
+	 * A list of students this supervisor is second marker too.
 	 *
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */

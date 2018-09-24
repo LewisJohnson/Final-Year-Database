@@ -37,11 +37,6 @@ class RequiredCookies{
 			Cookie::queue('hide_archived', false, 525600);
 		}
 
-		// TEMP COOKIES
-		if(Cookie::get('seen_supervisor_notice') == null){
-			Cookie::queue('seen_supervisor_notice', false, 525600);
-		}
-
 		return $next($request);
 	}
 }
