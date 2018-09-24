@@ -31,7 +31,7 @@ class TransactionController extends Controller{
 
 		$transactions = Transaction::where('type', $type)
 			->orderBy('transaction_date', 'desc')
-			->get();
+			->paginate(20);
 
 		return view('admin.transactions')
 			->with('transactions', $transactions)

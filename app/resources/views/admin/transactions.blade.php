@@ -15,7 +15,7 @@
 		</div>
 	</div>
 
-	<div class="table-responsive"  id="responsive-table">
+	<div class="table-responsive" id="responsive-table">
 		<table id="transaction-table" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
 			<thead>
 				<tr>
@@ -50,5 +50,7 @@
 			</tbody>
 		</table>
 	</div>
+	
+	{{ $transactions->links() }}
 </div>
 @endsection

@@ -33,6 +33,10 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
+		if(strlen($request->topic_name) < 3){
+			return false;
+		}
+
 		$result = DB::transaction(function() use ($request){
 			$topic = Topic::create(['name' => $request->topic_name]);
 			$transaction = new Transaction;
@@ -60,6 +64,10 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
+		if(strlen($request->topic_name) < 3){
+			return false;
+		}
+
 		$result = DB::transaction(function() use ($request){
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;

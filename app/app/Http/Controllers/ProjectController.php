@@ -153,12 +153,20 @@ class ProjectController extends Controller{
 	 * @return string The newly added topic's name
 	 */
 	public function addTopic(Request $request){
+
 		$result = DB::transaction(function() use ($request){
 			$topic = Topic::where('name', $request->topic_name)->first();
 			$project = Project::findOrFail($request->project_id);
 
 			// If topic isn't in the relevant topic database, create a new one.
 			if($topic == null){
+				if(strlen($request->topic_name) < 2){
+					return response()->json(array(
+						'successful' => false,
+						'message' => 'Topic name must be longer than 1 character.'
+					));
+				}
+
 				$topic = new Topic;
 				$topic->name = $request->topic_name;
 				$topic->save();
@@ -175,23 +183,19 @@ class ProjectController extends Controller{
 			try{
 				$projectTopic->save();
 			} catch (QueryException $e){
-				return false;
-			}
-
-			return Topic::findOrFail($topic->id);
-		});
-
-		if(!$result){
-			return response()->json(array(
+				return response()->json(array(
 					'successful' => false,
 					'message' => 'Topic "'.$request->topic_name.'" already belongs to the project.'
 				));
-		} else {
+			}
+
 			return response()->json(array(
 				'successful' => true,
-				'topic' => $result
+				'topic' => Topic::findOrFail($topic->id)
 			));
-		}
+		});
+
+		return $result;
 	}
 
 	/**
