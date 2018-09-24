@@ -143,7 +143,12 @@ class UserController extends Controller{
 					$supervisor['title'] = $request->title;
 
 					foreach (get_education_levels() as $education_level) {
-						$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+						if($request['project_load_'.$education_level['shortName']] != null){
+							$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+						} else {
+							// We need this because the DB doesn't have a default value
+							$supervisor['project_load_'.$education_level['shortName']] = 0;
+						}
 						$supervisor['take_students_'.$education_level['shortName']] = empty($request['take_students_'.$education_level['shortName']]);
 						$supervisor['accept_email_'.$education_level['shortName']] = empty($request['accept_email_'.$education_level['shortName']]);
 					}
@@ -407,7 +412,13 @@ class UserController extends Controller{
 				$supervisor['title'] = $request['title'];
 
 				foreach (get_education_levels() as $education_level) {
-					$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+					if($request['project_load_'.$education_level['shortName']] != null){
+						$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+					} else {
+						// We need this because the DB doesn't have a default value
+						$supervisor['project_load_'.$education_level['shortName']] = 0;
+					}
+
 					$supervisor['take_students_'.$education_level['shortName']] = isset($request['take_students_'.$education_level['shortName']]);
 					$supervisor['accept_email_'.$education_level['shortName']] = isset($request['accept_email_'.$education_level['shortName']]);
 				}
