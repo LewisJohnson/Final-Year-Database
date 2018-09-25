@@ -43,9 +43,9 @@ class UserController extends Controller{
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 					->get();
 
-		// Don't sort by last name because double surnames are broken.
 		$students = Student::select($student->getTable().'.*')
 				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
 				->get();
 
 		$staffUsers = User::where('privileges', 'staff')

@@ -18,7 +18,14 @@
 		@if($studentCount > 0)
 			@foreach(SussexProjects\Student::getAllStatuses() as $status)
 				@php
-					$students = SussexProjects\Student::Where('project_status', $status)->get();
+					$user = new SussexProjects\User;
+					$student = new SussexProjects\Student;
+
+					$students = SussexProjects\Student::select($student->getTable().'.*')
+						->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+						->where('project_status', $status)
+						->orderBy('last_name', 'asc')
+						->get();
 				@endphp
 
 				@if(count($students))
