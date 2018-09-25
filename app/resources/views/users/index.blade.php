@@ -38,20 +38,20 @@
 		<div class="section horizontal card">
 			<h3>Staff</h3>
 			<ol class="order-list-js last-name-header-list-js" id="staffList" sorted="false" style="list-style: none">
-				@foreach($staff as $staffUser)
+				@foreach($staffUsers as $staff)
 					<li>
-						<a title="Edit {{ $staffUser->getFullName() }}" href="{{ action('UserController@edit', $staffUser) }}">{{ $staffUser->getFullName() }}</a>
-						<a class="delete-user td-none" data-id="{{ $staffUser->id }}" data-name="{{ $staffUser->getFullName() }}" href="{{ action('UserController@destroy', $staffUser->id) }}">X</a>
+						<a title="Edit {{ $staff->getFullName() }}" href="{{ action('UserController@edit', $staff) }}">{{ $staff->getFullName() }}</a>
+						<a class="delete-user td-none" data-id="{{ $staff->id }}" data-name="{{ $staff->getFullName() }}" href="{{ action('UserController@destroy', $staff->id) }}">X</a>
 					</li>
 				@endforeach
 
 				@if(count($noPrivilegesUsers) > 0)
 					<li><hr></li>
 					<li><h4>Users without privileges</h4></li>
-					@foreach($user as $noPrivilegesUsers)
+					@foreach($noPrivilegesUsers as $user)
 						<li>
 							<a title="Edit {{ $user->getFullName() }}" href="{{ action('UserController@edit', $user) }}">{{ $user->getFullName() }}</a>
-							<a class="delete-user td-none" data-id="{{ $noPrivilegesUsers->id }}" data-name="{{ $noPrivilegesUsers->getFullName() }}" href="{{ action('UserController@destroy', $noPrivilegesUsers->id) }}">X</a>
+							<a class="delete-user td-none" data-id="{{ $user->id }}" data-name="{{ $user->getFullName() }}" href="{{ action('UserController@destroy', $user->id) }}">X</a>
 						</li>
 					@endforeach
 				@endif

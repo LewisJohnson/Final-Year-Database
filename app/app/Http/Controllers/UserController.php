@@ -37,24 +37,26 @@ class UserController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function index(Request $request){
-		$students = Student::all();
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$staffUsers = User::where('privileges', 'staff')->get();
-		$noPrivilegesUsers = User::whereNull('privileges')->get();
+		$student = new Student;
+		$user = new User;
+
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+					->get();
+
+		// Don't sort by last name because double surnames are broken.
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->get();
+
+		$staffUsers = User::where('privileges', 'staff')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		$noPrivilegesUsers = User::whereNull('privileges')
+				->orderBy('last_name', 'asc')
+				->get();
+
 		$admins = [];
-
-		$students = $students->sortBy(function($student){
-			return $student->user->last_name;
-		});
-
-		$staffUsers = $staffUsers->sortBy(function($staff){
-			return $staff->last_name;
-		});
-
-		$noPrivilegesUsers = $noPrivilegesUsers->sortBy(function($user){
-			return $user->last_name;
-		});
-
 		if(Auth::user()->isSystemAdmin()){
 			$admins = User::where('privileges', 'LIKE', '%admin_system%');
 
@@ -62,16 +64,14 @@ class UserController extends Controller{
 				$admins->orWhere('privileges', 'admin_'.$education_level["shortName"]);
 			}
 
-			$admins = $admins->get();
-
-			$admins = $admins->sortBy(function($admin){
-				return $admin->last_name;
-			});
+			$admins = $admins
+				->orderBy('last_name', 'asc')
+				->get();
 		}
 
 		return view('users.index')
 			->with('supervisors', $supervisors)
-			->with('staff', $staffUsers)
+			->with('staffUsers', $staffUsers)
 			->with('students', $students)
 			->with('admins', $admins)
 			->with('noPrivilegesUsers', $noPrivilegesUsers);

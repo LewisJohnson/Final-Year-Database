@@ -19,16 +19,13 @@
 			@foreach(SussexProjects\Student::getAllStatuses() as $status)
 				@php
 					$students = SussexProjects\Student::Where('project_status', $status)->get();
-					$sortedStudents = $students->sortBy(function ($student, $key) { 
-						return $student->user->last_name;
-					});
 				@endphp
 
-				@if(count($sortedStudents))
+				@if(count($students))
 					<div class="section horizontal">
 							<div class="flex flex--row flex--no-wrap">
-								<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins> {{ round((count($sortedStudents) / $studentCount) * 100, 2) }}%</ins></p>
-								<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($sortedStudents) }}</p>
+								<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins> {{ round((count($students) / $studentCount) * 100, 2) }}%</ins></p>
+								<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($students) }}</p>
 							</div>
 							<table data-admin-email="{{ Auth::user()->email }}" class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">
 								<thead>
@@ -45,7 +42,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach($sortedStudents as $student)
+									@foreach($students as $student)
 										@include('partials.student-edit', array('student'=> $student))
 									@endforeach
 								</tbody>
