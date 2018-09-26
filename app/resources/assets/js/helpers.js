@@ -54,16 +54,16 @@ function removeAllShadowClasses(element){
 
 
 function addLastNameHeadersToList(ul) {
-	var listItems = $("li > a:first-of-type", ul);
+	var listItems = $("li", ul);
 	var links = $('#' + ul.attr('id') + '-links');
 
 	for (var i = 0; i < listItems.length; i++) {
 
-		var firstCharOflastName = $(listItems[i]).text()
-			.trim()
+		var firstCharOflastName = $(listItems[i])
+			.data("sort-name")
+			.toString()
 			.toUpperCase()
-			.split(" ")[1]
-			.charAt(0);;
+			.charAt(0);
 
 		if(i == 0){
 			$(listItems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
@@ -71,10 +71,10 @@ function addLastNameHeadersToList(ul) {
 			continue;
 		}
 
-		var prevfirstCharOflastName = $(listItems[i - 1]).text()
-			.trim()
+		var prevfirstCharOflastName = $(listItems[i - 1])
+			.data("sort-name")
+			.toString()
 			.toUpperCase()
-			.split(" ")[1]
 			.charAt(0);
 
 		if(firstCharOflastName != prevfirstCharOflastName){
