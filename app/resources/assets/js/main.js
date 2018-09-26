@@ -44,10 +44,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 // DOC READY
 "use strict";
 ;$(function() {
+
 	/* ========================
 		2. HTML Modifications
 	   ======================== */
-
 	if($('.show--scroll-to-top').length > 0){
 		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
 	}
@@ -73,7 +73,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 	}
 
-	// Makes primary topic first
+	/**
+		* Sorts topics list to show primary topic first.
+	*/
 	$('.topics-list').prepend($('.first'));
 	if($('.topics-list .no-topics').length < 1){
 		$('[class="topics-list"] li').css("opacity", 0);
@@ -92,6 +94,12 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		});
 	}
 
+
+	/**
+		* Adds headers to list with a certain class name.
+		*
+		* There used to be more, but they were unused.
+	*/
 	$('.order-list-js').each(function() {
 		var list = $(this);
 
@@ -110,7 +118,11 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		 3. FORMS
 	   ====================== */
 
-	// Used on the student index page
+	/**
+		* Toggle sharing name with other student.
+		*
+		* Visible on a student's homepage.
+	*/
 	$("#share-name-form").on('submit', function(e){
 		e.preventDefault();
 
@@ -131,9 +143,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 
 	/**
-		* Toggle reverencing emails.
+		* Toggle receiving emails.
 		*
-		* Visible on supervisor homepage
+		* Visible on a supervisor's homepage.
 	*/
 	$(".receive-emails-form").on('submit', function(e){
 		e.preventDefault();
@@ -153,7 +165,14 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	});
 
 	/**
-		* Submit login details
+		* Submit receive email form when checkbox toggled.
+	*/
+	$('.receive-emails-checkbox').on('click', function(e){
+		$(this).submit();
+	});
+
+	/**
+		* Submit login form.
 	*/
 	$("#loginForm").on('submit', function(e){
 		e.preventDefault();
@@ -189,7 +208,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 
 	/**
-		* Create a new topic form submit
+		* Create a new topic form submit.
 	*/
 	$('#new-topic-form').on('submit', function(e) {
 		e.preventDefault();
@@ -213,6 +232,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		});
 	});
 
+	/**
+		* Create a new programme form submit.
+	*/
 	$('#new-programme-form').on('submit', function(e) {
 		e.preventDefault();
 
@@ -236,7 +258,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	});
 
 	/**
-		* New/Edit user form
+		* New/Edit user form.
 	*/
 	var supervisorForm = $('#supervisor-form');
 	var studentForm = $('#student-form');
@@ -294,10 +316,17 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		}
 	});
 
+	/**
+		* Auto generates the email from the username field.
+	*/
 	$('.user-form #username').on('keydown keyup change', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
+
+	/**
+		* Delete a project form submit.
+	*/
 	$('form.delete-project').on('submit', function(e) {
 		e.preventDefault();
 		var form = $(this);
@@ -340,8 +369,11 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/* ======================
 		 4. CLICK EVENTS
 	   ====================== */
-	// External links give an illusion of AJAX
 	var alreadyChangingDocument = false;
+
+	/**
+		* External links can be used to give the illusion of AJAX.
+	*/
 	$("body").on("click", ".external-link",  function(e) {
 		if(alreadyChangingDocument){
 			return;
@@ -359,6 +391,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		$('#content-replaced-container').css('display', 'block');
 	});
 
+	/**
+		* Toggles the mobile menu.
+	*/
 	$('nav.mobile .sub-dropdown').on('click', function(){
 		var dropdown = $(this);
 		var linkContainer = $(this).parent().parent();
@@ -390,6 +425,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		}
 	});
 
+
+	/**
+		* The student undo project form.
+	*/
 	$('.student-undo-select').on('click', function(e) {
 		var card = $(this).parent();
 		$.confirm({
@@ -428,7 +467,9 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		});
 	});
 
-	// Site-wide feedback form
+	/**
+		* The site-wide feedback form.
+	*/
 	$('#leave-feedback-button').on('click', function(e){
 		$.confirm({
 			title: 'Feedback',
@@ -490,13 +531,12 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		});
 	});
 
-	// Submit receive email form when checkbox toggled
-	$('.receive-emails-checkbox').on('click', function(e){
-		$(this).submit();
-	});
-	
-	// Adds or removes a project from a student favourites
+	/**
+		* Adds or removes a project from a student favourites.
+	*/
 	$(".favourite-container").on('click', function() {
+
+		// The last event is still loading, so return until it is complete.
 		if($('.loader', svgContainer).css('display') !== 'none'){
 			return;
 		}
