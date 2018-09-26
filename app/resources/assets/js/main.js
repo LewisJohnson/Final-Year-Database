@@ -123,22 +123,33 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		*
 		* Visible on a student's homepage.
 	*/
+
+	var canChangeShareNamePreference = true;
 	$("#share-name-form").on('submit', function(e){
 		e.preventDefault();
 
-		$.ajax({
-			url: $(this).prop('action'),
-			type:'PATCH',
-			data: $(this).serialize(),
-			success:function(response){
-				if(response.share_name){
-					createToast('success', 'Your name is being shared with other students.');
-				} else {
-					createToast('', 'You are no longer sharing your name with other students.');
-				}
-				$('#share_name').prop('checked', response.share_name);
-			},
-		});
+		if(canChangeShareNamePreference){
+			$.ajax({
+				url: $(this).prop('action'),
+				type:'PATCH',
+				data: $(this).serialize(),
+				success:function(response){
+					if(response.share_name){
+						createToast('success', 'Your name is being shared with other students.');
+					} else {
+						createToast('', 'You are no longer sharing your name with other students.');
+					}
+					$('#share_name').prop('checked', response.share_name);
+				},
+			});
+			canChangeShareNamePreference = false;
+		} else {
+			createToast('error', "Please wait a few seconds before changing your preference again.");
+		}
+
+		setTimeout(function(){
+			canChangeShareNamePreference = true;
+		}, 5000);
 	});
 
 
@@ -167,8 +178,20 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/**
 		* Submit receive email form when checkbox toggled.
 	*/
+	var canChangeEmailPreference = true;
 	$('.receive-emails-checkbox').on('click', function(e){
-		$(this).submit();
+
+		if(canChangeEmailPreference){
+			$(this).submit();
+			canChangeEmailPreference = false;
+		} else {
+			e.preventDefault();
+			createToast('error', "Please wait a few seconds before changing your preference again.");
+		}
+
+		setTimeout(function(){
+			canChangeEmailPreference = true;
+		}, 5000);
 	});
 
 	/**
