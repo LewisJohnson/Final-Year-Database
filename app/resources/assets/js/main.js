@@ -94,7 +94,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 	$('.order-list-js').each(function() {
 		var list = $(this);
-		// sortUnorderedList(list);
 
 		if(list.hasClass('last-name-header-list-js')){
 			if(!list.attr('id')){
@@ -104,26 +103,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 			list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
 			addLastNameHeadersToList(list);
-		}
-
-		if(list.hasClass('alpha-header-list-js')){
-			if(!list.attr('id')){
-				console.error('A unique id is required.');
-				return;
-			}
-
-			list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
-			addAlphaHeadersToList(list);
-		}
-
-		if(list.hasClass('title-header-list-js')){
-			if(!list.attr('id')){
-				console.error('A unique id is required.');
-				return;
-			}
-
-			list.before('<div class="header-links" id="' + list.attr('id') + '-links"></div>');
-			addTitleHeadersToList(list);
 		}
 	});
 

@@ -53,88 +53,33 @@ function removeAllShadowClasses(element){
 }
 
 
-/**
- * Sorts an unordered list by it's text value.
- *
- * @param {object} ul The lost to sort
- */
-function sortUnorderedList(ul) {
-	var listitems = ul.children('li').get();
-
-	listitems.sort(function(a, b) {
-		return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
-	})
-
-	$.each(listitems, function(idx, itm) { ul.append(itm); });
-}
-
 function addLastNameHeadersToList(ul) {
-	var listitems = ul.children('li').get();
+	var listItems = $("li > a:first-of-type", ul);
 	var links = $('#' + ul.attr('id') + '-links');
 
-	for (var i = 0; i < listitems.length; i++) {
+	for (var i = 0; i < listItems.length; i++) {
 
-		var name = $(listitems[i]).text();
-		var nameSplit = name.toUpperCase().split(" ");
-		var firstCharOflastName = nameSplit[nameSplit.length - 1].charAt(0);
+		var firstCharOflastName = $(listItems[i]).text()
+			.trim()
+			.toUpperCase()
+			.split(" ")[1]
+			.charAt(0);;
 
 		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
+			$(listItems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 			continue;
 		}
 
-		var prevName = $(listitems[i - 1]).text();
-		var prevNameSplit = prevName.toUpperCase().split(" ");
-		var prevfirstCharOflastName = prevNameSplit[prevNameSplit.length - 1].charAt(0);
+		var prevfirstCharOflastName = $(listItems[i - 1]).text()
+			.trim()
+			.toUpperCase()
+			.split(" ")[1]
+			.charAt(0);
 
 		if(firstCharOflastName != prevfirstCharOflastName){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
+			$(listItems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
 			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
-		}
-	}
-}
-
-function addAlphaHeadersToList(ul) {
-	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');
-
-	for (var i = 0; i < listitems.length; i++) {
-		var firstChar = $(listitems[i]).text().replace(/\s/g, '').charAt(0).toUpperCase();
-
-		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h4>" + firstChar + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
-			continue;
-		}
-		var prevFirstChar = $(listitems[i - 1]).text().replace(/\s/g, '').charAt(0).toUpperCase();
-		if(firstChar != prevFirstChar){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstChar + "'><h4>" + firstChar + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstChar + "'>"+ firstChar +"</a>");
-		}
-	}
-}
-
-function addTitleHeadersToList(ul) {
-	var listitems = ul.children('li').get();
-	var links = $('#' + ul.attr('id') + '-links');
-
-	for (var i = 0; i < listitems.length; i++) {
-		var t = $(listitems[i]).text();
-		var nameTitle = /[^[, ]*]*/.exec(t)[0].toUpperCase().replace(/\s/g, '');
-
-		if(i == 0){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h4>" + nameTitle + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
-			continue;
-		}
-
-		var pt = $(listitems[i - 1]).text();
-		var prevNameTitle = /[^[, ]*]*/.exec(pt)[0].toUpperCase().replace(/\s/g, '');
-
-		if(nameTitle != prevNameTitle){
-			$(listitems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + nameTitle + "'><h4>" + nameTitle + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + nameTitle + "'>"+ nameTitle +"</a>");
 		}
 	}
 }
