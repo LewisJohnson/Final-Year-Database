@@ -84,7 +84,7 @@ class ProjectAdminController extends Controller{
 
 	/**
 	 * The amend supervisor arrangements view.
-	 * 
+	 *
 	 * @return \Illuminate\View\View
 	 */
 	public function amendSupervisorArrangementsView(){
@@ -146,23 +146,28 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The log-in as another user view.
 	 *
-	 * @return \Illuminate\View\View 
+	 * @return \Illuminate\View\View
 	 */
 	public function loginAsView(){
-		$students = Student::all();
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$staffUsers = User::Where('privileges', 'staff')->get();
+		$student = new Student;
+		$user = new User;
 
-		$students = $students->sortBy(function($student){
-			return $student->user->last_name;
-		});
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+					->get();
 
-		$staffUsers = $staffUsers->sortBy(function($staff){
-			return $staff->last_name;
-		});
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
 
-		return view('admin.login-as')->with('supervisors', $supervisors)
-			->with('staff', $staffUsers)->with('students', $students);
+		$staffUsers = User::where('privileges', 'staff')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		return view('admin.login-as')
+			->with('supervisors', $supervisors)
+			->with('staffUsers', $staffUsers)
+			->with('students', $students);
 	}
 
 	/**
@@ -394,7 +399,7 @@ class ProjectAdminController extends Controller{
 	 * An overview of each automatically assigned second marker.
 	 *
 	 * @return \Illuminate\Http\Response
-	 
+
 	 */
 	public function assignSecondMarkerAutomaticTable(){
 		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
@@ -410,7 +415,7 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The swap second marker view.
 	 *
-	 * @return \Illuminate\View\View 
+	 * @return \Illuminate\View\View
 	 */
 	public function swapSecondMarkerView(){
 		$students = Student::where('project_status', 'accepted')->get();

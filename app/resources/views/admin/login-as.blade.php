@@ -11,7 +11,7 @@
 			<h2>Supervisors</h2>
 			<ol class="order-list-js last-name-header-list-js" id="supervisorList" sorted="false" style="list-style: none">
 				@foreach($supervisors as $supervisor)
-					<li>
+					<li data-sort-name="{{ $supervisor->user->last_name }}">
 						<a title="Log in as {{ $supervisor->user->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $supervisor->id) }}">{{ $supervisor->user->getFullName() }}</a>
 					</li>
 				@endforeach
@@ -24,7 +24,7 @@
 
 			<ol class="order-list-js last-name-header-list-js" id="studentList" sorted="false" style="list-style: none">
 				@foreach($students as $student)
-					<li>
+					<li data-sort-name="{{ $student->user->last_name }}">
 						<a title="Log in as {{ $student->getName() }}" href="{{ action('ProjectAdminController@loginAs', $student->user->id) }}">{{ $student->getName() }}</a>
 					</li>
 				@endforeach
@@ -34,9 +34,9 @@
 		<div class="section horizontal card">
 			<h2>Staff</h2>
 			<ol class="order-list-js last-name-header-list-js" id="staffList" sorted="false" style="list-style: none">
-				@foreach($staff as $staffUser)
-					<li>
-						<a title="Log in as {{ $staffUser->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $staffUser->id) }}">{{ $staffUser->getFullName() }}</a>
+				@foreach($staffUsers as $staff)
+					<li data-sort-name="{{ $staff->last_name }}">
+						<a title="Log in as {{ $staff->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $staff->id) }}">{{ $staff->getFullName() }}</a>
 					</li>
 				@endforeach
 			</ol>
