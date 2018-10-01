@@ -17,18 +17,23 @@
 |------------------
 |
 |	1. Mobile Menu
+|	1.1 Desktop Menu
 |	2. Dialog / Modal
 |	3. Data Table
-|	4. Column Toggle Table
-|	5. Forms / AJAX Functions
-|	6. Edit Topics [Admin]
-|	7. Menu
-|
+|	3.1 Column Toggle Table
+|	3.2 Table DotMenu
+|	4. Edit Topics [Project Admin]
+|	4.1 Edit Programmes [Project Admin]
+|	5. Second Marker [Assign]
+|	5.1 Second Marker [Swap]
+|	6. Universal Search
+|	7. Forms / AJAX Functions
 |
 */
 "use strict";
 
 ;$(function() {
+
 	/* ==================
 		 1. Mobile Menu
 	   ================== */
@@ -89,6 +94,147 @@
 			this.mobileMenu = new MobileMenu(this);
 		});
 	};
+
+	/* =========================
+		1.1 Desktop menu (MORPH)
+	   ========================= */
+	function morphDropdown( element ) {
+		this.element = element;
+		this.mainNavigation = this.element.find('.main-nav');
+		this.mainNavigationItems = this.mainNavigation.find('.has-dropdown');
+		this.dropdownList = this.element.find('.dropdown-list');
+		this.dropdownWrappers = this.dropdownList.find('.dropdown');
+		this.dropdownItems = this.dropdownList.find('.content');
+		this.dropdownBg = this.dropdownList.find('.bg-layer');
+		this.mq = this.checkMq();
+		this.bindEvents();
+	}
+
+	morphDropdown.prototype.checkMq = function() {
+		//check screen size
+		var self = this;
+		return window.getComputedStyle(self.element.get(0), '::before').getPropertyValue('content').replace(/'/g, "").replace(/"/g, "").split(', ');
+	};
+
+	morphDropdown.prototype.bindEvents = function() {
+		var self = this;
+		//hover over an item in the main navigation
+		this.mainNavigationItems.mouseenter(function(event){
+			//hover over one of the nav items -> show dropdown
+			self.showDropdown($(this));
+		}).mouseleave(function(){
+			setTimeout(function(){
+				//if not hovering over a nav item or a dropdown -> hide dropdown
+				if( self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) self.hideDropdown();
+			}, 50);
+		});
+
+		//hover over the dropdown
+		this.dropdownList.mouseleave(function(){
+			setTimeout(function(){
+				//if not hovering over a dropdown or a nav item -> hide dropdown
+				(self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) && self.hideDropdown();
+			}, 50);
+		});
+
+		//click on an item in the main navigation -> open a dropdown on a touch device
+		this.mainNavigationItems.on('touchstart', function(event){
+			var selectedDropdown = self.dropdownList.find('#'+$(this).data('content'));
+			if( !self.element.hasClass('is-dropdown-visible') || !selectedDropdown.hasClass('active') ) {
+				event.preventDefault();
+				self.showDropdown($(this));
+			}
+		});
+	};
+
+	morphDropdown.prototype.showDropdown = function(item) {
+		this.mq = this.checkMq();
+
+		var self = this;
+		var selectedDropdown = this.dropdownList.find('#'+item.data('content')),
+			selectedDropdownHeight = selectedDropdown.innerHeight(),
+			selectedDropdownWidth = selectedDropdown.children('.content').innerWidth(),
+			selectedDropdownLeft = item.offset().left + item.innerWidth()/2 - selectedDropdownWidth/2;
+
+		//update dropdown position and size
+		this.updateDropdown(selectedDropdown, parseInt(selectedDropdownHeight), selectedDropdownWidth, parseInt(selectedDropdownLeft));
+		//add active class to the proper dropdown item
+		this.element.find('.active').removeClass('active');
+		selectedDropdown.addClass('active').removeClass('move-left move-right').prevAll().addClass('move-left').end().nextAll().addClass('move-right');
+		item.addClass('active');
+		//show the dropdown wrapper if not visible yet
+		if( !this.element.hasClass('is-dropdown-visible') ) {
+			setTimeout(function(){
+				self.element.addClass('is-dropdown-visible');
+			}, 10);
+		}
+
+	};
+
+	morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left) {
+		this.dropdownList.css({
+			'-moz-transform': 'translateX(' + left + 'px)',
+			'-webkit-transform': 'translateX(' + left + 'px)',
+			'-ms-transform': 'translateX(' + left + 'px)',
+			'-o-transform': 'translateX(' + left + 'px)',
+			'transform': 'translateX(' + left + 'px)',
+			'width': width+'px',
+			'height': height+'px'
+		});
+
+		this.dropdownBg.css({
+			'-moz-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+			'-webkit-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+			'-ms-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+			'-o-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+			'transform': 'scaleX(' + width + ') scaleY(' + height + ')'
+		});
+	};
+
+	morphDropdown.prototype.hideDropdown = function() {
+		this.mq = this.checkMq();
+		this.element
+			.removeClass('is-dropdown-visible')
+			.find('.active')
+			.removeClass('active')
+			.end()
+			.find('.move-left')
+			.removeClass('move-left')
+			.end()
+			.find('.move-right')
+			.removeClass('move-right');
+	};
+
+	morphDropdown.prototype.resetDropdown = function() {
+		this.mq = this.checkMq();
+	};
+
+	var morphDropdowns = [];
+	if( $('.cd-morph-dropdown').length > 0) {
+		$('.cd-morph-dropdown').each(function(){
+			//create a morphDropdown object for each .cd-morph-dropdown
+			morphDropdowns.push(new morphDropdown($(this)));
+		});
+
+		var resizing = false;
+
+		//on resize, reset dropdown style property
+		updateDropdownPosition();
+		$(window).on('resize', function(){
+			if( !resizing ) {
+				resizing = true;
+				(!window.requestAnimationFrame) ? setTimeout(updateDropdownPosition, 300) : window.requestAnimationFrame(updateDropdownPosition);
+			}
+		});
+
+		function updateDropdownPosition() {
+			morphDropdowns.forEach(function(element){
+				element.resetDropdown();
+			});
+
+			resizing = false;
+		};
+	}
 
 	/* ====================
 		2. Dialog / Modal
@@ -207,10 +353,10 @@
 	/* ================
 		3. Data Table
 	   ================ */
+
 	/**
 	* Class constructor for data tables.
 	*
-	* @param {HTMLElement} element The element that will be upgraded.
 	*/
 	var DataTable = function DataTable(element) {
 		this.element = $(element);
@@ -274,13 +420,11 @@
 	};
 
 	/* ========================
-		4. Column Toggle Table
+		3.1. Column Toggle Table
 	   ======================== */
 
 	/**
 	* Class constructor for data tables.
-	*
-	* @param {HTMLElement} element The element that will be upgraded.
 	*/
 	var ColumnToggleTable = function ColumnToggleTable(element) {
 		this.element = $(element);
@@ -434,73 +578,126 @@
 		ColumnToggleTable.prototype.functions.refreshAll();
 	};
 
-	/* ============================
-		5 Forms / AJAX Functions
-	   ============================ */
+	/* ========================
+	   3.2 DotMenu
+	 	The menu used for tables on small screen devices.
+	   ======================== */
 
 	/**
 	* Class constructor for ajax functions.
-	*
-	* @param {HTMLElement} element The element that will be upgraded.
 	*/
-	var AjaxFunctions = function AjaxFunctions() {};
-	window['AjaxFunctions'] = AjaxFunctions;
-
-	AjaxFunctions.prototype.CssClasses_ = {
-		DATA_TABLE: 'data-table',
-		IS_SELECTED: 'is-selected'
+	var DotMenu = function Menu(element) {
+		this.button = $(element);
+		this.menu = null;
+		this.isTableDotMenu = false;
+		this.init();
 	};
 
-	AjaxFunctions.prototype.Selectors_ = {
-		SEARCH_INPUT: '.search-input',
-		SEARCH_CONTAINER: '.search-container',
-		SEARCH_FILTER_CONTAINER: '.search-filter-container',
-		SEARCH_FILTER_BUTTON: '#search-filter-button',
-		LOG_IN_DIALOG: '.login.dialog',
-		LOG_IN_FORM: '#loginForm',
+	DotMenu.prototype.Selectors_ = {
+		DOT_MENU: '.dot-menu',
+		ACTIVATOR: '.dot-menu__activator',
+		IS_VISIBLE: '.is-visible',
 	};
 
-	AjaxFunctions.prototype.Keys_ = {
-		SPACE: 32,
-		ENTER: 13,
-		COMMA: 45
+	DotMenu.prototype.CssClasses_ = {
+		IS_VISIBLE: 'is-visible',
+		BOTTOM_LEFT: 'dot-menu--bottom-left',
+		BOTTOM_RIGHT: 'dot-menu--bottom-right',
+		TOP_LEFT: 'dot-menu--top-left',
+		TOP_RIGHT: 'dot-menu--top-right',
+		TABLE_DOT_MENU: 'dot-menu--table'
 	};
 
-	// Project page search focus
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function(e){
-		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
-		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
-	});
+	DotMenu.prototype.positionMenu = function(){
+		var buttonRect = this.button[0].getBoundingClientRect();
 
-	// Project page search focus out
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function(e){
-		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
-		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
-	});
-
-	// SEARCH
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
-		var container = $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_CONTAINER);
-		var filterButton = $(this);
-
-		if(container.hasClass('active')){
-			container.removeClass('active');
-			filterButton.removeClass('active');
-			filterButton.blur();
-		} else{
-			container.addClass('active');
-			filterButton.addClass('active');
+		if(this.menu.hasClass(this.CssClasses_.BOTTOM_LEFT)){
+			this.menu.css('top', buttonRect.bottom);
+			this.menu.css('left', buttonRect.left - parseInt(this.button.css('width'), 10));
+			this.menu.css('transform-origin', 'top right');
+		} else if(this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)){
+			this.menu.css('top', buttonRect.bottom);
+			this.menu.css('left', buttonRect.left - 120);
+			this.menu.css('transform-origin', 'top left');
+		} else if(this.menu.hasClass(this.CssClasses_.TOP_LEFT)){
+			this.menu.css('top', buttonRect.top - 150);
+			this.menu.css('left', buttonRect.right - parseInt(this.button.css('width'), 10));
+			this.menu.css('transform-origin', 'bottom right');
+		} else if(this.menu.hasClass(this.CssClasses_.TOP_RIGHT)){
+			this.menu.css('top', buttonRect.top - 150);
+			this.menu.css('left', buttonRect.left - 120);
+			this.menu.css('transform-origin', 'bottom left');
+		} else {
+			this.menu.css('top', buttonRect.bottom);
+			this.menu.css('transform-origin', 'top');
 		}
-	});
+	}
+
+	DotMenu.prototype.show = function(){
+		DotMenu.prototype.positionMenu.bind(this)();
+		this.menu.addClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
+		this.menu.show();
+	}
+
+	DotMenu.prototype.hide = function(){
+		this.menu.removeClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
+		this.menu.hide();
+	}
+
+	DotMenu.prototype.toggle = function(){
+		if(this.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
+			DotMenu.prototype.hide.bind(this)();
+		} else {
+			DotMenu.prototype.show.bind(this)();
+		}
+	}
+
+	DotMenu.prototype.init = function () {
+		var dotMenu = this;
+		var menuId = $(this.button).attr('id') + '-menu';
+
+		this.menu = $('#' + menuId);
+		this.isTableDotMenu = this.menu.hasClass(DotMenu.prototype.CssClasses_.TABLE_DOT_MENU);
+
+		this.button.on('click', function(e) {
+			e.stopPropagation();
+			DotMenu.prototype.toggle.bind(dotMenu)();
+		});
+
+		$(document).on('scroll', function(e) {
+			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
+				DotMenu.prototype.positionMenu.bind(dotMenu)();
+			}
+		});
+
+		$(window).on('resize', function(e) {
+			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
+				DotMenu.prototype.positionMenu.bind(dotMenu)();
+			}
+		});
+
+		$(document).on('click', function(e) {
+			var target = $(e.target);
+			if(!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
+				if(!$.contains($(dotMenu.menu)[0], e.target)){
+					DotMenu.prototype.hide.bind(dotMenu)();
+				}
+			}
+		});
+	};
+
+	DotMenu.prototype.initAll = function() {
+		$(this.Selectors_.ACTIVATOR).each(function() {
+			this.DotMenu = new DotMenu(this);
+		});
+	};
 
 	/* ==================================
-		6 Edit Topics [Project Admin]
+		4. Edit Topics [Project Admin]
 	================================== */
 
 	/**
-	* Class constructor for ajax functions.
-	*
-	* @param {HTMLElement} element The element that will be upgraded.
+	* Class constructor for edit topics component.
 	*/
 	var EditTopic = function EditTopic(element) {
 		this.element = $(element);
@@ -630,14 +827,12 @@
 		});
 	};
 
-	/* ==================================
-		6 Edit Programmes [Project Admin]
-	================================== */
+	/* ===================================
+		4.1 Edit Programmes [Project Admin]
+	====================================== */
 
 	/**
-	* Class constructor for ajax functions.
-	*
-	* @param {HTMLElement} element The element that will be upgraded.
+	* Class constructor for edit programmes component.
 	*/
 	var EditProgramme = function EditProgramme(element) {
 		this.element = $(element);
@@ -767,124 +962,9 @@
 		});
 	};
 
-	/* ========================
-	   7 DotMenu
-	   ======================== */
-
-	/**
-	* Class constructor for ajax functions.
-	*
-	* @param {HTMLElement} element The element that will be upgraded.
-	*/
-	var DotMenu = function Menu(element) {
-		this.button = $(element);
-		this.menu = null;
-		this.isTableDotMenu = false;
-		this.init();
-	};
-
-	DotMenu.prototype.Selectors_ = {
-		DOT_MENU: '.dot-menu',
-		ACTIVATOR: '.dot-menu__activator',
-		IS_VISIBLE: '.is-visible',
-	};
-
-	DotMenu.prototype.CssClasses_ = {
-		IS_VISIBLE: 'is-visible',
-		BOTTOM_LEFT: 'dot-menu--bottom-left',
-		BOTTOM_RIGHT: 'dot-menu--bottom-right',
-		TOP_LEFT: 'dot-menu--top-left',
-		TOP_RIGHT: 'dot-menu--top-right',
-		TABLE_DOT_MENU: 'dot-menu--table'
-	};
-
-	DotMenu.prototype.positionMenu = function(){
-		var buttonRect = this.button[0].getBoundingClientRect();
-
-		if(this.menu.hasClass(this.CssClasses_.BOTTOM_LEFT)){
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('left', buttonRect.left - parseInt(this.button.css('width'), 10));
-			this.menu.css('transform-origin', 'top right');
-		} else if(this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)){
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('left', buttonRect.left - 120);
-			this.menu.css('transform-origin', 'top left');
-		} else if(this.menu.hasClass(this.CssClasses_.TOP_LEFT)){
-			this.menu.css('top', buttonRect.top - 150);
-			this.menu.css('left', buttonRect.right - parseInt(this.button.css('width'), 10));
-			this.menu.css('transform-origin', 'bottom right');
-		} else if(this.menu.hasClass(this.CssClasses_.TOP_RIGHT)){
-			this.menu.css('top', buttonRect.top - 150);
-			this.menu.css('left', buttonRect.left - 120);
-			this.menu.css('transform-origin', 'bottom left');
-		} else {
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('transform-origin', 'top');
-		}
-	}
-
-	DotMenu.prototype.show = function(){
-		DotMenu.prototype.positionMenu.bind(this)();
-		this.menu.addClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
-		this.menu.show();
-	}
-
-	DotMenu.prototype.hide = function(){
-		this.menu.removeClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
-		this.menu.hide();
-	}
-
-	DotMenu.prototype.toggle = function(){
-		if(this.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-			DotMenu.prototype.hide.bind(this)();
-		} else {
-			DotMenu.prototype.show.bind(this)();
-		}
-	}
-
-	DotMenu.prototype.init = function () {
-		var dotMenu = this;
-		var menuId = $(this.button).attr('id') + '-menu';
-
-		this.menu = $('#' + menuId);
-		this.isTableDotMenu = this.menu.hasClass(DotMenu.prototype.CssClasses_.TABLE_DOT_MENU);
-
-		this.button.on('click', function(e) {
-			e.stopPropagation();
-			DotMenu.prototype.toggle.bind(dotMenu)();
-		});
-
-		$(document).on('scroll', function(e) {
-			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-				DotMenu.prototype.positionMenu.bind(dotMenu)();
-			}
-		});
-
-		$(window).on('resize', function(e) {
-			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-				DotMenu.prototype.positionMenu.bind(dotMenu)();
-			}
-		});
-
-		$(document).on('click', function(e) {
-			var target = $(e.target);
-			if(!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
-				if(!$.contains($(dotMenu.menu)[0], e.target)){
-					DotMenu.prototype.hide.bind(dotMenu)();
-				}
-			}
-		});
-	};
-
-	DotMenu.prototype.initAll = function() {
-		$(this.Selectors_.ACTIVATOR).each(function() {
-			this.DotMenu = new DotMenu(this);
-		});
-	};
-
-	/* ==================
-		5. Second Marker
-	===================== */
+	/* ============================
+		5. Second Marker [Assign]
+	=============================== */
 	var Marker = function Marker() {
 		if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
 			return;
@@ -1002,9 +1082,9 @@
 	}
 
 
-	/* ==================
-		5. Second Marker
-	===================== */
+	/* ==========================
+		5.1 Second Marker [Swap]
+	============================= */
 	var Swap = function Swap() {
 		if($("#swap-marker-student-table").length < 1){
 			return;
@@ -1114,146 +1194,63 @@
 		window['Swap'] = new Swap();
 	}
 
-	/* ==================
-		MORPH
-	   ================== */
-	function morphDropdown( element ) {
-		this.element = element;
-		this.mainNavigation = this.element.find('.main-nav');
-		this.mainNavigationItems = this.mainNavigation.find('.has-dropdown');
-		this.dropdownList = this.element.find('.dropdown-list');
-		this.dropdownWrappers = this.dropdownList.find('.dropdown');
-		this.dropdownItems = this.dropdownList.find('.content');
-		this.dropdownBg = this.dropdownList.find('.bg-layer');
-		this.mq = this.checkMq();
-		this.bindEvents();
-	}
+	/* ============================
+		7. Forms / AJAX Functions
+	   ============================ */
 
-	morphDropdown.prototype.checkMq = function() {
-		//check screen size
-		var self = this;
-		return window.getComputedStyle(self.element.get(0), '::before').getPropertyValue('content').replace(/'/g, "").replace(/"/g, "").split(', ');
+	/**
+	* Class constructor for ajax functions.
+	*/
+
+	var AjaxFunctions = function AjaxFunctions() {};
+	window['AjaxFunctions'] = AjaxFunctions;
+
+	AjaxFunctions.prototype.CssClasses_ = {
+		DATA_TABLE: 'data-table',
+		IS_SELECTED: 'is-selected'
 	};
 
-	morphDropdown.prototype.bindEvents = function() {
-		var self = this;
-		//hover over an item in the main navigation
-		this.mainNavigationItems.mouseenter(function(event){
-			//hover over one of the nav items -> show dropdown
-			self.showDropdown($(this));
-		}).mouseleave(function(){
-			setTimeout(function(){
-				//if not hovering over a nav item or a dropdown -> hide dropdown
-				if( self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) self.hideDropdown();
-			}, 50);
-		});
-		
-		//hover over the dropdown
-		this.dropdownList.mouseleave(function(){
-			setTimeout(function(){
-				//if not hovering over a dropdown or a nav item -> hide dropdown
-				(self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) && self.hideDropdown();
-			}, 50);
-		});
-
-		//click on an item in the main navigation -> open a dropdown on a touch device
-		this.mainNavigationItems.on('touchstart', function(event){
-			var selectedDropdown = self.dropdownList.find('#'+$(this).data('content'));
-			if( !self.element.hasClass('is-dropdown-visible') || !selectedDropdown.hasClass('active') ) {
-				event.preventDefault();
-				self.showDropdown($(this));
-			}
-		});
+	AjaxFunctions.prototype.Selectors_ = {
+		SEARCH_INPUT: '.search-input',
+		SEARCH_CONTAINER: '.search-container',
+		SEARCH_FILTER_CONTAINER: '.search-filter-container',
+		SEARCH_FILTER_BUTTON: '#search-filter-button',
+		LOG_IN_DIALOG: '.login.dialog',
+		LOG_IN_FORM: '#loginForm',
 	};
 
-	morphDropdown.prototype.showDropdown = function(item) {
-		this.mq = this.checkMq();
+	AjaxFunctions.prototype.Keys_ = {
+		SPACE: 32,
+		ENTER: 13,
+		COMMA: 45
+	};
 
-		var self = this;
-		var selectedDropdown = this.dropdownList.find('#'+item.data('content')),
-			selectedDropdownHeight = selectedDropdown.innerHeight(),
-			selectedDropdownWidth = selectedDropdown.children('.content').innerWidth(),
-			selectedDropdownLeft = item.offset().left + item.innerWidth()/2 - selectedDropdownWidth/2;
+	// Project page search focus
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function(e){
+		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
+	});
 
-		//update dropdown position and size
-		this.updateDropdown(selectedDropdown, parseInt(selectedDropdownHeight), selectedDropdownWidth, parseInt(selectedDropdownLeft));
-		//add active class to the proper dropdown item
-		this.element.find('.active').removeClass('active');
-		selectedDropdown.addClass('active').removeClass('move-left move-right').prevAll().addClass('move-left').end().nextAll().addClass('move-right');
-		item.addClass('active');
-		//show the dropdown wrapper if not visible yet
-		if( !this.element.hasClass('is-dropdown-visible') ) {
-			setTimeout(function(){
-				self.element.addClass('is-dropdown-visible');
-			}, 10);
+	// Project page search focus out
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function(e){
+		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
+	});
+
+	// SEARCH
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
+		var container = $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_CONTAINER);
+		var filterButton = $(this);
+
+		if(container.hasClass('active')){
+			container.removeClass('active');
+			filterButton.removeClass('active');
+			filterButton.blur();
+		} else{
+			container.addClass('active');
+			filterButton.addClass('active');
 		}
-		
-	};
-
-	morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left) {
-		this.dropdownList.css({
-			'-moz-transform': 'translateX(' + left + 'px)',
-			'-webkit-transform': 'translateX(' + left + 'px)',
-			'-ms-transform': 'translateX(' + left + 'px)',
-			'-o-transform': 'translateX(' + left + 'px)',
-			'transform': 'translateX(' + left + 'px)',
-			'width': width+'px',
-			'height': height+'px'
-		});
-
-		this.dropdownBg.css({
-			'-moz-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
-			'-webkit-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
-			'-ms-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
-			'-o-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
-			'transform': 'scaleX(' + width + ') scaleY(' + height + ')'
-		});
-	};
-
-	morphDropdown.prototype.hideDropdown = function() {
-		this.mq = this.checkMq();
-		this.element
-			.removeClass('is-dropdown-visible')
-			.find('.active')
-			.removeClass('active')
-			.end()
-			.find('.move-left')
-			.removeClass('move-left')
-			.end()
-			.find('.move-right')
-			.removeClass('move-right');
-	};
-
-	morphDropdown.prototype.resetDropdown = function() {
-		this.mq = this.checkMq();
-	};
-
-	var morphDropdowns = [];
-	if( $('.cd-morph-dropdown').length > 0 ) {
-		$('.cd-morph-dropdown').each(function(){
-			//create a morphDropdown object for each .cd-morph-dropdown
-			morphDropdowns.push(new morphDropdown($(this)));
-		});
-
-		var resizing = false;
-
-		//on resize, reset dropdown style property
-		updateDropdownPosition();
-		$(window).on('resize', function(){
-			if( !resizing ) {
-				resizing = true;
-				(!window.requestAnimationFrame) ? setTimeout(updateDropdownPosition, 300) : window.requestAnimationFrame(updateDropdownPosition);
-			}
-		});
-
-		function updateDropdownPosition() {
-			morphDropdowns.forEach(function(element){
-				element.resetDropdown();
-			});
-
-			resizing = false;
-		};
-	}
+	});
 
 	// Initialise all components
 	MobileMenu.prototype.initAll();
