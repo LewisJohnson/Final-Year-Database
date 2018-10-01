@@ -426,7 +426,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			dropdown.attr("aria-expanded", false);
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
 			dropdown.removeClass("active");
-			
+
 			content.attr("aria-hidden", true);
 			content.removeClass("active");
 
@@ -436,10 +436,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			dropdown.attr("aria-expanded", true);
 			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
 			dropdown.addClass("active");
-			
+
 			content.attr("aria-hidden", false);
 			content.addClass("active");
-			
+
 			linkContainer.find('li').each(function(index) {
 				if($(this).index() != dropdown.parent().index()){
 					$(this).slideUp(config.animtions.slow);
@@ -474,7 +474,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 							success:function(response){
 								if(response.successful){
 									createToast('success', 'Undo successful.');
-									card.slideUp(400, function() { 
+									card.slideUp(400, function() {
 										location.reload();
 									});
 
@@ -603,7 +603,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			$('.loader', svgContainer).hide(0);
 		});
 	});
-	
+
 	/* ======================
 		 5. CHANGE EVENTS
 	   ====================== */
@@ -613,24 +613,32 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		var select = function(dom){
 			var status = dom.parents().eq(4).data('status');
 			var adminEmail = dom.parents().eq(4).data('admin-email');
-			var emailString = "mailto:" + adminEmail + "?bcc=";
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
 			var emailButtonselector = ".email-selected." + status;
-			var amountOfEmails = 0;
+
+			// Master email contains all emails
+			// Email and overflow adhere to the 2000 character limit
+			var masterEmailString = "mailto:" + adminEmail + "?bcc=";
+			var emailString = "mailto:" + adminEmail + "?bcc=";
+			var overflowEmailString = "mailto:" + adminEmail + "?bcc=";
 
 			$(checkboxSelector).each(function(index, value) {
-				if(amountOfEmails > 100){
-					return false;
-				}
-
+				// Add to second email if first URL length is too long
 				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
-					emailString += $(value).data('email');
-					emailString += ",";
-					amountOfEmails++;
+					if(emailString.length <= config.maxUrlLength){
+						emailString += $(value).data('email');
+						emailString += ",";
+					} else {
+						overflowEmailString += $(value).data('email');
+						overflowEmailString += ",";
+					}
+
+					masterEmailString += $(value).data('email');
+					masterEmailString += ",";
 				}
 			});
 
-			if(amountOfEmails > 100 && !dontRemindAgainAmoutMailtoLimit){
+			if(emailString.length >= config.maxUrlLength && !dontRemindAgainAmoutMailtoLimit){
 				$.confirm({
 					type: 'red',
 					icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div>',
@@ -639,10 +647,16 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 					animateFromElement : false,
 					backgroundDismiss: true,
 					title: 'Mailto Limit Reached',
-					content: 'URLs have a length limit of around 2000 characters. The amount of people you have selected is greater than this limit. The first 100 people you selected will be emailed.',
+					content: 'Some older web browsers and email clients have a URL length limit of 2000 characters. ' +
+							'Because of this we have generated multiple emails for you. ' +
+							'You can either try your luck with the longer URL (The "Email Selected" button), or use the separate email links here. ' +
+							'<div style="margin: 2rem auto">' +
+							'	<a class="button button--raised" style="margin-right: 10px" href="' + emailString + '">Email 1</a>' +
+							'	<a class="button button--raised" href="' + overflowEmailString + '">Email 2</a>' +
+							'</div> ',
 					buttons: {
 						neveragain: {
-							text: "Okay, don't remind me again",
+							text: "Don't remind me again",
 							btnClass: 'btn-red-text',
 							action: function(){
 								dontRemindAgainAmoutMailtoLimit = true;
@@ -653,7 +667,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 				});
 			}
 
-			$(emailButtonselector).prop('href', emailString);
+			$(emailButtonselector).prop('href', masterEmailString);
+
 		};
 		setTimeout(select($(this)), 2000);
 	});
@@ -804,7 +819,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			case "strike":
 				wrapTextWithTag('html-editor--input', 's');
 				break;
-				
+
 			case "video":
 				var inputUrl = prompt("Enter the video URL", "https://www.");
 				var html = '<video controls>\n';

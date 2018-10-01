@@ -49,6 +49,10 @@ var config = {
 	// In milliseconds
 	tapHeldTime: 500,
 
+	// The red banner "Something went wrong with that request"
+	// Unless you implement a custom request fail for-each AJAX request, leave this as true
+	maxUrlLength: 1900,
+
 	ajaxBaseUrl: "https://www.informatics.sussex.ac.uk/courses/Final-Year-Database/app/public/"
 }
 
