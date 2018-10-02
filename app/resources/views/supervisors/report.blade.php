@@ -12,8 +12,8 @@
 	@if(Auth::user()->isProjectAdmin())
 		<div class="button-group button-group--horizontal">
 			<a class="button button--white" href="{{ SussexProjects\Supervisor::getAllSupervisorsMailtoString() }}">Email Supervisors</a>
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}">Email open to projects</a>
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}">Email closed to projects</a>
+			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}">Email open to students</a>
+			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}">Email closed to students</a>
 		</div>
 	@endif
 
