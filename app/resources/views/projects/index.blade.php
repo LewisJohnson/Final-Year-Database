@@ -38,7 +38,7 @@
 			</div>
 		@endif
 
-		<a class="form-field--toggle" style="position: relative;top: 35px;" @if($hide_archived) href="{{ action('UserController@projects', [Auth::user(), 'hide_archived' => false]) }}" @else href="{{ action('UserController@projects', [Auth::user(), 'hide_archived'=> true]) }}" @endif>
+		<a class="form-field form-field--toggle" style="position: relative;top: 35px;" @if($hide_archived) href="{{ action('UserController@projects', [Auth::user(), 'hide_archived' => false]) }}" @else href="{{ action('UserController@projects', [Auth::user(), 'hide_archived'=> true]) }}" @endif>
 			<p class="switch-label" for="collect_referrer">Hide archived projects</p>
 			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">
 				<input type="checkbox" class="checkbox" @if($hide_archived) checked @endif>

@@ -118,14 +118,14 @@ Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']]
 
 	// User feedback view
 	Route::delete('admin/feedback', 'SystemAdminController@destroyFeedback');
-	
+
 });
 
 /* ========================
    3. PROJECT ADMIN ROUTES
    ======================== */
 Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment', 'adminPrivilegeCheck']], function() {
-	
+
 	// Admin hub
 	Route::get('admin', 'ProjectAdminController@index');
 
@@ -335,7 +335,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Delete project
 	Route::delete('projects/{project}', 'ProjectController@destroy');
 
-	// Update project 
+	// Update project
 	Route::patch('projects/{project}/edit', 'ProjectController@update');
 
 	// New project form
@@ -364,7 +364,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });
-	
+
 /* ===============================
    9. AUTHENTICATED OR LDAP GUESTS
 ================================== */
@@ -388,6 +388,9 @@ Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function
 
 	// Project search
 	Route::get('projects/search', 'ProjectController@search');
+
+	// Everything search
+	Route::get('/search', 'HomeController@search');
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');

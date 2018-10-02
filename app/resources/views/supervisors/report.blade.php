@@ -6,29 +6,29 @@
 
 @section('content')
 <div class="centered width--1000 show--scroll-to-top">
+
 	<h1>Supervisor Report</h1>
 
+	@if(Auth::user()->isProjectAdmin())
+		<div class="button-group button-group--horizontal">
+			<a class="button button--white" href="{{ SussexProjects\Supervisor::getAllSupervisorsMailtoString() }}">Email Supervisors</a>
+			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}">Email open to projects</a>
+			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}">Email closed to projects</a>
+		</div>
+	@endif
+
 	@include('supervisors.partials.supervisor-search')
-	<div class="button-group button-group--horizontal button-group--links">
-		@if(isset($_GET["includeClosedToOffer"]))
-			<div class="form-field form-field--toggle" onclick="window.location='{{ action("SupervisorController@report") }}';">
-				<p class="switch-label" for="iLoveYou">Include supervisors closed to offers</p>
-				<label class="toggle">
-					<input type="checkbox" name="iLoveYou" id="iLoveYou" checked>
-					<span class="slider"></span>
-				</label>
-			</div>
-		@else
-			<div class="form-field form-field--toggle" onclick="window.location='{{ action("SupervisorController@report", "includeClosedToOffer=true") }}'">
-				<p class="switch-label" for="iLoveYou">Include supervisors closed to offers</p>
-				<label class="toggle">
-					<input type="checkbox" name="iLoveYou" id="iLoveYou">
-					<span class="slider"></span>
-				</label>
-			</div>
-		@endif
+
+	<div class="button-group button-group--horizontal button-group--table-options">
+		<a class="form-field form-field--toggle" @if(isset($_GET["includeClosedToOffer"])) href="{{ action('SupervisorController@report') }}" @else href="{{ action('SupervisorController@report', 'includeClosedToOffer=true') }}" @endif>
+			<p class="switch-label" for="supervisorTakeToggle">Show supervisors closed to offers</p>
+			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">
+				<input type="checkbox" name="supervisorTakeToggle" id="supervisorTakeToggle" @if(!isset($_GET["includeClosedToOffer"])) checked @endif>
+				<span class="slider"></span>
+			</label>
+		</a>
 	</div>
-	
+
 	<div id="supervisor-report" style="overflow: auto;">
 		@foreach($supervisors as $supervisor)
 			@php
@@ -54,7 +54,7 @@
 				<thead>
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>
-						
+
 						@if($supervisor->getTakingStudents())
 							<th>Open to offers</th>
 						@else

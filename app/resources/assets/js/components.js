@@ -1195,6 +1195,99 @@
 	}
 
 	/* ============================
+		7. Search
+	 ============================== */
+
+	var Search = function Search() {
+		if($("#universal-search-input").length < 1){
+			return;
+		}
+		this.SearchInput = $("#universal-search-input");
+		this.SearchResults = $("#universal-search-results");
+		this.init();
+	};
+
+	Search.prototype.Urls_ = {
+		SEARCH: 'search',
+	};
+
+	Search.prototype.functions = {
+		get: function(search, searchTerm) {
+			if(searchTerm.length < 2){
+				console.log("more");
+				return;
+			}
+
+			$.ajax({
+				method: 'GET',
+				url: search.Urls_.SEARCH,
+				data: {
+					search_term: searchTerm,
+				},
+				success: function(response){
+					if(response.successful){
+						var html = "";
+
+						$.each(response.results, function(key, value) {
+							value = JSON.parse(value);
+							html += "<ul>";
+							html += "<li><b>" + key + "</b></li>";
+
+							if(Array.isArray(value) && value.length > 0) {
+								var resultType = key;
+								$.each(value, function(innerKey, innerValue) {
+									switch(resultType){
+										case "users":
+											html += "<li><a class=\"hover--dark td-none\" href=\"#\">";
+											html += innerValue.first_name + " " + innerValue.last_name;
+											break;
+										case "projects":
+											html += '<li><a class="hover--dark td-none" href="' + config.ajaxBaseUrl + 'projects/' + innerValue.id + '">';
+											html += innerValue.title;
+											break;
+										case "topics":
+											html += '<li><a class="hover--dark td-none" href="' + config.ajaxBaseUrl + 'projects/by-topic/' + innerValue.id + '">';
+											html += innerValue.name;
+											break;
+									}
+									html += "</li></a>";
+								});
+							} else {
+								html += "<li>No results found.</li>";
+							}
+
+							html += "</ul>";
+						});
+
+						search.SearchResults.html(html);
+					} else {
+
+					}
+				}
+			});
+
+			search.SearchResults.show(config.animtions.slow);
+		},
+
+		clear: function(search){
+			search.SearchInput.val('');
+			search.SearchResults.hide(config.animtions.slow);
+			search.SearchResults.html('');
+		}
+	}
+
+	Search.prototype.init = function(){
+		var search = this;
+		$(search.SearchInput).on('keydown change', function() { Search.prototype.functions.get(search, $(this).val()); });
+		$(search.SearchInput).on('blur', function() { Search.prototype.functions.clear(search); });
+	}
+
+	Search.prototype.initAll = function(){
+		window['Search'] = new Search();
+	}
+
+
+	/* ============================
 		7. Forms / AJAX Functions
 	   ============================ */
 
@@ -1261,6 +1354,7 @@
 	EditProgramme.prototype.initAll();
 	Marker.prototype.initAll();
 	Swap.prototype.initAll();
+	Search.prototype.initAll();
 	DotMenu.prototype.initAll();
 
 	if(window["showLoginDialog"] == true){

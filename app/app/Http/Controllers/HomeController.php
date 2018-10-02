@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Feedback;
 use SussexProjects\Project;
+use SussexProjects\User;
+use SussexProjects\Topic;
 
 /**
  * The home controller.
@@ -86,7 +88,52 @@ class HomeController extends Controller{
 		$feedback->save();
 
 		return response()->json(array(
-			'successful' => true, 'message' => 'Thank you for your feedback.'
+			'successful' => true,
+			'message' => 'Thank you for your feedback.'
+		));
+	}
+
+	/**
+	 * Log feedback to database.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function search(Request $request){
+		$searchTerm = $request->get("searchTerm");
+
+		$users = [];
+		$projects = Project::where('title', 'LIKE', '%'.$searchTerm.'%')
+							->limit(5)
+							->get();
+
+		$topics = Topic::where('name', 'LIKE', '%'.$searchTerm.'%')
+							->limit(5)
+							->get();
+
+		if(Auth::user()->isSupervisor()){
+			$users = User::
+						where('privileges', 'student')
+						->where(function ($query) use ($searchTerm) {
+							$query->where('first_name', 'LIKE', '%'.$searchTerm.'%')
+								->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%');
+						})
+						->limit(1)
+						->get();
+
+		} else if(Auth::user()->isProjectAdmin()){
+			$users = User::where('first_name', 'LIKE', '%'.$searchTerm.'%')
+						->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%')
+						->limit(5)
+						->get();
+		}
+
+		return response()->json(array(
+			'successful' => true,
+			'results' => array(
+				'users' => $users->toJson(),
+				'projects' => $projects->toJson(),
+				'topics' => $topics->toJson()
+			)
 		));
 	}
 

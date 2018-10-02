@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="centered width--1600">
-	<div id="report-header">
+	<div>
 		@if($studentCount > 0)
 			<a style="float: right" class="button button--raised" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students without project</a>
 		@endif

@@ -43,7 +43,7 @@ class User extends Authenticatable{
 	protected $fillable = ['privileges', 'first_name', 'last_name', 'username', 'programme', 'email'];
 
 	/**
-	 * The attributes that are not mass assignable. 
+	 * The attributes that are not mass assignable.
 	 *
 	 * @var array
 	 */
@@ -61,7 +61,7 @@ class User extends Authenticatable{
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['remember_token'];
+	protected $hidden = ['username', 'programme', 'remember_token', 'last_login', 'privileges'];
 
 	/**
 	 * The table to retrieve data from.
@@ -161,7 +161,7 @@ class User extends Authenticatable{
 	public function isSupervisor(){
 		return in_array("supervisor", $this->getPrivileges());
 	}
-	
+
 	/**
 	 * Indicates if authenticated used is a project administrator.
 	 *

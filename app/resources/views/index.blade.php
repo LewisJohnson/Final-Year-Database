@@ -1,8 +1,15 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered animated-entrance width--1000">
+<div class="centered animated-entrance width--1000" style="position: relative;">
 	@if(Auth::check())
 		<h1 style="text-align: center;">Hello, {{ Auth::user()->first_name }}.</h1>
+
+{{-- 		<div class="search-container shadow-4dp">
+			<input id="universal-search-input" class="search-input" style="flex-grow: 1;" type="text" minlength="3" autocomplete="off" name="searchTerm" placeholder="Search everywhere...">
+		</div>
+
+		<div id="universal-search-results"></div> --}}
+
 		<div class="card-container card--margin-vertical">
 			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
 				<h2>Your Privileges</h2>
@@ -26,7 +33,6 @@
 			@endif
 
 			@if(Auth::user()->isSupervisor())
-
 				<div class="card card--half">
 					<h2>Options</h2>
 					<p>Here you can change your email preferences.</p>
@@ -168,7 +174,7 @@
 							</div>
 						@endforeach
 					</div>
-				@endif 
+				@endif
 
 				<div style="width: 100%;" class="fancy-page card card--margin-vertical">
 					<h2>Your Favourite Projects</h2>

@@ -11,7 +11,7 @@
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
 
-		<div class="button-group button-group--horizontal button-group--links">
+		<div class="button-group button-group--horizontal">
 			@if(isset($_GET["unique"]))
 				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('SystemAdminController@userAgentView')}}">Only first visits</a>
 			@else

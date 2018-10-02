@@ -1,7 +1,7 @@
 <form id="project-search-form" class="form form--flex" action="{{ action('ProjectController@search') }}" role="form" method="GET" accept-charset="utf-8" style="padding-bottom: 2rem;">
 	{{ csrf_field() }}
 	<div class="search-container shadow-4dp">
-		<input class="search-input" style="flex-grow: 1;" type="text" minlength="3" name="searchTerm" placeholder="Search..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>
+		<input class="search-input" style="flex-grow: 1;" type="text" minlength="3" name="searchTerm" placeholder="Search projects..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>
 
 		<button class="svg button--dark" type="submit" data-element-to-replace-with-loader-selector=".table-responsive" data-element-to-hide-selector="">
 			<svg style="width:24px;height:24px" viewBox="0 0 24 24">

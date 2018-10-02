@@ -49,7 +49,7 @@ class Supervisor extends Model{
 	public static function getDatalist(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$dataListHtml = '<datalist id="supervisor-datalist">';
-		
+
 		foreach($supervisors as $supervisor){
 			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
 		}
@@ -294,7 +294,7 @@ class Supervisor extends Model{
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
 			->get();
-			
+
 		foreach($students as $student){
 			$ar = array();
 			$ar["student"] = $student;
@@ -376,5 +376,44 @@ class Supervisor extends Model{
 		$rtnString .= '</datalist>';
 
 		return $rtnString;
+	}
+
+	public static function getAllSupervisorsMailtoString(){
+		$students = Supervisor::all();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($students as $key => $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
+	public static function getSupervisorsOpenToStudentsMailtoString(){
+		$students = Supervisor::where("take_students_".Session::get('education_level')["shortName"], true)->get();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($students as $key => $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
+	}
+
+	public static function getSupervisorsClosedToStudentsMailtoString(){
+		$students = Supervisor::where("take_students_".Session::get('education_level')["shortName"], false)->get();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($students as $key => $student){
+			$return .= $student->user->email;
+			$return .= ',';
+		}
+
+		return $return;
 	}
 }
