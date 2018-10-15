@@ -379,12 +379,12 @@ class Supervisor extends Model{
 	}
 
 	public static function getAllSupervisorsMailtoString(){
-		$students = Supervisor::all();
+		$supervisors = Supervisor::all();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
-		foreach($students as $key => $student){
-			$return .= $student->user->email;
+		foreach($supervisors as $key => $supervisor){
+			$return .= $supervisor->user->email;
 			$return .= ',';
 		}
 
@@ -392,12 +392,12 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsOpenToStudentsMailtoString(){
-		$students = Supervisor::where("take_students_".Session::get('education_level')["shortName"], true)->get();
+		$supervisors = Supervisor::where("take_students_".Session::get('education_level')["shortName"], true)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
-		foreach($students as $key => $student){
-			$return .= $student->user->email;
+		foreach($supervisors as $key => $supervisor){
+			$return .= $supervisor->user->email;
 			$return .= ',';
 		}
 
@@ -405,13 +405,43 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsClosedToStudentsMailtoString(){
-		$students = Supervisor::where("take_students_".Session::get('education_level')["shortName"], false)->get();
+		$supervisors = Supervisor::where("take_students_".Session::get('education_level')["shortName"], false)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
-		foreach($students as $key => $student){
-			$return .= $student->user->email;
+		foreach($supervisors as $key => $supervisor){
+			$return .= $supervisor->user->email;
 			$return .= ',';
+		}
+
+		return $return;
+	}
+
+	public static function getSupervisorsWithPendingStudentMailtoString(){
+		$supervisors = Supervisor::all();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($supervisors as $key => $supervisor){
+			if(count($supervisor->getStudentProjectProposals()) > 0 || count($supervisor->getIntrestedStudents()) > 0){
+				$return .= $supervisor->user->email;
+				$return .= ',';
+			}
+		}
+
+		return $return;
+	}
+
+	public static function getSupervisorsWithAllStudentsAcceptedMailtoString(){
+		$supervisors = Supervisor::all();
+		$return = 'mailto:'.Auth::user()->email;
+		$return .= '?bcc=';
+
+		foreach($supervisors as $key => $supervisor){
+			if(count($supervisor->getAcceptedStudents()) > 0){
+				$return .= $supervisor->user->email;
+				$return .= ',';
+			}
 		}
 
 		return $return;
