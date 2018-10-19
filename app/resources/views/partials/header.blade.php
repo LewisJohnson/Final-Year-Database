@@ -389,13 +389,31 @@
 									<h3>Staff</h3>
 									<ul>
 										<li>
-											<ul>
-												<li><a href="{{ action('ProjectAdminController@swapSecondMarkerView') }}" >Swap Second Markers</a></li>
+											<ul class="icon-list links-list">
+												<h4>Second Marker</h4>
+												<li>
+													<a class="icon" href="{{ action('ProjectAdminController@swapSecondMarkerView') }}">
+														@include('svg.swap')
+														<p>Swap Second Markers</p>
+													</a>
+												</li>
 											</ul>
 										</li>
 										<li>
-											<ul>
-												<li><a href="{{ action('StudentController@report') }}">Student Report</a></li>
+											<ul class="icon-list links-list">
+												<h4>Projects</h4>
+												<li>
+													<a class="icon" href="{{ action('StudentController@report') }}">
+														@include('svg.school')
+														<p>Student Report</p>
+													</a>
+												</li>
+												<li>
+													<a class="icon" href="{{ action('SupervisorController@report') }}">
+														@include('svg.clipboard')
+														<p>Supervisor Report</p>
+													</a>
+												</li>
 											</ul>
 										</li>
 									</ul>
