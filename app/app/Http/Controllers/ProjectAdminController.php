@@ -261,7 +261,8 @@ class ProjectAdminController extends Controller{
 		});
 
 		return view('admin.assign-marker-manual')
-			->with('supervisors', $supervisors)->with('students', $sorted);
+			->with('supervisors', $supervisors)
+			->with('students', $sorted);
 	}
 
 	/**
@@ -279,105 +280,53 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
 	 */
 	public function calculateSecondMarkers(){
-		$studentTable = new Student;
-		DB::table($studentTable->getTable())->update(array(
-			'marker_id' => null
-		));
 
-		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
+		DB::transaction(function () {
+			$studentTable = new Student;
 
-		// Assignment derived from slack
-		foreach($assignmentSetup["supervisors"] as $key => $supervisor){
-			if($supervisor->target_load == 0){
-				break;
-			}
+			// Reset every students second marker
+			DB::table($studentTable->getTable())->update(array(
+				'marker_id' => null
+			));
+			
 
-			$studentsAssignedToThisSupervisor = 0;
-			while($studentsAssignedToThisSupervisor < $assignmentSetup["slack"]){
+			// Assign students taking lazy score in to consideration
+			while(StudentController::getStudentWithoutSecondMarker() != null){
+				// Recalculate scores
+				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
+				
+				// Get the student
 				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
+				
+				// Get the laziest supervisor
+				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
 
-				if(is_null($studentToAssign)){
-					return response()->json(array(
-						'successful' => false,
-						'message' => '<h2>Error</h2>Failed to find a student without a second marker already assigned.'
-					));
-				} else {
-					$studentToAssign->marker_id = $supervisor->id;
-					$studentToAssign->save();
-					$studentsAssignedToThisSupervisor++;
-				}
+				$studentToAssign->marker_id = $laziestSupervisor->id;
+				$studentToAssign->save();
 			}
-		}
-
-		// Assign remaining students taking lazy score in to consideration
-		// Assignment derived from slack
-		while(StudentController::getStudentWithoutSecondMarker()){
-			$studentToAssign = StudentController::getStudentWithoutSecondMarker();
-			$laziestSupervisor = null;
-
-			// No more students left to assign
-			if($studentToAssign == null){
-				break;
-			}
-
-			// foreach($assignmentSetup["supervisors"] as $key => $supervisor) {
-			// 	if($supervisor->target_load == 0){ break; }
-			// }
-			// todo: this;
-			$studentToAssign->marker_id = 1;
-			$studentToAssign->save();
-		}
+		});
 
 		return $this->assignSecondMarkerReportTable();
 	}
 
 	/**
-	 * Returns all the needed parameters for the automatic second marker assignment algorithm.
+	 * Returns all the supervisors with a lazy score associated to them.
 	 *
-	 * @return object[] slack, supervisors
+	 * @return \app\app\Supervisor
 	 */
-	public function setupAutomaticSecondMarkerAssignment(){
+	private function getSupervisorsWithLazyScore(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$supervisorLoadTotal = 0;
-		$maxTargetLoad = 0;
-		$studentCount = Student::count();
-		$projectCount = Project::count();
 
 		foreach($supervisors as $key => $supervisor){
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')["shortName"]];
-			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count;
-
-			$supervisorLoadTotal += $supervisor->project_load;
-
-			// No negative values
-			if($supervisor->target_load < 0){
-				$supervisor->target_load = 0;
-			}
-
-			// Determine who has max target load
-			if($supervisor->target_load >= $maxTargetLoad){
-				$maxTargetLoad = $supervisor->target_load;
-			}
+			$supervisor->target_load = max(1, ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count);
 
 			// Determine lazy score
-			if($supervisor->target_load > 0){
-				$supervisor->lazy_score = ($maxTargetLoad / $supervisor->target_load);
-			} else {
-				$supervisor->lazy_score = 0;
-			}
+			$supervisor->lazy_score = ($supervisor->target_load / $supervisor->project_load) - count($supervisor->getSecondSupervisingStudents());
 		}
 
-		$slack = $maxTargetLoad / $studentCount;
-
-		if($projectCount > $supervisorLoadTotal){
-			return response()->json(array(
-				'successful' => false,
-				'message' => '<h2>Calculation Error</h2>There are more projects than the supervisor load total.<br><b>Please increase the total supervisor load by at least '.($projectCount - $supervisorLoadTotal).'</b>.'
-			));
-		}
-
-		return ['slack' => $slack, 'supervisors' => $supervisors];
+		return $supervisors;
 	}
 
 	/**
@@ -386,12 +335,13 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function assignSecondMarkerReportTable(){
-		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
-
-		$view = view('admin.partials.assignment-report-table')->with('supervisors', $assignmentSetup["supervisors"]);
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
+		$view = view('admin.partials.second-supervisor-assignment-report-table')
+			->with('supervisors', $supervisorsWithLazyScore);
 
 		return response()->json(array(
-			'successful' => true, 'html' => $view->render()
+			'successful' => true,
+			'html' => json_encode($view->render())
 		));
 	}
 
@@ -402,13 +352,13 @@ class ProjectAdminController extends Controller{
 
 	 */
 	public function assignSecondMarkerAutomaticTable(){
-		$assignmentSetup = $this->setupAutomaticSecondMarkerAssignment();
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
 		$view = view('admin.partials.automatic-marker-assignment-table')
-			->with('supervisors', $assignmentSetup["supervisors"])
-			->with('slack', $assignmentSetup["slack"]);
+			->with('supervisors', $supervisorsWithLazyScore);
 
 		return response()->json(array(
-			'successful' => true, 'html' => $view->render()
+			'successful' => true,
+			'html' => $view->render()
 		));
 	}
 

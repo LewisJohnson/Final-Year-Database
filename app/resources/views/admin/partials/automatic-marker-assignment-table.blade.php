@@ -4,7 +4,7 @@
 			<th>Supervisor</th>
 			<th>Project Load</th>
 			<th>Actual Load</th>
-			<th>Target 2<sup>nd</sup> Supervisor Load</th>
+			<th>Target 2<sup>nd</sup> Marker Load</th>
 			<th>Lazy Score</th>
 		</tr>
 	</thead>
@@ -21,7 +21,7 @@
 	</tbody>
 </table>
 
-<p>Slack: {{ $slack }}</p>
+<br>
 
 <form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" id="calculateSecondMarkers" method="POST" accept-charset="utf-8">
 	{{ csrf_field() }}

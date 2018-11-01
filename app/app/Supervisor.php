@@ -311,7 +311,7 @@ class Supervisor extends Model{
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
 	public function getSecondSupervisingStudents(){
-		$students = Student::where('marker_id', $this->id);
+		$students = Student::where('marker_id', $this->id)->get();
 		$offers = array();
 
 		foreach($students as $key => $student){

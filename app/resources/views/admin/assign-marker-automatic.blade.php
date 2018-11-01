@@ -6,12 +6,16 @@
 
 	<div class="centered width--800">
 		<h1>Automatic Second Marker Assignment</h1>
-		<p>Using this tool will reset all currently assigned second markers.</p>
+		
+		<div class="config-tip">
+			<p class="text-icon">&#128161;</p>
+			<p>Using this tool will reset all currently assigned second markers.</p>
+		</div>
 
 		@if(SussexProjects\Http\Controllers\StudentController::getStudentWithoutSecondMarker() === null)
 			<div class="config-danger">
 				<p class="text-icon">&#9888;&#65039;</p>
-				<p><b>Warning!</b> All students already have a second marker. <a id="showReportTable" href="#">Click to view second marker report table.</a></p>
+				<p><b>Warning!</b> All students already have a second marker assigned to them. <a id="showReportTable" href="#">Click to view second marker report table.</a></p>
 			</div>
 		@endif
 

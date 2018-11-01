@@ -579,7 +579,7 @@
 	};
 
 	/* ========================
-	   3.2 DotMenu
+	   3.2 Table DotMenu
 	 	The menu used for tables on small screen devices.
 	   ======================== */
 
