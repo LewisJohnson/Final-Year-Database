@@ -71,7 +71,7 @@
 			<div class="form-field">
 				<div class="checkbox">
 					<input type="checkbox" name="empty_students" value="empty_students" id="empty_students">
-					<label for="empty_students">Empty students table <span style="color:red">(This remove all students)</span></label>
+					<label for="empty_students">Empty students table <span style="color:red">(This will remove all students)</span></label>
 				</div>
 			</div>
 			<div class="form-field">
