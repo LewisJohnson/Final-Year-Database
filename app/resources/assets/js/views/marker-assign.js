@@ -31,7 +31,7 @@
 		$('.config-danger').fadeOut(config.animtions.medium);
 		
 		$.ajax({
-			url: $(this).prop('action'),
+			url: 'admin/marker-calculate',
 			type: 'POST',
 			data: $(this).serialize(),
 			success: function(response){
