@@ -170,6 +170,10 @@ class HomeController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function setDepartmentView(){
+		if(Auth::check()){
+			return redirect()->action('HomeController@index');
+		}
+		
 		return view('set-department');
 	}
 
@@ -182,6 +186,9 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartment(Request $request){
+
+
+
 		if(in_array($request->department, get_departments())){
 			if(Auth::user()){
 				Auth::logout();

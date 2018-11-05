@@ -220,10 +220,12 @@ class ProjectAdminController extends Controller{
 		DB::transaction(function(){
 			$projects = Project::all();
 			$students = User::where('privileges', 'student')->get();
+
 			foreach($projects as $project){
 				if($project->getAcceptedStudent() != null){
 					$project->description = $project->description."(++ This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear()." ++)";
 				}
+				
 				$project->student_id = null;
 
 				if($project->status == 'student-proposed'){
@@ -280,7 +282,6 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
 	 */
 	public function calculateSecondMarkers(){
-
 		DB::transaction(function () {
 			$studentTable = new Student;
 
