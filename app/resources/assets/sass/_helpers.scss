@@ -85,6 +85,11 @@
 	}
 }
 
+.dashed-underline {
+	border-bottom: 1px dotted #000;
+	text-decoration: none;
+}
+
 .error-display {
 	border-top: 2px solid $text-color;
 	text-align: center;

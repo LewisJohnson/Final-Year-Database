@@ -2,13 +2,13 @@
 
 @section('scripts')
 	<script type="text/javascript">
-		Window["pageEnabled"] = {{ count($projects) >= 10 ? 'true' : 'false' }};
+		Window["pageEnabled"] = {{ count($projects) >= 3 ? 'true' : 'false' }};
 	</script>
 	<script src="{{ asset('js/views/project-popularity.js') }}"></script>
 @endsection
 
 @section('content')
-	@if(count($projects) < 10)
+	@if(count($projects) < 3)
 		<div class="centered width--800">
 			<div class="fancy-page">
 				<h1>Project Popularity</h1>
@@ -24,13 +24,13 @@
 	@else
 		<div class="centered width--800">
 			<h1>Project Popularity</h1>
-			<p class="subtitle">Your 10 most popular on-offer {{ Session::get('education_level')["longName"] }} projects viewed by students.</p>
+			<p class="subtitle">Your {{ count($projects) }} most popular on-offer {{ Session::get('education_level')["longName"] }} projects viewed by students.</p>
 
 			<table class="data-table table--dark-head sort-table">
 				<thead>
 					<tr>
 						<th class="pointer">Project</th>
-						<th class="pointer">View Count</th>
+						<th title="A view is counted when a student vists one of your project pages for longer than 5 seconds." class="pointer"><span class="dashed-underline">View Count</span></th>
 					</tr>
 				</thead>
 				<tbody>
