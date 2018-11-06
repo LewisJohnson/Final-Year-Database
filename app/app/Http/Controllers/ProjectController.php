@@ -352,6 +352,13 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@show', $project);
 		}
 
+		// Has the supervisor forgotten to remove the archive text?
+		if (strpos($input->description, '(++ In') !== false) {
+			session()->flash('message', 'Have you forgotten to remove the archive text?');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@edit', $project);
+		}
+
 		DB::Transaction(function() use ($input, $project){
 			$transaction = new Transaction;
 			$cleanHtml = Purify::clean($input->description, $this->htmlPurifyConfig);
