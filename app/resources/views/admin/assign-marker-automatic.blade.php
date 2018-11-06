@@ -1,8 +1,24 @@
 @extends('layouts.app')
-@section('content')
+
 @section('scripts')
 	<script src="{{ asset('js/views/marker-assign.js') }}"></script>
 @endsection
+
+@section('content')
+
+	<div class="centered width--800">
+		<h1>Temporary Automatic Second Marker Assignment</h1>
+		
+	
+		<form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" method="POST" accept-charset="utf-8">
+			{{ csrf_field() }}
+			<button type="submit" class="button button--accent">Calculate</button>
+		</form>
+
+	</div>
+
+	<hr>
+	<hr>
 
 	<div class="centered width--800">
 		<h1>Automatic Second Marker Assignment</h1>

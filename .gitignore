@@ -228,3 +228,4 @@ pip-log.txt
 #Custom
 .phpintel/
 ngrok.exe
+app/app/Http/Controllers/Auth/LoginController.php
