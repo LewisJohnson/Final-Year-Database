@@ -14,14 +14,21 @@
 			<li class="flex--full archive-blue">
 				<div class="icon">
 					@include('svg.playlist-edit')
-					<p>The string “This student was undertaken by [STUDENT NAME] in [YEAR]” will be added to the description of undertaken projects.</p>
+					<p>The string “In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]” will be added to the description of undertaken projects.</p>
 				</div>
 			</li>
 
-			<li class="flex--full archive-blue">
+			<li class="archive-blue">
 				<div class="icon">
 					@include('svg.archive')
 					<p>All projects will be set to archived.</p>
+				</div>
+			</li>
+
+			<li class="archive-blue">
+				<div class="icon">
+					@include('svg.eye')
+					<p>All projects will have their view count set to zero.</p>
 				</div>
 			</li>
 
@@ -50,6 +57,13 @@
 				<div class="icon">
 					@include('svg.delete-forever')
 					<p>The transactions table will be emptied.</p>
+				</div>
+			</li>
+
+			<li class="flex--full">
+				<div class="icon">
+					@include('svg.fire')
+					<p>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b>.</p>
 				</div>
 			</li>
 		</ul>

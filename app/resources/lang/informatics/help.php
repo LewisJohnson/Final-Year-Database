@@ -39,6 +39,9 @@ return [
 
 		<li><b>Supervisor Report</b> - A list of all supervisors, their projects, their project load and what/whom they supervise.</li>
 		<li class="sub-help">Supervisor > Supervisor Report</li>
+
+		<li><b>Project Popularity</b> - This page shows <i>upto</i> your 10 most popular projects and how many views they have. In order to see this page, you must have at least 3 projects with over 10 views.</li>
+		<li class="sub-help">Supervisor > Project Popularity</li>
 	</ul>
 
 	<p>You may also set your emails preferences on your homepage.</p>',

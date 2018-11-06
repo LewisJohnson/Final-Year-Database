@@ -203,7 +203,12 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function archiveView(){
-		return view('admin.archive');
+		$mostPopularProject = Project::whereNull('student_id')
+			->limit(1)
+			->orderBy('view_count', 'desc')
+			->first();
+
+		return view('admin.archive')->with('mostPopularProject', $mostPopularProject);
 	}
 
 	/**
@@ -223,7 +228,7 @@ class ProjectAdminController extends Controller{
 
 			foreach($projects as $project){
 				if($project->getAcceptedStudent() != null){
-					$project->description = $project->description."(++ This project was undertaken by ".$project->getAcceptedStudent()->user->getFullName()." in ".Mode::getProjectYear()." ++)";
+					$project->description = $project->description." (++ In ".Mode::getProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
 				}
 				
 				$project->student_id = null;
@@ -233,6 +238,7 @@ class ProjectAdminController extends Controller{
 				}
 
 				$project->status = 'archived';
+				$project->view_count = 0;
 				$project->save();
 			}
 

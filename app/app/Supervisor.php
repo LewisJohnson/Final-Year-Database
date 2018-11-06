@@ -211,7 +211,6 @@ class Supervisor extends Model{
 	public function getPopularProjects(){
 		return Project::where('supervisor_id', $this->id)
 			->whereNull('student_id')
-			->where('status', 'on-offer')
 			->where('view_count', '>=', 10)
 			->limit(10)
 			->orderBy('view_count', 'desc')
