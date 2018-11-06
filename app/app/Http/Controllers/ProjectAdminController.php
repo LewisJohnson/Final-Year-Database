@@ -324,7 +324,9 @@ class ProjectAdminController extends Controller{
 	 * @return \app\app\Supervisor
 	 */
 	private function getSupervisorsWithLazyScore(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+									->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+									->get();
 
 		foreach($supervisors as $key => $supervisor){
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
