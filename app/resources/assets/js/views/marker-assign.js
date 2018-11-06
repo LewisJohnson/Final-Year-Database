@@ -8,7 +8,7 @@
 	"use strict";
 
 	$.ajax({
-		url: 'admin/marker-assign-automatic-table',
+		url: 'https://www.informatics.sussex.ac.uk/courses/Final-Year-Database/app/public/admin/marker-assign-automatic-table',
 		type: 'GET',
 		success: function(response){
 			$('#automatic-assign-container .content').addClass('animated fadeInUp');
@@ -31,7 +31,7 @@
 		$('.config-danger').fadeOut(config.animtions.medium);
 		
 		$.ajax({
-			url: 'admin/marker-calculate',
+			url: 'https://www.informatics.sussex.ac.uk/courses/Final-Year-Database/app/public/admin/marker-calculate',
 			type: 'POST',
 			data: $(this).serialize(),
 			success: function(response){
@@ -56,7 +56,7 @@
 		$('#automatic-assign-container .loader-container p').text('Getting second marker table...');
 
 		$.ajax({
-			url: 'admin/marker-assign-report-table',
+			url: 'https://www.informatics.sussex.ac.uk/courses/Final-Year-Database/app/public/admin/marker-assign-report-table',
 			type: 'GET',
 			success: function(response){
 				$('#automatic-assign-container .content').addClass('animated fadeInUp');
