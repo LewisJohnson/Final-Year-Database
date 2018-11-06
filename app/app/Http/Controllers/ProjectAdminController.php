@@ -328,7 +328,7 @@ class ProjectAdminController extends Controller{
 
 		foreach($supervisors as $key => $supervisor){
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
-			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')["shortName"]];
+			$supervisor->project_load = max(1, $supervisor['project_load_'.Session::get('education_level')["shortName"]]);
 			$supervisor->target_load = max(1, ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count);
 
 			// Determine lazy score
