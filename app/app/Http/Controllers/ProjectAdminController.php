@@ -264,11 +264,10 @@ class ProjectAdminController extends Controller{
 	 */
 	public function manualSecondMarkerView(Request $request){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$students = Student::all();
-
-		$sorted = $students->sortBy(function($student) use ($request){
-			return $student->user->last_name;
-		});
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
 
 		return view('admin.assign-marker-manual')
 			->with('supervisors', $supervisors)
@@ -289,21 +288,37 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
 	 */
-	public function calculateSecondMarkers(){
-		DB::transaction(function () {
+	public function calculateSecondMarkers(Request $request){
+
+		$maxStudentsPerSupervisor = PHP_INT_MAX;
+
+		if(!empty($request->max_students_per_supervisor)){
+			$maxStudentsPerSupervisor = max(1, $request->max_students_per_supervisor);
+		}
+
+		if(Student::count() > (Supervisor::getAllSupervisorsQuery()
+				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+				->count() / $maxStudentsPerSupervisor)){
+			
+			return response()->json(array(
+				'successful' => false,
+				'message' => "Please increase the maximum students per supervisor"
+			));
+		}
+
+		DB::transaction(function () use ($maxStudentsPerSupervisor) {
 			$studentTable = new Student;
 
 			// Reset every students second marker
 			DB::table($studentTable->getTable())->update(array(
 				'marker_id' => null
 			));
-			
 
 			// Assign students taking lazy score in to consideration
 			while(StudentController::getStudentWithoutSecondMarker() != null){
 				// Recalculate scores
-				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false);
-				
+				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor);
+
 				// Get the student
 				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
 				
@@ -322,7 +337,7 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \app\app\Supervisor
 	 */
-	private function getSupervisorsWithLazyScore($isSetupView){
+	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
 				->get();
@@ -338,10 +353,14 @@ class ProjectAdminController extends Controller{
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 		}
 
+		$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {
+			return $supervisor->second_supervising_count < $maxStudentsPerSupervisor;
+		});
+
 		foreach($supervisors as $key => $supervisor){
 
 			$loadMinusStudentCount = $supervisors->sum('project_load_'.Session::get('education_level')["shortName"]) - Student::count();
-			$slack = floor($loadMinusStudentCount / $supervisors->where('second_supervising_count', 0)->count());
+			$slack = floor($loadMinusStudentCount / max(1 ,$supervisors->where('second_supervising_count', 0)->count()));
 
 			$supervisor->project_load = $supervisor->getProjectLoad();
 			$supervisor->target_load = ($supervisor->project_load * 2) - $supervisor->accepted_student_count;
@@ -359,9 +378,10 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function secondMarkerReport(){
-		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false);
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+
 		$view = view('admin.partials.second-supervisor-assignment-report-table')
-			->with('supervisors', $supervisorsWithLazyScore);
+			->with('supervisors', $supervisors);
 
 		return response()->json(array(
 			'successful' => true,
@@ -376,7 +396,7 @@ class ProjectAdminController extends Controller{
 
 	 */
 	public function assignSecondMarkerAutomaticTable(){
-		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true);
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX);
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 

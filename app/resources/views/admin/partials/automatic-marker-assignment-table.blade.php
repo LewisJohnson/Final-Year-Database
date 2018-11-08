@@ -20,10 +20,3 @@
 		@endforeach
 	</tbody>
 </table>
-
-<br>
-
-<form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" id="calculateSecondMarkers" method="POST" accept-charset="utf-8">
-	{{ csrf_field() }}
-	<button type="submit" class="button button--accent">Calculate</button>
-</form>

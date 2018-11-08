@@ -69,10 +69,6 @@ class SupervisorController extends Controller{
 				->get();
 		}
 
-		$supervisors = $supervisors->sortBy(function($supervisor){
-			return $supervisor->user->last_name;
-		});
-
 		return view('supervisors.report')->with("supervisors", $supervisors);
 	}
 

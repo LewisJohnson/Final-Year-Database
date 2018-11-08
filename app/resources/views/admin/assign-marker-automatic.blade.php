@@ -5,21 +5,6 @@
 @endsection
 
 @section('content')
-
-	<div class="centered width--800">
-		<h1>Temporary Automatic Second Marker Assignment</h1>
-		
-	
-		<form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" method="POST" accept-charset="utf-8">
-			{{ csrf_field() }}
-			<button type="submit" class="button button--accent">Calculate</button>
-		</form>
-
-	</div>
-
-	<hr>
-	<hr>
-
 	<div class="centered width--800">
 		<h1>Automatic Second Marker Assignment</h1>
 		
@@ -42,5 +27,18 @@
 				<p>Generating table...</p>
 			</div>
 		</div>
+
+		<br>
+
+		<form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" id="calculateSecondMarkers" method="POST" accept-charset="utf-8">
+			{{ csrf_field() }}
+
+			<div class="form-field">
+				<label>Maximum amount of students per marker</label>
+				<input type="number" name="max_students_per_supervisor" value="10" min="0" max="99">
+			</div>
+
+			<button type="submit" class="button button--accent">Calculate</button>
+		</form>
 	</div>
 @endsection

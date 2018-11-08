@@ -27,14 +27,15 @@
 		e.preventDefault();
 
 		$('#automatic-assign-container .loader-container').show();
-		$('#automatic-assign-container .loader-container p').text('Assigning second markers to students...');
-		$('.config-danger').fadeOut(config.animtions.medium);
+		$('#automatic-assign-container .loader-container p').html('Assigning second markers to students...<br> This may take up to 2 minutes.');
+		$('.config-danger, .config-tip, form').fadeOut(config.animtions.medium);
+		$('#automatic-assign-container .content').html("");
 		
 		$.ajax({
 			url: 'admin/marker-calculate',
 			type: 'POST',
 			data: $(this).serialize(),
-			success: function(response){
+			success: function(response) {
 				$('#automatic-assign-container .content').addClass('animated fadeInUp');
 				if(response.successful){
 					$('#automatic-assign-container .content').html(JSON.parse(response.html));
