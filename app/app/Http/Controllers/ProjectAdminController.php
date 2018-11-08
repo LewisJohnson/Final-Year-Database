@@ -344,7 +344,7 @@ class ProjectAdminController extends Controller{
 			$slack = floor($loadMinusStudentCount / $supervisors->where('second_supervising_count', 0)->count());
 
 			$supervisor->project_load = $supervisor->getProjectLoad();
-			$supervisor->target_load = ($supervisor->project_load * 2) - accepted_student_count;
+			$supervisor->target_load = ($supervisor->project_load * 2) - $supervisor->accepted_student_count;
 
 			// Determine lazy score
 			$supervisor->lazy_score = $supervisor->target_load - $supervisor->second_supervising_count - $slack;
