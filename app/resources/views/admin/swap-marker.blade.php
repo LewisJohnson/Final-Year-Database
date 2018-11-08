@@ -18,8 +18,14 @@
 					@foreach($students as $student)
 						<tr class="pointer" data-marker-name="{{ $student->marker->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}">
 							<td>{{ $student->getName() }}</td>
-							<td>{{ $student->project->title }}</td>
-							<td>{{ $student->project->supervisor->user->getFullName() }}</td>
+
+							@if($student->project == null)
+								<td>-</td>
+								<td>-</td>
+							@else
+								<td>{{ $student->project->title }}</td>
+								<td>{{ $student->project->supervisor->user->getFullName() }}</td>
+							@endif
 							<td>{{ $student->marker->user->getFullName() }}</td>
 						</tr>
 					@endforeach

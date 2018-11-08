@@ -412,8 +412,7 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function swapSecondMarkerView(){
-		$students = Student::where('project_status', 'accepted')->get();
-
+		$students = Student::all();
 		return view('admin.swap-marker')->with('students', $students);
 	}
 

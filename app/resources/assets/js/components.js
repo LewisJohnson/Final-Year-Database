@@ -1093,6 +1093,7 @@
 		this.studentB = null;
 		this.markerTable = $("#swap-marker-student-table");
 		this.markerDataTable = this.markerTable[0].dataTable;
+		this.underlay = $('.underlay');
 		this.init();
 	};
 
@@ -1118,17 +1119,6 @@
 				swap.studentA.data('marker-name'),
 				swap.studentB.data('marker-name'));
 		}
-
-		// swap.unselectAll(swap);
-
-
-		// $(swap.supervisorDataTable.bodyRows).each(function() {
-		// 	if($(this).data('marker-id') == row.data('supervisor-id')){
-		// 		$(this).attr('disabled', true);
-		// 	} else {
-		// 		$(this).attr('disabled', false);
-		// 	}
-		// });
 	}
 
 	Swap.prototype.resetView = function(swap){
@@ -1188,6 +1178,7 @@
 	Swap.prototype.init = function(){
 		var swap = this;
 		$(swap.markerDataTable.bodyRows).on('click', function() { Swap.prototype.selectStudent(this, swap); });
+		$(swap.underlay).on('click', function() { swap.resetView(swap); });
 	}
 
 	Swap.prototype.initAll = function(){
