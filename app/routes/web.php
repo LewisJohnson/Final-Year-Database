@@ -153,7 +153,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	Route::get('admin/marker-assign-automatic-table', 'ProjectAdminController@assignSecondMarkerAutomaticTable');
 
 	// Marker report
-	Route::get('admin/marker-assign-report-table', 'ProjectAdminController@assignSecondMarkerReportTable');
+	Route::get('admin/marker-report', 'ProjectAdminController@secondMarkerReport');
 
 	// Perform automatic second marker assignment
 	Route::post('admin/marker-calculate', 'ProjectAdminController@calculateSecondMarkers');

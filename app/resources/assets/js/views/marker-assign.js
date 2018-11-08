@@ -56,7 +56,7 @@
 		$('#automatic-assign-container .loader-container p').text('Getting second marker table...');
 
 		$.ajax({
-			url: 'admin/marker-assign-report-table',
+			url: 'admin/marker-report',
 			type: 'GET',
 			success: function(response){
 				$('#automatic-assign-container .content').addClass('animated fadeInUp');

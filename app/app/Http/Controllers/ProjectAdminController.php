@@ -302,7 +302,7 @@ class ProjectAdminController extends Controller{
 			// Assign students taking lazy score in to consideration
 			while(StudentController::getStudentWithoutSecondMarker() != null){
 				// Recalculate scores
-				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
+				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false);
 				
 				// Get the student
 				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
@@ -314,8 +314,7 @@ class ProjectAdminController extends Controller{
 				$studentToAssign->save();
 			}
 		});
-
-		return $this->assignSecondMarkerReportTable();
+		return redirect()->action('ProjectAdminController@secondMarkerReport');
 	}
 
 	/**
@@ -323,18 +322,33 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \app\app\Supervisor
 	 */
-	private function getSupervisorsWithLazyScore(){
+	private function getSupervisorsWithLazyScore($isSetupView){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
+
 									->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
 									->get();
 
+		// Set up the numbers
 		foreach($supervisors as $key => $supervisor){
+			if($isSetupView) {
+				$supervisor->second_supervising_count = 0;
+			} else {
+				$supervisor->second_supervising_count = count($supervisor->getSecondSupervisingStudents());
+			}
+
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
-			$supervisor->project_load = max(1, $supervisor['project_load_'.Session::get('education_level')["shortName"]]);
-			$supervisor->target_load = max(1, ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count);
+		}
+
+		foreach($supervisors as $key => $supervisor){
+
+			$loadMinusStudentCount = $supervisors->sum('project_load_'.Session::get('education_level')["shortName"]) - Student::count();
+			$slack = floor($loadMinusStudentCount / $supervisors->where('second_supervising_count', 0)->count());
+
+			$supervisor->project_load = $supervisor->getProjectLoad();
+			$supervisor->target_load = $supervisor->project_load * 2;
 
 			// Determine lazy score
-			$supervisor->lazy_score = ($supervisor->target_load / $supervisor->project_load) - count($supervisor->getSecondSupervisingStudents());
+			$supervisor->lazy_score = $supervisor->target_load - $supervisor->second_supervising_count - $slack;
 		}
 
 		return $supervisors;
@@ -345,8 +359,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function assignSecondMarkerReportTable(){
-		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
+	public function secondMarkerReport(){
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false);
 		$view = view('admin.partials.second-supervisor-assignment-report-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 
@@ -363,7 +377,7 @@ class ProjectAdminController extends Controller{
 
 	 */
 	public function assignSecondMarkerAutomaticTable(){
-		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore();
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true);
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 
