@@ -1001,7 +1001,7 @@
 	Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
 		var row = $(supervisorRowDOM);
 
-		if(row.attr('disabled')){return;}
+		if(row.attr('disabled')){ return; }
 
 		if(marker.selectedStudent != null){
 			row.addClass("is-selected");
@@ -1107,9 +1107,32 @@
 		if(swap.studentA == null){
 			row.addClass("is-selected");
 			swap.studentA = $(row);
-		}else if(swap.studentB == null){
+		} else if(swap.studentB == null){
+
+			if(row.index() == swap.studentA.index()){
+				swap.resetView(swap);
+				return;
+			}
+
+			if(row.attr('disabled')){ 
+				return;
+			}
+
 			row.addClass("is-selected");
 			swap.studentB = $(row);
+		}
+
+		if(swap.studentA != null){
+			$(swap.markerDataTable.bodyRows).each(function (index, student){
+				if(swap.studentA.index() != index) {				
+					if(swap.studentA.data('supervisor-id') == $(student).data('marker-id') ||
+						swap.studentA.data('marker-id') == $(student).data('marker-id')){
+						$(student).attr('disabled', true);
+					} else {
+						$(student).attr('disabled', false);
+					}
+				}
+			});
 		}
 
 		if(swap.studentA != null && swap.studentB != null){
@@ -1123,6 +1146,7 @@
 
 	Swap.prototype.resetView = function(swap){
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
+		$(swap.markerDataTable.bodyRows).attr('disabled', false);
 		swap.studentA = null;
 		swap.studentB = null;
 	}

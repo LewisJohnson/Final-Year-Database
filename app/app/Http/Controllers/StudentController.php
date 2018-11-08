@@ -75,19 +75,6 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Returns the first student in the DB without a second marker.
-	 *
-	 * @return boolean Returns true if every students has a second marker, false otherwise.
-	 */
-	public static function checkAllStudentsHaveSecondMarker(){
-		if(Student::whereNull('marker_id')->first() == null){
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * The student report view.
 	 *
 	 * @return \Illuminate\View\View

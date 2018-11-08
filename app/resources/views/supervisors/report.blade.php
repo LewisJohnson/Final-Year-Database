@@ -5,26 +5,37 @@
 @endsection
 
 @section('content')
-<div class="centered width--1000 show--scroll-to-top">
+<div class="centered width--1000 show--scroll-to-top" style="position: relative;">
 
 	<h1>Supervisor Report</h1>
 
 	@if(Auth::user()->isProjectAdmin())
-		<div class="button-group button-group--horizontal">
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getAllSupervisorsMailtoString() }}">Email Supervisors</a>
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}">Email open to students</a>
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}">Email closed to students</a>
-		</div>
+		<button data-activator="true" data-dialog="supervisor-emails" class="svg" style="position: absolute;right: 0;top: 0;">
+			<svg style="width:36px; height:36px" viewBox="0 0 24 24">
+				<path fill="rgba(0, 0, 0, 0.5)" d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"></path>
+			</svg>
+		</button>
 
-		<div class="button-group button-group--horizontal">
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsWithPendingStudentMailtoString() }}">Email supervisors with pending students</a>
-			<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsWithAllStudentsAcceptedMailtoString() }}">Email supervisors with only accepted students</a>
+		<div id="supervisor-emails-dialog" class="dialog assign marker-dialog" data-dialog="supervisor-emails">
+			<div class="header">
+				<h2>Email Supervisors</h2>
+			</div>
+
+			<div class="content" style="padding: 1rem;">
+				<div class="button-group button-group--vertical">
+					<a class="button button--white" href="{{ SussexProjects\Supervisor::getAllSupervisorsMailtoString() }}" title="Email all supervisors">Email all Supervisors</a>
+					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}" title="Email all supervisors">Open to students</a>
+					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}" title="Email all supervisors">Closed to students</a>
+					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsWithPendingStudentMailtoString() }}" title="Email supervisors with pending students">w/ pending students</a>
+					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsWithAllStudentsAcceptedMailtoString() }}" title="Email all supervisors who have accepted all their students">w/ only accepted students</a>
+				</div>
+			</div>
 		</div>
 	@endif
 
 	@include('supervisors.partials.supervisor-search')
 
-	<div class="button-group button-group--horizontal button-group--table-options">
+	<div class="button-group button-group--horizontal">
 		<a class="form-field form-field--toggle" @if(isset($_GET["includeClosedToOffer"])) href="{{ action('SupervisorController@report') }}" @else href="{{ action('SupervisorController@report', 'includeClosedToOffer=true') }}" @endif>
 			<p class="switch-label" for="supervisorTakeToggle">Hide supervisors closed to offers</p>
 			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">

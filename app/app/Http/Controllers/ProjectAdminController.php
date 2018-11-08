@@ -263,6 +263,9 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function manualSecondMarkerView(Request $request){
+		$student = new Student;
+		$user = new User;
+
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$students = Student::select($student->getTable().'.*')
 				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
@@ -271,7 +274,7 @@ class ProjectAdminController extends Controller{
 
 		return view('admin.assign-marker-manual')
 			->with('supervisors', $supervisors)
-			->with('students', $sorted);
+			->with('students', $students);
 	}
 
 	/**
