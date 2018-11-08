@@ -298,7 +298,7 @@ class ProjectAdminController extends Controller{
 
 		if(Student::count() > (Supervisor::getAllSupervisorsQuery()
 				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
-				->count() / $maxStudentsPerSupervisor)){
+				->count() * $maxStudentsPerSupervisor)){
 			
 			return response()->json(array(
 				'successful' => false,
