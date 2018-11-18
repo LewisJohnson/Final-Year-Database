@@ -33,7 +33,7 @@
 
 	<div class="button-group button-group--horizontal">
 		<a class="form-field form-field--toggle" @if(isset($_GET["includeClosedToOffer"])) href="{{ action('SupervisorController@report') }}" @else href="{{ action('SupervisorController@report', 'includeClosedToOffer=true') }}" @endif>
-			<p class="switch-label" for="supervisorTakeToggle">Hide supervisors closed to offers</p>
+			<p class="switch-label" for="supervisorTakeToggle"> {{ !isset($_GET["includeClosedToOffer"]) ? 'Hiding' : 'Showing' }} supervisors closed to offers</p>
 			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">
 				<input type="checkbox" name="supervisorTakeToggle" id="supervisorTakeToggle" @if(!isset($_GET["includeClosedToOffer"])) checked @endif>
 				<span class="slider"></span>
