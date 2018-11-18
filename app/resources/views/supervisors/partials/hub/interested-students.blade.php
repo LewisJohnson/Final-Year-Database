@@ -11,7 +11,7 @@
 	</div>
 
 	{{-- PROJECTS OFFER --}}
-	<div class="content" data-cookie-name="hide-selected-students" @if(!empty($_COOKIE["hide-selected-students"])) @if($_COOKIE["hide-selected-students"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
+	<div class="content" data-cookie-name="hide_selected_students" @if(!empty($_COOKIE["hide_selected_students"])) @if($_COOKIE["hide_selected_students"] == "true") style="display: none;" aria-expanded="false" @else aria-expanded="true" @endif @endif>
 		<h5>Selected Students</h5>
 		<div class="responsive-table">
 			<table class="data-table sort-table table--dark-head supervisor-table intrested-students" data-supervisor-email="{{ Auth::user()->email }}" data-status="intrested-students">
