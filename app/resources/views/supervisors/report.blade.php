@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('scripts')
-	<script src="{{ asset('js/views/supervisor-report.js') }}"></script>
-@endsection
-
 @section('content')
 <div class="centered width--1000 show--scroll-to-top" style="position: relative;">
 
@@ -33,7 +29,7 @@
 		</div>
 	@endif
 
-	@include('supervisors.partials.supervisor-search')
+	@include('supervisors.partials.supervisor-filter')
 
 	<div class="button-group button-group--horizontal">
 		<a class="form-field form-field--toggle" @if(isset($_GET["includeClosedToOffer"])) href="{{ action('SupervisorController@report') }}" @else href="{{ action('SupervisorController@report', 'includeClosedToOffer=true') }}" @endif>
@@ -66,7 +62,7 @@
 				$proposals = $supervisor->getStudentProjectProposals();
 				$proposalsCount = count($proposals) ?? 0;
 			@endphp
-			<table class="shadow-2dp table--dark-head " id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}">
+			<table class="shadow-2dp table--dark-head supervisor-row" data-supervisor-name="{{ $supervisor->user->getFullName() }}">
 				<thead>
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>

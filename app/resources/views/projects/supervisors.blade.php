@@ -1,14 +1,10 @@
 @extends('layouts.app')
 
-@section('scripts')
-	<script src="{{ asset('js/views/supervisor-report.js') }}"></script>
-@endsection
-
 @section('content')
 <div class="centered width--800">
 	<h1>Projects by Supervisor</h1>
 	<h3>Select a supervisor to see their projects.</h3>
-	@include('supervisors.partials.supervisor-search')
+	@include('supervisors.partials.supervisor-filter')
 
 	<table class="data-table sort-table shadow-2dp">
 		<thead>
@@ -20,7 +16,7 @@
 		<tbody>
 			@foreach($supervisors as $supervisor)
 				@if(count($supervisor->getProjects('on-offer')) > 0)
-					<tr class="pointer" tabindex="0" id="{{ preg_replace('/[\s.]+/', '', $supervisor->user->getFullName()) }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
+					<tr class="pointer supervisor-row" data-supervisor-name="{{ $supervisor->user->getFullName() }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ count($supervisor->getProjects('on-offer')) }}</td>
 					</tr>

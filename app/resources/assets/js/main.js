@@ -24,7 +24,8 @@
 |   7. Other
 */
 
-import '../js/components';
+import '../js/partials/components.js';
+import '../js/partials/supervisor-filter.js';
 
 /* ================
 	1. AJAX Setup
