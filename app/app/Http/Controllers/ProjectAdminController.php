@@ -459,8 +459,12 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response The second marker data.
 	 */
 	public function exportSecondMarkerData(Request $request){
+		if(!($request->type == "json" || $request->type == "csv")) {
+			abort(400);
+		}
+
 		$students = Student::all();
-		$output = array();
+		$results = array();
 
 		foreach($students as $student){
 			$ar = array();
@@ -479,38 +483,40 @@ class ProjectAdminController extends Controller{
 			} else {
 				$ar["markerName"] = "-";
 			}
-			array_push($output, $ar);
+			array_push($results, $ar);
 		}
+
+		$tempFileName = tempnam(sys_get_temp_dir(), 'SecondMarkerData');
+		$file = fopen($tempFileName, 'w');
 
 		if($request->type == "json"){
-			$filename = "SecondMarkerData.json";
-			$handle = fopen($filename, 'w+');
-			file_put_contents($filename, json_encode($output));
-			fclose($handle);
-
-			$headers = array('Content-Type' => 'text/json',);
-
-			return response()->download($filename, 'SecondMarkerData.json', $headers);
-		}
-
-		if($request->type == "csv"){
-			$filename = "SecondMarkerData.csv";
-			$handle = fopen($filename, 'w+');
-			fputcsv($handle, array(
+			fwrite($file, json_encode($results, JSON_PRETTY_PRINT));
+		} else if($request->type == "csv") {
+			fputcsv($file, array(
 				'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
 			));
 
-			foreach($output as $out){
-				fputcsv($handle, $out);
+			foreach($results as $result){
+				fputcsv($file, $result);
 			}
-
-			fclose($handle);
-
-			$headers = array('Content-Type' => 'text/csv',);
-
-			return response()->download($filename, 'SecondMarkerData.csv', $headers);
 		}
 
-		return abort(404);
+		fclose($file);
+
+		header('Content-Description: File Transfer');
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=SecondMarkerData.'.$request->type.'');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($tempFileName));
+
+		ob_clean();
+		flush();
+		readfile($tempFileName);
+		unlink($tempFileName);
+
+		return;
 	}
 }
