@@ -15,18 +15,31 @@
 
 	function filterSupervisors(){
 		var searchValue = input.val().trim().toLowerCase();
+		$(".no-results").remove();
 
 		if(searchValue == ""){
-			$('.supervisor-row').show();''
+			$('.supervisor-row').show();
 		} else {
+			var isSupeervisorVisible = false;
+
 			$('.supervisor-row').each(function(i , supervisorRow){
 				supervisorRow = $(supervisorRow);
 				if(supervisorRow.data("supervisor-name").toLowerCase().includes(searchValue)){
 					supervisorRow.show();
+					isSupeervisorVisible = true;
 				} else {
 					supervisorRow.hide();
 				}
+
 			});
+
+			if(!isSupeervisorVisible){
+				$('.main-content > div').append(
+					'<div class="config-note no-results">' +
+						'<p class="text-icon">&#128270;</p>' +
+						'<p>No results found.</p>' +
+					'</div>');
+			}
 		}
 	}
 });
