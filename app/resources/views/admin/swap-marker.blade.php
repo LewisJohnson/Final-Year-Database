@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width--1200">
+<div class="centered mw-1200">
 	<h1>Swap Second Marker</h1>
 	<h3>Select two students to swap their second marker.</h3>
 	<div class="section-container">
@@ -15,7 +15,7 @@
 			</thead>
 			<tbody>
 				@foreach($students as $student)
-					<tr class="pointer" 
+					<tr class="cursor--pointer" 
 
 						@if($student->project != null) data-supervisor-id="{{ $student->project->supervisor->id }}" @endif
 						@if($student->marker != null) data-marker-id="{{ $student->marker->id }}" data-marker-name="{{ $student->marker->user->getFullName() }}" @endif

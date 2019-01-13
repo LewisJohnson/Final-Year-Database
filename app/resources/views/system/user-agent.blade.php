@@ -7,11 +7,11 @@
 @endsection
 
 @if(get_config_json('user_agent.collect_user_agent.value'))
-	<div class="centered width--1200">
+	<div class="centered mw-1200">
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
 
-		<div class="button-group button-group--horizontal">
+		<div class="button-group margin-children--horizontal">
 			@if(isset($_GET["unique"]))
 				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('SystemAdminController@userAgentView')}}">Only first visits</a>
 			@else
@@ -45,7 +45,7 @@
 		<div style="margin: 1rem auto" class="loader loader--medium user-agent"></div>
 	</div>
 @else
-	<div class="centered width--800 fancy-page">
+	<div class="centered mw-800 fancy-page">
 		<h1>User agent string collection is disabled.</h1>
 		<p class="subtitle">You can turn it back on in the <a href="{{ action('SystemAdminController@systemDashboardView') }}">system dashboard</a>.</p>
 	</div>

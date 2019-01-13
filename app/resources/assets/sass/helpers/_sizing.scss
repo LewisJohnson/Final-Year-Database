@@ -1,0 +1,7 @@
+@for $i from 1 through 8 {
+	$width: $i * 2;
+
+	.mw-#{$width}00 {
+		max-width: #{$width + '00px'};
+	}
+}

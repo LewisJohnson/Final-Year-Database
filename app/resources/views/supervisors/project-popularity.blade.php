@@ -9,7 +9,7 @@
 
 @section('content')
 	@if(count($projects) < 3)
-		<div class="centered width--800">
+		<div class="centered mw-800">
 			<div class="fancy-page">
 				<h1>Project Popularity</h1>
 				<p class="subtitle">We need to gather a little bit more data before showing you this page, check back soon.</p>
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	@else
-		<div class="centered width--800">
+		<div class="centered mw-800">
 			<h1>Project Popularity</h1>
 
 			<div class="loader-container">
@@ -36,8 +36,8 @@
 				<table class="data-table table--dark-head sort-table">
 					<thead>
 						<tr>
-							<th class="pointer">Project</th>
-							<th title="A view is counted when a student vists one of your project pages for longer than 5 seconds." class="pointer"><span class="dashed-underline">View Count</span></th>
+							<th class="cursor--pointer">Project</th>
+							<th title="A view is counted when a student visits one of your project pages for longer than 5 seconds." class="cursor--pointer"><span class="dashed-underline">View Count</span></th>
 						</tr>
 					</thead>
 					<tbody>

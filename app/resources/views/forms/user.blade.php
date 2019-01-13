@@ -12,9 +12,9 @@
 		<label for="username">Username</label>
 
 		@if($view === "new")
-			<input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
+			<input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
 		@elseif($view === "edit")
-			<input id="username" type="text" class="form-control" name="username" value="{{ $user->username }}" autofocus>
+			<input id="username" type="text" name="username" value="{{ $user->username }}" autofocus>
 		@endif
 
 		@include('forms.partials.error-block', ['name' => 'username'])
@@ -24,9 +24,9 @@
 		<label for="first_name">First Name</label>
 
 		@if($view === "new")
-			<input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required>
+			<input id="first_name" type="text" name="first_name" value="{{ old('first_name') }}" required>
 		@elseif($view === "edit")
-			<input id="first_name" type="text" class="form-control" name="first_name" value="{{ $user->first_name }}">
+			<input id="first_name" type="text" name="first_name" value="{{ $user->first_name }}">
 		@endif
 		@include('forms.partials.error-block', ['name' => 'first_name'])
 	</div>
@@ -35,9 +35,9 @@
 		<label for="last_name">Last Name</label>
 
 		@if($view === "new")
-			<input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
+			<input id="last_name" type="text" name="last_name" value="{{ old('last_name') }}" required>
 		@elseif($view === "edit")
-			<input id="last_name" type="text" class="form-control" name="last_name" value="{{ $user->last_name }}">
+			<input id="last_name" type="text" name="last_name" value="{{ $user->last_name }}">
 		@endif
 
 		@include('forms.partials.error-block', ['name' => 'last_name'])
@@ -47,9 +47,9 @@
 		<label for="email">E-Mail Address</label>
 
 		@if($view === "new")
-			<input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+			<input id="email" type="email" name="email" value="{{ old('email') }}" required>
 		@elseif($view === "edit")
-			<input id="email" type="email" class="form-control" name="email" value="{{ $user->email }}">
+			<input id="email" type="email" name="email" value="{{ $user->email }}">
 		@endif
 
 		@include('forms.partials.error-block', ['name' => 'email'])
@@ -183,7 +183,7 @@
 			<button type="submit" class="button button--raised button--accent">Register</button>
 		</div>
 	@else
-		<div class="button-group button-group--horizontal">
+		<div class="button-group margin-children--horizontal">
 			<div class="form-field">
 				<button type="submit" class="button button--raised button--accent">Update user</button>
 			</div>

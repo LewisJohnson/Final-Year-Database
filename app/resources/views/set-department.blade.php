@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered fancy-page width--800">
+<div class="centered fancy-page mw-800">
 	<h1>Welcome.</h1>
 	<p class="subtitle" style="margin-bottom: 3rem;">Please select a department.</p>
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width--1200">
+<div class="centered mw-1200">
 <h1>Assign a Second Marker</h1>
 <h3>Select a student, then select a supervisor to be their second marker.</h3>
 <div class="section-container">
@@ -19,7 +19,7 @@
 			<tbody>
 				@foreach($students as $student)
 					@if(!is_null($student->project) && !is_null($student->project->supervisor))
-						<tr class="pointer" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" data-project="{{ $student->project->toJson() }}">
+						<tr class="cursor--pointer" data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}" data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" data-project="{{ $student->project->toJson() }}">
 							<td>{{ $student->getName() }}</td>
 							<td>{{ $student->project->title }}</td>
 							<td>{{ $student->project->supervisor->user->getFullName() }}</td>
@@ -47,7 +47,7 @@
 			</thead>
 			<tbody>
 				@foreach($supervisors as $supervisor)
-					<tr class="pointer" tabindex="0" data-marker-id="{{ $supervisor->id }}" data-marker-name="{{ $supervisor->user->getFullName() }}" disabled>
+					<tr class="cursor--pointer" tabindex="0" data-marker-id="{{ $supervisor->id }}" data-marker-name="{{ $supervisor->user->getFullName() }}" disabled>
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ $supervisor->getProjectLoad() }}</td>
 					</tr>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width--1600">
+<div class="centered mw-1600">
 	<div>
 		@if($studentCount > 0)
 			<a style="float: right" class="button button--raised" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students without project</a>
@@ -54,7 +54,7 @@
 									@endforeach
 								</tbody>
 							</table>
-							<div class="button-group button-group--horizontal">
+							<div class="button-group margin-children--horizontal">
 								<a class="button button--raised email-selected {{ $status }}" href="mailto:">Email Selected</a>
 							</div>
 						</div>

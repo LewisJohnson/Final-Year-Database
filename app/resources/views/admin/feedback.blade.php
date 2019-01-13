@@ -5,19 +5,19 @@
 @endsection
 
 @section('content')
-<div class="centered width--1400">
+<div class="centered mw-1400">
 	<h1>User Feedback</h1>
 	<h3>Browse all of the user submitted feedback</h3>
 
 	<table class="data-table table--dark-head sort-table">
 		<thead>
 			<tr>
-				<th class="pointer">Page</th>
-				<th class="pointer">Department</th>
-				<th class="pointer">Education Level</th>
-				<th class="pointer">Comment</th>
-				<th class="pointer">Email</th>
-				<th class="pointer">Date</th>
+				<th class="cursor--pointer">Page</th>
+				<th class="cursor--pointer">Department</th>
+				<th class="cursor--pointer">Education Level</th>
+				<th class="cursor--pointer">Comment</th>
+				<th class="cursor--pointer">Email</th>
+				<th class="cursor--pointer">Date</th>
 				<th></th>
 			</tr>
 		</thead>

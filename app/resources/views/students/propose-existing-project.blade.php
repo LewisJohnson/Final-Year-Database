@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section ('content')
 
-<div class="centered width--800">
+<div class="centered mw-800">
 
 @if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
 		<p class="config-tip">You may not propose a project until {{ SussexProjects\Mode::getProjectSelectionDate(true) }}.</p>
@@ -49,7 +49,7 @@
 		</form>
 	</div>
 
-	<div class="button-group button-group--horizontal">
+	<div class="button-group margin-children--horizontal">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 	</div>
 </div>

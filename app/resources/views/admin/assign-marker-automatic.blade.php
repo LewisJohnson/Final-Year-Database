@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-	<div class="centered width--800">
+	<div class="centered mw-800">
 		<h1>Automatic Second Marker Assignment</h1>
 		
 		<div class="config-tip">

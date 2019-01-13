@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width--1400">
+<div class="centered mw-1400">
 	<h1>{{ $transaction_type }} Transactions</h1>
 
-	<div class="button-group button-group--horizontal" style="position: relative;">
+	<div class="button-group margin-children--horizontal" style="position: relative;">
 		<a class="button external-link @if($transaction_type == "Project") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
 		<a class="button external-link @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
 		<a class="button external-link @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
@@ -19,14 +19,14 @@
 		<table id="transaction-table" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
 			<thead>
 				<tr>
-					<th data-default="false" class="pointer">Id</th>
-					<th data-default="true" class="pointer">Action</th>
-					<th data-default="true" class="pointer">Project</th>
-					<th data-default="true" class="pointer">Student</th>
-					<th data-default="true" class="pointer">Supervisor</th>
-					<th data-default="false" class="pointer">Marker</th>
-					<th data-default="false" class="pointer">Admin</th>
-					<th data-default="true" class="pointer">Date</th>
+					<th data-default="false" class="cursor--pointer">Id</th>
+					<th data-default="true" class="cursor--pointer">Action</th>
+					<th data-default="true" class="cursor--pointer">Project</th>
+					<th data-default="true" class="cursor--pointer">Student</th>
+					<th data-default="true" class="cursor--pointer">Supervisor</th>
+					<th data-default="false" class="cursor--pointer">Marker</th>
+					<th data-default="false" class="cursor--pointer">Admin</th>
+					<th data-default="true" class="cursor--pointer">Date</th>
 				</tr>
 			</thead>
 			<tbody>

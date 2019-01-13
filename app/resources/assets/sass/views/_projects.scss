@@ -226,3 +226,20 @@
 .project-row--student-proposed {
 	border-left: 10px solid $project-student-color;
 }
+
+.student-portfolio {
+	.form-field--mark {
+		input {
+			font-size: 70px;
+			text-align: center;
+			width: 100%;
+			height: 100px;
+		}
+	}
+
+	.form-field--feedback {
+		textarea {
+			height: 100px;
+		}
+	}
+}

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="centered width--800">
+<div class="centered mw-800">
 	<h1>Projects by Supervisor</h1>
 	<h3>Select a supervisor to see their projects.</h3>
 	@include('supervisors.partials.supervisor-filter')
@@ -16,7 +16,7 @@
 		<tbody>
 			@foreach($supervisors as $supervisor)
 				@if(count($supervisor->getProjects('on-offer')) > 0)
-					<tr class="pointer supervisor-row" data-supervisor-name="{{ $supervisor->user->getFullName() }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
+					<tr class="cursor--pointer supervisor-row" data-supervisor-name="{{ $supervisor->user->getFullName() }}" onclick="window.location='{{ action('UserController@projects', $supervisor->user)}}';">
 						<td>{{ $supervisor->user->getFullName() }}</td>
 						<td>{{ count($supervisor->getProjects('on-offer')) }}</td>
 					</tr>

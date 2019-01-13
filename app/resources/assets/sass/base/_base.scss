@@ -56,31 +56,34 @@ code {
 	}
 }
 
-.datalist-polyfill {
-	list-style: none;
-	display: none;
-	background: white;
-	box-shadow: 0 2px 2px #999;
-	position: absolute;
-	left: 0;
-	top: 0;
-	margin: 0;
-	padding: 0;
-	max-height: 300px;
-	overflow-y: auto;
+.fancy-page {
+	> h1 {
+		font-weight: 400;
+		text-align: center;
+	}
+
+	> h2 {
+		font-weight: 300;
+		text-align: center;
+	}
+
+	.subtitle {
+		text-align: center;
+	}
 }
 
-.datalist-polyfill:empty {
-	display: none !important;
-}
+.pagination {
+	display: block;
+	width: 100%;
+	text-align: center;
+	margin-top: 1rem;
 
-.datalist-polyfill > li {
-	padding: 3px;
-	font: 13px "Lucida Grande", Sans-Serif;
-}
+	.page-item {
+		display: inline-block;
+		padding: 4px;
 
-.datalist-polyfill__active {
-	background: #3875d7;
-	color: white;
+		&.active {
+			color: rgb(103, 114, 229);
+		}
+	}
 }
-

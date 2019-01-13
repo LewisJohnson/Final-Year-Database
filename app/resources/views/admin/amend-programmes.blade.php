@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered card width--1000">
+<div class="centered card mw-1000">
 	<h1>Amend {{ ucfirst(Session::get('department')) }} Programmes</h1>
 	<p>Programmes are shared between undergraduate and postgraduate students.</p>
 	

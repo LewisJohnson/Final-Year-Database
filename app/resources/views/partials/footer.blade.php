@@ -1,7 +1,7 @@
 <footer>
 	@if(get_config_json("footer.accessibility_buttons.value") == true)
 		<div class="footer-left">
-			<ul class="hl">
+			<ul class="list--horizontal">
 				<li>
 					@if(Cookie::get('accessibility_font') == "true")
 						<a class="button--small button--accent td-none" href="?large_font=false">Large Font</a>
@@ -28,7 +28,7 @@
 	@endif
 
 	<div class="footer-right">
-		<ul class="hl">
+		<ul class="list--horizontal">
 			<li>
 				<a id="leave-feedback-button" class="button--small td-none hover--light" href="#" data-is-guest="{{ Auth::guest() ? 'true' : 'false' }}">Leave Feedback</a>
 			</li>

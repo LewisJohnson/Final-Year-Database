@@ -8,7 +8,7 @@
 @endsection
 
 @section ('content')
-<div class="centered width--1200 show--scroll-to-top">
+<div class="centered mw-1200 show--scroll-to-top">
 	@if($view == "index")
 		<h1>Projects</h1>
 		@include('projects.partials.search')
@@ -60,13 +60,13 @@
 			<table id="project-table" class="data-table table-column-toggle table--dark-head shadow-2dp {{ $view }} @if($view != "index") sort-table @endif">
 				<thead>
 					<tr>
-						<th @if($view != "index") class="pointer" @endif data-default="true">Topic</th>
-						<th @if($view != "index") class="pointer" @endif data-default="true">Title</th>
-						<th @if($view != "index") class="pointer" @endif data-default="false">Short Description</th>
-						<th @if($view != "index") class="pointer" @endif data-default="false">Full Description</th>
-						<th @if($view != "index") class="pointer" @endif data-default="desktop">Skills</th>
-						@if(!($view == "supervisor" || $view == "personal"))<th @if($view != "index") class="pointer" @endif data-default="true">Supervisor</th>@endif
-						@if($view == "personal") <th @if($view != "index") class="pointer" @endif data-default="true">Status</th> @endif
+						<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Topic</th>
+						<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Title</th>
+						<th @if($view != "index") class="cursor--pointer" @endif data-default="false">Short Description</th>
+						<th @if($view != "index") class="cursor--pointer" @endif data-default="false">Full Description</th>
+						<th @if($view != "index") class="cursor--pointer" @endif data-default="desktop">Skills</th>
+						@if(!($view == "supervisor" || $view == "personal"))<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Supervisor</th>@endif
+						@if($view == "personal") <th @if($view != "index") class="cursor--pointer" @endif data-default="true">Status</th> @endif
 					</tr>
 				</thead>
 

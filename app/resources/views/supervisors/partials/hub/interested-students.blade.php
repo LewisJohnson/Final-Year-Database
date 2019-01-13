@@ -3,7 +3,7 @@
 	<div class="header">
 		@include('svg.clipboard')
 		<h3>Interested Students</h3>
-		<div class="svg-container expand pointer" style="margin-left: auto;">
+		<div class="svg-container expand cursor--pointer" style="margin-left: auto;">
 			<svg class="transition--medium" viewBox="0 0 24 24">
 				<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 			</svg>
@@ -24,9 +24,9 @@
 									<label for="selected-students" name="selected-students"></label>
 								</div>
 							</th>
-							<th class="pointer">Student</th>
-							<th class="pointer">Project</th>
-							<th class="pointer">Reject Count</th>
+							<th class="cursor--pointer">Student</th>
+							<th class="cursor--pointer">Project</th>
+							<th class="cursor--pointer">Reject Count</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -81,8 +81,8 @@
 									<label for="selected-students" name="selected-students"></label>
 								</div>
 							</th>
-							<th class="pointer">Student</th>
-							<th class="pointer">Project</th>
+							<th class="cursor--pointer">Student</th>
+							<th class="cursor--pointer">Project</th>
 							<th></th>
 							<th></th>
 						</tr>

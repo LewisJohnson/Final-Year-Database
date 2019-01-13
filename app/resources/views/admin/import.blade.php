@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="centered width--1200">
+<div class="centered mw-1200">
 	<h1>Import Students</h1>
 	<div class="card card--margin-vertical">
 		<h2>File Format</h2>

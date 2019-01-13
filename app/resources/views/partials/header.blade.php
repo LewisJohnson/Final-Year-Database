@@ -14,7 +14,7 @@
 	</div>
 @endif
 <div class="flex flex--row" style="background: rgb(52, 61, 70); z-index: 9; position: relative;">
-	<ul class="hl header-department-list">
+	<ul class="list--horizontal header-department-list">
 		@foreach(get_departments() as $key => $department)
 		<li>
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
@@ -26,7 +26,7 @@
 		@endforeach
 	</ul>
 	@if(Auth::check())
-		<ul class="hl ml-auto header-education-level-list">
+		<ul class="list--horizontal ml-auto header-education-level-list">
 			@foreach(Auth::user()->allowedEducationLevel() as $key => $level)
 				<li>
 					<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
@@ -36,7 +36,7 @@
 	@endif
 
 	@if(ldap_guest())
-		<ul class="hl ml-auto header-education-level-list">
+		<ul class="list--horizontal ml-auto header-education-level-list">
 			@foreach(SussexProjects\User::guestEducationLevel() as $key => $level)
 				<li>
 					<a href="?educationLevel={{ $level['shortName'] }}" class="button--small hover--light td-none @if(Session::get('education_level') == $level) button--accent @endif" >{{ ucfirst($level["longName"]) }}</a>

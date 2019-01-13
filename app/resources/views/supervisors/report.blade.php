@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="centered width--1000 show--scroll-to-top" style="position: relative;">
+<div class="centered mw-1000 show--scroll-to-top" style="position: relative;">
 
 	<h1>Supervisor Report</h1>
 
@@ -18,7 +18,7 @@
 			</div>
 
 			<div class="content" style="padding: 1rem;">
-				<div class="button-group button-group--vertical">
+				<div class="button-group margin-children--vertical">
 					<a class="button button--white" href="{{ SussexProjects\Supervisor::getAllSupervisorsMailtoString() }}" title="Email all supervisors">Email all Supervisors</a>
 					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsOpenToStudentsMailtoString() }}" title="Email all supervisors">Open to students</a>
 					<a class="button button--white" href="{{ SussexProjects\Supervisor::getSupervisorsClosedToStudentsMailtoString() }}" title="Email all supervisors">Closed to students</a>
@@ -31,7 +31,7 @@
 
 	@include('supervisors.partials.supervisor-filter')
 
-	<div class="button-group button-group--horizontal">
+	<div class="button-group margin-children--horizontal">
 		<a class="form-field form-field--toggle" @if(isset($_GET["includeClosedToOffer"])) href="{{ action('SupervisorController@report') }}" @else href="{{ action('SupervisorController@report', 'includeClosedToOffer=true') }}" @endif>
 			<p class="switch-label" for="supervisorTakeToggle"> {{ !isset($_GET["includeClosedToOffer"]) ? 'Hiding' : 'Showing' }} supervisors closed to offers</p>
 			<label onclick="window.location.href = this.closest('a').getAttribute('href')" class="toggle">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered width--800">
+<div class="centered mw-800">
 
 	@if($view != "StudentProject")
 		@if(Auth::check())
@@ -20,7 +20,7 @@
 	<div class="card project-card fadeIn animated card--margin-vertical {!! ($project->status == 'archived') ? ' archived': '' !!}" data-project-id="{{ $project->id }}" >
 		@if(Auth::check())
 			@if(Auth::user()->isStudent())
-				<div class="favourite-container pointer">
+				<div class="favourite-container cursor--pointer">
 					<svg viewBox="0 0 24 24" height="30" width="30" @if(Auth::user()->student->isFavouriteProject($project->id)) class="favourite" @endif>
 						<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 					</svg>
@@ -53,7 +53,7 @@
 		<ul class="topics-list">
 			@if(count($project->topics))
 				@foreach($project->topics as $topic)
-					<li class="pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
+					<li class="cursor--pointer topic @if($project->getPrimaryTopic()) {!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!} @endif">
 						<a title="Browse projects with the topic {{ $topic->name }}" href="{{ action('ProjectController@byTopic', $topic->id) }}">{{$topic->name}}</a>
 					</li>
 				@endforeach
@@ -78,7 +78,7 @@
 		</ul>
 	</div>
 
-	<div class="button-group button-group--horizontal">
+	<div class="button-group margin-children--horizontal">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 
 		{{-- STUDENT SELECT --}}

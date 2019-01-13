@@ -7,7 +7,7 @@
 @section ('content')
 {!! SussexProjects\Topic::getDatalist() !!}
 
-<div class="centered width--800">
+<div class="centered mw-800">
 	<h1>You are editing "{{ $project->title }}".</h1>
 
 	<div id="project-card" class="card project-card card--margin-vertical">

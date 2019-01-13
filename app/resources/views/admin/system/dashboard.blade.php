@@ -11,7 +11,7 @@
 @section('scripts')
 	<script src="{{ asset('js/views/tab-view.js') }}"></script>
 @endsection
-<div class="centered width--1000">
+<div class="centered mw-1000">
 	<h1>System Dashboard</h1>
 	<h3>Configure system variables and parameters.</h3>
 
@@ -82,22 +82,13 @@
 						<p>To add a new department, edit the <tt>app\config\system.json</tt> file.</p>
 
 						<h3>Existing</h3>
-						<ul class="department-list">
+						<ul>
 							@foreach(get_departments() as $dep)
-								<li class="flex flex--row" style="margin-bottom: 5px">
-									<p>{{ ucfirst($dep) }}</p>
-									{{-- <button type="button" class="button button--danger ml-auto">DELETE</button> --}}
+								<li>
+									{{ ucfirst($dep) }}
 								</li>
 							@endforeach
 						</ul>
-						
-						{{-- <form class="form form--flex" role="form" method="POST" action="{{ action('AdminController@newDepartment') }}">
-							{{ csrf_field() }}
-							<input type="text" name="" value="" placeholder="">
-							<div class="form-field form-field--flex">
-								<button class="button button--raised button--accent" type="submit">Save</button>
-							</div>
-						</form> --}}
 					</div>
 				</li>
 

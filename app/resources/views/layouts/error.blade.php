@@ -21,7 +21,7 @@
 
 		<div class="main-content">
 			@yield('content')
-			<div class="centered width--800" style="text-align: center;">
+			<div class="centered mw-800" style="text-align: center;">
 				<a class="blue-link" href="{{ action('HomeController@index') }}" title="Home">Click here to go home</a>
 			</div>
 		</div>

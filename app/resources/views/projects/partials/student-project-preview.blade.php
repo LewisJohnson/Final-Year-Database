@@ -21,11 +21,11 @@
 			@if (count($project->topics))
 				@foreach($project->topics as $topic)
 					@if($project->getPrimaryTopic())
-						<li class="pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
+						<li class="cursor--pointer topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' primary first': '' !!}" draggable onclick="window.location='{{ action('ProjectController@byTopic', $topic->id) }}';">
 							<p>{{$topic->name}}</p>
 						</li>
 					@else
-						<li class="pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic) }}';">
+						<li class="cursor--pointer topic" onclick="window.location='{{ action('ProjectController@byTopic', $topic) }}';">
 							<p>{{$topic->name}}</p>
 						</li>
 					@endif

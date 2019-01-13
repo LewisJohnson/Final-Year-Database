@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width--1200">
+<div class="centered mw-1200">
 	<h1>Amend Supervisor Arrangements</h1>
 	<h3>Edit the arrangements you wish then press submit</h3>
 	<form action="{{ action('ProjectAdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">

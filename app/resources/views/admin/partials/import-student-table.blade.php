@@ -1,4 +1,4 @@
-<div class="section-container section-user-selector">
+<div class="section-container">
 	<div class="section horizontal">
 		<h4>User Table</h4>
 		<div class="table-responsive">

@@ -1,0 +1,26 @@
+.list--unstyled {
+	padding: 0;
+	margin: 0;
+}
+
+.list--thirds {
+	li {
+		width: 30%;
+		margin: 0 auto;
+		padding: 0px 15px;
+	}
+
+	img {
+		width: 100%;
+	}
+}
+
+.list-style--none {
+	list-style: none;
+}
+
+.list--horizontal {
+	li {
+		display: inline-block;
+	}
+}

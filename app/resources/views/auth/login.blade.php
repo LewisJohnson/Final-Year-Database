@@ -2,7 +2,7 @@
 	@include('partials.html-head')
 	@include('partials.header')
 
-	<div class="width--600 centered card" style="margin-top: 3rem;">
+	<div class="mw-600 centered card" style="margin-top: 3rem;">
 		<div class="header">
 			<h2 id="dialog-title">LOG IN</h2>
 			<p id="dialog-desc">Use your Sussex ITS login details to log in to this system</p>

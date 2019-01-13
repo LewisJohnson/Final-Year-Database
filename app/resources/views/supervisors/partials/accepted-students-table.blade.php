@@ -8,9 +8,9 @@
 						<label for="accepted" name="accepted"></label>
 					</div>
 				</th>
-				<th class="pointer">Student Name</th>
-				<th class="pointer">Second Marker</th>
-				<th class="pointer">Project Title</th>
+				<th class="cursor--pointer">Student Name</th>
+				<th class="cursor--pointer">Second Marker</th>
+				<th class="cursor--pointer">Project Title</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -36,7 +36,7 @@
 							<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
 						</td>
 					@else
-						<td></td>
+						<td><a href="{{ action('SupervisorController@studentPortfolio', $accepted['student']->id) }}">{{ $accepted['project']->title }}</a></td>
 					@endif
 				</tr>
 			@endforeach

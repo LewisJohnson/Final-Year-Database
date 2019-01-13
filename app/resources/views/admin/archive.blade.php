@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="centered animated-entrance fancy-page width--1000 eoya-container">
+<div class="centered animated-entrance fancy-page mw-1000 eoya-container">
 	<h1>End of Year Archive</h1>
 	<p class="subtitle">The end of year archive will do the following in a single transaction</p>
 
@@ -69,7 +69,7 @@
 		</ul>
 	</div>
 
-	<div class="button-group button-group--horizontal ">
+	<div class="button-group margin-children--horizontal ">
 		<a class="button button--raised" href="javascript:history.back()">Back</a>
 		<form id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
 			{{ csrf_field() }}

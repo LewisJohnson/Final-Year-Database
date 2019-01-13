@@ -68,7 +68,7 @@
 						<li class="nav-button">
 							<div class="sub-dropdown" tab-index="0">
 								<h3>System</h3>
-								<div class="svg-container pointer">
+								<div class="svg-container cursor--pointer">
 									<svg viewBox="0 0 24 24">
 										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 									</svg>
@@ -84,7 +84,7 @@
 						<li class="nav-button">
 							<div class="sub-dropdown" tab-index="0">
 								<h3>Users</h3>
-								<div class="svg-container pointer">
+								<div class="svg-container cursor--pointer">
 									<svg class="transition--medium" viewBox="0 0 24 24">
 										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 									</svg>
@@ -106,7 +106,7 @@
 						<li class="nav-button">
 							<div class="sub-dropdown" tab-index="0">
 								<h3>Projects</h3>
-								<div class="svg-container pointer">
+								<div class="svg-container cursor--pointer">
 									<svg viewBox="0 0 24 24">
 										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 									</svg>
@@ -121,7 +121,7 @@
 						<li class="nav-button">
 							<div class="sub-dropdown" tab-index="0">
 								<h3>Reports</h3>
-								<div class="svg-container pointer">
+								<div class="svg-container cursor--pointer">
 									<svg viewBox="0 0 24 24">
 										<path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
 									</svg>

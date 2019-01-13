@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered animated-entrance width--1000" style="position: relative;">
+<div class="centered animated-entrance mw-1000" style="position: relative;">
 	@if(Auth::check())
 		<h1 style="text-align: center;">Hello, {{ Auth::user()->first_name }}.</h1>
 
@@ -182,7 +182,7 @@
 						<div class="favourite-projects flex flex--row flex--wrap">
 							@foreach($projects as $project)
 								<div>
-									<div class="favourite-container index pointer" data-project-id="{{ $project->id }}">
+									<div class="favourite-container index cursor--pointer" data-project-id="{{ $project->id }}">
 										<svg class="favourite" title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24">
 											<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
 										</svg>

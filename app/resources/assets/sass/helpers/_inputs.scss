@@ -1,0 +1,161 @@
+.cursor--pointer {
+	cursor: pointer;
+}
+
+.checkbox {
+	position: relative;
+	margin: 0;
+	cursor: pointer;
+
+	label {
+		display: inline;
+		width: 100%;
+		cursor: pointer;
+		color: #757575;
+		font-size: 16px;
+		margin-bottom: 0;
+
+		&:before, &:after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		&:before {
+			// box
+			width: $checkbox-size;
+			height: $checkbox-size;
+			background: #fff;
+			border: 2px solid $checkbox-border-color;
+			border-radius: 2px;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+	}
+
+	input[type="checkbox"] {
+		outline: 0;
+		margin-right: $checkbox-size - 15px;
+
+		&:checked {
+			+ label:before {
+				background: $checkbox-checked-color;
+				border: none;
+			}
+			+ label:after {
+				$checkmark-size: $checkbox-size - 2*$checkbox-padding;
+				transform: rotate(-45deg);
+				top: ($checkbox-size / 2) - ($checkmark-size / 4) - $checkbox-size/10;
+				left: $checkbox-padding;
+				width: $checkmark-size;
+				height: $checkmark-size / 2;
+				border: $checkmark-width solid $checkmark-color;
+				border-top-style: none;
+				border-right-style: none;
+			}
+		}
+	}
+
+	input[disabled] + label {
+		color: #cacaca;
+	}
+
+	input[disabled] + label:before {
+		border: 2px solid #cacaca;
+	}
+}
+
+/* The switch - the box around the slider */
+.switch-label {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	padding-right: 8px;
+	top: -5.5px;
+	white-space: pre;
+	user-select: none;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.toggle {
+	position: relative;
+	display: inline-block;
+	height: 14px;
+	min-width: 36px;
+	width: 36px;
+	cursor: pointer;
+	margin-bottom: 0px;
+
+	input {
+		display: none;
+	}
+
+	input:checked + .slider {
+		background-color: rgba($accent, .52);
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(18px);
+		background: $accent;
+		opacity: 1;
+	}
+
+	.slider {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, .26);
+		transition: .4s;
+		border-radius: 14px;
+
+		&:before {
+			border-radius: 50%;
+			position: absolute;
+			content: "";
+			height: 20px;
+			width: 20px;
+			left: -2px;
+			bottom: 4px;
+			top: -3px;
+			background-color: white;
+			transition: .4s;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+		}
+	}
+}
+
+.datalist-polyfill {
+	list-style: none;
+	display: none;
+	background: white;
+	box-shadow: 0 2px 2px #999;
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin: 0;
+	padding: 0;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.datalist-polyfill:empty {
+	display: none !important;
+}
+
+.datalist-polyfill > li {
+	padding: 3px;
+	font: 13px "Lucida Grande", Sans-Serif;
+}
+
+.datalist-polyfill__active {
+	background: #3875d7;
+	color: white;
+}

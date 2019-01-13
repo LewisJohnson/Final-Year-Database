@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered width--1200">
+<div class="centered mw-1200">
 	<h1>Export Second Marker Data</h1>
 
 	<p>The second marker export includes the student's name followed by their project, supervisor and second marker.</p>
@@ -40,7 +40,7 @@
 	</div>
 
 	<hr>
-	<div class="button-group button-group--horizontal">
+	<div class="button-group margin-children--horizontal">
 		<form title="Download second marker data as CSV" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
 			{{ csrf_field() }}
 			<input type="hidden" name="type" value="csv">
