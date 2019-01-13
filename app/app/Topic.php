@@ -27,18 +27,21 @@ class Topic extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
 	public $fillable = ['name'];
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
 	 * @var bool
 	 */
 	public $incrementing = false;
+
 	/**
 	 * The attributes that are not mass assignable.
 	 *
