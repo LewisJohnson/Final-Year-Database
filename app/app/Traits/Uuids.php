@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -12,17 +12,10 @@ use Webpatser\Uuid\Uuid;
 
 /**
  * The UUID trait.
- * If a model is using the UUID trait, 
- * the model's ID will be replaced with a Version 4 UUID
- * when the model is saved.
- * 
- * E.g
- * 
- * $User = new User();
- * $User->save(); (Here the UUID will be injected.);
+ * This replaces the model's ID with a V4 UUID when the model is saved.
  * 
  */
-trait Uuids{
+trait Uuids {
 
 	/**
 	 * Boot function from Laravel (This is used to start to trait when the application starts).

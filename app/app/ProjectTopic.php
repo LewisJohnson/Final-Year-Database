@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -28,6 +28,7 @@ class ProjectTopic extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
+	
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
