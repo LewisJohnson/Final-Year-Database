@@ -1,6 +1,6 @@
 LICENSE
 
-Copyright (c) 2018, Lewis Johnson
+Copyright (c) 2019, University of Sussex
 All rights reserved.
 
 You are not permitted to the rights to use, copy, modify, <br>
