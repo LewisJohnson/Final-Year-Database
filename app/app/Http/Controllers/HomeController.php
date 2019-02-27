@@ -94,14 +94,13 @@ class HomeController extends Controller{
 	}
 
 	/**
-	 * Log feedback to database.
+	 * Universal search.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function search(Request $request){
-		$searchTerm = $request->get("searchTerm");
+		$searchTerm = $request->get("search_term");
 
-		$users = [];
 		$projects = Project::where('title', 'LIKE', '%'.$searchTerm.'%')
 							->limit(5)
 							->get();
@@ -110,27 +109,9 @@ class HomeController extends Controller{
 							->limit(5)
 							->get();
 
-		if(Auth::user()->isSupervisor()){
-			$users = User::
-						where('privileges', 'student')
-						->where(function ($query) use ($searchTerm) {
-							$query->where('first_name', 'LIKE', '%'.$searchTerm.'%')
-								->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%');
-						})
-						->limit(1)
-						->get();
-
-		} else if(Auth::user()->isProjectAdmin()){
-			$users = User::where('first_name', 'LIKE', '%'.$searchTerm.'%')
-						->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%')
-						->limit(5)
-						->get();
-		}
-
 		return response()->json(array(
 			'successful' => true,
 			'results' => array(
-				'users' => $users->toJson(),
 				'projects' => $projects->toJson(),
 				'topics' => $topics->toJson()
 			)
@@ -186,9 +167,6 @@ class HomeController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setDepartment(Request $request){
-
-
-
 		if(in_array($request->department, get_departments())){
 			if(Auth::user()){
 				Auth::logout();
