@@ -2,7 +2,7 @@
 	<div class="section horizontal">
 		<h4>User Table</h4>
 		<div class="table-responsive">
-			<table class="data-table">
+			<table class="table table-hover bg-white  data-table">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -36,7 +36,7 @@
 	<div class="section horizontal">
 		<h4>Student Table</h4>
 		<div class="table-responsive">
-			<table class="data-table">
+			<table class="table table-hover bg-white  data-table">
 				<thead>
 					<tr>
 						<th>ID</th>

@@ -1,14 +1,12 @@
-<ul class="icon-list">
+<ul class="list-unstyled">
 	<li>
-		<a class="icon" href="{{ action('TransactionController@index') }}">
-			@include('svg.database')
-			<p>Browse Transactions</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('TransactionController@index') }}">
+			<span>@include('svg.database')<span>Browse Transactions</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@archiveView') }}">
-			@include('svg.archive')
-			<p>End of Year Archive</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@archiveView') }}">
+			<span>@include('svg.archive')<span>End of Year Archive</span></span>
 		</a>
 	</li>
 </ul>

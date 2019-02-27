@@ -1,20 +1,17 @@
-<ul class="icon-list">
+<ul class="list-unstyled">
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@amendTopicsView') }}">
-			@include('svg.playlist-edit')
-			<p>Edit Topics</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendTopicsView') }}">
+			<span>@include('svg.playlist-edit')<span class="ml-1">Edit Topics</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@amendProgrammesView') }}">
-			@include('svg.playlist-edit')
-			<p>Edit Programmes</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendProgrammesView') }}">
+			<span>@include('svg.playlist-edit')<span class="ml-1">Edit Programmes</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@amendParametersView') }}">
-			@include('svg.spanner')
-			<p>Amend Parameters</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendParametersView') }}">
+			<span>@include('svg.spanner')<span class="ml-1">Amend Parameters</span></span>
 		</a>
 	</li>
 </ul>

@@ -1,32 +1,27 @@
-<ul class="icon-list">
+<ul class="list-unstyled">
 	<li>
-		<a class="icon" href="{{ action('UserController@create') }}">
-			@include('svg.account-plus')
-			<p>Add User</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('UserController@create') }}">
+			<span>@include('svg.account-plus')<span>Add User</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('StudentController@importStudentsView') }}">
-			@include('svg.account-multiple-plus')
-			<p>Import Students</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('StudentController@importStudentsView') }}">
+			<span>@include('svg.account-multiple-plus')<span>Import Students</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('UserController@index') }}">
-			@include('svg.account-edit')
-			<p>Edit User</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('UserController@index') }}">
+			<span>@include('svg.account-edit')<span>Edit User</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@amendSupervisorArrangementsView') }}">
-			@include('svg.account-settings')
-			<p>Amend Supervisors Arrangements</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendSupervisorArrangementsView') }}">
+			<span>@include('svg.account-settings')<span>Amend Supervisors Arrangements</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('ProjectAdminController@loginAsView')}}">
-			@include('svg.login')
-			<p>Log in as Another User</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@loginAsView')}}">
+			<span>@include('svg.login')<span>Log in as Another User</span></span>
 		</a>
 	</li>
 </ul>

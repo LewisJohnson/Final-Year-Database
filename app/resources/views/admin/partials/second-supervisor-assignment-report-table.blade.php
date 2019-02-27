@@ -1,6 +1,6 @@
 <h3>Automatic Assignment Report</h3>
 
-<table class="data-table shadow-2dp">
+<table class="table table-hover bg-white  data-table shadow-2dp">
 	<thead>
 		<tr>
 			<th>Supervisor</th>
@@ -11,9 +11,9 @@
 		@foreach($supervisors as $supervisor)
 			<tr>
 				<td>{{ $supervisor->user->getFullName() }}</td>
-				<td>Supervising {{ count($supervisor->getAcceptedStudents()) }} / marker {{ count($supervisor->getSecondSupervisingStudents()) }}</td>
+				<td>Supervising {{ count($supervisor->getAcceptedStudents()) }} / marker {{ count($supervisor->getSecondSupervisingProjects()) }}</td>
 			</tr>
-			@foreach($supervisor->getSecondSupervisingStudents() as $secondSupervising)
+			@foreach($supervisor->getSecondSupervisingProjects() as $secondSupervising)
 				<tr style="background: rgb(0, 0, 0, 0.02)">
 					<td>-</td>
 					<td>{{ $secondSupervising["student"]->user->getFullName() }}</td>

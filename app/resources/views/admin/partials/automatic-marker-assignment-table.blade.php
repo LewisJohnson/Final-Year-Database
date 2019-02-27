@@ -1,4 +1,4 @@
-<table class="data-table shadow-2dp" id="2nd-marker-supervisor-table">
+<table class="table table-hover bg-white  data-table shadow-2dp" id="2nd-marker-supervisor-table">
 	<thead>
 		<tr>
 			<th>Supervisor</th>

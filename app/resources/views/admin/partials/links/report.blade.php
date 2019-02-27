@@ -1,14 +1,12 @@
-<ul class="icon-list links-list">
+<ul class="list-unstyled">
 	<li>
-		<a class="icon" href="{{ action('StudentController@report') }}">
-			@include('svg.school')
-			<p>Student Report</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('StudentController@report') }}">
+			<span>@include('svg.school')<span class="ml-1">Student Report</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="icon" href="{{ action('SupervisorController@report') }}">
-			@include('svg.clipboard')
-			<p>Supervisor Report</p>
+		<a class="btn w-100 text-left text-primary" href="{{ action('SupervisorController@report') }}">
+			<span>@include('svg.clipboard')<span class="ml-1">Supervisor Report</span></span>
 		</a>
 	</li>
 </ul>
