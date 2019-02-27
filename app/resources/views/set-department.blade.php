@@ -1,11 +1,13 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered fancy-page mw-800">
-	<h1>Welcome.</h1>
-	<p class="subtitle" style="margin-bottom: 3rem;">Please select a department.</p>
+<div class="centered mw-800">
+	<div class="text-center">
+		<h1>Welcome.</h1>
+		<p class="text-muted">Please select a department.</p>
+	</div>
 
-	<div class="department-select flex flex--row flex--wrap">
+	<div class="department-select d-flex mt-5">
 		@foreach(get_departments() as $key => $department)
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 				{{ csrf_field() }}
