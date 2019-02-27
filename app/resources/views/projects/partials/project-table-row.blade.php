@@ -8,7 +8,7 @@
 	@endif
 
 	<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
-	<td class="short-description" >{{ $project->getShortDescription() }}</td>
+	<td>{{ $project->getShortDescription() }}</td>
 	<td>{!! html_entity_decode($project->description, ENT_HTML5 | ENT_COMPAT) !!}</td>
 	<td>{{ $project->skills }}</td>
 
