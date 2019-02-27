@@ -6,8 +6,8 @@
 	<p>The second marker export includes the student's name followed by their project, supervisor and second marker.</p>
 
 	<h4>Example Export</h4>
-	<div class="table-responsive" style="margin-bottom: 1rem">
-		<table style="max-width: 800px">
+	<div class="table-responsive">
+		<table class="table table-hover bg-white  mw-800">
 			<thead>
 				<tr>
 					<th>Student Name</th>
@@ -40,21 +40,17 @@
 	</div>
 
 	<hr>
-	<div class="button-group margin-children--horizontal">
+	<div class="d-flex">
 		<form title="Download second marker data as CSV" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
 			{{ csrf_field() }}
 			<input type="hidden" name="type" value="csv">
-			<div class="form-field">
-				<button class="button button--raised">Download CSV</button>
-			</div>
+			<button class="btn btn-primary">Download CSV</button>
 		</form>
 
 		<form title="Download second marker data as JSON" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
 			{{ csrf_field() }}
 			<input type="hidden" name="type" value="json">
-			<div class="form-field">
-				<button class="button button--raised">Download JSON</button>
-			</div>
+			<button class="btn btn-primary ml-2">Download JSON</button>
 		</form>
 	</div>
 </div>

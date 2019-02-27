@@ -5,75 +5,68 @@
 @endsection
 
 @section('content')
-<div class="centered animated-entrance fancy-page mw-1000 eoya-container">
-	<h1>End of Year Archive</h1>
-	<p class="subtitle">The end of year archive will do the following in a single transaction</p>
-
-	<div>
-		<ul class="flex flex--row flex--wrap archive-list">
-			<li class="flex--full archive-blue">
-				<div class="icon">
-					@include('svg.playlist-edit')
-					<p>The string “In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]” will be added to the description of undertaken projects.</p>
-				</div>
-			</li>
-
-			<li class="archive-blue">
-				<div class="icon">
-					@include('svg.archive')
-					<p>All projects will be set to archived.</p>
-				</div>
-			</li>
-
-			<li class="archive-blue">
-				<div class="icon">
-					@include('svg.eye')
-					<p>All projects will have their view count set to zero.</p>
-				</div>
-			</li>
-
-			<li class="archive-red">
-				<div class="icon">
-					@include('svg.account-remove')
-					<p>All students will be removed from the user table.</p>
-				</div>
-			</li>
-
-			<li class="archive-red">
-				<div class="icon">
-					@include('svg.delete-forever')
-					<p>Student proposed projects will be deleted.</p>
-				</div>
-			</li>
-
-			<li class="archive-red">
-				<div class="icon">
-					@include('svg.delete-forever')
-					<p>The student table will be emptied.</p>
-				</div>
-			</li>
-
-			<li class="archive-red">
-				<div class="icon">
-					@include('svg.delete-forever')
-					<p>The transactions table will be emptied.</p>
-				</div>
-			</li>
-
-			<li class="flex--full">
-				<div class="icon">
-					@include('svg.fire')
-					<p>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b>.</p>
-				</div>
-			</li>
-		</ul>
+<div class="centered animated-entrance mw-1000 eoya-container">
+	<div class="text-center">
+		<h1>End of Year Archive</h1>
+		<p class="text-muted">The end of year archive will do the following in a single transaction</p>
 	</div>
 
-	<div class="button-group margin-children--horizontal ">
-		<a class="button button--raised" href="javascript:history.back()">Back</a>
+	<div class="row">
+		<div class="col-12 mt-2">
+			<div class="bg-primary text-white p-2">
+				<span>@include('svg.playlist-edit')</span>
+				<span>The string “In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]” will be added to the description of undertaken projects.</span>
+			</div>
+		</div>
+
+		<div class="col-6 mt-2">
+			<div class="bg-primary text-white p-2">
+				<span>@include('svg.archive')</span>
+				<span>All projects will be set to archived.</span>
+			</div>
+		</div>
+
+		<div class="col-6 mt-2">
+			<div class="bg-danger text-white p-2">
+				<span>@include('svg.account-remove')</span>
+				<span>All students will be removed from the user table.</span>
+			</div>
+		</div>
+
+		<div class="col-6 mt-2">
+			<div class="bg-danger text-white p-2">
+				<span>@include('svg.delete-forever')</span>
+				<span>Student proposed projects which we're not accepted will be deleted.</span>
+			</div>
+		</div>
+
+		<div class="col-6 mt-2">
+			<div class="bg-danger text-white p-2">
+				<span>@include('svg.delete-forever')</span>
+				<span>The student table will be emptied.</span>
+			</div>
+		</div>
+
+		<div class="col-6 mt-2">
+			<div class="bg-danger text-white p-2">
+				<span>@include('svg.delete-forever')</span>
+				<span>The transactions table will be emptied.</span>
+			</div>
+		</div>
+
+		<div class="col-12 mt-4">
+			<div class="bg-warning p-2">
+				<span>@include('svg.fire')</span>
+				<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b>.</span>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="text-right mt-3">
 		<form id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
 			{{ csrf_field() }}
-			<button title="Start archiving" type="submit" class="button button--raised button--danger">Archive</button>
+			<button title="Start archiving" type="submit" class="btn btn-danger">Archive</button>
 		</form>
 	</div>
 </div>

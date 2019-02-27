@@ -13,7 +13,7 @@
 			<p>Using this tool will reset all currently assigned second markers.</p>
 		</div>
 
-		@if(SussexProjects\Http\Controllers\StudentController::getStudentWithoutSecondMarker() === null)
+		@if(SussexProjects\Http\Controllers\ProjectController::getAccetpedProjectWithoutSecondMarker() === null)
 			<div class="config-danger">
 				<p class="text-icon">&#9888;&#65039;</p>
 				<p><b>Warning!</b> All students already have a second marker assigned to them. <a id="showReportTable" href="#">Click to view second marker report table.</a></p>
