@@ -5,75 +5,43 @@
 @endif
 
 @if(Session::get('logged_in_as') != null)
-	<div class="cookie-banner flex flex--row" style="background: #ff3434">
-		<div style="color: white; width: 30px;">
-			@include('svg.account')
+	<div class="row bg-danger d-print-none">
+		<div class="col-12 text-center">
+			<p class="text-white m-0 p-2">You are logged in as another user.</p>
 		</div>
-
-		<p style="margin: 0 auto;">You are logged in as another user.</p>
 	</div>
 @endif
-<div class="flex flex--row" style="background: rgb(52, 61, 70); z-index: 9; position: relative;">
-	<ul class="list--horizontal header-department-list">
-		@foreach(get_departments() as $key => $department)
-		<li>
-			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
-				{{ csrf_field() }}
-				<input type="hidden" name="department" value="{{ $department }}">
-				<button type="submit" class="button--small hover--light @if(Session::get('department') == $department)button--accent @endif" >{{ ucfirst($department) }}</button>
-			</form>
-		</li>
-		@endforeach
-	</ul>
-	@if(Auth::check())
-		<ul class="list--horizontal ml-auto header-education-level-list">
-			@foreach(Auth::user()->allowedEducationLevel() as $key => $level)
-				<li>
-					<a @if(count(Auth::user()->allowedEducationLevel()) > 1) href="?educationLevel={{ $level['shortName'] }}" @endif class="button--small hover--light td-none @if(count(Auth::user()->allowedEducationLevel()) > 1) @if(Session::get('education_level') == $level) button--accent @endif  @endif" >{{ ucfirst($level["longName"]) }}</a>
-				</li>
-			@endforeach
-		</ul>
-	@endif
 
-	@if(ldap_guest())
-		<ul class="list--horizontal ml-auto header-education-level-list">
-			@foreach(SussexProjects\User::guestEducationLevel() as $key => $level)
-				<li>
-					<a href="?educationLevel={{ $level['shortName'] }}" class="button--small hover--light td-none @if(Session::get('education_level') == $level) button--accent @endif" >{{ ucfirst($level["longName"]) }}</a>
-				</li>
-			@endforeach
-		</ul>
-	@endif
-</div>
-<div class="header-container">
-	<header class="cd-morph-dropdown flex flex--row flex--wrap"  style="background: {{ get_config_json('header.background.value') }}">
-		@if(Session::get('education_level') != null)
-			<a href="{{ action('HomeController@index') }}" title="Home"><h1>{{ lang_sess('homepage_main_header') }}</h1></a>
-		@else
-			<a href="{{ action('HomeController@index') }}" title="Home"><h1>@lang('messages.homepage_main_header')</h1></a>
-		@endif
+<div class="header-container d-print-none">
+	<header class="cd-morph-dropdown" style="background: {{ get_config_json('header.background.value') }}">
+		<div class="d-flex">
+			<a class="text-white h4 font-weight-bolder p-3 m-0" href="{{ action('HomeController@index') }}" title="Home">
+				@if(Session::get('education_level') != null)
+					{{ lang_sess('homepage_main_header') }}
+				@else
+					@lang('messages.homepage_main_header')
+				@endif
+			</a>
 
-		<div class="logo-container">
-			<a href="https://www.sussex.ac.uk" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
+			<a class="d-block ml-auto mr-2" href="https://www.sussex.ac.uk" title="Suusex University Logo" style="background-size: contain;width: 50px;height: 50px;background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
 		</div>
 
 		@if(Auth::check() || ldap_guest())
-			<div class="mobile-menu-container" role="button" aria-label="Toggles the mobile navigation menu.">
-				<ul class="mobile-menu">
-					<li></li>
-					<li></li>
-					<li></li>
+			<div class="mobile-menu-container w-25 cursor--pointer mx-auto" role="button" aria-label="Toggles the mobile navigation menu.">
+				<ul class="mobile-menu list-unstyled mb-0 p-3">
+					<li class="mx-auto"></li>
+					<li class="mx-auto"></li>
+					<li class="mx-auto"></li>
 				</ul>
 			</div>
 		@elseif(!empty(Session::get('department')) && Request::path() !== 'set-department')
-			<div class="mobile-menu-container" role="button">
-				<button class="button" style="margin-top: 8px; color: white;" data-activator="true" data-dialog="login">Login</button>
+			<div class="mobile-menu-container text-center" role="button">
+				<button class="btn text-white" data-activator="true" data-dialog="login">Login</button>
 			</div>
 		@endif
 
 		<nav class="main-nav flex--full flex--wrap flex--row desktop">
 			<ul>
-
 				@if(!empty(Session::get('department')) && Request::path() !== 'set-department')
 					<li>
 						<a href="{{ action('HomeController@index') }}">Home</a>
