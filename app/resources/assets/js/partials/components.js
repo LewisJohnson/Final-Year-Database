@@ -1,5 +1,5 @@
 /*
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -21,7 +21,6 @@
 |	2. Dialog / Modal
 |	3. Data Table
 |	3.1 Column Toggle Table
-|	3.2 Table DotMenu
 |	4. Edit Topics [Project Admin]
 |	4.1 Edit Programmes [Project Admin]
 |	5. Second Marker [Assign]
@@ -262,7 +261,7 @@
 	};
 
 	Dialog.prototype.HtmlSnippets_ = {
-		LOADER: '<div class="loader" style="width: 100px; height: 100px;top: 25%;"></div>',
+		LOADER: '<div class="w-100 loader text-center p-4" style="display:none"><div class="spinner-border text-primary"></div></div>',
 	};
 
 	Dialog.prototype.CssClasses_ = {
@@ -276,13 +275,13 @@
 	};
 
 	Dialog.prototype.showLoader = function(){
-		this.loader.show(0);
-		this.content.hide(0);
+		this.loader.show();
+		this.content.hide();
 	};
 
 	Dialog.prototype.hideLoader = function(){
-		this.loader.hide(0);
-		this.content.show(0);
+		this.loader.hide();
+		this.content.show();
 	};
 
 	Dialog.prototype.showDialog = function(){
@@ -427,8 +426,7 @@
 	* Class constructor for data tables.
 	*/
 	var ColumnToggleTable = function ColumnToggleTable(element) {
-		this.element = $(element);
-		this.loader = this.showLoader();
+		this.table = $(element);
 		this.head = $(element).find('> thead tr');
 		this.headers = $(element).find('> thead tr th');
 		this.bodyRows = $(element).find('> tbody tr');
@@ -449,22 +447,21 @@
 	};
 
 	ColumnToggleTable.prototype.HtmlSnippets_ = {
-		// COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-top:2rem;margin-left:auto;">Columns</button>',
-		COLUMN_SELECTOR_BUTTON: '<button class="button button--raised dot-menu__activator" style="display:block;margin-left:auto;">Columns</button>',
-		COLUMN_SELECTOR_MENU: '<ul class="dot-menu dot-menu--bottom-left"></ul>'
+		COLUMN_SELECTOR_BUTTON: '<button class="btn btn-light d-block ml-auto mb-3" style="position: relative;">Columns</button>',
+		COLUMN_SELECTOR_MENU: '<ul class="p-2 mt-2 rounded shadow bg-white list-unstyled text-left" style="display: none;position: absolute;right: 0px;width: 200px;"></ul>'
 	};
 
 	ColumnToggleTable.prototype.functions = {
-		toggleColumn: function(columnIndex, table, checked) {
+		toggleColumn: function(columnIndex, toggleTable, checked) {
 			if(checked){
-				table.head.children().eq(columnIndex).removeAttr('hidden');
-				table.head.children().eq(columnIndex).show();
+				toggleTable.head.children().eq(columnIndex).removeAttr('hidden');
+				toggleTable.head.children().eq(columnIndex).show();
 			} else {
-				table.head.children().eq(columnIndex).attr('hidden', "true");
-				table.head.children().eq(columnIndex).hide();
+				toggleTable.head.children().eq(columnIndex).attr('hidden', "true");
+				toggleTable.head.children().eq(columnIndex).hide();
 			}
 
-			table.bodyRows.each(function(){
+			toggleTable.bodyRows.each(function(){
 				if(checked){
 					$(this).children().eq(columnIndex).show();
 				} else {
@@ -473,17 +470,17 @@
 			});
 		},
 
-		refresh: function(table) {
+		refresh: function(toggleTable) {
 			var hideIndices = [];
 
-			table.bodyRows = table.element.find('tbody tr');
-			table.headers.each(function(){
+			toggleTable.bodyRows = toggleTable.table.find('tbody tr');
+			toggleTable.headers.each(function(){
 				if($(this).attr('hidden')){
 					hideIndices.push($(this).index());
 				}
 			});
 
-			table.bodyRows.each(function(){
+			toggleTable.bodyRows.each(function(){
 				for (var i = 0; i < hideIndices.length; i++) {
 					$(this).children().eq(hideIndices[i]).hide();
 				}
@@ -493,32 +490,21 @@
 		refreshAll: function() {
 			$(ColumnToggleTable.prototype.Selectors_.TOGGLE_TABLE).each(function() {
 				ColumnToggleTable.prototype.functions.refresh(this.ColumnToggleTable);
-				this.ColumnToggleTable.hideLoader();
 			});
 		},
 	};
 
 	ColumnToggleTable.prototype.init = function () {
-		if(!this.element.attr('id')){
-			console.log("ColumnToggleTable requires the table to have an unique ID.");
-			return;
-		}
-
 		var toggleTable = this;
 		var columnSelectorButton = $(this.HtmlSnippets_.COLUMN_SELECTOR_BUTTON);
 		var columnSelectorMenu = $(this.HtmlSnippets_.COLUMN_SELECTOR_MENU);
-		var columnSelectorButtonDotMenuId = 'ColumnToggleTable-' + toggleTable.element.attr('id');
 
-		this.element.before(columnSelectorButton);
 
-		columnSelectorButton.after(columnSelectorMenu);
-		columnSelectorButton.attr('id', columnSelectorButtonDotMenuId);
-		columnSelectorMenu.attr('id', columnSelectorButtonDotMenuId + '-menu');
+		this.table.before(columnSelectorButton);
+		columnSelectorButton.append(columnSelectorMenu);
 
 		this.selectorButton = columnSelectorButton;
 		this.selectorMenu = columnSelectorMenu;
-
-		this.selectorMenu.find('ul').data("table", toggleTable.element.attr('id'));
 
 		this.headers.each(function (){
 			var checked = $(this).data("default") ? "checked" : "";
@@ -532,13 +518,19 @@
 			}
 
 			columnSelectorMenu.append('\
-				<li class="dot-menu__item dot-menu__item--padded"> \
+				<li class="p-2 p-md-1"> \
 					<div class="checkbox"> \
 						<input class="column-toggle" id="column-' + $(this).text() + '" type="checkbox" '+ checked +'> \
-						<label for="column-' + $(this).text() + '">' + $(this).text() + '</label> \
+						<label class="ml-1" for="column-' + $(this).text() + '">' + $(this).text() + '</label> \
 					</div> \
 				</li>');
 		});
+
+		columnSelectorButton.on("click", function(e){
+			if($(e.target).hasClass("btn")){
+				columnSelectorMenu.fadeToggle(config.animtions.medium);
+			}
+		})
 
 		$("body").on("change", ".column-toggle", function(){
 			var index = $('.column-toggle').index(this);
@@ -546,29 +538,6 @@
 		});
 	};
 
-	ColumnToggleTable.prototype.showLoader = function () {
-		if(!this.element.attr('id')){
-			console.log("ColumnToggleTable requires the table to have an unique ID.");
-			return;
-		}
-
-		var loaderId = this.element.attr('id') + '-loader';
-		this.element.before('<div id="' + loaderId +'" class="loader loader--large" style="display: block"></div>');
-		this.element.fadeOut(0);
-
-		return $('#' + loaderId);
-	};
-
-	ColumnToggleTable.prototype.hideLoader = function () {
-		if(!this.element.attr('id')){
-			console.log("ColumnToggleTable requires the table to have an unique ID.");
-			return;
-		}
-
-		this.loader.hide();
-		this.element.css('display', 'table');
-		this.element.fadeIn(800);
-	};
 
 	ColumnToggleTable.prototype.initAll = function () {
 		$(this.Selectors_.TOGGLE_TABLE).each(function() {
@@ -576,120 +545,6 @@
 		});
 
 		ColumnToggleTable.prototype.functions.refreshAll();
-	};
-
-	/* ========================
-	   3.2 Table DotMenu
-	 	The menu used for tables on small screen devices.
-	   ======================== */
-
-	/**
-	* Class constructor for ajax functions.
-	*/
-	var DotMenu = function Menu(element) {
-		this.button = $(element);
-		this.menu = null;
-		this.isTableDotMenu = false;
-		this.init();
-	};
-
-	DotMenu.prototype.Selectors_ = {
-		DOT_MENU: '.dot-menu',
-		ACTIVATOR: '.dot-menu__activator',
-		IS_VISIBLE: '.is-visible',
-	};
-
-	DotMenu.prototype.CssClasses_ = {
-		IS_VISIBLE: 'is-visible',
-		BOTTOM_LEFT: 'dot-menu--bottom-left',
-		BOTTOM_RIGHT: 'dot-menu--bottom-right',
-		TOP_LEFT: 'dot-menu--top-left',
-		TOP_RIGHT: 'dot-menu--top-right',
-		TABLE_DOT_MENU: 'dot-menu--table'
-	};
-
-	DotMenu.prototype.positionMenu = function(){
-		var buttonRect = this.button[0].getBoundingClientRect();
-
-		if(this.menu.hasClass(this.CssClasses_.BOTTOM_LEFT)){
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('left', buttonRect.left - parseInt(this.button.css('width'), 10));
-			this.menu.css('transform-origin', 'top right');
-		} else if(this.menu.hasClass(this.CssClasses_.BOTTOM_RIGHT)){
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('left', buttonRect.left - 120);
-			this.menu.css('transform-origin', 'top left');
-		} else if(this.menu.hasClass(this.CssClasses_.TOP_LEFT)){
-			this.menu.css('top', buttonRect.top - 150);
-			this.menu.css('left', buttonRect.right - parseInt(this.button.css('width'), 10));
-			this.menu.css('transform-origin', 'bottom right');
-		} else if(this.menu.hasClass(this.CssClasses_.TOP_RIGHT)){
-			this.menu.css('top', buttonRect.top - 150);
-			this.menu.css('left', buttonRect.left - 120);
-			this.menu.css('transform-origin', 'bottom left');
-		} else {
-			this.menu.css('top', buttonRect.bottom);
-			this.menu.css('transform-origin', 'top');
-		}
-	}
-
-	DotMenu.prototype.show = function(){
-		DotMenu.prototype.positionMenu.bind(this)();
-		this.menu.addClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
-		this.menu.show();
-	}
-
-	DotMenu.prototype.hide = function(){
-		this.menu.removeClass(DotMenu.prototype.CssClasses_.IS_VISIBLE);
-		this.menu.hide();
-	}
-
-	DotMenu.prototype.toggle = function(){
-		if(this.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-			DotMenu.prototype.hide.bind(this)();
-		} else {
-			DotMenu.prototype.show.bind(this)();
-		}
-	}
-
-	DotMenu.prototype.init = function () {
-		var dotMenu = this;
-		var menuId = $(this.button).attr('id') + '-menu';
-
-		this.menu = $('#' + menuId);
-		this.isTableDotMenu = this.menu.hasClass(DotMenu.prototype.CssClasses_.TABLE_DOT_MENU);
-
-		this.button.on('click', function(e) {
-			e.stopPropagation();
-			DotMenu.prototype.toggle.bind(dotMenu)();
-		});
-
-		$(document).on('scroll', function(e) {
-			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-				DotMenu.prototype.positionMenu.bind(dotMenu)();
-			}
-		});
-
-		$(window).on('resize', function(e) {
-			if(dotMenu.menu.hasClass(DotMenu.prototype.CssClasses_.IS_VISIBLE)){
-				DotMenu.prototype.positionMenu.bind(dotMenu)();
-			}
-		});
-
-		$(document).on('click', function(e) {
-			var target = $(e.target);
-			if(!target.is(dotMenu.menu) || !target.is(dotMenu.button)) {
-				if(!$.contains($(dotMenu.menu)[0], e.target)){
-					DotMenu.prototype.hide.bind(dotMenu)();
-				}
-			}
-		});
-	};
-
-	DotMenu.prototype.initAll = function() {
-		$(this.Selectors_.ACTIVATOR).each(function() {
-			this.DotMenu = new DotMenu(this);
-		});
 	};
 
 	/* ==================================
@@ -712,7 +567,7 @@
 	window['EditTopic'] = EditTopic;
 
 	EditTopic.prototype.Selectors_ = {
-		EDIT_TOPIC: '.edit-topic-list .item',
+		EDIT_TOPIC: '#edit-topic-list > div',
 	};
 
 	EditTopic.prototype.Urls_ = {
@@ -741,8 +596,7 @@
 						btnClass: 'btn-blue',
 						action: function(){
 							topic.topicNameInput.prop('disabled', true);
-							topic.editButton.html('<div class="loader"></div>');
-							$('.loader', topic.element).css('display', 'block');
+							topic.editButton.html('<div class="spinner-border text-primary"</div>');
 
 							$.ajax({
 								method: 'PATCH',
@@ -794,7 +648,7 @@
 									topic_id: topic.topicId,
 								},
 								success: function(){
-									topic.element.hide(config.animtions.slow, function() {
+									topic.element.fadeOut(config.animtions.medium, function() {
 										topic.element.remove();
 									});
 								}
@@ -807,10 +661,10 @@
 		},
 
 		createEditTopicDOM: function(topicId, originalName){
-			var elem = $('<li class="item" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-topic" type="submit">Edit</button><button class="button delete-topic button--danger">Delete</button></li>');
-			$(".edit-topic-list").prepend(elem);
+			var elem = $('<div class="col-12 col-md-6 d-flex mt-2" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input class="flex-grow-1" spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="btn ml-1 border border-primary edit-topic" type="submit">Edit</button><button class="btn ml-1 border border-danger delete-topic">Delete</button></div>');
+			$("#edit-topic-list").prepend(elem);
 			elem.hide(0);
-			elem.show(400);
+			elem.fadeIn(config.animtions.medium);
 			EditTopic.prototype.initAll();
 		}
 	};
@@ -847,7 +701,7 @@
 	window['EditProgramme'] = EditProgramme;
 
 	EditProgramme.prototype.Selectors_ = {
-		EDIT_PROGRAMME: '.edit-programme-list .item',
+		EDIT_PROGRAMME: '#edit-programme-list > div',
 	};
 
 	EditProgramme.prototype.Urls_ = {
@@ -876,8 +730,7 @@
 						btnClass: 'btn-blue',
 						action: function(){
 							programme.programmeNameInput.prop('disabled', true);
-							programme.editButton.html('<div class="loader"></div>');
-							$('.loader', programme.element).css('display', 'block');
+							programme.editButton.html('<div class="spinner-border text-primary"</div>');
 
 							$.ajax({
 								method: 'PATCH',
@@ -929,7 +782,7 @@
 									programme_id: programme.programmeId,
 								},
 								success: function(){
-									programme.element.hide(config.animtions.slow, function() {
+									programme.element.fadeOut(config.animtions.medium, function() {
 										programme.element.remove();
 									});
 								}
@@ -942,10 +795,10 @@
 		},
 
 		createEditProgrammeDOM: function(programmeId, originalName){
-			var elem = $('<li class="item" data-programme-id="' + programmeId +'" data-original-programme-name="' + originalName +'"><input spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="button edit-programme" type="submit">Edit</button><button class="button delete-programme button--danger">Delete</button></li>');
-			$(".edit-programme-list").prepend(elem);
+			var elem = $('<div class="col-12 col-md-6 d-flex mt-2" data-programme-id="' + programmeId +'" data-original-programme-name="' + originalName +'"><input class="flex-grow-1" spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="btn ml-1 border border-primary edit-programme" type="submit">Edit</button><button class="btn ml-1 border border-danger delete-programme">Delete</button></div>');
+			$("#edit-programme-list").prepend(elem);
 			elem.hide(0);
-			elem.show(400);
+			elem.fadeIn(config.animtions.medium);
 			EditProgramme.prototype.initAll();
 		}
 	};
@@ -969,6 +822,7 @@
 		if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
 			return;
 		}
+		
 		this.selectedStudent = null;
 		this.selectedSupervisor = null;
 		this.studentTable = $("#2nd-marker-student-table");
@@ -979,7 +833,7 @@
 	};
 
 	Marker.prototype.Urls_ = {
-		ASSIGN_MARKER: 'admin/marker-assign',
+		ASSIGN_MARKER: 'admin/marker',
 	};
 
 	Marker.prototype.selectStudent = function(studentRowDOM, marker){
@@ -1010,7 +864,7 @@
 				marker.selectedStudent.data('student-name'),
 				marker.selectedStudent.data('supervisor-name'),
 				row.data('marker-name'),
-				marker.selectedStudent.data('project'));
+				marker.selectedStudent.data('project-title'));
 		}
 	}
 
@@ -1027,13 +881,11 @@
 		$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Marker.prototype.showDialog = function(studentName, supervisorName, markerName, project){
+	Marker.prototype.showDialog = function(studentName, supervisorName, markerName, projectTitle){
 		$("#student-name").text(studentName);
 		$("#supervisor-name").text(supervisorName);
 		$("#marker-name").text(markerName);
-
-		$("#project-title").html('<b>Title: </b>' + project['title']);
-		$("#project-description").html('<b>Description: </b>' + project['description']);
+		$("#project-title").text(projectTitle);
 
 		$("#assign-dialog")[0].dialog.showDialog();
 	}
@@ -1048,7 +900,7 @@
 
 		$("#assign-dialog")[0].dialog.showLoader();
 
-		var projectId = marker.selectedStudent.data('project')['id'];
+		var projectId = marker.selectedStudent.data('project-id');
 		var studentId = marker.selectedStudent.data('student-id');
 		var markerId = marker.selectedSupervisor.data('marker-id');
 
@@ -1059,11 +911,7 @@
 				project_id: projectId,
 				student_id: studentId,
 				marker_id: markerId,
-
-			},
-			success: function(data){
-
-			},
+			}
 		}).always(function(data){
 			$("#assign-dialog")[0].dialog.hideDialog();
 			$("#assign-dialog")[0].dialog.hideLoader();
@@ -1089,8 +937,8 @@
 		if($("#swap-marker-student-table").length < 1){
 			return;
 		}
-		this.studentA = null;
-		this.studentB = null;
+		this.projectA = null;
+		this.projectB = null;
 		this.markerTable = $("#swap-marker-student-table");
 		this.markerDataTable = this.markerTable[0].dataTable;
 		this.underlay = $('.underlay');
@@ -1098,18 +946,18 @@
 	};
 
 	Swap.prototype.Urls_ = {
-		SWAP_MARKER: 'admin/marker-swap',
+		SWAP_MARKER: 'admin/marker/swap',
 	};
 
 	Swap.prototype.selectStudent = function(studentRowDOM, swap){
 		var row = $(studentRowDOM);
 
-		if(swap.studentA == null){
+		if(swap.projectA == null){
 			row.addClass("is-selected");
-			swap.studentA = $(row);
-		} else if(swap.studentB == null){
-
-			if(row.index() == swap.studentA.index()){
+			swap.projectA = $(row);
+		} else if(swap.projectB == null){
+			// If user clicks same project again, reset the view (Unselect all)
+			if(row.index() == swap.projectA.index()){
 				swap.resetView(swap);
 				return;
 			}
@@ -1119,14 +967,17 @@
 			}
 
 			row.addClass("is-selected");
-			swap.studentB = $(row);
+			swap.projectB = $(row);
 		}
 
-		if(swap.studentA != null){
+		if(swap.projectA != null){
 			$(swap.markerDataTable.bodyRows).each(function (index, student){
-				if(swap.studentA.index() != index) {				
-					if(swap.studentA.data('supervisor-id') == $(student).data('marker-id') ||
-						swap.studentA.data('marker-id') == $(student).data('marker-id')){
+				if(swap.projectA.index() != index) {			
+					debugger;	
+					if(swap.projectA.data('supervisor-id') == $(student).data('marker-id') ||
+						swap.projectA.data('marker-id') == $(student).data('marker-id') ||
+						swap.projectA.data('marker-id') == $(student).data('supervisor-id')
+					){
 						$(student).attr('disabled', true);
 					} else {
 						$(student).attr('disabled', false);
@@ -1135,38 +986,39 @@
 			});
 		}
 
-		if(swap.studentA != null && swap.studentB != null){
+		if(swap.projectA != null && swap.projectB != null){
 			Swap.prototype.showDialog(
-				swap.studentA.data('student-name'),
-				swap.studentB.data('student-name'),
-				swap.studentA.data('marker-name'),
-				swap.studentB.data('marker-name'));
+				swap.projectA.data('student-name'),
+				swap.projectA.data('marker-name'),
+				swap.projectB.data('student-name'),
+				swap.projectB.data('marker-name'));
 		}
 	}
 
 	Swap.prototype.resetView = function(swap){
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 		$(swap.markerDataTable.bodyRows).attr('disabled', false);
-		swap.studentA = null;
-		swap.studentB = null;
+		swap.projectA = null;
+		swap.projectB = null;
 	}
 
 	Swap.prototype.unselectAll = function(swap){
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Swap.prototype.showDialog = function(studentAName, studentBName, studentAMarker, studentBMarker){
-		$("#studentA-name").text(studentAName);
-		$("#studentA-marker").text(studentAMarker);
-		$("#studentB-name").text(studentBName);
-		$("#studentB-marker").text(studentBMarker);
+	Swap.prototype.showDialog = function(projectA_Student, projectA_Marker, projectB_Student, projectB_Marker){
+		$("#projectA-name").text(projectA_Student);
+		$("#projectA-marker").text(projectA_Marker);
+
+		$("#projectB-name").text(projectB_Student);
+		$("#projectB-marker").text(projectB_Marker);
 		$("#swap-dialog")[0].dialog.showDialog();
 	}
 
 	$('#submitSwapMarker').on('click', function(){
 		var swap = window['Swap'];
 
-		if(swap.studentA == null || swap.studentB == null){
+		if(swap.projectB == null || swap.projectB == null){
 			$("#swap-dialog")[0].dialog.hideDialog();
 			return;
 		};
@@ -1177,19 +1029,29 @@
 			type: "PATCH",
 			url: swap.Urls_.SWAP_MARKER,
 			data: {
-				studentA: swap.studentA.data('student-id'),
-				studentB: swap.studentB.data('student-id'),
+				projectA: swap.projectA.data('project-id'),
+				projectB: swap.projectB.data('project-id'),
 			},
 			success: function(response){
 				if(response.successful){
-					var markerATemp = swap.studentA.find('td').eq(3).text();
-					var markerBTemp = swap.studentB.find('td').eq(3).text();
+					// eq.(3) is the marker name
+					var markerAName = swap.projectA.find('td').eq(3).text();
+					var markerAId = swap.projectA.data('marker-id');
 
-					swap.studentA.find('td').eq(3).text(markerBTemp);
-					swap.studentB.find('td').eq(3).text(markerATemp);
+					var markerBName = swap.projectB.find('td').eq(3).text();
+					var markerBId = swap.projectA.data('marker-id');
+
+					swap.projectA.find('td').eq(3).text(markerBName);
+					swap.projectB.find('td').eq(3).text(markerAName);
+
+					swap.projectA.data('marker-id', markerBId);
+					swap.projectB.data('marker-id', markerAId);
+
 					swap.resetView(swap);
 
 					createToast('success', 'Second markers have been swapped.');
+				} else {
+					createToast('error', 'The selected project(s) could not be found.');
 				}
 			},
 		}).always(function(response){
@@ -1217,6 +1079,7 @@
 		if($("#universal-search-input").length < 1){
 			return;
 		}
+
 		this.SearchInput = $("#universal-search-input");
 		this.SearchResults = $("#universal-search-results");
 		this.init();
@@ -1229,7 +1092,6 @@
 	Search.prototype.functions = {
 		get: function(search, searchTerm) {
 			if(searchTerm.length < 2){
-				console.log("more");
 				return;
 			}
 
@@ -1240,53 +1102,48 @@
 					search_term: searchTerm,
 				},
 				success: function(response){
-					if(response.successful){
+					if(response.successful) {
 						var html = "";
 
 						$.each(response.results, function(key, value) {
 							value = JSON.parse(value);
-							html += "<ul>";
+							html += '<ul class="list-unstyled">';
 							html += "<li><b>" + key + "</b></li>";
 
 							if(Array.isArray(value) && value.length > 0) {
 								var resultType = key;
 								$.each(value, function(innerKey, innerValue) {
 									switch(resultType){
-										case "users":
-											html += "<li><a class=\"hover--dark td-none\" href=\"#\">";
-											html += innerValue.first_name + " " + innerValue.last_name;
-											break;
 										case "projects":
-											html += '<li><a class="hover--dark td-none" href="' + config.ajaxBaseUrl + 'projects/' + innerValue.id + '">';
+											html += '<li><a class="btn text-primary w-100 text-left" href="' + config.ajaxBaseUrl + 'projects/' + innerValue.id + '">';
 											html += innerValue.title;
+											html += "</li></a>";
 											break;
 										case "topics":
-											html += '<li><a class="hover--dark td-none" href="' + config.ajaxBaseUrl + 'projects/by-topic/' + innerValue.id + '">';
+											html += '<li><a class="btn text-primary w-100 text-left" href="' + config.ajaxBaseUrl + 'projects/by-topic/' + innerValue.id + '">';
 											html += innerValue.name;
+											html += "</li></a>";
 											break;
 									}
-									html += "</li></a>";
+									
 								});
 							} else {
-								html += "<li>No results found.</li>";
+								html += '<li class="text-muted m-2">No results found.</li>';
 							}
 
 							html += "</ul>";
 						});
 
 						search.SearchResults.html(html);
-					} else {
-
 					}
 				}
 			});
 
-			search.SearchResults.show(config.animtions.slow);
+			search.SearchResults.fadeIn(config.animtions.medium);
 		},
 
 		clear: function(search){
-			search.SearchInput.val('');
-			search.SearchResults.hide(config.animtions.slow);
+			search.SearchResults.fadeOut(config.animtions.medium);
 			search.SearchResults.html('');
 		}
 	}
@@ -1294,7 +1151,11 @@
 	Search.prototype.init = function(){
 		var search = this;
 		$(search.SearchInput).on('keydown change', function() { Search.prototype.functions.get(search, $(this).val()); });
-		$(search.SearchInput).on('blur', function() { Search.prototype.functions.clear(search); });
+		$('body').on('click', function(e){
+			if(e.target != $("#universal-search-results *")){
+				 Search.prototype.functions.clear(search);
+			}
+		});
 	}
 
 	Search.prototype.initAll = function(){
@@ -1335,14 +1196,14 @@
 
 	// Project page search focus
 	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function(e){
-		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
-		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-focus');
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).removeClass('shadow-sm');
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow');
 	});
 
 	// Project page search focus out
 	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function(e){
-		removeAllShadowClasses(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER);
-		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-2dp');
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).removeClass('shadow');
+		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-sm');
 	});
 
 	// SEARCH
@@ -1370,7 +1231,6 @@
 	Marker.prototype.initAll();
 	Swap.prototype.initAll();
 	Search.prototype.initAll();
-	DotMenu.prototype.initAll();
 
 	if(window["showLoginDialog"] == true){
 		window["loginDialog"].showDialog();
