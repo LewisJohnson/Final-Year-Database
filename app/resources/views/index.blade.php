@@ -1,203 +1,270 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered animated-entrance mw-1000" style="position: relative;">
-	@if(Auth::check())
-		<h1 style="text-align: center;">Hello, {{ Auth::user()->first_name }}.</h1>
 
-{{-- 		<div class="search-container shadow-4dp">
-			<input id="universal-search-input" class="search-input" style="flex-grow: 1;" type="text" minlength="3" autocomplete="off" name="searchTerm" placeholder="Search everywhere...">
+@php
+	$helloArray = array("Hello", "Welcome", "Bonjour", "Olá", "Guten tag", "Ahoj", "Merhaba");
+	$randIndex = array_rand($helloArray, 1);
+@endphp
+
+<div class="centered animated-entrance mw-1000 container-fluid">
+	@if(Auth::check())
+		<h1 class="text-center">{{ $helloArray[$randIndex] }}, {{ Auth::user()->first_name }}.</h1>
+
+		<div class="row mt-4">
+			<div class="col-12">
+				<div class="search-container w-100 d-flex shadow-2dp">
+					<input id="universal-search-input" class="search-input flex-grow-1" type="text" minlength="3" autocomplete="off" name="searchTerm" placeholder="Search everywhere...">
+				</div>
+		
+				<div id="universal-search-results" style="display: none" class="p-2 shadow-2dp"></div>
+			</div>
 		</div>
 
-		<div id="universal-search-results"></div> --}}
+		@if(!Session::get('seen-welcome'))
+			@if(Auth::user()->isSupervisor())
+				<div class="card mt-4">
+					<div class="card-body">
+						<h3 class="card-title">@lang("messages_supervisor.homepage_introduction_header")</h3>
+						<p>@lang("messages_supervisor.homepage_introduction_body")</p>
+						
+						<h4>@lang("messages_supervisor.homepage_overview_header")</h4>
+						<p>@lang("messages_supervisor.homepage_overview_body")</p>
+					</div>
+				</div>
+			@endif
 
-		<div class="card-container card--margin-vertical">
-			<div class="card @if(Auth::user()->isStudent() || Auth::user()->isSupervisor()) card--half @endif">
-				<h2>Your Privileges</h2>
-				<p>You are a {{ Auth::user()->getPrettyPrivilegesString() }}.</p>
+			@if(Auth::user()->isStudent())
+				<div class="card mt-4">
+					<div class="card-body">
+						<h3 class="card-title">{{ lang_sess('homepage_introduction_header') }}</h3>
+						<p>{{ lang_sess('homepage_introduction_body') }}</p>
+	
+						<h4>{{ lang_sess('homepage_overview_header') }}</h4>
+						<p>{{ lang_sess('homepage_overview_body') }}</p>
+					</div>
+				</div>
+			@endif
+			{{ Session::put('seen-welcome', true) }}
+		@endif
+
+		<div class="row">
+			<div class="col-12 col-md-6 mt-4 d-flex align-items-stretch">
+				<div class="card w-100">
+					<div class="card-body">
+						<h3 class="card-title">Privileges</h3>
+						<p>You are a {{ Auth::user()->getPrettyPrivilegesString() }}.</p>
+					</div>
+				</div>
 			</div>
 
 			@if(Auth::user()->isStudent())
-				<div class="card card--half">
-					<h2>Options</h2>
-					<p>You may hide your name from other students in the supervisor report.</p>
-					<form id="share-name-form" class="form form--flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
-						{{ csrf_field() }}
-						<div class="form-field">
-							<div class="checkbox">
-								<input onChange="$('#share-name-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
-								<label for="share_name">Share name</label>
+				<div class="col-12 col-md-6 mt-3 mt-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">Options</h3>
+							<p>You may hide your name from other students in the supervisor report.</p>
+							<form id="share-name-form" class="form d-flex" action="{{ action('StudentController@shareName') }}" method="POST" accept-charset="utf-8">
+								{{ csrf_field() }}
+								<div class="form-field">
+									<div class="checkbox">
+										<input onchange="$('#share-name-form').submit();" type="checkbox" name="share_name" id="share_name" @if(Auth::user()->student->share_name) checked @endif >
+										<label class="ml-1" for="share_name">Share name</label>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			@endif
+		
+			@if(Auth::user()->isSupervisor())
+				<div class="col-12 col-md-6 mt-3 mt-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">Options</h3>
+							<p>Here you can change your email preferences.</p>
+							@foreach(get_education_levels() as $educationLevel)
+								<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
+									{{ csrf_field() }}
+			
+									<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
+									<div class="form-field mb-2">
+										<div class="checkbox">
+											<input class="receive-emails-checkbox" type="checkbox" name="accept_emails_{{ $educationLevel["shortName"] }}" id="accept_emails_{{ $educationLevel["shortName"] }}" @if(Auth::user()->supervisor->getAcceptingEmails($educationLevel["shortName"])) checked @endif >
+											<label class="ml-1" for="accept_emails_{{ $educationLevel["shortName"] }}">Receive {{ $educationLevel["longName"] }} emails</label>
+										</div>
+									</div>
+								</form>
+							@endforeach
+						</div>
+					</div>
+				</div>
+			@endif
+		</div>
+
+		@if(Auth::user()->isSupervisor())
+			@include('supervisors.project-report')
+
+			<div class="row mt-3">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h3>
+
+							<div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">Your {{ Session::get('education_level')["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</li>
+					
+									@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
+										<li class="list-group-item">You are accepting {{ Session::get('education_level')["longName"] }} students.</li>
+									@else
+										<li class="list-group-item">You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</li>
+									@endif
+					
+									@if(count(Auth::user()->supervisor->getInterestedStudents()) > 0)
+										<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getInterestedStudents()) }} student(s) are awaiting approval.</li>
+									@else
+										<li class="list-group-item">No students are awaiting approval.</li>
+									@endif
+					
+									@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
+										<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} student(s) have proposed a project to you.</li>
+									@else
+										<li class="list-group-item">No students have currently proposed a project to you.</li>
+									@endif
+					
+									@if(count(Auth::user()->supervisor->getAcceptedStudents()) > 0)
+										<li class="list-group-item">You have accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }} students.</li>
+									@else
+										<li class="list-group-item">You have accepted no students.</li>
+									@endif
+					
+									@if(count(Auth::user()->supervisor->getSecondSupervisingProjects()) > 0)
+										<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondSupervisingProjects()) }} projects.</li>
+									@else
+										<li class="list-group-item">You have not been assigned as second marker to any projects.</li>
+									@endif
+								</ul>
 							</div>
 						</div>
-					</form>
-				</div>
-			@endif
 
-			@if(Auth::user()->isSupervisor())
-				<div class="card card--half">
-					<h2>Options</h2>
-					<p>Here you can change your email preferences.</p>
-					@foreach(get_education_levels() as $educationLevel)
-						<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form form form--flex" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
-							{{ csrf_field() }}
-
-							<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
-							<div class="form-field">
-								<div class="checkbox">
-									<input class="receive-emails-checkbox" type="checkbox" name="accept_emails_{{ $educationLevel["shortName"] }}" id="accept_emails_{{ $educationLevel["shortName"] }}" @if(Auth::user()->supervisor->getAcceptingEmails($educationLevel["shortName"])) checked @endif >
-									<label for="accept_emails_{{ $educationLevel["shortName"] }}">Receive {{ $educationLevel["longName"] }} emails</label>
-								</div>
-							</div>
-						</form>
-					@endforeach
-				</div>
-				@include('supervisors.project-report')
-			@endif
-
-			@if(Session::get('seen-welcome') != true)
-				@if(Auth::user()->isSupervisor())
-					<div class="card">
-						<h2>@lang("messages_supervisor.homepage_introduction_header")</h2>
-						<p>@lang("messages_supervisor.homepage_introduction_body")</p>
-						<h2>@lang("messages_supervisor.homepage_overview_header")</h2>
-						<p>@lang("messages_supervisor.homepage_overview_body")</p>
-					</div>
-				@endif
-
-				@if(Auth::user()->isStudent())
-					<div class="card">
-						<h2>{{ lang_sess('homepage_introduction_header') }}</h2>
-						<p>{{ lang_sess('homepage_introduction_body') }}</p>
-						<h2>{{ lang_sess('homepage_overview_header') }}</h2>
-						<p>{{ lang_sess('homepage_overview_body') }}</p>
-					</div>
-				@endif
-				{{ Session::put('seen-welcome', true) }}
-			@endif
-
-			@if(Auth::user()->isSupervisor())
-				<div class="card card--full">
-					<h2>{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h2>
-
-					<p>Your {{ Session::get('education_level')["longName"] }} student load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</p>
-
-					@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
-						<p>You are accepting {{ Session::get('education_level')["longName"] }} students.</p>
-					@else
-						<p>You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</p>
-					@endif
-
-					@if(count(Auth::user()->supervisor->getIntrestedStudents()) > 0)
-						<p>A total of {{ count(Auth::user()->supervisor->getIntrestedStudents()) }} student(s) are awaiting approval.</p>
-					@else
-						<p>No students are awaiting approval.</p>
-					@endif
-
-					@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
-						<p>A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} student(s) have proposed a project to you.</p>
-					@else
-						<p>No students have currently proposed a project to you.</p>
-					@endif
-
-					@if(count(Auth::user()->supervisor->getAcceptedStudents()) > 0)
-						<p>You have accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }} students.</p>
-					@else
-						<p>You have accepted no students.</p>
-					@endif
-
-					@if(count(Auth::user()->supervisor->getSecondSupervisingStudents()) > 0)
-						<p>You are second marker to {{ count(Auth::user()->supervisor->getSecondSupervisingStudents()) }} students.</p>
-					@else
-						<p>You have not been assigned as second marker to any students.</p>
-					@endif
-
-					<div class="footer">
-						<a class="button--small hover--dark td-none" href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
+						<div class="card-footer">
+							<a href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
+						</div>
 					</div>
 				</div>
-			@endif
+			</div>
+		@endif
 
-			@if(!Auth::user()->isSystemAdmin())
-				<div style="display: none" class="card card--half"></div>
-			@endif
-
+		<div class="row">
 			@foreach(get_education_levels() as $level)
 				@if(Auth::user()->isAdminOfEducationLevel($level["shortName"]))
-					<div class="card card--half">
-						<h2>{{ ucfirst($level["longName"]) }} Administrator</h2>
-						<p>{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator. Take a look at the hub to see what actions you can perform.</p>
-
-						<div class="footer">
-							<a class="button--small hover--dark td-none" href="{{ action('ProjectAdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
+					<div class="col-12 col-md-6 mt-3">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">{{ ucfirst($level["longName"]) }} Administrator</h3>
+								<p>{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator. Take a look at the {{ $level["longName"] }} admin hub to see the actions you can perform.</p>
+			
+							</div>
+							<div class="card-footer">
+								<a href="{{ action('ProjectAdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
+							</div>
 						</div>
 					</div>
 				@endif
 			@endforeach
 
 			@if(Auth::user()->isSystemAdmin())
-				<div class="card card--half">
-					<h2>System Administrator</h2>
-					<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see what actions you can perform.</p>
-
-					<div class="footer">
-						<a class="button--small hover--dark td-none" href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+				<div class="col-12 col-md-6 mt-3">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">System Administrator</h3>
+							<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see the actions you can perform.</p>
+		
+						</div>
+						<div class="card-footer">
+							<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+						</div>
 					</div>
 				</div>
 			@endif
 
 			@if(Auth::user()->isStudent())
-				<div class="card card--margin-vertical">
-					@if(Auth::user()->student->project_status == 'selected'|| Auth::user()->student->project_status == 'proposed')
-						<a class="button button--danger student-undo-select fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
-					@endif
-
-					@if(Auth::user()->student->project_status == 'proposed')
-						<h2 style="width: 90%;">Your Proposed Project</h2>
-					@else
-						<h2 style="width: 90%;">Your Project</h2>
-					@endif
-					<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
-
-					@if(Auth::user()->student->project_status != 'none')
-						@include ('projects.partials.student-project-preview', array('project'=> Auth::user()->student->project))
-					@endif
+				<div class="col-12 mt-3">
+					<div class="card">
+						<div class="card-body">
+							@if(Auth::user()->student->project_status == 'selected'|| Auth::user()->student->project_status == 'proposed')
+								<a id="student-undo-select" class="btn btn-danger text-white fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
+							@endif
+			
+							@if(Auth::user()->student->project_status == 'proposed')
+								<h3 class="card-title">Your Proposed Project</h3>
+							@else
+								<h3 class="card-title">Your Project</h3>
+							@endif
+							<p><b>Status:</b> {{ Auth::user()->student->getStatusString() }}</p>
+			
+							@if(Auth::user()->student->project_status != 'none')
+								@include ('projects.partials.student-project-preview', array('project'=> Auth::user()->student->project))
+							@endif
+						</div>
+					</div>
 				</div>
 
 				@if(count(Auth::user()->student->getProposedProjectsWithoutSupervisor()) > 0 && Auth::user()->student->project_status == 'none')
-					<div style="width: 100%;" class="card fancy-page card--margin-vertical">
-						<h2 style="margin-bottom: 5px;">Your Proposed Projects</h2>
-						<p style="margin-top: 0;" class="subtitle">Without a supervisor.</p>
-
-						@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
-							<div class="proposed-project flex flex--row">
-								<a class="title" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
-								<a class="ml-auto button" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Re-propose</a>
+					<div class="col-12 mt-3">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">Your Proposed Projects</h3>
+								<h6 class="card-subtitle mb-2 text-muted">Without a supervisor</h6>
+		
+								<div class="row">
+									@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
+										<div class="col-12 col-md-6 mb-2">
+											<div class="d-flex">
+												<a class="w-75 d-inline-block text-truncate" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+																						
+												<div class="ml-auto">
+													<a class="btn btn-sm btn-secondary" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Re-propose</a>
+												</div>
+											</div>
+										</div>
+									@endforeach
+								</div>
 							</div>
-						@endforeach
+						</div>
 					</div>
 				@endif
 
-				<div style="width: 100%;" class="fancy-page card card--margin-vertical">
-					<h2>Your Favourite Projects</h2>
-					@if($projects = Auth::user()->student->getFavouriteProjects())
-						<div class="favourite-projects flex flex--row flex--wrap">
-							@foreach($projects as $project)
-								<div>
-									<div class="favourite-container index cursor--pointer" data-project-id="{{ $project->id }}">
-										<svg class="favourite" title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24">
-											<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
-										</svg>
-										<div class="loader loader--tiny"></div>
-									</div>
-									<a href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+				<div class="col-12 mt-3">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">Your Favourite Projects</h3>
+							@if($projects = Auth::user()->student->getFavouriteProjects())
+								<div class="row">
+									@foreach($projects as $project)
+										<div class="col-12 col-md-6 mb-2">
+											<div class="border p-2 bg-light">
+												<a class="w-75 d-inline-block text-truncate" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+
+												<div class="favourite-container cursor--pointer" data-project-id="{{ $project->id }}">
+													<svg class="favourite" title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24">
+														<polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"></polygon>
+													</svg>
+													<div class="spinner-grow text-warning" style="display: none"></div>
+												</div>
+											</div>
+										</div>
+									@endforeach
 								</div>
-							@endforeach
+							@else
+								<p class="subtitle" title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
+							@endif
 						</div>
-					@else
-						<p class="subtitle" title="Simply press the star in the upper right corner on a project page to add it to your favourites.">You haven't added any projects to your favourites yet.</p>
-					@endif
+					</div>
 				</div>
-			</div>
-		@endif
+			@endif
+		</div>
 	@else
 		@if(ldap_guest())
 			<h1>Hello, Guest.</h1>
@@ -205,12 +272,22 @@
 				<p>You are in Guest Mode. This means you are a member of the University of Sussex, however, you do not have an account on the system. You can only perform basic tasks such as browsing projects.</p>
 			</div>
 		@else
-			<h1>Welcome.</h1>
-			<div class="card card--margin-vertical">
-				<h2>@lang("messages.homepage_introduction_header")</h2>
-				<p>@lang("messages.homepage_introduction_body")</p>
-				<h2>@lang("messages.homepage_overview_header")</h2>
-				<p>@lang("messages.homepage_overview_body")</p>
+			<div class="row">
+				<div class="col-12">
+					<h1 class="text-center">Hello.</h1>
+	
+					<div class="mt-4">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">@lang("messages.homepage_introduction_header")</h3>
+								<p>@lang("messages.homepage_introduction_body")</p>
+			
+								<h4>@lang("messages.homepage_overview_header")</h4>
+								<p>@lang("messages.homepage_overview_body")</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		@endif
 	@endif
