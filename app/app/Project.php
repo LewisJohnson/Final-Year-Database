@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\ProjectController
  */
-class Project extends Model{
+class Project extends Model {
 	use Traits\Uuids;
 
 	/**
@@ -98,12 +98,21 @@ class Project extends Model{
 	}
 
 	/**
-	 * Returns the project's supervisor (Owner)
+	 * Returns the project's supervisor
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function supervisor(){
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
+	}
+
+	/**
+	 * Returns the project's second marker.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
+	 */
+	public function marker(){
+		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
 	/**
@@ -113,6 +122,15 @@ class Project extends Model{
 	 */
 	public function student(){
 		return $this->belongsTo(Student::class, 'student_id', 'id');
+	}
+
+	/**
+	 * This should only be called on student proposed projects.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function evaluation(){
+		return $this->hasOne(ProjectEvaluation::class, 'project_id', 'id');
 	}
 
 	/**
@@ -158,22 +176,35 @@ class Project extends Model{
 	 */
 	public function isOwnedByUser(){
 		if(Auth::user()->isSupervisor() && $this->status != "student-proposed"){
-			return $this->supervisor_id === Auth::user()->supervisor->id;
+			return $this->supervisor_id === Auth::user()->id;
 		} elseif(Auth::user()->isStudent()) {
-			return $this->student_id === Auth::user()->student->id;
+			return $this->student_id === Auth::user()->id;
 		}
 
 		return false;
 	}
 
 	/**
-	 * Determines if current user is supervisor of project.
+	 * Determines if current user is a supervisor of the project.
 	 *
 	 * @return boolean
 	 */
 	public function isUserSupervisorOfProject(){
 		if(Auth::user()->isSupervisor()){
-			return $this->supervisor_id === Auth::user()->supervisor->id;
+			return $this->supervisor_id === Auth::user()->id;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determines if current user is a second marker of the project.
+	 *
+	 * @return boolean
+	 */
+	public function isUserMarkerOfProject(){
+		if(Auth::user()->isSupervisor()){
+			return $this->marker_id === Auth::user()->id;
 		}
 
 		return false;
