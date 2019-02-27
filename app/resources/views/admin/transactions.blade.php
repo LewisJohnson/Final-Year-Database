@@ -3,20 +3,21 @@
 <div class="centered mw-1400">
 	<h1>{{ $transaction_type }} Transactions</h1>
 
-	<div class="button-group margin-children--horizontal" style="position: relative;">
-		<a class="button external-link @if($transaction_type == "Project") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
-		<a class="button external-link @if($transaction_type == "Student") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
-		<a class="button external-link @if($transaction_type == "Marker") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
-		<a class="button external-link @if($transaction_type == "Topic") {{'button--accent'}} @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
+	<div class="d-flex">
+		<a class="btn external-link @if($transaction_type == "Project") {{'btn-primary'}} @else btn-light @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
+		<a class="btn external-link ml-2 @if($transaction_type == "Student") {{'btn-primary'}} @else btn-light @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
+		<a class="btn external-link ml-2 @if($transaction_type == "Marker") {{'btn-primary'}}  @else btn-light @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
+		<a class="btn external-link ml-2 @if($transaction_type == "Topic") {{'btn-primary'}}   @else btn-light @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
 
-		<div class="checkbox" style="position: absolute; top: 65px; left: 0px">
-			<input type="checkbox" id="showTransactionDetailOnHover" checked>
-			<label style="margin-left: 5px;" for="showTransactionDetailOnHover">Enable detail on hover</label>
+		<div class="checkbox ml-auto">
+			<input type="checkbox" id="showTransactionDetailOnHover">
+			<label class="ml-1" for="showTransactionDetailOnHover">Enable detail on hover</label>
 		</div>
 	</div>
 
-	<div class="table-responsive" id="responsive-table">
-		<table id="transaction-table" class="data-table table-column-toggle table--dark-head sort-table shadow-2dp">
+
+	<div class="table-responsive">
+		<table id="transaction-table" class="table table-sm bg-white data-table table-column-toggle sort-table shadow-sm mt-3">
 			<thead>
 				<tr>
 					<th data-default="false" class="cursor--pointer">Id</th>
@@ -35,11 +36,29 @@
 						<td data-hover="{{ $transaction->id }}">{{ substr($transaction->id, 0, 7) }}</td>
 						<td>{{ ucfirst($transaction->action) }}</td>
 
-						@if($transaction->getProjectTitle() != '-')
-							<td data-hover="{{ $transaction->project }}"><a href="{{ action('ProjectController@show', $transaction->project) }}">{{ $transaction->getProjectTitle() }}</a></td>
+						@if($transaction->action == "copy")
+							@php
+								$splitProj = explode('->', $transaction->project);
+								$originalProject = \SussexProjects\Project::find(trim($splitProj[0]));
+								$copiedProject =  \SussexProjects\Project::find(trim($splitProj[1]));
+							@endphp
+
+							<td data-hover="{{ $transaction->project }}">
+								<a href="{{ action('ProjectController@show', $originalProject) }}">{{ $originalProject->title }}</a>
+								<span>⮕</span>
+								<a href="{{ action('ProjectController@show', $copiedProject) }}">{{ $copiedProject->title }}</a>
+							</td>
 						@else
-							<td data-hover="{{ $transaction->project }}">{{ $transaction->getProjectTitle() }}</td>
+							@php
+								$projTitle = $transaction->getProjectTitle();
+							@endphp
+							@if($projTitle != '-')
+								<td data-hover="{{ $transaction->project }}"><a href="{{ action('ProjectController@show', $transaction->project) }}">{{ $projTitle }}</a></td>
+							@else
+								<td data-hover="{{ $transaction->project }}">{{ $projTitle }}</td>
+							@endif
 						@endif
+
 						<td data-hover="{{ $transaction->student }}">{{ $transaction->getName($transaction->student) }}</td>
 						<td data-hover="{{ $transaction->supervisor }}">{{ $transaction->getName($transaction->supervisor) }}</td>
 						<td data-hover="{{ $transaction->marker }}"	>{{  $transaction->getName($transaction->marker) }}</td>
@@ -50,7 +69,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+		
 	{{ $transactions->links() }}
 </div>
 @endsection
