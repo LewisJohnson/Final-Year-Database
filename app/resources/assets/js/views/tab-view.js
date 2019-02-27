@@ -14,23 +14,10 @@
 	var buttons = tabs.find("> button");
 	var contentHost = $(".content-host");
 	var firstTabSelected = true;
-	var helpTabShown = false;
 	var previousTab = null;
 	var previousTabIndex = null;
 	var previousHeight = null;
-	var helpFooterSnippet = null;
 	
-	// Get help footer snippet using ajax
-	if(tabContainer.data("help-footer") && config.showHelpFooter){
-		$.ajax({
-			url: 'snippet?snippet=card-help-footer',
-			type:'GET',
-			success:function(result){
-				helpFooterSnippet = result;
-			},
-		});
-	}
-
 	$(".open-tab").on('click', function() {
 		var currentTab = $(this).parent();
 		var currentContent = currentTab.find(".content");
@@ -97,7 +84,7 @@
 				tabsContent.attr("aria-hidden", "true");
 
 				// Remove accent and blur (unfocus) all other buttons
-				buttons.removeClass("button--accent");
+				buttons.removeClass("btn-primary");
 				buttons.blur();
 
 				// ARIA
@@ -106,19 +93,7 @@
 
 				tabs.removeClass("selected");
 
-				$(this).addClass("button--accent");
-
-				// If settings allow footer
-				if(tabContainer.data("help-footer") && config.showHelpFooter){
-					// If not the first tab and tab not already shown
-					if(!firstTabSelected && !helpTabShown){
-						// If AJAX request was successful
-						if(helpFooterSnippet != null){
-							tabCard.append(helpFooterSnippet);
-							helpTabShown = true;
-						}
-					}
-				}
+				$(this).addClass("btn-primary");
 
 				if (typeof(Storage) !== "undefined") {
 					sessionStorage.setItem(tabContainer.data("cookie-name"), currentTab.data("tab-name"));
