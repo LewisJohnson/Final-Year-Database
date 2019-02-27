@@ -66,15 +66,6 @@ class StudentController extends Controller{
 	}
 
 	/**
-	 * Returns the first student in the DB without a second marker.
-	 *
-	 * @return Student The next student without a second marker assigned to them.
-	 */
-	public static function getStudentWithoutSecondMarker(){
-		return $student = Student::whereNull('marker_id')->first();
-	}
-
-	/**
 	 * The student report view.
 	 *
 	 * @return \Illuminate\View\View
@@ -491,7 +482,7 @@ class StudentController extends Controller{
 		DB::transaction(function() use ($student, $projectId){
 			$transaction = new Transaction;
 			$transaction->fill(array(
-				'type' => 'project',
+				'type' => 'student',
 				'action' =>'undo',
 				'project' => $student->project->id,
 				'student' => $student->id,
@@ -561,8 +552,8 @@ class StudentController extends Controller{
 			));
 
 			$transaction->save();
-			$student->marker_id = $marker->id;
-			$student->save();
+			$project->marker_id = $marker->id;
+			$project->save();
 		});
 
 		return response()->json(array('successful' => true));
