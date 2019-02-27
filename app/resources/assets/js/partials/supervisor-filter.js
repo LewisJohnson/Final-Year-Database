@@ -15,7 +15,7 @@
 
 	function filterSupervisors(){
 		var searchValue = input.val().trim().toLowerCase();
-		$(".no-results").remove();
+		$("#no-results").remove();
 
 		if(searchValue == ""){
 			$('.supervisor-row').show();
@@ -35,9 +35,10 @@
 
 			if(!isSupeervisorVisible){
 				$('.main-content > div').append(
-					'<div class="config-note no-results">' +
-						'<p class="text-icon">&#128270;</p>' +
-						'<p>No results found.</p>' +
+					'<div id="no-results" class="alert alert-secondary mt-2" role="alert">' +
+						'<span>&#128270;</span>' +
+						'<span class="ml-2">No results found.</span>' +
+						'</span>' +
 					'</div>');
 			}
 		}
