@@ -75,11 +75,8 @@ class MailableTest extends TestCase{
 		$this->assertTrue($response->isOk(), "Something went wrong.");
 
 
-		dd($response);
-
 		// Perform order shipping...
 		Mail::assertSent(StudentSelected::class, function ($mail) {
-			dd($mail);
 			return $mail->order->id === $order->id;
 		});
 

@@ -20,7 +20,6 @@ class LastLoginUpdateTest extends UserCase{
      */
     public function testLastLoginUpdate()
     {
-        dd($this->user);
         $this->assertTrue(true);
     }
 }
