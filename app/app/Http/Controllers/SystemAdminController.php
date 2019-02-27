@@ -30,8 +30,9 @@ class SystemAdminController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function feedback(){
+		$feedback = Feedback::orderBy('date', 'desc')->paginate(25);
 		return view('admin.feedback')
-			->with('feedback', Feedback::orderBy('date', 'desc')->get());
+			->with('feedback', $feedback);
 	}
 
 	/**
@@ -41,7 +42,10 @@ class SystemAdminController extends Controller{
 	 */
 	public function destroyFeedback(Request $request){
 		Feedback::find($request->feedback_id)->delete();
-		return view('admin.feedback')->with('feedback', Feedback::orderBy('date', 'desc')->get());
+
+		return response()->json(array(
+			'successful' => true
+		));
 	}
 
 	/**
