@@ -46,26 +46,6 @@ ul.topics-list {
 			background: lighten($topic-bg, 10%);
 		}
 	}
-
-	.no-topics {
-		background: $error-bg;
-		border-radius: 2px;
-		padding: 8px;
-		padding-top: 0;
-		color: white;
-		opacity: 0.2;
-		@include transition--medium();
-
-		&:hover {
-			opacity: 0.8;
-		}
-
-		svg, p {
-			display: inline-block;
-			margin: 0;
-			color: inherit;
-		}
-	}
 }
 
 .topics-list.edit, .topics-list.create {
