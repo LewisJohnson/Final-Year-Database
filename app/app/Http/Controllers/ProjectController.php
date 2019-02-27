@@ -20,11 +20,11 @@ use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Mail\SupervisorEditedProposedProject;
 use SussexProjects\Project;
 use SussexProjects\ProjectTopic;
+use SussexProjects\Student;
 use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
-
 
 /**
  * The project controller.
@@ -355,7 +355,7 @@ class ProjectController extends Controller{
 		// Has the supervisor forgotten to remove the archive text?
 		if (strpos($input->description, '(++ In') !== false) {
 			session()->flash('message', 'Have you forgotten to remove the archive text?');
-			session()->flash('message_type', 'error');
+			session()->flash('message_type', 'warning');
 			return redirect()->action('ProjectController@edit', $project);
 		}
 
@@ -411,6 +411,59 @@ class ProjectController extends Controller{
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('ProjectController@show', $project);
+	}
+
+	/**
+	 * Creates a copy of the specified resource.
+	 *
+	 * @param Project     $project
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function copy(Project $project){
+		if(!($project->isOwnedByUser() || $project->isUserSupervisorOfProject())){
+			session()->flash('message', 'You are not allowed to copy of "'.$project->title.'".');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@show', $project);
+		}
+
+		if($project->status == "student-proposed"){
+			session()->flash('message', 'You are not allowed to create a copy of a student proposal.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectController@show', $project);
+		}
+
+		$newProject = DB::Transaction(function() use ($project){
+			$newProject = new Project;
+			$transaction = new Transaction;
+
+			$newProject->fill(array(
+				'title' => $project->title." (Copied)",
+				'description' => $project->description,
+				'status' => 'withdrawn',
+				'skills' => $project->skills
+			));
+
+			$newProject->supervisor_id = $project->supervisor_id;
+			$newProject->save();
+
+			$transaction->fill(array(
+				'type' => 'project',
+				'action' => 'copy',
+				'project' => $project->id." -> ".$newProject->id,
+				'supervisor' => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon
+			));
+
+			$transaction->save();
+
+			return $newProject;
+		});
+
+		session()->flash('message', '"'.$newProject->title.'" has been copied.');
+		session()->flash('message_type', 'success');
+
+		return redirect()->action('ProjectController@show', $newProject);
 	}
 
 	/**
@@ -482,7 +535,7 @@ class ProjectController extends Controller{
 	public function showTopics(){
 		$topics = Topic::all();
 
-		return view('projects.topics')->with('topics', $topics);
+		return view('projects.by-topic')->with('topics', $topics);
 	}
 
 	/**
@@ -493,9 +546,12 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function byTopic(Topic $topic){
+		$topics = $topic->getProjectsOnOffer();
+
 		return view('projects.index')
-			->with('projects', $topic->getProjectsOnOffer())
-			->with('topic', $topic)->with('view', 'topic');
+			->with('projects', $topics)
+			->with('topic', $topic)
+			->with('view', 'topic');
 	}
 
 	/**
@@ -506,7 +562,7 @@ class ProjectController extends Controller{
 	public function showSupervisors(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
-		return view('projects.supervisors')->with('supervisors', $supervisors);
+		return view('projects.by-supervisor')->with('supervisors', $supervisors);
 	}
 
 	/**
@@ -688,5 +744,22 @@ class ProjectController extends Controller{
 
 		// Fallback
 		return redirect()->action('ProjectController@index');
+	}
+
+	/**
+	 * Returns the first accepted project without a second marker.
+	 *
+	 * @return Project The next accepted project without a second marker.
+	 */
+	public static function getAccetpedProjectWithoutSecondMarker(){
+		$project = new Project;
+		$student = new Student;
+
+		$proj = Project::join($student->getTable().' as student', $project->getTable().'.id', '=', 'student.project_id')
+			->where('student.project_status', 'accepted')
+			->whereNull($project->getTable().'.marker_id')
+			->first();
+
+		return $proj;
 	}
 }
