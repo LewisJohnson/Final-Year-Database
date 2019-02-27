@@ -11,7 +11,7 @@
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
 
-		<div class="button-group margin-children--horizontal">
+		<div class="d-flex mt-3">
 			@if(isset($_GET["unique"]))
 				<a class="chip external-link" data-element-to-replace-with-loader-selector="#user-agent-table" data-element-to-hide-selector=".search-container, .button-group--links" href="{{ action('SystemAdminController@userAgentView')}}">Only first visits</a>
 			@else
@@ -20,13 +20,12 @@
 		</div>
 
 		@if(!get_config_json('user_agent.collect_referrer.value'))
-			<div class="config-tip">
-				<p class="text-icon">&#128161;</p>
-				<p>Referral URLs are currently not being collected. You can turn it back on in the system dashboard.</p>
+			<div class="alert alert-info mt-3">
+				<span>&#128161;</span><span class="ml-2">Referral URLs are currently not being collected. You can turn it back on in the system dashboard.</span>
 			</div>
 		@endif
 
-		<table id="user-agent-table" class="data-table shadow-2dp" style="text-align: left">
+		<table id="user-agent-table" class="table data-table shadow-2dp">
 			<thead>
 				<tr>
 					<th>User Agent</th>
@@ -45,9 +44,9 @@
 		<div style="margin: 1rem auto" class="loader loader--medium user-agent"></div>
 	</div>
 @else
-	<div class="centered mw-800 fancy-page">
+	<div class="centered mw-800 text-center">
 		<h1>User agent string collection is disabled.</h1>
-		<p class="subtitle">You can turn it back on in the <a href="{{ action('SystemAdminController@systemDashboardView') }}">system dashboard</a>.</p>
+		<p class="text-muted">You can turn it back on in the <a href="{{ action('SystemAdminController@systemDashboardView') }}">system dashboard</a>.</p>
 	</div>
 @endif
 
