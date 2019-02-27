@@ -8,7 +8,7 @@
 	"use strict";
 	var dontRemindAgain = false;
 
-	$(".delete-feedback").on('click', function(e){
+	$(".js-delete-feedback").on('click', function(e){
 		e.preventDefault();
 		var deleteButton = $(this);
 
@@ -46,6 +46,7 @@
 	});
 
 	function deleteFeedback(button){
+		debugger;
 		$.ajax({
 			url: button.prop('href'),
 			type: 'DELETE',
@@ -55,7 +56,7 @@
 			success:function(){
 				createToast('', "Feedback deleted");
 				
-				button.parent().parent().hide(config.animtions.slow, function() {
+				button.parent().parent().hide(config.animtions.medium, function() {
 					button.parent().parent().remove();
 				});
 			}
