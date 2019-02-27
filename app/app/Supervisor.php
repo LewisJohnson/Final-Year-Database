@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -120,7 +120,7 @@ class Supervisor extends Model{
 	}
 
 	/**
-	 * Sets the project load of the supervisor (Student load).
+	 * Sets the project load of the supervisor.
 	 *
 	 * @param Int    $value          The project load
 	 * @param String $educationLevel An optional education level parameter
@@ -169,7 +169,7 @@ class Supervisor extends Model{
 	}
 
 	/**
-	 * The project load of the supervisor (Student load).
+	 * The project load of the supervisor.
 	 * NOTICE: The return value is dynamic, depending on session education level.
 	 *
 	 * @param String $educationLevel An optional education level parameter
@@ -222,7 +222,7 @@ class Supervisor extends Model{
 	 *
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
-	public function getIntrestedStudents(){
+	public function getInterestedStudents(){
 		$project = new Project;
 		$student = new Student;
 		$user = new User;
@@ -309,14 +309,14 @@ class Supervisor extends Model{
 	 *
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
-	public function getSecondSupervisingStudents(){
-		$students = Student::where('marker_id', $this->id)->get();
+	public function getSecondSupervisingProjects(){
+		$projects = Project::where('marker_id', $this->id)->get();
 		$offers = array();
 
-		foreach($students as $key => $student){
+		foreach($projects as $project){
 			$ar = array();
-			$ar["student"] = $student;
-			$ar["project"] = $student->project;
+			$ar["student"] = $project->student;
+			$ar["project"] = $project;
 			array_push($offers, $ar);
 		}
 
@@ -422,7 +422,7 @@ class Supervisor extends Model{
 		$return .= '?bcc=';
 
 		foreach($supervisors as $key => $supervisor){
-			if(count($supervisor->getStudentProjectProposals()) > 0 || count($supervisor->getIntrestedStudents()) > 0){
+			if(count($supervisor->getStudentProjectProposals()) > 0 || count($supervisor->getInterestedStudents()) > 0){
 				$return .= $supervisor->user->email;
 				$return .= ',';
 			}
