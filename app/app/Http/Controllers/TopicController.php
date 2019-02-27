@@ -33,7 +33,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request){
-		if(strlen($request->topic_name) < 3){
+		if(strlen($request->topic_name) < 2){
 			return false;
 		}
 
@@ -64,7 +64,7 @@ class TopicController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request){
-		if(strlen($request->topic_name) < 3){
+		if(strlen($request->topic_name) < 2){
 			return false;
 		}
 
