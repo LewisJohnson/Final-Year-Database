@@ -3,13 +3,25 @@
 
 <div class="centered mw-800">
 
+	@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))
+		<div class="alert alert-danger" role="alert">
+			You may not propose a project until {{ SussexProjects\Mode::getProjectSelectionDate(true) }}.
+		</div>
+		
+		<script>
+			$(function() {
+				$('.form-field *').prop('disabled', true);
+			});
+		</script>
+	@endif
+
 	<div class="card">
-		<h1>Propose Project</h1>
+		<div class="card-header">Propose Project</div>
 		@include('forms.new-project', ['user_type' => 'student'])
 	</div>
 
-	<div class="button-group margin-children--horizontal">
-		<a class="button button--raised" href="javascript:history.back()">Back</a>
+	<div class="mt-3">
+		<a class="btn btn-secondary" href="javascript:history.back()">Back</a>
 	</div>
 </div>
 @endsection
