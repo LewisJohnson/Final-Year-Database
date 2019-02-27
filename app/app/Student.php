@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -132,15 +132,6 @@ class Student extends Model{
 	 */
 	public function project(){
 		return $this->hasOne(Project::class, 'id', 'project_id');
-	}
-
-	/**
-	 * The students second marker.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
-	 */
-	public function marker(){
-		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
 	/**
