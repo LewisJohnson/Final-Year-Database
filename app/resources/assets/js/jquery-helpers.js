@@ -40,7 +40,7 @@ $(function() {
 		* 
 		* Only shown if a student has selected, proposed or been accepted for a project.
 	*/
-	$("body").on("click", ".show-more",  function(e) {
+	$("body").on("click", "#expand-student-project-preview",  function(e) {
 		$(this).hide();
 		$('.project').addClass('expand');
 	});
@@ -74,7 +74,7 @@ $(function() {
 		*
 		* Hides banner when clicked.
 	*/
-	$(".cookie-banner").on("click", "button",  function(e) {
+	$("#cookie-banner").on("click", "button",  function(e) {
 		setCookie('seen_cookie_banner', true, 365);
 		$(this).parent().hide(config.animtions.medium);
 	});
@@ -111,10 +111,9 @@ $(function() {
 		*
 		* Used as an easy way for functions to get current project data from other JS files.
 	*/
-	if($('.project-card').length > 0){
-		window['project'] = $('.project-card');
+	if($('.js-project').length > 0){
+		window['project'] = $('.js-project');
 	}
-
 
 	$('.sort-table thead tr th').on('click', function() {
 		sortTable($(this), $(this).closest('table'));

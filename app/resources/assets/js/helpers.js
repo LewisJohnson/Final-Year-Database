@@ -40,19 +40,6 @@ function createToast(type, message){
 	}, 4000);
 }
 
-
-/**
- * Removes all shadow classes from DOM element.
- *
- * @param {Object} element
- */
-function removeAllShadowClasses(element){
-	$(element).removeClass (function (index, className) {
-		return (className.match (/\bshadow\-\S+/g) || []).join(' ');
-	});
-}
-
-
 function addLastNameHeadersToList(ul) {
 	var listItems = $("li", ul);
 	var links = $('#' + ul.attr('id') + '-links');
@@ -67,7 +54,7 @@ function addLastNameHeadersToList(ul) {
 
 		if(i == 0){
 			$(listItems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 			continue;
 		}
 
@@ -79,7 +66,7 @@ function addLastNameHeadersToList(ul) {
 
 		if(firstCharOflastName != prevfirstCharOflastName){
 			$(listItems[i]).before("<li class='alpha-header' id='" + ul.attr('id') + "-" + firstCharOflastName + "'><h4>" + firstCharOflastName + "</h4</li>");
-			links.append("<a class='blue-link' href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
+			links.append("<a href='#" + ul.attr('id') + "-" + firstCharOflastName + "'>"+ firstCharOflastName +"</a>");
 		}
 	}
 }
