@@ -27,7 +27,6 @@
 	text-decoration: none;
 }
 
-
 %config-message {
 	padding: 8px 16px;
 	margin: 5px 0;
@@ -139,15 +138,7 @@
 	}
 }
 
-.icon {
-	p, h1, h2, h3, h4, h5, h6 {
-		display: inline-block;
-	}
-
-	p {
-		margin: 0;
-	}
-
+.btn {
 	.svg-container {
 		svg {
 			width: 20px;
@@ -242,28 +233,6 @@
 	}
 }
 
-.archive-list {
-	list-style: none;
-
-	li {
-		width: calc(50% - 10px);
-		padding: 1rem;
-		margin: 5px;
-	}
-
-	.archive-red {
-		border: 1px solid #d9534f;
-		border-radius: 2px;
-
-	}
-
-	.archive-blue {
-		border: 1px solid #1094ff;
-		border-radius: 2px;
-
-	}
-}
-
 .delete-user {
 	color: red;
 	float: right;
@@ -336,15 +305,6 @@
 
 .fr {
 	float: right;
-}
-
-// MARGINS
-.ml-auto {
-	margin-left: auto !important
-}
-
-.mr-auto {
-	margin-right: auto !important
 }
 
 .centered {
