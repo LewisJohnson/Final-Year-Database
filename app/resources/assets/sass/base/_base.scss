@@ -1,26 +1,18 @@
 /*!
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-body {
-	position: relative;
-
-	// Makes sure footer is always on the bottom
-	min-height: calc(100% - 50px);
-	margin: 0 0 50px;
-}
-
-// Normalise
-ul {
-	padding: 0;
-	margin: 0;
-}
-
 html {
-	height: 100%;
-	box-sizing: border-box;
+	position: relative;
+	min-height: 100%;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
 }
 
 code {
@@ -29,61 +21,39 @@ code {
 	display: inline-block;
 }
 
-*, *:before, *:after {
-	box-sizing: inherit;
+ins {
+	color: darkgray;
+	text-decoration: none;
 }
 
 .main-content {
-	@include transition--medium();
 	padding: 3rem 0;
+	margin-bottom: 3rem;
 }
 
-.cookie-banner {
-	padding: 1rem;
-	background: darken($space-grey, 5%);
 
-	a, p, button {
-		color: white;
+@media print {
+	.container {
+		width: auto;
 	}
 
-	a, p {
-		padding-right: 1rem;
-		margin: 0;
+	.card {
+		border: 0 !important;
 	}
 
-	button {
-		margin-left: auto;
-	}
-}
-
-.fancy-page {
-	> h1 {
-		font-weight: 400;
-		text-align: center;
+	body {
+		background-color: white !important;
 	}
 
-	> h2 {
-		font-weight: 300;
-		text-align: center;
+	.main-content {
+		padding: 0 !important;
+	}
+	
+	.main-content > div {
+		max-width: unset !important;
 	}
 
-	.subtitle {
-		text-align: center;
-	}
-}
-
-.pagination {
-	display: block;
-	width: 100%;
-	text-align: center;
-	margin-top: 1rem;
-
-	.page-item {
-		display: inline-block;
-		padding: 4px;
-
-		&.active {
-			color: rgb(103, 114, 229);
-		}
+	.btn, .search-container {
+		display: none !important;
 	}
 }

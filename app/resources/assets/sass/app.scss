@@ -31,19 +31,14 @@
 @import "helpers/helpers";
 @import "helpers/animations";
 @import "helpers/buttons";
-@import "helpers/flex";
 @import "helpers/inputs";
-@import "helpers/lists";
-@import "helpers/loader";
 @import "helpers/sizing";
-@import "helpers/text";
 @import "helpers/search";
 
 // Base
 @import "base/base";
 @import "base/forms";
 @import "base/footer";
-@import "base/typography";
 
 // Views
 @import "views/hub";
@@ -55,12 +50,14 @@
 // Partials
 @import "partials/tables";
 @import "partials/header";
-@import "partials/notification";
 @import "partials/topics";
+@import "partials/notification";
 @import "partials/project-preview";
 @import "partials/shadows";
-@import "partials/cards";
+@import "variables";
 
 // Media
 @import "media/mobile";
 
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';

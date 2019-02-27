@@ -22,29 +22,17 @@
 	.mobile-menu-container {
 		visibility: hidden;
 		max-width: 0;
+		display: none;
 	}
 
 	header {
 		padding: 5px 10px;
-
-		.logo-container {
-			visibility: visible;
-			top: 0px;
-			left: 0px;
-			opacity: 1;
-			z-index: 8;
-			margin-right: 20px;
-		}
 
 		> a {
 			h1 {
 				font-size: 140%;
 			}
 		}
-	}
-
-	.card--half {
-		width: 49%;
 	}
 
 	// Tab
@@ -127,75 +115,15 @@
 		overflow-x: auto;
 	}
 
-	.table-action-header, .table-action {
-		display: none;
-	}
-
-	.table-mobile-menu-header, .table-mobile-menu {
-		display: table-cell;
-	}
-
 	.main-content {
 		padding: 0 1rem;
 		padding-bottom: 7rem !important;
 		overflow-x: auto;
 	}
 
-	.section-container {
-		flex-wrap: wrap;
-
-		.section {
-			width: 100%;
-			margin: 7px auto !important;
-		}
-	}
-
-	.hub {
-		width: 100%;
-
-		.section {
-			width: 100%;
-			margin: 7px auto !important;
-
-			.content .icon-list .icon{
-				padding: 5px;
-			}
-		}
-	}
-
-	.hub-container {
-		> .header {
-			flex-wrap: wrap;
-
-			.title {
-				display: inline-block;
-				flex: 1 0 70%;
-			}
-
-			.svg-container {
-				display: inline-block;
-				flex: 1 0 10%;
-			}
-
-			.actions {
-				margin-top: 1rem;
-			}
-		}
-	}
-
 	.mobile--hidden {
 		visibility: hidden;
 		display: none;
-	}
-
-	.edit-list {
-		.item {
-			width: 100%;
-		}
-
-		.item:nth-child(odd) {
-			margin-right: 0;
-		}
 	}
 
 	.dialog {
@@ -267,36 +195,10 @@
 			display: none;
 		}
 	}
-
-	.department-select {
-
-		form {
-			width: 100%;
-			margin: 1%;
-		}
-	}
 }
 
-@media screen and (max-width: 500px) {
-	.header-education-level-list {
-		text-align: right;
-
-		li {
-			display: block !important;
-		}
-	}
-
-	.header-department-list {
-		li {
-			display: block !important;
-		}
-	}
-}
 
 @media screen and (max-width: 410px) {
-	.nav.mobile h3 {
-		padding-left: 0;
-	}
 
 	header {
 		> a {

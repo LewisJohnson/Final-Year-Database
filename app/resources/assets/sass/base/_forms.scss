@@ -1,23 +1,10 @@
 /*!
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-.form--flex {
-	display: flex;
-	flex-flow: column;
-}
-
-.form--flex-row {
-	flex-flow: row;
-
-	> * {
-		margin-right: 1rem;
-	}
-}
-
-select, input, textarea, .fake-input {
+select, input:not([type="range"]), textarea, .fake-input {
 	border: solid $form-border-width $form-border-color;
 	padding: $form-input-padding;
 	font-size: $form-input-font-size;
@@ -25,42 +12,8 @@ select, input, textarea, .fake-input {
 	color: $input-color;
 }
 
-select[readonly], input[readonly], textarea[readonly] {
-	border: none;
-	padding: $form-input-padding;
-	font-size: $form-input-font-size;
-	font-family: $font-family-sans-serif;
-	color: $input-color;
-}
-
 label {
-	color: $form-label-text-color;
-	display: block;
-	margin-bottom: 5px;
 	font-size: 16px;
-}
-
-.label--inline-button {
-	height: 32px;
-	line-height: 32px;
-
-	button {
-		height: 25px;
-		padding: 2px;
-		margin: 2px;
-		font-size: 12px;
-		line-height: 12px;
-		@include transition--medium();
-	}
-}
-
-button {
-	cursor: pointer;
-	background: none;
-	border: none;
-	font-family: $font-family-sans-serif;
-	color: $input-color;
-	@include transition--medium-cb();
 }
 
 .form-field {
@@ -77,11 +30,6 @@ button {
 		height: 150px;
 		display: block;
 	}
-}
-
-.form-field + .description, .form-field + * + .description {
-	position: relative;
-	top: -1.3rem;
 }
 
 .form-field.form-field--flex {
@@ -108,68 +56,8 @@ button {
 	text-decoration: none;
 }
 
-
-.margin-children--horizontal {
-	> * {
-		margin: 0 5px;
-	}
-
-	:first-child {
-		margin-left: 0;
-	}
-
-	:last-child {
-		margin-right: 0;
-	}
-}
-
-.margin-children--vertical {
-	flex-direction: column;
-	
-	> * {
-		margin: 10px 0;
-		display: block;
-	}
-
-	:first-child {
-		margin-top: 0;
-	}
-
-	:last-child {
-		margin-bottom: 0;
-	}
-}
-
 .help-block {
 	margin: 5px 0 1.2rem;
 	color: red;
 	font-weight: 900;
-}
-
-.inline-error-block {
-	margin: 0;
-	color: white;
-	padding: 5px;
-	background: $error-bg;
-	font-weight: 500;
-}
-
-.inline-info-block {
-	margin: 0;
-	color: white;
-	padding: 5px;
-	background: $accent-tip-background;
-	font-weight: 500;
-}
-
-.chip {
-	padding: 6px 12px;
-	background: #efefef;
-	border-radius: 90px;
-	text-decoration: none;
-
-	&.active {
-		background: $accent;
-		color: white;
-	}
 }
