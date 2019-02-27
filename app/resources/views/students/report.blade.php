@@ -4,17 +4,17 @@
 <div class="centered mw-1600">
 	<div>
 		@if($studentCount > 0)
-			<a style="float: right" class="button button--raised" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students without project</a>
+			<a class="btn btn-secondary fr" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students not accepted</a>
 		@endif
 
 		<h1>Student Report</h1>
 
 		@if($studentCount > 0)
-			<h3>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h3>
+			<h5>There are a total of <b>{{ $studentCount }}</b> {{ lang_sess('full_name') }} students.</h5>
 		@endif
 	</div>
 
-	<div class="section-container">
+	<div class="row mt-3">
 		@if($studentCount > 0)
 			@foreach(SussexProjects\Student::getAllStatuses() as $status)
 				@php
@@ -26,42 +26,67 @@
 						->where('project_status', $status)
 						->orderBy('last_name', 'asc')
 						->get();
+
+					$currentStatusStudentCount = count($students);
 				@endphp
 
-				@if(count($students))
-					<div class="section horizontal">
-							<div class="flex flex--row flex--no-wrap">
-								<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b> <ins> {{ round((count($students) / $studentCount) * 100, 2) }}%</ins></p>
-								<p style="margin-top: 0px; margin-bottom: 0px; margin-left: auto; color: darkgray;">Total: {{ count($students) }}</p>
-							</div>
-							<table data-admin-email="{{ Auth::user()->email }}" class="data-table sort-table email-table table--small {{ $status }}" data-status="{{ $status }}">
-								<thead>
-									<tr>
-										<th>
-											<div class="checkbox">
-												<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
-												<label for="{{ $status }}" name="{{ $status }}"></label>
-											</div>
-										</th>
-										<th>Name</th>
-										<th>Reject Count</th>
-										<th>Last Login</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($students as $student)
-										@include('partials.student-edit', array('student'=> $student))
-									@endforeach
-								</tbody>
-							</table>
-							<div class="button-group margin-children--horizontal">
-								<a class="button button--raised email-selected {{ $status }}" href="mailto:">Email Selected</a>
+				@if($currentStatusStudentCount)
+					<div class="col-12 col-md-6 col-lg-3 mb-3">
+						<div class="card">
+							<div class="card-body px-0">
+								<div class="d-flex px-3">
+									<h5>{{ ucfirst($status) }} <span class="text-muted">({{ round(($currentStatusStudentCount / $studentCount) * 100, 2) }}%)</span></h5>
+									<h5 class="ml-auto text-primary">{{ $currentStatusStudentCount }}</h5>
+								</div>
+								<table data-admin-email="{{ Auth::user()->email }}" class="table table-sm data-table sort-table email-table border-0 {{ $status }}" data-status="{{ $status }}">
+									<thead>
+										<tr>
+											<th>
+												<div class="checkbox">
+													<input class="checkbox-input master-checkbox" id="{{ $status }}" type="checkbox">
+													<label for="{{ $status }}" name="{{ $status }}"></label>
+												</div>
+											</th>
+											<th>Name</th>
+											<th>Reject Count</th>
+											<th>Last Login</th>
+										</tr>
+									</thead>
+									<tbody class="border-0">
+										@foreach($students as $student)
+											<tr class="student-edit-item">
+												<td>
+													<div class="checkbox">
+														<input class="checkbox-input" id="student-{{ $student->user->id }}" data-email="{{ $student->user->email }}" type="checkbox">
+														<label for="student-{{ $student->user->id }}" name="student-{{ $student->user->id }}"></label>
+													</div>
+												</td>
+												<td><a @if($student->project != null) href="{{ action('ProjectController@show', $student->project) }}" @endif>{{ $student->user->first_name }} {{ $student->user->last_name }}</a></td>
+												<td>{{ $student->reject_count }}</td>
+												@if($student->user->last_login)
+													<td>{{ $student->user->last_login->diffForHumans() }}</td>
+												@else
+													<td>Never</td>
+												@endif
+											</tr>
+										@endforeach
+									</tbody>
+								</table>
+
+								<div class="mt-3 px-3">
+									<a class="btn btn-secondary email-selected {{ $status }}" href="mailto:">Email Selected</a>
+								</div>
 							</div>
 						</div>
+					</div>
 					@else
-						<div class="section horizontal">
-							<p style="margin-top: 0px; margin-bottom: 0px;"><b>{{ ucfirst($status) }}</b></p>
-							<p>There are no students in the <b>{{ $status }}</b> category.</p>
+						<div class="col-12 col-md-6 col-lg-3 mb-3">
+							<div class="card">
+								<div class="card-body">
+									<h5>{{ ucfirst($status) }}</h5>
+									<p>There are no students in the <b>{{ $status }}</b> category.</p>
+								</div>
+							</div>					
 						</div>
 					@endif
 			@endforeach
