@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -23,7 +23,7 @@ use SussexProjects\User;
  * The user controller.
  * Handles all functions related to users.
  */
-class UserController extends Controller{
+class UserController extends Controller {
 
 	public function __construct(){
 		parent::__construct();
@@ -291,13 +291,13 @@ class UserController extends Controller{
 		}
 
 		if($view == 'personal'){
-			if(isset($request->hide_archived)){
-				Cookie::queue('hide_archived', $request->hide_archived, 525600);
+			if(isset($request->mp_hide_archived)){
+				Cookie::queue('mp_hide_archived', $request->mp_hide_archived, 525600);
 			} else {
-				$request->hide_archived =  Cookie::get('hide_archived');
+				$request->mp_hide_archived = Cookie::get('mp_hide_archived');
 			}
 
-			if($request->hide_archived){
+			if($request->mp_hide_archived){
 				$projects->where('status', '<>', 'archived');
 			}
 		}
@@ -306,7 +306,7 @@ class UserController extends Controller{
 			->with('projects', $projects->get())
 			->with('owner', $user)
 			->with('view', $view)
-			->with('hide_archived', $request->hide_archived);
+			->with('mp_hide_archived', $request->mp_hide_archived);
 	}
 
 	/**
@@ -470,10 +470,10 @@ class UserController extends Controller{
 		if($user->isSupervisor()){
 			$infoString .= "<li>They are a supervisor.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getProjects())." projects.</li>";
-			$infoString .= "<li>They have ".count($user->supervisor->getIntrestedStudents())." interested students.</li>";
+			$infoString .= "<li>They have ".count($user->supervisor->getInterestedStudents())." interested students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getAcceptedStudents())." accepted students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getStudentProjectProposals())." students who have proposed a project to them.</li>";
-			$infoString .= "<li>They are second marker to ".count($user->supervisor->getSecondSupervisingStudents())." students.</li>";
+			$infoString .= "<li>They are second marker to ".count($user->supervisor->getSecondSupervisingProjects())." projects.</li>";
 			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
 		}
 
@@ -508,7 +508,7 @@ class UserController extends Controller{
 			$user = User::findOrFail($request->id);
 
 			if($user->isSupervisor()){
-				foreach($user->supervisor->getIntrestedStudents() as $interested) {
+				foreach($user->supervisor->getInterestedStudents() as $interested) {
 					$student = $interested['student'];
 					$student->project_id = null;
 					$student->project_status = 'none';
@@ -531,10 +531,9 @@ class UserController extends Controller{
 					$student->save();
 				}
 
-				foreach($user->supervisor->getSecondSupervisingStudents() as $second) {
-					$student = $second['student'];
-					$student->marker_id = null;
-					$student->save();
+				foreach($user->supervisor->getSecondSupervisingProjects() as $project) {
+					$project->marker_id = null;
+					$project->save();
 				}
 
 				$projects = Project::where('supervisor_id', $user->id)->delete();
