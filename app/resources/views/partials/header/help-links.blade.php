@@ -1,17 +1,13 @@
 @if(lang_sess('help_link_1') != null)
 	@if($platform === "mobile")
 		{{-- MOBILE --}}
-		<div class="flex flex--col">
-			@for ($i = 1; $i <= 20; $i++)
-				@if(lang_sess('help_link_'.$i) != null)
-					<li class="nav-button">
-						<a target="_blank" 
-							href="{{ lang_sess('help_link_'.$i.'_url')}}" 
-							title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
-					</li>
-				@endif
-			@endfor
-		</div>
+		@for ($i = 1; $i <= 20; $i++)
+			@if(lang_sess('help_link_'.$i) != null)
+					<a target="_blank" 
+						href="{{ lang_sess('help_link_'.$i.'_url')}}" 
+						title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
+			@endif
+		@endfor
 	@elseif($platform == "desktop")
 		{{-- DESKTOP --}}
 		@for ($i = 1; $i <= 20; $i++)
