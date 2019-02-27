@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -137,29 +137,29 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form
-	Route::get('admin/supervisor-arrangements-amend', 'ProjectAdminController@amendSupervisorArrangementsView');
+	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
 
 	// Updated supervisor arrangements POST
-	Route::post('admin/supervisor-arrangements-amend', 'ProjectAdminController@amendSupervisorArrangements');
+	Route::post('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangements');
 
 	/* SECOND MARKER ROUTES */
 	// Manual assign second marker view
-	Route::get('admin/marker-assign-manual', 'ProjectAdminController@manualSecondMarkerView');
+	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
 
 	// Automatically assign second marker view
-	Route::get('admin/marker-assign-automatic', 'ProjectAdminController@computeSecondMarkerView');
+	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
 
 	// Automatically assigned second markers table
-	Route::get('admin/marker-assign-automatic-table', 'ProjectAdminController@assignSecondMarkerAutomaticTable');
+	Route::get('admin/marker/automatic-table', 'ProjectAdminController@assignSecondMarkerAutomaticTable');
 
 	// Marker report
-	Route::get('admin/marker-report', 'ProjectAdminController@secondMarkerReport');
+	Route::get('admin/marker/report', 'ProjectAdminController@secondMarkerReport');
 
 	// Perform automatic second marker assignment
-	Route::post('admin/marker-calculate', 'ProjectAdminController@calculateSecondMarkers');
+	Route::post('admin/marker/calculate', 'ProjectAdminController@calculateSecondMarkers');
 
-	// Manually assign second marker
-	Route::patch('admin/marker-assign', 'StudentController@updateSecondMarker');
+	// Manual second marker assignment
+	Route::patch('admin/marker', 'StudentController@updateSecondMarker');
 
 	/* LOGIN AS ROUTES */
 	// Login as another user view
@@ -190,7 +190,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	/* TOPIC ROUTES */
 	// Update topic view
-	Route::get('admin/topics-amend', 'ProjectAdminController@amendTopicsView');
+	Route::get('admin/topics/amend', 'ProjectAdminController@amendTopicsView');
 
 	// Store new topic
 	Route::post('topics', 'TopicController@store');
@@ -203,7 +203,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	/* PROGRAMME ROUTES */
 	// Update topic view
-	Route::get('admin/programmes-amend', 'ProjectAdminController@amendProgrammesView');
+	Route::get('admin/programmes/amend', 'ProjectAdminController@amendProgrammesView');
 
 	// Store new topic
 	Route::post('programmes', 'ProgrammeController@store');
@@ -255,16 +255,16 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 	Route::get('reports/student', 'StudentController@report');
 
 	// Swap second marker view
-	Route::get('admin/marker-swap', 'ProjectAdminController@swapSecondMarkerView');
+	Route::get('admin/marker/swap', 'ProjectAdminController@swapSecondMarkerView');
 
 	// Swap second marker POST
-	Route::patch('admin/marker-swap', 'ProjectAdminController@swapSecondMarker');
+	Route::patch('admin/marker/swap', 'ProjectAdminController@swapSecondMarker');
 
 	// Export marker data view
-	Route::get('admin/marker-export', 'ProjectAdminController@exportSecondMarkerDataView');
+	Route::get('admin/marker/export', 'ProjectAdminController@exportSecondMarkerDataView');
 
 	// Export marker data
-	Route::get('admin/marker-export-download', 'ProjectAdminController@exportSecondMarkerData');
+	Route::get('admin/marker/export-download', 'ProjectAdminController@exportSecondMarkerData');
 });
 
 /* =================
@@ -288,6 +288,12 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Undo student's accepted project
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
+
+	// Project evaluation
+	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@index');
+
+	// Update project evaluation
+	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');
 });
 
 /* =================
@@ -295,31 +301,31 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
    ================= */
 Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function() {
 	// Propose project view
-	Route::get('students/project-propose', 'StudentController@proposeProjectView');
+	Route::get('students/project/propose', 'StudentController@proposeProjectView');
 
 	// Propose project POST
-	Route::post('students/project-propose', 'StudentController@proposeProject');
+	Route::post('students/project/propose', 'StudentController@proposeProject');
 
 	// Propose existing project view
-	Route::get('students/project-propose-existing/{project}', 'StudentController@proposeExistingProjectView');
+	Route::get('students/project/propose-existing/{project}', 'StudentController@proposeExistingProjectView');
 
 	// Propose existing project POST
-	Route::post('students/project-propose-existing', 'StudentController@proposeExistingProject');
+	Route::post('students/project/propose-existing', 'StudentController@proposeExistingProject');
 
 	// Project selection
-	Route::patch('students/project-select', 'StudentController@selectProject');
+	Route::patch('students/project/select', 'StudentController@selectProject');
 
 	// Undo selected project
-	Route::patch('students/undo-selected-project', 'StudentController@undoSelectedProject');
+	Route::patch('students/project/undo', 'StudentController@undoSelectedProject');
 
 	// Share name with other student
 	Route::patch('students/share-name', 'StudentController@shareName');
 
 	// Add project to favourites
-	Route::patch('students/add-favourite', 'StudentController@addFavouriteProject');
+	Route::patch('students/favourites/add', 'StudentController@addFavouriteProject');
 
 	// Remove project from favourites
-	Route::patch('students/remove-favourite', 'StudentController@removeFavouriteProject');
+	Route::patch('students/favourites/remove', 'StudentController@removeFavouriteProject');
 });
 
 
@@ -337,6 +343,9 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
 	// Update project
 	Route::patch('projects/{project}/edit', 'ProjectController@update');
+
+	// Copy project
+	Route::post('projects/{project}/copy', 'ProjectController@copy');
 
 	// New project form
 	Route::get('projects/create', 'ProjectController@create');
