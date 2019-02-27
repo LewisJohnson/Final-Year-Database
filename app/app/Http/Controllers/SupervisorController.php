@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Mail\StudentAccepted;
 use SussexProjects\Mail\StudentRejected;
@@ -61,15 +62,24 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function report(Request $request){
-		if($request->query("includeClosedToOffer") === "true"){
-			$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+
+		if(isset($request->sr_hide_closed)){
+			Cookie::queue('sr_hide_closed', $request->sr_hide_closed, 525600);
 		} else {
+			$request->sr_hide_closed = Cookie::get('sr_hide_closed');
+		}
+
+		if($request->sr_hide_closed){
 			$supervisors = Supervisor::getAllSupervisorsQuery()
 				->where('take_students_'.Session::get('education_level')["shortName"], true)
 				->get();
+		} else {
+			$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		}
 
-		return view('supervisors.report')->with("supervisors", $supervisors);
+		return view('supervisors.report')
+			->with("supervisors", $supervisors)
+			->with('sr_hide_closed', $request->sr_hide_closed);
 	}
 
 	/**
@@ -139,7 +149,7 @@ class SupervisorController extends Controller{
 			$student->save();
 
 			$transaction->fill(array(
-				'type' => 'project',
+				'type' => 'student',
 				'action' => 'accepted',
 				'project' => $student->project_id,
 				'student' => $student->id,
@@ -195,7 +205,7 @@ class SupervisorController extends Controller{
 		DB::transaction(function() use ($request, $student, $projectId){
 			$transaction = new Transaction;
 			$transaction->fill(array(
-				'type' => 'project',
+				'type' => 'student',
 				'action' => 'rejected',
 				'project' => $student->project_id,
 				'student' => $student->id,
@@ -295,7 +305,7 @@ class SupervisorController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'project',
+				'type' => 'student',
 				'action' => 'undo',
 				'project' => $student->project_id,
 				'student' => $student->id,
