@@ -195,7 +195,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		draggable: ".topic",
 	});
 
-
 	editSwappable.on('swappable:stop', function(){
 		var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
 		var topicId = $(".topics-list.edit li:first-child").data('topic-id');
@@ -313,25 +312,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			$(emailButtonselector).prop('href', emailString);
 		};
 		setTimeout(select($(this)), 2000);
-	});
-
-	$('.expand').on('click', function(e) {
-		var content = $(this).parents().eq(1).find('.content');
-
-		if(content.attr("aria-expanded") == "true"){
-			$(this).parent().removeClass("active");
-			$(this).find("svg").css("transform", "rotateZ(0deg)");
-			content.slideUp(200);
-			content.attr("aria-expanded", "false");
-			setCookie(content.data("cookie-name"), true, 365);
-
-		} else {
-			$(this).parent().addClass("active");
-			$(this).find("svg").css("transform", "rotateZ(180deg)");
-			content.show(200);
-			content.attr("aria-expanded", "true");
-			setCookie(content.data("cookie-name"), false, 365);
-		}
 	});
 
 	$('#supervisor-accepted-students-table').on('click', '.supervisor-undo-accept', function(e) {
