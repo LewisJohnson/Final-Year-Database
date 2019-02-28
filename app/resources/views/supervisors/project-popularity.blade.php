@@ -33,7 +33,7 @@
 			<div class="content">
 				<p class="subtitle">Your {{ count($projects) }} most popular on-offer {{ Session::get('education_level')["longName"] }} projects viewed by students.</p>
 
-				<table class="data-table table--dark-head sort-table">
+				<table class="table table-hover bg-white  data-table table--dark-head sort-table">
 					<thead>
 						<tr>
 							<th class="cursor--pointer">Project</th>

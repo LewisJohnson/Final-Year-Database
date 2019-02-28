@@ -1,4 +1,4 @@
-<table class="data-table sort-table table--dark-head supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
+<table class="table table-hover bg-white mt-3 mb-1 data-table sort-table supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
 	@if(Auth::user()->supervisor->getAcceptedStudents())
 		<thead>
 			<tr>
@@ -36,7 +36,7 @@
 							<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
 						</td>
 					@else
-						<td><a href="{{ action('SupervisorController@studentPortfolio', $accepted['student']->id) }}">{{ $accepted['project']->title }}</a></td>
+						<td><a href="{{ action('ProjectEvaluationController@index', $accepted['project']->id) }}">Evaluation</a></td>
 					@endif
 				</tr>
 			@endforeach
