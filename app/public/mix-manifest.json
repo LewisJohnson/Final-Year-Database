@@ -10,6 +10,7 @@
     "/js/views/project-popularity.js": "/js/views/project-popularity.js",
     "/js/views/supervisor.js": "/js/views/supervisor.js",
     "/js/views/tab-view.js": "/js/views/tab-view.js",
+    "/js/views/project-evaluation.js": "/js/views/project-evaluation.js",
     "/js/views/project-preview.js": "/js/views/project-preview.js",
     "/js/views/marker-assign.js": "/js/views/marker-assign.js",
     "/js/views/admin.js": "/js/views/admin.js",
