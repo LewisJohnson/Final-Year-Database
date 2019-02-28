@@ -39,6 +39,9 @@ return [
 
 		<li><b>Supervisor Report</b> - A list of all supervisors, their projects, their project load and what/whom they supervise.</li>
 		<li class="sub-help">Supervisor > Supervisor Report</li>
+
+		<li><b>Project Popularity</b> - This page shows <i>upto</i> your 10 most popular projects and how many views they have. In order to see this page, you must have at least 3 projects with over 10 views.</li>
+		<li class="sub-help">Supervisor > Project Popularity</li>
 	</ul>
 
 	<p>You may also set your emails preferences on your homepage.</p>',
@@ -237,7 +240,7 @@ return [
 
 	<h3>How do we use cookies?</h3>
 
-	<table class="data-table">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Category</th>
@@ -278,22 +281,17 @@ return [
 			</tr>
 			<tr>
 				<td>Usability</td>
+				<td>sr_hide_closed</td>
+				<td>Determines if supervisors not currently accepting offers are shown in the "Supervisor Report".</td>
+			</tr>
+			<tr>
+				<td>Usability</td>
 				<td>favourite_projects</td>
 				<td><b>Students only</b><br>A list of your favourite projects.</td>
 			</tr>
 			<tr>
 				<td>Usability</td>
-				<td>hide_accepted</td>
-				<td><b>Supervisors only</b><br>Determines if the table "Accepted Students" is hidden.</td>
-			</tr>
-			<tr>
-				<td>Usability</td>
-				<td>hide_offers</td>
-				<td><b>Supervisors only</b><br>Determines if the table "Interested Students" is hidden.</td>
-			</tr>
-			<tr>
-				<td>Usability</td>
-				<td>hide_archived</td>
+				<td>mp_hide_archived</td>
 				<td><b>Supervisors only</b><br>Determines if the user is displaying archived projects in "My Projects".</td>
 			</tr>
 		</tbody>
@@ -304,7 +302,7 @@ return [
 	These little tokens will be cleared as soon as you close your browser.
 	If your browser does not support session storage, we will store these values as cookies instead.</p>
 
-	<table class="data-table">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Category</th>
