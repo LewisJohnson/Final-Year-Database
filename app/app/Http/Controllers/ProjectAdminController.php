@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2018.
+ * Copyright (C) University of Sussex 2019.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Written by Lewis Johnson <lj234@sussex.com>
  */
@@ -233,14 +233,11 @@ class ProjectAdminController extends Controller{
 					$project->description = $project->description." (++ In ".Mode::getProjectYear()." this project was viewed ".$project->view_count." times. ++)";
 				}
 				
-				$project->student_id = null;
-
 				if($project->status == 'student-proposed'){
 					$project->delete();
 				}
 
 				$project->status = 'archived';
-				$project->view_count = 0;
 				$project->save();
 			}
 
@@ -292,7 +289,6 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
 	 */
 	public function calculateSecondMarkers(Request $request){
-
 		$maxStudentsPerSupervisor = PHP_INT_MAX;
 
 		if(!empty($request->max_students_per_supervisor)){
@@ -305,33 +301,35 @@ class ProjectAdminController extends Controller{
 			
 			return response()->json(array(
 				'successful' => false,
-				'message' => "Please increase the maximum students per supervisor"
+				'message' => "Please increase the maximum students per supervisor."
 			));
 		}
 
-		DB::transaction(function () use ($maxStudentsPerSupervisor) {
-			$studentTable = new Student;
 
-			// Reset every students second marker
-			DB::table($studentTable->getTable())->update(array(
+		DB::transaction(function () use ($maxStudentsPerSupervisor) {
+			$projectTable = new Project;
+
+			// Reset every project's second marker
+			DB::table($projectTable->getTable())->update(array(
 				'marker_id' => null
 			));
 
 			// Assign students taking lazy score in to consideration
-			while(StudentController::getStudentWithoutSecondMarker() != null){
-				// Recalculate scores
-				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor);
+			while(ProjectController::getAccetpedProjectWithoutSecondMarker() != null){
+				// Get the project
+				$projectToAssign = ProjectController::getAccetpedProjectWithoutSecondMarker();
 
-				// Get the student
-				$studentToAssign = StudentController::getStudentWithoutSecondMarker();
+				// Recalculate scores
+				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor, $projectToAssign->id);
 				
 				// Get the laziest supervisor
 				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
 
-				$studentToAssign->marker_id = $laziestSupervisor->id;
-				$studentToAssign->save();
+				$projectToAssign->marker_id = $laziestSupervisor->id;
+				$projectToAssign->save();
 			}
 		});
+
 		return redirect()->action('ProjectAdminController@secondMarkerReport');
 	}
 
@@ -340,27 +338,29 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \app\app\Supervisor
 	 */
-	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor){
+	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor, $supervisorToIgnoreId){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
 				->get();
 
 		// Set up the numbers
-		foreach($supervisors as $key => $supervisor){
+		foreach($supervisors as $supervisor){
 			if($isSetupView) {
 				$supervisor->second_supervising_count = 0;
+			} else if($supervisor == $supervisorToIgnoreId) {
+				$supervisor->second_supervising_count = PHP_INT_MAX;
 			} else {
-				$supervisor->second_supervising_count = count($supervisor->getSecondSupervisingStudents());
+				$supervisor->second_supervising_count = count($supervisor->getSecondSupervisingProjects());
 			}
 
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 		}
 
-		$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {
+		$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {	
 			return $supervisor->second_supervising_count < $maxStudentsPerSupervisor;
 		});
 
-		foreach($supervisors as $key => $supervisor){
+		foreach($supervisors as $supervisor){
 
 			$loadMinusStudentCount = $supervisors->sum('project_load_'.Session::get('education_level')["shortName"]) - Student::count();
 			$slack = floor($loadMinusStudentCount / max(1 ,$supervisors->where('second_supervising_count', 0)->count()));
@@ -399,7 +399,7 @@ class ProjectAdminController extends Controller{
 
 	 */
 	public function assignSecondMarkerAutomaticTable(){
-		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX);
+		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX, "");
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 
@@ -415,29 +415,34 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function swapSecondMarkerView(){
-		$students = Student::all();
-		return view('admin.swap-marker')->with('students', $students);
+		$projects = Project::whereNotNull('marker_id')->get();
+
+		return view('admin.swap-marker')->with('projects', $projects);
 	}
 
 	/**
-	 * Swap student A and student B's second markers.
+	 * Swap project A's and project B's second markers.
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function swapSecondMarker(Request $request){
-		$studentA = Student::findOrFail($request->studentA);
-		$studentB = Student::findOrFail($request->studentB);
+		try {
+			$projectA = Project::findOrFail($request->projectA);
+			$projectB = Project::findOrFail($request->projectB);
+		} catch(ModelNotFoundException $e) {
+			return response()->json(array('successful' => false));
+		}
 
-		$MarkerA = $studentA->marker->id;
-		$MarkerB = $studentB->marker->id;
+		$MarkerA = $projectA->marker_id;
+		$MarkerB = $projectB->marker_id;
 
-		$studentA->marker_id = $MarkerB;
-		$studentB->marker_id = $MarkerA;
+		$projectA->marker_id = $MarkerB;
+		$projectB->marker_id = $MarkerA;
 
-		$studentA->save();
-		$studentB->save();
+		$projectA->save();
+		$projectB->save();
 
 		return response()->json(array('successful' => true));
 	}
@@ -463,26 +468,24 @@ class ProjectAdminController extends Controller{
 			abort(400);
 		}
 
-		$students = Student::all();
+		$projects = Project::whereNotNull('marker_id')->get();
 		$results = array();
 
-		foreach($students as $student){
+		foreach($projects as $project){
 			$ar = array();
-			$ar["studentName"] = $student->user->getFullName();
+			
+			$ar["projectTitle"] = $project->title;
 
-			if($student->project != null){
-				$ar["projectTitle"] = $student->project->title;
-				$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
+			// This should never happen but you never know
+			if($project->student != null){
+				$ar["studentName"] = $project->student->user->getFullName();
 			} else {
-				$ar["projectTitle"] = "-";
-				$ar["supervisorName"] = "-";
+				$ar["studentName"] = "-";
 			}
 
-			if($student->marker != null){
-				$ar["markerName"] = $student->marker->user->getFullName();
-			} else {
-				$ar["markerName"] = "-";
-			}
+			$ar["supervisorName"] = $project->supervisor->user->getFullName();
+			$ar["markerName"] = $project->marker->user->getFullName();
+
 			array_push($results, $ar);
 		}
 
@@ -493,7 +496,7 @@ class ProjectAdminController extends Controller{
 			fwrite($file, json_encode($results, JSON_PRETTY_PRINT));
 		} else if($request->type == "csv") {
 			fputcsv($file, array(
-				'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
+				'Project Title', 'Student', 'Supervisor', 'Second Marker'
 			));
 
 			foreach($results as $result){
@@ -504,7 +507,13 @@ class ProjectAdminController extends Controller{
 		fclose($file);
 
 		header('Content-Description: File Transfer');
-		header('Content-Type: text/csv');
+
+		if($request->type == "json"){
+			header('Content-Type: application/json');
+		} else {
+			header('Content-Type: text/csv');
+		}
+
 		header('Content-Disposition: attachment; filename=SecondMarkerData.'.$request->type.'');
 		header('Content-Transfer-Encoding: binary');
 		header('Expires: 0');
