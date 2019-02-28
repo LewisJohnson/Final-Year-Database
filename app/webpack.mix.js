@@ -1,5 +1,3 @@
-let mix = require('laravel-mix');
-var webpack = require('webpack');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -10,6 +8,9 @@ var webpack = require('webpack');
  | file for the application as well as bundling up all the JS files.
  |
  */
+
+let mix = require('laravel-mix');
+var webpack = require('webpack');
 
 mix.disableNotifications();
 
@@ -39,6 +40,7 @@ mix.js('resources/assets/js/views/project-popularity.js', 'public/js/views');
 mix.js('resources/assets/js/views/admin.js', 'public/js/views');
 mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
 mix.js('resources/assets/js/views/marker-assign.js', 'public/js/views');
+mix.js('resources/assets/js/views/project-evaluation.js', 'public/js/views');
 
 // JS | PAGINATION
 mix.js('resources/assets/js/dynamic-pagination/projects-pagination.js', 'public/js/pagination');
