@@ -26,6 +26,7 @@
 
 import '../js/partials/components.js';
 import '../js/partials/supervisor-filter.js';
+import 'bootstrap';
 
 /* ================
 	1. AJAX Setup
@@ -49,52 +50,14 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/* ========================
 		2. HTML Modifications
 	   ======================== */
-	if($('.show--scroll-to-top').length > 0){
-		$('body').append('<button class="button button--raised button--accent scroll-to-top">Scroll to Top</button>');
-	}
-
-	if(config.fancyAnimations){
-		var animatedSelector = ".animated-entrance div, .animated-entrance .card, .animated-entrance h1, .animated-entrance h2, .animated-entrance p, .animated-entrance li";
-		$(animatedSelector).css("opacity", 0);
-
-		// Animate all cards
-		var animatedEntranceAnimationDelay = 0;
-
-		$(animatedSelector).each(function(index, value) {
-			animatedEntranceAnimationDelay += 50;
-			setTimeout(function(){
-				$(this).addClass("slideInUp animated");
-
-				$(this).animate({
-					opacity: 1
-				}, 800);
-
-			}.bind(this), animatedEntranceAnimationDelay);
-		});
-
+	if($('.js-show-scroll-top').length > 0){
+		$('body').append('<button class="btn btn-primary scroll-to-top" style="display: none">Scroll to Top</button>');
 	}
 
 	/**
 		* Sorts topics list to show primary topic first.
 	*/
 	$('.topics-list').prepend($('.first'));
-	if($('.topics-list .no-topics').length < 1){
-		$('[class="topics-list"] li').css("opacity", 0);
-
-		var animatedTopicsAnimationDelay = 0;
-		$('[class="topics-list"] li').each(function(index, value) {
-			animatedTopicsAnimationDelay += 200;
-			setTimeout(function(){
-				$(this).addClass("slideInRight animated");
-
-				$(this).animate({
-					opacity: 1
-				}, 800);
-
-			}.bind(this), animatedTopicsAnimationDelay);
-		});
-	}
-
 
 	/**
 		* Adds headers to list with a certain class name.
@@ -179,20 +142,20 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/**
 		* Submit receive email form when checkbox toggled.
 	*/
-	var canChangeEmailPreference = true;
+	var userCanChangeEmailPreference = true;
 	$('.receive-emails-checkbox').on('click', function(e){
 
-		if(canChangeEmailPreference){
+		if(userCanChangeEmailPreference){
 			$(this).submit();
-			canChangeEmailPreference = false;
+			userCanChangeEmailPreference = false;
 		} else {
 			e.preventDefault();
 			createToast('error', "Please wait a few seconds before changing your preference again.");
 		}
 
 		setTimeout(function(){
-			canChangeEmailPreference = true;
-		}, 5000);
+			userCanChangeEmailPreference = true;
+		}, 2000);
 	});
 
 	/**
@@ -263,7 +226,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		e.preventDefault();
 
 		var submitButton = $(this).find(':submit');
-		submitButton.html('<div class="loader"></div>');
+		submitButton.html('<div class="spinner-border text-light"></div>');
 		$('.loader', submitButton).css('display', 'block');
 
 		$.ajax({
@@ -351,7 +314,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/**
 		* Delete a project form submit.
 	*/
-	$('form.delete-project').on('submit', function(e) {
+	$('form#delete-project').on('submit', function(e) {
 		e.preventDefault();
 		var form = $(this);
 		var projectName = form.data('project-title');
@@ -453,7 +416,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	/**
 		* The student undo project form.
 	*/
-	$('.student-undo-select').on('click', function(e) {
+	$('#student-undo-select').on('click', function(e) {
 		var card = $(this).parent();
 		$.confirm({
 			title: 'Undo Project Selection',
@@ -464,14 +427,14 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			backgroundDismiss: true,
 			animateFromElement : false,
 			autoClose: 'cancel|10000',
-			content: 'Are you sure you want to un-select your selected project?</b>',
+			content: 'Are you sure you want to un-select your selected project?<br>You may only perform this action prior to being accepted',
 			buttons: {
 				confirm: {
 					btnClass: 'btn-red',
 					action: function(){
 						$.ajax({
 							method: 'PATCH',
-							url: 'students/undo-selected-project',
+							url: 'students/project/undo',
 							success:function(response){
 								if(response.successful){
 									createToast('success', 'Undo successful.');
@@ -560,13 +523,15 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	*/
 	$(".favourite-container").on('click', function() {
 
+		var svgContainer = $(this);
+		var svg = svgContainer.find('svg');
+
 		// The last event is still loading, so return until it is complete.
-		if($('.loader', svgContainer).css('display') !== 'none'){
+		if($('.spinner-grow', svgContainer).css('display') !== 'none'){
+			createToast('', 'Please wait a few seconds before changing your preference again.');
 			return;
 		}
 
-		var svgContainer = $(this);
-		var svg = svgContainer.find('svg');
 
 		if(window['project'] != null){
 			var projectId = window['project'].data('project-id');
@@ -574,16 +539,16 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			var projectId = $(this).data('project-id');
 		}
 
-		svg.hide(0);
-		$('.loader', svgContainer).show(0);
+		svg.hide();
+		$('.spinner-grow', svgContainer).show();
 
 		if(svg.hasClass('favourite')){
 			var action = 'remove';
-			var ajaxUrl = 'students/remove-favourite';
+			var ajaxUrl = 'students/favourites/remove';
 
 		} else {
 			var action = 'add';
-			var ajaxUrl = 'students/add-favourite';
+			var ajaxUrl = 'students/favourites/add';
 		}
 
 		$.ajax({
@@ -601,7 +566,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			}
 		}).always(function(data){
 			svg.fadeIn(config.animtions.fast);
-			$('.loader', svgContainer).hide(0);
+			$('.spinner-grow', svgContainer).hide();
 		});
 	});
 
@@ -675,10 +640,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 	});
 
 	// Check title name
-	if($('.project-title').length > 0){
+	if($('.js-project-title').length > 0){
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
-		var projectId = $('.project-form').data('project-id');
+		var projectId = $('.js-project-form').data('project-id');
 
 		// Bind value
 		// Only bind blur to not spam DB
@@ -744,7 +709,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			},
 		});
 
-		var buttonsHtml = "<div class='html-editor--top-buttons flex'><button class='html' type='button'>HTML</button><button class='preview' type='button'>PREVIEW</button></div>";
+		var buttonsHtml = "<div class='html-editor--top-buttons d-flex'><button class='html btn btn-sm shadow-none' type='button'>HTML</button><button class='preview btn btn-sm shadow-none' type='button'>PREVIEW</button></div>";
 		var previewHtml = "<div class='html-editor--preview-container'><div class='html-editor--preview'></div></div>";
 
 		$('.html-editor--input').before(buttonsHtml);
@@ -866,14 +831,14 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		 7. OTHER
 	   ====================== */
 	$('[data-hover]').on('mouseenter', function(){
-		if($('#showTransactionDetailOnHover').prop("checked")){
+		if($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1){
 			$(this).attr('data-original', $(this).html());
 			$(this).html($(this).data('hover'));
 		}
 	});
 
 	$('[data-hover]').on('mouseleave', function(){
-		if($('#showTransactionDetailOnHover').prop("checked")){
+		if($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1){
 			$(this).html($(this).data('original'));
 		}
 	});
