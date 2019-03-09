@@ -86,9 +86,9 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 					if(response.successful){
 						if($(".topics-list.edit li.topic:last").length > 0){
-							$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+							$(".topics-list.edit li.topic:last").after('<li class="topic" data-topic-id="' + response.topic.id + '"><button type="button" class="btn rounded-0 topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
 						} else {
-							$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response.topic.id + '"><button type="button" class="topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
+							$(".topics-list.edit").prepend('<li class="topic first" data-topic-id="' + response.topic.id + '"><button type="button" class="btn rounded-0 topic-remove">X</button><p class="topic-name">' + response.topic.name + '</p></li>');
 						}
 					} else {
 						createToast('error', response.message);

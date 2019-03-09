@@ -51,14 +51,14 @@
 								<div id="new-topic-input-container" class="fake-input">
 									<ul class="topics-list edit">
 										@foreach($project->topics as $topic)
-											@if($project->getPrimaryTopic())
+											@if($project->getPrimaryTopic() != null)
 												<li class="topic{!! ($topic->id == $project->getPrimaryTopic()->id) ? ' first': '' !!}" data-topic-id="{{ $topic->id }}">
-													<button type="button" class="topic-remove">X</button>
+													<button type="button" class="btn rounded-0 topic-remove">X</button>
 													<p class="topic-name">{{ $topic->name }}</p>
 												</li>
 											@else
 												<li class="topic" data-topic-id="{{ $topic->id }}">
-													<button type="button" class="topic-remove">X</button>
+													<button type="button" class="btn rounded-0 topic-remove">X</button>
 													<p class="topic-name">{{ $topic->name }}</p>
 												</li>
 											@endif
