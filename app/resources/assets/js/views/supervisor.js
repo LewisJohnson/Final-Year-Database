@@ -46,6 +46,10 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			} else {
 				$(".topics-list.create").prepend('<li class="topic first" data-topic-id="' + topicName + '"><button type="button" class="topic-remove">X</button><input type="text" readonly name="topics[]" class="topic-name" size="' + topicName.length + '" value="' + topicName +' "></li>');
 			}
+
+			setTimeout(function(){
+				$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).val('');
+			}, 20);
 		},
 
 		removeTopicToProjectBeingCreated: function (topicId) {
@@ -164,7 +168,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).keypress(function(e) {
 		if((e.which == 44 || e.keyCode == 188) && $(this).val() != "") {
 			projectTopics.functions.addTopicToProjectBeingCreated($(this).val());
-			$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).val('');
 		}
 	});
 
@@ -172,7 +175,6 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).on('blur', function(e) {
 		if($(this).val() != "") {
 			projectTopics.functions.addTopicToProjectBeingCreated($(this).val());
-			$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).val('');
 		}
 	});
 
