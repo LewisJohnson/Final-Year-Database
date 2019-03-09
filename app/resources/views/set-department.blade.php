@@ -12,7 +12,7 @@
 			<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
 				{{ csrf_field() }}
 				<input type="hidden" name="department" value="{{ $department }}">
-				<button type="submit" style="background-image: url('{{ asset('images/thumbnails/'.$department.'.jpg') }}')">
+				<button type="submit" class="btn border-0 rounded-0" style="background-image: url('{{ asset('images/thumbnails/'.$department.'.jpg') }}')">
 					<span>{{ ucfirst($department) }}</span>
 				</button>
 			</form>
