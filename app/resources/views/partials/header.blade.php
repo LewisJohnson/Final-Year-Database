@@ -123,14 +123,9 @@
 								<ul>
 									<li>
 										<ul>
-											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
-											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
-										</ul>
-									</li>
-									<li>
-										<ul>
-											<li style="opactiy: 0"></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
 										</ul>
 									</li>
 								</ul>
@@ -143,13 +138,13 @@
 									<li>
 										<h4>Help</h4>
 										<ul class="links-list">
-											<li><a href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
-											<li><a href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
+											<li><a class="btn text-primary" href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
+											<li><a class="btn text-primary" href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
 										</ul>
 									</li>
 
 									<li>
-										<div class="icon">
+										<div class="d-flex">
 											<h4>External Links</h4>
 											@include('svg.external')
 										</div>
@@ -177,14 +172,9 @@
 								<ul>
 									<li>
 										<ul>
-											<li><a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
-											<li><a href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
-											<li><a href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
-										</ul>
-									</li>
-									<li>
-										<ul>
-											<li style="opactiy: 0"></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">Projects</a></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@showSupervisors') }}" title="Browse projects sorted by supervisor">Projects by Supervisor</a></li>
+											<li><a class="btn text-primary" href="{{ action('ProjectController@showTopics') }}" title="Browse projects sorted by topic">Projects by Topic</a></li>
 										</ul>
 									</li>
 								</ul>
@@ -198,17 +188,15 @@
 									<ul>
 										<li>
 											<h4>Projects</h4>
-											<ul class="icon-list links-list">
+											<ul class="list-unstyled">
 												<li>
-													<a class="icon" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
-														@include('svg.file-account')
-														<p>My Projects</p>
+													<a class="btn w-100 text-left text-primary" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
+														<span>@include('svg.file-account')<span>My Projects</span></span>
 													</a>
 												</li>
 												<li>
-													<a class="icon" title="Create a new project" href="{{ action('ProjectController@create') }}">
-														@include('svg.file-plus')
-														<p>New Project</p>
+													<a class="btn w-100 text-left text-primary" title="Create a new project" href="{{ action('ProjectController@create') }}">
+														<span>@include('svg.file-plus')<span>New Project</span></span>
 													</a>
 												</li>
 											</ul>
@@ -216,17 +204,15 @@
 
 										<li>
 											<h4>Reports</h4>
-											<ul class="icon-list links-list">
+											<ul class="list-unstyled">
 												<li>
-													<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
-														@include('svg.clipboard')
-														<p>Supervisor Report</p>
+													<a class="btn w-100 text-left text-primary" title="Create a new project" href="{{ action('SupervisorController@report') }}">
+														<span>@include('svg.clipboard')<span>Supervisor Report</span></span>
 													</a>
 												</li>
 												<li>
-													<a class="icon" title="Show my most popular projects" href="{{ action('SupervisorController@projectPopularity') }}">
-														@include('svg.fire')
-														<p>Project Popularity</p>
+													<a class="btn w-100 text-left text-primary" title="Show my most popular projects" href="{{ action('SupervisorController@projectPopularity') }}">
+														<span>@include('svg.fire')<span>Project Popularity</span></span>
 													</a>
 												</li>
 											</ul>
@@ -258,43 +244,38 @@
 									<h3>System Administrator</h3>
 									<ul>
 										<li>
-											<h4>System</h4>
+											<h5>System</h5>
 											<ul>
 												<li>
-													<a class="icon" href="{{ action('SystemAdminController@systemDashboardView') }}">
-														@include('svg.tune')
-														<p>System Dashboard</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('SystemAdminController@systemDashboardView') }}">
+														<span>@include('svg.tune')<span>System Dashboard</span></span>
 													</a>
 												</li>
 
 												<li>
-													<a class="icon" href="{{ action('SystemAdminController@userAgentView') }}">
-														@include('svg.monitor')
-														<p>User Agent Strings</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('SystemAdminController@userAgentView') }}">
+														<span>@include('svg.monitor')<span>User Agent Strings</span></span>
 													</a>
 												</li>
 
 												<li>
-													<a class="icon" href="{{ action('SystemAdminController@feedback') }}">
-														@include('svg.message-bulleted')
-														<p>User Feedback</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('SystemAdminController@feedback') }}">
+														<span>@include('svg.message-bulleted')<span>User Feedback</span></span>
 													</a>
 												</li>
 											</ul>
 										</li>
 										<li>
-											<h4>User</h4>
+											<h5>User</h5>
 											<ul>
 												<li>
-													<a class="icon" href="{{ action('UserController@create') }}">
-														@include('svg.account-plus')
-														<p>Add User</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('UserController@create') }}">
+														<span>@include('svg.account-plus')<span>Add User</span></span>
 													</a>
 												</li>
 												<li>
-													<a class="icon" href="{{ action('UserController@index') }}">
-														@include('svg.account-edit')
-														<p>Edit User</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('UserController@index') }}">
+														<span>@include('svg.account-edit')<span>Edit User</span></span>
 													</a>
 												</li>
 											</ul>
@@ -315,12 +296,12 @@
 												<li>
 													{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
 													@if(Auth::user()->student->project_status == "none")
-														<a class="icon" title="Propose a project to a supervisor" href="{{ action('StudentController@proposeProjectView') }}">
+														<a class="btn w-100 text-left text-primary" title="Propose a project to a supervisor" href="{{ action('StudentController@proposeProjectView') }}">
 															@include('svg.pencil')
 															<p>Propose Project</p>
 														</a>
 													@else
-														<a class="icon" title="See your selected project" href="{{ action('ProjectController@show', Auth::user()->student->project) }}">
+														<a class="btn w-100 text-left text-primary" title="See your selected project" href="{{ action('ProjectController@show', Auth::user()->student->project) }}">
 															@include('svg.creation')
 															@if(Auth::user()->student->project_status == "proposed")
 																<p>Your Proposed Project</p>
@@ -336,9 +317,9 @@
 										</li>
 										<li>
 											<h4>Reports</h4>
-											<ul class="icon-list links-list">
+											<ul class="list-unstyled">
 												<li>
-													<a class="icon" title="Create a new project" href="{{ action('SupervisorController@report') }}">
+													<a class="btn w-100 text-left text-primary" title="Create a new project" href="{{ action('SupervisorController@report') }}">
 														@include('svg.clipboard')
 														<p>Supervisor Report</p>
 													</a>
@@ -357,29 +338,26 @@
 									<h3>Staff</h3>
 									<ul>
 										<li>
-											<ul class="icon-list links-list">
-												<h4>Second Marker</h4>
+											<ul class="list-unstyled">
+												<h5>Second Marker</h5>
 												<li>
-													<a class="icon" href="{{ action('ProjectAdminController@swapSecondMarkerView') }}">
-														@include('svg.swap')
-														<p>Swap Second Markers</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@swapSecondMarkerView') }}">
+														<span>@include('svg.swap')<span>Swap Second Markerspan</span></span>
 													</a>
 												</li>
 											</ul>
 										</li>
 										<li>
-											<ul class="icon-list links-list">
-												<h4>Projects</h4>
+											<ul class="list-unstyled">
+												<h5>Projects</h5>
 												<li>
-													<a class="icon" href="{{ action('StudentController@report') }}">
-														@include('svg.school')
-														<p>Student Report</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('StudentController@report') }}">
+														<span>@include('svg.school')<span>Student Report</span></span>
 													</a>
 												</li>
 												<li>
-													<a class="icon" href="{{ action('SupervisorController@report') }}">
-														@include('svg.clipboard')
-														<p>Supervisor Report</p>
+													<a class="btn w-100 text-left text-primary" href="{{ action('SupervisorController@report') }}">
+														<span>@include('svg.clipboard')<span>Supervisor Report</span></span>
 													</a>
 												</li>
 											</ul>
@@ -396,13 +374,13 @@
 									<li>
 										<h4>Help</h4>
 										<ul class="links-list">
-											<li><a href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
-											<li><a href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
+											<li><a class="btn text-primary" href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
+											<li><a class="btn text-primary" href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
 										</ul>
 									</li>
 
 									<li>
-										<div class="icon">
+										<div class="d-flex">
 											<h4>External Links</h4>
 											@include('svg.external')
 										</div>

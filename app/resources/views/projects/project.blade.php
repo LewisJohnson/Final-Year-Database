@@ -94,35 +94,32 @@
 							<input type="hidden" name="project_id" value="{{ $project->id }}">
 						</form>
 
-						<button class="ml-auto btn btn-primary" onclick="$('#selectForm').submit()">Select project</button>
+						<button class="ml-2 btn btn-primary" onclick="$('#selectForm').submit()">Select project</button>
 					@endif
 				@endif
 			@endif
 
 			@if($project->isOwnedByUser() || $project->isUserSupervisorOfProject())
-
 				@if($project->status != 'archived')
-					<a class="btn btn-primary ml-auto" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
+					<a class="btn btn-primary ml-2" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 				@else
 					<form id="copy-project" action="{{ action('ProjectController@copy', $project->id) }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
-						<button type="submit" class="btn btn-primary ml-auto" title="Copy {{ $project->title }}">Copy Project</button>
+						<button type="submit" class="btn btn-primary ml-2" title="Copy {{ $project->title }}">Copy Project</button>
 					</form>
-				@endif
-
-				@if($project->isOwnedByUser())
-					@if($project->status != 'archived')
-						<form id="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" data-project-id="{{ $project->id }}" method="POST" accept-charset="utf-8">
-							{{ csrf_field() }}
-						</form>
-
-						<button type="submit" class="btn btn-danger ml-auto" title="Delete {{ $project->title }}" onclick="$('#delete-project').submit()">Delete Project</button>
-					@endif
 				@endif
 			@endif
 
 			@if($project->isUserSupervisorOfProject() || $project->isUserMarkerOfProject())
-				<a class="btn btn-primary ml-auto" href="{{ action('ProjectEvaluationController@index', $project->id) }}">Evaluation</a>
+				<a class="btn btn-primary ml-2" href="{{ action('ProjectEvaluationController@index', $project->id) }}">Evaluation</a>
+			@endif
+
+			@if($project->isOwnedByUser() && $project->status != 'archived')
+				<form id="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" data-project-id="{{ $project->id }}" method="POST" accept-charset="utf-8">
+					{{ csrf_field() }}
+				</form>
+
+				<button type="submit" class="btn btn-danger ml-auto" title="Delete {{ $project->title }}" onclick="$('#delete-project').submit()">Delete Project</button>
 			@endif
 		@endif
 	</div>

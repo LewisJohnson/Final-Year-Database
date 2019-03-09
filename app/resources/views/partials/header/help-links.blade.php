@@ -3,8 +3,7 @@
 		{{-- MOBILE --}}
 		@for ($i = 1; $i <= 20; $i++)
 			@if(lang_sess('help_link_'.$i) != null)
-					<a target="_blank" 
-						href="{{ lang_sess('help_link_'.$i.'_url')}}" 
+					<a target="_blank" href="{{ lang_sess('help_link_'.$i.'_url')}}" 
 						title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
 			@endif
 		@endfor
@@ -13,9 +12,8 @@
 		@for ($i = 1; $i <= 20; $i++)
 			@if(lang_sess('help_link_'.$i) != null)
 				<li>
-					<a target="_blank" 
-					href="{{ lang_sess('help_link_'.$i.'_url')}}" 
-					title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
+					<a class="text-primary btn" target="_blank" href="{{ lang_sess('help_link_'.$i.'_url')}}" 
+						title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
 				</li>
 			@endif
 		@endfor
@@ -24,8 +22,7 @@
 		@for ($i = 1; $i <= 20; $i++)
 			@if(lang_sess('help_link_'.$i) != null)
 				<li>
-					<a target="_blank" 
-					href="{{ lang_sess('help_link_'.$i.'_url')}}" 
+					<a target="_blank" href="{{ lang_sess('help_link_'.$i.'_url')}}" 
 					title="{{ lang_sess('help_link_'.$i) }}">{{ lang_sess('help_link_'.$i) }}</a>
 				</li>
 			@endif

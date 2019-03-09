@@ -2,9 +2,9 @@
 
 <div class="card-body">
 	@if($view === "new")
-		<form class="form d-flex user-form" role="form" method="POST" action="{{ action('UserController@store') }}">
+		<form class="form user-form" role="form" method="POST" action="{{ action('UserController@store') }}">
 	@elseif($view === "edit")
-		<form class="form d-flex user-form" role="form" method="POST" action="{{ action('UserController@update', $user) }}">
+		<form class="form user-form" role="form" method="POST" action="{{ action('UserController@update', $user) }}">
 		{{ method_field('PATCH') }}
 	@endif
 
@@ -184,7 +184,7 @@
 			</div>
 		@else
 			<div class="text-right mt-3">
-				<button type="submit" class="btn btn-primary">Update user</button>
+				<button type="submit" class="btn btn-primary">Update</button>
 			</div>
 		@endif
 	{{-- END USER FORM --}}
