@@ -24,8 +24,8 @@
 						</div>
 					</td>
 					<td><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a></td>
-					@if($accepted['student']->marker)
-						<td>{{ $accepted['student']->marker->user->getFullName() }}</td>
+					@if(isset($accepted['project']->marker))
+						<td>{{ $accepted['project']->marker->user->getFullName() }}</td>
 					@else
 						<td>-</td>
 					@endif
@@ -33,7 +33,10 @@
 
 					@if(Session::get('logged_in_as') != null)
 						<td>
-							<button class="button button--danger-text supervisor-undo-accept" title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" data-project-title="{{ $accepted['project']->title }}">Undo</button>
+							<button class="button text-danger supervisor-undo-accept" 
+								title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" 
+								data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" 
+								data-project-title="{{ $accepted['project']->title }}">Undo</button>
 						</td>
 					@else
 						<td><a href="{{ action('ProjectEvaluationController@index', $accepted['project']->id) }}">Evaluation</a></td>

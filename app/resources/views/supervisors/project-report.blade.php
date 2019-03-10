@@ -2,15 +2,14 @@
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>
 @endsection
 
-
 @php
-	
 	$interestedStudents = Auth::user()->supervisor->getInterestedStudents();
 	$studentProposals = Auth::user()->supervisor->getStudentProjectProposals();
 	$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
+	$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects();
 @endphp
 
-
+{{-- INTRESTED STUDENTS --}}
 <div class="row mt-3">
 	<div class="col-12">
 		<div class="card">
@@ -28,7 +27,7 @@
 				<h5 class="mt-3">Interested</h5>
 				<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
 					@if($interestedStudents)
-					<thead class="thead-light">
+						<thead class="thead-light">
 							<tr>
 								<th>
 									<div class="checkbox">
@@ -136,7 +135,7 @@
 				<div class="text-right mt-3">
 					<a class="btn btn-light email-selected interested-students" href="#">Email Selected</a>
 				</div>
-		</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -154,6 +153,51 @@
 				<div class="text-right mt-3">
 					<a class="btn btn-light email-selected accepted-students" href="#">Email Selected</a>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{-- SECOND MARKING PROJECTS --}}
+<div class="row mt-3">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title">Second Marker Projects <span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
+				<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getProjectYear() }}.</h6>
+
+				<table class="table table-hover bg-white table data-table mt-1">
+					@if($secondMarkerProjects)
+						<thead class="thead-light">
+							<tr>
+								<th>Student</th>
+								<th>Project</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($secondMarkerProjects as $markerProjects)
+								<tr>
+									<td class="w-25">
+										<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
+									</td>
+
+									<td class="w-50">
+										<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
+									</td>
+
+									<td class="w-5 text-right">
+										<a href="{{ action('ProjectEvaluationController@index', $markerProjects['project']->id) }}">Evaluation</a>
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					@else
+						<tfoot>
+							<tr><td>You are not second marker to any projects yet.</td></tr>
+						</tfoot>
+					@endif
+				</table>
 			</div>
 		</div>
 	</div>
