@@ -71,7 +71,7 @@
 						@endif
 			
 						@if(!Auth::user()->isStudent())
-							@if($project->status != "student-proposed")
+							@if($project->status != "student-proposed" && $project->getAcceptedStudent() == null)
 								<div class="form-field">
 									<label for="status">Project Status</label>
 									<select name="status">
