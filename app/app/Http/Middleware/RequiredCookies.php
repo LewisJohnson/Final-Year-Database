@@ -37,7 +37,7 @@ class RequiredCookies{
 		// View: Home (Student), Project (Student)
 		// Action: A list of favourite projects
 		if(empty(Cookie::get('favourite_projects'))){
-			Cookie::queue('favourite_projects', null, 525600);
+			Cookie::queue('favourite_projects', "none", 525600);
 		}
 
 		// View: My Projects 

@@ -163,14 +163,9 @@ class Student extends Model{
 	 * @return Project Projects
 	 */
 	public function getFavouriteProjects(){
-		if(Cookie::get('favourite_projects') == "none" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
-			return null;
-		} else {
-			$projects = Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))
-				->get();
-		}
-
-		return $projects;
+		return Student::favouriteProjectCookieIsValid() 
+			? Project::whereIn('id', unserialize(Cookie::get('favourite_projects')))->get() 
+			: null;
 	}
 
 	/**
@@ -194,7 +189,7 @@ class Student extends Model{
 	 * @return boolean favourite project
 	 */
 	public function isFavouriteProject($id){
-		if(empty(Cookie::get('favourite_projects'))){
+		if(!Student::favouriteProjectCookieIsValid()){
 			return false;
 		}
 
@@ -207,5 +202,20 @@ class Student extends Model{
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns a boolean whether the parameter project is a favourite project.
+	 *
+	 * @param $id Project ID
+	 *
+	 * @return boolean favourite project
+	 */
+	public static function favouriteProjectCookieIsValid(){
+		return !(
+			Cookie::get('favourite_projects') == "none" || 
+			Cookie::get('favourite_projects') == "a:0:{}" || 
+			empty(Cookie::get('favourite_projects'))
+		);
 	}
 }
