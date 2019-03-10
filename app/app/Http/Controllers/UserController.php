@@ -473,7 +473,7 @@ class UserController extends Controller {
 			$infoString .= "<li>They have ".count($user->supervisor->getInterestedStudents())." interested students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getAcceptedStudents())." accepted students.</li>";
 			$infoString .= "<li>They have ".count($user->supervisor->getStudentProjectProposals())." students who have proposed a project to them.</li>";
-			$infoString .= "<li>They are second marker to ".count($user->supervisor->getSecondSupervisingProjects())." projects.</li>";
+			$infoString .= "<li>They are second marker to ".count($user->supervisor->getSecondMarkingProjects())." projects.</li>";
 			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
 		}
 
@@ -531,7 +531,7 @@ class UserController extends Controller {
 					$student->save();
 				}
 
-				foreach($user->supervisor->getSecondSupervisingProjects() as $project) {
+				foreach($user->supervisor->getSecondMarkingProjects() as $project) {
 					$project->marker_id = null;
 					$project->save();
 				}

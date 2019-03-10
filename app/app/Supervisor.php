@@ -305,22 +305,23 @@ class Supervisor extends Model{
 	}
 
 	/**
-	 * A list of students this supervisor is second marker too.
+	 * A list of projects this supervisor is second marker too.
 	 *
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
-	public function getSecondSupervisingProjects(){
+	public function getSecondMarkingProjects(){
 		$projects = Project::where('marker_id', $this->id)->get();
-		$offers = array();
+
+		$secondSupervisingProjects = array();
 
 		foreach($projects as $project){
 			$ar = array();
-			$ar["student"] = $project->student;
+			$ar["student"] = $project->getAcceptedStudent();
 			$ar["project"] = $project;
-			array_push($offers, $ar);
+			array_push($secondSupervisingProjects, $ar);
 		}
 
-		return $offers;
+		return $secondSupervisingProjects;
 	}
 
 	public function getMailtoStringByProjectStatus($status){

@@ -350,7 +350,7 @@ class ProjectAdminController extends Controller{
 			} else if($supervisor == $supervisorToIgnoreId) {
 				$supervisor->second_supervising_count = PHP_INT_MAX;
 			} else {
-				$supervisor->second_supervising_count = count($supervisor->getSecondSupervisingProjects());
+				$supervisor->second_supervising_count = count($supervisor->getSecondMarkingProjects());
 			}
 
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
