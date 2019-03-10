@@ -145,7 +145,7 @@ class ProjectEvaluation extends Model {
 			new ProjectEvaluationQuestion(
 				"Additional Comments",
 				"Justify your mark referring to the comments above where useful",
-				PEQValueTypes::PlainText
+				PEQValueTypes::CommentOnly
 		));
 
 		array_push($questions,

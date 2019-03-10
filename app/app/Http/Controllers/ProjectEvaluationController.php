@@ -43,7 +43,7 @@ class ProjectEvaluationController extends Controller {
 			return redirect()->action('HomeController@index');
 		}
 
-		if(Auth::user()->id != $project->supervisor->id && Auth::user()->id == $project->marker_id){
+		if(Auth::user()->id != $project->supervisor->id && Auth::user()->id != $project->marker_id){
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
@@ -66,7 +66,6 @@ class ProjectEvaluationController extends Controller {
 			$evaluation = ProjectEvaluation::find($evaluation->id);
 		}
 
-		// todo: Check if supervisor has accepted or is second supervising
 		return view('evaluation.index')
 			->with("project", $project)
 			->with("evaluation", $evaluation);
@@ -84,6 +83,7 @@ class ProjectEvaluationController extends Controller {
 		}
 
 		$questions = $project->evaluation->questions;
+
 		for ($i = 0; $i < count($questions); $i++) { 
 			if($isProjectSupervisor) {
 				$accessor = "supervisor";
@@ -93,7 +93,7 @@ class ProjectEvaluationController extends Controller {
 
 			$value = $request[$i.'_'.$accessor.'_value'];
 
-			switch ($questions[$i]['type']) {
+			switch ($questions[$i]->type) {
 				case PEQValueTypes::Scale:
 					$value = (int)max(0, min(7, $value));
 					break;
@@ -111,8 +111,11 @@ class ProjectEvaluationController extends Controller {
 					break;
 			}
 
-			$questions[$i][ucfirst($accessor).'Value'] = $value;
-			$questions[$i][ucfirst($accessor).'Comment'] = $request[$i.'_'.$accessor.'_comment'];
+			$valueAccessor = ucfirst($accessor).'Value';
+			$questions[$i]->$valueAccessor = $value;
+
+			$commentAccessor = ucfirst($accessor).'Comment';
+			$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
 		}
 
 		$eve = ProjectEvaluation::find($project->evaluation->id);

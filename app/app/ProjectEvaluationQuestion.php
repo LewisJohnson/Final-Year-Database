@@ -29,18 +29,18 @@ class ProjectEvaluationQuestion {
 
 	// JSON mapper
 	public function map($data) {
-		$this->title = $data['title'];
-		$this->description = $data['description'];
-		$this->type = $data['type'];
+		$this->title = $data->title;
+		$this->description = $data->description;
+		$this->type = $data->type;
 
-		$this->SupervisorValue = $data['SupervisorValue'] ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->SupervisorComment = $data['SupervisorComment'] ?? "None";
+		$this->SupervisorValue = $data->SupervisorValue ?? PEQValueTypes::getDefaultValue($this->type);
+		$this->SupervisorComment = $data->SupervisorComment ?? "None";
 
-		$this->MarkerValue = $data['MarkerValue'] ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->MarkerComment = $data['MarkerComment'] ?? "None";
+		$this->MarkerValue = $data->MarkerValue ?? PEQValueTypes::getDefaultValue($this->type);
+		$this->MarkerComment = $data->MarkerComment ?? "None";
 
-		$this->FinalValue = $data['FinalValue'] ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->FinalComment = $data['FinalComment'] ?? "None";
+		$this->FinalValue = $data->FinalValue ?? PEQValueTypes::getDefaultValue($this->type);
+		$this->FinalComment = $data->FinalComment ?? "None";
 	}
 }
 
@@ -70,9 +70,16 @@ class PEQValueTypes {
 	 */
 	const YesNoPossibly = 4;
 
+
+	/**
+	 * A question where a value is not required (Relies soely on comment).
+	 */
+	const CommentOnly = 5;
+
 	public static function getDefaultValue($type){
 		switch ($type) {
 			case PEQValueTypes::PlainText:
+			case PEQValueTypes::CommentOnly:
 				return "";
 				break;
 			
