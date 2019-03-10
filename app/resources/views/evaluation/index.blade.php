@@ -13,7 +13,7 @@
 		Window["isMarker"] = {{ Auth::user()->id == $marker->id ? 'true' : 'false' }};
 	</script>
 
-	<script src="{{ asset('js/views/student-portfolio.js') }}"></script>
+	<script src="{{ asset('js/views/project-evaluation.js') }}"></script>
 @endsection
 
 @section('content')
@@ -99,6 +99,10 @@
 														</select>
 														@break
 												
+													@case(SussexProjects\PEQValueTypes::CommentOnly)
+														<p class="js-value supervisor pl-2">{{ $question->SupervisorValue }}</p>
+														@break
+
 													@default
 														<p class="supervisor js-value">{{ $question->SupervisorValue }}</p>
 														<input class="supervisor js-input form-control" type="text" name="{{ $loop->index }}_supervisor_value" value="{{ $question->SupervisorValue }}">
@@ -148,6 +152,10 @@
 														</select>
 														@break
 												
+													@case(SussexProjects\PEQValueTypes::CommentOnly)
+														<p class="js-value supervisor pl-2">{{ $question->SupervisorValue }}</p>
+														@break
+
 													@default
 														<p class="marker js-value">{{ $question->MarkerValue }}</p>
 														<input class="marker js-input form-control" type="text" name="{{ $loop->index }}_marker_value" value="{{ $question->MarkerValue }}">
@@ -161,10 +169,11 @@
 												</div>
 											@endif
 
-
-											<div class="col-12">
-												<p class="mb-0">Comments:</p>
-											</div>
+											@if($question->type != SussexProjects\PEQValueTypes::CommentOnly)
+												<div class="col-12">
+													<p class="mb-0">Comments:</p>
+												</div>
+											@endif
 
 											<div class="col-6" style="min-height: 100px">
 												<p class="supervisor js-value pl-2">{{ $question->SupervisorComment }}</p>
@@ -187,9 +196,9 @@
 
 							<div class="text-right mt-3">
 								@if(!$evaluation->is_finalised)
-									<a id="edit" class="btn button--raised" href="#">Edit</a>
+									<a id="finalise" class="btn btn-secondary" href="#">Finalise</a>
+									<a id="edit" class="btn btn-primary" href="#">Edit</a>
 									<button id="save" class="btn btn-primary">Save</button>
-									<a id="finalise" class="btn button--raised" href="#">Finalise</a>
 								@endif
 							</div>
 						</div>
