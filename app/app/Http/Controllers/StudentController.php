@@ -83,8 +83,7 @@ class StudentController extends Controller{
 	public function addFavouriteProject(Request $request){
 		$project = Project::findOrFail($request->project_id);
 
-		// It works.
-		if(Cookie::get('favourite_projects') === "null" || Cookie::get('favourite_projects') == "a:0:{}" || empty(Cookie::get('favourite_projects'))){
+		if(!Student::favouriteProjectCookieIsValid()){
 			Cookie::queue('favourite_projects', serialize(array($project->id)), 525600);
 		} else {
 			$projectInCookie = false;
@@ -518,45 +517,6 @@ class StudentController extends Controller{
 			'successful' => true,
 			'message' => "You have un-selected a project."
 		));
-	}
-
-	/**
-	 * Updates the students second marker.
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
-			session()->flash('message_type', 'error');
-			return redirect()->action('HomeController@index');
-		}
-
-		DB::transaction(function() use ($request){
-			$project = Project::findOrFail(request('project_id'));
-			$student = Student::findOrFail(request('student_id'));
-			$marker = Supervisor::findOrFail(request('marker_id'));
-			$transaction = new Transaction;
-
-			$transaction->fill(array(
-				'type' => 'project',
-				'action' => 'marker-assigned',
-				'project' => $project->id,
-				'student' => $student->id,
-				'supervisor' => $project->supervisor_id,
-				'marker' => $marker->id,
-				'admin' => Auth::user()->id,
-				'transaction_date' => new Carbon
-			));
-
-			$transaction->save();
-			$project->marker_id = $marker->id;
-			$project->save();
-		});
-
-		return response()->json(array('successful' => true));
 	}
 
 	/**

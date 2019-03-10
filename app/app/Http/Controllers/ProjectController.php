@@ -762,4 +762,44 @@ class ProjectController extends Controller{
 
 		return $proj;
 	}
+
+	/**
+	 * Updates the projects second marker.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function updateSecondMarker(Request $request){
+		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
+		DB::transaction(function() use ($request){
+			$project = Project::findOrFail(request('project_id'));
+			$student = Student::findOrFail(request('student_id'));
+			$marker = Supervisor::findOrFail(request('marker_id'));
+			$transaction = new Transaction;
+
+			$transaction->fill(array(
+				'type' => 'project',
+				'action' => 'marker-assigned',
+				'project' => $project->id,
+				'student' => $student->id,
+				'supervisor' => $project->supervisor_id,
+				'marker' => $marker->id,
+				'admin' => Auth::user()->id,
+				'transaction_date' => new Carbon
+			));
+
+			$transaction->save();
+
+			$project->marker_id = $marker->id;
+			$project->save();
+		});
+
+		return response()->json(array('successful' => true));
+	}
 }
