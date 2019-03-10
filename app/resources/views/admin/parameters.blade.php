@@ -6,17 +6,21 @@
 		<div class="card-header">Parameters</div>
 
 		<div class="card-body">
-			<form class="form d-flex" method="POST" action="{{ action('ProjectAdminController@amendParameters') }}">
+			<form class="form" method="POST" action="{{ action('ProjectAdminController@amendParameters') }}">
 				{{ csrf_field() }}
 	
+				<p>
+					The date you set will be the day the action will be permitted, not midnight on this day.<br>
+					For example, if you set the date to {{ Carbon\Carbon::now()->format('d/m/Y') }}, the action will be permitted on {{ Carbon\Carbon::now()->format('d/m/Y') }} 00:00.</p>
+
 				<div class="form-field">
 					<label for="project_selection">Student Selection Date</label>
-					<input type="date" name="project_selection" value="{{ SussexProjects\Mode::getProjectSelectionDate()->toDateString() }}">
+					<input class="ml-2" type="date" name="project_selection" value="{{ SussexProjects\Mode::getProjectSelectionDate()->toDateString() }}">
 				</div>
 	
 				<div class="form-field">
 					<label for="supervisor_accept">Supervisor Accept Date</label>
-					<input type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
+					<input class="ml-2" type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
 				</div>
 	
 				<div class="form-field">
