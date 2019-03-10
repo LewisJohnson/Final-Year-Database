@@ -29,10 +29,10 @@
 								<td>{{ $student->project->title }}</td>
 								<td>{{ $student->project->supervisor->user->getFullName() }}</td>
 
-								@if($student->marker != null)
-									<td>{{ $student->marker->user->getFullName() }}</td>
-								@else
+								@if(empty($student->project->marker))
 									<td>None</td>
+								@else
+									<td>{{ $student->project->marker->user->getFullName() }}</td>
 								@endif
 							</tr>
 						@endif

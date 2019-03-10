@@ -833,7 +833,7 @@
 	};
 
 	Marker.prototype.Urls_ = {
-		ASSIGN_MARKER: 'admin/marker',
+		ASSIGN_MARKER: 'admin/marker/manual',
 	};
 
 	Marker.prototype.selectStudent = function(studentRowDOM, marker){
@@ -1091,7 +1091,7 @@
 
 	Search.prototype.functions = {
 		get: function(search, searchTerm) {
-			if(searchTerm.length < 2){
+			if(searchTerm.length < 1){
 				return;
 			}
 
@@ -1186,12 +1186,6 @@
 		SEARCH_FILTER_BUTTON: '#search-filter-button',
 		LOG_IN_DIALOG: '.login.dialog',
 		LOG_IN_FORM: '#loginForm',
-	};
-
-	AjaxFunctions.prototype.Keys_ = {
-		SPACE: 32,
-		ENTER: 13,
-		COMMA: 45
 	};
 
 	// Project page search focus

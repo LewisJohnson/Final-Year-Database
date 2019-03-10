@@ -146,6 +146,9 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	// Manual assign second marker view
 	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
 
+	// Manual second marker assignment
+	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
+
 	// Automatically assign second marker view
 	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
 
@@ -158,8 +161,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	// Perform automatic second marker assignment
 	Route::post('admin/marker/calculate', 'ProjectAdminController@calculateSecondMarkers');
 
-	// Manual second marker assignment
-	Route::patch('admin/marker', 'StudentController@updateSecondMarker');
 
 	/* LOGIN AS ROUTES */
 	// Login as another user view
