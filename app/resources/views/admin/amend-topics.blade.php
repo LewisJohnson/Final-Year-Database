@@ -3,7 +3,6 @@
 <div class="centered mw-1000">
 	<h1>Amend {{ ucfirst(Session::get('department'))." ".ucfirst(Session::get('education_level')["longName"]) }} Topics</h1>
 
-
 	<div class="card mt-3">
 		<div class="card-body">
 			<h3 class="card-title">Add Topic</h3>

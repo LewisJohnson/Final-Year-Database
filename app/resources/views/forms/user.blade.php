@@ -139,9 +139,9 @@
 			<div class="button-group flex--stretch-children">
 				@foreach(get_education_levels() as $educationLevel)
 					@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
-						<div class="checkbox">
+						<div class="checkbox mt-1">
 							<input type="checkbox" id="email-{{ $educationLevel['shortName'] }}" name="accept_email_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isSupervisor() && $user->supervisor->getAcceptingEmails($educationLevel['shortName'])) checked @endif @endif>
-							<label for="email-{{ $educationLevel['shortName'] }}">Accept {{ $educationLevel['longName'] }} emails</label>
+							<label class="ml-1" for="email-{{ $educationLevel['shortName'] }}">Accept {{ $educationLevel['longName'] }} emails</label>
 						</div>
 					@endif
 				@endforeach
@@ -153,9 +153,9 @@
 			<div class="button-group flex--stretch-children">
 				@foreach(get_education_levels() as $educationLevel)
 					@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
-						<div class="checkbox">
+						<div class="checkbox mt-1">
 							<input type="checkbox" id="take-students-{{ $educationLevel['shortName'] }}" name="take_students_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isSupervisor() && $user->supervisor->getTakingStudents($educationLevel['shortName'])) checked @endif @endif>
-							<label for="take-students-{{ $educationLevel['shortName'] }}">Take {{ $educationLevel['longName'] }} students</label>
+							<label class="ml-1" for="take-students-{{ $educationLevel['shortName'] }}">Take {{ $educationLevel['longName'] }} students</label>
 						</div>
 					@endif
 				@endforeach

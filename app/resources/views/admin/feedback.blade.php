@@ -7,7 +7,7 @@
 @section('content')
 <div class="centered mw-1400">
 	<h1>User Feedback</h1>
-	<h>Browse all of the user submitted feedback</h5>
+	<h5>Browse all of the user submitted feedback</h5>
 
 	<table id="UserFeedbackTable" class="table bg-white data-table table-column-toggle sort-table shadow-sm mt-3">
 		<thead>

@@ -11,9 +11,9 @@
 		@foreach($supervisors as $supervisor)
 			<tr>
 				<td>{{ $supervisor->user->getFullName() }}</td>
-				<td>Supervising {{ count($supervisor->getAcceptedStudents()) }} / marker {{ count($supervisor->getSecondSupervisingProjects()) }}</td>
+				<td>Supervising {{ count($supervisor->getAcceptedStudents()) }} / marker {{ count($supervisor->getSecondMarkingProjects()) }}</td>
 			</tr>
-			@foreach($supervisor->getSecondSupervisingProjects() as $secondSupervising)
+			@foreach($supervisor->getSecondMarkingProjects() as $secondSupervising)
 				<tr style="background: rgb(0, 0, 0, 0.02)">
 					<td>-</td>
 					<td>{{ $secondSupervising["student"]->user->getFullName() }}</td>

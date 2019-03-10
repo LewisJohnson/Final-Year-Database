@@ -7,9 +7,9 @@
 	<h1>Help</h1>
 
 	@if($user = Auth::user())
-		<h5>Need a helping hand, {{ Auth::user()->first_name }}? Here you can find help relevant to you.</h5>
+		<h5>Need some help, {{ Auth::user()->first_name }}? Here you can find help relevant to you.</h5>
 	@else
-		<h5>Need a helping hand? Here you can find help relevant to you.</h5>
+		<h5>Need some help? Here you can find help relevant to you.</h5>
 	@endif
 
 	<div class="card tab-card mt-5">

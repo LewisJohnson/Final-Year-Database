@@ -9,6 +9,7 @@
 <div class="centered animated-entrance mw-1000 container-fluid">
 	@if(Auth::check())
 		<h1 class="text-center">{{ $helloArray[$randIndex] }}, {{ Auth::user()->first_name }}.</h1>
+		<h6 class="text-center" style="opacity: 0.5">{{ ucfirst(Session::get('department')) }} | {{ ucfirst(Session::get('education_level')["longName"]) }}</h6>
 
 		<div class="row mt-4">
 			<div class="col-12">
@@ -139,8 +140,8 @@
 										<li class="list-group-item">You have accepted no students.</li>
 									@endif
 					
-									@if(count(Auth::user()->supervisor->getSecondSupervisingProjects()) > 0)
-										<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondSupervisingProjects()) }} projects.</li>
+									@if(count(Auth::user()->supervisor->getSecondMarkingProjects()) > 0)
+										<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondMarkingProjects()) }} projects.</li>
 									@else
 										<li class="list-group-item">You have not been assigned as second marker to any projects.</li>
 									@endif
@@ -269,7 +270,11 @@
 		@if(ldap_guest())
 			<h1>Hello, Guest.</h1>
 			<div class="card card--margin-vertical">
-				<p>You are in Guest Mode. This means you are a member of the University of Sussex, however, you do not have an account on the system. You can only perform basic tasks such as browsing projects.</p>
+				<p>
+					You are in Guest Mode.
+					This means you are a member of the University of Sussex, however, you do not have an account on the system.
+					You can only perform basic tasks such as browsing projects.
+				</p>
 			</div>
 		@else
 			<div class="row">
