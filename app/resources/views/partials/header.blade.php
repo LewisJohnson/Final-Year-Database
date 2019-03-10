@@ -119,7 +119,7 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
-								<h4>Browse</h4>
+								<h5>Browse</h5>
 								<ul>
 									<li>
 										<ul>
@@ -136,7 +136,7 @@
 							<div class="content">
 								<ul>
 									<li>
-										<h4>Help</h4>
+										<h5>Help</h5>
 										<ul class="links-list">
 											<li><a class="btn text-primary" href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
 											<li><a class="btn text-primary" href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
@@ -145,7 +145,7 @@
 
 									<li>
 										<div class="d-flex">
-											<h4>External Links</h4>
+											<h5>External Links</h5>
 											@include('svg.external')
 										</div>
 										<ul class="links-list">
@@ -187,7 +187,7 @@
 								<div class="content">
 									<ul>
 										<li>
-											<h4>Projects</h4>
+											<h5>Projects</h5>
 											<ul class="list-unstyled">
 												<li>
 													<a class="btn w-100 text-left text-primary" title="Show my projects" href="{{ action('UserController@projects', Auth::user()) }}">
@@ -203,7 +203,7 @@
 										</li>
 
 										<li>
-											<h4>Reports</h4>
+											<h5>Reports</h5>
 											<ul class="list-unstyled">
 												<li>
 													<a class="btn w-100 text-left text-primary" title="Create a new project" href="{{ action('SupervisorController@report') }}">
@@ -291,37 +291,36 @@
 								<div class="content">
 									<ul>
 										<li>
-											<h4>Project</h4>
+											<h5>Project</h5>
 											<ul>
 												<li>
 													{{-- THERE IS NO SWITCH, PLEASE DO NOT JUDGE ME --}}
 													@if(Auth::user()->student->project_status == "none")
 														<a class="btn w-100 text-left text-primary" title="Propose a project to a supervisor" href="{{ action('StudentController@proposeProjectView') }}">
-															@include('svg.pencil')
-															<p>Propose Project</p>
+															<span>@include('svg.pencil')<span>Propose Project</span></span>
 														</a>
 													@else
 														<a class="btn w-100 text-left text-primary" title="See your selected project" href="{{ action('ProjectController@show', Auth::user()->student->project) }}">
-															@include('svg.creation')
-															@if(Auth::user()->student->project_status == "proposed")
-																<p>Your Proposed Project</p>
-															@elseif(Auth::user()->student->project_status == "selected")
-																<p>Your Selected Project</p>
-															@elseif(Auth::user()->student->project_status == "accepted")
-																<p>Your Accepted Project</p>
-															@endif
+															<span>@include('svg.creation')
+																@if(Auth::user()->student->project_status == "proposed")
+																	<span>Your Proposed Project</span>
+																@elseif(Auth::user()->student->project_status == "selected")
+																	<span>Your Selected Project</span>
+																@elseif(Auth::user()->student->project_status == "accepted")
+																	<span>Your Accepted Project</span>
+																@endif
+															</span>
 														</a>
 													@endif
 												</li>
 											</ul>
 										</li>
 										<li>
-											<h4>Reports</h4>
+											<h5>Reports</h5>
 											<ul class="list-unstyled">
 												<li>
 													<a class="btn w-100 text-left text-primary" title="Create a new project" href="{{ action('SupervisorController@report') }}">
-														@include('svg.clipboard')
-														<p>Supervisor Report</p>
+														<span>@include('svg.clipboard')<span>Supervisor Report</span></span>
 													</a>
 												</li>
 											</ul>
@@ -372,7 +371,7 @@
 							<div class="content">
 								<ul>
 									<li>
-										<h4>Help</h4>
+										<h5>Help</h5>
 										<ul class="links-list">
 											<li><a class="btn text-primary" href="{{ action('HomeController@help') }}" title="System Help">System Help</a><li>
 											<li><a class="btn text-primary" href="{{ action('HomeController@about') }}" title="About this software">About</a><li>
@@ -381,8 +380,8 @@
 
 									<li>
 										<div class="d-flex">
-											<h4>External Links</h4>
-											@include('svg.external')
+											<h5>External Links</h5>
+											<span class="ml-2" style="height: 24px; width: 24px">@include('svg.external')</span>
 										</div>
 										<ul class="links-list">
 											@include('partials.header.help-links', ['platform' => 'desktop'])
