@@ -31,6 +31,12 @@ ins {
 	margin-bottom: 3rem;
 }
 
+footer {
+	a, button {
+		width: 100px;
+	}
+}
+
 
 @media print {
 	.container {

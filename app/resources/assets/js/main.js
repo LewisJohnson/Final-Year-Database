@@ -201,8 +201,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		e.preventDefault();
 
 		var submitButton = $(this).find(':submit');
-		submitButton.html('<div class="loader"></div>');
-		$('.loader', submitButton).css('display', 'block');
+		submitButton.html('<div class="spinner-border text-white"></div>');
 
 		$.ajax({
 			url: $(this).prop('action'),
@@ -377,41 +376,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 		$('#content-replaced-container').css('display', 'block');
 	});
-
-	/**
-		* Toggles the mobile menu.
-	*/
-	$('nav.mobile .sub-dropdown').on('click', function(){
-		var dropdown = $(this);
-		var linkContainer = $(this).parent().parent();
-		var content = dropdown.find('.dropdown-content');
-
-		if(dropdown.attr("aria-expanded") == "true"){
-			dropdown.attr("aria-expanded", false);
-			dropdown.find(".svg-container svg").css("transform", "rotateZ(0deg)");
-			dropdown.removeClass("active");
-
-			content.attr("aria-hidden", true);
-			content.removeClass("active");
-
-			linkContainer.find('li').slideDown(config.animtions.slow);
-
-		} else {
-			dropdown.attr("aria-expanded", true);
-			dropdown.find(".svg-container svg").css("transform", "rotateZ(180deg)");
-			dropdown.addClass("active");
-
-			content.attr("aria-hidden", false);
-			content.addClass("active");
-
-			linkContainer.find('li').each(function(index) {
-				if($(this).index() != dropdown.parent().index()){
-					$(this).slideUp(config.animtions.slow);
-				}
-			});
-		}
-	});
-
 
 	/**
 		* The student undo project form.
@@ -735,7 +699,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 
 		$(this).addClass('active');
 		$('.html-editor--top-buttons .html').removeClass('active');
-		$('.html-editor--preview').html('<div style="display: block;margin: 70px auto;" class="loader loader--large"></div>');
+		$('.html-editor--preview').html('<div style="display: block;margin: 70px auto;" class="spinner-border text-primary"></div>');
 		$('.html-editor--input').hide();
 		$('.html-editor--toolbar').hide();
 		$('.html-editor--preview-container').show();

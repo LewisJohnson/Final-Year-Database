@@ -21,3 +21,7 @@ tbody tr.is-selected:not([disabled]) {
 		cursor: pointer;
 	}
 }
+
+.table-responsive {
+	min-height: 350px;
+}
