@@ -46,6 +46,7 @@
 
 			<div class="form-field">
 				<label for="skills">Status</label>
+				<br>
 				<select name="status" id="status">
 					<option value="on-offer">On Offer</option>
 					<option value="withdrawn">Withdrawn</option>

@@ -71,14 +71,21 @@
 						@endif
 			
 						@if(!Auth::user()->isStudent())
-							@if($project->status != "student-proposed" && $project->getAcceptedStudent() == null)
-								<div class="form-field">
-									<label for="status">Project Status</label>
-									<select name="status">
-										<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
-										<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
-									</select>
-								</div>
+							@if($project->status != "student-proposed")
+								@if($project->getAcceptedStudent() == null)
+									<div class="form-field">
+										<label for="status">Status</label>
+										<br>
+										<select name="status">
+											<option @if($project->status == "on-offer") selected @endif value="on-offer">On Offer</option>
+											<option @if($project->status == "withdrawn") selected @endif value="withdrawn">Withdrawn</option>
+										</select>
+									</div>
+								@else
+									<div class="alert alert-info" role="alert">
+										You can not change the status of this project because <b>{{ $project->getAcceptedStudent()->user->getFullName() }}</b> has been accepted. 
+									</div>
+								@endif
 							@endif
 						@endif
 			
