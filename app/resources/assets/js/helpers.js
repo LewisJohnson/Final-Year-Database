@@ -13,7 +13,7 @@
 |
 */
 
-const toastHtmlSnippet = '<div class="toast" role="alert"></div>';
+const toastHtmlSnippet = '<div class="notification" role="alert"></div>';
 
 /**
  * Creates a new toast.
@@ -32,7 +32,7 @@ function createToast(type, message){
 	$(toast).html("<p>" + message + "</p>");
 
 	// Add classes to toast
-	$(toast).addClass('notification ' + type);
+	$(toast).addClass(type);
 
 	setTimeout(function() {
 		// Delete toast
