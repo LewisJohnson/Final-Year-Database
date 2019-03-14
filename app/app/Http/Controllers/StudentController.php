@@ -568,8 +568,11 @@ class StudentController extends Controller{
 
 				// EMPTY STUDENTS
 				if(isset($request->empty_students)){
-					$students = User::where('privileges', 'student');
-					$students->delete();
+					$studentsToDelete = Student::all();
+
+					foreach ($studentsToDelete as $student) {
+						User::destroy($student->id);
+					}
 				}
 
 				// EMPTY PROGRAMMES
@@ -724,10 +727,12 @@ class StudentController extends Controller{
 					));
 				}
 
-				$users = User::where('privileges', 'student')->get();
 				$students = Student::all();
+				$users = User::whereIn('id', $students->pluck('id')->toArray())->get();
+
 				$view = view('admin.partials.import-student-table')
-					->with('users', $users)->with('students', $students)
+					->with('users', $users)
+					->with('students', $students)
 					->render();
 
 				return response()->json(array(

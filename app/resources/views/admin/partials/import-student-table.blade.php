@@ -1,60 +1,35 @@
-<div class="section-container">
-	<div class="section horizontal">
-		<h4>User Table</h4>
-		<div class="table-responsive">
-			<table class="table table-hover bg-white  data-table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Username</th>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Email</th>
-						<th>Programme</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($users as $user)
-						<tr>
-							<td>{{ $user->id }}</td>
-							<td>{{ $user->username }}</td>
-							<td>{{ $user->first_name }}</td>
-							<td>{{ $user->last_name }}</td>
-							<td>{{ $user->email }}</td>
-							@if(!empty($user->programme_relationship))
-								<td>{{ $user->programme_relationship->name }}</td>
-							@else
-								<td>{{ $user->programme }}</td>
-							@endif
-						</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<div class="section horizontal">
-		<h4>Student Table</h4>
-		<div class="table-responsive">
-			<table class="table table-hover bg-white  data-table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Registration Number</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($students as $student)
-						<tr>
-							<td>{{ $student->id }}</td>
-							<td>{{ $student->registration_number }}</td>
-						</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-	</div>
+<hr>
+<h5>Imported Students</h5>
+<div class="table-responsive mt-3">
+	<table class="table table-hover bg-white data-table">
+		<thead class="thead-light">
+			<tr>
+				<th>ID</th>
+				<th>Registration Number</th>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Programme</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($users as $user)
+				<tr>
+					<td class="text-truncate" style="max-width: 50px" title="{{ $user->id }}" >{{ $user->id }}</td>
+					<td>{{ $students[$loop->index]["registration_number"] }}</td>
+					<td>{{ $user->username }}</td>
+					<td>{{ $user->first_name }}</td>
+					<td>{{ $user->last_name }}</td>
+					<td>{{ $user->email }}</td>
+					@if(!empty($user->programme_relationship))
+						<td>{{ $user->programme_relationship->name }}</td>
+					@else
+						<td>{{ $user->programme }}</td>
+					@endif
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
 </div>
-
-
 
