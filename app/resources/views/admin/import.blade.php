@@ -68,35 +68,44 @@
 	<div class="col-12 mt-3">
 		<div class="card">
 			<div class="card-body">
-				<h3 class="card-title">Import Students</h3>
+				<h3 class="card-title">Real Import Students</h3>
 				<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ Session::get('education_level')["longName"] }} student table.</p>
 				<form class="import-student-form" data-type="prod" action="{{ action('StudentController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 					{{ csrf_field() }}
-		
-					<div class="form-field">
-						<label>Select file to upload</label>
-						<input type="file" accept=".csv" name="studentFile" class="file" required/>
-					</div>
 
 					<div class="form-field mb-2">
 						<div class="checkbox">
-							<input type="checkbox" name="empty_programmes" value="empty_programmes" id="empty_programmes" onchange="$('#import-students-submit').addClass('btn-danger')">
-							<label class="ml-1" for="empty_programmes">Empty programmes table <span class="text-danger">(This will reset everybody's programme)</span></label>
+							<input type="checkbox" name="auto_programmes" value="auto_programmes" id="auto_programmes">
+							<label class="ml-1" for="auto_programmes">Auto import programmes</label>
+							<p class="text-muted ml-4">This will import all of the programmes from the CSV to the database so you don't have to do it manually.<br>
+								This will not affect any current data.</p>
 						</div>
 					</div>
 
 					<div class="form-field mb-2">
 						<div class="checkbox">
 							<input type="checkbox" name="empty_students" value="empty_students" id="empty_students" onchange="$('#import-students-submit').addClass('btn-danger')">
-							<label class="ml-1" for="empty_students">Empty students table <span class="text-danger">(This will remove all students)</span></label>
+							<label class="ml-1" for="empty_students">Empty students table</label>
 						</div>
+						<p class="text-danger ml-4">
+							This will option will <b>empty</b> the <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> students table and delete the entries from the user table.<br>
+						</p>
 					</div>
 
 					<div class="form-field mb-2">
 						<div class="checkbox">
-							<input type="checkbox" name="auto_programmes" value="auto_programmes" id="auto_programmes">
-							<label class="ml-1" for="auto_programmes">Auto import programmes</label>
+							<input type="checkbox" name="empty_programmes" value="empty_programmes" id="empty_programmes" onchange="$('#import-students-submit').addClass('btn-danger')">
+							<label class="ml-1" for="empty_programmes">Empty programmes table</label>
+							<p class="text-danger ml-4">
+								This will option will <b>empty</b> the <span class="text-uppercase">{{ Session::get('department') }}</span> programmes table, which is shared between all education levels.<br>
+								You probably do not want to do this.
+							</p>
 						</div>
+					</div>
+
+					<div class="form-field">
+						<label>Select file to upload</label>
+						<input type="file" accept=".csv" name="studentFile" class="file" required/>
 					</div>
 
 					<div class="text-right mt-3">
