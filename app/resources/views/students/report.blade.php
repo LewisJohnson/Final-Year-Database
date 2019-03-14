@@ -31,14 +31,14 @@
 				@endphp
 
 				@if($currentStatusStudentCount)
-					<div class="col-12 col-md-6 col-lg-3 mb-3">
+					<div class="col-12 col-md-6 col-lg-3 mt-3">
 						<div class="card">
 							<div class="card-body px-0">
 								<div class="d-flex px-3">
 									<h5>{{ ucfirst($status) }} <span class="text-muted">({{ round(($currentStatusStudentCount / $studentCount) * 100, 2) }}%)</span></h5>
 									<h5 class="ml-auto text-primary">{{ $currentStatusStudentCount }}</h5>
 								</div>
-								<table data-admin-email="{{ Auth::user()->email }}" class="table table-sm data-table sort-table email-table border-0 {{ $status }}" data-status="{{ $status }}">
+								<table data-admin-email="{{ Auth::user()->email }}" class="table table-sm data-table sort-table email-table border-0 mt-3 {{ $status }}" data-status="{{ $status }}">
 									<thead>
 										<tr>
 											<th>
@@ -48,7 +48,7 @@
 												</div>
 											</th>
 											<th>Name</th>
-											<th>Reject Count</th>
+											<th class="text-right">Reject Count</th>
 											<th>Last Login</th>
 										</tr>
 									</thead>
@@ -62,7 +62,7 @@
 													</div>
 												</td>
 												<td><a @if($student->project != null) href="{{ action('ProjectController@show', $student->project) }}" @endif>{{ $student->user->first_name }} {{ $student->user->last_name }}</a></td>
-												<td>{{ $student->reject_count }}</td>
+												<td class="text-right">{{ $student->reject_count }}</td>
 												@if($student->user->last_login)
 													<td>{{ $student->user->last_login->diffForHumans() }}</td>
 												@else
@@ -73,14 +73,14 @@
 									</tbody>
 								</table>
 
-								<div class="mt-3 px-3">
+								<div class="mt-3 text-right px-3">
 									<a class="btn btn-secondary email-selected {{ $status }}" href="mailto:">Email Selected</a>
 								</div>
 							</div>
 						</div>
 					</div>
 					@else
-						<div class="col-12 col-md-6 col-lg-3 mb-3">
+						<div class="col-12 col-md-6 col-lg-3 mt-3">
 							<div class="card">
 								<div class="card-body">
 									<h5>{{ ucfirst($status) }}</h5>
