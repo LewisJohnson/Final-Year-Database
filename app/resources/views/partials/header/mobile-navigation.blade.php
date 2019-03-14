@@ -42,7 +42,7 @@
 			</div>
 		@endif
 		@if(Auth::check())
-			@if(Auth::user()->isProjectAdmin())
+			@if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]))
 				<div class="col-12"><h5 class="text-uppercase mt-3">Project Administrator</h5>
 					<div class="list-group">
 						<a href="{{ action('ProjectAdminController@index') }}" title="Administrator">Administrator Hub</a>

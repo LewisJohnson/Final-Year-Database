@@ -178,19 +178,19 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function loginAs($id){
-		$user = User::findOrFail($id);
+		$userToLoginAs = User::findOrFail($id);
 
-		if($user->isSystemAdmin() || $user->isProjectAdmin()){
+		if($userToLoginAs->isSystemAdmin() || $userToLoginAs->isProjectAdmin()){
 			session()->flash('message', 'You may not log in as an administrator.');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ProjectAdminController@loginAsView');
 		}
 
-		Auth::login($user);
+		Auth::login($userToLoginAs);
 
 		// Redirect
-		session()->flash('message', 'You have logged in as '.$user->getFullName());
+		session()->flash('message', 'You have logged in as '.$userToLoginAs->getFullName());
 		session()->flash('message_type', 'success');
 		Session::put('logged_in_as', true);
 

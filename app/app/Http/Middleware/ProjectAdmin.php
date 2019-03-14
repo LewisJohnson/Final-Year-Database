@@ -8,6 +8,7 @@
 namespace SussexProjects\Http\Middleware;
 
 use Closure;
+Use Session;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectAdmin{
@@ -21,7 +22,7 @@ class ProjectAdmin{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if(Auth::check() && Auth::user()->isProjectAdmin()){
+		if(Auth::check() && Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
 			return $next($request);
 		}
 
