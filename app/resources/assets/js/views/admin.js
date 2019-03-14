@@ -67,7 +67,7 @@
 		e.preventDefault();
 
 		if($(this).find('.file').length < 1){
-			createToast('error', 'Something went wrong. Please refresh the page.');
+			createToast('error', 'Please select a file.');
 			return;
 		}
 
@@ -76,34 +76,52 @@
 		var formData = new FormData();
 
 		formData.append('studentFile', fileData);
-		formData.append('empty_programmes', $(this).find('#empty_programmes'));
 		formData.append('auto_programmes', $(this).find('#auto_programmes'));
+		formData.append('empty_programmes', $(this).find('#empty_programmes'));
 		formData.append('empty_students', $(this).find('#empty_students'));
-		$.ajax({
-			url: $(this).prop('action'),
-			cache: false,
-			contentType: false,
-			processData: false,
-			data: formData,
-			type: 'post',
-			success: function(response){
-				if(!response.successful){
-					$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b>' + response.message + '</p>');
-					return;
-				}
 
-				if(requestType == "test"){
-					$('#import-student-test-result').html(response.message);
-					$('#import-student-test-result').addClass('fadeInUp animated');
-				} else {
-					$('#import-student-result').html(response.message);
-					$('#import-student-result').addClass('fadeInUp animated');
-				}
-			},
-			error: function(response){
-				$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b> This is likely caused by a foreign key constraint failure. Have you added all the programmes in the uploaded file to the database?</p>');
-			},
-		 });
+		$.confirm({
+			title: 'Import Students',
+			type: 'red',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement : false,
+			content: 'Please double check the file and the options you have selected before importing.',
+			buttons: {
+				import: {
+					btnClass: 'btn-red',
+					action: function(){
+						$.ajax({
+							url: $(this).prop('action'),
+							cache: false,
+							contentType: false,
+							processData: false,
+							data: formData,
+							type: 'post',
+							success: function(response){
+								if(!response.successful){
+									$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b>' + response.message + '</p>');
+									return;
+								}
+
+								if(requestType == "test"){
+									$('#import-student-test-result').html(response.message);
+									$('#import-student-test-result').addClass('fadeInUp animated');
+								} else {
+									$('#import-student-result').html(response.message);
+									$('#import-student-result').addClass('fadeInUp animated');
+								}
+							},
+							error: function(response){
+								$('#import-student-result').html('<p style="color: red"><b>An error has occurred.</b> This is likely caused by a foreign key constraint failure. Have you added all the programmes in the uploaded file to the database?</p>');
+							},
+						});
+					}
+				},
+				cancel: {},
+			}
+		});
 	});
 
 	$('.delete-user').on('click', function(e) {
