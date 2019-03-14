@@ -57,22 +57,22 @@
 			<div class="col-4">
 				@if(get_config_json("footer.accessibility_buttons.value") == true)
 					@if(Cookie::get('accessibility_font') == "true")
-						<a class="btn btn-sm rounded-0 btn-link border-bottom text-white" href="?large_font=false">Standard Font</a>
+						<a class="btn btn-sm rounded-0 btn-link border-bottom text-white text-left" href="?large_font=false">Standard Font</a>
 					@else
-						<a class="btn btn-sm rounded-0 btn-link" href="?large_font=true">Large Font</a>
+						<a class="btn btn-sm rounded-0 btn-link text-left" href="?large_font=true">Large Font</a>
 					@endif
 					
 					<span class="mx-2 text-muted d-none d-md-inline-block">|</span>
 
 					@if(Cookie::get('accessibility_contrast') == "true")
-						<a class="btn btn-sm rounded-0 btn-link border-bottom text-white" href="?high_contrast=false">High Contrast</a>
+						<a class="btn btn-sm rounded-0 btn-link border-bottom text-white text-left" href="?high_contrast=false">High Contrast</a>
 					@else
-						<a class="btn btn-sm rounded-0 btn-link" href="?high_contrast=true">High Contrast</a>
+						<a class="btn btn-sm rounded-0 btn-link text-left" href="?high_contrast=true">High Contrast</a>
 					@endif
 				@endif
 
 				@if(ldap_guest())
-					<p class="hover--light">Guest Mode</p>
+					<p>Guest Mode</p>
 				@endif
 			</div>
 		
