@@ -33,7 +33,7 @@ import 'bootstrap';
 	================ */
 $.ajaxSetup({
 	headers: {
-		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	}
 });
 
@@ -235,8 +235,8 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			data: $(this).serialize(),
 			success:function(data){
 				data = JSON.parse(data);
-				var elem = EditProgramme.prototype.functions.createEditProgrammeDOM(data["id"], data["name"]);
-			},
+				EditProgramme.prototype.functions.createEditProgrammeDOM(data["id"], data["name"]);
+			}
 		}).always(function(){
 			$(this).find('input').val('');
 			$(this).find(':submit').html('Add');
@@ -413,7 +413,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 						});
 					}
 				},
-				cancel: {},
+				cancel: {}
 			}
 		});
 	});
@@ -495,7 +495,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			createToast('', 'Please wait a few seconds before changing your preference again.');
 			return;
 		}
-
 
 		if(window['project'] != null){
 			var projectId = window['project'].data('project-id');
