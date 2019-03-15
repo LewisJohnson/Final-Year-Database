@@ -71,23 +71,51 @@
 			return;
 		}
 
+		var modalTitle;
+		var modalDesc;
+		var modalType;
+
+		if(requestType == "test"){
+			modalTitle = "Test Import Students";
+			modalDesc = "This test import will not affect any real data.";
+			modalType = "blue";
+		} else {
+			modalTitle = "Import Students";
+			modalDesc = "Please be sure of the file and options you have selected for import.";
+			modalType = "red";
+		}
+
 		var fileData = $(this).find('.file').prop('files')[0];
 		var requestType = $(this).data('type');
 		var formData = new FormData();
 
 		formData.append('studentFile', fileData);
-		formData.append('auto_programmes', $(this).find('#auto_programmes'));
-		formData.append('empty_programmes', $(this).find('#empty_programmes'));
-		formData.append('empty_students', $(this).find('#empty_students'));
+
+		modalDesc += '<br><br><span class="text-primary">FILE: ' + fileData.name + '</span>';
+
+		if($(this).find('#auto_programmes').is(":checked")){
+			formData.append('auto_programmes', true);
+			modalDesc += '<br><span class="text-primary">OPTION: Auto import programmes</span>';
+		}
+
+		if($(this).find('#empty_programmes').is(":checked")){
+			formData.append('empty_programmes', true);
+			modalDesc += '<br><span class="text-danger">OPTION: Empty programmes table. This will delete all programmes for <b>ALL<b> education levels.</span>';
+		}
+
+		if($(this).find('#empty_students').is(":checked")){
+			formData.append('empty_students', true);
+			modalDesc += '<br><span class="text-danger">OPTION: Empty students table. This will delete all students for this education level.</span>';
+		}
 
 		$.confirm({
-			title: 'Import Students',
-			type: 'red',
+			title: modalTitle,
+			type: modalType,
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
 			animateFromElement : false,
-			content: 'Please double check the file and the options you have selected before importing.',
+			content: modalDesc,
 			buttons: {
 				import: {
 					btnClass: 'btn-red',

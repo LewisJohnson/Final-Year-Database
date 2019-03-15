@@ -15,13 +15,13 @@
 			<div class="card-body">
 				<h3 class="card-title">File Format</h3>
 			
-				<span>You can export spreadsheets to CSV, all versions of Microsoft Excel and LibreOffice Calc support this feature.</span>
+				<span>You can easily export spreadsheets to CSV, all versions of Microsoft Excel and LibreOffice Calc support this feature.</span>
 				<br>
 				<span>The CSV file must be encoded in UTF-8.</span>
 		
 				<h5 class="mt-3">Example Spreadsheet</h5>
 				<table class="table w-60">
-					<thead>
+					<thead class="thead-light">
 						<tr>
 							<th>Registration Number</th>
 							<th>Last Name</th>
@@ -31,13 +31,20 @@
 						</tr>
 					</thead>
 					<tbody>
-							<tr>
-								<td>21201297</td>
-								<td>Smith</td>
-								<td>Amadeus</td>
-								<td>Computer Science</td>
-								<td>as997</td>
-							</tr>
+						<tr>
+							<td>21201297</td>
+							<td>Smith</td>
+							<td>Amadeus</td>
+							<td>Computer Science</td>
+							<td>as997</td>
+						</tr>
+						<tr>
+							<td>21291433</td>
+							<td>Stone</td>
+							<td>Hannah</td>
+							<td>GAME</td>
+							<td>hs145</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -48,11 +55,14 @@
 		<div class="card w-100">
 			<div class="card-body">
 				<h3 class="card-title">Test Import Students</h3>
-				<p>Uploading a file to this form will upload the data to a test table, then display the result.</p>
+				<p>
+					Uploading a file to this form will upload the data to a test table, then display the result.<br>
+					This will not affect any real data.
+				</p>
 				<form class="import-student-form" data-type="test" action="{{ action('StudentController@importStudents', ['test' => true]) }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 					{{ csrf_field() }}
 					<div class="form-field">
-						<label>Select file to upload</label>
+						<label class="d-block m-0">Select test file</label>
 						<input type="file" accept=".csv" name="studentFile" class="file" required/>
 					</div>
 
@@ -104,7 +114,7 @@
 					</div>
 
 					<div class="form-field">
-						<label>Select file to upload</label>
+						<label class="d-block m-0">Select file to upload</label>
 						<input type="file" accept=".csv" name="studentFile" class="file" required/>
 					</div>
 
@@ -117,4 +127,10 @@
 		</div>
 	</div>
 </div>
+
+<style type="text/css">
+	.jconfirm-content {
+		text-align: left !important;
+	}
+</style>
 @endsection
