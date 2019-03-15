@@ -20,15 +20,6 @@
 	pointer-events: none;
 	font-size: 20px;
 
-	@if $notification-fullscreen {
-		top: 0;
-
-		p {
-			font-size: 8vw;
-			position: relative;
-		}
-	}
-
 	p {
 		text-align: center;
 		margin: 0;

@@ -39,7 +39,7 @@
 
 		&:checked {
 			+ label:before {
-				background: $checkbox-checked-color;
+				background: #007bff;
 				border: none;
 			}
 			+ label:after {

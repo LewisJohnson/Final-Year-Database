@@ -11,14 +11,14 @@
 }
 
 .error-display {
-	border-top: 2px solid $text-color;
+	border-top: 2px solid gray;
 	text-align: center;
 	padding: 1rem;
 	background: $accent-danger-background;
-	color: $accent-danger-text-color;
+	color: white;
 
 	h1, h2, h3, h4, h5, h6 {
-		color: $accent-danger-text-color;
+		color: white;
 	}
 }
 
@@ -58,13 +58,13 @@
 .config-tip {
 	@extend %config-message;
 	background: $accent-tip-background;
-	color: $accent-tip-text-color;
+	color: white;
 }
 
 .config-danger {
 	@extend %config-message;
 	background: $accent-danger-background;
-	color: $accent-danger-text-color;
+	color: white;
 }
 
 .config-note {
