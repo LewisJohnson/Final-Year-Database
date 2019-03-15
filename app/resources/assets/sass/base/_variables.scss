@@ -7,34 +7,11 @@
 /* BRAND */
 $brand-primary: #1D4289;
 $accent: darken($brand-primary, 6%);
-$accent-info: #8eb4cb;
 
 $accent-success-background: #2ab27b;
-$accent-success-text-color: white;
-
 $accent-warning-background: #cbb956;
-$accent-warning-text-color: white;
-
 $accent-danger-background: #d9534f;
-$accent-danger-text-color: white;
-
 $accent-tip-background: #64B5F6;
-$accent-tip-text-color: white;
-
-$space-grey: rgb(52, 61, 70);
-
-/* TYPOGRAPHY */
-$font-family-sans-serif: "Roboto", sans-serif;
-$font-size-base: 16px;
-
-$text-color: #757575;
-$h5-color: darken($text-color, 3%);
-$h4-color: darken($h5-color, 3%);
-$h3-color: darken($h4-color, 3%);
-$h2-color: darken($h3-color, 3%);
-$h1-color: darken($h2-color, 3%);
-
-$list-text-color: #515151;
 
 /* NAV & HEADER */
 $header-background: $brand-primary;
@@ -48,30 +25,19 @@ $form-border-color: rgba(0, 0, 0, 0.12);
 $form-border-width: 1px;
 $form-input-padding: 8px;
 $form-input-font-size: 16px;
-$form-label-text-color: $text-color;
-
-$input-color: $text-color;
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
 
 /* CHECKBOX */
 $checkbox-margin: 16px 0;
-$checkbox-checked-color: #3f51b5;
 $checkbox-border-color: rgba(0, 0, 0, 0.54);
 $checkbox-size: 20px;
 $checkbox-padding: 4px;
 $checkmark-width: 2px;
-$checkmark-color: #fff;
+$checkmark-color: white;
 
 /* SHADOWS */
 $shadow-key-umbra-opacity: 0.1;
 $shadow-key-penumbra-opacity: 0.08;
 $shadow-ambient-shadow-opacity: 0.06;
-
-/* ERROR */
-$error-bg: #ff6363;
-$error-border-color: darken($error-bg, 5%);
 
 /* NOTIFICATION */
 $notification-bg: #ececec;
@@ -79,7 +45,6 @@ $notification-error-bg: #ff0033;
 $notification-warning-bg: #ffcc00;
 $notification-success-bg: #00b724;
 $notification-animation-duration: 3s;
-$notification-fullscreen: false; // True | false
 
 /* TOPICS */
 $topic-bg: #323232;
@@ -94,3 +59,44 @@ $project-on-offer-color: green;
 $project-withdrawn-color: rgb(255, 119, 119);
 $project-student-color: #d6d600;
 $project-archived-color: #757575;
+
+/* BOOTSTRAP */
+// Body
+$body-bg: #f5f8fa;
+
+// Typography
+$font-family-sans-serif: "Raleway", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Options
+$enable-shadows: true;
+
+// This variable affects the `.h-*` and `.w-*` classes.
+$sizes: ();
+$sizes: map-merge(
+	(
+		5: 5%,
+		10: 10%,
+		15: 15%,
+		20: 20%,
+		25: 25%,
+		30: 30%,
+		35: 35%,
+		40: 40%,
+		45: 45%,
+		50: 50%,
+		55: 55%,
+		60: 60%,
+		65: 65%,
+		70: 70%,
+		75: 75%,
+		80: 80%,
+		85: 85%,
+		90: 90%,
+		95: 95%,
+		100: 100%,
+		auto: auto
+	),
+	$sizes
+);
