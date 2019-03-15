@@ -224,8 +224,9 @@ class ProjectAdminController extends Controller{
 	public function archive(){
 		DB::transaction(function(){
 			$projects = Project::all();
-			$students = User::where('privileges', 'student')->get();
+			$studentsToDelete = Student::all();
 
+			// Archive all projects
 			foreach($projects as $project){
 				if($project->getAcceptedStudent() != null){
 					$project->description = $project->description." (++ In ".Mode::getProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
@@ -241,10 +242,12 @@ class ProjectAdminController extends Controller{
 				$project->save();
 			}
 
-			foreach($students as $student){
-				$student->delete();
+			// Empty the students table
+			foreach ($studentsToDelete as $student) {
+				User::destroy($student->id);
 			}
 
+			// Empty the transaction table
 			$transaction = new Transaction();
 			DB::table($transaction->getTable())->delete();
 		});
