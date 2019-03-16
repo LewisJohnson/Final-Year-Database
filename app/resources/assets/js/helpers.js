@@ -13,8 +13,6 @@
 |
 */
 
-const toastHtmlSnippet = '<div class="notification" role="alert"></div>';
-
 /**
  * Creates a new toast.
  * @param {string} type The css class to add to the toast
@@ -22,11 +20,8 @@ const toastHtmlSnippet = '<div class="notification" role="alert"></div>';
  */
 function createToast(type, message){
 
-	// Remove other toasts
-	$('.toast').remove();
-
 	// Create new toast
-	var toast = $(toastHtmlSnippet).appendTo('body');
+	var toast = $('<div class="notification shadow-lg" role="alert"></div>').appendTo('body');
 
 	// Add message to toast
 	$(toast).html("<p>" + message + "</p>");
