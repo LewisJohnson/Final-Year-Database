@@ -22,11 +22,12 @@
 				<tr>
 					<th data-default="false" class="cursor--pointer">Id</th>
 					<th data-default="true" class="cursor--pointer">Action</th>
-					<th data-default="true" class="cursor--pointer">Project</th>
-					<th data-default="true" class="cursor--pointer">Student</th>
+					<th data-default="{{ $transaction_type == "Topic" }}" class="cursor--pointer">Topic</th>
+					<th data-default="{{ $transaction_type != "Topic" }}" class="cursor--pointer">Project</th>
+					<th data-default="{{ $transaction_type != "Topic" }}" class="cursor--pointer">Student</th>
 					<th data-default="true" class="cursor--pointer">Supervisor</th>
 					<th data-default="false" class="cursor--pointer">Marker</th>
-					<th data-default="false" class="cursor--pointer">Admin</th>
+					<th data-default="{{ $transaction_type == "Topic" }}" class="cursor--pointer">Admin</th>
 					<th data-default="true" class="cursor--pointer">Date</th>
 				</tr>
 			</thead>
@@ -35,6 +36,8 @@
 					<tr>
 						<td data-hover="{{ $transaction->id }}">{{ substr($transaction->id, 0, 7) }}</td>
 						<td>{{ ucfirst($transaction->action) }}</td>
+
+						<td>{{ $transaction->topic }}</td>
 
 						@if($transaction->action == "copy")
 							@php
@@ -48,10 +51,15 @@
 								<span>⮕</span>
 								<a href="{{ action('ProjectController@show', $copiedProject) }}">{{ $copiedProject->title }}</a>
 							</td>
+						@elseif($transaction->action == "deleted")
+							<td>
+								{{ $transaction->project }}
+							</td>
 						@else
 							@php
 								$projTitle = $transaction->getProjectTitle();
 							@endphp
+
 							@if($projTitle != '-')
 								<td data-hover="{{ $transaction->project }}"><a href="{{ action('ProjectController@show', $transaction->project) }}">{{ $projTitle }}</a></td>
 							@else
