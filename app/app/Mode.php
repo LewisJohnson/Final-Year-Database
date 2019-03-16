@@ -49,13 +49,22 @@ class Mode extends Model{
 	protected $primaryKey = 'project_year';
 
 	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'thresholds' => 'array'
+	];
+
+	/**
 	 * Call this method to get singleton
 	 * ish...
 	 *
 	 * @return Mode
 	 */
 	public static function Instance(){
-		$mode = Mode::all()->first();
+		$mode = Mode::first();
 
 		// There is no mode, create one
 		if($mode == null){
@@ -77,7 +86,7 @@ class Mode extends Model{
 	/**
 	 * Gets project selection date
 	 *
-	 * @param null $human
+	 * @param boolean $human
 	 *
 	 * @return string
 	 */
@@ -92,7 +101,7 @@ class Mode extends Model{
 	/**
 	 * Gets supervisor accept date
 	 *
-	 * @param null $human
+	 * @param boolean $human
 	 *
 	 * @return string
 	 */
@@ -114,7 +123,19 @@ class Mode extends Model{
 	}
 
 	/**
-	 * Gets project year
+	 * Gets thresholds for project evaluations
+	 *
+	 * @return string
+	 */
+	public static function getThresholds(){
+		$thresholds = Mode::Instance()->thresholds;
+		sort($thresholds);
+		
+		return $thresholds;
+	}
+
+	/**
+	 * Gets the boolean is marker realeased to staff
 	 *
 	 * @return string
 	 */
