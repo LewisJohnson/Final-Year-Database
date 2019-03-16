@@ -10,6 +10,7 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use SussexProjects\ProjectTopic;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
@@ -45,6 +46,7 @@ class TopicController extends Controller{
 				'type' => 'topic',
 				'action' => 'created',
 				'topic' => $topic->name,
+				'admin' => Auth::user()->id,
 				'transaction_date' => new Carbon
 			));
 
@@ -72,17 +74,18 @@ class TopicController extends Controller{
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
+			$topic->name = $request->topic_name;
+			$topic->save();
+
 			$transaction->fill(array(
 				'type' => 'topic',
 				'action' => 'updated',
-				'topic' => $topic->id,
+				'topic' => $topic->name." -> ".$request->topic_name,
+				'admin' => Auth::user()->id,
 				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
-
-			$topic->name = $request->topic_name;
-			$topic->save();
 		});
 
 		return $result;
@@ -101,16 +104,18 @@ class TopicController extends Controller{
 			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction;
 
+			$projectTopic->delete();
+			$topic->delete();
+
 			$transaction->fill(array(
 				'type' => 'topic',
 				'action' => 'deleted',
-				'topic' => $topic->id,
+				'topic' => $topic->name,
+				'admin' => Auth::user()->id,
 				'transaction_date' => new Carbon
 			));
 
 			$transaction->save();
-			$projectTopic->delete();
-			$topic->delete();
 		});
 
 		return $result;
