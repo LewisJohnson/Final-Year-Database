@@ -24,9 +24,9 @@
 |   7. Other
 */
 
+import 'bootstrap';
 import '../js/partials/components.js';
 import '../js/partials/supervisor-filter.js';
-import 'bootstrap';
 
 /* ================
 	1. AJAX Setup
@@ -191,122 +191,6 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
 			}
 		});
-	});
-
-
-	/**
-		* Create a new topic form submit.
-	*/
-	$('#new-topic-form').on('submit', function(e) {
-		e.preventDefault();
-
-		var submitButton = $(this).find(':submit');
-		submitButton.html('<div class="spinner-border text-white"></div>');
-
-		$.ajax({
-			url: $(this).prop('action'),
-			type:'POST',
-			context: $(this),
-			data: $(this).serialize(),
-			success:function(data){
-				data = JSON.parse(data);
-				var elem = EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
-			},
-		}).always(function(){
-			$(this).find('input').val('');
-			$(this).find(':submit').html('Add');
-		});
-	});
-
-	/**
-		* Create a new programme form submit.
-	*/
-	$('#new-programme-form').on('submit', function(e) {
-		e.preventDefault();
-
-		var submitButton = $(this).find(':submit');
-		submitButton.html('<div class="spinner-border text-light"></div>');
-		$('.loader', submitButton).css('display', 'block');
-
-		$.ajax({
-			url: $(this).prop('action'),
-			type:'POST',
-			context: $(this),
-			data: $(this).serialize(),
-			success:function(data){
-				data = JSON.parse(data);
-				EditProgramme.prototype.functions.createEditProgrammeDOM(data["id"], data["name"]);
-			}
-		}).always(function(){
-			$(this).find('input').val('');
-			$(this).find(':submit').html('Add');
-		});
-	});
-
-	/**
-		* New/Edit user form.
-	*/
-	var supervisorForm = $('#supervisor-form');
-	var studentForm = $('#student-form');
-
-	supervisorForm.hide();
-	studentForm.hide();
-
-	$('.user-form-supervisor').each(function() {
-		if($(this).prop('checked')){
-			supervisorForm.show(400);
-		}
-	});
-
-	$('.user-form-supervisor').on('change', function(){
-		if($(this).prop('checked')){
-			$('.user-form-student').attr('disabled', 'true');
-			supervisorForm.show(400);
-		} else {
-			var checked = false;
-			$('.user-form-student').removeAttr('disabled');
-			$('.user-form-supervisor').each(function() {
-				if($(this).prop('checked')){
-					checked = true;
-				}
-			});
-
-			if(!checked){
-				supervisorForm.hide(400);
-			}
-		}
-	});
-
-	$('.user-form-student').each(function() {
-		if($(this).prop('checked')){
-			studentForm.show(400);
-		}
-	});
-
-	$('.user-form-student').on('change', function(){
-		if($(this).prop('checked')){
-			studentForm.show(400);
-			$('.user-form-supervisor').attr('disabled', 'true');
-		} else {
-			var checked = false;
-			$('.user-form-supervisor').removeAttr('disabled');
-			$('.user-form-student').each(function() {
-				if($(this).prop('checked')){
-					checked = true;
-				}
-			});
-
-			if(!checked){
-				studentForm.hide(400);
-			}
-		}
-	});
-
-	/**
-		* Auto generates the email from the username field.
-	*/
-	$('.user-form #username').on('keydown keyup change', function(){
-		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
 	});
 
 
