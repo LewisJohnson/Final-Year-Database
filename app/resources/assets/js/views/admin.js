@@ -4,65 +4,37 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
+/*
+|--------------------------------------------------------------------------
+| MAIN
+|--------------------------------------------------------------------------
+|
+| The JavaScript functions required solely by Project or System Administrators
+|
+|------------------
+| FILE STRUCTURE
+|------------------
+|
+|  	1. Project Admin
+|		1.1 Import Students
+|		1.2 Delete User
+|		1.3 End-Of-Year Archive
+|		1.4 New Topic
+|		1.5 New Programme
+|		1.6 New User
+|	2. System Admin
+|		2.1 User Feedback
+|		2.2 Project Evaluation Thresholds
+*/
+
 ;$(function() {
 	"use strict";
-	var dontRemindAgain = false;
 
-	$(".js-delete-feedback").on('click', function(e){
-		e.preventDefault();
-		var deleteButton = $(this);
+	/* ==================
+		1. PROJECT ADMIN
+	   ================== */
 
-		if(dontRemindAgain){
-			deleteFeedback(deleteButton);
-		} else {
-			$.confirm({
-				title: 'Delete Comment',
-				type: 'red',
-				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
-				theme: 'modern',
-				escapeKey: true,
-				backgroundDismiss: true,
-				animateFromElement : false,
-				content: 'Are you sure you want to delete this piece of feedback?',
-				buttons: {
-					yes: {
-						btnClass: 'btn-red',
-						action: function(){
-							deleteFeedback(deleteButton);
-						}
-					},
-					neveragain: {
-						text: "Yes, don't ask again",
-						btnClass: 'btn-red-text',
-						action: function(){
-							dontRemindAgain = true;
-							deleteFeedback(deleteButton);
-						}
-					},
-					cancel: {},
-				}
-			});
-		}
-	});
-
-	function deleteFeedback(button){
-		debugger;
-		$.ajax({
-			url: button.prop('href'),
-			type: 'DELETE',
-			data: {
-				feedback_id: button.data('id'),
-			},
-			success:function(){
-				createToast('', "Feedback deleted");
-				
-				button.parent().parent().hide(config.animtions.medium, function() {
-					button.parent().parent().remove();
-				});
-			}
-		});
-	};
-
+	// 1.1 Import Students
 	$(".import-student-form").on('submit', function(e){
 		e.preventDefault();
 
@@ -152,6 +124,7 @@
 		});
 	});
 
+	// 1.2 Delete User
 	$('.delete-user').on('click', function(e) {
 		e.preventDefault();
 		var userDeleteButton = $(this);
@@ -218,6 +191,7 @@
 		});
 	});
 
+	// 1.3 EOYA
 	$('body').on('submit', '#endOfYearArchive', function(e) {
 		e.preventDefault();
 		var form = $(this);
@@ -237,8 +211,7 @@
 				archive: {
 					btnClass: 'btn-red',
 					action: function(){
-						container.html('<div class="loader loader--x-large"></div>');
-						$('.loader', container).css('display', 'block');
+						container.html('<div class="spinner spinner-border"></div>');
 
 						$.ajax({
 							url: form.prop('action'),
@@ -257,5 +230,267 @@
 				cancel: {},
 			}
 		});
+	});
+
+	// 1.4 New Topic
+	/**
+		* Create a new topic form submit.
+	*/
+	$('#new-topic-form').on('submit', function(e) {
+		e.preventDefault();
+
+		var submitButton = $(this).find(':submit');
+		submitButton.html('<div class="spinner-border spinner-border-sm text-white"></div>');
+
+		$.ajax({
+			url: $(this).prop('action'),
+			type:'POST',
+			context: $(this),
+			data: $(this).serialize(),
+			success:function(data){
+				data = JSON.parse(data);
+				EditTopic.prototype.functions.createEditTopicDOM(data["id"], data["name"]);
+			},
+		}).always(function(){
+			$(this).find('input').val('');
+			$(this).find(':submit').html('Add');
+		});
+	});
+
+	$(".js-topic input").on('keydown change', function(){
+		var originalName = $(this).closest(".input-group").data("original-topic-name");
+		var editButton = $(this).siblings(".input-group-append").find(".js-edit");
+
+		if($(this).val() == originalName){
+			editButton.removeClass("btn-outline-primary");
+			editButton.addClass("disabled btn-outline-secondary");
+		} else {
+			editButton.removeClass("disabled btn-outline-secondary");
+			editButton.addClass("btn-outline-primary");
+		}
+	});
+
+	// 1.5 New Programme
+	/**
+		* Create a new programme form submit.
+	*/
+	$('#new-programme-form').on('submit', function(e) {
+		e.preventDefault();
+
+		var submitButton = $(this).find(':submit');
+		submitButton.html('<div class="spinner-border spinner-border-sm text-light"></div>');
+
+		$.ajax({
+			url: $(this).prop('action'),
+			type:'POST',
+			context: $(this),
+			data: $(this).serialize(),
+			success:function(data){
+				data = JSON.parse(data);
+				EditProgramme.prototype.functions.createEditProgrammeDOM(data["id"], data["name"]);
+			}
+		}).always(function(){
+			$(this).find('input').val('');
+			$(this).find(':submit').html('Add');
+		});
+	});
+
+	$(".js-programme input").on('keydown change', function(){
+		var originalName = $(this).closest(".input-group").data("original-programme-name");
+		var editButton = $(this).siblings(".input-group-append").find(".js-edit");
+
+		if($(this).val() == originalName){
+			editButton.removeClass("btn-outline-primary");
+			editButton.addClass("disabled btn-outline-secondary");
+		} else {
+			editButton.removeClass("disabled btn-outline-secondary");
+			editButton.addClass("btn-outline-primary");
+		}
+	});
+
+	// 1.6 New User
+	/**
+		* New/Edit user form.
+	*/
+	var supervisorForm = $('#supervisor-form');
+	var studentForm = $('#student-form');
+
+	if($('.js-supervisor:checked').length < 1){
+		supervisorForm.hide();
+	} else {
+		$('.js-student').attr('disabled', 'true');
+		$('.js-staff').attr('disabled', 'true');
+	}
+
+	if($('.js-student:checked').length < 1){
+		studentForm.hide();
+	} else {
+		$('.js-supervisor').attr('disabled', 'true');
+		$('.js-staff').attr('disabled', 'true');
+	}
+
+	if($('.js-staff:checked').length > 0){
+		$('.js-supervisor').attr('disabled', 'true');
+		$('.js-staff').attr('disabled', 'true');
+	}
+
+	$('.js-supervisor').on('change', function(){
+		if($(this).prop('checked')){
+			$('.js-student').attr('disabled', 'true');
+			$('.js-staff').attr('disabled', 'true');
+			supervisorForm.show(config.animtions.medium);
+		} else {
+			$('.js-student').removeAttr('disabled');
+			$('.js-staff').removeAttr('disabled');
+			supervisorForm.hide(config.animtions.medium);
+		}
+	});
+
+	$('.js-student').on('change', function(){
+		if($(this).prop('checked')){
+			$('.js-supervisor').attr('disabled', 'true');
+			$('.js-staff').attr('disabled', 'true');
+			$('.js-admin').attr('disabled', 'true');
+			studentForm.show(config.animtions.medium);
+		} else {
+			$('.js-supervisor').removeAttr('disabled');
+			$('.js-staff').removeAttr('disabled');
+			$('.js-admin').removeAttr('disabled');
+			studentForm.hide(config.animtions.medium);
+		}
+	});
+
+	$('.js-staff').on('change', function(){
+		if($(this).prop('checked')){
+			$('.js-supervisor').attr('disabled', 'true');
+			$('.js-student').attr('disabled', 'true');
+			$('.js-admin').attr('disabled', 'true');
+		} else {
+			$('.js-supervisor').removeAttr('disabled');
+			$('.js-student').removeAttr('disabled');
+			$('.js-admin').removeAttr('disabled');
+		}
+	});
+
+	/**
+		* Auto generates the email from the username field.
+	*/
+	$('.user-form #username').on('keydown keyup change', function(){
+		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
+	});
+
+	/* =================
+	 	2.SYSTEM ADMIN
+	   ================ */
+
+	// 2.1 User Feedback
+	/**
+		* Determines if a user should be warned when deleting user feedback
+	*/
+	var showDeleteUserFeedbackWarning = false;
+
+	/**
+		* Deletes user feedback
+	*/
+	$(".js-delete-feedback").on('click', function(e){
+		e.preventDefault();
+		var deleteButton = $(this);
+
+		if(showDeleteUserFeedbackWarning){
+			$.confirm({
+				title: 'Delete Comment',
+				type: 'red',
+				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				theme: 'modern',
+				escapeKey: true,
+				backgroundDismiss: true,
+				animateFromElement : false,
+				content: 'Are you sure you want to delete this piece of feedback?',
+				buttons: {
+					yes: {
+						btnClass: 'btn-red',
+						action: function(){
+							deleteFeedback(deleteButton);
+						}
+					},
+					neveragain: {
+						text: "Yes, don't ask again",
+						btnClass: 'btn-red-text',
+						action: function(){
+							showDeleteUserFeedbackWarning = false;
+							deleteFeedback(deleteButton);
+						}
+					},
+					cancel: {},
+				}
+			});
+		} else {
+			deleteFeedback(deleteButton);
+		}
+	});
+
+	/**
+		* Deletes user feedback
+	*/
+	function deleteFeedback(button){
+		$.ajax({
+			url: button.prop('href'),
+			type: 'DELETE',
+			data: {
+				feedback_id: button.data('id'),
+			},
+			success:function(){
+				createToast('', "Feedback deleted");
+				
+				button.parent().parent().hide(config.animtions.medium, function() {
+					button.parent().parent().remove();
+				});
+			}
+		});
+	};
+
+	// 2.2 PE Thresholds
+	$("#new-threshold-button").on('click', function(){
+		var newThresholdValue = parseInt($("#new-threshold-value").val());
+
+		if(!Number.isInteger(newThresholdValue)){
+			createToast('error', 'Threshold value must be an integer.');
+			return;
+		}
+
+		if(newThresholdValue < 0 || newThresholdValue > 100){
+			createToast('error', 'Threshold value must be between 0 - 100.');
+			return;
+		}
+
+		// See if value already exists
+		var thresholdValueAlreadyExists = false;
+
+		$("input[name*='thresholds']").each(function(){
+			if($(this).val() == newThresholdValue){
+				thresholdValueAlreadyExists = true;
+			}
+		});
+
+		if(thresholdValueAlreadyExists){
+			createToast('error', 'Threshold values must be unqiue.');
+			return;
+		}
+
+		$("#thresholds-list").append(
+			`<li class="list-group-item">
+				<div class="d-flex">
+					<span>${newThresholdValue}%</span>
+					<button type="button" class="btn btn-sm btn-danger ml-auto js-deleteThreshold">Remove</button>
+					<input type="hidden" name="thresholds[]" value="${newThresholdValue}">
+				</div>
+			</li>`
+		);
+
+		$("#new-threshold-value").val('');
+	});
+
+	$("body").on("click", ".js-deleteThreshold", function(){
+		$(this).closest('li').remove();
 	});
 });

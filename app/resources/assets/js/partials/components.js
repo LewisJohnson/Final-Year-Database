@@ -557,17 +557,17 @@
 	var EditTopic = function EditTopic(element) {
 		this.element = $(element);
 		this.originalName = $(element).data("original-topic-name");
-		this.topicId = $(element).data('topic-id');
-		this.topicNameInput = $(element).find('input');
-		this.editButton = $(element).find('.edit-topic');
-		this.deleteButton = $(element).find('.delete-topic');
+		this.Id = $(element).data('topic-id');
+		this.nameInput = $(element).find('input');
+		this.editButton = $(element).find('.js-edit');
+		this.deleteButton = $(element).find('.js-delete');
 		this.init();
 	};
 
 	window['EditTopic'] = EditTopic;
 
 	EditTopic.prototype.Selectors_ = {
-		EDIT_TOPIC: '#edit-topic-list > div',
+		EDIT_TOPIC: '#edit-topic-list .input-group',
 	};
 
 	EditTopic.prototype.Urls_ = {
@@ -579,9 +579,10 @@
 	EditTopic.prototype.functions = {
 		editTopic: function() {
 			var topic = this;
-			if(topic.originalName == topic.topicNameInput.val()){
+			if(topic.originalName == topic.nameInput.val()){
 				return;
 			}
+
 			$.confirm({
 				title: 'Change Topic Name',
 				type: 'blue',
@@ -590,35 +591,40 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.topicNameInput.val() +'"</b>?',
+				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.nameInput.val() +'"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
 						action: function(){
-							topic.topicNameInput.prop('disabled', true);
-							topic.editButton.html('<div class="spinner-border text-primary"</div>');
+							topic.nameInput.prop('disabled', true);
+							topic.editButton.html('<div class="spinner-border spinner-border-sm text-primary"</div>');
 
 							$.ajax({
 								method: 'PATCH',
-								url: topic.Urls_.DELETE_TOPIC,
+								url: topic.Urls_.PATCH_TOPIC,
 								context: topic,
 								data: {
-									topic_id: topic.topicId,
-									topic_name : topic.topicNameInput.val()
+									topic_id: topic.Id,
+									topic_name : topic.nameInput.val()
 								},
+								success: function(){
+									createToast('success', 'Topic Updated');
+									topic.element.data('original-topic-name', topic.nameInput.val());
+									topic.nameInput.change();
+								}
 							}).always(function(){
-								topic.topicNameInput.prop('disabled', false);
+								topic.nameInput.prop('disabled', false);
 								topic.editButton.html('Edit');
-								topic.originalName = topic.topicNameInput.val();
+								topic.originalName = topic.nameInput.val();
 							});
 						}
 					},
 					cancel: function(){
-						topic.topicNameInput.val(topic.originalName);
+						topic.nameInput.val(topic.originalName);
 					}
 				},
 				backgroundDismiss: function(){
-					topic.topicNameInput.val(topic.originalName);
+					topic.nameInput.val(topic.originalName);
 				},
 			});
 		},
@@ -633,23 +639,25 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to delete <b>"' + topic.topicNameInput.val() + '"</b>?',
+				content: 'Are you sure you want to delete <b>"' + topic.nameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
 						action: function(){
-							topic.topicNameInput.prop('disabled', true);
+							topic.nameInput.prop('disabled', true);
 							$.ajax({
 								method: 'DELETE',
 								url: topic.Urls_.DELETE_TOPIC,
 								context: topic,
 								data: {
-									topic_id: topic.topicId,
+									topic_id: topic.Id,
 								},
 								success: function(){
-									topic.element.fadeOut(config.animtions.medium, function() {
-										topic.element.remove();
+									createToast('', 'Topic deleted');
+
+									topic.element.closest('.js-topic').fadeOut(config.animtions.medium, function() {
+										topic.element.closest('.js-topic').remove();
 									});
 								}
 							});
@@ -660,11 +668,21 @@
 			});
 		},
 
-		createEditTopicDOM: function(topicId, originalName){
-			var elem = $('<div class="col-12 col-md-6 d-flex mt-2" data-topic-id="' + topicId +'" data-original-topic-name="' + originalName +'"><input class="flex-grow-1" spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="btn ml-1 border border-primary edit-topic" type="submit">Edit</button><button class="btn ml-1 border border-danger delete-topic">Delete</button></div>');
-			$("#edit-topic-list").prepend(elem);
-			elem.hide(0);
-			elem.fadeIn(config.animtions.medium);
+		createEditTopicDOM: function(id, name){
+			var newTopicElement = $(
+				`<div class="col-12 col-md-6 mt-2 js-topic">
+					<div class="input-group" data-topic-id="${id}" data-original-topic-name="${name}">
+						<input class="form-control" spellcheck="true" name="name" type="text" value="${name}">
+						<div class="input-group-append">
+							<button class="js-edit btn btn-outline-secondary disabled">Edit</button>
+							<button class="js-delete btn btn-outline-danger">Delete</button>
+						</div>
+					</div>
+				</div>`);
+
+			$("#edit-topic-list").prepend(newTopicElement);
+			newTopicElement.hide();
+			newTopicElement.fadeIn(config.animtions.medium);
 			EditTopic.prototype.initAll();
 		}
 	};
@@ -691,17 +709,17 @@
 	var EditProgramme = function EditProgramme(element) {
 		this.element = $(element);
 		this.originalName = $(element).data("original-programme-name");
-		this.programmeId = $(element).data('programme-id');
-		this.programmeNameInput = $(element).find('input');
-		this.editButton = $(element).find('.edit-programme');
-		this.deleteButton = $(element).find('.delete-programme');
+		this.Id = $(element).data('programme-id');
+		this.nameInput = $(element).find('input');
+		this.editButton = $(element).find('.js-edit');
+		this.deleteButton = $(element).find('.js-delete');
 		this.init();
 	};
 
 	window['EditProgramme'] = EditProgramme;
 
 	EditProgramme.prototype.Selectors_ = {
-		EDIT_PROGRAMME: '#edit-programme-list > div',
+		EDIT_PROGRAMME: '#edit-programme-list .input-group',
 	};
 
 	EditProgramme.prototype.Urls_ = {
@@ -713,9 +731,11 @@
 	EditProgramme.prototype.functions = {
 		EditProgramme: function() {
 			var programme = this;
-			if(programme.originalName == programme.programmeNameInput.val()){
+
+			if(programme.originalName == programme.nameInput.val()){
 				return;
 			}
+
 			$.confirm({
 				title: 'Change Programme Name',
 				type: 'blue',
@@ -724,35 +744,40 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to change the programme name from <b>"' + programme.originalName + '"</b> to <b>"' + programme.programmeNameInput.val() +'"</b>?',
+				content: 'Are you sure you want to change the programme name from <b>"' + programme.originalName + '"</b> to <b>"' + programme.nameInput.val() +'"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
 						action: function(){
-							programme.programmeNameInput.prop('disabled', true);
-							programme.editButton.html('<div class="spinner-border text-primary"</div>');
+							programme.nameInput.prop('disabled', true);
+							programme.editButton.html('<div class="spinner-border spinner-border-sm text-primary"</div>');
 
 							$.ajax({
 								method: 'PATCH',
-								url: programme.Urls_.DELETE_PROGRAMME,
+								url: programme.Urls_.PATCH_PROGRAMME,
 								context: programme,
 								data: {
-									programme_id: programme.programmeId,
-									programme_name : programme.programmeNameInput.val()
+									programme_id: programme.Id,
+									programme_name : programme.nameInput.val()
 								},
+								success: function(){
+									programme.element.data('original-programme-name', programme.nameInput.val());
+									programme.nameInput.change();
+									createToast('success', 'Programme Updated');
+								}
 							}).always(function(){
-								programme.programmeNameInput.prop('disabled', false);
+								programme.nameInput.prop('disabled', false);
 								programme.editButton.html('Edit');
-								programme.originalName = programme.programmeNameInput.val();
+								programme.originalName = programme.nameInput.val();
 							});
 						}
 					},
 					cancel: function(){
-						programme.programmeNameInput.val(programme.originalName);
+						programme.nameInput.val(programme.originalName);
 					}
 				},
 				backgroundDismiss: function(){
-					programme.programmeNameInput.val(programme.originalName);
+					programme.nameInput.val(programme.originalName);
 				},
 			});
 		},
@@ -767,23 +792,24 @@
 				escapeKey: true,
 				backgroundDismiss: true,
 				animateFromElement : false,
-				content: 'Are you sure you want to delete <b>"' + programme.programmeNameInput.val() + '"</b>?',
+				content: 'Are you sure you want to delete <b>"' + programme.nameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
 						action: function(){
-							programme.programmeNameInput.prop('disabled', true);
+							programme.nameInput.prop('disabled', true);
 							$.ajax({
 								method: 'DELETE',
 								url: programme.Urls_.DELETE_PROGRAMME,
 								context: programme,
 								data: {
-									programme_id: programme.programmeId,
+									programme_id: programme.Id,
 								},
 								success: function(){
-									programme.element.fadeOut(config.animtions.medium, function() {
-										programme.element.remove();
+									createToast('success', 'Programme Deleted');
+									programme.element.closest('.js-topic').fadeOut(config.animtions.medium, function() {
+										programme.element.closest('.js-topic').remove();
 									});
 								}
 							});
@@ -794,11 +820,23 @@
 			});
 		},
 
-		createEditProgrammeDOM: function(programmeId, originalName){
-			var elem = $('<div class="col-12 col-md-6 d-flex mt-2" data-programme-id="' + programmeId +'" data-original-programme-name="' + originalName +'"><input class="flex-grow-1" spellcheck="true" name="name" type="text" value="' + originalName +'"><button class="btn ml-1 border border-primary edit-programme" type="submit">Edit</button><button class="btn ml-1 border border-danger delete-programme">Delete</button></div>');
-			$("#edit-programme-list").prepend(elem);
-			elem.hide(0);
-			elem.fadeIn(config.animtions.medium);
+		createEditProgrammeDOM: function(id, name){
+			var newProgrammeElement = $(
+				`<div class="col-12 col-md-6 mt-2 js-programme">
+					<div class="input-group" data-programme-id="${id}" data-original-programme-name="${name}">
+						<input class="form-control" spellcheck="true" name="name" type="text" value="${name}">
+						<div class="input-group-append">
+							<button class="js-edit btn btn-outline-secondary disabled">Edit</button>
+							<button class="js-delete btn btn-outline-danger">Delete</button>
+						</div>
+					</div>
+				</div>`
+			);
+
+			$("#edit-programme-list").prepend(newProgrammeElement);
+			newProgrammeElement.hide();
+			newProgrammeElement.fadeIn(config.animtions.medium);
+
 			EditProgramme.prototype.initAll();
 		}
 	};
@@ -973,7 +1011,6 @@
 		if(swap.projectA != null){
 			$(swap.markerDataTable.bodyRows).each(function (index, student){
 				if(swap.projectA.index() != index) {			
-					debugger;	
 					if(swap.projectA.data('supervisor-id') == $(student).data('marker-id') ||
 						swap.projectA.data('marker-id') == $(student).data('marker-id') ||
 						swap.projectA.data('marker-id') == $(student).data('supervisor-id')
@@ -1072,7 +1109,7 @@
 	}
 
 	/* ============================
-		7. Search
+		6. Universal Search
 	 ============================== */
 
 	var Search = function Search() {
@@ -1150,7 +1187,11 @@
 
 	Search.prototype.init = function(){
 		var search = this;
-		$(search.SearchInput).on('keydown change', function() { Search.prototype.functions.get(search, $(this).val()); });
+
+		$(search.SearchInput).on('keydown change', function() { 
+			Search.prototype.functions.get(search, $(this).val()); 
+		});
+
 		$('body').on('click', function(e){
 			if(e.target != $("#universal-search-results *")){
 				 Search.prototype.functions.clear(search);
