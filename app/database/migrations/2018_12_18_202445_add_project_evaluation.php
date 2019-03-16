@@ -18,7 +18,7 @@ class AddProjectEvaluation extends Migration
 					$table->uuid('id')->unqiue();
 					$table->uuid('project_id');
 					$table->boolean('is_finalised');
-					$table->text('questions');
+					$table->mediumText('questions');
 
 					$table->primary('id');
 					$table->foreign('project_id')->references('id')->on($department.'_projects_'.$level['shortName'])->onDelete('CASCADE');
