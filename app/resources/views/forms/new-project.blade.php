@@ -30,7 +30,7 @@
 
 		<div class="form-field">
 			<label for="skills">Skills</label>
-			<input maxlength="255" type="text" name="skills" id="skills" required value="{{ old('skills') }}"></input>
+			<input maxlength="255" type="text" name="skills" id="skills" required value="{{ old('skills') }}">
 		</div>
 
 		@if($user_type == "supervisor")

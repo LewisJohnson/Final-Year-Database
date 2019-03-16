@@ -10,13 +10,13 @@
 		</a>
 	</li>
 	<li>
-		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendParametersView') }}">
-			<span>@include('svg.globe')<span>Amend Global <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> Parameters</span></span>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendSupervisorArrangementsView') }}">
+			<span>@include('svg.account-settings')<span>Amend Supervisors Arrangements</span></span>
 		</a>
 	</li>
 	<li>
-		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@amendParametersView') }}">
-			<span>@include('svg.tune')<span>Amend <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> Thresholds</span></span>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ModeController@index') }}">
+			<span>@include('svg.globe')<span>Amend <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> Global Parameters</span></span>
 		</a>
 	</li>
 </ul>

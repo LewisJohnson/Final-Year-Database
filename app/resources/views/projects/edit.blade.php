@@ -42,7 +42,7 @@
 			
 						<div class="form-field">
 							<label for="skills">Skills</label>
-							<input maxlength="255" type="text" name="skills" id="skills" value="{{ $project->skills }}"></input>
+							<input maxlength="255" type="text" name="skills" id="skills" value="{{ $project->skills }}">
 						</div>
 			
 						@if(!Auth::user()->isStudent())
