@@ -11,7 +11,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	"use strict";
 
 	/* =================================
-		4.4 Project Topics [Supervisor]
+		Project Topics [Supervisor]
 	   ================================= */
 
 	/**
@@ -28,13 +28,13 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	};
 
 	ProjectTopics.prototype.Selectors_ = {
-		EDIT__ADD_TOPIC_INPUT: '#add-topic-input',
-		EDIT__NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
-		EDIT__PROJECT_FORM : '#edit-project-form',
+		EDIT_ADD_TOPIC_INPUT: '#add-topic-input',
+		EDIT_NEW_TOPIC_INPUT_CONTAINER: '#new-topic-input-container',
+		EDIT_PROJECT_FORM : '#edit-project-form',
 		
-		CREATE__ADD_TOPIC_INPUT: '#create-project-add-topic-input',
-		CREATE__NEW_TOPIC_INPUT_CONTAINER: '#create-topic-input-container',
-		CREATE__PROJECT_FORM : '#create-project-form',
+		CREATE_ADD_TOPIC_INPUT: '#create-project-add-topic-input',
+		CREATE_NEW_TOPIC_INPUT_CONTAINER: '#create-topic-input-container',
+		CREATE_PROJECT_FORM : '#create-project-form',
 	};
 
 	var projectTopics = new ProjectTopics();
@@ -48,7 +48,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 			}
 
 			setTimeout(function(){
-				$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).val('');
+				$(projectTopics.Selectors_.CREATE_ADD_TOPIC_INPUT).val('');
 			}, 20);
 		},
 
@@ -82,7 +82,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					project_id: projectId
 				},
 				success: function(response){
-					$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).val('');
+					$(projectTopics.Selectors_.EDIT_ADD_TOPIC_INPUT).val('');
 
 					if(response.successful){
 						if($(".topics-list.edit li.topic:last").length > 0){
@@ -156,7 +156,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	});
 
 	createSwappable.on('swappable:swapped', function(){
-		var originalPrimaryTopicId = $(projectTopics.Selectors_.CREATE__PROJECT_FORM).data('primary-topic-id');
+		var originalPrimaryTopicId = $(projectTopics.Selectors_.CREATE_PROJECT_FORM).data('primary-topic-id');
 		var topicId = $(".topics-list.create li:first-child").data('topic-id');
 
 		if(topicId != originalPrimaryTopicId){
@@ -165,14 +165,14 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	});
 
 	// Add new topic on COMMA pressed
-	$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).keypress(function(e) {
+	$(projectTopics.Selectors_.CREATE_ADD_TOPIC_INPUT).keypress(function(e) {
 		if((e.which == 44 || e.keyCode == 188) && $(this).val() != "") {
 			projectTopics.functions.addTopicToProjectBeingCreated($(this).val());
 		}
 	});
 
 	// Add new topic on input blur
-	$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).on('blur', function(e) {
+	$(projectTopics.Selectors_.CREATE_ADD_TOPIC_INPUT).on('blur', function(e) {
 		if($(this).val() != "") {
 			projectTopics.functions.addTopicToProjectBeingCreated($(this).val());
 		}
@@ -184,8 +184,8 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		projectTopics.functions.removeTopicToProjectBeingCreated(topicId);
 	});
 
-	$(projectTopics.Selectors_.CREATE__NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
-		$(projectTopics.Selectors_.CREATE__ADD_TOPIC_INPUT).focus();
+	$(projectTopics.Selectors_.CREATE_NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
+		$(projectTopics.Selectors_.CREATE_ADD_TOPIC_INPUT).focus();
 	});
 
 	/*
@@ -198,37 +198,37 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	});
 
 	editSwappable.on('swappable:stop', function(){
-		var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
+		var projectId = $(projectTopics.Selectors_.EDIT_PROJECT_FORM).data('project-id');
 		var topicId = $(".topics-list.edit li:first-child").data('topic-id');
 
 		projectTopics.functions.updateProjectPrimaryTopic(projectId, topicId);
 	});
 
 	// Add new topic on COMMA press
-	$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).keypress(function(e) {
+	$(projectTopics.Selectors_.EDIT_ADD_TOPIC_INPUT).keypress(function(e) {
 		if((e.which == 44 || e.keyCode == 188) && $(this).val() != "") {
-			var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
+			var projectId = $(projectTopics.Selectors_.EDIT_PROJECT_FORM).data('project-id');
 			projectTopics.functions.addTopicToProject(projectId, $(this).val());
 		}
 	});
 
 	// Add new topic on input blur
-	$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).on('blur', function(e) {
+	$(projectTopics.Selectors_.EDIT_ADD_TOPIC_INPUT).on('blur', function(e) {
 		if($(this).val() != "") {
-			var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
+			var projectId = $(projectTopics.Selectors_.EDIT_PROJECT_FORM).data('project-id');
 			projectTopics.functions.addTopicToProject(projectId, $(this).val());
 		}
 	});
 
 	// Remove topic
 	$('.topics-list.edit').on('click', '.topic .topic-remove', function(){
-		var projectId = $(projectTopics.Selectors_.EDIT__PROJECT_FORM).data('project-id');
+		var projectId = $(projectTopics.Selectors_.EDIT_PROJECT_FORM).data('project-id');
 		var topicId = $(this).parent('li').data('topic-id');
 		projectTopics.functions.removeTopicFromProject(projectId, topicId);
 	});
 
-	$(projectTopics.Selectors_.EDIT__NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
-		$(projectTopics.Selectors_.EDIT__ADD_TOPIC_INPUT).focus();
+	$(projectTopics.Selectors_.EDIT_NEW_TOPIC_INPUT_CONTAINER).on('click', function() {
+		$(projectTopics.Selectors_.EDIT_ADD_TOPIC_INPUT).focus();
 	});
 
 	/* ========
