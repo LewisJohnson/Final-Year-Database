@@ -58,6 +58,7 @@
 
 		<div class="form-field{{ $errors->has('programme') ? ' has-error' : '' }}">
 			<label for="programme">Programme</label>
+			<br>
 			@if($view === "new" || empty($user->programme))
 				{!! SussexProjects\Programme::getSelectList() !!}
 			@elseif($view === "edit")
@@ -76,39 +77,35 @@
 				<div class="d-flex">
 					@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel(Session::get('education_level')['shortName']))
 						<div class="checkbox">
-							<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input user-form-student" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName']) checked @endif @endif>
+							<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input js-student" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName']) checked @endif @endif>
 							<label class="ml-1" for="privileges-student">Student</label>
 						</div>
 					@endif
 					<div class="checkbox ml-4">
-						<input type="checkbox" id="privileges-supervisor" name="privileges[]" value="supervisor" class="checkbox-input user-form-supervisor" @if($view === "edit") @if($user->isSupervisor()) checked @endif @endif>
+						<input type="checkbox" id="privileges-supervisor" name="privileges[]" value="supervisor" class="checkbox-input js-supervisor" @if($view === "edit") @if($user->isSupervisor()) checked @endif @endif>
 						<label class="ml-1" for="privileges-supervisor">Supervisor</label>
 					</div>
-				</div>
 
-				<hr>
-
-				<div class="button-group flex--stretch-children">
-					<div class="checkbox">
-						<input type="checkbox" id="privileges-staff" name="privileges[]" value="staff" class="checkbox-input" @if($view === "edit") @if($user->isStaff()) checked @endif @endif>
+					<div class="checkbox ml-4">
+						<input type="checkbox" id="privileges-staff" name="privileges[]" value="staff" class="checkbox-input js-staff" @if($view === "edit") @if($user->isStaff()) checked @endif @endif>
 						<label class="ml-1" for="privileges-staff">Staff</label>
 					</div>
 				</div>
-				
+
 				<hr>
 				
 				<div class="d-flex">
 					@foreach(get_education_levels() as $educationLevel)
 						@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 							<div class="checkbox @if($loop->iteration > 1) ml-4 @endif">
-								<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
+								<input type="checkbox" id="privileges-admin-{{ $educationLevel['shortName'] }}" name="privileges[]" value="admin_{{ $educationLevel['shortName'] }}" class="checkbox-input js-admin" @if($view === "edit") @if($user->isAdminOfEducationLevel($educationLevel['shortName'])) checked @endif @endif>
 								<label class="ml-1" for="privileges-admin-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} administrator</label>
 							</div>
 						@endif
 					@endforeach
 					@if(Auth::user()->isSystemAdmin())
 						<div class="checkbox ml-4">
-							<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input" @if($view === "edit") @if($user->isSystemAdmin()) checked @endif @endif>
+							<input type="checkbox" id="privileges-admin-system" name="privileges[]" value="admin_system" class="checkbox-input js-admin" @if($view === "edit") @if($user->isSystemAdmin()) checked @endif @endif>
 							<label class="ml-1" for="privileges-admin-system">System administrator</label>
 						</div>
 					@endif
@@ -169,6 +166,7 @@
 					@if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel($educationLevel['shortName']))
 						<div class="form-field">
 							<label for="project-load-{{ $educationLevel['shortName'] }}">{{ ucfirst($educationLevel['longName']) }} project load</label>
+							<br>
 							<input id="project-load-{{ $educationLevel['shortName'] }}" type="number" name="project_load_{{ $educationLevel['shortName'] }}" min="0" max="255" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->getProjectLoad($educationLevel['shortName']) }}" @endif @else value="0" @endif>
 						</div>
 					@endif
