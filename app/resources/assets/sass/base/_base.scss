@@ -28,7 +28,9 @@ ins {
 
 .main-content {
 	padding: 3rem 0;
-	margin-bottom: 3rem;
+	margin-bottom: 5rem;
+	position: relative;
+	z-index: 0;
 }
 
 footer {
