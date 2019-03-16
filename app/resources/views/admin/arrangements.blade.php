@@ -1,18 +1,19 @@
 @extends('layouts.app')
 @section('content')
-<div class="centered mw-1200">
-	<h1>Amend Supervisor Arrangements</h1>
-	<h3>Edit the arrangements you wish then press submit</h3>
+<div class="centered mw-1000">
+	<h1>Amend {{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Arrangements</h1>
+	<h5>Amend the arrangements you wish then press submit at the bottom of the page</h5>
+
 	<form action="{{ action('ProjectAdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
-		<div class="table-responsive">
-			<table class="table table-hover bg-white  data-table shadow-2dp">
+		<div class="table-responsive mt-5">
+			<table class="table table-hover bg-white data-table shadow-2dp">
 				<thead>
 					<tr>
 						<th>Name</th>
 						<th>Username</th>
 						<th>Project Load</th>
-						<th>Take Students</th>
+						<th class="text-right">Take Students</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -20,8 +21,10 @@
 						<tr>
 							<td>{{ $supervisor->user->getFullName() }}</td>
 							<td>{{ $supervisor->user->username }}</td>
-							<td><input type="number" id="{{ $supervisor->user->id }}_project_load" name="{{ $supervisor->user->id }}_project_load" value="{{ $supervisor->getProjectLoad() }}"></td>
 							<td>
+								<input type="number" id="{{ $supervisor->user->id }}_project_load" name="{{ $supervisor->user->id }}_project_load" value="{{ $supervisor->getProjectLoad() }}" class="py-0">
+							</td>
+							<td class="text-right">
 								<div class="checkbox">
 									<input id="{{ $supervisor->user->id }}_take_students" name="{{ $supervisor->user->id }}_take_students" type="checkbox" @if($supervisor->getTakingStudents()) checked @endif>
 									<label style="position: relative;left: -23px;" for="{{ $supervisor->user->id }}_take_students"></label>
@@ -31,9 +34,9 @@
 					@endforeach
 				</tbody>
 			</table>
-		</div>
-		<div class="text-right mt-3">
-			<input type="submit" class="btn btn-primary">
+			<div class="text-right mt-3">
+				<input type="submit" class="btn btn-primary">
+			</div>
 		</div>
 	</form>
 </div>
