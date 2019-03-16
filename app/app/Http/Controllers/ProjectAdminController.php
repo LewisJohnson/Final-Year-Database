@@ -43,44 +43,6 @@ class ProjectAdminController extends Controller{
 		return view('admin.index');
 	}
 
-	/**
-	 * Amend parameters view.
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function amendParametersView(){
-		return view('admin.parameters');
-	}
-
-	/**
-	 * Amend parameters.
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function amendParameters(Request $request){
-		$mode = Mode::all()->first();
-
-		if(isset($request->project_selection)){
-			$mode->project_selection = $request->project_selection;
-		}
-
-		if(isset($request->supervisor_accept)){
-			$mode->supervisor_accept = $request->supervisor_accept;
-		}
-
-		if(isset($request->project_year)){
-			$mode->project_year = $request->project_year;
-		}
-
-		$mode->save();
-
-		session()->flash('message', 'Parameters have been updated successfully.');
-		session()->flash('message_type', 'success');
-
-		return redirect()->action('HomeController@index');
-	}
 
 	/**
 	 * The amend supervisor arrangements view.

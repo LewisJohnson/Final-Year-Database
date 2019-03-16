@@ -170,11 +170,11 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	Route::get('admin/login-as/{id}', 'ProjectAdminController@loginAs');
 
 	/* CONFIGURATION ROUTES */
-	// Yearly parameters configuration view
-	Route::get('admin/parameters', 'ProjectAdminController@amendParametersView');
+	// Global parameters configuration view
+	Route::get('admin/parameters', 'ModeController@index');
 
-	// Yearly parameters form post
-	Route::post('admin/parameters', 'ProjectAdminController@amendParameters');
+	// Global parameters form post
+	Route::post('admin/parameters', 'ModeController@update');
 
 	// End-of-Year archive view
 	Route::get('admin/archive', 'ProjectAdminController@archiveView');
@@ -191,7 +191,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	/* TOPIC ROUTES */
 	// Update topic view
-	Route::get('admin/topics/amend', 'ProjectAdminController@amendTopicsView');
+	Route::get('admin/topics', 'ProjectAdminController@amendTopicsView');
 
 	// Store new topic
 	Route::post('topics', 'TopicController@store');
@@ -204,7 +204,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	/* PROGRAMME ROUTES */
 	// Update topic view
-	Route::get('admin/programmes/amend', 'ProjectAdminController@amendProgrammesView');
+	Route::get('admin/programmes', 'ProjectAdminController@amendProgrammesView');
 
 	// Store new topic
 	Route::post('programmes', 'ProgrammeController@store');
