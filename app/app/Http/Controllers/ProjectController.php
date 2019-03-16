@@ -170,12 +170,23 @@ class ProjectController extends Controller{
 				$topic = new Topic;
 				$topic->name = $request->topic_name;
 				$topic->save();
+
+				$transaction = new Transaction;
+				$transaction->fill(array(
+					'type' => 'topic',
+					'action' => 'created',
+					'topic' => $topic->name,
+					'supervisor' => Auth::user()->id,
+					'transaction_date' => new Carbon
+				));
+
+				$transaction->save();
 			}
 
 			// Validate data
 			$projectTopic = new ProjectTopic;
 
-			// the project has no other topics, so make it's first topic the primary topic
+			// The project has no other topics, so make it's first topic the primary topic
 			$projectTopic->primary = count($project->topics) == 0;
 			$projectTopic->topic_id = $topic->id;
 			$projectTopic->project_id = $project->id;
@@ -499,7 +510,7 @@ class ProjectController extends Controller{
 				$transaction->fill(array(
 					'type' => 'project',
 					'action' => 'deleted',
-					'project' => $project->id,
+					'project' => $project->title,
 					'student' => Auth::user()->student->id,
 					'transaction_date' => new Carbon
 				));
@@ -507,7 +518,7 @@ class ProjectController extends Controller{
 				$transaction->fill(array(
 					'type' => 'project',
 					'action' => 'deleted',
-					'project' => $project->id,
+					'project' => $project->title,
 					'supervisor' => Auth::user()->supervisor->id,
 					'transaction_date' => new Carbon
 				));
