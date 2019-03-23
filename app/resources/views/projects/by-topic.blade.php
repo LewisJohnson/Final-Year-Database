@@ -12,18 +12,12 @@
 			</tr>
 		</thead>
 		<tbody>
-		@foreach($topics as $topic)
-			@php
-				$amountOfProjects = count($topic->getProjectsOnOffer());
-			@endphp
-
-			@if($amountOfProjects > 0)
-				<tr tabindex="0" class="cursor--pointer" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}';">
+			@foreach($topics as $topic)
+				<tr tabindex="0" onclick="window.location='{{ action('ProjectController@byTopic', $topic->id)}}'">
 					<td>{{ $topic->name }}</td>
-					<td class="text-right">{{ $amountOfProjects }}</td>
+					<td class="text-right">{{ $topic->project_count }}</td>
 				</tr>
-			@endif
-		@endforeach
+			@endforeach
 		</tbody>
 	</table>
 </div>
