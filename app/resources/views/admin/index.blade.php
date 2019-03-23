@@ -8,7 +8,7 @@
 			@include('admin.partials.hub-section', ['title' => 'Reports', 'links' => 'report', 'svg' => 'clipboard'])
 			@include('admin.partials.hub-section', ['title' => 'Transactions', 'links' => 'transaction', 'svg' => 'clock'])
 			@include('admin.partials.hub-section', ['title' => 'Settings', 'links' => 'settings', 'svg' => 'cog'])
-			@include('admin.partials.hub-section', ['title' => 'Marker', 'links' => 'marker', 'svg' => 'account-multiple'])
+			@include('admin.partials.hub-section', ['title' => 'Second Marker', 'links' => 'marker', 'svg' => 'account-multiple'])
 		</div>
 	</div>
 @endsection

@@ -2,9 +2,10 @@
 @section('content')
 <div class="centered mw-1200">
 	<h1>Swap Second Marker</h1>
-	<h3>Select two projects to swap their second marker.</h3>
-	<div class="section-container">
-		<table class="table table-hover bg-white  data-table shadow-2dp" id="swap-marker-student-table">
+	<h5>Select two projects to swap their second marker.</h5>
+
+	<div class="mt-3">
+		<table class="table table-hover bg-white data-table shadow-2dp" id="swap-marker-student-table">
 			<thead>
 				<tr>
 					<th>Project Title</th>

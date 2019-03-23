@@ -16,7 +16,7 @@
 	</li>
 	<li>
 		<a class="btn w-100 text-left text-primary" href="{{ action('ModeController@index') }}">
-			<span>@include('svg.globe')<span>Amend <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> Global Parameters</span></span>
+			<span>@include('svg.globe')<span>Amend <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> Parameters</span></span>
 		</a>
 	</li>
 </ul>
