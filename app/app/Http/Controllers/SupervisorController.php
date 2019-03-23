@@ -314,10 +314,12 @@ class SupervisorController extends Controller{
 			));
 			$transaction->save();
 
+			$student->project->marker_id = null;
+
 			if($student->project->status == "student-proposed"){
 				$student->project->supervisor_id = null;
-				$student->project->save();
 			}
+			$student->project->save();
 
 			$student->project_id = null;
 			$student->project_status = 'none';

@@ -22,6 +22,8 @@ class ProjectEvaluation extends Model {
 	use Traits\Uuids;
 	use Traits\Encryptable;
 	
+	const DissertationMarkIndex = 8;
+	
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
@@ -153,6 +155,13 @@ class ProjectEvaluation extends Model {
 				"Have you actually seen a working version of this system/video/application?",
 				"",
 				PEQValueTypes::YesNo
+		));
+
+		array_push($questions,
+			new ProjectEvaluationQuestion(
+				"Mark for Dissertation%",
+				"",
+				PEQValueTypes::Number
 		));
 
 		array_push($questions,

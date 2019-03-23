@@ -9,6 +9,7 @@ namespace SussexProjects\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
 use SussexProjects\Http\Controllers\UserController;
 
