@@ -23,7 +23,7 @@
 		<div id="automatic-assign-container">
 			<div class="content"></div>
 			<div class="loader-container">
-				<div class="loader loader--x-large" style="display: block"></div>
+				<div class="spinner spinner-border spinner-border-lg"></div>
 				<p>Generating table...</p>
 			</div>
 		</div>

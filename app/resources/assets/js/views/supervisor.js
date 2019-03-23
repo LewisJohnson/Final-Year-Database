@@ -239,8 +239,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		var actionType = actionButton.data('action-type');
 		var tableRow = actionButton.parents().eq(1);
 
-		actionButton.html('<div class="loader"></div>');
-		$('.loader', actionButton).css('display', 'block');
+		actionButton.html('<div class="spinner spinner-border"></div>');
 
 		if(actionType === "accept"){
 			var ajaxUrl = 'supervisor/student-accept';

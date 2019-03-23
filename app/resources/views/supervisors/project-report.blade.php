@@ -81,7 +81,7 @@
 
 				{{-- STUDENT PROPOSALS --}}
 				<h5 class="mt-3">Proposals</h5>
-				<table class="table table-hover bg-white  table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
+				<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
 					@if($studentProposals)
 						<thead class="thead-light">
 							<tr>
