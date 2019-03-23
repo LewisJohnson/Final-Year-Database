@@ -50,7 +50,6 @@
 				<select name="status" id="status">
 					<option value="on-offer">On Offer</option>
 					<option value="withdrawn">Withdrawn</option>
-					<option value="archived">Archived</option>
 				</select>
 			</div>
 		@elseif($user_type == "student")
