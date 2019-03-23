@@ -2,7 +2,7 @@
 @section('content')
 
 @php
-	$helloArray = array("Hello", "Welcome", "Bonjour", "Olá", "Guten tag", "Ahoj", "Merhaba");
+	$helloArray = array("Hello", "Welcome", "Hi", "Bonjour", "Olá", "Guten tag", "Ahoj", "Merhaba", "Buongiorno");
 	$randIndex = array_rand($helloArray, 1);
 @endphp
 
@@ -28,7 +28,7 @@
 						<h3 class="card-title">@lang("messages_supervisor.homepage_introduction_header")</h3>
 						<p>@lang("messages_supervisor.homepage_introduction_body")</p>
 						
-						<h4>@lang("messages_supervisor.homepage_overview_header")</h4>
+						<h5>@lang("messages_supervisor.homepage_overview_header")</h5>
 						<p>@lang("messages_supervisor.homepage_overview_body")</p>
 					</div>
 				</div>
@@ -40,7 +40,7 @@
 						<h3 class="card-title">{{ lang_sess('homepage_introduction_header') }}</h3>
 						<p>{{ lang_sess('homepage_introduction_body') }}</p>
 	
-						<h4>{{ lang_sess('homepage_overview_header') }}</h4>
+						<h5>{{ lang_sess('homepage_overview_header') }}</h5>
 						<p>{{ lang_sess('homepage_overview_body') }}</p>
 					</div>
 				</div>
@@ -195,7 +195,7 @@
 					<div class="card">
 						<div class="card-body">
 							@if(Auth::user()->student->project_status == 'selected'|| Auth::user()->student->project_status == 'proposed')
-								<a id="student-undo-select" class="btn btn-danger text-white fr" title="Un-select {{ Auth::user()->student->project->title }}" >UNDO</a>
+								<button id="student-undo-select" class="btn btn-sm btn-outline-danger fr" title="Un-select {{ Auth::user()->student->project->title }}">UNDO</button>
 							@endif
 			
 							@if(Auth::user()->student->project_status == 'proposed')

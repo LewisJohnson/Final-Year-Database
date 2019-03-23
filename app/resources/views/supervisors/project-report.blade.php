@@ -62,11 +62,11 @@
 
 									<td class="w-10 text-right">{{ $interested['student']->reject_count }}</td>
 
-									<td class="w-5">
-										<button class="offer-action btn btn-sm text-danger border border-danger" title="Reject {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="reject">Reject</button>
+									<td class="w-5 text-right">
+										<button class="offer-action btn btn-sm btn-outline-danger" title="Reject {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="reject">Reject</button>
 									</td>
 									
-									<td class="w-5">
+									<td class="w-5 text-right">
 										<button class="offer-action btn btn-sm btn-success" title="Accept {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="accept">Accept</button>
 									</td>
 								</tr>
@@ -111,15 +111,15 @@
 										<a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a>
 									</td>
 
-									<td class="w-10 text-right">
+									<td class="w-50">
 										<a href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a>
 									</td>
 
-									<td class="w-5">
-										<button class=" offer-action btn btn-sm text-danger border border-danger" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
+									<td class="w-5 text-right">
+										<button class=" offer-action btn btn-sm btn-outline-danger" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
 									</td>
 									
-									<td class="w-5">
+									<td class="w-5 text-right">
 										<button class="offer-action btn btn-sm btn-success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
 									</td>
 								</tr>
@@ -187,7 +187,7 @@
 									</td>
 
 									<td class="w-5 text-right">
-										<a href="{{ action('ProjectEvaluationController@index', $markerProjects['project']->id) }}">Evaluation</a>
+										<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
 									</td>
 								</tr>
 							@endforeach

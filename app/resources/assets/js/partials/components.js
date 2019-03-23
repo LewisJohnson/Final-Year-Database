@@ -285,6 +285,7 @@
 	};
 
 	Dialog.prototype.showDialog = function(){
+		$(".main-content").css("position", "unset");
 		this.element.attr("aria-hidden", "false");
 		this.underlay.addClass(this.CssClasses_.ACTIVE);
 		this.underlay.data("owner", this.dialogName);
@@ -298,6 +299,7 @@
 
 	Dialog.prototype.hideDialog = function(){
 		if(this.isClosable && this.underlay.data("owner") == this.dialogName){
+			$(".main-content").css("position", "relative");
 			this.element.attr("aria-hidden", "true");
 			this.underlay.removeClass(this.CssClasses_.ACTIVE);
 			this.element.removeClass(this.CssClasses_.ACTIVE);
@@ -882,7 +884,7 @@
 		marker.selectedStudent = $(row);
 
 		$(marker.supervisorDataTable.bodyRows).each(function() {
-			if($(this).data('marker-id') == row.data('supervisor-id')){
+			if($(this).data('marker-id') == row.data('supervisor-id') || $(this).data('marker-id') == row.data('marker-id')){
 				$(this).attr('disabled', true);
 			} else {
 				$(this).attr('disabled', false);
@@ -949,6 +951,9 @@
 				project_id: projectId,
 				student_id: studentId,
 				marker_id: markerId,
+			},
+			success: function(response){
+				window.location.reload();
 			}
 		}).always(function(data){
 			$("#assign-dialog")[0].dialog.hideDialog();

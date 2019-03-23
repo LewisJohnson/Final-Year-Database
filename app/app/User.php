@@ -188,7 +188,7 @@ class User extends Authenticatable{
 		return in_array("admin_system", $this->getPrivileges());
 	}
 
-		/**
+	/**
 	 * Indicates if authenticated used is a student.
 	 *
 	 * @return boolean

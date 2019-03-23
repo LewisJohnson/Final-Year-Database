@@ -60,6 +60,7 @@
 		@if($user_type == "student")
 			<div class="form-field">
 				<label for="supervisor_id">Supervisor</label>
+				<br>
 				<select id="supervisor_id" name="supervisor_id">
 					@foreach($supervisors as $supervisor)
 						<option value="{{ $supervisor->user->id }}">{{ $supervisor->user->getFullName() }}</option>

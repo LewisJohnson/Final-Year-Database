@@ -1,6 +1,10 @@
+@php
+	$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
+@endphp
+
 <table class="table table-hover bg-white mt-3 mb-1 data-table sort-table supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
-	@if(Auth::user()->supervisor->getAcceptedStudents())
-		<thead>
+	@if($acceptedStudents)
+		<thead class="thead-light">
 			<tr>
 				<th>
 					<div class="checkbox">
@@ -15,7 +19,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach(Auth::user()->supervisor->getAcceptedStudents() as $accepted)
+			@foreach($acceptedStudents as $accepted)
 				<tr>
 					<td>
 						<div class="checkbox">
@@ -29,17 +33,21 @@
 					@else
 						<td>-</td>
 					@endif
-					<td><a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a></td>
+					<td>
+						<a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a>
+					</td>
 
 					@if(Session::get('logged_in_as') != null)
-						<td>
-							<button class="button text-danger supervisor-undo-accept" 
+						<td class="text-right">
+							<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" 
 								title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" 
 								data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" 
 								data-project-title="{{ $accepted['project']->title }}">Undo</button>
 						</td>
 					@else
-						<td><a href="{{ action('ProjectEvaluationController@index', $accepted['project']->id) }}">Evaluation</a></td>
+						<td class="text-right">
+							<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
+						</td>
 					@endif
 				</tr>
 			@endforeach

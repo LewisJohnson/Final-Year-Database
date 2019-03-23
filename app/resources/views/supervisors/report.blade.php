@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="centered mw-1000 js-show-scroll-top" style="position: relative;">
+<div class="centered mw-1000 js-show-scroll-top">
 
 	<h1>Supervisor Report</h1>
 

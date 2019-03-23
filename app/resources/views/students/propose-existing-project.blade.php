@@ -17,7 +17,7 @@
 		<div class="card-header">Propose Existing Project</div>
 
 		<div class="card-body">
-			<form class="form d-flex" method="POST" autocomplete="off" action="{{ action('StudentController@proposeExistingProject') }}">
+			<form class="form" method="POST" autocomplete="off" action="{{ action('StudentController@proposeExistingProject') }}">
 				{{ csrf_field() }}
 	
 				<h1 class="text-capitalize text-center">{{ $project->title }}</h1>
@@ -35,6 +35,7 @@
 	
 				<div class="form-field">
 					<label for="supervisor_id">Supervisor</label>
+					<br>
 					<select id="supervisor_id" name="supervisor_id">
 						@foreach($supervisors as $supervisor)
 							<option value="{{ $supervisor->user->id }}">{{ $supervisor->user->getFullName() }}</option>

@@ -13,6 +13,7 @@ html {
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	z-index: 1;
 }
 
 code {
@@ -28,7 +29,7 @@ ins {
 
 .main-content {
 	padding: 3rem 0;
-	margin-bottom: 5rem;
+	padding-bottom: 10rem;
 	position: relative;
 	z-index: 0;
 }

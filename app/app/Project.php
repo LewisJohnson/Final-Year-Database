@@ -125,7 +125,7 @@ class Project extends Model {
 	}
 
 	/**
-	 * This should only be called on student proposed projects.
+	 * Returns the project's evaluation.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */

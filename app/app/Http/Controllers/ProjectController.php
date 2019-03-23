@@ -490,7 +490,7 @@ class ProjectController extends Controller{
 		}
 
 		if(count($project->getStudentsWithProjectSelected()) > 0){
-			return response()->json(array('successful' => false, 'message' => 'Students have this project selected.'));
+			return response()->json(array('successful' => false, 'message' => '1 or more students have this project selected.'));
 		}
 
 		if($project->getAcceptedStudent() != null){
