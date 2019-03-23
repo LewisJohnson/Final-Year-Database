@@ -226,24 +226,26 @@ function sortTable(header, table) {
 
 	table.find('th').each(function(key, th) {
 		if(!$(th).is(header)){
-			$(th).find('span').remove();
+			$(th).find('.js-colSortDir').remove();
 		}
 	});
 
-	if(header.find('span').length < 1){
-		header.append('<span>&#x25B2;</span>');
+	if(header.find('.js-colSortDir').length < 1){
+		header.append('<span class="js-colSortDir">&#x25B2;</span>');
 		header.attr('data-asc', '');
 	} else {
 		if(header.attr('data-asc') == ""){
 			header.removeAttr('data-asc');
 			header.attr('data-desc', '');
-			header.find('span').remove();
-			header.append('<span>&#x25BC;</span>');
+			
+			header.find('.js-colSortDir').remove();
+			header.append('<span class="js-colSortDir">&#x25BC;</span>');
 		} else if(header.attr('data-desc') == ""){
 			header.removeAttr('data-desc');
 			header.attr('data-asc', '');
-			header.find('span').remove();
-			header.append('<span>&#x25B2;</span>');
+
+			header.find('.js-colSortDir').remove();
+			header.append('<span class="js-colSortDir">&#x25B2;</span>');
 		}
 
 	}
