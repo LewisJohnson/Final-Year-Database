@@ -238,66 +238,6 @@
 	float: right;
 }
 
-// COGS
-#cogs {
-	max-width: 200px;
-	margin: 0 auto;
-
-	.cog--large {
-		position: relative;
-		z-index: 3;
-		animation: cogSpin 4s linear infinite;
-		color: #a0a0a0;
-	}
-
-	.cog--medium {
-		position: relative;
-		float: left;
-		z-index: 2;
-		top: -59px;
-		left: 100px;
-		animation: cogSpin 2.2s linear infinite;
-		animation-direction: reverse;
-		color: grey;
-	}
-
-	.cog--small {
-		position: relative;
-		float: left;
-		z-index: 1;
-		top: -99px;
-		left: 30px;
-		animation: cogSpin 1.8s linear infinite;
-		color: #6b6b6b;
-	}
-}
-
-.cog {
-	&.cog--large {
-		.svg-container {
-			margin-right: 0px;
-			max-height: 200px;
-			max-width: 200px;
-		}
-	}
-
-	&.cog--medium {
-		.svg-container {
-			margin-right: 0px;
-			max-height: 125px;
-			max-width: 125px;
-		}
-	}
-
-	&.cog--small {
-		.svg-container {
-			margin-right: 0px;
-			max-height: 75px;
-			max-width: 75px;
-		}
-	}
-}
-
 // FLOATS
 .fl {
 	float: left;
