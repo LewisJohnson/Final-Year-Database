@@ -27,7 +27,7 @@ import WordCloud from '../wordcloud';
 
 		// Get all the data for the cloud using the table
 		$('.project-row').each(function(index) {
-			var titleWords = $(this).data('title').toLowerCase().split(" ");
+			var titleWords = $(this).data('title').toString().toLowerCase().split(" ");
 
 			for(var i = 0; i < titleWords.length; i++)
 			{
