@@ -6,6 +6,7 @@
 	@elseif($view === "edit")
 		<form class="form user-form" role="form" method="POST" action="{{ action('UserController@update', $user) }}">
 		{{ method_field('PATCH') }}
+		<input type="hidden" name="id" value="{{ $user->id }}">
 	@endif
 
 		{{ csrf_field() }}
