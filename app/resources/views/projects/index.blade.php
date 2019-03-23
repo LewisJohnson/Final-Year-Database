@@ -1,11 +1,8 @@
 @extends('layouts.app')
 @section('scripts')
 	<script src="{{ asset('js/views/project-preview.js') }}"></script>
-
-	@if($view == "index")
-		<script src="{{ asset('js/pagination/projects-pagination.js') }}"></script>
-	@endif
 @endsection
+
 
 @section ('content')
 <div class="centered mw-1200 js-show-scroll-top">
@@ -53,23 +50,24 @@
 	{{-- We have search results--}}
 	@if($view == "search")
 		<h1>Project Search</h1>
-		<h3 style="margin-bottom: 5px; word-break: break-all;">We found {{ count($projects) }} projects with the term "{{ $searchTerm }}".</h3>
-		<h5 style="margin-top: 0;">Search term limited to {{ Session::get('search_filters') }}.</h5>
+		<h3 class="mb-2">We found {{ count($projects) }} projects with the term "{{ $searchTerm }}".</h3>
+		<h6 class="mt-0 text-muted">Search term limited to {{ Session::get('search_filters') }}.</h6>
 		@include('projects.partials.search')
+		@if(count($projects) >= 50)<div class="alert alert-warning" role="alert">You reached the results limit of 50.</div>@endif
 	@endif
 
 	@if(count($projects) > 0)
 		<div class="table-responsive">
-			<table id="project-table" class="table table-hover bg-white data-table table-column-toggle table--dark-head shadow-2dp {{ $view }} @if($view != "index") sort-table @endif">
+			<table id="project-table" class="table table-hover bg-white data-table table-column-toggle shadow-2dp {{ $view }} @if($view != "search") server-sort-table @endif">
 				<thead>
 					<tr>
-						<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Topic</th>
-						<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Title</th>
-						<th @if($view != "index") class="cursor--pointer" @endif data-default="false">Short Description</th>
-						<th @if($view != "index") class="cursor--pointer" @endif data-default="false">Full Description</th>
-						<th @if($view != "index") class="cursor--pointer" @endif data-default="desktop">Skills</th>
-						@if(!($view == "supervisor" || $view == "personal"))<th @if($view != "index") class="cursor--pointer" @endif data-default="true">Supervisor</th>@endif
-						@if($view == "personal") <th @if($view != "index") class="cursor--pointer" @endif data-default="true">Status</th> @endif
+						@if($view != "topic")<th data-default="true" class="js-unsortable">Topic</th>@endif
+						<th data-default="true">Title</th>
+						<th data-default="false" class="js-unsortable">Short Description</th>
+						<th data-default="false" class="js-unsortable">Full Description</th>
+						<th data-default="desktop">Skills</th>
+						@if(!($view == "supervisor" || $view == "personal"))<th class="js-unsortable" data-default="true">Supervisor</th>@endif
+						@if($view == "personal") <th data-default="true">Status</th> @endif
 					</tr>
 				</thead>
 
@@ -80,7 +78,12 @@
 				</tbody>
 			</table>
 		</div>
-		<div style="margin: 1rem auto" class="loader loader--medium projects"></div>
+	@else
+		<p class="mt-5">There are no on-offer projects to show</p>
+	@endif
+
+	@if($view != "search")
+		{{ $projects->links() }}
 	@endif
 </div>
 @endsection

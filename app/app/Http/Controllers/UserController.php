@@ -27,6 +27,7 @@ class UserController extends Controller {
 
 	public function __construct(){
 		parent::__construct();
+		$this->paginationCount = 50;
 	}
 
 	/**
@@ -274,7 +275,10 @@ class UserController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function projects(User $user, Request $request){
-		$projects = Project::where('supervisor_id', $user->id);
+		$projectTable = new Project();
+
+		$sortCol = "title";
+		$sortDir = "asc";
 
 		if(Auth::user() == $user){
 			$view = 'personal';
@@ -282,12 +286,12 @@ class UserController extends Controller {
 			$view = 'supervisor';
 		}
 
-		if($view == 'supervisor'){
-			$projects->where('status', 'on-offer');
+		if(!empty($request->sortCol) && in_array($request->sortCol, $projectTable->sortable)){
+			$sortCol = $request->sortCol;
 		}
 
-		if(Auth::user()->isSupervisor()){
-			$projects->where('status', '<>' , 'student-proposed');
+		if(!empty($request->sortDir) && ($sortDir == "asc" || $sortDir == "desc")){
+			$sortDir = $request->sortDir;
 		}
 
 		if($view == 'personal'){
@@ -296,14 +300,24 @@ class UserController extends Controller {
 			} else {
 				$request->mp_hide_archived = Cookie::get('mp_hide_archived');
 			}
-
-			if($request->mp_hide_archived){
-				$projects->where('status', '<>', 'archived');
-			}
 		}
 
+		$projects = 
+			Project::where('supervisor_id', $user->id)
+			->when($view == 'supervisor', function($query) {
+				return $query->where('status', 'on-offer');
+			})
+			->when(Auth::user()->isSupervisor(), function($query) {
+				return $query->where('status', '<>' , 'student-proposed');
+			})
+			->when($view == 'personal' && $request->mp_hide_archived, function($query) {
+				return $query->where('status', '<>' , 'archived');
+			})
+			->orderBy($sortCol, $sortDir)
+			->paginate($this->paginationCount);
+
 		return view('projects.index')
-			->with('projects', $projects->get())
+			->with('projects', $projects)
 			->with('owner', $user)
 			->with('view', $view)
 			->with('mp_hide_archived', $request->mp_hide_archived);
@@ -330,7 +344,7 @@ class UserController extends Controller {
 	 */
 	public function update(UserForm $userForm){
 		$request = request();
-		$user = User::where('username', $userForm->username)->first();
+		$user = User::find($userForm->id);
 
 		// No privileges selected
 		if (empty($request->privileges) || !(is_array($request->privileges))){

@@ -101,7 +101,7 @@ $(function() {
 		*
 		* Toggles a toggle if it's form is clicked.
 	*/
-	$('.remember-with-cookie:checkbox').on('change', function() {
+	$('body').on('change', '.js-cookie:checkbox', function() {
 		rememberFormValues("checkbox");
 	});
 
@@ -115,8 +115,29 @@ $(function() {
 		window['project'] = $('.js-project');
 	}
 
-	$('.sort-table thead tr th').on('click', function() {
+	$('.sort-table thead tr th:not(.js-unsortable)').on('click', function() {
 		sortTable($(this), $(this).closest('table'));
+	});
+
+
+	if($('.server-sort-table').length > 0){
+		var urlParams = new URLSearchParams(window.location.search);
+		var sortCol = urlParams.get('sortCol');
+		var sortDir = urlParams.get('sortDir');
+
+		$(this).find('th').each(function() {
+			if($(this).text().toLowerCase() == sortCol){
+				if(sortDir == "asc"){
+					$(this).append('<span class="js-colSortDir">&#x25BC;</span>');
+				} else {
+					$(this).append('<span class="js-colSortDir">&#x25B2;</span>');
+				}
+			}
+		});
+	}
+
+	$('.server-sort-table thead tr th:not(.js-unsortable)').on('click', function() {
+		serverSortTable($(this), $(this).closest('table'));
 	});
 
 	// Repopulate checkboxes

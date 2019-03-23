@@ -16,8 +16,8 @@ tbody tr.is-selected:not([disabled]) {
 }
 
 
-.sort-table {
-	th {
+.sort-table, .server-sort-table {
+	th:not(.js-unsortable) {
 		cursor: pointer;
 	}
 }

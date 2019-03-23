@@ -100,18 +100,10 @@ function getCookie(cname) {
 	return null;
 }
 
-function formCookie(inputType){
-	var checkboxValues = {};
-
-	$(".remember-with-cookie:"+inputType).each(function(){
-		checkboxValues[this.id] = this.checked;
-	});
-}
-
 function rememberFormValues(inputType){
 	var checkboxValues = {};
 
-	$(".remember-with-cookie:"+inputType).each(function(){
+	$(".js-cookie:" + inputType).each(function(){
 		checkboxValues[this.id] = this.checked;
 	});
 
@@ -140,6 +132,7 @@ function repopulateCheckboxes(){
 		Object.keys(checkboxValues).forEach(function(element) {
 			var checked = checkboxValues[element];
 			$("#" + element).prop('checked', checked);
+			$("#" + element).trigger('change');
 		});
 	}
 }
@@ -247,7 +240,6 @@ function sortTable(header, table) {
 			header.find('.js-colSortDir').remove();
 			header.append('<span class="js-colSortDir">&#x25B2;</span>');
 		}
-
 	}
 
 	/* Make a loop that will continue until
@@ -317,5 +309,29 @@ function sortTable(header, table) {
 	}
 }
 
-// string.includes polyfill for IE
-String.prototype.includes||(String.prototype.includes=function(a,b){'use strict';return'number'!=typeof b&&(b=0),!(b+a.length>this.length)&&-1!==this.indexOf(a,b)});
+function serverSortTable(header) {
+	var urlParams = new URLSearchParams(window.location.search);
+	var sortDir = urlParams.get('sortDir');
+
+	var headerText = $(header).contents().get(0).nodeValue;
+
+	if(sortDir == "asc"){
+		var sorturl = updateQueryStringParameter(window.location.href, "sortDir", "desc");
+		var finalUrl = updateQueryStringParameter(sorturl, "sortCol", headerText.toLowerCase());
+		window.location.href = finalUrl;
+	} else {
+		var sorturl = updateQueryStringParameter(window.location.href, "sortDir", "asc");
+		var finalUrl = updateQueryStringParameter(sorturl, "sortCol", headerText.toLowerCase());
+		window.location.href = finalUrl;
+	}	
+}
+
+function updateQueryStringParameter(uri, key, value) {
+	var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+	var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+	if (uri.match(re)) {
+		return uri.replace(re, '$1' + key + "=" + value + '$2');
+	} else {
+		return uri + separator + key + "=" + value;
+	}
+}

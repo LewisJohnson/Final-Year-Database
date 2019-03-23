@@ -81,29 +81,26 @@ class Topic extends Model{
 	}
 
 	/**
-	 * Returns all projects related to this topic.
-	 * Includes primary project pivot.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Project
-	 */
-	public function projects(){
-		// Needed to get the pivot table name
-		$projectTopic = new ProjectTopic;
-
-		return $this->belongsToMany(Project::class, $projectTopic->getTable(), 'topic_id', 'project_id')
-			->withPivot('primary');
-	}
-
-	/**
-	 * Returns all projects related to this topic which are on-offer to students.
+	 * Returns the project count of on-offer projects.
 	 *
 	 * @return Project
 	 */
-	public function getProjectsOnOffer(){
-		$projects = $this->projects->where('status', 'on-offer');
+	public function getProjectsOnOfferCount(){
 
-		return $projects->filter(function ($project) {
-			return strpos($project->supervisor->user->privileges, 'supervisor') !== false;
-		});
+		$supervisorTable = new Supervisor();
+		$userTable = new User();
+		$projectTable = new Project();
+		$projectTopicTable = new ProjectTopic();
+
+		return
+			Project::whereNotNull('supervisor_id')
+			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
+			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
+			->rightJoin($projectTopicTable->getTable().' as projectTopic', 'projectTopic.project_id', '=', $projectTable->getTable().'.id')
+			->where('topic_id', $this->id)
+			->where('status', 'on-offer')
+			->where('user.privileges', 'LIKE', '%supervisor%')
+			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
+			->count();
 	}
 }

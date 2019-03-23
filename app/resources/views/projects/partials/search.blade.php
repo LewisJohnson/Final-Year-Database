@@ -19,19 +19,19 @@
 			<ul class="search-filter list-unstyled">
 				<li>
 					<div class="checkbox">
-						<input class="remember-with-cookie" id="search-title-checkbox" type="checkbox" name="filter[]" value="title" checked>
+						<input class="js-cookie" id="search-title-checkbox" type="checkbox" name="filter[]" value="title" checked>
 						<label class="ml-1" for="search-title-checkbox">Title</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input class="remember-with-cookie" id="search-description-checkbox" type="checkbox" name="filter[]" value="description" checked>
+						<input class="js-cookie" id="search-description-checkbox" type="checkbox" name="filter[]" value="description" checked>
 						<label class="ml-1" for="search-description-checkbox">Description</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
-						<input class="remember-with-cookie" id="search-skills-checkbox" type="checkbox" name="filter[]" value="skills" checked>
+						<input class="js-cookie" id="search-skills-checkbox" type="checkbox" name="filter[]" value="skills" checked>
 						<label class="ml-1" for="search-skills-checkbox">Skills</label>
 					</div>
 				</li>

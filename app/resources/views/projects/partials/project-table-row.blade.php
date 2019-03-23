@@ -1,12 +1,15 @@
 <tr class="project-row--{{ $project->status }} project-row" tabindex="0" data-project-id="{{ $project->id }}" data-preview-url="{{ action('ProjectController@show', ['project' => $project, 'preview' => true] )}}" >
-	@if($project->getPrimaryTopic() != null)
-		<td>
-			<a class="blue-link" href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
-		</td>
-	@else
-		<td>-</td>
+	
+	@if($view != "topic")
+		@if($project->getPrimaryTopic() != null)
+			<td>
+				<a class="blue-link" href="{{ action('ProjectController@byTopic', $project->getPrimaryTopic()->id) }}">{{ $project->getPrimaryTopic()->name }}</a>
+			</td>
+		@else
+			<td>-</td>
+		@endif
 	@endif
-
+	
 	<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
 	<td>{{ $project->getShortDescription() }}</td>
 	<td>{!! html_entity_decode($project->description, ENT_HTML5 | ENT_COMPAT) !!}</td>

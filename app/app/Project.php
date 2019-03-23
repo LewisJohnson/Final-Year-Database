@@ -42,6 +42,13 @@ class Project extends Model {
 	protected $fillable = ['title', 'description', 'skills', 'status'];
 
 	/**
+	 * The attributes that are sortable.
+	 *
+	 * @var array
+	 */
+	public $sortable = ['title', 'description', 'skills', 'status'];
+
+	/**
 	 * The attributes that are not mass assignable.
 	 *
 	 * @var array

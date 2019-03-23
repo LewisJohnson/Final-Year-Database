@@ -17,14 +17,14 @@
 |------------------
 |
 |	1. Mobile Menu
-|	1.1 Desktop Menu
+|		1.1 Desktop Menu
 |	2. Dialog / Modal
 |	3. Data Table
-|	3.1 Column Toggle Table
+|		3.1 Column Toggle Table
 |	4. Edit Topics [Project Admin]
-|	4.1 Edit Programmes [Project Admin]
+|		4.1 Edit Programmes [Project Admin]
 |	5. Second Marker [Assign]
-|	5.1 Second Marker [Swap]
+|		5.1 Second Marker [Swap]
 |	6. Universal Search
 |	7. Forms / AJAX Functions
 |
@@ -252,7 +252,7 @@
 		this.header.attr('title', this.header.find('#dialog-desc').html());
 
 		this.content.before(this.HtmlSnippets_.LOADER);
-		this.loader = $(element).find(".loader");
+		this.loader = $(element).find(".spinner");
 		this.isClosable = true;
 		this.activatorButtons = [];
 		this.init();
@@ -261,7 +261,7 @@
 	};
 
 	Dialog.prototype.HtmlSnippets_ = {
-		LOADER: '<div class="w-100 loader text-center p-4" style="display:none"><div class="spinner-border text-primary"></div></div>',
+		LOADER: '<div class="w-100 spinner spinner-border text-center p-4" style="display:none"><div class="spinner-border text-primary"></div></div>',
 	};
 
 	Dialog.prototype.CssClasses_ = {
@@ -449,7 +449,7 @@
 	};
 
 	ColumnToggleTable.prototype.HtmlSnippets_ = {
-		COLUMN_SELECTOR_BUTTON: '<button class="btn btn-light d-block ml-auto mb-3" style="position: relative;">Columns</button>',
+		COLUMN_SELECTOR_BUTTON: '<button class="btn btn-secondary d-block ml-auto mb-3" style="position: relative;">Columns</button>',
 		COLUMN_SELECTOR_MENU: '<ul class="p-2 mt-2 rounded shadow bg-white list-unstyled text-left" style="display: none;position: absolute;right: 0px;width: 200px;"></ul>'
 	};
 
@@ -519,13 +519,16 @@
 				$(this).attr("hidden", "true");
 			}
 
-			columnSelectorMenu.append('\
-				<li class="p-2 p-md-1"> \
-					<div class="checkbox"> \
-						<input class="column-toggle" id="column-' + $(this).text() + '" type="checkbox" '+ checked +'> \
-						<label class="ml-1" for="column-' + $(this).text() + '">' + $(this).text() + '</label> \
-					</div> \
-				</li>');
+			var id = $(this).contents().get(0).nodeValue.toLowerCase().replace(/\s/g, '-');
+
+			columnSelectorMenu.append(`
+				<li class="p-2 p-md-1">
+					<div class="checkbox d-flex">
+						<input class="column-toggle js-cookie" id="column-${ id }" type="checkbox" ${ checked }>
+						<label class="text-body ml-2 flex-grow-1" for="column-${ id }">${ $(this).contents().get(0).nodeValue }</label>
+					</div>
+				</li>`
+			);
 		});
 
 		columnSelectorButton.on("click", function(e){
@@ -547,6 +550,7 @@
 		});
 
 		ColumnToggleTable.prototype.functions.refreshAll();
+		repopulateCheckboxes();
 	};
 
 	/* ==================================

@@ -43,7 +43,7 @@ class ProjectController extends Controller{
 
 	public function __construct(){
 		parent::__construct();
-		$this->paginationCount = 25;
+		$this->paginationCount = 50;
 
 		$purifier = Purify::getPurifier();
 		$config = $purifier->config;
@@ -77,32 +77,32 @@ class ProjectController extends Controller{
 		$supervisorTable = new Supervisor();
 		$userTable = new User();
 		$projectTable = new Project();
-		$projects = Project::whereNotNull('supervisor_id');
 
-		if(Auth::check()){
-			if(!Auth::user()->isSupervisor()){
-				$projects->where('status', 'on-offer');
-			}
+		$sortCol = "view_count";
+		$sortDir = "asc";
+
+		if(!empty($request->sortCol) && in_array($request->sortCol, $projectTable->sortable)){
+			$sortCol = $request->sortCol;
 		}
 
-		if(ldap_guest()){
-			$projects->where('status', 'on-offer');
+		if(!empty($request->sortDir) && ($sortDir == "asc" || $sortDir == "desc")){
+			$sortDir = $request->sortDir;
 		}
 
-		$projects
+		$projects = 
+			Project::whereNotNull('supervisor_id')
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
+			->when((Auth::check() && !Auth::user()->isSupervisor()) || ldap_guest(), function($query) {
+				return $query->where('status', 'on-offer');
+			})
 			->where('user.privileges', 'LIKE', '%supervisor%')
 			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
 			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
-			->orderBy('title', 'asc')
+			->orderBy($sortCol, $sortDir)
 			->paginate($this->paginationCount);
 
-		if($request->query("page")){
-			return view('projects.partials.pagination')
-				->with('projects', $projects->get())->with('view', 'index');
-		}
-		return view('projects.index')->with('projects', $projects->get())
+		return view('projects.index')->with('projects', $projects)
 			->with('view', 'index');
 	}
 
@@ -546,6 +546,14 @@ class ProjectController extends Controller{
 	public function showTopics(){
 		$topics = Topic::all();
 
+		foreach ($topics as $key => $topic) {
+			$topic->project_count = $topic->getProjectsOnOfferCount();
+
+			if($topic->project_count < 1){
+				unset($topics[$key]); 
+			}
+		}
+
 		return view('projects.by-topic')->with('topics', $topics);
 	}
 
@@ -556,11 +564,38 @@ class ProjectController extends Controller{
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function byTopic(Topic $topic){
-		$topics = $topic->getProjectsOnOffer();
+	public function byTopic(Topic $topic, Request $request){
+		$supervisorTable = new Supervisor();
+		$userTable = new User();
+		$projectTable = new Project();
+		$projectTopicTable = new ProjectTopic();
+
+		$sortCol = "view_count";
+		$sortDir = "asc";
+
+		if(!empty($request->sortCol) && in_array($request->sortCol, $projectTable->sortable)){
+			$sortCol = $request->sortCol;
+		}
+
+		if(!empty($request->sortDir) && ($sortDir == "asc" || $sortDir == "desc")){
+			$sortDir = $request->sortDir;
+		}
+
+		$projects = 
+			Project::whereNotNull('supervisor_id')
+			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
+			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
+			->rightJoin($projectTopicTable->getTable().' as projectTopic', 'projectTopic.project_id', '=', $projectTable->getTable().'.id')
+			->where('topic_id', $topic->id)
+			->where('status', 'on-offer')
+			->where('user.privileges', 'LIKE', '%supervisor%')
+			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
+			->select($projectTable->getTable().'.*')
+			->orderBy($sortCol, $sortDir)
+			->paginate($this->paginationCount);
 
 		return view('projects.index')
-			->with('projects', $topics)
+			->with('projects', $projects)
 			->with('topic', $topic)
 			->with('view', 'topic');
 	}
@@ -679,7 +714,7 @@ class ProjectController extends Controller{
 			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
 
 		if(Auth::check()){
-			if(!Auth::user()->isSupervisor()){
+			if(Auth::user()->isSupervisor()){
 				$projects->where("status", "on-offer");
 			}
 		}
@@ -721,7 +756,7 @@ class ProjectController extends Controller{
 			$filteredAtLeastOnce = true;
 		}
 
-		$projects = $projects->get();
+		$projects = $projects->limit(50)->get();
 
 		// There was no projects to be found
 		if(!$filteredAtLeastOnce || count($projects) == 0){
