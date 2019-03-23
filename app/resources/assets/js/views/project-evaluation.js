@@ -126,10 +126,14 @@
 		$(".js-value" + selectorModifier).hide();
 
 		$("#edit").text('Cancel');
+		$("#edit").addClass('btn-primary');
+		$("#edit").addClass('btn-secondary');
+
 		$("#save").show();
 
 		$("textarea" + selectorModifier).show();
-		$(".custom-range" + selectorModifier).show();
+		$(".custom-range" + selectorModifier).prev('.js-value').show();
+		$(".js-input" + selectorModifier).show();
 
 		if(!isFinialised){
 			$("#finalise").hide();

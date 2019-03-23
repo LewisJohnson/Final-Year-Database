@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Mode;
+use SussexProjects\Student;
 use SussexProjects\Project;
 use SussexProjects\ProjectEvaluation;
 use SussexProjects\PEQValueTypes;
@@ -32,11 +33,40 @@ class ProjectEvaluationController extends Controller {
 	/**
 	 * The project evaluation view.
 	 *
-	 * @param  \Illuminate\Http\Request $request
+	 * @param  Project $project
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function index(Project $project, Request $request){
+	public function index(){
+		$students = Student::all();
+
+		$studentsSorted = $students->sortByDesc(function ($student) {
+			$weight = 0;
+
+			if(!empty($student->project->evaluation)){
+				$weight++;
+			}
+
+			if($student->project_status == "accepted"){
+				$weight++;
+			}
+
+			return $weight;
+		});
+
+
+		return view('evaluation.index')
+			->with("students", $studentsSorted);
+	}
+	/**
+	 * The project evaluation view.
+	 *
+	 * @param  \Illuminate\Http\Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function show(Project $project){
+
 		if(empty($project->marker_id)){
 			session()->flash('message', 'A second marker is yet to be set up for this project.');
 			session()->flash('message_type', 'error');
@@ -44,9 +74,11 @@ class ProjectEvaluationController extends Controller {
 		}
 
 		if(Auth::user()->id != $project->supervisor->id && Auth::user()->id != $project->marker_id){
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
-			session()->flash('message_type', 'error');
-			return redirect()->action('HomeController@index');
+			if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+				session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+				session()->flash('message_type', 'error');
+				return redirect()->action('HomeController@index');
+			}
 		}
 
 		$evaluation = $project->evaluation;
@@ -66,7 +98,7 @@ class ProjectEvaluationController extends Controller {
 			$evaluation = ProjectEvaluation::find($evaluation->id);
 		}
 
-		return view('evaluation.index')
+		return view('evaluation.evaluation')
 			->with("project", $project)
 			->with("evaluation", $evaluation);
 	}
@@ -126,6 +158,6 @@ class ProjectEvaluationController extends Controller {
 		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@index', $project->id);
+		return redirect()->action('ProjectEvaluationController@show', $project->id);
 	}
 }

@@ -135,6 +135,9 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	// Import student form
 	Route::post('admin/students/import', 'StudentController@importStudents');
 
+	// Project evaluation
+	Route::get('admin/evaluation', 'ProjectEvaluationController@index');
+
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form
 	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
@@ -160,7 +163,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 
 	// Perform automatic second marker assignment
 	Route::post('admin/marker/calculate', 'ProjectAdminController@calculateSecondMarkers');
-
 
 	/* LOGIN AS ROUTES */
 	// Login as another user view
@@ -291,7 +293,7 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 
 	// Project evaluation
-	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@index');
+	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@show');
 
 	// Update project evaluation
 	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');

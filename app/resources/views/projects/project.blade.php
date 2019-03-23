@@ -111,7 +111,7 @@
 			@endif
 
 			@if($project->isUserSupervisorOfProject() || $project->isUserMarkerOfProject())
-				<a class="btn btn-primary ml-2" href="{{ action('ProjectEvaluationController@index', $project->id) }}">Evaluation</a>
+				<a class="btn btn-primary ml-2" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
 			@endif
 
 			@if($project->isOwnedByUser() && $project->status != 'archived')

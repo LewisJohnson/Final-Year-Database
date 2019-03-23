@@ -9,4 +9,9 @@
 			<span>@include('svg.clipboard')<span>Supervisor Report</span></span>
 		</a>
 	</li>
+	<li>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@index') }}">
+			<span>@include('svg.clipboard')<span>Project Evaluation Report</span></span>
+		</a>
+	</li>
 </ul>
