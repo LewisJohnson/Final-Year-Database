@@ -23,118 +23,123 @@
 					</div>
 				@endif
 				
-				{{-- INTERESTED STUDENTS --}}
-				<h5 class="mt-3">Interested</h5>
-				<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
-					@if($interestedStudents)
-						<thead class="thead-light">
-							<tr>
-								<th>
-									<div class="checkbox">
-										<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
-										<label for="selected-students" name="selected-students"></label>
-									</div>
-								</th>
-								<th class="cursor--pointer">Student</th>
-								<th class="cursor--pointer">Project</th>
-								<th title="The amount of times the student has been rejected" class="cursor--pointer text-right">Rejected</th>
-								<th></th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($interestedStudents as $interested)
-								<tr data-student-id="{{ $interested['student']->id }}" data-project-id="{{ $interested['project']->id }}">
-									<td class="w-5">
+				@if(count($interestedStudents) > 1 || count($studentProposals) > 1)
+					{{-- INTERESTED STUDENTS --}}
+					<h5 class="mt-3">Interested</h5>
+					<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
+						@if($interestedStudents)
+							<thead class="thead-light">
+								<tr>
+									<th>
 										<div class="checkbox">
-											<input class="checkbox-input" id="offer-{{ $interested['student']->user->getFullName() }}" type="checkbox" data-email="{{ $interested['student']->user->email }}">
-											<label for="offer-{{ $interested['student']->user->getFullName() }}" name="offer-{{ $interested['student']->user->getFullName() }}"></label>
+											<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
+											<label for="selected-students" name="selected-students"></label>
 										</div>
-									</td>
-
-									<td class="w-25">
-										<a href="mailto:{{ $interested['student']->user->email }}">{{ $interested['student']->user->getFullName() }}</a>
-									</td>
-
-									<td class="w-50">
-										<a href="{{ action('ProjectController@show', $interested['project']) }}">{{ $interested['project']->title }}</a>
-									</td>
-
-									<td class="w-10 text-right">{{ $interested['student']->reject_count }}</td>
-
-									<td class="w-5 text-right">
-										<button class="offer-action btn btn-sm btn-outline-danger" title="Reject {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="reject">Reject</button>
-									</td>
-									
-									<td class="w-5 text-right">
-										<button class="offer-action btn btn-sm btn-success" title="Accept {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="accept">Accept</button>
-									</td>
+									</th>
+									<th class="cursor--pointer">Student</th>
+									<th class="cursor--pointer">Project</th>
+									<th title="The amount of times the student has been rejected" class="cursor--pointer text-right">Rejected</th>
+									<th></th>
+									<th></th>
 								</tr>
-							@endforeach
-						</tbody>
-					@else
-						<tfoot>
-							<tr><td>No students have selected one of your projects yet.</td></tr>
-						</tfoot>
-					@endif
-				</table>
+							</thead>
+							<tbody>
+								@foreach($interestedStudents as $interested)
+									<tr data-student-id="{{ $interested['student']->id }}" data-project-id="{{ $interested['project']->id }}">
+										<td class="w-5">
+											<div class="checkbox">
+												<input class="checkbox-input" id="offer-{{ $interested['student']->user->getFullName() }}" type="checkbox" data-email="{{ $interested['student']->user->email }}">
+												<label for="offer-{{ $interested['student']->user->getFullName() }}" name="offer-{{ $interested['student']->user->getFullName() }}"></label>
+											</div>
+										</td>
 
-				{{-- STUDENT PROPOSALS --}}
-				<h5 class="mt-3">Proposals</h5>
-				<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
-					@if($studentProposals)
-						<thead class="thead-light">
-							<tr>
-								<th>
-									<div class="checkbox">
-										<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
-										<label for="selected-students" name="selected-students"></label>
-									</div>
-								</th>
-								<th>Student</th>
-								<th>Project</th>
-								<th></th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($studentProposals as $proposal)
-								<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
-									<td class="w-5">
+										<td class="w-25">
+											<a href="mailto:{{ $interested['student']->user->email }}">{{ $interested['student']->user->getFullName() }}</a>
+										</td>
+
+										<td class="w-50">
+											<a href="{{ action('ProjectController@show', $interested['project']) }}">{{ $interested['project']->title }}</a>
+										</td>
+
+										<td class="w-10 text-right">{{ $interested['student']->reject_count }}</td>
+
+										<td class="w-5 text-right">
+											<button class="offer-action btn btn-sm btn-outline-danger" title="Reject {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="reject">Reject</button>
+										</td>
+										
+										<td class="w-5 text-right">
+											<button class="offer-action btn btn-sm btn-success" title="Accept {{ $interested['student']->user->getFullName() }} for {{ $interested['project']->title }}" data-action-type="accept">Accept</button>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						@else
+							<tfoot>
+								<tr><td>No students have selected one of your projects yet.</td></tr>
+							</tfoot>
+						@endif
+					</table>
+
+					{{-- STUDENT PROPOSALS --}}
+					<h5 class="mt-3">Proposals</h5>
+					<table class="table table-hover bg-white table data-table sort-table supervisor-table interested-students mt-1" data-supervisor-email="{{ Auth::user()->email }}" data-status="interested-students">
+						@if($studentProposals)
+							<thead class="thead-light">
+								<tr>
+									<th>
 										<div class="checkbox">
-											<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox" data-email="{{ $proposal['student']->user->email }}">
-											<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
+											<input class="checkbox-input master-checkbox" id="selected-students" type="checkbox">
+											<label for="selected-students" name="selected-students"></label>
 										</div>
-									</td>
-
-									<td class="w-25">
-										<a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a>
-									</td>
-
-									<td class="w-50">
-										<a href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a>
-									</td>
-
-									<td class="w-5 text-right">
-										<button class=" offer-action btn btn-sm btn-outline-danger" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
-									</td>
-									
-									<td class="w-5 text-right">
-										<button class="offer-action btn btn-sm btn-success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
-									</td>
+									</th>
+									<th>Student</th>
+									<th>Project</th>
+									<th></th>
+									<th></th>
 								</tr>
-							@endforeach
-						</tbody>
-					@else
-						<tfoot>
-							<tr><td>You have no student project proposals yet.</td></tr>
-						</tfoot>
-					@endif
-				</table>
+							</thead>
+							<tbody>
+								@foreach($studentProposals as $proposal)
+									<tr data-student-id="{{ $proposal['student']->id }}" data-project-id="{{ $proposal['project']->id }}">
+										<td class="w-5">
+											<div class="checkbox">
+												<input class="checkbox-input" id="offer-{{ $proposal['student']->user->getFullName() }}" type="checkbox" data-email="{{ $proposal['student']->user->email }}">
+												<label for="offer-{{ $proposal['student']->user->getFullName() }}" name="offer-{{ $proposal['student']->user->getFullName() }}"></label>
+											</div>
+										</td>
 
-				<div class="text-right mt-3">
-					<a class="btn btn-light email-selected interested-students" href="#">Email Selected</a>
-				</div>
+										<td class="w-25">
+											<a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a>
+										</td>
+
+										<td class="w-50">
+											<a href="{{ action('ProjectController@show', $proposal['project']) }}">{{ $proposal['project']->title }}</a>
+										</td>
+
+										<td class="w-5 text-right">
+											<button class=" offer-action btn btn-sm btn-outline-danger" title="Reject {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="reject">Reject</button>
+										</td>
+										
+										<td class="w-5 text-right">
+											<button class="offer-action btn btn-sm btn-success" title="Accept {{ $proposal['student']->user->getFullName() }} for {{ $proposal['project']->title }}" data-action-type="accept">Accept</button>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						@else
+							<tfoot>
+								<tr><td>You have no student project proposals yet.</td></tr>
+							</tfoot>
+						@endif
+					</table>
+
+					<div class="text-right mt-3">
+						<a class="btn btn-light email-selected interested-students" href="#">Email Selected</a>
+					</div>
+				@else
+					<hr>
+					<p>You have no pending decisions.</p>
+				@endif
 			</div>
 		</div>
 	</div>
