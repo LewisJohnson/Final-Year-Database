@@ -41,25 +41,6 @@ class Supervisor extends Model{
 	protected $guarded = [];
 
 	/**
-	 * A HTML 5 data list snippet containing all supervisors.
-	 * This is used for auto-complete.
-	 *
-	 * @return string The resulting HTML
-	 */
-	public static function getDatalist(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$dataListHtml = '<datalist id="supervisor-datalist">';
-
-		foreach($supervisors as $supervisor){
-			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
-		}
-
-		$dataListHtml .= '</datalist>';
-
-		return $dataListHtml;
-	}
-
-	/**
 	 * Returns the user related to this supervisor.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne User
@@ -360,14 +341,38 @@ class Supervisor extends Model{
 	}
 
 	/**
-	 * A HTML data-list of all titles.
+	 * A HTML 5 data list snippet containing all supervisor names.
+	 * This is used for auto-complete.
 	 *
+	 * @return string The resulting HTML
+	 */
+	public static function getSupervisorNameDatalist($hideClosedToOffers = true){
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+			->when($hideClosedToOffers, function($query) {
+				return $query->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+							->where("take_students_".Session::get('education_level')["shortName"], true);
+			})
+			->get();
+
+		$dataListHtml = '<datalist id="supervisor-datalist">';
+
+		foreach($supervisors as $supervisor){
+			$dataListHtml .= '<option value="'.$supervisor->user->getFullName().'">';
+		}
+
+		$dataListHtml .= '</datalist>';
+
+		return $dataListHtml;
+	}
+
+	/**
+	 * A HTML 5 data-list of all titles.
+	 * This is used for auto-complete.
+
 	 * @return string
 	 */
 	public static function getTitleDatalist(){
-		$titles = Supervisor::groupBy('title')
-			->where("take_students_".Session::get('education_level')["shortName"], true)
-			->pluck('title');
+		$titles = Supervisor::groupBy('title')->pluck('title');
 
 		$rtnString = '<datalist id="titleDataList">';
 		foreach($titles as $title){

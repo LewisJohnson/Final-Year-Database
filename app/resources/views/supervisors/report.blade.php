@@ -32,7 +32,7 @@
 		</div>
 	@endif
 
-	@include('supervisors.partials.supervisor-filter')
+	@include('supervisors.partials.supervisor-filter', ['hideClosedToOffers' => $sr_hide_closed])
 
 	<a id="showSupervisorsClosedToOffersToggleButton" @if($sr_hide_closed) href="{{ action('SupervisorController@report', ['sr_hide_closed' => false]) }}" @else href="{{ action('SupervisorController@report', ['sr_hide_closed'=> true]) }}" @endif></a>
 
