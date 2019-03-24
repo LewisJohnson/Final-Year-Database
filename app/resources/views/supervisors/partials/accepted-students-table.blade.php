@@ -37,18 +37,16 @@
 						<a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a>
 					</td>
 
-					@if(Session::get('logged_in_as') != null)
-						<td class="text-right">
+					<td class="text-right">
+						@if(Session::get('logged_in_as') != null)
 							<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" 
 								title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" 
 								data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" 
 								data-project-title="{{ $accepted['project']->title }}">Undo</button>
-						</td>
-					@else
-						<td class="text-right">
-							<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
-						</td>
-					@endif
+						@endif
+
+						<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
+					</td>
 				</tr>
 			@endforeach
 		</tbody>
