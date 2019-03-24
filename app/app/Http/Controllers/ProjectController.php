@@ -606,7 +606,10 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function showSupervisors(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()
+						->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+						->where("take_students_".Session::get('education_level')["shortName"], true)
+						->get();
 
 		return view('projects.by-supervisor')->with('supervisors', $supervisors);
 	}
