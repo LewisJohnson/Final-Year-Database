@@ -5,11 +5,7 @@
 @endif
 
 @if(Session::get('logged_in_as') != null)
-	<div class="row bg-danger d-print-none">
-		<div class="col-12 text-center">
-			<p class="text-white m-0 p-2">You are logged in as another user.</p>
-		</div>
-	</div>
+	<p class="text-white m-0 p-2 text-center bg-danger d-print-none">You are logged in as another user.</p>
 @endif
 
 <div class="header-container d-print-none">
