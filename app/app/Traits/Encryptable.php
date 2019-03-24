@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Written by Sam Whisker.
- * Source: github.com/samWhisker/laravel-trait-encrypt
- */
-
 namespace SussexProjects\Traits;
 
 use Illuminate\Contracts\Encryption\DecryptException;
