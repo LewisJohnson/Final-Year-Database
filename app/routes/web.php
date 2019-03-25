@@ -138,6 +138,10 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment',
 	// Project evaluation
 	Route::get('admin/evaluation', 'ProjectEvaluationController@index');
 
+	/* PROJECT EVALUATION */
+	// Un-finalise Project evaluation
+	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
+
 	/* SUPERVISOR ARRANGMENTS ROUTES */
 	// Amend supervisor arrangements form
 	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');

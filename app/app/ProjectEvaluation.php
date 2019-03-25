@@ -82,7 +82,7 @@ class ProjectEvaluation extends Model {
 	 * @return Project
 	 */
 	public function project(){
-		return $this->hasOne(Project::class, 'id');
+		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
 
 	public function getQuestions(){
@@ -118,7 +118,7 @@ class ProjectEvaluation extends Model {
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Technical Quality",
-				"depends on project type; for CS/GAME programming required",
+				"Depends on project type; for CS/GAME programming required",
 				PEQValueTypes::Scale
 		));
 
@@ -159,7 +159,7 @@ class ProjectEvaluation extends Model {
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
-				"Mark for Dissertation%",
+				"Mark for Dissertation %",
 				"",
 				PEQValueTypes::Number
 		));
