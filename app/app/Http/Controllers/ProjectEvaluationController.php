@@ -31,7 +31,7 @@ class ProjectEvaluationController extends Controller {
 	}
 
 	/**
-	 * The project evaluation view.
+	 * An overall view of project evaluations.
 	 *
 	 * @param  Project $project
 	 *
@@ -58,6 +58,7 @@ class ProjectEvaluationController extends Controller {
 		return view('evaluation.index')
 			->with("students", $studentsSorted);
 	}
+
 	/**
 	 * The project evaluation view.
 	 *
@@ -104,7 +105,15 @@ class ProjectEvaluationController extends Controller {
 	}
 
 
-	public static function update(Project $project, Request $request){
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Project	$project
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Project $project, Request $request){
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
 		$isProjectMarker = Auth::user()->id == $project->marker->id;
 
@@ -114,8 +123,17 @@ class ProjectEvaluationController extends Controller {
 			return redirect()->action('HomeController@index');
 		}
 
+		$evaluation = ProjectEvaluation::find($project->evaluation->id);
+
+		if($evaluation->is_finalised) {
+			session()->flash('message', 'This project evaluation has been finalised.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
+
 		$questions = $project->evaluation->questions;
 
+		$finalise = !empty($request->finalise);
 		for ($i = 0; $i < count($questions); $i++) { 
 			if($isProjectSupervisor) {
 				$accessor = "supervisor";
@@ -123,7 +141,11 @@ class ProjectEvaluationController extends Controller {
 				$accessor = "marker";
 			}
 
-			$value = $request[$i.'_'.$accessor.'_value'];
+			if($finalise && $i == ProjectEvaluation::DissertationMarkIndex) {
+				$value = $request->final_mark;
+			} else {
+				$value = $request[$i.'_'.$accessor.'_value'];
+			}
 
 			switch ($questions[$i]->type) {
 				case PEQValueTypes::Scale:
@@ -143,21 +165,51 @@ class ProjectEvaluationController extends Controller {
 					break;
 			}
 
-			$valueAccessor = ucfirst($accessor).'Value';
-			$questions[$i]->$valueAccessor = $value;
+			if($finalise && $i == ProjectEvaluation::DissertationMarkIndex) {
+				$valueAccessor = 'FinalValue';
+				$commentAccessor ='FinalComment';
 
-			$commentAccessor = ucfirst($accessor).'Comment';
-			$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
+				$questions[$i]->$valueAccessor = $value;
+
+				if(!empty($request->joint_report)){
+					$questions[$i]->$commentAccessor = $request->joint_report;
+				} else {
+					$questions[$i]->$commentAccessor = "Not required.";
+				}
+			} else {
+				$valueAccessor = ucfirst($accessor).'Value';
+				$questions[$i]->$valueAccessor = $value;
+
+				$commentAccessor = ucfirst($accessor).'Comment';
+				$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
+			}
 		}
 
-		$eve = ProjectEvaluation::find($project->evaluation->id);
-		$eve->update([
+		$evaluation->update(array(
+			'is_finalised' => $finalise,
 			'questions' => $questions
-		]);
+		));
 
 		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@show', $project->id);
+		return redirect()->action('ProjectEvaluationController@show', $project);
+	}
+
+	/**
+	 * Un-finalises a project evaluation.
+	 *
+	 * @param ProjectEvaluation	$evaluation
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function undoFinalise(ProjectEvaluation $evaluation){
+		$evaluation->is_finalised = false;
+		$evaluation->save();
+
+		session()->flash('message', 'The project evaluation has been un-finalised');
+		session()->flash('message_type', 'warning');
+
+		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
 	}
 }
