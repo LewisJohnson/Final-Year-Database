@@ -42,10 +42,6 @@ mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
 mix.js('resources/assets/js/views/marker-assign.js', 'public/js/views');
 mix.js('resources/assets/js/views/project-evaluation.js', 'public/js/views');
 
-// JS | PAGINATION
-mix.js('resources/assets/js/dynamic-pagination/projects-pagination.js', 'public/js/pagination');
-mix.js('resources/assets/js/dynamic-pagination/user-agent-pagination.js', 'public/js/pagination');
-
 // STYLE
 mix.less('resources/assets/sass/jquery-confirm.less', 'public/css');
 mix.sass('resources/assets/sass/email.scss', 'public/css');
