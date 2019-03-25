@@ -9,12 +9,11 @@
 
 	var isInEditMode = false;
 
-	var isFinialised = Window['isFinialised'];
 	var userIsSupervisor = Window['isSupervisor'];
 	var userIsMarker = Window['isMarker'];
 	var selectorModifier;
 
-	if(isFinialised == null || userIsSupervisor == null || userIsMarker == null){
+	if(userIsSupervisor == null || userIsMarker == null){
 		createToast('error', "Something went wrong (ERROR: Window variable 'isFinialised' is null).");
 	}
 
@@ -29,24 +28,54 @@
 	$(".js-input").hide();
 	$(".custom-range").hide();
 
-	$('body').on('click', '.delete', function(e){
-		if(isInEditMode){
-			$(this).closest('.form-field').remove();
-		}
-	});
-
 	$("#edit").on('click', function(e){
 		e.preventDefault();
 
 		if(isInEditMode){
+			// This is the cancel button
 			window.location.reload();
 		} else {
 			editMode();
 		}
 	});
 
-	$("#finalise").on('click', function(){
-		finaliseMode();
+	var userHasSeenShortJointReportLength = false;
+
+	$("#finalise").on('click', function(e){
+		$(".js-error").remove()
+		var finalMark = parseInt($("#finalMark").val());
+
+		if(!Number.isInteger(finalMark)){
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Final mark must be an integer.</p>');
+			$(".dialog .container").scrollTop(999999);
+			return;
+		}
+
+		if(finalMark < 0 || finalMark > 100){
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Final mark must be between 0 - 100.</p>');
+			$(".dialog .container").scrollTop(999999);
+			return;
+		}
+
+		if($("#jointReport").val().length < 120){
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">The joint report must be at least 120 characters.</p>');
+			$(".dialog .container").scrollTop(999999);
+			return;
+		}
+
+		if($("#jointReport").val().length < 240 && !userHasSeenShortJointReportLength){
+			$(".dialog .container").append('<div class="js-error alert alert-warning mt-2" role="alert">The joint report looks a bit short. If you\'re sure it\'s long enough, resubmit the form.</div>');
+			$(".dialog .container").scrollTop(999999);
+			userHasSeenShortJointReportLength = true;
+			return;
+		}
+
+		$(".dialog .container").find("input, textarea").removeClass('d-inline-block').addClass('d-none');
+
+		$("#projectEvaluationForm").append($(".dialog .container").find("input, textarea"));
+		window['Dialog'].showLoader();
+
+		$("#projectEvaluationForm").submit();
 	});
 
 	$('body').on('input change', '.custom-range', function(){
@@ -108,36 +137,20 @@
 		input.prev('.js-value').css('color', 'rgb(' + rgb + ')');
 	}
 
-	function finaliseMode(){
-		editMode();
-
-		$("#newFieldForm").hide();
-		$("#finaliseFields").show();
-		
-		var supervisorMark = parseInt($("#supervisorMark").val());
-		var markerMark = parseInt($("#markerMark").val());
-
-		$("#isFinal").val(true);
-	}
-
 	function editMode(){
 		// Into edit mode
 		$(".comment" + selectorModifier).hide();
 		$(".js-value" + selectorModifier).hide();
 
 		$("#edit").text('Cancel');
-		$("#edit").addClass('btn-primary');
 		$("#edit").addClass('btn-secondary');
 
 		$("#save").show();
-
+		$("#finaliseEvaluation").hide();
+		
 		$("textarea" + selectorModifier).show();
 		$(".custom-range" + selectorModifier).prev('.js-value').show();
 		$(".js-input" + selectorModifier).show();
-
-		if(!isFinialised){
-			$("#finalise").hide();
-		}
 
 		isInEditMode = true;
 	}
