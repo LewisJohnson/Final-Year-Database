@@ -4,7 +4,7 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
-select, input:not([type="range"]), textarea, .fake-input {
+select:not([readonly]), input:not([type='range']):not([readonly]), textarea:not([readonly]), .fake-input {
 	border: solid $form-border-width $form-border-color;
 	padding: $form-input-padding;
 	font-size: $form-input-font-size;
