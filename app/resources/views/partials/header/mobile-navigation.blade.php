@@ -15,7 +15,7 @@
 				<h5 class="text-uppercase mt-3">Browse</h5>
 				<div class="list-group">
 					<li class="nav-button">
-						<a center" href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">All Projects</a>
+						<a href="{{ action('ProjectController@index') }}" title="Browse all on-offer projects">All Projects</a>
 					</li>
 
 					<li class="nav-button">

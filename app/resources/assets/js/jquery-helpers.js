@@ -105,7 +105,6 @@ $(function() {
 		rememberFormValues("checkbox");
 	});
 
-
 	/**
 		* Assign project to window variable.
 		*
