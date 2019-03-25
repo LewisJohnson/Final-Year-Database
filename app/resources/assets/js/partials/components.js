@@ -244,6 +244,7 @@
 		this.underlay = $('.underlay');
 		this.header = $(element).find(this.Selectors_.DIALOG_HEADER);
 		this.content = $(element).find(this.Selectors_.DIALOG_CONTENT);
+		this.footer = $(element).find(this.Selectors_.DIALOG_FOOTER);
 
 		// ARIA
 		this.element.attr("role", "dialog");
@@ -252,7 +253,7 @@
 		this.header.attr('title', this.header.find('#dialog-desc').html());
 
 		this.content.before(this.HtmlSnippets_.LOADER);
-		this.loader = $(element).find(".spinner");
+		this.loader = $(element).find(".spinner-container");
 		this.isClosable = true;
 		this.activatorButtons = [];
 		this.init();
@@ -261,7 +262,7 @@
 	};
 
 	Dialog.prototype.HtmlSnippets_ = {
-		LOADER: '<div class="w-100 spinner spinner-border text-center p-4" style="display:none"><div class="spinner-border text-primary"></div></div>',
+		LOADER: '<div class="spinner-container d-none"><div class="spinner spinner-border text-primary m-auto"></div></div>',
 	};
 
 	Dialog.prototype.CssClasses_ = {
@@ -271,21 +272,40 @@
 	Dialog.prototype.Selectors_ = {
 		DIALOG: '.dialog',
 		DIALOG_HEADER: '.header',
-		DIALOG_CONTENT: '.content',
+		DIALOG_CONTENT: '.content, .container',
+		DIALOG_FOOTER: 'footer, .footer',
 	};
 
 	Dialog.prototype.showLoader = function(){
-		this.loader.show();
+		// Show loader
+		this.loader.removeClass('d-none');
+		this.loader.addClass('d-flex');
+
+		// Match loader height to content so the height doesn't snap
+		this.loader.height(this.content.outerHeight() + this.footer.outerHeight());
+
 		this.content.hide();
+		this.footer.hide();
 	};
 
 	Dialog.prototype.hideLoader = function(){
-		this.loader.hide();
+		// Hide loader
+		this.loader.removeClass('d-flex');
+		this.loader.addClass('d-none');
+
+		// Show content and footer
 		this.content.show();
+		this.footer.show();
 	};
 
 	Dialog.prototype.showDialog = function(){
+
+		// Disable body scroll
+		$("body").css("overflow", "hidden");
+
+		// Unset main content position so modal is on top
 		$(".main-content").css("position", "unset");
+
 		this.element.attr("aria-hidden", "false");
 		this.underlay.addClass(this.CssClasses_.ACTIVE);
 		this.underlay.data("owner", this.dialogName);
@@ -299,6 +319,9 @@
 
 	Dialog.prototype.hideDialog = function(){
 		if(this.isClosable && this.underlay.data("owner") == this.dialogName){
+			// Enable body scroll
+			$("body").css("overflow", "auto");
+
 			$(".main-content").css("position", "relative");
 			this.element.attr("aria-hidden", "true");
 			this.underlay.removeClass(this.CssClasses_.ACTIVE);

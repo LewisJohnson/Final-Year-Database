@@ -55,9 +55,9 @@
 		</div>
 
 		<form id="loginForm" role="form" method="POST" action="{{ action('Auth\LoginController@login')}}" accept-charset="utf-8">
-			<div class="container">
-				<div class="row mt-4">
-					<div class="col-12 px-4">
+			<div class="container px-4 pb-3">
+				<div class="row mt-3">
+					<div class="col-12">
 						{{ csrf_field() }}
 									
 						<div class="form-field">
@@ -85,12 +85,8 @@
 					</div>
 				</div>
 	
-				<div class="row mt-5">
-					<div class="col-12 bg-light border-top">
-						<div class="p-2 text-right">
-							<button class="btn btn-primary" type="submit">LOG IN</button>
-						</div>
-					</div>
+				<div class="footer bg-light border-top p-2 text-right">
+					<button class="btn btn-primary" type="submit">LOG IN</button>
 				</div>
 			</div>
 		</form>

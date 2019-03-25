@@ -70,7 +70,7 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 // Options
-$enable-shadows: true;
+$enable-shadows: false;
 
 // This variable affects the `.h-*` and `.w-*` classes.
 $sizes: ();
@@ -100,3 +100,5 @@ $sizes: map-merge(
 	),
 	$sizes
 );
+
+$input-border-radius: 0.12rem;

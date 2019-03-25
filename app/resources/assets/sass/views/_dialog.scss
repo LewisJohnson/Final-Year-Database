@@ -15,12 +15,17 @@
 	background: white;
 	box-shadow: none;
 	border-radius: 5px;
-	overflow-y: auto;
+	overflow: hidden;
 	max-width: 500px;
-	max-height: 450px;
 	transform: scale3d(0.98, 0.94, 0.98);
 	opacity: 0;
 	transition: 0.28s all cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+	.container {
+		max-height: 400px;
+		margin-bottom: 54px;
+		overflow-y: auto;
+	}
 
 	#dialog-title {
 		color: $accent;
@@ -42,10 +47,4 @@
 				0 11px 15px -7px rgba(0, 0, 0, 0.12),
 				0 24px 38px 3px rgba(0, 0, 0, 0.2),
 				0 0 0 1px rgba(0, 0, 0, 0.12) inset;
-}
-
-#change-auth-dialog select {
-	padding: 1rem;
-	font-size: 16px;
-	width: 100%;
 }
