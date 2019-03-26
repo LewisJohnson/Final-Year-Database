@@ -33,8 +33,8 @@
 	<script src="{{ asset('js/helpers.js') }}"></script>
 	<script src="{{ asset('js/jquery-bundle.js') }}"></script>
 	<script src="{{ asset('js/jquery-helpers.js') }}"></script>
+	<script src="{{ asset('js/main.js') }}"></script>
 	
 	@yield('scripts')
 
-	<script src="{{ asset('js/main.js') }}" async></script>
 </head>
