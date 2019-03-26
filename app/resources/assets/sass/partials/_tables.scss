@@ -15,13 +15,8 @@ tbody tr.is-selected:not([disabled]) {
 	background-color: darken(#eee, 5%);
 }
 
-
 .sort-table, .server-sort-table {
 	th:not(.js-unsortable) {
 		cursor: pointer;
 	}
-}
-
-.table-responsive {
-	min-height: 350px;
 }

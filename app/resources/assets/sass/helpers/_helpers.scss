@@ -10,18 +10,6 @@
 	}
 }
 
-.error-display {
-	border-top: 2px solid gray;
-	text-align: center;
-	padding: 1rem;
-	background: $accent-danger-background;
-	color: white;
-
-	h1, h2, h3, h4, h5, h6 {
-		color: white;
-	}
-}
-
 .dashed-underline {
 	border-bottom: 1px dotted #000;
 	text-decoration: none;

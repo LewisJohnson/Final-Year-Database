@@ -4,71 +4,59 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
+
 ;$(function() {
 	"use strict";
 
 	$.ajax({
-		url: 'admin/marker/automatic-table',
+		url: 'admin/marker/automatic/preview',
 		type: 'GET',
 		success: function(response){
-			$('#automatic-assign-container .content').addClass('animated fadeInUp');
-			if(response.successful){
-				$('#automatic-assign-container .content').html(response.html);
-			} else {
-				$('#automatic-assign-container .content').addClass('error-display');
-				$('#automatic-assign-container .content').html(response.message);
-			}
-
-			$('#automatic-assign-container .loader-container').hide();
+			$('#automatic-assign-content').addClass('animated fadeInUp');
+			$('#automatic-assign-content').html(response.html);
+			$('#loader-container').hide();
 		}
 	});
 
-	$("body").on("submit", "#calculateSecondMarkers", function(e) {
+	$("body").on("submit", "#calculate-second-markers", function(e) {
 		e.preventDefault();
 
-		$('#automatic-assign-container .loader-container').show();
-		$('#automatic-assign-container .loader-container p').html('Assigning second markers to projects...<br> This may take up to 2 minutes.');
-		$('.config-danger, .config-tip, form').fadeOut(config.animtions.medium);
-		$('#automatic-assign-container .content').html("");
+		$('#loader-container').show();
+		$('#loader-container p').html('Assigning second markers to projects...<br> This may take a few minutes.');
+		$('.alert, h1, form').fadeOut(config.animtions.medium);
+		$('#automatic-assign-content').html("");
 		
 		$.ajax({
 			url: 'admin/marker/calculate',
 			type: 'POST',
 			data: $(this).serialize(),
 			success: function(response) {
-				$('#automatic-assign-container .content').addClass('animated fadeInUp');
+				$('#automatic-assign-content').addClass('animated fadeInUp');
 				if(response.successful){
-					$('#automatic-assign-container .content').html(JSON.parse(response.html));
+					$('#automatic-assign-content').html(JSON.parse(response.html));
 				} else {
-					$('#automatic-assign-container .content').addClass('error-display');
-					$('#automatic-assign-container .content').html(response.message);
+					$('#automatic-assign-content').addClass('alert alert-danger');
+					$('#automatic-assign-content').html("&#9888;&#65039; " + response.message);
 				}
 
-				$('#automatic-assign-container .loader-container').hide();
+				$('#loader-container').hide();
 			}
 		});
 	});
 
-	$("body").on("click", "#showReportTable", function(e) {
+	$("body").on("click", "#show-automatic-assignment-report", function(e) {
 		e.preventDefault();
-		$(this).parent().parent().fadeOut(config.animtions.medium);
-		$('.config-danger').fadeOut(config.animtions.medium);
-		$('#automatic-assign-container .loader-container').show();
-		$('#automatic-assign-container .loader-container p').text('Getting second marker table...');
+		$('.alert, h1, form').fadeOut(config.animtions.medium);
+		$('#loader-container').show();
+		$('#loader-container p').text('Getting second marker table...');
 
 		$.ajax({
 			url: 'admin/marker/report',
 			type: 'GET',
 			success: function(response){
-				$('#automatic-assign-container .content').addClass('animated fadeInUp');
-				if(response.successful){
-					$('#automatic-assign-container .content').html(JSON.parse(response.html));
-				} else {
-					$('#automatic-assign-container .content').addClass('error-display');
-					$('#automatic-assign-container .content').html(response.message);
-				}
-
-				$('#automatic-assign-container .loader-container').hide();
+				$('#loader-container').hide();
+				$('#automatic-assign-content').addClass('animated fadeInUp');
+				$('#automatic-assign-content').html(JSON.parse(response.html));
 			}
 		});
 	});

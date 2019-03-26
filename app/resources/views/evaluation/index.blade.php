@@ -20,7 +20,7 @@
 				<th class="border-left">2<sup>nd</sup> Marker<br><span class="text-muted">Name</span></th>
 				<th class="text-muted">Mark</th>
 				<th class="border-left">Final Mark</th>
-				<th class="border-left"></th>
+				<th class="border-left d-print-none"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,7 +37,7 @@
 						<td class="border-left">{{ $student->project->marker->user->getFullName() }}</td>
 						<td>{{ $dissertation->MarkerValue }}</td>
 						<td class="border-left">{{ $dissertation->FinalValue }}</td>
-						<td class="border-left text-right">
+						<td class="border-left text-right d-print-none">
 							<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $student->project->id) }}">Evaluation</a>
 						</td>
 					</tr>
@@ -50,7 +50,7 @@
 						<td class="border-left">{{ $student->project->marker->user->getFullName() }}</td>
 						<td>-</td>
 						<td class="border-left">-</td>
-						<td class="border-left text-right">
+						<td class="border-left text-right d-print-none">
 							<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student->project->id) }}">Create Evaluation</a>
 						</td>
 					</tr>
@@ -63,7 +63,7 @@
 						<td class="border-left">-</td>
 						<td>-</td>
 						<td class="border-left">-</td>
-						<td class="border-left text-right"></td>
+						<td class="border-left text-right d-print-none"></td>
 					</tr>
 				@endif
 			@endforeach
