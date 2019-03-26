@@ -96,7 +96,8 @@ class ProjectEvaluationController extends Controller {
 			));
 
 			$evaluation->save();
-			$evaluation = ProjectEvaluation::find($evaluation->id);
+
+			return redirect()->action('ProjectEvaluationController@show', $project);
 		}
 
 		return view('evaluation.evaluation')
