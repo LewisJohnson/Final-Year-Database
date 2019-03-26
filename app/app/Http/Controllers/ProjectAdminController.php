@@ -260,7 +260,7 @@ class ProjectAdminController extends Controller{
 			$maxStudentsPerSupervisor = max(1, $request->max_students_per_supervisor);
 		}
 
-		if(Student::count() > (Supervisor::getAllSupervisorsQuery()
+		if(ProjectController::getAcceptedProjectCount() > (Supervisor::getAllSupervisorsQuery()
 				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
 				->count() * $maxStudentsPerSupervisor)){
 			
@@ -269,7 +269,6 @@ class ProjectAdminController extends Controller{
 				'message' => "Please increase the maximum students per supervisor."
 			));
 		}
-
 
 		DB::transaction(function () use ($maxStudentsPerSupervisor) {
 			$projectTable = new Project;
@@ -280,12 +279,12 @@ class ProjectAdminController extends Controller{
 			));
 
 			// Assign students taking lazy score in to consideration
-			while(ProjectController::getAccetpedProjectWithoutSecondMarker() != null){
+			while(ProjectController::getAcceptedProjectWithoutSecondMarker() != null){
 				// Get the project
-				$projectToAssign = ProjectController::getAccetpedProjectWithoutSecondMarker();
+				$projectToAssign = ProjectController::getAcceptedProjectWithoutSecondMarker();
 
 				// Recalculate scores
-				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor, $projectToAssign->id);
+				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor, $projectToAssign->supervisor_id);
 				
 				// Get the laziest supervisor
 				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
@@ -309,11 +308,14 @@ class ProjectAdminController extends Controller{
 				->get();
 
 		// Set up the numbers
-		foreach($supervisors as $supervisor){
+		foreach($supervisors as $key => $supervisor){
+
+			if($supervisor->id == $supervisorToIgnoreId){
+				unset($supervisors[$key]);
+			}
+
 			if($isSetupView) {
 				$supervisor->second_supervising_count = 0;
-			} else if($supervisor == $supervisorToIgnoreId) {
-				$supervisor->second_supervising_count = PHP_INT_MAX;
 			} else {
 				$supervisor->second_supervising_count = count($supervisor->getSecondMarkingProjects());
 			}
@@ -321,9 +323,11 @@ class ProjectAdminController extends Controller{
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 		}
 
-		$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {	
-			return $supervisor->second_supervising_count < $maxStudentsPerSupervisor;
-		});
+		if(count($supervisors) > 1){
+			$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {	
+				return $supervisor->second_supervising_count < $maxStudentsPerSupervisor;
+			});
+		}
 
 		foreach($supervisors as $supervisor){
 
@@ -363,7 +367,7 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response
 
 	 */
-	public function assignSecondMarkerAutomaticTable(){
+	public function automaticSecondMarkerPreview(){
 		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX, "");
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);

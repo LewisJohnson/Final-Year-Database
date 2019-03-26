@@ -800,16 +800,30 @@ class ProjectController extends Controller{
 	 *
 	 * @return Project The next accepted project without a second marker.
 	 */
-	public static function getAccetpedProjectWithoutSecondMarker(){
+	public static function getAcceptedProjectWithoutSecondMarker(){
 		$project = new Project;
 		$student = new Student;
 
-		$proj = Project::join($student->getTable().' as student', $project->getTable().'.id', '=', 'student.project_id')
+		return Project::join($student->getTable().' as student', $project->getTable().'.id', '=', 'student.project_id')
 			->where('student.project_status', 'accepted')
 			->whereNull($project->getTable().'.marker_id')
+			->select($project->getTable().'.*')
 			->first();
+	}
 
-		return $proj;
+	/**
+	 * Returns the first accepted project without a second marker.
+	 *
+	 * @return Project The next accepted project without a second marker.
+	 */
+	public static function getAcceptedProjectCount(){
+		$project = new Project;
+		$student = new Student;
+
+		// We shouldn't return 0 because division by zero could occur
+		return max(1, Project::join($student->getTable().' as student', $project->getTable().'.id', '=', 'student.project_id')
+			->where('student.project_status', 'accepted')
+			->count());
 	}
 
 	/**
