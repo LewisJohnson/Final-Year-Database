@@ -731,9 +731,10 @@ class StudentController extends Controller{
 				$users = User::whereIn('id', $students->pluck('id')->toArray())->get();
 
 				$view = view('admin.partials.import-student-table')
-					->with('users', $users)
-					->with('students', $students)
-					->render();
+						->with('users', $users)
+						->with('students', $students)
+						->with('test', false)
+						->render();
 
 				return response()->json(array(
 					'successful' => true,
@@ -781,17 +782,18 @@ class StudentController extends Controller{
 			));
 		}
 
-		$users = DB::table('test_users')
-		->select('*')
-		->get();
-
 		$students = DB::table('test_students')
-		->select('*')
-		->get();
+						->select('*')
+						->get();
+
+		$users = DB::table('test_users')
+					->whereIn('id', $students->pluck('id')->toArray())
+					->get();
 
 		$view = view('admin.partials.import-student-table')
 			->with('users', $users)
 			->with('students', $students)
+			->with('test', true)
 			->render();
 
 		return response()->json(array(

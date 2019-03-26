@@ -16,8 +16,14 @@
 		<tbody>
 			@foreach($users as $user)
 				<tr>
-					<td class="text-truncate" style="max-width: 50px" title="{{ $user->id }}" >{{ $user->id }}</td>
-					<td>{{ $students[$loop->index]["registration_number"] }}</td>
+					<td class="text-truncate" style="max-width: 50px" title="{{ $user->id }}">{{ $user->id }}</td>
+
+					@if($test)
+						<td>{{ $students[$loop->index]->registration_number }}</td>
+					@else
+						<td>{{ $students[$loop->index]["registration_number"] }}</td>
+					@endif
+
 					<td>{{ $user->username }}</td>
 					<td>{{ $user->first_name }}</td>
 					<td>{{ $user->last_name }}</td>
