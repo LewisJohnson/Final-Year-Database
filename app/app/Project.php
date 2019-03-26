@@ -67,7 +67,7 @@ class Project extends Model {
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['supervisor', 'created_at', 'updated_at'];
+	protected $hidden = ['created_at', 'updated_at'];
 
 	/**
 	 * A list of all potential project statues.
