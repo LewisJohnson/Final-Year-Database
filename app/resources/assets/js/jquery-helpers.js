@@ -76,7 +76,7 @@ $(function() {
 	*/
 	$("#cookie-banner").on("click", "button",  function(e) {
 		setCookie('seen_cookie_banner', true, 365);
-		$(this).parent().hide(config.animtions.medium);
+		$("#cookie-banner").hide(config.animtions.medium);
 	});
 
 	/**
