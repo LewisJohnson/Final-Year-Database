@@ -60,6 +60,7 @@
 		var fileData = $(this).find('.file').prop('files')[0];
 		var requestType = $(this).data('type');
 		var formData = new FormData();
+		var formUrl = $(this).prop('action');
 
 		formData.append('studentFile', fileData);
 
@@ -72,12 +73,12 @@
 
 		if($(this).find('#empty_programmes').is(":checked")){
 			formData.append('empty_programmes', true);
-			modalDesc += '<br><span class="text-danger">OPTION: Empty programmes table. This will delete all programmes for <b>ALL<b> education levels.</span>';
+			modalDesc += '<br><span class="text-danger">OPTION: Empty programmes table.<br>This will delete all programmes for <b>ALL</b> education levels.</span>';
 		}
 
 		if($(this).find('#empty_students').is(":checked")){
 			formData.append('empty_students', true);
-			modalDesc += '<br><span class="text-danger">OPTION: Empty students table. This will delete all students for this education level.</span>';
+			modalDesc += '<br><span class="text-danger">OPTION: Empty students table.<br>This will delete all students for this education level.</span>';
 		}
 
 		$.confirm({
@@ -93,7 +94,7 @@
 					btnClass: 'btn-red',
 					action: function(){
 						$.ajax({
-							url: $(this).prop('action'),
+							url: formUrl,
 							cache: false,
 							contentType: false,
 							processData: false,
