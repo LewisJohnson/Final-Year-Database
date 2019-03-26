@@ -29,7 +29,7 @@
 	@if($view == "personal")
 		<h1>My {{ ucfirst(Session::get('education_level')["longName"]) }} Projects</h1>
 		@if(count($projects) < 1)
-			<div class="text-center">
+			<div class="text-center mt-5">
 				<h1>You have no projects...</h1>
 				<p>Why not create a project for students right now? Just <a href="{{ action('ProjectController@create') }}">click here</a> to create a new project.</p>
 			</div>
@@ -39,8 +39,8 @@
 		</a>
 
 		<div class="form-row align-items-center form-inline ml-1 mt-3">
-			<label for="inlineFormCustomSelect">Archived Projects</label>
-			<select class="custom-select ml-2" id="inlineFormCustomSelect" onchange="window.location.href = $('#showArchivedToggleButton').attr('href')">
+			<label>Archived Projects</label>
+			<select class="ml-2" onchange="window.location.href = $('#showArchivedToggleButton').attr('href')">
 				<option value="0" @if(!$mp_hide_archived) selected @endif>Shown</option>
 				<option value="1" @if($mp_hide_archived) selected @endif>Hidden</option>
 			</select>
@@ -78,7 +78,7 @@
 				</tbody>
 			</table>
 		</div>
-	@else
+	@elseif($view != "personal")
 		<p class="mt-5">There are no on-offer projects to show</p>
 	@endif
 
