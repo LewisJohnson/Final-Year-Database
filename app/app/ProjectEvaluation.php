@@ -180,4 +180,49 @@ class ProjectEvaluation extends Model {
 
 		return $questions;
 	}
+
+	public function isFilled() {
+		foreach ($this::getQuestions() as $question) {
+			// We probably only want Scale and Number types
+			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
+				// We don't check values because the student could have failed every question
+
+				// Check comments 
+				if(strlen($question->SupervisorComment) < 20 || strlen($question->MarkerComment) < 20){
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public function getQuestionsLeftToFillSummary() {
+
+		$output = "";
+
+		foreach ($this::getQuestions() as $question) {
+			// We probably only want Scale and Number types
+			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
+				// We don't check values because the student could have failed every question
+
+				if(strlen($question->SupervisorComment) < 20 || strlen($question->MarkerComment)  < 20){
+					$output .= '<li class="list-unstyled"><br><b>'.$question->title.':</b>';
+
+					if(strlen($question->SupervisorComment) < 20){
+						$output .= "<li>Supervisor comment is too short</li>";
+					}
+
+					if(strlen($question->MarkerComment) < 20){
+						$output .= "<li>Second Marker comment is too short</li>";
+					}
+
+					$output .= "</li>";
+				}
+
+			}
+		}
+
+		return $output;
+	}
 }

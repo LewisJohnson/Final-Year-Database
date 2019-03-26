@@ -4,12 +4,12 @@
 @php
 	$supervisor = $project->supervisor->user;
 	$marker = $project->marker->user;
+
 	$dissertation = $project->evaluation->getQuestions()[SussexProjects\ProjectEvaluation::DissertationMarkIndex];
 	$thresholds = SussexProjects\Mode::getThresholds();
+	$isFilled = $project->evaluation->IsFilled();
 
-	$isFilled = $dissertation->SupervisorValue > 0 && $dissertation->MarkerValue > 0;
 	$straddles = false;
-
 	foreach ($thresholds as $threshold) {
 		if(($dissertation->SupervisorValue > $threshold && $dissertation->MarkerValue < $threshold) ||
 			($dissertation->SupervisorValue < $threshold && $dissertation->MarkerValue > $threshold)) {
@@ -311,7 +311,11 @@
 
 					<input type="hidden" name="finalise" value="true">
 				@else
-					{{-- <p>You may not finalise the project evaluation for the following reasons:</p> --}}
+					<p>You may not finalise the project evaluation for the following reasons:</p>
+
+					<ul>
+						{!! $project->evaluation->getQuestionsLeftToFillSummary() !!}
+					</ul>
 				@endif
 					
 				</div>
