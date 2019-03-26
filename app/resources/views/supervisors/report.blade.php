@@ -37,8 +37,8 @@
 	<a id="showSupervisorsClosedToOffersToggleButton" @if($sr_hide_closed) href="{{ action('SupervisorController@report', ['sr_hide_closed' => false]) }}" @else href="{{ action('SupervisorController@report', ['sr_hide_closed'=> true]) }}" @endif></a>
 
 	<div class="form-row align-items-center form-inline ml-1 mt-3">
-		<label for="inlineFormCustomSelect">Supervisors closed to offers</label>
-		<select class="custom-select ml-2" id="inlineFormCustomSelect" onchange="window.location.href = $('#showSupervisorsClosedToOffersToggleButton').attr('href')">
+		<label>Supervisors closed to offers</label>
+		<select class="ml-2" onchange="window.location.href = $('#showSupervisorsClosedToOffersToggleButton').attr('href')">
 			<option value="0" @if(!$sr_hide_closed) selected @endif>Shown</option>
 			<option value="1" @if($sr_hide_closed) selected @endif>Hidden</option>
 		</select>
