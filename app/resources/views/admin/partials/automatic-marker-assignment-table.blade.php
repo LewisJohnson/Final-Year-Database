@@ -1,5 +1,5 @@
-<table class="table table-hover bg-white  data-table shadow-2dp" id="2nd-marker-supervisor-table">
-	<thead>
+<table class="table table-hover bg-white shadow-sm" id="2nd-marker-supervisor-table">
+	<thead class="thead-light">
 		<tr>
 			<th>Supervisor</th>
 			<th>Project Load</th>
