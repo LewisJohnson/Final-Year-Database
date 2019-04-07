@@ -47,6 +47,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 "use strict";
 ;$(function() {
 
+	if($('.navbar').length > 0){
+		$(window).scrollTop($('.navbar').outerHeight());
+	}
+	
 	/* ========================
 		2. HTML Modifications
 	   ======================== */
@@ -537,8 +541,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		var length = title.val().length;
 		titleCharCount.text(length + '/40');
 
-		if(length > 40){
+		if(length >= 40){
 			titleCharCount.css('color', 'red');
+		} else if(length > 34){
+			titleCharCount.css('color', 'orange');
 		} else {
 			titleCharCount.css('color', 'darkgray');
 		}
@@ -556,7 +562,7 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 			},
 		});
 
-		var buttonsHtml = "<div class='html-editor--top-buttons d-flex'><button class='html btn btn-sm shadow-none' type='button'>HTML</button><button class='preview btn btn-sm shadow-none' type='button'>PREVIEW</button></div>";
+		var buttonsHtml = "<div class='html-editor--top-buttons d-flex'><button class='html btn btn-sm rounded-0' type='button'>HTML</button><button class='preview btn btn-sm rounded-0' type='button'>PREVIEW</button></div>";
 		var previewHtml = "<div class='html-editor--preview-container'><div class='html-editor--preview'></div></div>";
 
 		$('.html-editor--input').before(buttonsHtml);
