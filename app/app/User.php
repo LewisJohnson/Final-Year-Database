@@ -211,6 +211,15 @@ class User extends Authenticatable{
 	 *
 	 * @return boolean
 	 */
+	public function isExternalMarker(){
+		return in_array("external_marker", $this->getPrivileges());
+	}
+
+	/**
+	 * Indicates if authenticated used is a staff member.
+	 *
+	 * @return boolean
+	 */
 	public function isOnlyStaff(){
 		return $this->privileges == "staff";
 	}
