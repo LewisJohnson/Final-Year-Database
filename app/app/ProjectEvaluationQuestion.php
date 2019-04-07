@@ -34,13 +34,13 @@ class ProjectEvaluationQuestion {
 		$this->type = $data->type;
 
 		$this->SupervisorValue = $data->SupervisorValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->SupervisorComment = $data->SupervisorComment ?? "None";
+		$this->SupervisorComment = $data->SupervisorComment ?? "-";
 
 		$this->MarkerValue = $data->MarkerValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->MarkerComment = $data->MarkerComment ?? "None";
+		$this->MarkerComment = $data->MarkerComment ?? "-";
 
 		$this->FinalValue = $data->FinalValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->FinalComment = $data->FinalComment ?? "None";
+		$this->FinalComment = $data->FinalComment ?? "-";
 	}
 }
 
@@ -51,7 +51,8 @@ class PEQValueTypes {
 	const PlainText = 0;
 
 	/**
-	 * Excellent | Good+ | Good | Satisfactory+ | Satisfactory | Border+ | Border | Fail
+	 *
+	 	Fail | Border- | Border | Border+ | Satisfactory- | Satisfactory | Satisfactory+ | Good- | Good | Good+ | Excellent
 	 */
 	const Scale = 1;
 
@@ -61,35 +62,59 @@ class PEQValueTypes {
 	const Number = 2;
 
 	/**
+	 * Unsigned TINYINT 0 - 255
+	 */
+	const PosterPresentation = 3;
+
+	/**
+	 * Unsigned TINYINT 0 - 255
+	 */
+	const OralPresentation = 4;
+
+	/**
+	 * Unsigned TINYINT 0 - 255
+	 */
+	const Dissertation = 5;
+
+	/**
 	 * Yes | No
 	 */
-	const YesNo = 3;
+	const YesNo = 6;
 
 	/**
 	 * Yes | Possibly | No
 	 */
-	const YesNoPossibly = 4;
+	const YesPossiblyNo = 7;
 
 
 	/**
 	 * A question where a value is not required (Relies soely on comment).
 	 */
-	const CommentOnly = 5;
+	const CommentOnly = 8;
+
+	/**
+	 * A question where a value is not required (Relies soely on comment).
+	 */
+	const StudentFeedback = 9;
 
 	public static function getDefaultValue($type){
 		switch ($type) {
 			case PEQValueTypes::PlainText:
 			case PEQValueTypes::CommentOnly:
+			case PEQValueTypes::StudentFeedback:
 				return "";
 				break;
 			
 			case PEQValueTypes::Scale:
 			case PEQValueTypes::Number:
+			case PEQValueTypes::PosterPresentation:
+			case PEQValueTypes::OralPresentation:
+			case PEQValueTypes::Dissertation:
 			case PEQValueTypes::YesNo:
 				return 0;
 				break;
 
-			case PEQValueTypes::YesNoPossibly:
+			case PEQValueTypes::YesPossiblyNo:
 				return 'No';
 				break;
 		}
