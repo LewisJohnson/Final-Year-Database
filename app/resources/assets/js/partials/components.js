@@ -335,7 +335,7 @@
 
 		// Find activator button
 		$('button, a').each(function() {
-			if($(this).data('activator') && $(this).data('dialog') == dialog.dialogName){
+			if(($(this).data('activator') || $(this).is('[data-activator]')) && $(this).data('dialog') == dialog.dialogName){
 				dialog.activatorButtons.push($(this));
 			}
 		});
