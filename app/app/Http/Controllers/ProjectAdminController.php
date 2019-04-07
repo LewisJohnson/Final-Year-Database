@@ -8,6 +8,7 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -291,6 +292,20 @@ class ProjectAdminController extends Controller{
 
 				$projectToAssign->marker_id = $laziestSupervisor->id;
 				$projectToAssign->save();
+
+				$transaction = new Transaction;
+				$transaction->fill(array(
+					'type' => 'marker',
+					'action' => 'marker-assigned',
+					'project' => $projectToAssign->id,
+					'student' => $projectToAssign->getAcceptedStudent()->id,
+					'supervisor' => $projectToAssign->supervisor_id,
+					'marker' => $projectToAssign->marker_id,
+					'admin' => Auth::user()->id,
+					'transaction_date' => new Carbon
+				));
+
+				$transaction->save();
 			}
 		});
 

@@ -153,7 +153,6 @@ class ProjectController extends Controller{
 	 * @return string The newly added topic's name
 	 */
 	public function addTopic(Request $request){
-
 		$result = DB::transaction(function() use ($request){
 			$topic = Topic::where('name', $request->topic_name)->first();
 			$project = Project::findOrFail($request->project_id);
@@ -299,6 +298,18 @@ class ProjectController extends Controller{
 						$topic = new Topic;
 						$topic->name = $createTopicName;
 						$topic->save();
+
+						$topicTransaction = new Transaction;
+
+						$topicTransaction->fill(array(
+							'type' => 'topic',
+							'action' => 'created',
+							'topic' => $topic->name,
+							'admin' => Auth::user()->id,
+							'transaction_date' => new Carbon
+						));
+
+						$topicTransaction->save();
 					}
 
 					// Validate data
@@ -554,7 +565,8 @@ class ProjectController extends Controller{
 			}
 		}
 
-		return view('projects.by-topic')->with('topics', $topics);
+		return view('projects.by-topic')
+			->with('topics', $topics);
 	}
 
 	/**
@@ -847,7 +859,7 @@ class ProjectController extends Controller{
 			$transaction = new Transaction;
 
 			$transaction->fill(array(
-				'type' => 'project',
+				'type' => 'marker',
 				'action' => 'marker-assigned',
 				'project' => $project->id,
 				'student' => $student->id,
