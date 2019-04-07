@@ -22,8 +22,6 @@ class ProjectEvaluation extends Model {
 	use Traits\Uuids;
 	use Traits\Encryptable;
 	
-	const DissertationMarkIndex = 8;
-	
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
@@ -85,10 +83,34 @@ class ProjectEvaluation extends Model {
 		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
 
+	public function getStatus(){
+		if($this->is_finalised){
+			return "Finalised";
+		}
+
+		if($this->supervisor_submitted && $this->marker_submitted){
+			return "Submitted";
+		}
+
+		return "In-Progress";
+	}
+
+	public function getStatusBootstrapClass(){
+		if($this->is_finalised){
+			return "text-danger";
+		}
+
+		if($this->supervisor_submitted && $this->marker_submitted){
+			return "text-success";
+		}
+
+		return "text-warning";
+	}
+
 	public function getQuestions(){
 		$questions = [];
 
-		foreach ($this->questions as $question) {
+		foreach($this->questions as $question) {
 			$peq = new ProjectEvaluationQuestion(null, null, null);
 			$peq->map($question);
 
@@ -98,97 +120,57 @@ class ProjectEvaluation extends Model {
 		return $questions;
 	}
 
-	public function getPresetQuestions() {
-		$questions = [];
+	public function getPosterPresentationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::PosterPresentation) {
+				return $question;
+			}
+		}
 
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Basic Criteria",
-				"Understanding of problem / Completion of project / Overall quality of work / Extent to which objectives are met",
-				PEQValueTypes::Scale
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Quality of Research & Analysis",
-				"Clear objectives / Background literature / Research / Difficulty of the problem / Completeness / Professional issues",
-				PEQValueTypes::Scale
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Technical Quality",
-				"Depends on project type; for CS/GAME programming required",
-				PEQValueTypes::Scale
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Writeup Quality",
-				"Organization / Clarity / References / General presentation/ English / Diagrams and figures/ Within word limit",
-				PEQValueTypes::Scale
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Evaluation",
-				"Justification of decisions / Critical Evaluation of achievements",
-				PEQValueTypes::Scale
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Exceptional Criteria",
-				"Evidence of outstanding merit / Contains publishable material / Reaches beyond taught courses",
-				PEQValueTypes::YesNoPossibly
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Additional Comments",
-				"Justify your mark referring to the comments above where useful",
-				PEQValueTypes::CommentOnly
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Have you actually seen a working version of this system/video/application?",
-				"",
-				PEQValueTypes::YesNo
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Mark for Dissertation %",
-				"",
-				PEQValueTypes::Number
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Poster Mark %",
-				"",
-				PEQValueTypes::Number
-		));
-
-		array_push($questions,
-			new ProjectEvaluationQuestion(
-				"Oral Presentation Mark %",
-				"",
-				PEQValueTypes::Number
-		));
-
-		return $questions;
+		throw new Exception("Error finding poster mark.");
 	}
 
-	public function isFilled() {
+	public function getOralPresentationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::OralPresentation) {
+				return $question;
+			}
+		}
+
+		throw new Exception("Error finding oral presentation mark.");
+	}
+
+	public function getDissertationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::Dissertation) {
+				return $question;
+			}
+		}
+
+		throw new Exception("Error finding dissertation mark.");
+	}
+
+	public function getStudentFeedback(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::StudentFeedback) {
+				return $question;
+			}
+		}
+
+		throw new Exception("Error finding dissertation mark.");
+	}
+
+	public function isFilled($type) {
+
+		$commentAccessor = $type."Comment";
+
 		foreach ($this::getQuestions() as $question) {
 			// We probably only want Scale and Number types
 			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
 				// We don't check values because the student could have failed every question
 
 				// Check comments 
-				if(strlen($question->SupervisorComment) < 20 || strlen($question->MarkerComment) < 20){
+				if(strlen($question->$commentAccessor) < 20){
 					return false;
 				}
 			}
@@ -197,29 +179,21 @@ class ProjectEvaluation extends Model {
 		return true;
 	}
 
-	public function getQuestionsLeftToFillSummary() {
+	public function getQuestionsLeftToFillSummary($type) {
 
+		$commentAccessor = $type."Comment";
 		$output = "";
 
-		foreach ($this::getQuestions() as $question) {
+		foreach($this::getQuestions() as $question) {
 			// We probably only want Scale and Number types
 			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
 				// We don't check values because the student could have failed every question
 
-				if(strlen($question->SupervisorComment) < 20 || strlen($question->MarkerComment)  < 20){
-					$output .= '<li class="list-unstyled"><br><b>'.$question->title.':</b>';
-
-					if(strlen($question->SupervisorComment) < 20){
-						$output .= "<li>Supervisor comment is too short</li>";
-					}
-
-					if(strlen($question->MarkerComment) < 20){
-						$output .= "<li>Second Marker comment is too short</li>";
-					}
-
-					$output .= "</li>";
+				if(strlen($question->$commentAccessor) < 20){
+					$output .= '<li class="list-unstyled"><b>'.$question->title.':</b>';
+					$output .= "	<li>Comment is too short</li>";
+					$output .= "<br></li>";
 				}
-
 			}
 		}
 
