@@ -22,9 +22,12 @@
 |		1.4 New Topic
 |		1.5 New Programme
 |		1.6 New User
+|		1.7 Project Evaluation
+|			1.7.1 Thresholds
+|			1.7.2 Questions
 |	2. System Admin
 |		2.1 User Feedback
-|		2.2 Project Evaluation Thresholds
+|		
 */
 
 ;$(function() {
@@ -327,22 +330,18 @@
 		studentForm.hide();
 	} else {
 		$('.js-supervisor').attr('disabled', 'true');
-		$('.js-staff').attr('disabled', 'true');
 	}
 
 	if($('.js-staff:checked').length > 0){
-		$('.js-supervisor').attr('disabled', 'true');
-		$('.js-staff').attr('disabled', 'true');
+		$('.js-student').attr('disabled', 'true');
 	}
 
 	$('.js-supervisor').on('change', function(){
 		if($(this).prop('checked')){
 			$('.js-student').attr('disabled', 'true');
-			$('.js-staff').attr('disabled', 'true');
 			supervisorForm.show(config.animtions.medium);
 		} else {
 			$('.js-student').removeAttr('disabled');
-			$('.js-staff').removeAttr('disabled');
 			supervisorForm.hide(config.animtions.medium);
 		}
 	});
@@ -363,13 +362,9 @@
 
 	$('.js-staff').on('change', function(){
 		if($(this).prop('checked')){
-			$('.js-supervisor').attr('disabled', 'true');
 			$('.js-student').attr('disabled', 'true');
-			$('.js-admin').attr('disabled', 'true');
 		} else {
-			$('.js-supervisor').removeAttr('disabled');
 			$('.js-student').removeAttr('disabled');
-			$('.js-admin').removeAttr('disabled');
 		}
 	});
 
@@ -378,6 +373,93 @@
 	*/
 	$('.user-form #username').on('keydown keyup change', function(){
 		$('.user-form #email').val($(this).val() + "@sussex.ac.uk");
+	});
+
+	// 1.7 Project Evaluation
+	// 1.7.1 Thresholds
+	$("#new-threshold-button").on('click', function(){
+		var newThresholdValue = parseInt($("#new-threshold-value").val());
+
+		if(!Number.isInteger(newThresholdValue)){
+			createToast('error', 'Threshold value must be an integer.');
+			return;
+		}
+
+		if(newThresholdValue < 0 || newThresholdValue > 100){
+			createToast('error', 'Threshold value must be between 0 - 100.');
+			return;
+		}
+
+		// See if value already exists
+		var thresholdValueAlreadyExists = false;
+
+		$("input[name*='thresholds']").each(function(){
+			if($(this).val() == newThresholdValue){
+				thresholdValueAlreadyExists = true;
+			}
+		});
+
+		if(thresholdValueAlreadyExists){
+			createToast('error', 'Threshold values must be unqiue.');
+			return;
+		}
+
+		$("#thresholds-list").append(
+			`<li class="list-group-item">
+				<div class="d-flex">
+					<span>${newThresholdValue}%</span>
+					<button type="button" class="btn btn-sm btn-outline-danger ml-auto js-deleteThreshold">Remove</button>
+					<input type="hidden" name="thresholds[]" value="${newThresholdValue}">
+				</div>
+			</li>`
+		);
+
+		$("#new-threshold-value").val('');
+	});
+
+	$("body").on("click", ".js-deleteThreshold", function(){
+		$(this).closest('li').remove();
+	});
+
+	// 1.7.2 Questions
+	$("#new-question-button").on('click', function(){
+		$("#questions-list").append(
+			`<li class="list-group-item">
+				<div class="row">
+					<div class="col-12 d-flex">
+						Question ${ $("#questions-list").children().length + 1 }
+						<button type="button" class="btn btn-sm btn-outline-danger ml-auto js-deleteQuestion">Remove</button>
+					</div>
+					<div class="col-8">
+						<label>Title</label>
+						<input class="form-control" type="text" name="title[]">
+					</div>
+					<div class="col-4">
+						<label>Type</label>
+						<select class="form-control" name="type[]">
+							<option value="3">Poster Presentation</option>
+							<option value="4">Oral Presentation</option>
+							<option value="5">Dissertation</option>
+							<option value="9">Student Feedback</option>
+							<option disabled><hr></option>
+							<option value="0">Plain Text</option>
+							<option value="1">Scale (Fail > Excellent)</option>
+							<option value="2">Number</option>
+							<option value="6">Yes/No</option>
+							<option value="7">Yes/Possibly/No</option>
+							<option value="8">Comment Only</option>
+						</select>
+					</div>
+				</div>
+
+				<label class="mt-2">Description</label>
+				<input class="form-control" type="text" name="description[]">
+			</li>`
+		);
+	});
+
+	$("body").on("click", ".js-deleteQuestion", function(){
+		$(this).closest('li').remove();
 	});
 
 	/* =================
@@ -449,49 +531,4 @@
 			}
 		});
 	};
-
-	// 2.2 PE Thresholds
-	$("#new-threshold-button").on('click', function(){
-		var newThresholdValue = parseInt($("#new-threshold-value").val());
-
-		if(!Number.isInteger(newThresholdValue)){
-			createToast('error', 'Threshold value must be an integer.');
-			return;
-		}
-
-		if(newThresholdValue < 0 || newThresholdValue > 100){
-			createToast('error', 'Threshold value must be between 0 - 100.');
-			return;
-		}
-
-		// See if value already exists
-		var thresholdValueAlreadyExists = false;
-
-		$("input[name*='thresholds']").each(function(){
-			if($(this).val() == newThresholdValue){
-				thresholdValueAlreadyExists = true;
-			}
-		});
-
-		if(thresholdValueAlreadyExists){
-			createToast('error', 'Threshold values must be unqiue.');
-			return;
-		}
-
-		$("#thresholds-list").append(
-			`<li class="list-group-item">
-				<div class="d-flex">
-					<span>${newThresholdValue}%</span>
-					<button type="button" class="btn btn-sm btn-danger ml-auto js-deleteThreshold">Remove</button>
-					<input type="hidden" name="thresholds[]" value="${newThresholdValue}">
-				</div>
-			</li>`
-		);
-
-		$("#new-threshold-value").val('');
-	});
-
-	$("body").on("click", ".js-deleteThreshold", function(){
-		$(this).closest('li').remove();
-	});
 });
