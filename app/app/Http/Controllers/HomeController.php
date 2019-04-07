@@ -171,7 +171,7 @@ class HomeController extends Controller{
 			if(Auth::user()){
 				Auth::logout();
 				session()->flash("message", "You have been logged out.");
-				session()->flash('message_type', 'notification');
+				session()->flash('message_type', 'bg-warning');
 			}
 			Session::put("department", $request->department);
 		} else {
