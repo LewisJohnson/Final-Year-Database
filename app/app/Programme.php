@@ -50,7 +50,7 @@ class Programme extends Model{
 	public static function getSelectList($userProgrammeId = null){
 		$programmes = Programme::all();
 
-		$rtnString = '<select name="programme">';
+		$rtnString = '<select class="form-control w-auto" name="programme">';
 		$rtnString .= '<option value="">None</option>';
 		foreach($programmes as $prog){
 			if($userProgrammeId == $prog->id){

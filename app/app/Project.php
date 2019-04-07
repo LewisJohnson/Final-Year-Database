@@ -70,12 +70,49 @@ class Project extends Model {
 	protected $hidden = ['created_at', 'updated_at'];
 
 	/**
-	 * A list of all potential project statues.
+	 * Get's the project status.
 	 *
-	 * @return string[] An array of all statues'.
+	 * @return string The project's status.
 	 */
-	public static function getAllStatuses(){
-		return ['none', 'student-proposed', 'selected', 'accepted'];
+	public function getStatus(){
+		if($this->status == "withdrawn" && !empty($this->getAcceptedStudent())){
+			return "accepted";
+		}
+
+		if($this->status == "student-proposed" && !empty($this->getAcceptedStudent())){
+			return "accepted (student proposed)";
+		}
+		
+		return $this->status;
+	}
+
+
+	/**
+	 * Get's the project status.
+	 *
+	 * @return string The project's status.
+	 */
+	public function getStatusAsBootstrapClass(){
+		$status = $this->getStatus();
+		
+		switch ($status) {
+			case 'accepted':
+			case 'accepted (student proposed)':
+				return "success";
+				break;
+
+			case 'withdrawn':
+				return "warning";
+				break;
+
+			case 'archived':
+				return "danger";
+				break;
+			
+			default:
+				return "secondary";
+				break;
+		}
 	}
 
 	/**
