@@ -61,7 +61,6 @@ class Kernel extends HttpKernel{
 		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 		'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
 		'admin' => \SussexProjects\Http\Middleware\Admin::class,
-		'adminPrivilegeCheck' => \SussexProjects\Http\Middleware\AdminPrivilegeCheck::class,
 		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
 		'checkDepartment' => \SussexProjects\Http\Middleware\CheckDepartment::class,
@@ -72,6 +71,8 @@ class Kernel extends HttpKernel{
 		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
 		'student' => \SussexProjects\Http\Middleware\Student::class,
 		'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
+		'externalMarkerOrProjectAdmin' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdmin::class,
+		'externalMarkerOrProjectAdminOrSupervisor' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdminOrSupervisor::class,
 		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 	];
 }

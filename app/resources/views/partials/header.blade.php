@@ -8,6 +8,52 @@
 	<p class="text-white m-0 p-2 text-center bg-danger d-print-none">You are logged in as another user.</p>
 @endif
 
+@if(Session::get('department') != null)
+	<nav class="navbar navbar-expand navbar-dark bg-dark p-0">
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav d-flex w-100">
+				<li class="nav-item dropright">
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{{ ucfirst(Session::get('department')) }}
+					</a>
+					<div class="dropdown-menu">
+						@foreach(get_departments() as $key => $department)
+							<form role="form" method="POST" action="{{ action('HomeController@setDepartment') }}">
+								{{ csrf_field() }}
+								<input type="hidden" name="department" value="{{ $department }}">
+								<button type="submit" class="dropdown-item cursor--pointer @if(Session::get('department') == $department) active @endif" href="#">{{ ucfirst($department) }}</button>
+							</form>
+						@endforeach
+					</div>
+				</li>
+
+				@if(Auth::check() || ldap_guest())
+					<li class="nav-item dropleft ml-auto">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{ ucfirst(Session::get('education_level')['longName']) }}
+						</a>
+						<div class="dropdown-menu">
+							{{-- USER EDUCATION LEVEL LIST --}}
+							@if(Auth::check())
+								@foreach(Auth::user()->allowedEducationLevel() as $key => $level)
+									<a class="dropdown-item @if(Session::get('education_level') == $level) active @endif" href="?educationLevel={{ $level['shortName'] }}">{{ ucfirst($level["longName"]) }}</a>
+								@endforeach
+							@endif
+						
+							{{-- GUEST EDUCATION LEVEL LIST --}}
+							@if(ldap_guest())
+								@foreach(SussexProjects\User::guestEducationLevel() as $key => $level)
+									<a class="dropdown-item @if(Session::get('education_level') == $level) active @endif" href="?educationLevel={{ $level['shortName'] }}" >{{ ucfirst($level["longName"]) }}</a>
+								@endforeach
+							@endif
+						</div>
+					</li>
+				@endif
+			</ul>
+		</div>
+	</nav>
+@endif
+
 <div class="header-container d-print-none">
 	<header class="cd-morph-dropdown" style="background: {{ get_config_json('header.background.value') }}">
 		<div class="d-flex">
@@ -85,6 +131,12 @@
 					@if(Auth::user()->isOnlyStaff())
 						<li class="has-dropdown links" data-content="staff">
 							<a href="#0">Staff</a>
+						</li>
+					@endif
+
+					@if(Auth::user()->isExternalMarker())
+						<li class="has-dropdown links" data-content="external-marker">
+							<a href="#0">Marker</a>
 						</li>
 					@endif
 
@@ -217,6 +269,7 @@
 								</div>
 							</li>
 						@endif
+
 						@if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]))
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
@@ -327,23 +380,28 @@
 						@endif
 
 						@if(Auth::user()->isOnlyStaff())
-							<li id="staff" class="dropdown links">
+							<li id="staff" class="dropdown wide links">
 								<a href="#0" class="label">Staff</a>
 								<div class="content">
 									<h3>Staff</h3>
 									<ul>
 										<li>
-											<ul class="list-unstyled">
+											<ul>
 												<h5>Second Marker</h5>
 												<li>
 													<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@swapSecondMarkerView') }}">
-														<span>@include('svg.swap')<span>Swap Second Markerspan</span></span>
+														<span>@include('svg.swap')<span>Swap Second Marker</span></span>
+													</a>
+												</li>
+												<li>
+													<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@exportSecondMarkerDataView') }}">
+														<span>@include('svg.database-export')<span>Export Second Marker Data</span></span>
 													</a>
 												</li>
 											</ul>
 										</li>
 										<li>
-											<ul class="list-unstyled">
+											<ul>
 												<h5>Projects</h5>
 												<li>
 													<a class="btn w-100 text-left text-primary" href="{{ action('StudentController@report') }}">
@@ -356,6 +414,23 @@
 													</a>
 												</li>
 											</ul>
+										</li>
+									</ul>
+								</div>
+							</li>
+						@endif
+
+						@if(Auth::user()->isExternalMarker())
+							<li id="external-marker" class="dropdown links">
+								<a href="#0" class="label">Marker</a>
+								<div class="content">
+									<h3>External Marker</h3>
+									<h6>Project Evaluation</h6>
+									<ul>
+										<li class="w-100">
+											<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@index') }}">
+												<span>@include('svg.clipboard-check')<span>Project Evaluation Report</span></span>
+											</a>
 										</li>
 									</ul>
 								</div>
