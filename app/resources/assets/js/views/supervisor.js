@@ -42,9 +42,17 @@ import Swappable from '@shopify/draggable/lib/swappable';
 	ProjectTopics.prototype.functions = {
 		addTopicToProjectBeingCreated: function (topicName) {
 			if($(".topics-list.create li.topic:last").length > 0){
-				$(".topics-list.create li.topic:last").after('<li class="topic" data-topic-id="' + topicName + '"><button type="button" class="topic-remove">X</button><input type="text" readonly name="topics[]" class="topic-name" size="' + topicName.length + '" value="' + topicName +' "></li>');
+				$(".topics-list.create li.topic:last").after(`
+					<li class="topic" data-topic-id="${ topicName }">
+						<button type="button" class="btn rounded-0 topic-remove">X</button>
+						<input type="text" readonly name="topics[]" class="topic-name" size="${ topicName.length }" value="${ topicName }">
+					</li>`);
 			} else {
-				$(".topics-list.create").prepend('<li class="topic first" data-topic-id="' + topicName + '"><button type="button" class="topic-remove">X</button><input type="text" readonly name="topics[]" class="topic-name" size="' + topicName.length + '" value="' + topicName +' "></li>');
+				$(".topics-list.create").prepend(`
+					<li class="topic first" data-topic-id="${ topicName }">
+						<button type="button" class="btn rounded-0 topic-remove">X</button>
+						<input type="text" readonly name="topics[]" class="topic-name" size="${ topicName.length }" value="${ topicName }">
+					</li>`);
 			}
 
 			setTimeout(function(){
@@ -72,7 +80,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 		// EXISTING PROJECT
 		addTopicToProject: function (projectId, topicName) {
-			$('.loader').show(0);
+			$('.spinner').show();
 			var ajaxUrl = "projects/topic-add";
 			$.ajax({
 				type: "POST",
@@ -95,12 +103,12 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					}
 				}
 			}).always(function(data){
-				$('.loader').hide(0);
+				$('.spinner').hide();
 			});
 		},
 
 		removeTopicFromProject: function (projectId, topicId) {
-			$(".loader").show(0);
+			$(".loader").show();
 			var ajaxUrl = "projects/topic-remove";
 			$.ajax({
 				type: "PATCH",
@@ -117,12 +125,12 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					});
 				},
 			}).always(function(){
-				$(".loader").hide(0);
+				$(".loader").hide();
 			});
 		},
 
 		updateProjectPrimaryTopic: function (projectId, topicId) {
-			$(".loader").show(0);
+			$(".spinner").show();
 			var ajaxUrl = "projects/topic-update-primary";
 			$.ajax({
 				type: "PATCH",
@@ -141,7 +149,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					});
 				},
 			}).always(function(){
-				$(".loader").hide(0);
+				$(".spinner").hide();
 			});
 		}
 	};
