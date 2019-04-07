@@ -29,8 +29,12 @@ class AddViewCountToProjectTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::table('project', function (Blueprint $table) {
-			//
-		});
+		foreach(get_departments() as $key => $department) {
+			foreach(get_education_levels() as $key => $level) {
+				Schema::table($department.'_projects_'.$level['shortName'], function (Blueprint $table){
+					$table->dropColumn('view_count');
+				});
+			}
+		}
 	}
 }
