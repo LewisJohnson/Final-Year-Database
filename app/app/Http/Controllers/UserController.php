@@ -53,6 +53,10 @@ class UserController extends Controller {
 				->orderBy('last_name', 'asc')
 				->get();
 
+		$externalMarkers = User::where('privileges', 'external_marker')
+				->orderBy('last_name', 'asc')
+				->get();
+
 		$noPrivilegesUsers = User::whereNull('privileges')
 				->orderBy('last_name', 'asc')
 				->get();
@@ -73,6 +77,7 @@ class UserController extends Controller {
 		return view('users.index')
 			->with('supervisors', $supervisors)
 			->with('staffUsers', $staffUsers)
+			->with('externalMarkers', $externalMarkers)
 			->with('students', $students)
 			->with('admins', $admins)
 			->with('noPrivilegesUsers', $noPrivilegesUsers);
@@ -95,6 +100,9 @@ class UserController extends Controller {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store(UserForm $request){
+
+		$request->privileges = $request->privileges ?? [];
+		
 		// Validate Student
 		if(in_array("student", $request->privileges)){
 			$request->validate([
@@ -213,20 +221,20 @@ class UserController extends Controller {
 			}
 		}
 
-		if(in_array("staff", $privileges) && $amountOfPrivileges > 1){
-			// Staff is a unique privilege
-			$error = ValidationException::withMessages(["privileges" => ["Staff is a unique privilege."]]);
+		if(in_array("staff", $privileges) && $amountOfStudentPrivileges > 1){
+			// User can NOT be a student and a staff memeber
+			$error = ValidationException::withMessages(["privileges" => ["Privileges student and staff are not compatible."]]);
 			throw $error;
 		}
 
 		if($amountOfStudentPrivileges > 0 && $amountOfAdminPrivileges > 0){
-			// User can NOT be student and an admin
+			// User can NOT be a student and an admin
 			$error = ValidationException::withMessages(["privileges" => ["Privileges student and administrator are not compatible."]]);
 			throw $error;
 		}
 
 		if($amountOfStudentPrivileges > 0 && in_array("supervisor", $privileges)){
-			// User can NOT be student and a supervisor
+			// User can NOT be a student and a supervisor
 			$error = ValidationException::withMessages(["privileges" => ["Privileges student and supervisor are not compatible."]]);
 			throw $error;
 		}
