@@ -4,11 +4,37 @@
  * Written by Lewis Johnson <lj234@sussex.com>
  */
 
+
 ;$(function() {
 	"use strict";
+	
+	$.fn.autogrow = function() {
+		return this.each(function() {
+			var textarea = this;
+			$.fn.autogrow.resize(textarea);
+			$(textarea).focus(function() {
+				textarea.interval = setInterval(function() {
+					$.fn.autogrow.resize(textarea);
+				}, 500);
+			}).blur(function() {
+				clearInterval(textarea.interval);
+			});
+		});
+	};
+
+	$.fn.autogrow.resize = function(textarea) {
+		var lineHeight = parseInt($(textarea).css('line-height'), 10);
+		var lines = textarea.value.split('\n');
+		var columns = textarea.cols;
+		var lineCount = 0;
+		$.each(lines, function() {
+			lineCount += Math.ceil(this.length / columns) || 1;
+		});
+		var height = Math.max(100, (lineHeight * (lineCount + 3) / 2));
+		$(textarea).css('height', height);
+	};
 
 	var isInEditMode = false;
-
 	var userIsSupervisor = Window['isSupervisor'];
 	var userIsMarker = Window['isMarker'];
 	var selectorModifier;
@@ -16,6 +42,8 @@
 	if(userIsSupervisor == null || userIsMarker == null){
 		createToast('error', "Something went wrong (ERROR: Window variable 'isFinialised' is null).");
 	}
+
+	$('#project-evaluation-form textarea').autogrow();
 
 	if(userIsSupervisor) {
 		selectorModifier = ".supervisor ";
@@ -43,39 +71,49 @@
 
 	$("#finalise").on('click', function(e){
 		$(".js-error").remove()
-		var finalMark = parseInt($("#finalMark").val());
+		var posterMark = parseInt($("#poster-final-mark").val());
+		var presentationMark = parseInt($("#presentation-final-mark").val());
+		var dissertationMark = parseInt($("#dissertation-final-mark").val());
 
-		if(!Number.isInteger(finalMark)){
-			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Final mark must be an integer.</p>');
+		if(!Number.isInteger(posterMark) || !Number.isInteger(presentationMark) || !Number.isInteger(dissertationMark)){
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be an integer.</p>');
 			$(".dialog .container").scrollTop(999999);
 			return;
 		}
 
-		if(finalMark < 0 || finalMark > 100){
-			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Final mark must be between 0 - 100.</p>');
+		if((posterMark < 0 || posterMark > 100) || (presentationMark < 0 || presentationMark > 100) || (dissertationMark < 0 || dissertationMark > 100)){
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be between 0 - 100.</p>');
 			$(".dialog .container").scrollTop(999999);
 			return;
 		}
 
-		if($("#jointReport").val().length < 120){
-			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">The joint report must be at least 120 characters.</p>');
-			$(".dialog .container").scrollTop(999999);
-			return;
-		}
+		if($("#jointReport").length > 1){
+			if($("#jointReport").val().length < 120){
+				$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">The joint report must be at least 120 characters.</p>');
+				$(".dialog .container").scrollTop(999999);
+				return;
+			}
 
-		if($("#jointReport").val().length < 240 && !userHasSeenShortJointReportLength){
-			$(".dialog .container").append('<div class="js-error alert alert-warning mt-2" role="alert">The joint report looks a bit short. If you\'re sure it\'s long enough, resubmit the form.</div>');
-			$(".dialog .container").scrollTop(999999);
-			userHasSeenShortJointReportLength = true;
-			return;
+			if($("#jointReport").val().length < 240 && !userHasSeenShortJointReportLength){
+				$(".dialog .container").append('<div class="js-error alert alert-warning mt-2" role="alert">The joint report looks a bit short. If you\'re sure it\'s long enough, resubmit the form.</div>');
+				$(".dialog .container").scrollTop(999999);
+				userHasSeenShortJointReportLength = true;
+				return;
+			}
 		}
 
 		$(".dialog .container").find("input, textarea").removeClass('d-inline-block').addClass('d-none');
 
-		$("#projectEvaluationForm").append($(".dialog .container").find("input, textarea"));
 		window['Dialog'].showLoader();
 
-		$("#projectEvaluationForm").submit();
+		$("#project-evaluation-form").append($(".dialog .container").find("input, textarea"));
+		$("#project-evaluation-form").submit();
+	});
+
+	$("#submit-evaluation").on('click', function(e){
+		window['Dialog'].showLoader();
+		$("#project-evaluation-form").append('<input type="hidden" name="submission" value="true">');
+		$("#project-evaluation-form").submit();
 	});
 
 	$('body').on('input change', '.custom-range', function(){
@@ -98,38 +136,53 @@
 			break;
 
 			case 1:
-				text = "Border";
-				rgb = "176,34,10";
+				text = "Border-";
+				rgb = "237,44,24";
 			break;
 
 			case 2:
-				text = "Border+";
-				rgb = "153,58,10";
+				text = "Border";
+				rgb = "234,80,19";
 			break;
 
 			case 3:
-				text = "Satisfactory";
-				rgb = "120,120,10";
+				text = "Border+";
+				rgb = "230,116,14";
 			break;
 
 			case 4:
-				text = "Satisfactory+";
-				rgb = "180,180,10";
+				text = "Satisfactory-";
+				rgb = "227,152,9";
 			break;
 
 			case 5:
-				text = "Good";
-				rgb = "81,129,10";
+				text = "Satisfactory";
+				rgb = "223,188,4";
 			break;
 
 			case 6:
-				text = "Good+";
-				rgb = "58,153,10";
+				text = "Satisfactory+";
+				rgb = "180,195,3";
 			break;
 
 			case 7:
+				text = "Good-";
+				rgb = "137, 204, 2";
+			break;
+
+			case 8:
+				text = "Good";
+				rgb = "94, 212, 2";
+			break;
+
+			case 9:
+				text = "Good+";
+				rgb = "51, 220, 1";
+			break;
+
+			case 10:
 				text = "Excellent";
-				rgb = "10,200,10";
+				rgb = "9, 228, 1";
 			break;
 		}
 
@@ -143,7 +196,7 @@
 		$(".js-value" + selectorModifier).hide();
 
 		$("#edit").text('Cancel');
-		$("#edit").addClass('btn-secondary');
+		$("#submission").hide();
 
 		$("#save").show();
 		$("#finaliseEvaluation").hide();
