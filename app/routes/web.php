@@ -9,18 +9,21 @@ use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web
 |--------------------------------------------------------------------------
 |
-| 1. Web Routes (Accessible by any request)
-| 2. System admin routes
-| 3. Project admin routes
-| 4. Any admin routes
-| 5. Project admin or staff routes
-| 6. Supervisor routes
-| 7. Student routes
-| 8. Authenticated user routes (Anyone who is logged in)
-| 9. Authenticated or LDAP Guest
+| 1. Web (Accessible by any request)
+| 2. Admin
+| 	2.1. Any admin
+| 	2.2. System admin
+| 	2.3. Project admin
+| 		2.3.1 Or staff
+|		2.3.2 Or External Marker
+|		2.3.3 Or External Marker Or Supervisor
+| 3. Supervisor
+| 4. Student
+| 5. Authenticated user (Anyone who is logged in)
+| 6. Authenticated or LDAP Guest
 |
 | Please follow the CRUD convention
 | Verb		URI						Action		Route Name
@@ -35,27 +38,27 @@ use Illuminate\Http\Request;
 */
 
 // This can be used to test mailables
-// Route::get('/mailable', function () {
-// 	$student = SussexProjects\Student::all()->first();
-// 	$supervisor = SussexProjects\Supervisor::all()->first();
-// 	$project = SussexProjects\Project::all()->first();
-// 	return new SussexProjects\Mail\SupervisorEditedProposedProject($supervisor, $student, $project);
-// });
+Route::get('/mailable', function () {
+	$student = SussexProjects\Student::first();
+	$supervisor = SussexProjects\Supervisor::first();
+	$project = SussexProjects\Project::first();
+	return new SussexProjects\Mail\SupervisorEditedProposedProject($supervisor, $student, $project);
+});
 
 /* =============
-   1. WEB ROUTES
+   1. WEB
    ============= */
 
 // WITH department check
 Route::group(['middleware' => ['web', 'checkDepartment']], function() {
-	/* LOGIN ROUTES (AUTHENTICATION) */
+	/* LOGIN (AUTHENTICATION) */
 	// Login form/view
 	Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 
 	// Perform login
 	Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
 
-	/* ROOT ROUTES */
+	/* ROOT */
 	// Index page alias
 	Route::get('index', 'HomeController@index');
 
@@ -65,7 +68,7 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 	// Show home page (Default index route)
 	Route::get('/', 'HomeController@index');
 
-	/* HELP ROUTES */
+	/* HELP */
 	// About page view
 	Route::get('about', 'HomeController@about');
 
@@ -75,14 +78,14 @@ Route::group(['middleware' => ['web', 'checkDepartment']], function() {
 
 // Without department check
 Route::group(['middleware' => ['web']], function() {
-	/* DEPARTMENT ROUTES */
+	/* DEPARTMENT */
 	// Set department view (Most users landing page)
 	Route::get('set-department', 'HomeController@setDepartmentView');
 
 	// Perform set department
 	Route::post('set-department', 'HomeController@setDepartment');
 
-	/* OTHER ROUTES */
+	/* OTHER */
 	// Get HTML code snippet
 	Route::get('snippet', 'HomeController@snippet');
 
@@ -96,138 +99,12 @@ Route::group(['middleware' => ['web']], function() {
 	Route::post('feedback', 'HomeController@feedback');
 });
 
-/* ===============
-   2. SYSTEM ADMIN ROUTES
-   =============== */
-Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']], function() {
-
-	// System admin dashboard
-	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
-
-	// Updated configuration post
-	Route::post('admin/dashboard/system', 'SystemAdminController@updateSystemConfiguration');
-
-	// Add new department
-	Route::post('admin/system/new-department', 'SystemAdminController@newDepartment');
-
-	// User agent view
-	Route::get('system/user-agent', 'SystemAdminController@userAgentView');
-
-	// User feedback view
-	Route::get('admin/feedback', 'SystemAdminController@feedback');
-
-	// User feedback view
-	Route::delete('admin/feedback', 'SystemAdminController@destroyFeedback');
-
-});
-
-/* ========================
-   3. PROJECT ADMIN ROUTES
-   ======================== */
-Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment', 'adminPrivilegeCheck']], function() {
-
-	// Admin hub
-	Route::get('admin', 'ProjectAdminController@index');
-
-	// Import student view
-	Route::get('admin/students/import', 'StudentController@importStudentsView');
-
-	// Import student form
-	Route::post('admin/students/import', 'StudentController@importStudents');
-
-	// Project evaluation
-	Route::get('admin/evaluation', 'ProjectEvaluationController@index');
-
-	/* PROJECT EVALUATION */
-	// Un-finalise Project evaluation
-	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
-
-	/* SUPERVISOR ARRANGMENTS ROUTES */
-	// Amend supervisor arrangements form
-	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
-
-	// Updated supervisor arrangements POST
-	Route::post('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangements');
-
-	/* SECOND MARKER ROUTES */
-	// Manual assign second marker view
-	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
-
-	// Manual second marker assignment
-	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
-
-	// Automatically assign second marker view
-	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
-
-	// Automatically assigned second markers table
-	Route::get('admin/marker/automatic-table', 'ProjectAdminController@assignSecondMarkerAutomaticTable');
-
-	// Marker report
-	Route::get('admin/marker/report', 'ProjectAdminController@secondMarkerReport');
-
-	// Perform automatic second marker assignment
-	Route::post('admin/marker/calculate', 'ProjectAdminController@calculateSecondMarkers');
-
-	/* LOGIN AS ROUTES */
-	// Login as another user view
-	Route::get('admin/login-as', 'ProjectAdminController@loginAsView');
-
-	// Perform login alias
-	Route::get('admin/login-as/{id}', 'ProjectAdminController@loginAs');
-
-	/* CONFIGURATION ROUTES */
-	// Global parameters configuration view
-	Route::get('admin/parameters', 'ModeController@index');
-
-	// Global parameters form post
-	Route::post('admin/parameters', 'ModeController@update');
-
-	// End-of-Year archive view
-	Route::get('admin/archive', 'ProjectAdminController@archiveView');
-
-	// Perform End-of-Year archive
-	Route::post('admin/archive', 'ProjectAdminController@archive');
-
-	/* TRANSACTIONS ROUTES */
-	// Transactions by time view
-	Route::get('admin/transactions', 'TransactionController@index');
-
-	// Transactions by project view
-	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
-
-	/* TOPIC ROUTES */
-	// Update topic view
-	Route::get('admin/topics', 'ProjectAdminController@amendTopicsView');
-
-	// Store new topic
-	Route::post('topics', 'TopicController@store');
-
-	// Update topic
-	Route::patch('topics', 'TopicController@update');
-
-	// Delete topic
-	Route::delete('topics', 'TopicController@destroy');
-
-	/* PROGRAMME ROUTES */
-	// Update topic view
-	Route::get('admin/programmes', 'ProjectAdminController@amendProgrammesView');
-
-	// Store new topic
-	Route::post('programmes', 'ProgrammeController@store');
-
-	// Update topic
-	Route::patch('programmes', 'ProgrammeController@update');
-
-	// Delete topic
-	Route::delete('programmes', 'ProgrammeController@destroy');
-
-	/* STUDENT ROUTES */
-	// Store new student POST
-	Route::post('students', 'StudentController@store');
-});
+/* ================
+   2. ADMIN
+   ================ */
 
 /* ===================================
-   4. PROJECT OR SYSTEM ADMIN ROUTES
+   2.1. ANY ADMIN
    ================================== */
 Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 
@@ -253,8 +130,135 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 	Route::delete('users', 'UserController@destroy');
 });
 
+/* ===================================
+   2.2. SYSTEM ADMIN
+   ================================== */
+Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']], function() {
+
+	// System admin dashboard
+	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
+
+	// Updated configuration post
+	Route::post('admin/dashboard/system', 'SystemAdminController@updateSystemConfiguration');
+
+	// Add new department
+	Route::post('admin/system/new-department', 'SystemAdminController@newDepartment');
+
+	// User agent view
+	Route::get('system/user-agent', 'SystemAdminController@userAgentView');
+
+	// User feedback view
+	Route::get('admin/feedback', 'SystemAdminController@feedback');
+
+	// User feedback view
+	Route::delete('admin/feedback', 'SystemAdminController@destroyFeedback');
+
+});
+
+/* ========================
+   2.3. PROJECT ADMIN
+   ======================== */
+Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']], function() {
+
+	// Admin hub
+	Route::get('admin', 'ProjectAdminController@index');
+
+	// Import student view
+	Route::get('admin/students/import', 'StudentController@importStudentsView');
+
+	// Import student form
+	Route::post('admin/students/import', 'StudentController@importStudents');
+
+	/* PROJECT EVALUATION */
+	// Un-finalise Project evaluation
+	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
+
+	/* SUPERVISOR ARRANGMENTS */
+	// Amend supervisor arrangements form
+	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
+
+	// Updated supervisor arrangements POST
+	Route::post('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangements');
+
+	/* SECOND MARKER */
+	// Manual assign second marker view
+	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
+
+	// Manual second marker assignment
+	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
+
+	// Automatically assign second marker view
+	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
+
+	// Automatically assigned second markers table
+	Route::get('admin/marker/automatic/preview', 'ProjectAdminController@automaticSecondMarkerPreview');
+
+	// Marker report
+	Route::get('admin/marker/report', 'ProjectAdminController@secondMarkerReport');
+
+	// Perform automatic second marker assignment
+	Route::post('admin/marker/calculate', 'ProjectAdminController@calculateSecondMarkers');
+
+	/* LOGIN AS */
+	// Login as another user view
+	Route::get('admin/login-as', 'ProjectAdminController@loginAsView');
+
+	// Perform login alias
+	Route::get('admin/login-as/{id}', 'ProjectAdminController@loginAs');
+
+	/* CONFIGURATION */
+	// Global parameters configuration view
+	Route::get('admin/parameters', 'ModeController@index');
+
+	// Global parameters form post
+	Route::post('admin/parameters', 'ModeController@update');
+
+	// End-of-Year archive view
+	Route::get('admin/archive', 'ProjectAdminController@archiveView');
+
+	// Perform End-of-Year archive
+	Route::post('admin/archive', 'ProjectAdminController@archive');
+
+	/* TRANSACTIONS */
+	// Transactions by time view
+	Route::get('admin/transactions', 'TransactionController@index');
+
+	// Transactions by project view
+	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
+
+	/* TOPIC */
+	// Update topic view
+	Route::get('admin/topics', 'ProjectAdminController@amendTopicsView');
+
+	// Store new topic
+	Route::post('topics', 'TopicController@store');
+
+	// Update topic
+	Route::patch('topics', 'TopicController@update');
+
+	// Delete topic
+	Route::delete('topics', 'TopicController@destroy');
+
+	/* PROGRAMME */
+	// Update topic view
+	Route::get('admin/programmes', 'ProjectAdminController@amendProgrammesView');
+
+	// Store new topic
+	Route::post('programmes', 'ProgrammeController@store');
+
+	// Update topic
+	Route::patch('programmes', 'ProgrammeController@update');
+
+	// Delete topic
+	Route::delete('programmes', 'ProgrammeController@destroy');
+
+	/* STUDENT */
+	// Store new student POST
+	Route::post('students', 'StudentController@store');
+});
+
 /* =================================
-   5. PROJECT ADMIN OR STAFF ROUTES
+   2.3.1 PROJECT ADMIN OR STAFF
    ================================= */
 Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
 
@@ -271,11 +275,35 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 	Route::get('admin/marker/export', 'ProjectAdminController@exportSecondMarkerDataView');
 
 	// Export marker data
-	Route::get('admin/marker/export-download', 'ProjectAdminController@exportSecondMarkerData');
+	Route::get('admin/marker/export-download', 'ProjectAdminController@export');
+});
+
+/* =================================
+   2.3.1 PROJECT ADMIN OR EXTERNAL MARKER
+   ================================= */
+Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepartment']], function() {
+	/* PROJECT EVALUATION */
+	// Project evaluation
+	Route::get('reports/evaluations', 'ProjectEvaluationController@index');
+
+	// Export project evaluation data
+	Route::get('reports/evaluations/export', 'ProjectEvaluationController@export');
+
+	// Student Feedback
+	Route::get('/evaluations/student-feedback', 'ProjectEvaluationController@studentFeedback');
+});
+
+/* =================================
+   2.3.2 PROJECT ADMIN OR EXTERNAL MARKER OR SUPERVISOR
+   ================================= */
+Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepartment']], function() {
+	/* PROJECT EVALUATION */
+	// Project evaluation
+	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@show');
 });
 
 /* =================
-   6. SUPERVISOR ROUTES
+   3. SUPERVISOR
    ================= */
 Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], function() {
 	// Project popularity
@@ -296,15 +324,12 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	// Undo student's accepted project
 	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 
-	// Project evaluation
-	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@show');
-
 	// Update project evaluation
 	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');
 });
 
 /* =================
-   7. STUDENT ROUTES
+   4. STUDENT
    ================= */
 Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function() {
 	// Propose project view
@@ -335,13 +360,12 @@ Route::group(['middleware' => ['web', 'student', 'checkDepartment']], function()
 	Route::patch('students/favourites/remove', 'StudentController@removeFavouriteProject');
 });
 
-
 /* ============================
-   8. AUTHENTICATED USER ROUTES
+   5. AUTHENTICATED USER
    ============================ */
 Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 
-	/* PROJECT ROUTES */
+	/* PROJECT */
 	// Store new project POST
 	Route::post('projects', 'ProjectController@store');
 
@@ -366,7 +390,7 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Convert html using purify
 	Route::post('projects/description-preview', 'ProjectController@projectDescriptionPreview');
 
-	/* PROJECT TOPIC ROUTES */
+	/* PROJECT TOPIC */
 	// Add topic to project
 	Route::post('projects/topic-add', 'ProjectController@addTopic');
 
@@ -376,20 +400,25 @@ Route::group(['middleware' => ['web', 'auth', 'checkDepartment']], function() {
 	// Update project primary topic
 	Route::patch('projects/topic-update-primary', 'ProjectController@updatePrimaryTopic');
 
-	/* REPORT ROUTES */
+	/* REPORT */
 	// Supervisor report
 	Route::get('reports/supervisor', 'SupervisorController@report');
 });
 
+Route::group(['middleware' => ['web', 'auth']], function() {
+	// Perform logout
+	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+});
+
 /* ===============================
-   9. AUTHENTICATED OR LDAP GUESTS
+   6. AUTHENTICATED OR LDAP GUESTS
 ================================== */
 Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function() {
 
-	/* USER ROUTES */
+	/* USER */
 	Route::get('users/{user}/projects', 'UserController@projects');
 
-	/* PROJECT ROUTES */
+	/* PROJECT */
 	// Project page
 	Route::get('projects', 'ProjectController@index');
 
@@ -410,9 +439,4 @@ Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
-});
-
-Route::group(['middleware' => ['web', 'auth']], function() {
-	// Perform logout
-	Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 });
