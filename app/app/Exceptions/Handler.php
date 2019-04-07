@@ -8,6 +8,7 @@
 namespace SussexProjects\Exceptions;
 
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler{
@@ -46,6 +47,16 @@ class Handler extends ExceptionHandler{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function render($request, Exception $exception){
+		if ($exception && !env('APP_DEBUG')){
+			session()->flash('message', 'SQL ERROR: '. $exception->getMessage());
+			session()->flash('message_type', 'error');
+
+			if($request->isMethod('post') && isset($_SERVER['HTTP_REFERER'])) {
+				return redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				return redirect($request->fullUrl());
+			}
+		}
 		return parent::render($request, $exception);
 	}
 }
