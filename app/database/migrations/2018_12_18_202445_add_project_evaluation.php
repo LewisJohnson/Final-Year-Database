@@ -17,7 +17,9 @@ class AddProjectEvaluation extends Migration
 				Schema::create($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
 					$table->uuid('id')->unqiue();
 					$table->uuid('project_id');
-					$table->boolean('is_finalised');
+					$table->boolean('supervisor_submitted')->default(0);
+					$table->boolean('marker_submitted')->default(0);
+					$table->boolean('is_finalised')->default(0);
 					$table->mediumText('questions');
 
 					$table->primary('id');
