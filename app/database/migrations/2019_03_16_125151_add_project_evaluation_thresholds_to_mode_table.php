@@ -17,6 +17,7 @@ class AddProjectEvaluationThresholdsToModeTable extends Migration
 			foreach(get_education_levels() as $key => $level) {
 				Schema::table($department.'_mode_'.$level['shortName'], function (Blueprint $table) {
 					$table->text('thresholds')->nullable();
+					$table->mediumText('evaluation_questions')->nullable();
 				});
 			}
 		}
@@ -33,6 +34,7 @@ class AddProjectEvaluationThresholdsToModeTable extends Migration
 			foreach(get_education_levels() as $key => $level) {
 				Schema::table($department.'_mode_'.$level['shortName'], function (Blueprint $table){
 					$table->dropColumn('thresholds');
+					$table->dropColumn('evaluation_questions');
 				});
 			}
 		}
