@@ -21,7 +21,7 @@
 
 		<div class="main-content mt-5">
 			<div class="container-fluid">
-				<div class="row">
+				<div class="row" style="min-height: calc(79vh - 31px);">
 					<div class="col-12">
 						@yield('content')
 					</div>

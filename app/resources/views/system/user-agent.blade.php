@@ -1,11 +1,6 @@
 @extends('layouts.app')
 @section('content')
 
-@section('scripts')
-	<script src="{{ asset('js/pagination/user-agent-pagination.js') }}"></script>
-
-@endsection
-
 @if(get_config_json('user_agent.collect_user_agent.value'))
 	<div class="centered mw-1200">
 		<h1>User Agent Strings</h1>

@@ -27,11 +27,13 @@
 	$isFilled = $userIsSupervisor ? $evaluation->isFilled('Supervisor') : $evaluation->isFilled('Marker');
 
 	$straddles = false;
-	if(count($thresholds) > 0){
-		foreach($thresholds as $threshold) {
-			if(($dissertation->SupervisorValue > $threshold && $dissertation->MarkerValue < $threshold) ||
-				($dissertation->SupervisorValue < $threshold && $dissertation->MarkerValue > $threshold)) {
-				$straddles = $threshold;
+	if(!empty($thresholds)){
+		if(count($thresholds) > 0){
+			foreach($thresholds as $threshold) {
+				if(($dissertation->SupervisorValue > $threshold && $dissertation->MarkerValue < $threshold) ||
+					($dissertation->SupervisorValue < $threshold && $dissertation->MarkerValue > $threshold)) {
+					$straddles = $threshold;
+				}
 			}
 		}
 	}
