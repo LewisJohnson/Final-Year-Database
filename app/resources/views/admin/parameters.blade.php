@@ -27,22 +27,22 @@
 				<div class="row">
 					<div class="col-12 col-md-6">
 						<h5>Dates</h5>
-						<div class="form-field">
+						<div class="form-group">
 							<label for="project_selection">Student Selection Date</label>
 							<br>
-							<input type="date" name="project_selection" value="{{ SussexProjects\Mode::getProjectSelectionDate()->toDateString() }}">
+							<input class="form-control" type="date" name="project_selection" value="{{ SussexProjects\Mode::getProjectSelectionDate()->toDateString() }}">
 						</div>
 			
-						<div class="form-field">
+						<div class="form-group">
 							<label for="supervisor_accept">Supervisor Accept Date</label>
 							<br>
-							<input type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
+							<input class="form-control" type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
 						</div>
 			
-						<div class="form-field">
+						<div class="form-group">
 							<label for="project_year">Project Year</label>
 							<br>
-							<select id="project_year" name="project_year">
+							<select class="form-control" id="project_year" name="project_year">
 								@for ($i = (date("Y") - 5); $i < (date("Y") + 5); $i++)
 									<option @if($i == SussexProjects\Mode::getProjectYear()) selected @endif>{{ $i }}</option>
 								@endfor
@@ -54,22 +54,26 @@
 						<h5>Evaluation Thresholds</h5>
 
 						<ul class="list-group" id="thresholds-list">
-							@if(count($thresholds) > 0)
-								@foreach($thresholds as $threshold)
-									<li class="list-group-item">
-										<div class="d-flex">
-											<span>{{ $threshold }}%</span>
-											<button type="button" class="btn btn-sm btn-outline-danger ml-auto js-deleteThreshold">Remove</button>
-											<input type="hidden" name="thresholds[]" value="{{ $threshold }}">
-										</div>
-									</li>
-								@endforeach
+							@if(!empty($thresholds))
+								@if(count($thresholds) > 0)
+									@foreach($thresholds as $threshold)
+										<li class="list-group-item">
+											<div class="d-flex">
+												<span>{{ $threshold }}%</span>
+												<button type="button" class="btn btn-sm btn-outline-danger ml-auto js-deleteThreshold">Remove</button>
+												<input type="hidden" name="thresholds[]" value="{{ $threshold }}">
+											</div>
+										</li>
+									@endforeach
+								@endif
 							@endif
 						</ul>
 
-						<div class="mt-3">
-							<input id="new-threshold-value" class="w-50" placeholder="Threshold value" type="number" min="0" max="100">
-							<button id="new-threshold-button" class="btn btn-outline-primary ml-2" type="button">Add</button>
+						<div class="form-inline mt-3">
+							<div class="form-group w-100">
+								<input id="new-threshold-value" class="form-control flex-grow-1" placeholder="Threshold value" type="number" min="0" max="100">
+								<button id="new-threshold-button" class="btn btn-outline-primary ml-2" type="button">Add</button>
+							</div>
 						</div>
 					</div>
 
