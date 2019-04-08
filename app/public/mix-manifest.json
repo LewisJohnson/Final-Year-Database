@@ -10,12 +10,10 @@
     "/js/views/project-popularity.js": "/js/views/project-popularity.js",
     "/js/views/supervisor.js": "/js/views/supervisor.js",
     "/js/views/tab-view.js": "/js/views/tab-view.js",
-    "/js/views/project-evaluation.js": "/js/views/project-evaluation.js",
     "/js/views/project-preview.js": "/js/views/project-preview.js",
+    "/js/views/project-evaluation.js": "/js/views/project-evaluation.js",
     "/js/views/marker-assign.js": "/js/views/marker-assign.js",
     "/js/views/admin.js": "/js/views/admin.js",
     "/js/jquery-helpers.js": "/js/jquery-helpers.js",
-    "/js/pagination/user-agent-pagination.js": "/js/pagination/user-agent-pagination.js",
-    "/js/pagination/projects-pagination.js": "/js/pagination/projects-pagination.js",
     "/js/helpers.js": "/js/helpers.js"
 }
