@@ -40,7 +40,7 @@ class Mode extends Model{
 	 *
 	 * @var array
 	 */
-	protected $dates = ['project_selection', 'supervisor_accept'];
+	protected $dates = ['project_selection', 'supervisor_accept', 'project_evaluation_date'];
 
 	/**
 	 * The models primary key
@@ -109,6 +109,11 @@ class Mode extends Model{
 			$mode->save();
 		}
 
+		if($mode->project_evaluation_date == null){
+			$mode->project_evaluation_date = Carbon::now()->addYear();
+			$mode->save();
+		}
+
 		return $mode;
 	}
 
@@ -139,6 +144,21 @@ class Mode extends Model{
 			return Mode::Instance()->supervisor_accept->toDayDateTimeString();
 		} else {
 			return Mode::Instance()->supervisor_accept;
+		}
+	}
+
+	/**
+	 * Gets supervisor accept date
+	 *
+	 * @param boolean $human
+	 *
+	 * @return string
+	 */
+	public static function getProjectEvaluationDate($human = null){
+		if($human){
+			return Mode::Instance()->project_evaluation_date->toDayDateTimeString();
+		} else {
+			return Mode::Instance()->project_evaluation_date;
 		}
 	}
 

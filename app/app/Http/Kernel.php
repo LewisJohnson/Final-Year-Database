@@ -73,7 +73,6 @@ class Kernel extends HttpKernel{
 		'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
 		'externalMarkerOrProjectAdmin' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdmin::class,
 		'externalMarkerOrProjectAdminOrSupervisor' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdminOrSupervisor::class,
-		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-		'disableRoutes' => \SussexProjects\Http\Middleware\TempDisablePERoutes::class
+		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class
 	];
 }

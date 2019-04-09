@@ -82,6 +82,10 @@ class Student extends Model{
 		return $return;
 	}
 
+	public static function getAllStudentsWithoutProjectCount(){
+		return Student::Where('project_status', '<>', 'accepted')->count();
+	}
+
 	/**
 	 * A list of all potential student project statues.
 	 *

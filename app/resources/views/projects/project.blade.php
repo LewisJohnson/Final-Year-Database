@@ -117,7 +117,9 @@
 				@endif
 
 				@if($project->isUserSupervisorOfProject() || $project->isUserMarkerOfProject())
-					<a class="btn btn-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+					@if(SussexProjects\Mode::getProjectEvaluationDate()->eq(\Carbon\Carbon::now()))
+						<a class="btn btn-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+					@endif
 				@endif
 			@endif
 		</div>

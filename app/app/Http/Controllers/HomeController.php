@@ -25,17 +25,6 @@ use SussexProjects\Topic;
 class HomeController extends Controller{
 
 	/**
-	 * An overall view of project evaluations.
-	 *
-	 * @param  Project $project
-	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function notready(){
-		return view('help.tempPE');
-	}
-	
-	/**
 	 * Displays the home page.
 	 *
 	 * @return \Illuminate\View\View

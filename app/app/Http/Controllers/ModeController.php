@@ -158,9 +158,13 @@ class ModeController extends Controller{
 
 		$mode->project_selection = $request->project_selection;
 		$mode->supervisor_accept = $request->supervisor_accept;
+		$mode->project_evaluation_date = $request->project_evaluation_date;
+
 		$mode->project_year = $request->project_year;
+
 		$mode->evaluation_questions = $questions;
 		$mode->thresholds = $request->thresholds;
+		
 		$mode->save();
 
 		session()->flash('message', 'Parameters have been updated successfully.');

@@ -38,6 +38,12 @@
 							<br>
 							<input class="form-control" type="date" name="supervisor_accept" value="{{ SussexProjects\Mode::getSupervisorAcceptDate()->toDateString() }}">
 						</div>
+
+						<div class="form-group">
+							<label for="project_evaluation_date">Project Evaluation Date</label>
+							<br>
+							<input class="form-control" type="date" name="project_evaluation_date" value="{{ SussexProjects\Mode::getProjectEvaluationDate()->toDateString() }}">
+						</div>
 			
 						<div class="form-group">
 							<label for="project_year">Project Year</label>

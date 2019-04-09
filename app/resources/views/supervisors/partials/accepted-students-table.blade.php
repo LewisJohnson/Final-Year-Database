@@ -46,7 +46,9 @@
 									data-project-title="{{ $accepted['project']->title }}">Undo</button>
 							@endif
 
-							<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
+							@if(SussexProjects\Mode::getProjectEvaluationDate()->eq(\Carbon\Carbon::now()))
+								<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
+							@endif
 						</td>
 					</tr>
 				@endforeach
