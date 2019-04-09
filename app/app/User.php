@@ -265,7 +265,7 @@ class User extends Authenticatable{
 			array_push($allowedLevels, $this->studentType());
 		}
 
-		if($this->isStaff()){
+		if($this->isStaff() || $this->isExternalMarker()){
 			foreach(get_education_levels() as $key => $level){
 				array_push($allowedLevels, $level);
 			}
