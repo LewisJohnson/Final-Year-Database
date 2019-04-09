@@ -9,7 +9,7 @@
 	</div>
 
 	<div class="row mt-3">
-		<div class="col-4">
+		<div class="col-12 mt-2 mt-md-0 col-sm-6 col-md-4">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">Supervisors</h5>
@@ -26,7 +26,7 @@
 		</div>
 
 
-		<div class="col-4">
+		<div class="col-12 mt-2 mt-md-0 col-sm-6 col-md-4">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Students</h5>
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<div class="col-4">
+		<div class="col-12 mt-2 mt-md-0 col-sm-6 col-md-4">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">Staff</h5>
