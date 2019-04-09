@@ -1,7 +1,7 @@
 <form id="project-search-form" class="form d-flex pb-4 mt-3" action="{{ action('ProjectController@search') }}" role="form" method="GET" accept-charset="utf-8">
 	{{ csrf_field() }}
 	<div class="search-container w-100 d-flex flex-wrap shadow-sm">
-		<input class="search-input flex-grow-1" type="text" minlength="3" name="searchTerm" placeholder="Search projects..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>
+		<input class="search-input form-control w-auto flex-grow-1" type="text" minlength="3" name="searchTerm" placeholder="Search projects..." @if($view == "search") value="{{ Request::get("searchTerm") }}" @endif>
 
 		<button class="btn btn-sm rounded-0 border border-left-0" type="submit" data-element-to-replace-with-loader-selector=".table-responsive" data-element-to-hide-selector="">
 			<svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -16,23 +16,23 @@
 		</button>
 
 		<div class="search-filter-container">
-			<ul class="search-filter list-unstyled">
+			<ul class="search-filter list-unstyled m-0">
 				<li>
 					<div class="checkbox">
 						<input class="js-cookie" id="search-title-checkbox" type="checkbox" name="filter[]" value="title" checked>
-						<label class="ml-1" for="search-title-checkbox">Title</label>
+						<label class="ml-4" for="search-title-checkbox">Title</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
 						<input class="js-cookie" id="search-description-checkbox" type="checkbox" name="filter[]" value="description" checked>
-						<label class="ml-1" for="search-description-checkbox">Description</label>
+						<label class="ml-4" for="search-description-checkbox">Description</label>
 					</div>
 				</li>
 				<li>
 					<div class="checkbox">
 						<input class="js-cookie" id="search-skills-checkbox" type="checkbox" name="filter[]" value="skills" checked>
-						<label class="ml-1" for="search-skills-checkbox">Skills</label>
+						<label class="ml-4" for="search-skills-checkbox">Skills</label>
 					</div>
 				</li>
 			</ul>
