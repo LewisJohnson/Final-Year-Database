@@ -27,7 +27,7 @@ class ProjectEvaluationController extends Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->middleware('auth');
+		$this->middleware('disableRoutes');
 	}
 
 	/**
@@ -175,7 +175,7 @@ class ProjectEvaluationController extends Controller {
 		$finalise = !empty($request->finalise);
 		$submission = !empty($request->submission);
 
-		if( !$finalise && 
+		if(!$finalise && 
 			(($isProjectSupervisor && $project->evaluation->supervisor_submitted) ||
 			($isProjectMarker && $project->evaluation->marker_submitted))
 		){
