@@ -26,5 +26,5 @@
 <div class="flex flex--row ie-banner">
 	@include('svg.delete-forever')
 
-	<p><b>Internet Explorer is not supported.</b><br>Please use an alternative browser such as Microsoft Edge, Mozilla Firefox or Google Chrome.</a>
+	<p><b>Internet Explorer is not supported.</b><br>Please use an alternative browser such as Microsoft Edge, Mozilla Firefox or Google Chrome.</p>
 </div>
