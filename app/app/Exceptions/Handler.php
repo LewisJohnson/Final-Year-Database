@@ -48,13 +48,13 @@ class Handler extends ExceptionHandler{
 	 */
 	public function render($request, Exception $exception){
 		if ($exception && !env('APP_DEBUG')){
-			session()->flash('message', 'SQL ERROR: '. $exception->getMessage());
+			session()->flash('message', 'Sorry, an SQL error occurred. Please try again.');
 			session()->flash('message_type', 'error');
 
 			if($request->isMethod('post') && isset($_SERVER['HTTP_REFERER'])) {
 				return redirect($_SERVER['HTTP_REFERER']);
 			} else {
-				return redirect($request->fullUrl());
+				return redirect('/');
 			}
 		}
 		return parent::render($request, $exception);
