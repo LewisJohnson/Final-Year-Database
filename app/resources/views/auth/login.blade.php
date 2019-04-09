@@ -15,12 +15,12 @@
 						<input class="form-control" id="username"  type="text" name="username" value="{{ old('username') }}" required autofocus>
 					</div>
 	
-					<div class="form-field">
+					<div class="form-group">
 						<label for="password">Password</label>
-						<input id="password" type="password" name="password" required>
+						<input class="form-control" id="password" type="password" name="password" required>
 					</div>
 	
-					<div class="form-field" title="This is not recommended for shared devices">
+					<div class="form-group" title="This is not recommended for shared devices">
 						<div class="checkbox">
 							<input id="remember" name="title" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
 							<label class="ml-1" for="remember">Remember Me</label>
