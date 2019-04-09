@@ -274,11 +274,11 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 	// Swap second marker POST
 	Route::patch('admin/marker/swap', 'ProjectAdminController@swapSecondMarker');
 
-	// Export marker data view
+	// Export second marker data view
 	Route::get('admin/marker/export', 'ProjectAdminController@exportSecondMarkerDataView');
 
 	// Export marker data
-	Route::get('admin/marker/export-download', 'ProjectAdminController@export');
+	Route::get('admin/marker/export-download', 'ProjectAdminController@exportSecondMarkerData');
 });
 
 /* =================================
