@@ -8,6 +8,7 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -71,6 +72,7 @@ class HomeController extends Controller{
 
 		$feedback = new Feedback;
 		$feedback->comment = request('comment');
+		$feedback->date = new Carbon;
 
 		if(Auth::check()){
 			if(empty(request('anonymous'))){

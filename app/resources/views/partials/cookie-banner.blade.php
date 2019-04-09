@@ -1,7 +1,7 @@
 @if(empty($_COOKIE['seen_cookie_banner']))
 	<div id="cookie-banner">
 		<div class="d-flex p-3 bg-dark">
-			<div class="text-white w-3">
+			<div class="text-white w-3 svg-md">
 				@include('svg.cookie')
 			</div>
 	

@@ -149,7 +149,7 @@
 		$.confirm({
 			title: 'Delete User',
 			type: 'red',
-			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div></div>',
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
@@ -205,7 +205,7 @@
 		$.confirm({
 			title: 'End of Year Archive',
 			type: 'red',
-			icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" /></svg></div>',
+			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" /></svg></div></div>',
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
@@ -483,7 +483,7 @@
 			$.confirm({
 				title: 'Delete Comment',
 				type: 'red',
-				icon: '<div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>',
+				icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div></div>',
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,

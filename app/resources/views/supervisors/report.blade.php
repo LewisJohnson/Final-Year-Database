@@ -150,4 +150,5 @@
 			</table>
 		@endforeach
 	</div>
+</div>
 @endsection

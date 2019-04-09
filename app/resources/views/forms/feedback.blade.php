@@ -1,28 +1,27 @@
-<form class="form" method="POST" action="{{ action('HomeController@feedback') }}">
+<form class="form text-left" method="POST" action="{{ action('HomeController@feedback') }}">
 	{{ csrf_field() }}
 	<p>Please send us any comments, feedback, or problems you may be experiencing.</p>
 
-	<div class="form-field">
+	<div class="form-group">
 		<label>Comment</label>
-		<textarea class="comment" type="text" name="comment" required></textarea>
+		<textarea class="form-control comment" type="text" name="comment" required></textarea>
 	</div>
 
 	@if(Auth::check())
-		<div class="form-field">
-			<div style="width: 170px;margin: 4px auto;" class="checkbox">
+		<div class="form-group">
+			<div class="checkbox">
 				<input type="checkbox" id="anonymous" name="anonymous" class="checkbox-input">
-				<label for="anonymous">Send Anonymously</label>
+				<label for="anonymous">Send Anonymously <small><ins>Your email will not be recorded.</ins></small></label>
 			</div>
-			<ins>Your email will not be recorded.</ins>
 		</div>
 	@else
-		<div class="form-field">
-			<label>Email</label>
-			<input type="text" name="email" placeholder="Optional"/>
+		<div class="form-group">
+			<label>Email <small><ins>OPTIONAL</ins></small></label>
+			<input class="form-control" type="email" name="email" placeholder="JohnSmith@sussex.ac.uk"/>
 		</div>
 	@endif
 
-	<input type="hidden" name="page" id="feedback-page" value="">
+	<input type="hidden" name="page" id="feedback-page">
 
 	@include ('partials.errors')
 </form>
