@@ -1,8 +1,8 @@
 @extends('layouts.error')
 @section('content')
 
-<div class="centered mw-800 flex flex--row cursor--pointer tea-error">
-	@include('svg.teapot')
+<div class="centered mw-800 cursor--pointer tea-error">
+	<div class="svg-md">@include('svg.teapot')</div>
 	<div class="tea"></div>
 	<div class="tea-fill"></div>
 	<div style="margin-left: auto;">
@@ -21,7 +21,7 @@
 
 		var flowingTea = $('.tea');
 		var teafill = $('.tea-fill');
-		var teapot = flowingTea.prev();
+		var teapot = $(".svg-container");
 		var animPlayed = false;
 
 		$('.tea-error').on('click', function(){

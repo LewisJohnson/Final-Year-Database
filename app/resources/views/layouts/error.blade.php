@@ -3,9 +3,7 @@
 	@include ('partials.html-head')
 
 	<style>
-		header{ background: #bf0000 !important; }
-		nav, footer{ background: #a70101 !important; }
-		.svg-container{	min-width: 100px; max-width: 15%; max-height: none; display: block; margin: 0; margin-right: 15px; color: #4f4f4f;}
+		.logo-container { display: none }
 	</style>
 
 	<body>
