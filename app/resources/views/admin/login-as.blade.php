@@ -54,6 +54,28 @@
 							</li>
 						@endforeach
 					</ol>
+
+					@if(count($externalMarkers) > 0)
+						<h5 class="card-title">External Markers</h5>
+						<ol class="order-list-js last-name-header-list-js list-unstyled" id="externalList">
+							@foreach($externalMarkers as $user)
+								<li data-sort-name="{{ $user->last_name }}">
+									<a title="Log in as {{ $user->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
+								</li>
+							@endforeach
+						</ol>
+					@endif
+
+					@if(count($noPrivilegesUsers) > 0)
+						<h5 class="card-title">Users without privileges</h5>
+						<ol class="order-list-js last-name-header-list-js list-unstyled" id="sansPrivList">
+							@foreach($noPrivilegesUsers as $user)
+								<li data-sort-name="{{ $user->last_name }}">
+									<a title="Log in as {{ $user->getFullName() }}" href="{{ action('ProjectAdminController@loginAs', $user->id) }}">{{ $user->getFullName() }}</a>
+								</li>
+							@endforeach
+						</ol>
+					@endif
 				</div>
 			</div>
 		</div>
