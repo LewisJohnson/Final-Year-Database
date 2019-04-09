@@ -49,11 +49,11 @@ class UserController extends Controller {
 				->orderBy('last_name', 'asc')
 				->get();
 
-		$staffUsers = User::where('privileges', 'staff')
+		$staffUsers = User::where('privileges', 'LIKE', '%staff%')
 				->orderBy('last_name', 'asc')
 				->get();
 
-		$externalMarkers = User::where('privileges', 'external_marker')
+		$externalMarkers = User::where('privileges', 'LIKE', '%external_marker%')
 				->orderBy('last_name', 'asc')
 				->get();
 
