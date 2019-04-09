@@ -108,7 +108,9 @@
 	input[type="checkbox"] {
 		outline: 0;
 		margin-right: $checkbox-size - 15px;
-
+		width: $checkbox-size;
+		height: $checkbox-size;
+		
 		&:checked {
 			+ label:before {
 				background: #007bff;

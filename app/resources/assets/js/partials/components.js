@@ -472,8 +472,8 @@
 	};
 
 	ColumnToggleTable.prototype.HtmlSnippets_ = {
-		COLUMN_SELECTOR_BUTTON: '<button class="btn btn-secondary d-block ml-auto mb-3" style="position: relative;">Columns</button>',
-		COLUMN_SELECTOR_MENU: '<ul class="p-2 mt-2 rounded shadow bg-white list-unstyled text-left" style="display: none;position: absolute;right: 0px;width: 200px;"></ul>'
+		COLUMN_SELECTOR_BUTTON: '<button class="btn btn-secondary d-block ml-auto mb-3">Columns</button>',
+		COLUMN_SELECTOR_MENU: '<ul class="p-2 mt-2 rounded shadow bg-white list-unstyled text-left position-absolute" style="display: none;right: 0px;top: 30px;width: 200px;"></ul>'
 	};
 
 	ColumnToggleTable.prototype.functions = {
@@ -523,10 +523,12 @@
 		var toggleTable = this;
 		var columnSelectorButton = $(this.HtmlSnippets_.COLUMN_SELECTOR_BUTTON);
 		var columnSelectorMenu = $(this.HtmlSnippets_.COLUMN_SELECTOR_MENU);
+		let container = $('<div id="column-toggle-container" class="position-relative"></div>');
 
 
-		this.table.before(columnSelectorButton);
-		columnSelectorButton.append(columnSelectorMenu);
+		this.table.before(container);
+		container.append(columnSelectorButton);
+		container.append(columnSelectorMenu);
 
 		this.selectorButton = columnSelectorButton;
 		this.selectorMenu = columnSelectorMenu;
