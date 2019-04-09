@@ -199,7 +199,9 @@
 									</td>
 
 									<td class="w-5 text-right">
-										<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
+										@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+											<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
+										@endif
 									</td>
 								</tr>
 							@endforeach

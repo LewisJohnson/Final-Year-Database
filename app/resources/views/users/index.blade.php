@@ -59,7 +59,7 @@
 
 					@if(count($externalMarkers) > 0)
 						<h5 class="card-title">External Markers</h5>
-						<ol class="order-list-js last-name-header-list-js list-unstyled" id="sansPrivList">
+						<ol class="order-list-js last-name-header-list-js list-unstyled" id="externalList">
 							@foreach($externalMarkers as $user)
 								<li data-sort-name="{{ $user->last_name }}">
 									<a title="Edit {{ $user->getFullName() }}" href="{{ action('UserController@edit', $user) }}">{{ $user->getFullName() }}</a>
