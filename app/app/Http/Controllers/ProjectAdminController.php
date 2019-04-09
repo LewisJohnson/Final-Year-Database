@@ -123,14 +123,23 @@ class ProjectAdminController extends Controller{
 				->orderBy('last_name', 'asc')
 				->get();
 
-		$staffUsers = User::where('privileges', 'staff')
+		$staffUsers = User::where('privileges', 'LIKE', '%staff%')
+				->orderBy('last_name', 'asc')
+				->get();
+		$externalMarkers = User::where('privileges', 'LIKE', '%external_marker%')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		$noPrivilegesUsers = User::whereNull('privileges')
 				->orderBy('last_name', 'asc')
 				->get();
 
 		return view('admin.login-as')
 			->with('supervisors', $supervisors)
 			->with('staffUsers', $staffUsers)
-			->with('students', $students);
+			->with('students', $students)
+			->with('externalMarkers', $externalMarkers)
+			->with('noPrivilegesUsers', $noPrivilegesUsers);
 	}
 
 	/**
@@ -458,15 +467,14 @@ class ProjectAdminController extends Controller{
 		foreach($projects as $project){
 			$ar = array();
 			
-			$ar["projectTitle"] = $project->title;
-
 			// This should never happen but you never know
-			if($project->student != null){
-				$ar["studentName"] = $project->student->user->getFullName();
+			if($project->getAcceptedStudent() != null){
+				$ar["studentName"] = $project->getAcceptedStudent()->user->getFullName();
 			} else {
 				$ar["studentName"] = "-";
 			}
 
+			$ar["projectTitle"] = $project->title;
 			$ar["supervisorName"] = $project->supervisor->user->getFullName();
 			$ar["markerName"] = $project->marker->user->getFullName();
 
@@ -480,7 +488,7 @@ class ProjectAdminController extends Controller{
 			fwrite($file, json_encode($results, JSON_PRETTY_PRINT));
 		} else if($request->type == "csv") {
 			fputcsv($file, array(
-				'Project Title', 'Student', 'Supervisor', 'Second Marker'
+				'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
 			));
 
 			foreach($results as $result){
