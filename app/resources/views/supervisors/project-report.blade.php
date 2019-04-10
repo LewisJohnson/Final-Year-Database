@@ -175,43 +175,45 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<h3 class="card-title">Second Marker Projects <span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
+				<h3 class="card-title">Second Marker Projects<span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
 				<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getProjectYear() }}.</h6>
 
-				<table class="table table-hover bg-white table data-table mt-1">
-					@if($secondMarkerProjects)
-						<thead class="thead-light">
-							<tr>
-								<th>Student</th>
-								<th>Project</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($secondMarkerProjects as $markerProjects)
+				<div class="table-responsive">
+					<table class="table table-hover bg-white table data-table mt-3 mb-1">
+						@if($secondMarkerProjects)
+							<thead class="thead-light">
 								<tr>
-									<td class="w-25">
-										<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
-									</td>
-
-									<td class="w-50">
-										<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
-									</td>
-
-									<td class="w-5 text-right">
-										@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
-											<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
-										@endif
-									</td>
+									<th>Student</th>
+									<th>Project</th>
+									<th></th>
 								</tr>
-							@endforeach
-						</tbody>
-					@else
-						<tfoot>
-							<tr><td>You are not second marker to any projects yet.</td></tr>
-						</tfoot>
-					@endif
-				</table>
+							</thead>
+							<tbody>
+								@foreach($secondMarkerProjects as $markerProjects)
+									<tr>
+										<td class="w-25">
+											<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
+										</td>
+	
+										<td class="w-50">
+											<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
+										</td>
+	
+										<td class="w-5 text-right">
+											@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+												<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
+											@endif
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						@else
+							<tfoot>
+								<tr><td>You are not second marker to any projects yet.</td></tr>
+							</tfoot>
+						@endif
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
