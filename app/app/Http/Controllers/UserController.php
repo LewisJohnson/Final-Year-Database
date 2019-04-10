@@ -285,13 +285,14 @@ class UserController extends Controller {
 	public function projects(User $user, Request $request){
 		$projectTable = new Project();
 
-		$sortCol = "title";
-		$sortDir = "asc";
-
 		if(Auth::user() == $user){
 			$view = 'personal';
+			$sortCol = 'status';
+			$sortDir = 'desc';
 		} else {
 			$view = 'supervisor';
+			$sortCol = 'title';
+			$sortDir = 'asc';
 		}
 
 		if(!empty($request->sortCol) && in_array($request->sortCol, $projectTable->sortable)){
