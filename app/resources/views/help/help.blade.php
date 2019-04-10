@@ -17,7 +17,7 @@
 			@for ($i = 1; $i <= 20; $i++)
 				@if(Lang::has("help.help_tab_".$i))
 					<li class="tab" data-tab-name="@lang('help.help_tab_'.$i)">
-						<button class="btn w-100 text-left open-tab">@lang("help.help_tab_".$i)</button>
+						<button class="btn w-100 text-left js-tab-button">@lang("help.help_tab_".$i)</button>
 						<div class="content" aria-expanded="false" aria-hidden="true" >
 							<h2>@lang("help.help_tab_".$i)</h2>
 							@lang("help.help_tab_".$i."_content")
@@ -30,7 +30,7 @@
 				<li><hr style="opacity: 0.6;"></li>
 				@if(Auth::user()->isStudent())
 					<li class="tab" data-tab-name="@lang('help.help_tab_student')">
-						<button class="btn w-100 text-left open-tab">@lang("help.help_tab_student")</button>
+						<button class="btn w-100 text-left js-tab-button">@lang("help.help_tab_student")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
 							<h2>@lang("help.help_tab_student")</h2>
 							@lang("help.help_tab_student_content")
@@ -40,7 +40,7 @@
 
 				@if(Auth::user()->isSupervisor())
 					<li class="tab" data-tab-name="@lang('help.help_tab_supervisor')">
-						<button class="btn w-100 text-left open-tab">@lang("help.help_tab_supervisor")</button>
+						<button class="btn w-100 text-left js-tab-button">@lang("help.help_tab_supervisor")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
 							<h2>@lang("help.help_tab_supervisor")</h2>
 							@lang("help.help_tab_supervisor_content")
@@ -50,7 +50,7 @@
 
 				@if(Auth::user()->isProjectAdmin())
 					<li class="tab" data-tab-name="@lang('help.help_tab_project_admin')">
-						<button class="btn w-100 text-left open-tab">@lang("help.help_tab_project_admin")</button>
+						<button class="btn w-100 text-left js-tab-button">@lang("help.help_tab_project_admin")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
 							<h2>@lang("help.help_tab_project_admin")</h2>
 							@lang("help.help_tab_project_admin_content")
@@ -60,7 +60,7 @@
 
 				@if(Auth::user()->isSystemAdmin())
 					<li class="tab" data-tab-name="@lang('help.help_tab_system_admin')">
-						<button class="btn w-100 text-left open-tab">@lang("help.help_tab_system_admin")</button>
+						<button class="btn w-100 text-left js-tab-button">@lang("help.help_tab_system_admin")</button>
 						<div class="content" aria-expanded="false" aria-hidden="true">
 							<h2>@lang("help.help_tab_system_admin")</h2>
 							@lang("help.help_tab_system_admin_content")
@@ -75,4 +75,10 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.content li {
+		margin-bottom: 1rem;
+	}
+</style>
 @endsection

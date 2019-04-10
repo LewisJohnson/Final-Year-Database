@@ -18,9 +18,12 @@
 	var previousTabIndex = null;
 	var previousHeight = null;
 	
-	$(".open-tab").on('click', function() {
+	$(".js-tab-button").on('click', function() {
 		var currentTab = $(this).parent();
 		var currentContent = currentTab.find(".content");
+
+		// Remove all old sub tabs
+		$(".sub-tab").remove();
 
 		if(currentContent.attr("aria-hidden") == "true"){
 			if(previousTab !== null){
@@ -105,8 +108,22 @@
 				firstTabSelected = false;
 				previousTab = currentTab;
 				previousTabIndex = previousTab.index();
-			}.bind(this), 100);
 
+
+				// Create sub tabs
+				$(currentContent.find('h5').get().reverse()).each(function(){
+					var titleId = (currentTab.text().trim() + "-" + $(this).text().trim()).toLowerCase();
+					$(this).attr('id', titleId);
+
+					var tab = $(`
+						<li class="sub-tab">
+							<a class="btn w-100 text-right js-sub-tab-button" href="#${ titleId }">${ $(this).text().trim() }</a>
+						</li>
+					`).insertAfter(currentTab).hide();
+
+					tab.fadeIn(200);
+				});
+			}.bind(this), 100);
 		}
 	});
 
@@ -128,7 +145,7 @@ function restoreOldTabFromStorage(tabContainer, tabs){
 
 	if(oldSelectedTab == null){
 		// No session or cookie
-		$(".open-tab").first().click();
+		$(".js-tab-button").first().click();
 	}
 
 	var tabClicked = false;
@@ -142,6 +159,6 @@ function restoreOldTabFromStorage(tabContainer, tabs){
 
 	// Tab name not found, could be different authentication
 	if(!tabClicked){
-		$(".open-tab").first().click();
+		$(".js-tab-button").first().click();
 	}
 }

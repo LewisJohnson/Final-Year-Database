@@ -18,7 +18,7 @@
 	<div class="card tab-card mt-5">
 		<ul class="tab-container mb-0" data-cookie-name="cadt">
 			<li class="tab" data-tab-name="System">
-				<button class="btn w-100 text-left open-tab">System</button>
+				<button class="btn w-100 text-left js-tab-button">System</button>
 				<div class="content" aria-expanded="false" aria-hidden="true">
 					<h2>System</h2>
 					<div class="dashboard-section">
@@ -73,7 +73,7 @@
 			</li>
 
 			<li class="tab" data-tab-name="Departments">
-				<button class="btn w-100 text-left open-tab">Departments</button>
+				<button class="btn w-100 text-left js-tab-button">Departments</button>
 				<div class="content" aria-expanded="false" aria-hidden="true">
 					<h2>Departments</h2>
 
@@ -91,7 +91,7 @@
 				</div>
 			</li>
 			<li class="tab" data-tab-name="User Agent">
-				<button class="btn w-100 text-left open-tab">User Agent</button>
+				<button class="btn w-100 text-left js-tab-button">User Agent</button>
 				<div class="content" aria-expanded="false" aria-hidden="true">
 					<h2>User Agent</h2>
 					<form class="form d-flex flex-column" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
@@ -125,7 +125,7 @@
 			</li>
 
 			<li class="tab" data-tab-name="Header">
-				<button class="btn w-100 text-left open-tab">Header</button>
+				<button class="btn w-100 text-left js-tab-button">Header</button>
 				<div class="content" aria-expanded="false" aria-hidden="true">
 					<h2>Header</h2>
 					<form class="form d-flex flex-column" role="form" method="POST" action="{{ action('SystemAdminController@updateSystemConfiguration') }}">
