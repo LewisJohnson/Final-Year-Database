@@ -183,8 +183,8 @@
 						@if($secondMarkerProjects)
 							<thead class="thead-light">
 								<tr>
-									<th>Student</th>
-									<th>Project</th>
+									<th>Student Name</th>
+									<th>Project Title</th>
 									<th></th>
 								</tr>
 							</thead>
