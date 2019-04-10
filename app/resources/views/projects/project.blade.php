@@ -96,7 +96,7 @@
 					@endif
 				@endif
 
-				@if($project->isOwnedByUser() && $project->status != 'archived')
+				@if($project->isOwnedByUser() && $project->status != 'archived' && $project->getAcceptedStudent() == null)
 					<form class="d-none" id="delete-project" action="{{ action('ProjectController@destroy', $project->id) }}" data-project-title="{{ $project->title }}" data-project-id="{{ $project->id }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
 					</form>
