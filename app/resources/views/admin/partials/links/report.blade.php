@@ -15,8 +15,8 @@
 		</a>
 	</li>
 		<li>
-		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@index') }}">
-			<span>@include('svg.message-bulleted')<span>PE Student Feedback</span></span>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@studentFeedback') }}">
+			<span>@include('svg.bullhorn')<span>Project Evaluation Student Feedback</span></span>
 		</a>
 	</li>
 </ul>
