@@ -4,10 +4,6 @@
 	@include('partials.ie-banner')
 @endif
 
-@if(Session::get('logged_in_as') != null)
-	<p class="text-white m-0 p-2 text-center bg-danger d-print-none">You are logged in as another user.</p>
-@endif
-
 @if(Session::get('department') != null)
 	<nav class="navbar navbar-expand navbar-dark bg-dark p-0">
 		<div class="collapse navbar-collapse">
@@ -52,6 +48,10 @@
 			</ul>
 		</div>
 	</nav>
+@endif
+
+@if(Session::get('logged_in_as') != null)
+	<p class="text-white m-0 p-2 text-center bg-danger d-print-none">You are logged in as another user.</p>
 @endif
 
 <div class="header-container d-print-none">
