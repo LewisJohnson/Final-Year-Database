@@ -166,7 +166,12 @@ class ProjectEvaluation extends Model {
 
 		foreach ($this::getQuestions() as $question) {
 			// We probably only want Scale and Number types
-			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
+			if($question->type == PEQValueTypes::Scale || 
+				$question->type == PEQValueTypes::Number ||
+				$question->type == PEQValueTypes::PosterPresentation ||
+				$question->type == PEQValueTypes::OralPresentation ||
+				$question->type == PEQValueTypes::Dissertation ||
+				$question->type == PEQValueTypes::StudentFeedback){
 				// We don't check values because the student could have failed every question
 
 				// Check comments 
@@ -186,7 +191,12 @@ class ProjectEvaluation extends Model {
 
 		foreach($this::getQuestions() as $question) {
 			// We probably only want Scale and Number types
-			if($question->type == PEQValueTypes::Scale || $question->type == PEQValueTypes::Number){
+			if($question->type == PEQValueTypes::Scale ||
+				$question->type == PEQValueTypes::Number ||
+				$question->type == PEQValueTypes::PosterPresentation ||
+				$question->type == PEQValueTypes::OralPresentation ||
+				$question->type == PEQValueTypes::Dissertation ||
+				$question->type == PEQValueTypes::StudentFeedback){
 				// We don't check values because the student could have failed every question
 
 				if(strlen($question->$commentAccessor) < 20){
