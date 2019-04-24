@@ -1,13 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<style>
-	.centered.mw-1600 .svg-container{
-		display: inline-block;
-		width: 20px;
-	}
-</style>
-
-<div class="centered mw-1600 js-show-scroll-top">
+<div class="centered mw-1800 js-show-scroll-top">
 
 	<h1>Project Evaluations</h1>
 
@@ -27,9 +20,9 @@
 					<th class="border-left">2<sup>nd</sup> Marker<br><span class="text-muted">Name</span></th>
 					<th class="text-muted">Mark</th>
 					<th class="text-muted">Submitted</th>
-					<th class="border-left">Final Marks<br><span class="text-muted"><span>@include('svg.eye')</span>Poster</span></th>
-					<th class="text-muted"><span><span>@include('svg.presentation')</span>Presentation</span></th>
-					<th class="text-muted"><span>@include('svg.paper-stacked')</span>Dissertation</th>
+					<th class="border-left">Final Marks<br>	<span class="svg-sm text-muted"><span>@include('svg.eye')</span>Poster</span></th>
+					<th class="text-muted"><span class="svg-sm"><span>@include('svg.presentation')</span>Presentation</span></th>
+					<th class="text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation</th>
 					<th class="border-left">Status</th>
 					<th class="border-left d-print-none js-unsortable"></th>
 				</tr>
@@ -38,20 +31,21 @@
 				@foreach($students as $student)
 					@if(!empty($student->project) && !empty($student->project->evaluation))
 						@php
-							$evaluation = $student->project->evaluation;
+							$project = $student->project;
+							$evaluation = $project->evaluation;
 							$poster = $evaluation->getPosterPresentationQuestion();
 							$presentation = $evaluation->getOralPresentationQuestion();
 							$dissertation = $evaluation->getDissertationQuestion();
 						@endphp
 						<tr>
 							<td>{{ $student->user->getFullName() }}</td>
-							<td>{{ $student->project->title }}</td>
+							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
 	
-							<td class="border-left">{{ $student->project->supervisor->user->getFullName() }}</td>
+							<td class="border-left"><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
 							<td>{{ $evaluation->supervisor_submitted ? $dissertation->SupervisorValue : '-' }}</td>
 							<td>{{ $evaluation->supervisor_submitted ? 'Yes' : 'No' }}</td>
 	
-							<td class="border-left">{{ $student->project->marker->user->getFullName() }}</td>
+							<td class="border-left"><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
 							<td>{{  $evaluation->marker_submitted ? $dissertation->MarkerValue : '-' }}</td>
 							<td>{{ $evaluation->marker_submitted ? 'Yes' : 'No' }}</td>
 	
@@ -67,17 +61,17 @@
 							<td class="border-left {{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</td>
 	
 							<td class="border-left text-right d-print-none">
-								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $student->project->id) }}">Evaluation</a>
+								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
 							</td>
 						</tr>
 					@elseif(!empty($student->project) && !empty($student->project->marker))
 						<tr style="opacity: 0.7">
 							<td>{{ $student->getName() }}</td>
-							<td>{{ $student->project->title }}</td>
-							<td class="border-left">{{ $student->project->supervisor->user->getFullName() }}</td>
+							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
+							<td class="border-left"><a href="mailto:{{ $student->project->supervisor->user->email }}">{{ $student->project->supervisor->user->getFullName() }}</a></td>
 							<td>-</td>
 							<td>-</td>
-							<td class="border-left">{{ $student->project->marker->user->getFullName() }}</td>
+							<td class="border-left"><a href="mailto:{{ $student->project->marker->user->email }}">{{ $student->project->marker->user->getFullName() }}</a></td>
 							<td>-</td>
 							<td>-</td>
 							<td class="border-left">-</td>
@@ -93,7 +87,7 @@
 					@else
 						<tr style="opacity: 0.3">
 							<td>{{ $student->getName() }}</td>
-							<td>No Project</td>
+							<td>{{ !empty($student->project) && empty($student->project->marker) ? 'No Second Marker' : 'No Project' }}</td>
 							<td class="border-left">-</td>
 							<td>-</td>
 							<td>-</td>
