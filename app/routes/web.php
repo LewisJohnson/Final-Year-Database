@@ -296,7 +296,7 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 /* =================================
    2.3.2 PROJECT ADMIN OR EXTERNAL MARKER OR SUPERVISOR
    ================================= */
-Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepartment']], function() {
+Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdminOrSupervisor', 'checkDepartment']], function() {
 	/* PROJECT EVALUATION */
 	// Project evaluation
 	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@show');
