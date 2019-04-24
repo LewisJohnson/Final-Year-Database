@@ -50,7 +50,7 @@
 
 @section('content')
 
-<div class="centered mw-1200">
+<div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
 		<div class="col-12">
 			@if(is_null($marker))
@@ -67,11 +67,11 @@
 					@if(!$evaluation->is_finalised && $userIsSupervisor && $evaluation->supervisor_submitted)
 						@if($evaluation->marker_submitted)
 							<p class="bg-success rounded text-white text-center w-100 p-2">
-								READY TO FINALISE
+								READY TO BE FINALISED
 							</p>
 						@else
 							<p class="bg-danger rounded text-white text-center w-100 p-2">
-								NOT READY TO FINALISE
+								NOT READY TO BE FINALISED
 							</p>
 						@endif
 					@endif
@@ -378,21 +378,21 @@
 				</div>
 
 				<div class="col-6">
-					<label class="text-muted"><span>@include('svg.eye')</span>Poster Mark</label>
+					<label class="text-muted"><span class="svg-sm">@include('svg.eye')</span>Poster Mark</label>
 					<div class="d-flex">
 						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="poster-final-mark" name="poster_final_mark" value="{{ floor(($poster->SupervisorValue + $poster->MarkerValue) / 2) }}" min="0" max="100" step="1">
 						<span class="p-2" style="font-size: 2rem">%</span>
 					</div>
 					<p class="text-muted mb-0"><small>Supervisor {{ $poster->SupervisorValue }} | Marker {{ $poster->MarkerValue }}</small></p>
 
-					<label class="mt-3 text-muted"><span>@include('svg.presentation')</span>Oral Presentation Mark</label>
+					<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.presentation')</span>Oral Presentation Mark</label>
 					<div class="d-flex">
 						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="presentation-final-mark" name="presentation_final_mark" value="{{ floor(($presentation->SupervisorValue + $presentation->MarkerValue) / 2) }}" min="0" max="100" step="1">
 						<span class="p-2" style="font-size: 2rem">%</span>
 					</div>
 					<p class="text-muted mb-0"><small>Supervisor {{ $presentation->SupervisorValue }} | Marker {{ $presentation->MarkerValue }}</small></p>
 
-					<label class="mt-3 text-muted"><span>@include('svg.paper-stacked')</span>Dissertation Mark</label>
+					<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation Mark</label>
 					<div class="d-flex">
 						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="dissertation-final-mark" name="dissertation_final_mark" value="{{ floor(($dissertation->SupervisorValue + $dissertation->MarkerValue) / 2) }}" min="0" max="100" step="1">
 						<span class="p-2" style="font-size: 2rem">%</span>
