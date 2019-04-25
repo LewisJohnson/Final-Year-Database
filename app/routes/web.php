@@ -291,6 +291,9 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 
 	// Student Feedback
 	Route::get('/evaluations/student-feedback', 'ProjectEvaluationController@studentFeedback');
+
+	// Export Student Feedback
+	Route::get('/evaluations/student-feedback/export', 'ProjectEvaluationController@exportStudentFeedback');
 });
 
 /* =================================
