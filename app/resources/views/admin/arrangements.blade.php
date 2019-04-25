@@ -22,7 +22,7 @@
 							<td>{{ $supervisor->user->getFullName() }}</td>
 							<td>{{ $supervisor->user->username }}</td>
 							<td>
-								<input type="number" id="{{ $supervisor->user->id }}_project_load" name="{{ $supervisor->user->id }}_project_load" value="{{ $supervisor->getProjectLoad() }}" class="py-0">
+								<input type="number" id="{{ $supervisor->user->id }}_project_load" name="{{ $supervisor->user->id }}_project_load" value="{{ $supervisor->getProjectLoad() }}" class="py-0 form-control">
 							</td>
 							<td class="text-right">
 								<div class="checkbox">
