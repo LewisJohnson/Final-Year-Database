@@ -44,7 +44,7 @@
 
 		{{-- SUPERVISORS --}}
 		<div class="col-4">
-			<table class="table table-hover table-sm bg-white data-table shadow-sm" id="2nd-marker-supervisor-table">
+			<table class="table table-hover table-sm bg-white data-table shadow-sm position-sticky" style="top: 10px" id="2nd-marker-supervisor-table">
 				<thead>
 					<tr>
 						<th>Supervisor</th>

@@ -11,12 +11,9 @@
 	$canViewSupervisorValues = $userIsSupervisor || ($userIsMarker && $evaluation->marker_submitted);
 	$canViewMarkerValues = $userIsMarker || ($userIsSupervisor && $evaluation->supervisor_submitted);
 
-	$ValuesAreOverridden = false;
-
-	if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]) || Auth::user()->isExternalMarker()){
+	if(Auth::user()->isExternalMarker()){
 		$canViewSupervisorValues = true;
 		$canViewMarkerValues = true;
-		$ValuesAreOverridden = true;
 	}
 
 	$questions = $evaluation->getQuestions();
@@ -77,12 +74,6 @@
 								NOT READY TO BE FINALISED
 							</p>
 						@endif
-					@endif
-
-					@if($ValuesAreOverridden)
-						<p class="bg-info rounded text-white text-center w-100 p-2">
-							NOTICE: You can see all values and comments because you are an {{ Session::get('education_level')["longName"] }} administrator.
-						</p>
 					@endif
 
 					<div class="card">

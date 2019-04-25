@@ -349,8 +349,7 @@ class Supervisor extends Model{
 	public static function getSupervisorNameDatalist($hideClosedToOffers = true){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 			->when($hideClosedToOffers, function($query) {
-				return $query->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
-							->where("take_students_".Session::get('education_level')["shortName"], true);
+				return $query->where("take_students_".Session::get('education_level')["shortName"], true);
 			})
 			->get();
 
