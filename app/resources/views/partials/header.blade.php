@@ -128,7 +128,7 @@
 						</li>
 					@endif
 
-					@if(Auth::user()->isOnlyStaff())
+					@if(Auth::user()->isStaff())
 						<li class="has-dropdown links" data-content="staff">
 							<a href="#0">Staff</a>
 						</li>
@@ -379,7 +379,7 @@
 							</li>
 						@endif
 
-						@if(Auth::user()->isOnlyStaff())
+						@if(Auth::user()->isStaff())
 							<li id="staff" class="dropdown wide links">
 								<a href="#0" class="label">Staff</a>
 								<div class="content">
