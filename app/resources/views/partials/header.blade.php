@@ -432,6 +432,11 @@
 												<span>@include('svg.clipboard-check')<span>Project Evaluation Report</span></span>
 											</a>
 										</li>
+										<li class="w-100">
+											<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@studentFeedback') }}">
+												<span>@include('svg.bullhorn')<span>Project Evaluation Student Feedback</span></span>
+											</a>
+										</li>
 									</ul>
 								</div>
 							</li>
