@@ -5,7 +5,7 @@
 	<h1>Project Evaluations</h1>
 
 	<div class="d-flex w-100">
-		<a class="ml-auto btn btn-primary" title="Download project evaluation data as CSV" href="{{ action('ProjectEvaluationController@export') }}">Export CSV</a>
+		<a class="ml-auto btn btn-primary" title="Download project evaluation data as CSV" href="{{ action('ProjectEvaluationController@export') }}"><span class="svg-xs">@include('svg.file-export')</span>Export CSV</a>
 	</div>
 
 	<div class="table-responsive">
