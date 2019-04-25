@@ -158,7 +158,7 @@
 		<div class="card">
 			<div class="card-body">
 				<h3 class="card-title">Accepted Students <span class="fr text-primary px-2 py-1">{{ count($acceptedStudents) }}</span></h3>
-				<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ SussexProjects\Mode::getProjectYear() }}.</h6>
+				<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
 
 				@include('supervisors.partials.accepted-students-table')
 				
@@ -176,7 +176,7 @@
 		<div class="card">
 			<div class="card-body">
 				<h3 class="card-title">Second Marker Projects<span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
-				<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getProjectYear() }}.</h6>
+				<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
 
 				<div class="table-responsive">
 					<table class="table table-hover bg-white table data-table mt-3 mb-1">

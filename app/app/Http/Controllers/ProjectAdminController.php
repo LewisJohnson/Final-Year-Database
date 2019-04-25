@@ -201,9 +201,9 @@ class ProjectAdminController extends Controller{
 			// Archive all projects
 			foreach($projects as $project){
 				if($project->getAcceptedStudent() != null){
-					$project->description = $project->description." (++ In ".Mode::getProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
+					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
 				} else {
-					$project->description = $project->description." (++ In ".Mode::getProjectYear()." this project was viewed ".$project->view_count." times. ++)";
+					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times. ++)";
 				}
 				
 				if($project->status == 'student-proposed'){

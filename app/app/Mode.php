@@ -172,6 +172,15 @@ class Mode extends Model{
 	}
 
 	/**
+	 * Gets project year
+	 *
+	 * @return string
+	 */
+	public static function getFriendlyProjectYear(){
+		return Mode::Instance()->project_year.'/'.(Mode::Instance()->project_year + 1);
+	}
+
+	/**
 	 * Gets thresholds for project evaluations
 	 *
 	 * @return string
