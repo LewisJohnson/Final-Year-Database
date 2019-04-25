@@ -8,9 +8,11 @@
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use SussexProjects\Mode;
 use SussexProjects\Student;
 use SussexProjects\Project;
@@ -349,8 +351,8 @@ class ProjectEvaluationController extends Controller {
 			array_push($results, $ar);
 		}
 
-		$tempFileName = tempnam(sys_get_temp_dir(), 'ProjectEvaluationData');
-		$file = fopen($tempFileName, 'w');
+		$filepath = "../storage/app/ProjectEvaluationData.csv";
+		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
 			'Registration Number' , 'First name', 'Last name', 'Programme', 'Project Title',
@@ -370,12 +372,100 @@ class ProjectEvaluationController extends Controller {
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
-		header('Content-Length: '.filesize($tempFileName));
+		header('Content-Length: '.filesize($filepath));
 
 		ob_clean();
 		flush();
-		readfile($tempFileName);
-		unlink($tempFileName);
+		readfile($filepath);
+		unlink($filepath);
+
+		return;
+	}
+
+	/**
+	 * Exports the project evaluation data as CSV.
+	 *
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response A CSV file
+	 */
+	public function exportStudentFeedback(Request $request){
+
+		$students = Student::all();
+		$results = array();
+
+		foreach($students as $student){
+			$ar = array();
+			
+			$ar["regNo"] = $student->registration_number;
+			$ar["fName"] = $student->user->first_name;
+			$ar["lName"] = $student->user->last_name;
+
+			if(!empty($student->user->programme_relationship)){
+				$ar["prog"] = $student->user->programme_relationship->name;
+			} else {
+				$ar["prog"] = '-';
+			}
+
+			if(!empty($student->project)){
+				$ar["proj"] = $student->project->title;
+
+				$ar["supervisor"] = $student->project->supervisor->user->getFullName();
+
+				if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
+					$ar["supervisorFeedback"] = $student->project->evaluation->getStudentFeedback()->SupervisorComment;
+				} else {
+					$ar["supervisorFeedback"] = '-';
+				}
+
+				if(!empty($student->project->marker)){
+					$ar["marker"] = $student->project->marker->user->getFullName();
+
+					if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
+						$ar["markerFeedback"] = $student->project->evaluation->getStudentFeedback()->MarkerComment;
+					} else {
+						$ar["markerFeedback"] = '-';
+					}
+				} else {
+					$ar["marker"] = '-';
+				}
+
+			} else {
+				$ar["proj"] = '-';
+				$ar["marker"] = '-';
+				$ar["markerFeedback"] = '-';
+			}
+
+			array_push($results, $ar);
+		}
+
+		$filepath = "../storage/app/ProjectEvaluationStudentFeedbackData.csv";
+		$file = fopen($filepath, 'w');
+
+		fputcsv($file, array(
+			'Registration Number' , 'Student First name', 'Student Last name', 'Programme', 'Project Title',
+			'Supervisor Name', 'Supervisor Feedback', 'Marker Name', 'Marker Feedback'
+		));
+
+		foreach($results as $result){
+			fputcsv($file, $result);
+		}
+
+		fclose($file);
+
+		header('Content-Description: File Transfer');
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=ProjectEvaluationStudentFeedbackData.csv');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: '.filesize($filepath));
+
+		ob_clean();
+		flush();
+		readfile($filepath);
+		unlink($filepath);
 
 		return;
 	}

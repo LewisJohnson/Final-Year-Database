@@ -25,6 +25,9 @@
 |		1.7 Project Evaluation
 |			1.7.1 Thresholds
 |			1.7.2 Questions
+|		1.8 PE student Feedback
+|			1.8.1 Print
+|			1.8.1 Print All
 |	2. System Admin
 |		2.1 User Feedback
 |		
@@ -462,6 +465,67 @@
 		$(this).closest('li').remove();
 	});
 
+	// 1.8 PE Student Feedback
+	// 1.8.1 Print
+	var isSingleStudentFeedbackPrint = false;
+
+	$(".js-print-student-feedback").on("click", function(){
+		isSingleStudentFeedbackPrint = true;
+
+		var card = $(this).closest('.card');
+
+		card.addClass("js-print-card");
+		card.find(".card-title").addClass('h2').addClass('d-inline-block').before('<h2 class="d-inline-block delete-me">Student:&nbsp;</h2>');
+		card.find(".card-subtitle").addClass('h3').addClass('d-inline-block').before('<br class="delete-me"><h3 class="d-inline-block delete-me">Project:&nbsp;</h3>');
+
+		$("#card-container").removeClass("card-columns");
+		$(".card:not(.js-print-card)").hide();
+		window.print();
+	});
+
+	window.onafterprint = function(){
+		if(isSingleStudentFeedbackPrint){
+			$(".js-print-card").removeClass("js-print-card");
+			$(".h2, .h3").removeClass('h2 h3 d-inline-block');
+			$(".delete-me").remove();
+
+			$("#card-container").addClass("card-columns");
+			$(".card").show();
+
+			isSingleStudentFeedbackPrint = false;
+		}
+	}
+
+	var isAllStudentFeedbackPrint = false;
+
+	$(".js-print-all-student-feedback").on("click", function(){
+		isAllStudentFeedbackPrint = true;
+
+		var cards = $('.card');
+
+		cards.after('<p class="delete-me" style="page-break-before: always">');
+		cards.find(".card-title").addClass('h3').addClass('d-inline-block').before('<h2 class="delete-me">Student Feedback</h2><br class="delete-me"><h3 class="d-inline-block delete-me">Student:&nbsp;</h3>');
+		cards.find(".card-subtitle").addClass('h3').addClass('d-inline-block').before('<br class="delete-me"><h3 class="d-inline-block delete-me">Project:&nbsp;</h3>');
+
+		$("#page-title").hide();
+		$("#card-container").removeClass("card-columns");
+		window.print();
+	});
+
+	window.onafterprint = function(){
+		if(isAllStudentFeedbackPrint){
+			$(".js-print-card").removeClass("js-print-card");
+			$(".h3").removeClass('h3 d-inline-block');
+			$(".delete-me").remove();
+
+			$("#card-container").addClass("card-columns");
+			$(".card").show();
+
+			isAllStudentFeedbackPrint = false;
+		}
+	}
+
+	// 1.8.2 Print All
 	/* =================
 	 	2.SYSTEM ADMIN
 	   ================ */
