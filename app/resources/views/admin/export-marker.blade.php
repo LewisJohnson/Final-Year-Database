@@ -43,14 +43,7 @@
 	<div class="d-flex">
 		<form title="Download second marker data as CSV" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
 			{{ csrf_field() }}
-			<input type="hidden" name="type" value="csv">
 			<button class="btn btn-primary">Download CSV</button>
-		</form>
-
-		<form title="Download second marker data as JSON" action="{{ action('ProjectAdminController@exportSecondMarkerData') }}" method="GET" accept-charset="utf-8">
-			{{ csrf_field() }}
-			<input type="hidden" name="type" value="json">
-			<button class="btn btn-primary ml-2">Download JSON</button>
 		</form>
 	</div>
 </div>

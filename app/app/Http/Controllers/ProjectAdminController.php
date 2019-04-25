@@ -457,13 +457,8 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\Http\Response The second marker data.
 	 */
 	public function exportSecondMarkerData(Request $request){
-		if(!($request->type == "json" || $request->type == "csv")) {
-			abort(400);
-		}
-
 		$projects = Project::whereNotNull('marker_id')->get();
 		$results = array();
-
 		foreach($projects as $project){
 			$ar = array();
 			
@@ -481,42 +476,33 @@ class ProjectAdminController extends Controller{
 			array_push($results, $ar);
 		}
 
-		$tempFileName = tempnam(sys_get_temp_dir(), 'SecondMarkerData');
-		$file = fopen($tempFileName, 'w');
+		$filepath = "../storage/app/SecondMarkerData.csv";
+		$file = fopen($filepath, 'w');
 
-		if($request->type == "json"){
-			fwrite($file, json_encode($results, JSON_PRETTY_PRINT));
-		} else if($request->type == "csv") {
-			fputcsv($file, array(
-				'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
-			));
+		fputcsv($file, array(
+			'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
+		));
 
-			foreach($results as $result){
-				fputcsv($file, $result);
-			}
+		foreach($results as $result){
+			fputcsv($file, $result);
 		}
 
 		fclose($file);
 
 		header('Content-Description: File Transfer');
-
-		if($request->type == "json"){
-			header('Content-Type: application/json');
-		} else {
-			header('Content-Type: text/csv');
-		}
-
-		header('Content-Disposition: attachment; filename=SecondMarkerData.'.$request->type.'');
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=SecondMarkerData.csv');
 		header('Content-Transfer-Encoding: binary');
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
-		header('Content-Length: ' . filesize($tempFileName));
+		header('Content-Length: ' . filesize($filepath));
+		dd("ok");
 
 		ob_clean();
 		flush();
-		readfile($tempFileName);
-		unlink($tempFileName);
+		readfile($filepath);
+		unlink($filepath);
 
 		return;
 	}
