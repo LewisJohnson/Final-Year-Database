@@ -483,19 +483,6 @@
 		window.print();
 	});
 
-	window.onafterprint = function(){
-		if(isSingleStudentFeedbackPrint){
-			$(".js-print-card").removeClass("js-print-card");
-			$(".h2, .h3").removeClass('h2 h3 d-inline-block');
-			$(".delete-me").remove();
-
-			$("#card-container").addClass("card-columns");
-			$(".card").show();
-
-			isSingleStudentFeedbackPrint = false;
-		}
-	}
-
 	var isAllStudentFeedbackPrint = false;
 
 	$(".js-print-all-student-feedback").on("click", function(){
@@ -513,6 +500,17 @@
 	});
 
 	window.onafterprint = function(){
+		if(isSingleStudentFeedbackPrint){
+			$(".js-print-card").removeClass("js-print-card");
+			$(".h2, .h3").removeClass('h2 h3 d-inline-block');
+			$(".delete-me").remove();
+
+			$("#card-container").addClass("card-columns");
+			$(".card").show();
+
+			isSingleStudentFeedbackPrint = false;
+		}
+
 		if(isAllStudentFeedbackPrint){
 			$(".js-print-card").removeClass("js-print-card");
 			$(".h3").removeClass('h3 d-inline-block');
