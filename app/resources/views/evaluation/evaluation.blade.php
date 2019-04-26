@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section('content')
 
 @php
 	$supervisor = $project->supervisor->user;
@@ -46,13 +45,18 @@
 	</script>
 
 	<script src="{{ asset('js/views/project-evaluation.js') }}"></script>
+	<script src="{{ asset('js/views/admin.js') }}"></script>
 @endsection
 
 @section('content')
 
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
-		<div class="col-12">
+		<div class="col-12 text-right">
+			<button class="btn btn-primary js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
+		</div>
+
+		<div class="col-12 mt-3">
 			@if(is_null($marker))
 				<p>This page is unavailable as a second marker has not been assigned to "{{ $project->title }}".</p>
 			@else
@@ -192,7 +196,7 @@
 									</div>
 								</div>
 
-								<button class="btn btn-light mt-5 w-100" type="button" data-toggle="collapse" data-target="#ProjectEvaluationQuestions">Show all questions</button>
+								<button class="btn btn-light mt-5 w-100" id="ExpandQuestions" type="button" data-toggle="collapse" data-target="#ProjectEvaluationQuestions">Show all questions</button>
 							@endif
 
 							<div @if($evaluation->is_finalised) id="ProjectEvaluationQuestions" class="collapse mt-3" @endif>

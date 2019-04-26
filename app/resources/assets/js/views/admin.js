@@ -25,6 +25,7 @@
 |		1.7 Project Evaluation
 |			1.7.1 Thresholds
 |			1.7.2 Questions
+|			1.7.3 Print
 |		1.8 PE student Feedback
 |			1.8.1 Print
 |			1.8.1 Print All
@@ -463,6 +464,12 @@
 
 	$("body").on("click", ".js-deleteQuestion", function(){
 		$(this).closest('li').remove();
+	});
+
+	// 1.7.3 Print
+	$(".js-print-project-evaluation").on("click", function(){
+		$('#ExpandQuestions:not([aria-expanded="true"])').click();
+		window.print();
 	});
 
 	// 1.8 PE Student Feedback
