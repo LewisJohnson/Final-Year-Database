@@ -196,7 +196,7 @@
 									</div>
 								</div>
 
-								<button class="btn btn-light mt-5 w-100" id="ExpandQuestions" type="button" data-toggle="collapse" data-target="#ProjectEvaluationQuestions">Show all questions</button>
+								<button class="btn btn-light mt-5 w-100" id="ExpandQuestions" type="button" data-toggle="collapse" data-target="#ProjectEvaluationQuestions">Show all comments</button>
 							@endif
 
 							<div @if($evaluation->is_finalised) id="ProjectEvaluationQuestions" class="collapse mt-3" @endif>
@@ -372,7 +372,7 @@
 						<h4>Straddle</h4>
 						<p>
 							The student's mark is straddling.
-							This means that yours and the second marker's marks straddles a threshold.
+							This means that yours and the second marker's marks straddle a threshold.
 							The threshold the mark is straddling is <b>{{ $straddles }}%</b>.
 							Because of this, you must fill out a joint report explaining how you and the second marker came to the agreed dissertation mark.
 							<br><br>
