@@ -462,9 +462,11 @@ class ProjectAdminController extends Controller{
 			
 			// This should never happen but you never know
 			if($project->getAcceptedStudent() != null){
-				$ar["studentName"] = $project->getAcceptedStudent()->user->getFullName();
+				$ar["fName"] = $project->getAcceptedStudent()->user->first_name;
+				$ar["lName"] = $project->getAcceptedStudent()->user->last_name;
 			} else {
-				$ar["studentName"] = "-";
+				$ar["fName"] = "-";
+				$ar["lName"] = $student->user->last_name;
 			}
 
 			$ar["projectTitle"] = $project->title;
@@ -478,7 +480,7 @@ class ProjectAdminController extends Controller{
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'Student Name', 'Project Title', 'Supervisor', 'Second Marker'
+			'First Name', 'Last Name', 'Project Title', 'Supervisor', 'Second Marker'
 		));
 
 		foreach($results as $result){
