@@ -72,8 +72,6 @@ class ProjectAdminController extends Controller{
 
 			if($project_load != null){
 				$supervisor->setProjectLoad($project_load);
-			} else {
-				$supervisor->setProjectLoad(0);
 			}
 			$supervisor->setTakingStudents(isset($take_students) ? 1 : 0);
 		}
