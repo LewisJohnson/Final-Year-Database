@@ -270,7 +270,7 @@ class ProjectEvaluationController extends Controller {
 			'questions' => $questions
 		));
 		
-		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
+		session()->flash('message', 'You have successfully submitted Group "'.$group.'".');
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('ProjectEvaluationController@show', $project);
