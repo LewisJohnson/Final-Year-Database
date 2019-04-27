@@ -102,7 +102,8 @@ class ProjectController extends Controller{
 			->orderBy($sortCol, $sortDir)
 			->paginate($this->paginationCount);
 
-		return view('projects.index')->with('projects', $projects)
+		return view('projects.index')
+			->with('projects', $projects)
 			->with('view', 'index');
 	}
 
@@ -138,10 +139,12 @@ class ProjectController extends Controller{
 
 		if(request()->query("preview") == true){
 			return view('projects.partials.project-preview')
-				->with('project', $project)->with('view', $view);
+				->with('project', $project)
+				->with('view', $view);
 		}
 
-		return view('projects.project')->with('project', $project)
+		return view('projects.project')
+			->with('project', $project)
 			->with('view', $view);
 	}
 
@@ -221,7 +224,8 @@ class ProjectController extends Controller{
 			$project = Project::findOrFail($request->project_id);
 
 			ProjectTopic::where('project_id', $project->id)
-				->where('topic_id', $topic->id)->delete();
+				->where('topic_id', $topic->id)
+				->delete();
 		});
 		
 		return response()->json(array('successful' => true));
@@ -353,7 +357,8 @@ class ProjectController extends Controller{
 	 */
 	public function edit(Project $project){
 		if($project->isOwnedByUser() || $project->isUserSupervisorOfProject()){
-			return view('projects.edit')->with('project', $project);
+			return view('projects.edit')
+				->with('project', $project);
 		}
 
 		return redirect()->action('ProjectController@show', $project);
