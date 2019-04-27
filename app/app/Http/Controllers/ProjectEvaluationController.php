@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use SussexProjects\Mode;
 use SussexProjects\Student;
+use SussexProjects\User;
 use SussexProjects\Project;
 use SussexProjects\ProjectEvaluation;
 use SussexProjects\PEQValueTypes;
@@ -39,33 +40,16 @@ class ProjectEvaluationController extends Controller {
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index(){
-		$students = Student::all();
+		$student = new Student();
+		$user = new User();
 
-		$studentsSorted = $students->sortByDesc(function ($student) {
-			$weight = 0;
-
-			if(!empty($student->project->evaluation)){
-				$weight++;
-
-				if($student->project->evaluation->getStatus() == "Finalised"){
-					$weight += 2;
-				}
-
-				if($student->project->evaluation->getStatus() == "Submitted"){
-					$weight++;
-				}
-			}
-
-			if($student->project_status == "accepted"){
-				$weight++;
-			}
-
-			return $weight;
-		});
-
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
 
 		return view('evaluation.index')
-			->with("students", $studentsSorted);
+			->with("students", $students);
 	}
 
 	/**
@@ -76,33 +60,16 @@ class ProjectEvaluationController extends Controller {
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function studentFeedback(){
-		$students = Student::all();
+		$student = new Student();
+		$user = new User();
 
-		$studentsSorted = $students->sortByDesc(function ($student) {
-			$weight = 0;
-
-			if(!empty($student->project->evaluation)){
-				$weight++;
-
-				if($student->project->evaluation->getStatus() == "Finalised"){
-					$weight += 2;
-				}
-
-				if($student->project->evaluation->getStatus() == "Submitted"){
-					$weight++;
-				}
-			}
-
-			if($student->project_status == "accepted"){
-				$weight++;
-			}
-
-			return $weight;
-		});
-
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
 
 		return view('evaluation.feedback')
-			->with("students", $studentsSorted);
+			->with("students", $students);
 	}
 
 	/**

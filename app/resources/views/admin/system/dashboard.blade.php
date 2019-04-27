@@ -152,6 +152,5 @@
 			<div class="content"></div>
 		</div>
 	</div>
-
 </div>
 @endsection
