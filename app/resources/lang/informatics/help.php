@@ -133,6 +133,27 @@ return [
 			</li>
 		</ul>
 
+		<h5>Project Evaluation</h5>
+		<p>There are 2 types of participants for a project evaluation. A Supervisor, and a second marker. Depending on your role, you will have different actions available to you.</p>
+		<ul>
+			<li>
+				<b>Submission & Groups</b><br>
+				Questions are split into alphabetical groups.
+				Once you have submitted a group, you will be able to see the other participants marks and comments.
+				You must fill out every question and write a comment to submit a group.
+			</li>
+
+			<li>
+				<b>Finalise</b><br>
+				Once both participants have completed all groups of project evaluation, the supervisor will be able to finalise the evaluation.
+				Once an evaluation has been finalised, neither participant will be able to edit their marks or comments.<br><br>
+
+				There is a chance the marks will straddle a threshold or have a large difference in percentage.
+				If this is the case, the finalise modal will explain which threshold/percentage you have passed,
+				and you will have to fill in a joint report. 
+			</li>
+		</ul>
+
 		<h5>Reports</h5>
 		<ul>
 			<li>
