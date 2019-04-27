@@ -32,7 +32,7 @@
 	}
 
 	if($maxDifference > 0 && $dissertation->supervisorValue > 0) {
-		if(abs(round((($dissertation->supervisorValue - $dissertation->markerValue) / $dissertation->supervisorValue) * 100)) >= $maxDifference) {
+		if(abs(round((($dissertation->supervisorValue - $dissertation->markerValue) / $dissertation->supervisorValue) * 100)) > $maxDifference) {
 			$differsByPercentage = true;
 		}
 	}
@@ -280,7 +280,7 @@
 												@continue
 											@endif
 
-											<div class="@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly) col-12 @else col-12 col-md-6 @endif">
+											<div class="@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly) col-12 @else col-6 @endif">
 												<p class="m-0">{{ ucfirst($type) }}</p>
 
 												@if(($type == "supervisor" && $canViewSupervisorValuesForGroup) || ($type == "marker" && $canViewMarkerValuesForGroup))
