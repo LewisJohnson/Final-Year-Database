@@ -32,7 +32,7 @@
 		});
 		var height = Math.max(100, (lineHeight * (lineCount / 3)));
 
-		if($(textarea).parent().hasClass('col-md-6')) {
+		if($(textarea).parent().hasClass('col-6')) {
 			$(textarea).css('height', height);
 		} else {
 			$(textarea).css('height', height / 2);
