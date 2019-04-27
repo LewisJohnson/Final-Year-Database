@@ -151,7 +151,6 @@ class ProjectEvaluationController extends Controller {
 			->with("evaluation", $evaluation);
 	}
 
-
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -173,14 +172,11 @@ class ProjectEvaluationController extends Controller {
 		$evaluation = ProjectEvaluation::find($project->evaluation->id);
 		$questions = $project->evaluation->questions;
 
-		$finalise = !empty($request->finalise);
-		$submission = !empty($request->submission);
-
-		if(!$finalise && 
-			(($isProjectSupervisor && $project->evaluation->supervisor_submitted) ||
-			($isProjectMarker && $project->evaluation->marker_submitted))
+		if(
+			($isProjectSupervisor && $project->evaluation->supervisorHasSubmittedAllQuestions()) ||
+			($isProjectMarker && $project->evaluation->markerHasSubmittedAllQuestions())
 		){
-			session()->flash('message', 'You have already submitted your marks.');
+			session()->flash('message', 'You have already submitted all your marks.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $project);
 		}
@@ -197,22 +193,8 @@ class ProjectEvaluationController extends Controller {
 			} elseif($isProjectMarker) {
 				$accessor = "marker";
 			}
-
-			if($finalise) {
-				if($questions[$i]->type == PEQValueTypes::PosterPresentation) {
-					$value = $request->poster_final_mark;
-				} 
-				elseif($questions[$i]->type == PEQValueTypes::OralPresentation) {
-					$value = $request->presentation_final_mark;
-				} 
-				elseif($questions[$i]->type == PEQValueTypes::Dissertation) {
-					$value = $request->dissertation_final_mark;
-				} else {
-					$value = $request[$i.'_'.$accessor.'_value'];
-				}
-			} else {
-				$value = $request[$i.'_'.$accessor.'_value'];
-			}
+			
+			$value = $request[$i.'_'.$accessor.'_value'];
 
 			switch ($questions[$i]->type) {
 				case PEQValueTypes::Scale:
@@ -235,38 +217,140 @@ class ProjectEvaluationController extends Controller {
 					break;
 			}
 
-			if(($finalise && $questions[$i]->type == PEQValueTypes::PosterPresentation) ||
-				($finalise && $questions[$i]->type == PEQValueTypes::OralPresentation) ||
-				($finalise && $questions[$i]->type == PEQValueTypes::Dissertation)) {
+			$valueAccessor = $accessor.'Value';
+			$questions[$i]->$valueAccessor = $value;
 
-				$valueAccessor = 'FinalValue';
-				$commentAccessor ='FinalComment';
+			$commentAccessor = $accessor.'Comment';
+			$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
+		}
 
-				$questions[$i]->$valueAccessor = $value;
+		$evaluation->update(array(
+			'questions' => $questions
+		));
+		
+		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
+		session()->flash('message_type', 'success');
 
-				if($questions[$i]->type == PEQValueTypes::Dissertation) {
-					if(!empty($request->joint_report)) {
-						$questions[$i]->$commentAccessor = $request->joint_report;
-					} else {
-						$questions[$i]->$commentAccessor = "Not required.";
-					}
-				}
-			} else {
-				$valueAccessor = ucfirst($accessor).'Value';
-				$questions[$i]->$valueAccessor = $value;
+		return redirect()->action('ProjectEvaluationController@show', $project);
+	}
 
-				$commentAccessor = ucfirst($accessor).'Comment';
-				$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
+	public function submitGroup(Project $project, string $group, Request $request){
+		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
+		$isProjectMarker = Auth::user()->id == $project->marker->id;
+
+		if(!$isProjectSupervisor && !$isProjectMarker) {
+			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
+		$evaluation = ProjectEvaluation::find($project->evaluation->id);
+
+		if($evaluation->is_finalised) {
+			session()->flash('message', 'This project evaluation has been finalised.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
+
+		$questions = $evaluation->questions;
+
+		for ($i = 0; $i < count($questions); $i++) {
+			if($isProjectSupervisor) {
+				$accessor = "supervisorSubmitted";
+			} elseif($isProjectMarker) {
+				$accessor = "markerSubmitted";
+			}
+
+			if($questions[$i]->group == $group){
+				$questions[$i]->$accessor = true;
 			}
 		}
 
 		$evaluation->update(array(
-			'is_finalised' => $finalise,
-			$isProjectSupervisor ? 'supervisor_submitted' : 'marker_submitted' => $submission,
 			'questions' => $questions
 		));
-
+		
 		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
+		session()->flash('message_type', 'success');
+
+		return redirect()->action('ProjectEvaluationController@show', $project);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Project	$project
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function finalise(Project $project, Request $request){
+		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
+		$isProjectMarker = Auth::user()->id == $project->marker->id;
+
+		if(!$isProjectSupervisor && !$isProjectMarker) {
+			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
+		$evaluation = ProjectEvaluation::find($project->evaluation->id);
+		$questions = $evaluation->questions;
+
+		if($evaluation->is_finalised) {
+			session()->flash('message', 'This project evaluation has already been finalised.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
+
+		if($finalise && strlen($request->joint_report) < 20) {
+			session()->flash('message', 'The joint report is too short.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
+
+		
+		for ($i = 0; $i < count($questions); $i++) {
+			if($isProjectSupervisor) {
+				$accessor = "supervisor";
+			} elseif($isProjectMarker) {
+				$accessor = "marker";
+			}
+
+			if($questions[$i]->type == PEQValueTypes::PosterPresentation) {
+				$value = $request->poster_final_mark;
+			} 
+			elseif($questions[$i]->type == PEQValueTypes::OralPresentation) {
+				$value = $request->presentation_final_mark;
+			} 
+			elseif($questions[$i]->type == PEQValueTypes::Dissertation) {
+				$value = $request->dissertation_final_mark;
+			} else {
+				continue;
+			}
+			
+			$value = (int)max(0, min(100, $value));
+
+			$valueAccessor = 'finalValue';
+			$commentAccessor ='finalComment';
+
+			$questions[$i]->$valueAccessor = $value;
+
+			if($questions[$i]->type == PEQValueTypes::Dissertation) {
+				if(!empty($request->joint_report)) {
+					$questions[$i]->$commentAccessor = $request->joint_report;
+				} else {
+					$questions[$i]->$commentAccessor = "Not required.";
+				}
+			}
+		}
+
+		$evaluation->update(array(
+			'is_finalised' => true,
+			'questions' => $questions
+		));
+		
+		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been finalised.');
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('ProjectEvaluationController@show', $project);
@@ -286,15 +370,15 @@ class ProjectEvaluationController extends Controller {
 			if(($questions[$i]->type == PEQValueTypes::PosterPresentation) ||
 				($questions[$i]->type == PEQValueTypes::OralPresentation) ||
 				($questions[$i]->type == PEQValueTypes::Dissertation)) {
-					$questions[$i]->FinalValue = 0;
-					$questions[$i]->FinalComment = "-";
+					$questions[$i]->finalValue = 0;
+					$questions[$i]->finalComment = "-";
+					$questions[$i]->supervisorSubmitted = false;
+					$questions[$i]->markerSubmitted = false;
 			}
 		}
 
 		$evaluation->update(array(
 			'is_finalised' => false,
-			'supervisor_submitted' => false,
-			'marker_submitted' => false,
 			'questions' => $questions
 		));
 
@@ -339,9 +423,9 @@ class ProjectEvaluationController extends Controller {
 
 			if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
 				$eval = $student->project->evaluation;
-				$ar["posterMark"] = $eval->getPosterPresentationQuestion()->FinalValue;
-				$ar["presentationMark"] = $eval->getOralPresentationQuestion()->FinalValue;
-				$ar["dissertationMark"] = $eval->getDissertationQuestion()->FinalValue;
+				$ar["posterMark"] = $eval->getPosterPresentationQuestion()->finalValue;
+				$ar["presentationMark"] = $eval->getOralPresentationQuestion()->finalValue;
+				$ar["dissertationMark"] = $eval->getDissertationQuestion()->finalValue;
 			} else {
 				$ar["posterMark"] = '-';
 				$ar["presentationMark"] = '-';
@@ -412,28 +496,21 @@ class ProjectEvaluationController extends Controller {
 
 				$ar["supervisor"] = $student->project->supervisor->user->getFullName();
 
-				if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
-					$ar["supervisorFeedback"] = $student->project->evaluation->getStudentFeedback()->SupervisorComment;
-				} else {
-					$ar["supervisorFeedback"] = '-';
-				}
-
 				if(!empty($student->project->marker)){
 					$ar["marker"] = $student->project->marker->user->getFullName();
-
-					if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
-						$ar["markerFeedback"] = $student->project->evaluation->getStudentFeedback()->MarkerComment;
-					} else {
-						$ar["markerFeedback"] = '-';
-					}
 				} else {
 					$ar["marker"] = '-';
 				}
 
+				if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
+					$ar["feedback"] = $student->project->evaluation->getStudentFeedbackQuestion()->supervisorComment;
+				} else {
+					$ar["feedback"] = '-';
+				}
 			} else {
 				$ar["proj"] = '-';
+				$ar["supervisor"] = '-';
 				$ar["marker"] = '-';
-				$ar["markerFeedback"] = '-';
 			}
 
 			array_push($results, $ar);
@@ -443,8 +520,8 @@ class ProjectEvaluationController extends Controller {
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'Registration Number' , 'Student First name', 'Student Last name', 'Programme', 'Project Title',
-			'Supervisor Name', 'Supervisor Feedback', 'Marker Name', 'Marker Feedback'
+			'Registration Number' , 'Student First name', 'Student Last name', 'Programme', 
+			'Project Title', 'Supervisor Name', 'Marker Name', 'Feedback'
 		));
 
 		foreach($results as $result){

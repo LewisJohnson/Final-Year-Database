@@ -469,6 +469,7 @@
 	// 1.7.3 Print
 	$(".js-print-project-evaluation").on("click", function(){
 		$('#ExpandQuestions:not([aria-expanded="true"])').click();
+		$(".main-content").removeClass("mt-5");
 		window.print();
 	});
 
@@ -482,34 +483,37 @@
 		var card = $(this).closest('.card');
 
 		card.addClass("js-print-card");
-		card.find(".card-title").addClass('h2').addClass('d-inline-block').before('<h2 class="d-inline-block delete-me">Student:&nbsp;</h2>');
-		card.find(".card-subtitle").addClass('h3').addClass('d-inline-block').before('<br class="delete-me"><h3 class="d-inline-block delete-me">Project:&nbsp;</h3>');
+		card.find(".card-title").addClass('h5').addClass('d-inline-block').before('<h5 class="d-inline-block delete-me">Student:&nbsp;</h5>');
+		card.find(".card-subtitle").addClass('h5').addClass('d-inline-block').before('<br class="delete-me"><h5 class="d-inline-block delete-me">Project:&nbsp;</h5>');
 
 		$("#card-container").removeClass("card-columns");
+		$(".main-content").removeClass("mt-5").addClass("mt-3");
 		$(".card:not(.js-print-card)").hide();
 		window.print();
 	});
 
 	var isAllStudentFeedbackPrint = false;
 
+	// 1.8.2 Print all
 	$(".js-print-all-student-feedback").on("click", function(){
 		isAllStudentFeedbackPrint = true;
 
 		var cards = $('.card');
 
 		cards.after('<p class="delete-me" style="page-break-before: always">');
-		cards.find(".card-title").addClass('h3').addClass('d-inline-block').before('<h2 class="delete-me">Student Feedback</h2><br class="delete-me"><h3 class="d-inline-block delete-me">Student:&nbsp;</h3>');
-		cards.find(".card-subtitle").addClass('h3').addClass('d-inline-block').before('<br class="delete-me"><h3 class="d-inline-block delete-me">Project:&nbsp;</h3>');
+		cards.find(".card-title").addClass('h5').addClass('d-inline-block').before('<h3 class="delete-me mt-3">Student Feedback</h3><br class="delete-me"><h5 class="d-inline-block delete-me">Student:&nbsp;</h5>');
+		cards.find(".card-subtitle").addClass('h5').addClass('d-inline-block').before('<br class="delete-me"><h5 class="d-inline-block delete-me">Project:&nbsp;</h5>');
 
 		$("#page-title").hide();
 		$("#card-container").removeClass("card-columns");
+		$(".main-content").removeClass("mt-5");
 		window.print();
 	});
 
 	window.onafterprint = function(){
-		if(isSingleStudentFeedbackPrint){
+		if(isSingleStudentFeedbackPrint || isAllStudentFeedbackPrint){
 			$(".js-print-card").removeClass("js-print-card");
-			$(".h2, .h3").removeClass('h2 h3 d-inline-block');
+			$(".h5").removeClass('h5 d-inline-block');
 			$(".delete-me").remove();
 
 			$("#card-container").addClass("card-columns");
@@ -519,18 +523,13 @@
 		}
 
 		if(isAllStudentFeedbackPrint){
-			$(".js-print-card").removeClass("js-print-card");
-			$(".h3").removeClass('h3 d-inline-block');
-			$(".delete-me").remove();
-
-			$("#card-container").addClass("card-columns");
-			$(".card").show();
-
+			$("#page-title").show();
 			isAllStudentFeedbackPrint = false;
 		}
+
+		$(".main-content").removeClass("mt-3").addClass("mt-5");
 	}
 
-	// 1.8.2 Print All
 	/* =================
 	 	2.SYSTEM ADMIN
 	   ================ */

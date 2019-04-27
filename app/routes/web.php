@@ -329,6 +329,12 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Update project evaluation
 	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');
+
+	// Submit project evaluation group
+	Route::patch('projects/{project}/evaluation/submit/{group}', 'ProjectEvaluationController@submitGroup');
+
+	// Finalise project evaluation
+	Route::patch('projects/{project}/evaluation/finalise', 'ProjectEvaluationController@finalise');
 });
 
 /* =================

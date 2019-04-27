@@ -42,17 +42,17 @@
 							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
 	
 							<td class="border-left"><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
-							<td>{{ $evaluation->supervisor_submitted ? $dissertation->SupervisorValue : '-' }}</td>
+							<td>{{ $evaluation->supervisor_submitted ? $dissertation->supervisorValue : '-' }}</td>
 							<td>{{ $evaluation->supervisor_submitted ? 'Yes' : 'No' }}</td>
 	
 							<td class="border-left"><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
-							<td>{{  $evaluation->marker_submitted ? $dissertation->MarkerValue : '-' }}</td>
+							<td>{{  $evaluation->marker_submitted ? $dissertation->markerValue : '-' }}</td>
 							<td>{{ $evaluation->marker_submitted ? 'Yes' : 'No' }}</td>
 	
 							@if($evaluation->is_finalised)
-								<td class="border-left">{{ $poster->FinalValue }}</td>
-								<td>{{ $presentation->FinalValue }}</td>
-								<td>{{ $dissertation->FinalValue }}</td>
+								<td class="border-left">{{ $poster->finalValue }}</td>
+								<td>{{ $presentation->finalValue }}</td>
+								<td>{{ $dissertation->finalValue }}</td>
 							@else
 								<td class="border-left" style="opacity: 0.3">-</td>
 								<td style="opacity: 0.3">-</td>

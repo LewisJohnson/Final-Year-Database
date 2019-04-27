@@ -12,19 +12,31 @@ class ProjectEvaluationQuestion {
 	public $description;
 	public $type;
 
-	public $SupervisorValue;
-	public $SupervisorComment;
+	public $group;
 
-	public $MarkerValue;
-	public $MarkerComment;
+	public $submissionType;
 
-	public $FinalValue;
-	public $FinalComment;
+	public $supervisorValue;
+	public $supervisorComment;
 
-	function __construct($title, $description, $type) {
+	public $markerValue;
+	public $markerComment;
+
+	public $finalValue;
+	public $finalComment;
+
+	public $minCommentLength;
+
+	public $supervisorSubmitted;
+	public $markerSubmitted;
+
+	function __construct($title, $description, $type,  $submissionType, $minCommentLength, $group) {
 		$this->title = $title;
 		$this->description = $description;
 		$this->type = $type;
+		$this->group = $group;
+		$this->minCommentLength = $minCommentLength;
+		$this->submissionType = $submissionType;
     }
 
 	// JSON mapper
@@ -33,15 +45,35 @@ class ProjectEvaluationQuestion {
 		$this->description = $data->description;
 		$this->type = $data->type;
 
-		$this->SupervisorValue = $data->SupervisorValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->SupervisorComment = $data->SupervisorComment ?? "-";
+		$this->group = $data->group;
 
-		$this->MarkerValue = $data->MarkerValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->MarkerComment = $data->MarkerComment ?? "-";
+		$this->minCommentLength = $data->minCommentLength;
+		$this->submissionType = $data->submissionType;
 
-		$this->FinalValue = $data->FinalValue ?? PEQValueTypes::getDefaultValue($this->type);
-		$this->FinalComment = $data->FinalComment ?? "-";
+		$this->supervisorValue = $data->supervisorValue;
+		$this->supervisorComment = $data->supervisorComment ?? "";
+
+		$this->markerValue = $data->markerValue;
+		$this->markerComment = $data->markerComment ?? "";
+
+		$this->finalValue = $data->finalValue;
+		$this->finalComment = $data->finalComment ?? "";
+
+		$this->supervisorSubmitted = $data->supervisorSubmitted ?? false;
+		$this->markerSubmitted = $data->markerSubmitted ?? false;
 	}
+}
+
+class PEQSubmissionTypes {
+	/**
+	 * Both markers have to submit and answer
+	 */
+	const Both = 0;
+
+	/**
+	 * Supervisor only
+	 */
+	const SupervisorOnly = 1;
 }
 
 class PEQValueTypes {
@@ -88,35 +120,12 @@ class PEQValueTypes {
 
 
 	/**
-	 * A question where a value is not required (Relies soely on comment).
+	 * A question where a value is not required (Relies solely on comment).
 	 */
 	const CommentOnly = 8;
 
 	/**
-	 * A question where a value is not required (Relies soely on comment).
+	 * A question where a value is not required (Relies solely on comment).
 	 */
 	const StudentFeedback = 9;
-
-	public static function getDefaultValue($type){
-		switch ($type) {
-			case PEQValueTypes::PlainText:
-			case PEQValueTypes::CommentOnly:
-			case PEQValueTypes::StudentFeedback:
-				return "";
-				break;
-			
-			case PEQValueTypes::Scale:
-			case PEQValueTypes::Number:
-			case PEQValueTypes::PosterPresentation:
-			case PEQValueTypes::OralPresentation:
-			case PEQValueTypes::Dissertation:
-			case PEQValueTypes::YesNo:
-				return 0;
-				break;
-
-			case PEQValueTypes::YesPossiblyNo:
-				return 'No';
-				break;
-		}
-	}
 }

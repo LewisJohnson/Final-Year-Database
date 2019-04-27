@@ -30,8 +30,13 @@
 		$.each(lines, function() {
 			lineCount += Math.ceil(this.length / columns) || 1;
 		});
-		var height = Math.max(100, (lineHeight * (lineCount + 3) / 2));
-		$(textarea).css('height', height);
+		var height = Math.max(100, (lineHeight * (lineCount / 3)));
+
+		if($(textarea).parent().hasClass('col-md-6')) {
+			$(textarea).css('height', height);
+		} else {
+			$(textarea).css('height', height / 2);
+		}
 	};
 
 	var isInEditMode = false;
@@ -51,26 +56,30 @@
 		selectorModifier = ".marker ";
 	}
 
-	// Hides the custom field delete buttons
+	// Hide save and cancel buttons
 	$("#save").hide();
+	$("#cancel").hide();
+
+	// Hides the custom field delete buttons
 	$(".js-input").hide();
 	$(".custom-range").hide();
 
 	$("#edit").on('click', function(e){
 		e.preventDefault();
+		editMode();
+	});
 
-		if(isInEditMode){
-			// This is the cancel button
-			window.location.reload();
-		} else {
-			editMode();
-		}
+	$("#cancel").on('click', function(e){
+		e.preventDefault();
+		window.location.reload();
 	});
 
 	var userHasSeenShortJointReportLength = false;
 
 	$("#finalise").on('click', function(e){
-		$(".js-error").remove()
+		e.preventDefault();
+
+		$(".js-error").remove();
 		var posterMark = parseInt($("#poster-final-mark").val());
 		var presentationMark = parseInt($("#presentation-final-mark").val());
 		var dissertationMark = parseInt($("#dissertation-final-mark").val());
@@ -87,7 +96,7 @@
 			return;
 		}
 
-		if($("#jointReport").length > 1){
+		if($("#jointReport").length > 0){
 			if($("#jointReport").val().length < 120){
 				$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">The joint report must be at least 120 characters.</p>');
 				$(".dialog .container").scrollTop(999999);
@@ -102,18 +111,8 @@
 			}
 		}
 
-		$(".dialog .container").find("input, textarea").removeClass('d-inline-block').addClass('d-none');
-
 		window['Dialog'].showLoader();
-
-		$("#project-evaluation-form").append($(".dialog .container").find("input, textarea"));
-		$("#project-evaluation-form").submit();
-	});
-
-	$("#submit-evaluation").on('click', function(e){
-		window['Dialog'].showLoader();
-		$("#project-evaluation-form").append('<input type="hidden" name="submission" value="true">');
-		$("#project-evaluation-form").submit();
+		$("#project-evaluation-finalise-form").submit();
 	});
 
 	$('body').on('input change', '.custom-range', function(){
@@ -184,6 +183,16 @@
 				text = "Excellent";
 				rgb = "9, 228, 1";
 			break;
+
+			default:
+				text = "Not Set";
+				rgb = "50, 50, 50";
+			break;
+		}
+
+		if(input.is('[data-unset]')){
+			text = "Not Set";
+			rgb = "50, 50, 50";
 		}
 
 		input.prev('.js-value').text(text);
@@ -192,18 +201,30 @@
 
 	function editMode(){
 		// Into edit mode
-		$(".comment" + selectorModifier).hide();
-		$(".js-value" + selectorModifier).hide();
 
-		$("#edit").text('Cancel');
-		$("#submission").hide();
+		$(".js-value" + selectorModifier).each(function(){
+			var group = $(this).data('group');
 
+			if($("#submitted_group_" + group).length == 0){
+				$(this).hide();
+				$(this).next(".js-input" + selectorModifier).show();
+				$(this).next("textarea" + selectorModifier).show();
+				$(this).next(".custom-range" + selectorModifier).prev('.js-value').show();
+				$(this).next(".comment" + selectorModifier).hide();
+			}
+		});
+
+		$("[data-unset]").removeAttr("data-unset");
+
+		$("#edit").hide();
+		$("#cancel").show();
 		$("#save").show();
+
+		// Hide all submit buttons
+		$(".js-submission").hide();
+
+		// Hide finalise button
 		$("#finaliseEvaluation").hide();
-		
-		$("textarea" + selectorModifier).show();
-		$(".custom-range" + selectorModifier).prev('.js-value').show();
-		$(".js-input" + selectorModifier).show();
 
 		isInEditMode = true;
 	}

@@ -7,33 +7,33 @@
 	$userIsSupervisor = Auth::user()->id == $supervisor->id;
 	$userIsMarker = Auth::user()->id == $marker->id;
 
-	$canViewSupervisorValues = $userIsSupervisor || ($userIsMarker && $evaluation->marker_submitted);
-	$canViewMarkerValues = $userIsMarker || ($userIsSupervisor && $evaluation->supervisor_submitted);
-
-	if(Auth::user()->isExternalMarker()){
-		$canViewSupervisorValues = true;
-		$canViewMarkerValues = true;
-	}
-
 	$questions = $evaluation->getQuestions();
 
 	$poster = $evaluation->getPosterPresentationQuestion();
 	$presentation = $evaluation->getOralPresentationQuestion();
 	$dissertation = $evaluation->getDissertationQuestion();
+	$studentFeedback = $evaluation->getStudentFeedbackQuestion();
 
 	$thresholds = SussexProjects\Mode::getThresholds();
-
-	$isFilled = $userIsSupervisor ? $evaluation->isFilled('Supervisor') : $evaluation->isFilled('Marker');
+	$maxDifference = SussexProjects\Mode::getEvaluationPercentageDifference();
 
 	$straddles = false;
-	if(!empty($thresholds)){
-		if(count($thresholds) > 0){
+	$differsByPercentage = false;
+	
+	if(!empty($thresholds)) {
+		if(count($thresholds) > 0) {
 			foreach($thresholds as $threshold) {
-				if(($dissertation->SupervisorValue > $threshold && $dissertation->MarkerValue < $threshold) ||
-					($dissertation->SupervisorValue < $threshold && $dissertation->MarkerValue > $threshold)) {
-					$straddles = $threshold;
+				if(($dissertation->supervisorValue > $threshold && $dissertation->markerValue < $threshold) ||
+					($dissertation->supervisorValue < $threshold && $dissertation->markerValue > $threshold)) {
+						$straddles = $threshold;
 				}
 			}
+		}
+	}
+
+	if($maxDifference > 0 && $dissertation->supervisorValue > 0) {
+		if(abs(round((($dissertation->supervisorValue - $dissertation->markerValue) / $dissertation->supervisorValue) * 100)) >= $maxDifference) {
+			$differsByPercentage = true;
 		}
 	}
 @endphp
@@ -48,12 +48,18 @@
 	<script src="{{ asset('js/views/admin.js') }}"></script>
 @endsection
 
+<style>
+	.js-value {
+
+	}
+</style>
 @section('content')
 
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
 		<div class="col-12 text-right">
-			<button class="btn btn-primary js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
+			<a class="btn btn-outline-primary" href="{{ action('HomeController@help') }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
+			<button class="btn btn-primary ml-2 js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
 		</div>
 
 		<div class="col-12 mt-3">
@@ -68,8 +74,8 @@
 						{{ method_field('PATCH') }}
 					@endif
 
-					@if(!$evaluation->is_finalised && $userIsSupervisor && $evaluation->supervisor_submitted)
-						@if($evaluation->marker_submitted)
+					@if(!$evaluation->is_finalised && $userIsSupervisor)
+						@if($evaluation->supervisorHasSubmittedAllQuestions() && $evaluation->markerHasSubmittedAllQuestions())
 							<p class="bg-success rounded text-white text-center w-100 p-2">
 								READY TO BE FINALISED
 							</p>
@@ -86,8 +92,8 @@
 								@if($evaluation->is_finalised)
 									<span class="ml-auto text-danger">Finalised</span>
 								@else
-									@if(($userIsSupervisor && $evaluation->supervisor_submitted) || 
-										($userIsMarker && $evaluation->marker_submitted))
+									@if(($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions()) || 
+										($userIsMarker && $evaluation->markerHasSubmittedAllQuestions()))
 										<span class="ml-auto text-success">Submitted</span>
 										
 									@else
@@ -132,24 +138,16 @@
 							</div>
 
 							<div class="mt-3 d-flex align-items-end d-print-none">
-								@if($userIsSupervisor && !$canViewMarkerValues)
-									<span class="text-muted">The second marker's marks are hidden until you submit your evaluation</span>
-								@elseif($userIsMarker && !$canViewSupervisorValues)
-									<span class="text-muted">The supervisor's marks are hidden until you submit your evaluation</span>
-								@endif
-
 								@if(!$evaluation->is_finalised)
 									<div class="ml-auto">
-										@if(($userIsSupervisor && !$evaluation->supervisor_submitted) || 
-												($userIsMarker && !$evaluation->marker_submitted))
-											<button type="button" id="edit" class="btn btn-secondary">Edit</button>
-											<button id="save" class="btn btn-primary">Save</button>
-											<button id="submission" type="button" data-activator data-dialog="submit-evaluation-dialog" class="btn btn-primary">Submit</button>
+										@if(($userIsSupervisor && !$evaluation->supervisorHasSubmittedAllQuestions()) || 
+												($userIsMarker && !$evaluation->markerHasSubmittedAllQuestions()))
+											<button type="button" id="edit" class="btn btn-secondary"><span class="svg-xs">@include('svg.pencil')</span>Edit</button>
 										@else
-											@if(!$evaluation->supervisor_submitted)
-												<p class="text-muted">The project evaluation can not be finalised because {{ $supervisor->getFullName() }} has not submitted their evaluation.</p>
-											@elseif(!$evaluation->marker_submitted)
-												<p class="text-muted">The project evaluation can not be finalised because {{ $marker->getFullName() }} has not submitted their evaluation.</p>
+											@if(!$evaluation->supervisorHasSubmittedAllQuestions())
+												<p class="text-muted">The project evaluation is not ready to be finalised because {{ $supervisor->getFullName() }} has not completed their evaluation.</p>
+											@elseif(!$evaluation->markerHasSubmittedAllQuestions())
+												<p class="text-muted">The project evaluation is not ready to be finalised because {{ $marker->getFullName() }} has not completed their evaluation.</p>
 											@elseif($userIsSupervisor)
 												<button id="finalise-evaluation" type="button" data-activator="true" data-dialog="finalise-evaluation-dialog" class="btn btn-primary">Finalise</button>
 											@endif
@@ -168,7 +166,7 @@
 												<label class="text-muted mb-0"><span class="svg-sm">@include('svg.eye')</span>Poster</label>
 												
 												<div class="text-center text-muted" style="font-size: 2rem">
-													{{ $poster->FinalValue }}%
+													{{ $poster->finalValue }}%
 												</div>
 											</div>
 
@@ -176,7 +174,7 @@
 												<label class="text-muted mb-0"><span class="svg-sm">@include('svg.presentation')</span>Presentation</label>
 														
 												<div class="text-center text-muted" style="font-size: 2rem">
-													{{ $presentation->FinalValue }}%
+													{{ $presentation->finalValue }}%
 												</div>
 											</div>
 
@@ -184,66 +182,133 @@
 												<label class="text-muted mb-0"><span class="svg-md">@include('svg.paper-stacked')</span>Dissertation Mark</label>
 						
 												<div class="text-center text-muted" style="font-size: 4rem">
-													{{ $dissertation->FinalValue }}%
+													{{ $dissertation->finalValue }}%
 												</div>
 											</div>
 										</div>
 									</div>
 
 									<div class="col-12 col-sm-6 col-md-8">
-										<label>Joint Report</label>
-										<p class="pl-2" style="white-space: pre-wrap;">{{ $dissertation->FinalComment }}</p>
+										<label><b>Joint Report</b></label>
+										<p class="pl-2" style="white-space: pre-wrap;">{{ $dissertation->finalComment }}</p>
+									</div>
+
+									<div class="col-12">
+										<label><b>Student Feedback</b></label>
+										<p class="pl-2" style="white-space: pre-wrap;">{{ $studentFeedback->supervisorComment }}</p>
 									</div>
 								</div>
 
 								<button class="btn btn-light mt-5 w-100" id="ExpandQuestions" type="button" data-toggle="collapse" data-target="#ProjectEvaluationQuestions">Show all comments</button>
 							@endif
 
-							<div @if($evaluation->is_finalised) id="ProjectEvaluationQuestions" class="collapse mt-3" @endif>
-								@foreach($evaluation->getQuestions() as $question)
+							<div id="ProjectEvaluationQuestions" @if($evaluation->is_finalised) class="collapse mt-3" @endif>
+								@php
+									$prevQuestionGroup = null;
+								@endphp
+
+								@foreach($questions as $question)
+									@php
+										$canViewSupervisorValuesForGroup = $userIsSupervisor || ($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group));
+										$canViewMarkerValuesForGroup = $userIsMarker || ($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group));
+
+										$supervisorHasSubmitted = $userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group);
+										$markerHasSubmitted = $userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group);
+
+										if(Auth::user()->isExternalMarker()){
+											$canViewSupervisorValuesForGroup = true;
+											$canViewMarkerValuesForGroup = true;
+										}
+									@endphp
+
 									<div class="row">
 										<div class="col-12">
-											<p>
-												<span class="text-uppercase font-weight-bold">{{ $loop->iteration.". ".$question->title }}</span> @if(!empty($question->description)) ({{ $question->description }}) @endif
-											</p>
+											@if($prevQuestionGroup == null)
+												<h1 class="mt-5 mb-3">Group {{ $question->group }}</h1>
+											@endif
 										</div>
 
-										<input type="hidden" name="{{ $loop->index }}_type" value="{{ $question->type }}">
+										<div class="col-12">
+											@if($prevQuestionGroup != $question->group)
+												@if($prevQuestionGroup != null)
+													{{-- PREV GOURP --}}
+
+													@if(!$evaluation->is_finalised)
+														@if(
+															($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($prevQuestionGroup)) || 
+															($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($prevQuestionGroup))
+														)
+															<p class="text-right text-muted">
+																You have submitted Group {{ $prevQuestionGroup }}
+															</p>
+
+															<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
+														@else
+															<div class="text-right">
+																<button class="btn js-submission btn-primary mt-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit Group {{ $prevQuestionGroup }}</button>
+															</div>
+														@endif
+													@endif
+
+													{{-- NEW GROUP --}}
+													<h1 class="mt-5 mb-3">Group {{ $question->group }}</h1>
+
+													@if($userIsSupervisor && !$canViewMarkerValuesForGroup)
+														<h6 class="text-muted">The second marker's marks are hidden until you submit <b>Group {{ $question->group }}</b></h6>
+													@elseif($userIsMarker && !$canViewSupervisorValuesForGroup)
+														<h6 class="text-muted">The supervisor's marks are hidden until you submit <b>Group {{ $question->group }}</b></h6>
+													@endif
+												@endif
+
+												@php
+													$prevQuestionGroup = $question->group;
+												@endphp
+											@endif
+										</div>
+
+										<div class="col-12 d-flex">
+											<span class="text-uppercase font-weight-bold">{{ $loop->iteration.". ".$question->title }}</span>@if(!empty($question->description))<span class="text-muted">&nbsp;{{ $question->description }}</span>@endif
+										</div>
 
 										@foreach(['supervisor', 'marker'] as $type)
 											@php
-												$valueAccessor = ucfirst($type).'Value';
-												$commentAccessor = ucfirst($type).'Comment';
+												$valueAccessor = $type.'Value';
+												$commentAccessor = $type.'Comment';
 											@endphp
 
-											<div class="col-6">
+											@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker")
+												@continue
+											@endif
+
+											<div class="@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly) col-12 @else col-12 col-md-6 @endif">
 												<p class="m-0">{{ ucfirst($type) }}</p>
 
-												@if(($type == "supervisor" && $canViewSupervisorValues) || ($type == "marker" && $canViewMarkerValues))
+												@if(($type == "supervisor" && $canViewSupervisorValuesForGroup) || ($type == "marker" && $canViewMarkerValuesForGroup))
 													@switch($question->type)
 														@case(SussexProjects\PEQValueTypes::Scale)
-															<p class="js-value {{ $type }} pl-2"></p>
-															<input class="js-input {{ $type }} custom-range" type="range" step="1" min="0" max="10" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}">
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2"></p>
+															<input class="js-input {{ $type }} custom-range" type="range" step="1" min="0" max="10" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}" @if($question->$valueAccessor == null) data-unset @endif>
 															@break
 
 														@case(SussexProjects\PEQValueTypes::Number)
 														@case(SussexProjects\PEQValueTypes::PosterPresentation)
 														@case(SussexProjects\PEQValueTypes::OralPresentation)
 														@case(SussexProjects\PEQValueTypes::Dissertation)
-															<p class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
 															<input class="js-input {{ $type }} form-control" type="number" step="1" min="0" max="100" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}">
 															@break
 
 														@case(SussexProjects\PEQValueTypes::YesNo)
-															<p class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor == 0 ? 'No' : 'Yes' }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor == 0 ? 'No' : 'Yes' }}</p>
 															<select class="js-input {{ $type }} form-control" name="{{ $loop->parent->index }}_{{ $type }}_value">
+																<option @if($question->$valueAccessor == null) selected @endif value="NULL">Not Set</option>
 																<option @if($question->$valueAccessor == 0) selected @endif value="0">No</option>
 																<option @if($question->$valueAccessor == 1) selected @endif value="1">Yes</option>
 															</select>
 															@break
 
 														@case(SussexProjects\PEQValueTypes::YesPossiblyNo)
-															<p class="js-value {{ $type }} pl-2">
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">
 																@switch($question->$valueAccessor)
 																	@case(0)
 																		No
@@ -266,11 +331,11 @@
 													
 														@case(SussexProjects\PEQValueTypes::CommentOnly)
 														@case(SussexProjects\PEQValueTypes::StudentFeedback)
-															<p class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
 															@break
 
 														@default
-															<p class="js-value {{ $type }}">{{ $question->$valueAccessor }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }}">{{ $question->$valueAccessor }}</p>
 															<input class="js-input {{ $type }} form-control" type="text" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}">
 													@endswitch
 
@@ -279,7 +344,7 @@
 														<p class="mt-3 mb-1 {{ $loop->index > 0 ? 'invisible' : '' }}">Comments:</p>
 													@endif
 
-													<p class="js-value {{ $type }} pl-2 mt-3" style="min-height: 100px;">{{ $question->$commentAccessor }}</p>
+													<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2 mt-3" style="min-height: 100px;">{{ $question->$commentAccessor }}</p>
 													<textarea class="js-input {{ $type }} mb-3 form-control" style="min-height: 100px;" name="{{ $loop->parent->index }}_{{ $type }}_comment">{{ $question->$commentAccessor }}</textarea>
 												@else
 													<p class="bg-light text-muted mt-1 py-1 text-center rounded">Hidden</p>
@@ -288,9 +353,38 @@
 												@endif
 											</div>
 										@endforeach
+
+										@if($loop->iteration == count($questions) && !$evaluation->is_finalised)
+											@if(
+												($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group)) || 
+												($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group))
+											)
+												<div class="col-12 text-right">
+													<p class="text-muted">
+														You have submitted Group {{ $question->group }}
+													</p>
+
+													<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
+												</div>
+											@else
+												<div class="col-12 text-right">
+													<button class="btn js-submission btn-primary my-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit Group {{ $prevQuestionGroup }}</button>
+												</div>
+											@endif
+										@endif
 									</div>
 								@endforeach
 							</div>
+
+							@if(!$evaluation->is_finalised)
+								<div class="text-right">
+									@if(($userIsSupervisor && !$evaluation->supervisorHasSubmittedAllQuestions()) || 
+											($userIsMarker && !$evaluation->markerHasSubmittedAllQuestions()))
+										<button id="save" class="btn btn-primary">Save</button>
+										<button id="cancel" class="btn btn-secondary">Cancel</button>
+									@endif
+								</div>
+							@endif
 						</div>
 					</div>
 				</form>
@@ -308,50 +402,63 @@
 	</div>
 </div>
 
-@if(($userIsSupervisor && !$evaluation->supervisor_submitted) || 
-	($userIsMarker && !$evaluation->marker_submitted))
+@foreach($evaluation->getGroups() as $group)
+	@php
+		$isFilled = $userIsSupervisor ? $evaluation->hasSupervisorFilledGroup($group) : $evaluation->hasMarkerFilledGroup($group);
+		$showSubmitModalForCurrentGroup = 
+				($userIsSupervisor && !$evaluation->supervisorHasSubmittedAllQuestions($group)) || 
+				($userIsMarker && !$evaluation->markerHasSubmittedAllQuestions($group));
+	@endphp
 
-	{{-- SUBMIT MODAL --}}
-	<div class="dialog" data-dialog="submit-evaluation-dialog">
-		<div class="border-bottom">
-			<h4 id="dialog-title" class="text-center p-3 m-0 font-weight-bold text-uppercase">Submit Project Evaluation</h4>
-		</div>
+	@if($showSubmitModalForCurrentGroup)
 
-		<div class="container px-4 pb-3">
-			<div class="row mt-3">
-				@if($isFilled)
-					<div class="col-12">
-						<div class="form-group row">
-							<label class="col-sm-2 col-form-label"><b>Project</b></label>
-							<div class="col-sm-10">
-								<input type="text" readonly class="form-control-plaintext" value="{{ $project->title }}">
+		{{-- SUBMIT MODAL --}}
+		<div class="dialog" data-dialog="submit-group-{{ $group }}-dialog">
+			<div class="border-bottom">
+				<h4 id="dialog-title" class="text-center p-3 m-0 font-weight-bold text-uppercase">Submit Project Evaluation</h4>
+			</div>
+
+			<div class="container px-4 pb-3">
+				<div class="row mt-3">
+					@if($isFilled)
+						<div class="col-12">
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label"><b>Project</b></label>
+								<div class="col-sm-10">
+									<input type="text" readonly class="form-control-plaintext" value="{{ $project->title }}">
+								</div>
 							</div>
+
+							<p>
+								You are about to submit your part for <b>Group {{ $group }}</b> of the project evaluation.
+								Once you do this, you will no longer be able to edit your marks or comments for this section.
+							</p>
 						</div>
+					@else
+						<div class="col-12">
+							<p>You may not submit <b>Group {{ $group }}</b> of the project evaluation for the following reasons:</p>
 
-						<p>
-							You are about to submit your half of the project evaluation.
-							Once you do this, you will no longer be able to edit your marks or comments.
-						</p>
-					</div>
-				@else
-					<div class="col-12">
-						<p>You may not submit the project evaluation for the following reasons:</p>
-
-						<ul>
-							{!! $userIsSupervisor ? $evaluation->getQuestionsLeftToFillSummary('Supervisor') : $evaluation->getQuestionsLeftToFillSummary('Marker') !!}
-						</ul>
-					</div>
-				@endif
+							<ul>
+								{!! $userIsSupervisor ? $evaluation->getSupervisorQuestionsLeftToFillSummary($group) : $evaluation->getMarkerQuestionsLeftToFillSummary($group) !!}
+							</ul>
+						</div>
+					@endif
+				</div>
 			</div>
+
+			@if($isFilled)
+				<div class="footer bg-light border-top p-2 text-right">
+					<form id="project-evaluation-submit-group-{{ $group }}-form" action="{{ action('ProjectEvaluationController@submitGroup', ['project' => $project->id, 'group' => $group]) }}" method="POST" accept-charset="utf-8">
+						{{ csrf_field() }}
+						{{ method_field('PATCH') }}
+
+						<button data-group="{{ $group }}" type="submit" class="btn btn-primary">SUBMIT</button>
+					</form>
+				</div>
+			@endif
 		</div>
-
-		@if($isFilled)
-			<div class="footer bg-light border-top p-2 text-right">
-				<button id="submit-evaluation" type="button" class="btn btn-primary">SUBMIT</button>
-			</div>
-		@endif
-	</div>
-@endif
+	@endif
+@endforeach
 
 @if(!$evaluation->is_finalised)
 	{{-- FINALISE MODAL --}}
@@ -361,66 +468,76 @@
 		</div>
 
 		<div class="container px-4 pb-3">
-			<div class="row mt-3">
-				<div class="col-6">
-					<p>
-						You are about to finalise the project evaluation for the project "{{ $project->title }}".
-						Once you do this, the evaluation will no longer be editable by you or the second marker.
-					</p>
-
-					@if($straddles != false)
-						<h4>Straddle</h4>
+			<form id="project-evaluation-finalise-form" action="{{ action('ProjectEvaluationController@finalise', ['project' => $project->id]) }}" method="POST" accept-charset="utf-8">
+				<div class="row mt-3">
+					<div class="col-6">
 						<p>
-							The student's mark is straddling.
-							This means that yours and the second marker's marks straddle a threshold.
-							The threshold the mark is straddling is <b>{{ $straddles }}%</b>.
-							Because of this, you must fill out a joint report explaining how you and the second marker came to the agreed dissertation mark.
-							<br><br>
-							Before finalising this report, please make sure you and <b>{{ $marker->getFullName() }}</b> fully agree on the mark.
+							You are about to finalise the project evaluation for the project "{{ $project->title }}".
+							Once you do this, the evaluation will no longer be editable by you or the second marker.
 						</p>
+
+						@if($straddles != false)
+							<h4>Straddle</h4>
+							<p>
+								The student's mark is straddling.
+								This means that the second marker's marks and yours straddle a threshold.
+								The threshold the mark is straddling is <b>{{ $straddles }}%</b>.
+								Because of this, you must fill out a joint report explaining how you and the second marker came to the agreed dissertation mark.
+								<br><br>
+								Before finalising this report, please make sure you and <b>{{ $marker->getFullName() }}</b> fully agree on the mark.
+							</p>
+						@endif
+
+						@if($differsByPercentage)
+							<h4>Percentage Threshold</h4>
+							<p>
+								The difference between the second marker's marks and yours are greater than {{ $maxDifference }}%.
+								Because of this, you must fill out a joint report explaining how you and the second marker came to the agreed dissertation mark.
+								<br><br>
+								Before finalising this report, please make sure you and <b>{{ $marker->getFullName() }}</b> fully agree on the mark.
+							</p>
+						@endif
+					</div>
+
+					<div class="col-6">
+						<label class="text-muted"><span class="svg-sm">@include('svg.eye')</span>Poster Mark</label>
+						<div class="d-flex">
+							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="poster-final-mark" name="poster_final_mark" value="{{ floor(($poster->supervisorValue + $poster->markerValue) / 2) }}" min="0" max="100" step="1">
+							<span class="p-2" style="font-size: 2rem">%</span>
+						</div>
+						<p class="text-muted mb-0"><small>Supervisor {{ $poster->supervisorValue }} | Marker {{ $poster->markerValue }}</small></p>
+
+						<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.presentation')</span>Oral Presentation Mark</label>
+						<div class="d-flex">
+							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="presentation-final-mark" name="presentation_final_mark" value="{{ floor(($presentation->supervisorValue + $presentation->markerValue) / 2) }}" min="0" max="100" step="1">
+							<span class="p-2" style="font-size: 2rem">%</span>
+						</div>
+						<p class="text-muted mb-0"><small>Supervisor {{ $presentation->supervisorValue }} | Marker {{ $presentation->markerValue }}</small></p>
+
+						<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation Mark</label>
+						<div class="d-flex">
+							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="dissertation-final-mark" name="dissertation_final_mark" value="{{ floor(($dissertation->supervisorValue + $dissertation->markerValue) / 2) }}" min="0" max="100" step="1">
+							<span class="p-2" style="font-size: 2rem">%</span>
+						</div>
+						<p class="text-muted mb-0"><small>Supervisor {{ $dissertation->supervisorValue }} | Marker {{ $dissertation->markerValue }}</small></p>
+
+						<p class="mt-1 text-muted"><small>Fields are auto-filled with the average mark</small></p>
+					</div>
+
+					@if($straddles != false || $differsByPercentage)
+						<div class="col-12 mt-3">
+							<div class="form-group">
+								<label for="jointReport">Joint Report <br><ins><small>Explain how you and {{ $marker->first_name }} agreed on the final dissertation mark.</small></ins></label>
+								<textarea class="form-control" style="min-height: 200px" name="joint_report" id="jointReport"></textarea>
+							</div>
+						</div>
 					@endif
 				</div>
-
-				<div class="col-6">
-					<label class="text-muted"><span class="svg-sm">@include('svg.eye')</span>Poster Mark</label>
-					<div class="d-flex">
-						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="poster-final-mark" name="poster_final_mark" value="{{ floor(($poster->SupervisorValue + $poster->MarkerValue) / 2) }}" min="0" max="100" step="1">
-						<span class="p-2" style="font-size: 2rem">%</span>
-					</div>
-					<p class="text-muted mb-0"><small>Supervisor {{ $poster->SupervisorValue }} | Marker {{ $poster->MarkerValue }}</small></p>
-
-					<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.presentation')</span>Oral Presentation Mark</label>
-					<div class="d-flex">
-						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="presentation-final-mark" name="presentation_final_mark" value="{{ floor(($presentation->SupervisorValue + $presentation->MarkerValue) / 2) }}" min="0" max="100" step="1">
-						<span class="p-2" style="font-size: 2rem">%</span>
-					</div>
-					<p class="text-muted mb-0"><small>Supervisor {{ $presentation->SupervisorValue }} | Marker {{ $presentation->MarkerValue }}</small></p>
-
-					<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation Mark</label>
-					<div class="d-flex">
-						<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="dissertation-final-mark" name="dissertation_final_mark" value="{{ floor(($dissertation->SupervisorValue + $dissertation->MarkerValue) / 2) }}" min="0" max="100" step="1">
-						<span class="p-2" style="font-size: 2rem">%</span>
-					</div>
-					<p class="text-muted mb-0"><small>Supervisor {{ $dissertation->SupervisorValue }} | Marker {{ $dissertation->MarkerValue }}</small></p>
-
-					<p class="mt-1 text-muted"><small>Fields are auto-filled with the average mark</small></p>
-				</div>
-
-				@if($straddles != false)
-					<div class="col-12 mt-3">
-						<div class="form-group">
-							<label for="jointReport">Joint Report <br><ins><small>Explain how you and {{ $marker->first_name }} agreed on the final dissertation mark.</small></ins></label>
-							<textarea class="form-control" style="min-height: 200px" name="joint_report" id="jointReport"></textarea>
-						</div>
-					</div>
-				@endif
-
-				<input type="hidden" name="finalise" value="true">
-			</div>
+			</form>
 		</div>
 		
 		<div class="footer bg-light border-top p-2 text-right">
-			<button id="finalise" type="button" class="btn btn-primary">{{ $straddles == false ? "FINALISE" : "AGREE & FINALISE"}}</button>
+			<button id="finalise" type="button" class="btn btn-primary">{{ ($straddles == false || $differsByPercentage) ? "FINALISE" : "AGREE & FINALISE"}}</button>
 		</div>
 	</div>
 @endif

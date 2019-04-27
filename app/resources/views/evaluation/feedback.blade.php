@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
-
 	<h1 id="page-title">Project Evaluation Student Feedback</h1>
 
  	<div class="d-flex w-100">
@@ -27,8 +26,12 @@
 						<h5 class="card-title">{{ $student->user->getFullName() }}</h5>
 						<h6 class="card-subtitle mb-2 text-muted">{{ $project->title }}</h6>
 
-						<p class="card-text"><b>{{ $project->supervisor->user->getFullName() }}</b><br>{{ $evaluation->getStudentFeedback()->SupervisorComment }}</p>
-						<p class="card-text"><b>{{ $project->marker->user->getFullName() }}</b><br>{{ $evaluation->getStudentFeedback()->MarkerComment }}</p>
+						<p class="card-text">
+							<b>Supervisor:</b> {{ $project->supervisor->user->getFullName() }}<br>
+							<b>Second Marker:</b> {{ $project->marker->user->getFullName() }}
+						</p>
+
+						<p class="card-text">{{ $evaluation->getStudentFeedbackQuestion()->supervisorComment }}</p>
 
 						<a href="{{ action('ProjectEvaluationController@show', $student->project) }}" class="ml-auto card-link d-print-none"><span class="svg-sm">@include('svg.clipboard-check')</span></a>
 						<a href="#print" class="card-link d-print-none js-print-student-feedback"><span class="svg-sm">@include('svg.printer')</span></a>

@@ -83,12 +83,44 @@ class ProjectEvaluation extends Model {
 		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
 
+	public function supervisorHasSubmittedAllQuestions($group = null){
+		foreach($this->getQuestions() as $question) {
+			if($group != null){
+				if($question->group != $group){
+					continue;
+				}
+			}
+
+			if(!$question->supervisorSubmitted){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function markerHasSubmittedAllQuestions($group = null){
+		foreach($this->getQuestions() as $question) {
+			if($group != null){
+				if($question->group != $group){
+					continue;
+				}
+			}
+
+			if(!$question->markerSubmitted){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	public function getStatus(){
 		if($this->is_finalised){
 			return "Finalised";
 		}
 
-		if($this->supervisor_submitted && $this->marker_submitted){
+		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
 			return "Submitted";
 		}
 
@@ -100,18 +132,30 @@ class ProjectEvaluation extends Model {
 			return "text-danger";
 		}
 
-		if($this->supervisor_submitted && $this->marker_submitted){
+		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
 			return "text-success";
 		}
 
 		return "text-warning";
 	}
 
+	public function getGroups(){
+		$groups = [];
+
+		foreach($this->getQuestions() as $question) {
+			if(!in_array($question->group, $groups)) {
+				array_push($groups, $question->group);
+			}
+		}
+
+		return $groups;
+	}
+
 	public function getQuestions(){
 		$questions = [];
 
 		foreach($this->questions as $question) {
-			$peq = new ProjectEvaluationQuestion(null, null, null);
+			$peq = new ProjectEvaluationQuestion(null, null, null, null, null, null);
 			$peq->map($question);
 
 			array_push($questions, $peq);
@@ -150,60 +194,123 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding dissertation mark.");
 	}
 
-	public function getStudentFeedback(){
+	public function getStudentFeedbackQuestion(){
 		foreach($this->getQuestions() as $question) {
 			if($question->type == PEQValueTypes::StudentFeedback) {
 				return $question;
 			}
 		}
 
-		throw new Exception("Error finding dissertation mark.");
+		throw new Exception("Error finding student feedback.");
 	}
 
-	public function isFilled($type) {
-
-		$commentAccessor = $type."Comment";
-
+	public function hasSupervisorFilledGroup($group) {
 		foreach ($this::getQuestions() as $question) {
-			// We probably only want Scale and Number types
-			if($question->type == PEQValueTypes::Scale || 
-				$question->type == PEQValueTypes::Number ||
-				$question->type == PEQValueTypes::PosterPresentation ||
-				$question->type == PEQValueTypes::OralPresentation ||
-				$question->type == PEQValueTypes::Dissertation ||
-				$question->type == PEQValueTypes::StudentFeedback){
-				// We don't check values because the student could have failed every question
+			if($question->group != $group){
+				continue;
+			}
 
-				// Check comments 
-				if(strlen($question->$commentAccessor) < 20){
+			if(is_null($question->supervisorValue)){
+				if($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback){
 					return false;
 				}
+			}
+
+			// Check comments 
+			if(strlen($question->supervisorComment) < $question->minCommentLength){
+				return false;
 			}
 		}
 
 		return true;
 	}
 
-	public function getQuestionsLeftToFillSummary($type) {
+	public function hasMarkerFilledGroup($group) {
+		foreach ($this::getQuestions() as $question) {
+			if($question->group != $group){
+				continue;
+			}
+			
+			if($question->submissionType == PEQSubmissionTypes::SupervisorOnly){
+				continue;
+			}
 
-		$commentAccessor = $type."Comment";
+			if(is_null($question->markerValue)){
+				if($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback){
+					return false;
+				}
+			}
+
+			// Check comments 
+			if(strlen($question->markerComment) < $question->minCommentLength){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function getSupervisorQuestionsLeftToFillSummary($group) {
 		$output = "";
 
 		foreach($this::getQuestions() as $question) {
-			// We probably only want Scale and Number types
-			if($question->type == PEQValueTypes::Scale ||
-				$question->type == PEQValueTypes::Number ||
-				$question->type == PEQValueTypes::PosterPresentation ||
-				$question->type == PEQValueTypes::OralPresentation ||
-				$question->type == PEQValueTypes::Dissertation ||
-				$question->type == PEQValueTypes::StudentFeedback){
-				// We don't check values because the student could have failed every question
+			if($question->group != $group){
+				continue;
+			}
 
-				if(strlen($question->$commentAccessor) < 20){
-					$output .= '<li class="list-unstyled"><b>'.$question->title.':</b>';
-					$output .= "	<li>Comment is too short</li>";
-					$output .= "<br></li>";
-				}
+			$isBad = (is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)) || 
+				strlen($question->supervisorComment) < $question->minCommentLength;
+
+			if($isBad){
+				$output .= '<li class="list-unstyled"><b>'.$question->title.'</b>';
+			}
+
+			if(is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)){
+				$output .= "	<li>Value is not filled in</li>";
+			}
+
+			if(strlen($question->supervisorComment) < $question->minCommentLength){
+				$output .= "	<li>Comment is too short</li>";
+			}
+
+			if($isBad){
+				$output .= "<br></li>";
+			}
+			
+		}
+
+		return $output;
+	}
+
+	public function getMarkerQuestionsLeftToFillSummary($group) {
+
+		$output = "";
+
+		foreach($this::getQuestions() as $question) {
+			if($question->group != $group){
+				continue;
+			}
+
+			if($question->submissionType == PEQSubmissionTypes::SupervisorOnly){
+				continue;
+			}
+
+			$isBad = is_null($question->markerValue) || strlen($question->markerComment) < $question->minCommentLength;
+
+			if($isBad){
+				$output .= '<li class="list-unstyled"><b>'.$question->title.'</b>';
+			}
+
+			if(is_null($question->markerValue) && ($question->type != PEQValueTypes::CommentOnly || $question->type != PEQValueTypes::StudentFeedback)){
+				$output .= "	<li>Value is not filled in</li>";
+			}
+
+			if(strlen($question->markerComment) < $question->minCommentLength){
+				$output .= "	<li>Comment is too short</li>";
+			}
+
+			if($isBad){
+				$output .= "<br></li>";
 			}
 		}
 

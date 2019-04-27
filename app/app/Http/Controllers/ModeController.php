@@ -53,7 +53,10 @@ class ModeController extends Controller{
 				new ProjectEvaluationQuestion(
 					$request->title[$i],
 					$request->description[$i],
-					$request->type[$i]
+					$request->type[$i],
+					$request->group[$i],
+					$request->minCommentLength[$i],
+					$request->submissionType[$i]
 			));
 
 			if($request->type[$i] == PEQValueTypes::PosterPresentation) {
@@ -164,6 +167,7 @@ class ModeController extends Controller{
 
 		$mode->evaluation_questions = $questions;
 		$mode->thresholds = $request->thresholds;
+		$mode->project_evaluation_percentage_difference = $request->project_evaluation_percentage_difference;
 		
 		$mode->save();
 

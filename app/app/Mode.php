@@ -99,6 +99,7 @@ class Mode extends Model{
 			$newMode->supervisor_accept = $carbon->addYear();
 			$newMode->marker_released_to_staff = false;
 			$newMode->evaluation_questions = Mode::getPresetQuestions();
+			$newMode->project_evaluation_date = $carbon->addYear();
 			$newMode->save();
 
 			return $newMode;
@@ -205,7 +206,16 @@ class Mode extends Model{
 	}
 
 	/**
-	 * Gets the boolean is marker realeased to staff
+	 * Gets the default questions for project evaluations
+	 *
+	 * @return string
+	 */
+	public static function getEvaluationPercentageDifference(){
+		return Mode::Instance()->project_evaluation_percentage_difference;
+	}
+
+	/**
+	 * Gets the boolean is marker released to staff
 	 *
 	 * @return string
 	 */
@@ -220,85 +230,133 @@ class Mode extends Model{
 			new ProjectEvaluationQuestion(
 				"Basic Criteria",
 				"Understanding of problem / Completion of project / Overall quality of work / Extent to which objectives are met",
-				PEQValueTypes::Scale
-		));
+				PEQValueTypes::Scale,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Quality of Research & Analysis",
 				"Clear objectives / Background literature / Research / Difficulty of the problem / Completeness / Professional issues",
-				PEQValueTypes::Scale
-		));
+				PEQValueTypes::Scale,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Technical Quality",
 				"Depends on project type; for CS/GAME programming required",
-				PEQValueTypes::Scale
-		));
+				PEQValueTypes::Scale,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Writeup Quality",
 				"Organization / Clarity / References / General presentation / English / Diagrams and figures / Within word limit",
-				PEQValueTypes::Scale
-		));
+				PEQValueTypes::Scale,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Evaluation",
 				"Justification of decisions / Critical Evaluation of achievements",
-				PEQValueTypes::Scale
-		));
+				PEQValueTypes::Scale,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Exceptional Criteria",
 				"Evidence of outstanding merit / Contains publishable material / Reaches beyond taught courses",
-				PEQValueTypes::YesPossiblyNo
-		));
+				PEQValueTypes::YesPossiblyNo,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Additional Comments",
 				"Justify your mark referring to the comments above where useful",
-				PEQValueTypes::CommentOnly
-		));
+				PEQValueTypes::CommentOnly,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Have you actually seen a working version of this system / video / application?",
 				"",
-				PEQValueTypes::YesNo
-		));
+				PEQValueTypes::YesNo,
+				PEQSubmissionTypes::Both,
+				20,
+				'A'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Poster Presentation Mark %",
 				"",
-				PEQValueTypes::PosterPresentation
-		));
+				PEQValueTypes::PosterPresentation,
+				PEQSubmissionTypes::Both,
+				20,
+				'B'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Oral Presentation Mark %",
 				"",
-				PEQValueTypes::OralPresentation
-		));
+				PEQValueTypes::OralPresentation,
+				PEQSubmissionTypes::Both,
+				20,
+				'C'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Mark for Dissertation %",
 				"",
-				PEQValueTypes::Dissertation
-		));
+				PEQValueTypes::Dissertation,
+				PEQSubmissionTypes::Both,
+				20,
+				'D'
+			)
+		);
 
 		array_push($questions,
 			new ProjectEvaluationQuestion(
 				"Student Feedback",
 				"",
-				PEQValueTypes::StudentFeedback
-		));
+				PEQValueTypes::StudentFeedback,
+				PEQSubmissionTypes::SupervisorOnly,
+				50,
+				'D'
+			)
+		);
 
 		return $questions;
 	}
