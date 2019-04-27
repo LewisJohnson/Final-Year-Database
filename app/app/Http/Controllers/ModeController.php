@@ -57,7 +57,8 @@ class ModeController extends Controller{
 					$request->group[$i],
 					$request->minCommentLength[$i],
 					$request->submissionType[$i]
-			));
+				)
+			);
 
 			if($request->type[$i] == PEQValueTypes::PosterPresentation) {
 				$amountOfPosterQuestions++;

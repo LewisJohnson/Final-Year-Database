@@ -30,7 +30,7 @@ class ProjectEvaluationQuestion {
 	public $supervisorSubmitted;
 	public $markerSubmitted;
 
-	function __construct($title, $description, $type,  $submissionType, $minCommentLength, $group) {
+	function __construct($title, $description, $type, $group, $minCommentLength, $submissionType) {
 		$this->title = $title;
 		$this->description = $description;
 		$this->type = $type;
