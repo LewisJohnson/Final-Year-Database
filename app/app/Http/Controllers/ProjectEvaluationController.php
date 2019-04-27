@@ -170,7 +170,7 @@ class ProjectEvaluationController extends Controller {
 		}
 
 		$evaluation = ProjectEvaluation::find($project->evaluation->id);
-		$questions = $project->evaluation->questions;
+		$questions = $evaluation->questions;
 
 		if(
 			($isProjectSupervisor && $project->evaluation->supervisorHasSubmittedAllQuestions()) ||
@@ -308,15 +308,8 @@ class ProjectEvaluationController extends Controller {
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $project);
 		}
-
 		
 		for ($i = 0; $i < count($questions); $i++) {
-			if($isProjectSupervisor) {
-				$accessor = "supervisor";
-			} elseif($isProjectMarker) {
-				$accessor = "marker";
-			}
-
 			if($questions[$i]->type == PEQValueTypes::PosterPresentation) {
 				$value = $request->poster_final_mark;
 			} 

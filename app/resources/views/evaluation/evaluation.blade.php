@@ -223,7 +223,7 @@
 
 									<div class="row">
 										<div class="col-12">
-											@if($prevQuestionGroup == null)
+											@if(is_null($prevQuestionGroup))
 												<h1 class="mt-5 mb-3">Group {{ $question->group }}</h1>
 											@endif
 										</div>
@@ -287,21 +287,29 @@
 													@switch($question->type)
 														@case(SussexProjects\PEQValueTypes::Scale)
 															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2"></p>
-															<input class="js-input {{ $type }} custom-range" type="range" step="1" min="0" max="10" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}" @if($question->$valueAccessor == null) data-unset @endif>
+															<input class="js-input {{ $type }} custom-range" type="range" step="1" min="0" max="10" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}" @if(is_null($question->$valueAccessor)) data-unset @endif>
 															@break
 
 														@case(SussexProjects\PEQValueTypes::Number)
 														@case(SussexProjects\PEQValueTypes::PosterPresentation)
 														@case(SussexProjects\PEQValueTypes::OralPresentation)
 														@case(SussexProjects\PEQValueTypes::Dissertation)
-															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ is_null($question->$valueAccessor) ? 'Not Set' : $question->$valueAccessor }}</p>
 															<input class="js-input {{ $type }} form-control" type="number" step="1" min="0" max="100" name="{{ $loop->parent->index }}_{{ $type }}_value" value="{{ $question->$valueAccessor }}">
 															@break
 
 														@case(SussexProjects\PEQValueTypes::YesNo)
-															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor == 0 ? 'No' : 'Yes' }}</p>
+															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">
+																@if(is_null($question->$valueAccessor))
+																	Not Set
+																@elseif($question->$valueAccessor == 0)
+																	No
+																@elseif($question->$valueAccessor == 1)
+																	Yes
+																@endif
+															</p>
+
 															<select class="js-input {{ $type }} form-control" name="{{ $loop->parent->index }}_{{ $type }}_value">
-																<option @if($question->$valueAccessor == null) selected @endif value="NULL">Not Set</option>
 																<option @if($question->$valueAccessor == 0) selected @endif value="0">No</option>
 																<option @if($question->$valueAccessor == 1) selected @endif value="1">Yes</option>
 															</select>
@@ -309,23 +317,21 @@
 
 														@case(SussexProjects\PEQValueTypes::YesPossiblyNo)
 															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">
-																@switch($question->$valueAccessor)
-																	@case(0)
-																		No
-																		@break
-																	@case(1)
-																		Possibly
-																		@break
-																	@case(2)
-																		Yes
-																		@break
-																@endswitch
+																@if(is_null($question->$valueAccessor))
+																	Not Set
+																@elseif($question->$valueAccessor === 0)
+																	No
+																@elseif($question->$valueAccessor === 1)
+																	Possibly
+																@elseif($question->$valueAccessor === 2)
+																	Yes
+																@endif
 															</p>
 
 															<select class="js-input {{ $type }} form-control" name="{{ $loop->parent->index }}_{{ $type }}_value">
-																<option @if($question->$valueAccessor == 0) selected @endif value="0">No</option>
-																<option @if($question->$valueAccessor == 1) selected @endif value="1">Possibly</option>
-																<option @if($question->$valueAccessor == 2) selected @endif value="2">Yes</option>
+																<option @if($question->$valueAccessor === 0) selected @endif value="0">No</option>
+																<option @if($question->$valueAccessor === 1) selected @endif value="1">Possibly</option>
+																<option @if($question->$valueAccessor === 2) selected @endif value="2">Yes</option>
 															</select>
 															@break
 													
