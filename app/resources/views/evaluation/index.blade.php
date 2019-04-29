@@ -33,26 +33,47 @@
 						@php
 							$project = $student->project;
 							$evaluation = $project->evaluation;
-							$poster = $evaluation->getPosterPresentationQuestion();
-							$presentation = $evaluation->getOralPresentationQuestion();
-							$dissertation = $evaluation->getDissertationQuestion();
+
+							$poster = null;
+							$presentation = null;
+							$dissertation = null;
+
+							if($evaluation->hasPosterPresentationQuestion()){
+								$poster = $evaluation->getPosterPresentationQuestion();
+							}
+
+							if($evaluation->hasOralPresentationQuestion()){
+								$presentation = $evaluation->getOralPresentationQuestion();
+							}
+
+							if($evaluation->hasDissertationQuestion()){
+								$dissertation = $evaluation->getDissertationQuestion();
+							}
 						@endphp
 						<tr>
 							<td>{{ $student->user->getFullName() }}</td>
 							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
 	
 							<td class="border-left"><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
-							<td>{{ $evaluation->supervisor_submitted ? $dissertation->supervisorValue : '-' }}</td>
-							<td>{{ $evaluation->supervisor_submitted ? 'Yes' : 'No' }}</td>
+							@if(is_null($dissertation))
+								<td>n/a</td>
+							@else
+								<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? $dissertation->supervisorValue : '-' }}</td>
+							@endif
+							<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
 	
 							<td class="border-left"><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
-							<td>{{  $evaluation->marker_submitted ? $dissertation->markerValue : '-' }}</td>
-							<td>{{ $evaluation->marker_submitted ? 'Yes' : 'No' }}</td>
-	
+							@if(is_null($dissertation))
+								<td>n/a</td>
+							@else
+								<td>{{ $evaluation->markerHasSubmittedAllQuestions() ? $dissertation->markerValue : '-' }}</td>
+							@endif
+							<td>{{ $evaluation->markerHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
+
 							@if($evaluation->is_finalised)
-								<td class="border-left">{{ $poster->finalValue }}</td>
-								<td>{{ $presentation->finalValue }}</td>
-								<td>{{ $dissertation->finalValue }}</td>
+								<td class="border-left">{{ is_null($poster) ? 'n/a' : $poster->finalValue }}</td>
+								<td>{{ is_null($presentation) ? 'n/a' : $presentation->finalValue }}</td>
+								<td>{{ is_null($dissertation) ? 'n/a' : $dissertation->finalValue }}</td>
 							@else
 								<td class="border-left" style="opacity: 0.3">-</td>
 								<td style="opacity: 0.3">-</td>

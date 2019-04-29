@@ -84,14 +84,35 @@
 		var presentationMark = parseInt($("#presentation-final-mark").val());
 		var dissertationMark = parseInt($("#dissertation-final-mark").val());
 
-		if(!Number.isInteger(posterMark) || !Number.isInteger(presentationMark) || !Number.isInteger(dissertationMark)){
+		if(Window["hasPosterPresentationQuestion"] && !Number.isInteger(posterMark)){
+			if((posterMark < 0 || posterMark > 100)){
+				$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be between 0 - 100.</p>');
+				$(".dialog .container").scrollTop(999999);
+			}
+
 			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be an integer.</p>');
 			$(".dialog .container").scrollTop(999999);
 			return;
 		}
 
-		if((posterMark < 0 || posterMark > 100) || (presentationMark < 0 || presentationMark > 100) || (dissertationMark < 0 || dissertationMark > 100)){
-			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be between 0 - 100.</p>');
+		if(Window["hasOralPresentationQuestion"] && !Number.isInteger(presentationMark)){
+			if((presentationMark < 0 || presentationMark > 100)){
+				$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be between 0 - 100.</p>');
+				$(".dialog .container").scrollTop(999999);
+			}
+
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be an integer.</p>');
+			$(".dialog .container").scrollTop(999999);
+			return;
+		}
+
+		if(Window["hasDissertationQuestion"] && !Number.isInteger(dissertationMark)){
+			if((dissertationMark < 0 || dissertationMark > 100)){
+				$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be between 0 - 100.</p>');
+				$(".dialog .container").scrollTop(999999);
+			}
+
+			$(".dialog .container").append('<p class="js-error mt-2 p-2 text-white bg-danger">Values must be an integer.</p>');
 			$(".dialog .container").scrollTop(999999);
 			return;
 		}

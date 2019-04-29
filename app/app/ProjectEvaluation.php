@@ -164,6 +164,16 @@ class ProjectEvaluation extends Model {
 		return $questions;
 	}
 
+	public function hasPosterPresentationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::PosterPresentation) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public function getPosterPresentationQuestion(){
 		foreach($this->getQuestions() as $question) {
 			if($question->type == PEQValueTypes::PosterPresentation) {
@@ -172,6 +182,16 @@ class ProjectEvaluation extends Model {
 		}
 
 		throw new Exception("Error finding poster mark.");
+	}
+
+	public function hasOralPresentationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::OralPresentation) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function getOralPresentationQuestion(){
@@ -184,6 +204,17 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding oral presentation mark.");
 	}
 
+
+	public function hasDissertationQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::Dissertation) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 	public function getDissertationQuestion(){
 		foreach($this->getQuestions() as $question) {
 			if($question->type == PEQValueTypes::Dissertation) {

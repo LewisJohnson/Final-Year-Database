@@ -270,7 +270,7 @@ class ProjectEvaluationController extends Controller {
 			return redirect()->action('ProjectEvaluationController@show', $project);
 		}
 
-		if($finalise && strlen($request->joint_report) < 20) {
+		if(!empty($request->joint_report) && strlen($request->joint_report) < 30) {
 			session()->flash('message', 'The joint report is too short.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $project);
@@ -383,9 +383,25 @@ class ProjectEvaluationController extends Controller {
 
 			if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
 				$eval = $student->project->evaluation;
-				$ar["posterMark"] = $eval->getPosterPresentationQuestion()->finalValue;
-				$ar["presentationMark"] = $eval->getOralPresentationQuestion()->finalValue;
-				$ar["dissertationMark"] = $eval->getDissertationQuestion()->finalValue;
+
+				if($eval->hasPosterPresentationQuestion()){
+					$ar["posterMark"] = $eval->getPosterPresentationQuestion()->finalValue;
+				} else {
+					$ar["posterMark"] = 'n/a';
+				}
+
+				if($eval->hasOralPresentationQuestion()){
+					$ar["presentationMark"] = $eval->getOralPresentationQuestion()->finalValue;
+				} else {
+					$ar["presentationMark"] = 'n/a';
+				}
+
+				if($eval->hasDissertationQuestion()){
+					$ar["dissertationMark"] = $eval->getDissertationQuestion()->finalValue;
+				} else {
+					$ar["dissertationMark"] = 'n/a';
+				}
+
 			} else {
 				$ar["posterMark"] = '-';
 				$ar["presentationMark"] = '-';

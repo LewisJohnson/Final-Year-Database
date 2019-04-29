@@ -84,27 +84,6 @@ class ModeController extends Controller{
 			}
 		}
 
-		if($amountOfPosterQuestions < 1) {
-			session()->flash('message', 'There must be at least 1 "Poster Presentation" question');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('ModeController@index');
-		}
-
-		if($amountOfOralQuestions < 1) {
-			session()->flash('message', 'There must be at least 1 "Oral Presentation" question');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('ModeController@index');
-		}
-
-		if($amountOfDissertationQuestions < 1) {
-			session()->flash('message', 'There must be at least 1 "Dissertation" question');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('ModeController@index');
-		}
-
 		if($amountOfStudentFeedbackQuestions < 1) {
 			session()->flash('message', 'There must be at least 1 "Student Feedback" question');
 			session()->flash('message_type', 'error');

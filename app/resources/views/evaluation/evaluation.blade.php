@@ -9,9 +9,18 @@
 
 	$questions = $evaluation->getQuestions();
 
-	$poster = $evaluation->getPosterPresentationQuestion();
-	$presentation = $evaluation->getOralPresentationQuestion();
-	$dissertation = $evaluation->getDissertationQuestion();
+	if($evaluation->hasPosterPresentationQuestion()){
+		$poster = $evaluation->getPosterPresentationQuestion();
+	}
+
+	if($evaluation->hasOralPresentationQuestion()){
+		$presentation = $evaluation->getOralPresentationQuestion();
+	}
+
+	if($evaluation->hasDissertationQuestion()){
+		$dissertation = $evaluation->getDissertationQuestion();
+	}
+
 	$studentFeedback = $evaluation->getStudentFeedbackQuestion();
 
 	$thresholds = SussexProjects\Mode::getThresholds();
@@ -20,20 +29,22 @@
 	$straddles = false;
 	$differsByPercentage = false;
 	
-	if(!empty($thresholds)) {
-		if(count($thresholds) > 0) {
-			foreach($thresholds as $threshold) {
-				if(($dissertation->supervisorValue > $threshold && $dissertation->markerValue < $threshold) ||
-					($dissertation->supervisorValue < $threshold && $dissertation->markerValue > $threshold)) {
-						$straddles = $threshold;
+	if($evaluation->hasDissertationQuestion()){
+		if(!empty($thresholds)) {
+			if(count($thresholds) > 0) {
+				foreach($thresholds as $threshold) {
+					if(($dissertation->supervisorValue > $threshold && $dissertation->markerValue < $threshold) ||
+						($dissertation->supervisorValue < $threshold && $dissertation->markerValue > $threshold)) {
+							$straddles = $threshold;
+					}
 				}
 			}
 		}
-	}
 
-	if($maxDifference > 0 && $dissertation->supervisorValue > 0) {
-		if(abs(round((($dissertation->supervisorValue - $dissertation->markerValue) / $dissertation->supervisorValue) * 100)) > $maxDifference) {
-			$differsByPercentage = true;
+		if($maxDifference > 0 && $dissertation->supervisorValue > 0) {
+			if(abs(round((($dissertation->supervisorValue - $dissertation->markerValue) / $dissertation->supervisorValue) * 100)) > $maxDifference) {
+				$differsByPercentage = true;
+			}
 		}
 	}
 @endphp
@@ -42,6 +53,10 @@
 	<script type="text/javascript">
 		Window["isSupervisor"] = {{ $userIsSupervisor ? 'true' : 'false' }};
 		Window["isMarker"] = {{ $userIsMarker ? 'true' : 'false' }};
+
+		Window["hasPosterPresentationQuestion"] = {{ $evaluation->hasPosterPresentationQuestion() ? 'true' : 'false' }};
+		Window["hasOralPresentationQuestion"] = {{ $evaluation->hasOralPresentationQuestion() ? 'true' : 'false' }};
+		Window["hasDissertationQuestion"] = {{ $evaluation->hasDissertationQuestion() ? 'true' : 'false' }};
 	</script>
 
 	<script src="{{ asset('js/views/project-evaluation.js') }}"></script>
@@ -162,36 +177,41 @@
 								<div class="row">
 									<div class="col-12 col-sm-6 col-md-4">
 										<div class="row">
-											<div class="col-6">
-												<label class="text-muted mb-0"><span class="svg-sm">@include('svg.eye')</span>Poster</label>
-												
-												<div class="text-center text-muted" style="font-size: 2rem">
-													{{ $poster->finalValue }}%
+											@if($evaluation->hasPosterPresentationQuestion())
+												<div class="col-6">
+													<label class="text-muted mb-0"><span class="svg-sm">@include('svg.eye')</span>Poster</label>
+													<div class="text-center text-muted" style="font-size: 2rem">
+														{{ $poster->finalValue }}%
+													</div>
 												</div>
-											</div>
+											@endif
 
-											<div class="col-6">
-												<label class="text-muted mb-0"><span class="svg-sm">@include('svg.presentation')</span>Presentation</label>
-														
-												<div class="text-center text-muted" style="font-size: 2rem">
-													{{ $presentation->finalValue }}%
+											@if($evaluation->hasOralPresentationQuestion())
+												<div class="col-6">
+													<label class="text-muted mb-0"><span class="svg-sm">@include('svg.presentation')</span>Presentation</label>
+													<div class="text-center text-muted" style="font-size: 2rem">
+															{{ $presentation->finalValue }}%
+													</div>
 												</div>
-											</div>
+											@endif
 
-											<div class="col-12 mt-3">
-												<label class="text-muted mb-0"><span class="svg-md">@include('svg.paper-stacked')</span>Dissertation Mark</label>
-						
-												<div class="text-center text-muted" style="font-size: 4rem">
-													{{ $dissertation->finalValue }}%
+											@if($evaluation->hasDissertationQuestion())
+												<div class="col-12 mt-3">
+													<label class="text-muted mb-0"><span class="svg-md">@include('svg.paper-stacked')</span>Dissertation Mark</label>
+													<div class="text-center text-muted" style="font-size: 4rem">
+															{{ $dissertation->finalValue }}%
+													</div>
 												</div>
-											</div>
+											@endif
 										</div>
 									</div>
 
-									<div class="col-12 col-sm-6 col-md-8">
-										<label><b>Joint Report</b></label>
-										<p class="pl-2" style="white-space: pre-wrap;">{{ $dissertation->finalComment }}</p>
-									</div>
+									@if($evaluation->hasDissertationQuestion())
+										<div class="col-12 col-sm-6 col-md-8">
+											<label><b>Joint Report</b></label>
+											<p class="pl-2" style="white-space: pre-wrap;">{{ $dissertation->finalComment }}</p>
+										</div>
+									@endif
 
 									<div class="col-12">
 										<label><b>Student Feedback</b></label>
@@ -475,6 +495,9 @@
 
 		<div class="container px-4 pb-3">
 			<form id="project-evaluation-finalise-form" action="{{ action('ProjectEvaluationController@finalise', ['project' => $project->id]) }}" method="POST" accept-charset="utf-8">
+				{{ csrf_field() }}
+				{{ method_field('PATCH') }}
+
 				<div class="row mt-3">
 					<div class="col-6">
 						<p>
@@ -507,26 +530,39 @@
 
 					<div class="col-6">
 						<label class="text-muted"><span class="svg-sm">@include('svg.eye')</span>Poster Mark</label>
-						<div class="d-flex">
-							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="poster-final-mark" name="poster_final_mark" value="{{ floor(($poster->supervisorValue + $poster->markerValue) / 2) }}" min="0" max="100" step="1">
-							<span class="p-2" style="font-size: 2rem">%</span>
-						</div>
-						<p class="text-muted mb-0"><small>Supervisor {{ $poster->supervisorValue }} | Marker {{ $poster->markerValue }}</small></p>
+
+						@if($evaluation->hasPosterPresentationQuestion())
+							<div class="d-flex">
+								<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="poster-final-mark" name="poster_final_mark" value="{{ floor(($poster->supervisorValue + $poster->markerValue) / 2) }}" min="0" max="100" step="1">
+								<span class="p-2" style="font-size: 2rem">%</span>
+							</div>
+							<p class="text-muted mb-0"><small>Supervisor {{ $poster->supervisorValue }} | Marker {{ $poster->markerValue }}</small></p>
+						@else
+							<p>Not part of evaluation</p>
+						@endif
 
 						<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.presentation')</span>Oral Presentation Mark</label>
-						<div class="d-flex">
-							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="presentation-final-mark" name="presentation_final_mark" value="{{ floor(($presentation->supervisorValue + $presentation->markerValue) / 2) }}" min="0" max="100" step="1">
-							<span class="p-2" style="font-size: 2rem">%</span>
-						</div>
-						<p class="text-muted mb-0"><small>Supervisor {{ $presentation->supervisorValue }} | Marker {{ $presentation->markerValue }}</small></p>
 
+						@if($evaluation->hasPosterPresentationQuestion())
+							<div class="d-flex">
+								<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="presentation-final-mark" name="presentation_final_mark" value="{{ floor(($presentation->supervisorValue + $presentation->markerValue) / 2) }}" min="0" max="100" step="1">
+								<span class="p-2" style="font-size: 2rem">%</span>
+							</div>
+							<p class="text-muted mb-0"><small>Supervisor {{ $presentation->supervisorValue }} | Marker {{ $presentation->markerValue }}</small></p>
+						@else
+							<p>Not part of evaluation</p>
+						@endif
 						<label class="mt-3 text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation Mark</label>
-						<div class="d-flex">
-							<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="dissertation-final-mark" name="dissertation_final_mark" value="{{ floor(($dissertation->supervisorValue + $dissertation->markerValue) / 2) }}" min="0" max="100" step="1">
-							<span class="p-2" style="font-size: 2rem">%</span>
-						</div>
-						<p class="text-muted mb-0"><small>Supervisor {{ $dissertation->supervisorValue }} | Marker {{ $dissertation->markerValue }}</small></p>
 
+						@if($evaluation->hasPosterPresentationQuestion())
+							<div class="d-flex">
+								<input class="d-inline-block flex-grow-1 text-right" style="font-size: 2rem" type="number" id="dissertation-final-mark" name="dissertation_final_mark" value="{{ floor(($dissertation->supervisorValue + $dissertation->markerValue) / 2) }}" min="0" max="100" step="1">
+								<span class="p-2" style="font-size: 2rem">%</span>
+							</div>
+							<p class="text-muted mb-0"><small>Supervisor {{ $dissertation->supervisorValue }} | Marker {{ $dissertation->markerValue }}</small></p>
+						@else
+							<p>Not part of evaluation</p>
+						@endif
 						<p class="mt-1 text-muted"><small>Fields are auto-filled with the average mark</small></p>
 					</div>
 
