@@ -8,7 +8,7 @@
 <br>
 
 <p>You've been accepted to undertake the project <b><a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a></b> by <b>{{ $supervisor->user->getFullName() }}</b>.</p>
-<p>Your supervisor should be in-touch with you in the coming weeks to discuss the next steps.</p>
+<p>You should contact your supervisor to discuss the next steps.</p>
 
 <p style="margin-top: 1rem;">In the meantime, here are some links to help you get started</p>
 <ul>

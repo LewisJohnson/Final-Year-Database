@@ -37,13 +37,15 @@ use Illuminate\Http\Request;
 | DELETE	/photos/{photo}			destroy		photos.destroy
 */
 
-// This can be used to test mailables
-Route::get('/mailable', function () {
-	$student = SussexProjects\Student::first();
-	$supervisor = SussexProjects\Supervisor::first();
-	$project = SussexProjects\Project::first();
-	return new SussexProjects\Mail\SupervisorEditedProposedProject($supervisor, $student, $project);
-});
+if(env('APP_DEBUG')){	
+	// This can be used to test mailables
+	Route::get('/mailable', function () {
+		$student = SussexProjects\Student::first();
+		$supervisor = SussexProjects\Supervisor::first();
+		$project = SussexProjects\Project::first();
+		return new SussexProjects\Mail\StudentAccepted($supervisor, $student, $project);
+	});
+}
 
 /* =============
    1. WEB
