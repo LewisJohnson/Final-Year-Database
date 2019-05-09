@@ -383,7 +383,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getAllSupervisorsMailtoString(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -396,7 +396,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsOpenToStudentsMailtoString(){
-		$supervisors = Supervisor::where("take_students_".Session::get('education_level')["shortName"], true)->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".Session::get('education_level')["shortName"], true)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -409,7 +409,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsClosedToStudentsMailtoString(){
-		$supervisors = Supervisor::where("take_students_".Session::get('education_level')["shortName"], false)->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".Session::get('education_level')["shortName"], false)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -422,7 +422,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsWithPendingStudentMailtoString(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -437,7 +437,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsWithAllStudentsAcceptedMailtoString(){
-		$supervisors = Supervisor::all();
+		$supervisors = Supervisor::getAllSupervisorsQuery();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
