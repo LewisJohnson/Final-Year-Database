@@ -299,12 +299,12 @@
 												$commentAccessor = $type.'Comment';
 											@endphp
 
-											@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker")
-												@continue
-											@endif
-
-											<div class="@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly) col-12 @else col-6 @endif">
-												<p class="m-0">{{ ucfirst($type) }}</p>
+											<div class="col-6">
+												@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker")
+													<p class="m-0">{{ ucfirst($type) }} <i>(Optional)</i></p>
+												@else
+													<p class="m-0">{{ ucfirst($type) }}</p>
+												@endif
 
 												@if(($type == "supervisor" && $canViewSupervisorValuesForGroup) || ($type == "marker" && $canViewMarkerValuesForGroup))
 													@switch($question->type)

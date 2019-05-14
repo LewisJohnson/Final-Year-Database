@@ -18,6 +18,10 @@
 	var previousTabIndex = null;
 	var previousHeight = null;
 	
+	var tabInUrl = getQueryVariable("tab-name");
+	var headingInUrl = getQueryVariable("header-name");
+	
+
 	$(".js-tab-button").on('click', function() {
 		var currentTab = $(this).parent();
 		var currentContent = currentTab.find(".content");
@@ -109,15 +113,14 @@
 				previousTab = currentTab;
 				previousTabIndex = previousTab.index();
 
-
 				// Create sub tabs
 				$(currentContent.find('h5').get().reverse()).each(function(){
-					var titleId = (currentTab.text().trim() + "-" + $(this).text().trim()).toLowerCase();
+					var titleId = slugify(currentTab.text()) + "-" + slugify($(this).text());
 					$(this).attr('id', titleId);
 
 					var tab = $(`
 						<li class="sub-tab">
-							<a class="btn w-100 text-right js-sub-tab-button" href="#${ titleId }">${ $(this).text().trim() }</a>
+							<a class="btn w-100 text-right" href="#${ titleId }">${ $(this).text().trim() }</a>
 						</li>
 					`).insertAfter(currentTab).hide();
 
@@ -127,7 +130,22 @@
 		}
 	});
 
-	restoreOldTabFromStorage(tabContainer, tabs);
+	if(tabInUrl == false){
+		restoreOldTabFromStorage(tabContainer, tabs);
+	} else {
+		$("[data-tab-name='" + tabInUrl + "'] > button").click();
+
+		if(headingInUrl != false){
+			setTimeout(function() {
+				$('html, body').animate({
+					scrollTop: $("[href='#" + headingInUrl + "']").offset().top + 1000
+				}, 200, function(){
+					$("#" + headingInUrl).addClass("animated flash");
+				});
+				
+			}, 300);
+		}
+	}
 });
 
 function restoreOldTabFromStorage(tabContainer, tabs){
@@ -161,4 +179,33 @@ function restoreOldTabFromStorage(tabContainer, tabs){
 	if(!tabClicked){
 		$(".js-tab-button").first().click();
 	}
+}
+
+function getQueryVariable(variable)
+{
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		if(pair[0] == variable) {
+			return pair[1];
+		}
+	}
+
+	return(false);
+}
+
+function slugify(string) {
+  const a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœøṕŕßśșțùúüûǘẃẍÿź·/_,:;'
+  const b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuwxyz------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+
+  return string.toString().toLowerCase()
+    .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+    .replace(/&/g, '-and-') // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+    .replace(/^-+/, '') // Trim - from start of text
+    .replace(/-+$/, '') // Trim - from end of text
 }
