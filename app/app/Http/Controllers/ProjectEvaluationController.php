@@ -146,9 +146,9 @@ class ProjectEvaluationController extends Controller {
 						'questions' => $questions
 					));
 
-					return "Groups has been fixed.";
+					return "Groups has been fixed. Please go back AND refresh the page.";
 				} catch(Exception $e){
-					return "Something went wrong, please contact an administrator";
+					return "Something went wrong, please contact an administrator.";
 				}
 			}
 		}
