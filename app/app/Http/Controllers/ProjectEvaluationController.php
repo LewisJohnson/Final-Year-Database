@@ -243,6 +243,48 @@ class ProjectEvaluationController extends Controller {
 		return redirect()->action('ProjectEvaluationController@show', $project);
 	}
 
+	public function unsubmitGroup(Project $project, string $group, Request $request){
+		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
+		$isProjectMarker = Auth::user()->id == $project->marker->id;
+
+		if(!$isProjectSupervisor && !$isProjectMarker) {
+			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
+		$evaluation = ProjectEvaluation::find($project->evaluation->id);
+
+		if($evaluation->is_finalised) {
+			session()->flash('message', 'This project evaluation has been finalised.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
+
+		$questions = $evaluation->questions;
+
+		for ($i = 0; $i < count($questions); $i++) {
+			if($isProjectSupervisor) {
+				$accessor = "supervisorSubmitted";
+			} elseif($isProjectMarker) {
+				$accessor = "markerSubmitted";
+			}
+
+			if($questions[$i]->group == $group){
+				$questions[$i]->$accessor = false;
+			}
+		}
+
+		$evaluation->update(array(
+			'questions' => $questions
+		));
+		
+		session()->flash('message', 'You have un-submitted Group "'.$group.'".');
+		session()->flash('message_type', 'warning');
+
+		return redirect()->action('ProjectEvaluationController@show', $project);
+	}
+
 	/**
 	 * Update the specified resource in storage.
 	 *

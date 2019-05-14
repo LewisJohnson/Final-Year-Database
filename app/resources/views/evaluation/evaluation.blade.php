@@ -70,10 +70,12 @@
 </style>
 @section('content')
 
+<div></div>
+</div>
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
 		<div class="col-12 text-right">
-			<a class="btn btn-outline-primary" href="{{ action('HomeController@help') }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
+			<a class="btn btn-outline-primary" href="{{ action('HomeController@help', ['tab-name' => 'Supervisor', 'header-name' => 'supervisor-project-evaluation']) }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
 			<button class="btn btn-primary ml-2 js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
 		</div>
 
@@ -209,13 +211,13 @@
 									@if($evaluation->hasDissertationQuestion())
 										<div class="col-12 col-sm-6 col-md-8">
 											<label><b>Joint Report</b></label>
-											<p class="pl-2" style="white-space: pre-wrap;">{{ $dissertation->finalComment }}</p>
+											<p class="pl-2" class="text-pre-wrap">{{ $dissertation->finalComment }}</p>
 										</div>
 									@endif
 
 									<div class="col-12">
 										<label><b>Student Feedback</b></label>
-										<p class="pl-2" style="white-space: pre-wrap;">{{ $studentFeedback->supervisorComment }}</p>
+										<p class="pl-2" class="text-pre-wrap">{{ $studentFeedback->supervisorComment }}</p>
 									</div>
 								</div>
 
@@ -258,9 +260,10 @@
 															($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($prevQuestionGroup)) || 
 															($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($prevQuestionGroup))
 														)
-															<p class="text-right text-muted">
-																You have submitted Group {{ $prevQuestionGroup }}
-															</p>
+															<div class="text-right">
+																<p class="text-muted">You have submitted Group {{ $prevQuestionGroup }}</p>
+																<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@unsubmitGroup', ['project' => $project->id, 'group' => $prevQuestionGroup]) }}">UNSUBMIT</a>
+															</div>
 
 															<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
 														@else
@@ -357,7 +360,7 @@
 													
 														@case(SussexProjects\PEQValueTypes::CommentOnly)
 														@case(SussexProjects\PEQValueTypes::StudentFeedback)
-															<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
+															<p data-group="{{ $question->group }}" class="js-value text-pre-wrap {{ $type }} pl-2">{{ $question->$valueAccessor }}</p>
 															@break
 
 														@default
@@ -370,7 +373,7 @@
 														<p class="mt-3 mb-1 {{ $loop->index > 0 ? 'invisible' : '' }}">Comments:</p>
 													@endif
 
-													<p data-group="{{ $question->group }}" class="js-value {{ $type }} pl-2 mt-3" style="min-height: 100px;">{{ $question->$commentAccessor }}</p>
+													<p data-group="{{ $question->group }}" class="js-value text-pre-wrap {{ $type }} pl-2 mt-3" style="min-height: 100px;">{{ $question->$commentAccessor }}</p>
 													<textarea class="js-input {{ $type }} mb-3 form-control" style="min-height: 100px;" name="{{ $loop->parent->index }}_{{ $type }}_comment">{{ $question->$commentAccessor }}</textarea>
 												@else
 													<p class="bg-light text-muted mt-1 py-1 text-center rounded">Hidden</p>
@@ -386,9 +389,8 @@
 												($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group))
 											)
 												<div class="col-12 text-right">
-													<p class="text-muted">
-														You have submitted Group {{ $question->group }}
-													</p>
+													<p class="text-muted">You have submitted Group {{ $prevQuestionGroup }}</p>
+													<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@unsubmitGroup', ['project' => $project->id, 'group' => $prevQuestionGroup]) }}">UNSUBMIT</a>
 
 													<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
 												</div>
