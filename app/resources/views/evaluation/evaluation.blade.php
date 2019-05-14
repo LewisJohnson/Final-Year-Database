@@ -63,15 +63,9 @@
 	<script src="{{ asset('js/views/admin.js') }}"></script>
 @endsection
 
-<style>
-	.js-value {
 
-	}
-</style>
 @section('content')
 
-<div></div>
-</div>
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
 		<div class="col-12 text-right">
