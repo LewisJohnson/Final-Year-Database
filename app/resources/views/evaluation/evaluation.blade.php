@@ -68,10 +68,6 @@
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row mt-3">
 		<div class="col-12 text-right">
-			{{-- TOOD: REMOVE THIS  --}}
-			@if($questions[0]->group === 0)
-				<a class="btn btn-success animated slow infinite flash mr-2" href="{{ action('ProjectEvaluationController@fixGroups', ['project' => $project->id]) }}"><span class="svg-xs">@include('svg.auto-fix')</span>Fix Groups</a>
-			@endif
 			<a class="btn btn-outline-primary" href="{{ action('HomeController@help', ['tab-name' => 'Supervisor', 'header-name' => 'supervisor-project-evaluation']) }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
 			<button class="btn btn-primary ml-2 js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
 		</div>

@@ -119,40 +119,7 @@ class ProjectEvaluationController extends Controller {
 			->with("evaluation", $evaluation);
 	}
 
-	/**
-	 * A temporary function to fix the groups
-	 * TODO: TO BE REMOVED
-	 *
-	 * @param Project	$project
-	 * @param Request	$request
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function fixGroups(Project $project, Request $request){
-		$evaluation = $project->evaluation;
 
-		if(!is_null($evaluation)){
-			if(!empty($evaluation->questions[0])){
-				try {
-					$questions = $evaluation->questions;
-					$fixedQuestions = Mode::getEvaluationQuestions();
-					if($questions[0]->group == 0){
-						for ($i = 0; $i < count($questions); $i++) {
-							$questions[$i]->group = $fixedQuestions[$i]->group;
-						}
-					}
-
-					$evaluation->update(array(
-						'questions' => $questions
-					));
-
-					return "Groups has been fixed. Please go back AND refresh the page.";
-				} catch(Exception $e){
-					return "Something went wrong, please contact an administrator.";
-				}
-			}
-		}
-	}
 
 
 	/**

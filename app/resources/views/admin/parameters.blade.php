@@ -126,11 +126,7 @@
 
 											<div class="col-1">
 												<label>Group</label>
-												<select class="form-control" name="group[]">
-													@foreach(range('A', 'Z') as $char)
-														<option @if($question->group == $char) selected @endif value="{{ $char }}">{{ $char }}</option>
-													@endforeach
-												</select>
+												<input class="form-control" type="text" name="group[]" value="{{ $question->group }}">
 											</div>
 
 											<div class="col-6">

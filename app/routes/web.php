@@ -339,9 +339,6 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	// Note: The only reason this is a GET is because we can't have a <form> in another <form> in the view
 	Route::get('projects/{project}/evaluation/unsubmit/{group}', 'ProjectEvaluationController@unsubmitGroup');
 
-	// TODO: TO BE REMOVED
-	Route::get('projects/{project}/evaluation/fix-groups', 'ProjectEvaluationController@fixGroups');
-
 	// Finalise project evaluation
 	Route::patch('projects/{project}/evaluation/finalise', 'ProjectEvaluationController@finalise');
 });

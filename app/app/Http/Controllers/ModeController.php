@@ -9,6 +9,7 @@ namespace SussexProjects\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Mode;
+use SussexProjects\ProjectEvaluation;
 use SussexProjects\PEQValueTypes;
 use SussexProjects\ProjectEvaluationQuestion;
 
@@ -92,32 +93,33 @@ class ModeController extends Controller{
 		}
 
 		if($amountOfPosterQuestions > 1) {
-			session()->flash('message', 'There can no more than 1 "Poster Presentation" question');
+			session()->flash('message', 'There can be no more than 1 "Poster Presentation" question');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ModeController@index');
 		}
 
 		if($amountOfOralQuestions > 1) {
-			session()->flash('message', 'There can no more than 1 "Oral Presentation" question');
+			session()->flash('message', 'There can be no more than 1 "Oral Presentation" question');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ModeController@index');
 		}
 
 		if($amountOfDissertationQuestions > 1) {
-			session()->flash('message', 'There can no more than 1 "Dissertation" question');
+			session()->flash('message', 'There can be no more than 1 "Dissertation" question');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ModeController@index');
 		}
 
 		if($amountOfStudentFeedbackQuestions > 1) {
-			session()->flash('message', 'There can no more than 1 "Student Feedback" question');
+			session()->flash('message', 'There can be no more than 1 "Student Feedback" question');
 			session()->flash('message_type', 'error');
 
 			return redirect()->action('ModeController@index');
 		}
+
 		if(!isset($request->project_selection)){
 			session()->flash('message', 'Invalid project selection date.');
 			session()->flash('message_type', 'error');
@@ -151,7 +153,29 @@ class ModeController extends Controller{
 		
 		$mode->save();
 
-		session()->flash('message', 'Parameters have been updated successfully.');
+		// Update all existing evaluations
+
+		$evaluations = ProjectEvaluation::where('project_year', Mode::getProjectYear())->get();
+
+		foreach ($evaluations as $evaluation) {
+			$questions = $evaluation->questions;
+			$updatedQuestions = Mode::getEvaluationQuestions();
+
+			for ($i = 0; $i < count($questions); $i++) {
+				$questions[$i]->title = $updatedQuestions[$i]->title;
+				$questions[$i]->description = $updatedQuestions[$i]->description;
+				$questions[$i]->type = $updatedQuestions[$i]->type;
+				$questions[$i]->group = $updatedQuestions[$i]->group;
+				$questions[$i]->minCommentLength = $updatedQuestions[$i]->minCommentLength;
+				$questions[$i]->submissionType = $updatedQuestions[$i]->submissionType;
+			}
+
+			$evaluation->update(array(
+				'questions' => $questions
+			));
+		}
+
+		session()->flash('message', 'Parameters and evaluations have been updated successfully.');
 		session()->flash('message_type', 'success');
 
 		return redirect()->action('ModeController@index');
