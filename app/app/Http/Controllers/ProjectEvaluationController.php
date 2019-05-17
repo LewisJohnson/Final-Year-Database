@@ -165,6 +165,11 @@ class ProjectEvaluationController extends Controller {
 				$accessor = "marker";
 			}
 			
+			$submittedAccessor = $accessor.'Submitted';
+			if($questions[$i]->$submittedAccessor){
+				continue;
+			}
+
 			$value = $request[$i.'_'.$accessor.'_value'];
 
 			switch ($questions[$i]->type) {

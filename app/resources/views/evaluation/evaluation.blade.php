@@ -239,7 +239,7 @@
 												$canViewMarkerValuesForGroup = true;
 											}
 										}
-										
+
 										$supervisorHasSubmitted = $userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group);
 										$markerHasSubmitted = $userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group);
 
@@ -412,7 +412,7 @@
 							</div>
 
 							@if(!$evaluation->is_finalised)
-								<div class="text-right">
+								<div class="text-right mt-3">
 									@if(($userIsSupervisor && !$evaluation->supervisorHasSubmittedAllQuestions()) || 
 											($userIsMarker && !$evaluation->markerHasSubmittedAllQuestions()))
 										<button id="save" class="btn btn-primary">Save</button>
