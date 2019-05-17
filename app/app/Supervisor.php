@@ -383,7 +383,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getAllSupervisorsMailtoString(){
-		$supervisors = Supervisor::getAllSupervisorsQuery();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -422,7 +422,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsWithPendingStudentMailtoString(){
-		$supervisors = Supervisor::getAllSupervisorsQuery();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -437,7 +437,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsWithAllStudentsAcceptedMailtoString(){
-		$supervisors = Supervisor::getAllSupervisorsQuery();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
