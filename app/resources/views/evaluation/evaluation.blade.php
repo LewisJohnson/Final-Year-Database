@@ -225,8 +225,21 @@
 								@foreach($questions as $question)
 									@php
 										$canViewSupervisorValuesForGroup = $userIsSupervisor || ($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group));
+
+										if(!$canViewSupervisorValuesForGroup){
+											if(!$userIsMarker && Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+												$canViewSupervisorValuesForGroup = true;
+											}
+										}
+
 										$canViewMarkerValuesForGroup = $userIsMarker || ($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group));
 
+										if(!$canViewMarkerValuesForGroup){
+											if(!$userIsSupervisor && Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+												$canViewMarkerValuesForGroup = true;
+											}
+										}
+										
 										$supervisorHasSubmitted = $userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group);
 										$markerHasSubmitted = $userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group);
 
@@ -291,6 +304,7 @@
 												$valueAccessor = $type.'Value';
 												$commentAccessor = $type.'Comment';
 											@endphp
+
 
 											<div class="col-6">
 												@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker")
