@@ -257,6 +257,13 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	/* STUDENT */
 	// Store new student POST
 	Route::post('students', 'StudentController@store');
+
+	/* PROJECT EVALUATION */
+	// Manual finalisation view
+	Route::get('/evaluations/finalise', 'ProjectEvaluationController@manualFinaliseView');
+
+	// Manual finalisation
+	Route::post('/evaluations/finalise', 'ProjectEvaluationController@manualFinalise');
 });
 
 /* =================================

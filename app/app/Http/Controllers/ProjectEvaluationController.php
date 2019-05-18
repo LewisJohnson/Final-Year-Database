@@ -119,9 +119,6 @@ class ProjectEvaluationController extends Controller {
 			->with("evaluation", $evaluation);
 	}
 
-
-
-
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -130,7 +127,7 @@ class ProjectEvaluationController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Project $project, Request $request){
+	public function update(Project $project, Request $request) {
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
 		$isProjectMarker = Auth::user()->id == $project->marker->id;
 
@@ -166,7 +163,7 @@ class ProjectEvaluationController extends Controller {
 			}
 			
 			$submittedAccessor = $accessor.'Submitted';
-			if($questions[$i]->$submittedAccessor){
+			if($questions[$i]->$submittedAccessor) {
 				continue;
 			}
 
@@ -210,7 +207,17 @@ class ProjectEvaluationController extends Controller {
 		return redirect()->action('ProjectEvaluationController@show', $project);
 	}
 
-	public function submitGroup(Project $project, string $group, Request $request){
+
+	/**
+	 * Submits the group for the evaluation
+	 *
+	 * @param Project	$project The project the evaluation belongs too
+	 * @param string	$group The group to submit
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function submitGroup(Project $project, string $group, Request $request) {
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
 		$isProjectMarker = Auth::user()->id == $project->marker->id;
 
@@ -237,7 +244,7 @@ class ProjectEvaluationController extends Controller {
 				$accessor = "markerSubmitted";
 			}
 
-			if($questions[$i]->group == $group){
+			if($questions[$i]->group == $group) {
 				$questions[$i]->$accessor = true;
 			}
 		}
@@ -252,7 +259,16 @@ class ProjectEvaluationController extends Controller {
 		return redirect()->action('ProjectEvaluationController@show', $project);
 	}
 
-	public function unsubmitGroup(Project $project, string $group, Request $request){
+	/**
+	 * Un-submits the group for the evaluation
+	 *
+	 * @param Project	$project The project the evaluation belongs too
+	 * @param string	$group The group to un-submit
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function unsubmitGroup(Project $project, string $group, Request $request) {
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
 		$isProjectMarker = Auth::user()->id == $project->marker->id;
 
@@ -279,7 +295,7 @@ class ProjectEvaluationController extends Controller {
 				$accessor = "markerSubmitted";
 			}
 
-			if($questions[$i]->group == $group){
+			if($questions[$i]->group == $group) {
 				$questions[$i]->$accessor = false;
 			}
 		}
@@ -292,6 +308,68 @@ class ProjectEvaluationController extends Controller {
 		session()->flash('message_type', 'warning');
 
 		return redirect()->action('ProjectEvaluationController@show', $project);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Project	$project
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function manualFinaliseView(Request $request){
+		$student = new Student();
+		$user = new User();
+
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		$students = $students->filter(function ($student) {
+			if(empty($student->project)){
+				return false;
+			}
+
+			if(empty($student->project->evaluation)){
+				return false;
+			}
+
+			return !$student->project->evaluation->is_finalised;
+		});
+
+		return view('evaluation.finalise-manual')
+			->with("students", $students);
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Project	$project
+	 * @param Request	$request
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function manualFinalise(Request $request){
+		$evaluations = ProjectEvaluation::all();
+		$finaliseCount = 0;
+
+		foreach($evaluations as $evaluation){
+			$finalise = $request[$evaluation->id."_finalise"];
+
+			if($finalise != null){
+				$evaluation->is_finalised = true;
+				$evaluation->save();
+
+				$finaliseCount++;
+			}
+		}
+
+		session()->flash('message', $finaliseCount.' project evaluation(s) have been finalised.');
+		session()->flash('message_type', 'success');
+
+		return redirect()->action('ProjectEvaluationController@manualFinaliseView');
 	}
 
 	/**
@@ -494,7 +572,7 @@ class ProjectEvaluationController extends Controller {
 	}
 
 	/**
-	 * Exports the project evaluation data as CSV.
+	 * Exports the student feedback in all project evaluations as CSV.
 	 *
 	 * @param Request	$request
 	 *
