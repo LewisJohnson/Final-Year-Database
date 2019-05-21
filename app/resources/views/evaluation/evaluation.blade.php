@@ -21,7 +21,9 @@
 		$dissertation = $evaluation->getDissertationQuestion();
 	}
 
-	$studentFeedback = $evaluation->getStudentFeedbackQuestion();
+	if($evaluation->hasStudentFeedbackQuestion()){
+		$studentFeedback = $evaluation->getStudentFeedbackQuestion();
+	}
 
 	$thresholds = SussexProjects\Mode::getThresholds();
 	$maxDifference = SussexProjects\Mode::getEvaluationPercentageDifference();
@@ -210,7 +212,7 @@
 
 									<div class="col-12">
 										<label><b>Student Feedback</b></label>
-										<p class="pl-2" class="text-pre-wrap">{{ $studentFeedback->supervisorComment }}</p>
+										<p class="pl-2" class="text-pre-wrap">{{ $evaluation->hasStudentFeedbackQuestion() ? $studentFeedback->supervisorComment : 'Not required.' }}</p>
 									</div>
 								</div>
 
@@ -307,7 +309,7 @@
 
 
 											<div class="col-6">
-												@if($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker")
+												@if($question->submissionType == SussexProjects\PEQSubmissionTypes::Optional || ($question->submissionType == SussexProjects\PEQSubmissionTypes::SupervisorOnly && $type == "marker"))
 													<p class="m-0">{{ ucfirst($type) }} <i>(Optional)</i></p>
 												@else
 													<p class="m-0">{{ ucfirst($type) }}</p>

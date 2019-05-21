@@ -204,7 +204,6 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding oral presentation mark.");
 	}
 
-
 	public function hasDissertationQuestion(){
 		foreach($this->getQuestions() as $question) {
 			if($question->type == PEQValueTypes::Dissertation) {
@@ -235,9 +234,23 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding student feedback.");
 	}
 
+	public function hasStudentFeedbackQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::StudentFeedback) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 	public function hasSupervisorFilledGroup($group) {
 		foreach ($this::getQuestions() as $question) {
 			if($question->group != $group){
+				continue;
+			}
+
+			if($question->submissionType == PEQSubmissionTypes::Optional){
 				continue;
 			}
 
@@ -259,6 +272,10 @@ class ProjectEvaluation extends Model {
 	public function hasMarkerFilledGroup($group) {
 		foreach ($this::getQuestions() as $question) {
 			if($question->group != $group){
+				continue;
+			}
+
+			if($question->submissionType == PEQSubmissionTypes::Optional){
 				continue;
 			}
 			
@@ -286,6 +303,10 @@ class ProjectEvaluation extends Model {
 
 		foreach($this::getQuestions() as $question) {
 			if($question->group != $group){
+				continue;
+			}
+
+			if($question->submissionType == PEQSubmissionTypes::Optional){
 				continue;
 			}
 
@@ -319,6 +340,10 @@ class ProjectEvaluation extends Model {
 
 		foreach($this::getQuestions() as $question) {
 			if($question->group != $group){
+				continue;
+			}
+
+			if($question->submissionType == PEQSubmissionTypes::Optional){
 				continue;
 			}
 

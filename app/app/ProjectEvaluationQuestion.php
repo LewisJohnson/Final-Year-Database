@@ -74,6 +74,11 @@ class PEQSubmissionTypes {
 	 * Supervisor only
 	 */
 	const SupervisorOnly = 1;
+
+	/**
+	 * Optional
+	 */
+	const Optional = 2;
 }
 
 class PEQValueTypes {

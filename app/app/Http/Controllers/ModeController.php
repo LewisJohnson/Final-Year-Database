@@ -77,19 +77,12 @@ class ModeController extends Controller{
 				$amountOfStudentFeedbackQuestions++;
 			}
 
-			if(strlen($request->title[$i]) < 10){
+			if(strlen($request->title[$i]) < 2){
 				session()->flash('message', 'The question title "'.$request->title[$i].'" is too short');
 				session()->flash('message_type', 'error');
 
 				return redirect()->action('ModeController@index');
 			}
-		}
-
-		if($amountOfStudentFeedbackQuestions < 1) {
-			session()->flash('message', 'There must be at least 1 "Student Feedback" question');
-			session()->flash('message_type', 'error');
-
-			return redirect()->action('ModeController@index');
 		}
 
 		if($amountOfPosterQuestions > 1) {

@@ -156,6 +156,7 @@
 												<select class="form-control" name="submissionType[]">
 													<option @if($question->submissionType == 0) selected @endif value="0">Both</option>
 													<option @if($question->submissionType == 1) selected @endif value="1">Supervisor Only</option>
+													<option @if($question->submissionType == 2) selected @endif value="2">Optional</option>
 												</select>
 											</div>
 										</div> 

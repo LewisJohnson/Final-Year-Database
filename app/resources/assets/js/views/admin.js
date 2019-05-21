@@ -429,17 +429,24 @@
 	// 1.7.2 Questions
 	$("#new-question-button").on('click', function(){
 		$("#questions-list").append(
-			`<li class="list-group-item">
+			`<li class="border-bottom mb-3 pb-3">
 				<div class="row">
-					<div class="col-12 d-flex">
-						Question ${ $("#questions-list").children().length + 1 }
+					<div class="col-12 d-flex mb-2 align-items-center">
+						<b>Question ${ $("#questions-list").children().length + 1 }</b>
 						<button type="button" class="btn btn-sm btn-outline-danger ml-auto js-deleteQuestion">Remove</button>
 					</div>
-					<div class="col-8">
+
+					<div class="col-1">
+						<label>Group</label>
+						<input class="form-control" type="text" name="group[]">
+					</div>
+
+					<div class="col-6">
 						<label>Title</label>
 						<input class="form-control" type="text" name="title[]">
 					</div>
-					<div class="col-4">
+
+					<div class="col-3">
 						<label>Type</label>
 						<select class="form-control" name="type[]">
 							<option value="3">Poster Presentation</option>
@@ -455,10 +462,27 @@
 							<option value="8">Comment Only</option>
 						</select>
 					</div>
-				</div>
 
-				<label class="mt-2">Description</label>
-				<input class="form-control" type="text" name="description[]">
+					<div class="col-2">
+						<label>Submission Type</label>
+						<select class="form-control" name="submissionType[]">
+							<option value="0">Both</option>
+							<option value="1">Supervisor Only</option>
+							<option value="2">Optional</option>
+						</select>
+					</div>
+				</div> 
+
+				<div class="row mt-2">
+					<div class="col-10">
+						<label>Description</label>
+						<input class="form-control" type="text" name="description[]">
+					</div>
+					<div class="col-2">
+						<label>Min comment length</label>
+						<input class="form-control" type="number" name="minCommentLength[]">
+					</div>
+				</div>
 			</li>`
 		);
 	});
