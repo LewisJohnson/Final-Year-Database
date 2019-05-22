@@ -462,24 +462,8 @@ class ProjectEvaluationController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function undoFinalise(ProjectEvaluation $evaluation){
-		$questions = $evaluation->questions;
-
-		for ($i = 0; $i < count($questions); $i++) {
-			if(($questions[$i]->type == PEQValueTypes::PosterPresentation) ||
-				($questions[$i]->type == PEQValueTypes::OralPresentation) ||
-				($questions[$i]->type == PEQValueTypes::Dissertation)) {
-					$questions[$i]->finalValue = 0;
-					$questions[$i]->finalComment = "-";
-					$questions[$i]->supervisorSubmitted = false;
-					$questions[$i]->markerSubmitted = false;
-			}
-		}
-
-		$evaluation->update(array(
-			'is_finalised' => false,
-			'questions' => $questions
-		));
-
+		
+		$evaluation->is_finalised = false;
 		$evaluation->save();
 
 		session()->flash('message', 'The project evaluation has been un-finalised');
