@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RemoveSubmittedColumnsFromProjectEvaluations extends Migration
+class AddIsDeferredToProjectEvaluation extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -16,8 +16,7 @@ class RemoveSubmittedColumnsFromProjectEvaluations extends Migration
 		foreach(get_departments() as $key => $department) {
 			foreach(get_education_levels() as $key => $level) {
 				Schema::table($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
-					$table->dropColumn('supervisor_submitted')->default(0);
-					$table->dropColumn('marker_submitted')->default(0);
+					$table->boolean('is_deferred')->default(0);
 				});
 			}
 		}
@@ -30,11 +29,10 @@ class RemoveSubmittedColumnsFromProjectEvaluations extends Migration
 	 */
 	public function down()
 	{
-	   foreach(get_departments() as $key => $department) {
+		 foreach(get_departments() as $key => $department) {
 			foreach(get_education_levels() as $key => $level) {
 				Schema::table($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
-					$table->boolean('supervisor_submitted')->default(0);
-					$table->boolean('marker_submitted')->default(0);
+					$table->dropColumn('is_deferred');
 				});
 			}
 		}

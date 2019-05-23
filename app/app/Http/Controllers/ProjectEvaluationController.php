@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
 use SussexProjects\Mode;
 use SussexProjects\Student;
 use SussexProjects\User;
@@ -62,26 +63,6 @@ class ProjectEvaluationController extends Controller {
 	}
 
 	/**
-	 * An overall view of project evaluations.
-	 *
-	 * @param  Project $project
-	 *
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function studentFeedback(){
-		$student = new Student();
-		$user = new User();
-
-		$students = Student::select($student->getTable().'.*')
-				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
-				->orderBy('last_name', 'asc')
-				->get();
-
-		return view('evaluation.feedback')
-			->with("students", $students);
-	}
-
-	/**
 	 * The project evaluation view.
 	 *
 	 * @param  \Illuminate\Http\Project $project
@@ -103,7 +84,6 @@ class ProjectEvaluationController extends Controller {
 				return redirect()->action('HomeController@index');
 			}
 		}
-
 
 		$evaluation = $project->evaluation;
 		
@@ -171,8 +151,16 @@ class ProjectEvaluationController extends Controller {
 				$accessor = "marker";
 			}
 			
+			// Check Supervisor / Marker has already submitted
 			$submittedAccessor = $accessor.'Submitted';
 			if($questions[$i]->$submittedAccessor) {
+				continue;
+			}
+
+			// Check if is an omission
+			if(!empty($request[$i.'_'.$accessor.'_omit_submission'])) {
+				$omissionAccessor = $accessor.'OmitSubmission';
+				$questions[$i]->$omissionAccessor = true;
 				continue;
 			}
 
@@ -209,7 +197,7 @@ class ProjectEvaluationController extends Controller {
 		$evaluation->update(array(
 			'questions' => $questions
 		));
-		
+
 		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');
 
@@ -300,19 +288,22 @@ class ProjectEvaluationController extends Controller {
 		for ($i = 0; $i < count($questions); $i++) {
 			if($isProjectSupervisor) {
 				$accessor = "supervisorSubmitted";
+				$omitAccessor = "supervisorOmitSubmission";
 			} elseif($isProjectMarker) {
 				$accessor = "markerSubmitted";
+				$omitAccessor = "markerOmitSubmission";
 			}
 
 			if($questions[$i]->group == $group) {
 				$questions[$i]->$accessor = false;
+				$questions[$i]->$omitAccessor = false;
 			}
 		}
 
 		$evaluation->update(array(
 			'questions' => $questions
 		));
-		
+
 		session()->flash('message', 'You have un-submitted Group "'.$group.'".');
 		session()->flash('message_type', 'warning');
 
@@ -369,6 +360,8 @@ class ProjectEvaluationController extends Controller {
 
 			if($finalise != null){
 				$evaluation->is_finalised = true;
+				$evaluation->is_deferred = false;
+				
 				$evaluation->save();
 
 				$finaliseCount++;
@@ -445,6 +438,7 @@ class ProjectEvaluationController extends Controller {
 
 		$evaluation->update(array(
 			'is_finalised' => true,
+			'is_deferred' => false,
 			'questions' => $questions
 		));
 		
@@ -468,6 +462,40 @@ class ProjectEvaluationController extends Controller {
 
 		session()->flash('message', 'The project evaluation has been un-finalised');
 		session()->flash('message_type', 'warning');
+
+		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
+	}
+
+	/**
+	 * Defers a project evaluation.
+	 *
+	 * @param ProjectEvaluation	$evaluation
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function defer(ProjectEvaluation $evaluation, Request $request){
+		$evaluation->is_deferred = true;
+		$evaluation->save();
+
+		session()->flash('message', 'The project evaluation has been deferred');
+		session()->flash('message_type', 'warning');
+
+		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
+	}
+
+	/**
+	 * Defers a project evaluation.
+	 *
+	 * @param ProjectEvaluation	$evaluation
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function undefer(ProjectEvaluation $evaluation, Request $request){
+		$evaluation->is_deferred = false;
+		$evaluation->save();
+
+		session()->flash('message', 'The project evaluation is now in-progress');
+		session()->flash('message_type', 'success');
 
 		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
 	}
@@ -563,6 +591,52 @@ class ProjectEvaluationController extends Controller {
 
 		return;
 	}
+
+	/**
+	 * An overall view of project evaluations.
+	 *
+	 * @param  Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function studentFeedback(Request $request){
+		$student = new Student();
+		$user = new User();
+
+		if(isset($request->pe_hide_incomplete)){
+			Cookie::queue('pe_hide_incomplete', $request->pe_hide_incomplete, 525600);
+		} else {
+			$request->pe_hide_incomplete = Cookie::get('pe_hide_incomplete');
+		}
+
+		$students = Student::select($student->getTable().'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		if($request->pe_hide_incomplete){
+			$students = $students->filter(function ($student) {
+				if(empty($student->project)){
+					return false;
+				}
+
+				if(empty($student->project->evaluation)){
+					return false;
+				}
+
+				if($student->project->evaluation->is_deferred){
+					return false;
+				}
+
+				return $student->project->evaluation->is_finalised;
+			});
+		}
+
+		return view('evaluation.feedback')
+			->with("students", $students)
+			->with('pe_hide_incomplete', $request->pe_hide_incomplete);
+	}
+
 
 	/**
 	 * Exports the student feedback in all project evaluations as CSV.

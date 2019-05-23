@@ -30,6 +30,9 @@ class ProjectEvaluationQuestion {
 	public $supervisorSubmitted;
 	public $markerSubmitted;
 
+	public $supervisorOmitSubmission;
+	public $markerOmitSubmission;
+
 	function __construct($title, $description, $type, $group, $minCommentLength, $submissionType) {
 		$this->title = $title;
 		$this->description = $description;
@@ -47,8 +50,8 @@ class ProjectEvaluationQuestion {
 
 		$this->group = $data->group;
 
-		$this->minCommentLength = $data->minCommentLength;
-		$this->submissionType = $data->submissionType;
+		$this->minCommentLength = $data->minCommentLength ?? 0;
+		$this->submissionType = $data->submissionType ?? PEQSubmissionTypes::Both;
 
 		$this->supervisorValue = $data->supervisorValue;
 		$this->supervisorComment = $data->supervisorComment ?? "";
@@ -61,6 +64,9 @@ class ProjectEvaluationQuestion {
 
 		$this->supervisorSubmitted = $data->supervisorSubmitted ?? false;
 		$this->markerSubmitted = $data->markerSubmitted ?? false;
+
+		$this->supervisorOmitSubmission = $data->supervisorOmitSubmission ?? false;
+		$this->markerOmitSubmission = $data->markerOmitSubmission ?? false;
 	}
 }
 

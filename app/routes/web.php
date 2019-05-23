@@ -288,7 +288,7 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 });
 
 /* =================================
-   2.3.1 PROJECT ADMIN OR EXTERNAL MARKER
+   2.3.2 PROJECT ADMIN OR EXTERNAL MARKER
    ================================= */
 Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepartment']], function() {
 	/* PROJECT EVALUATION */
@@ -306,7 +306,7 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 });
 
 /* =================================
-   2.3.2 PROJECT ADMIN OR EXTERNAL MARKER OR SUPERVISOR
+   2.3.3 PROJECT ADMIN OR EXTERNAL MARKER OR SUPERVISOR
    ================================= */
 Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdminOrSupervisor', 'checkDepartment']], function() {
 	/* PROJECT EVALUATION */
@@ -348,6 +348,12 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Finalise project evaluation
 	Route::patch('projects/{project}/evaluation/finalise', 'ProjectEvaluationController@finalise');
+
+	// Defer project evaluation
+	Route::post('projects/{evaluation}/evaluation/defer', 'ProjectEvaluationController@defer');
+
+	// Undefer project evaluation
+	Route::post('projects/{evaluation}/evaluation/undefer', 'ProjectEvaluationController@undefer');
 });
 
 /* =================

@@ -10,6 +10,7 @@ namespace SussexProjects;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use SussexProjects\Student;
 use Encryptable;
 
@@ -50,6 +51,7 @@ class ProjectEvaluation extends Model {
 	 */
 	protected $casts = [
 		'is_finalised' => 'boolean',
+		'is_deferred' => 'boolean',
 		'questions' => 'array'
 	];
 
@@ -91,6 +93,10 @@ class ProjectEvaluation extends Model {
 				}
 			}
 
+			if($question->supervisorOmitSubmission){
+				continue;
+			}
+
 			if(!$question->supervisorSubmitted){
 				return false;
 			}
@@ -107,6 +113,10 @@ class ProjectEvaluation extends Model {
 				}
 			}
 
+			if($question->markerOmitSubmission){
+				continue;
+			}
+
 			if(!$question->markerSubmitted){
 				return false;
 			}
@@ -120,8 +130,20 @@ class ProjectEvaluation extends Model {
 			return "Finalised";
 		}
 
+		if($this->is_deferred){
+			return "Deferred";
+		}
+
 		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
 			return "Submitted";
+		}
+
+		if((Auth::user()->id == $this->project->supervisor_id) && $this->supervisorHasSubmittedAllQuestions()){
+			return "Supervisor Submitted";
+		}
+
+		if((Auth::user()->id == $this->project->supervisor_id) && $this->markerHasSubmittedAllQuestions()){
+			return "Marker Submitted";
 		}
 
 		return "In-Progress";
@@ -130,6 +152,10 @@ class ProjectEvaluation extends Model {
 	public function getStatusBootstrapClass(){
 		if($this->is_finalised){
 			return "text-danger";
+		}
+
+		if($this->is_deferred){
+			return "text-info";
 		}
 
 		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
@@ -254,6 +280,10 @@ class ProjectEvaluation extends Model {
 				continue;
 			}
 
+			if($question->supervisorOmitSubmission){
+				continue;
+			}
+
 			if(is_null($question->supervisorValue)){
 				if($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback){
 					return false;
@@ -276,6 +306,10 @@ class ProjectEvaluation extends Model {
 			}
 
 			if($question->submissionType == PEQSubmissionTypes::Optional){
+				continue;
+			}
+
+			if($question->markerOmitSubmission){
 				continue;
 			}
 			
@@ -307,6 +341,10 @@ class ProjectEvaluation extends Model {
 			}
 
 			if($question->submissionType == PEQSubmissionTypes::Optional){
+				continue;
+			}
+
+			if($question->supervisorOmitSubmission){
 				continue;
 			}
 
@@ -348,6 +386,10 @@ class ProjectEvaluation extends Model {
 			}
 
 			if($question->submissionType == PEQSubmissionTypes::SupervisorOnly){
+				continue;
+			}
+
+			if($question->markerOmitSubmission){
 				continue;
 			}
 
