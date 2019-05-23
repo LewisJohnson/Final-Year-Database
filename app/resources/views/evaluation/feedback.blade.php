@@ -13,6 +13,16 @@
 		<a class="ml-2 btn btn-primary" title="Download project evaluation student feedback data as CSV" href="{{ action('ProjectEvaluationController@exportStudentFeedback') }}"><span class="svg-xs">@include('svg.file-export')</span>Export</a>
 	</div>
 
+	<a class="d-print-none" id="showIncompleteProjectEvaluationsToggleButton" @if($pe_hide_incomplete) href="{{ action('ProjectEvaluationController@studentFeedback', ['pe_hide_incomplete' => false]) }}" @else href="{{ action('ProjectEvaluationController@studentFeedback', ['pe_hide_incomplete'=> true]) }}" @endif></a>
+
+	<div class="form-group align-items-center form-inline ml-1 mt-3 d-print-none">
+		<label>Incomplete evaluations</label>
+		<select class="ml-2 form-control" onchange="window.location.href = $('#showIncompleteProjectEvaluationsToggleButton').attr('href')">
+			<option value="0" @if(!$pe_hide_incomplete) selected @endif>Shown</option>
+			<option value="1" @if($pe_hide_incomplete) selected @endif>Hidden</option>
+		</select>
+	</div>
+
 	<div class="card-columns mt-3" id="card-container">
 		@foreach($students as $student)
 			@php

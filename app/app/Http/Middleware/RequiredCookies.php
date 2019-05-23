@@ -52,6 +52,12 @@ class RequiredCookies{
 			Cookie::queue('sr_hide_closed', true, 525600);
 		}
 
+		// View: Evaluations - Student Feedback
+		// Action: Toggles the display of incomplete project evaluations
+		if(Cookie::get('pe_hide_incomplete') == null){
+			Cookie::queue('pe_hide_incomplete', true, 525600);
+		}
+
 		return $next($request);
 	}
 }
