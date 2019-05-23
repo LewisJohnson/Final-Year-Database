@@ -2,7 +2,7 @@
 @section('content')
 
 @php
-	$helloArray = array("Hello", "Welcome", "Hi", "Bonjour", "Olá", "Guten Tag", "Ahoj", "Merhaba", "Buongiorno");
+	$helloArray = array("Hello", "Welcome", "Hi", "Bonjour", "Olá", "Guten Tag", "Ahoj", "Merhaba", "Buongiorno", "Γειά σου!", "여보세요!", "你好!", "Я люблю бекон!", "Kjúklingasúpa!", "👋");
 	$randIndex = array_rand($helloArray, 1);
 @endphp
 
