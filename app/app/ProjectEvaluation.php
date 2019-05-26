@@ -250,16 +250,6 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding dissertation mark.");
 	}
 
-	public function getStudentFeedbackQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::StudentFeedback) {
-				return $question;
-			}
-		}
-
-		throw new Exception("Error finding student feedback.");
-	}
-
 	public function hasStudentFeedbackQuestion(){
 		foreach($this->getQuestions() as $question) {
 			if($question->type == PEQValueTypes::StudentFeedback) {
@@ -268,6 +258,16 @@ class ProjectEvaluation extends Model {
 		}
 
 		return false;
+	}
+
+	public function getStudentFeedbackQuestion(){
+		foreach($this->getQuestions() as $question) {
+			if($question->type == PEQValueTypes::StudentFeedback) {
+				return $question;
+			}
+		}
+
+		throw new Exception("Error finding student feedback.");
 	}
 	
 	public function hasSupervisorFilledGroup($group) {

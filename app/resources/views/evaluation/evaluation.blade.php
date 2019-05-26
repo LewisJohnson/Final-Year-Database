@@ -151,7 +151,7 @@
 										{{-- DEFER --}}
 										<form id="deferForm" class="d-inline-block" action="{{ action('ProjectEvaluationController@defer', $evaluation->id) }}" method="POST" accept-charset="utf-8">
 											{{ csrf_field() }}
-											<button type="button" id="defer" class="btn btn-secondary" data-id="{{ $evaluation->id }}" ><span class="svg-xs">@include('svg.alarm-snooze')</span>Defer</button>
+											<button type="button" id="defer" class="btn btn-warning" data-id="{{ $evaluation->id }}" ><span class="svg-xs">@include('svg.alarm-snooze')</span>Defer</button>
 										</form>
 									@endif
 								@endif
@@ -266,6 +266,7 @@
 									$supervisorHasSubmitted = $userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group);
 									$markerHasSubmitted = $userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group);
 
+
 									if(Auth::user()->isExternalMarker()){
 										$canViewSupervisorValuesForGroup = true;
 										$canViewMarkerValuesForGroup = true;
@@ -275,7 +276,7 @@
 								<div class="row">
 									<div class="col-12">
 										@if(is_null($prevQuestionGroup))
-											<h1 class="mt-5 mb-3">Group {{ $question->group }}</h1>
+											<h1 class="mt-5 mb-3">{{ $question->group }}</h1>
 										@endif
 									</div>
 
@@ -290,25 +291,25 @@
 														($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($prevQuestionGroup))
 													)
 														<div class="text-right">
-															<p class="text-muted">You have submitted Group {{ $prevQuestionGroup }}</p>
+															<p class="text-muted">You have submitted {{ $prevQuestionGroup }}</p>
 															<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@unsubmitGroup', ['project' => $project->id, 'group' => $prevQuestionGroup]) }}">UNSUBMIT</a>
 														</div>
 
 														<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
 													@else
 														<div class="text-right">
-															<button class="btn js-submission btn-primary mt-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit Group {{ $prevQuestionGroup }}</button>
+															<button class="btn js-submission btn-primary mt-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit {{ $prevQuestionGroup }}</button>
 														</div>
 													@endif
 												@endif
 
 												{{-- NEW GROUP --}}
-												<h1 class="mt-5 mb-3">Group {{ $question->group }}</h1>
+												<h1 class="mt-5 mb-3">{{ $question->group }}</h1>
 
 												@if($userIsSupervisor && !$canViewMarkerValuesForGroup)
-													<h6 class="text-muted">The second marker's marks are hidden until you submit <b>Group {{ $question->group }}</b></h6>
+													<h6 class="text-muted">The second marker's marks are hidden until you submit <b>{{ $question->group }}</b></h6>
 												@elseif($userIsMarker && !$canViewSupervisorValuesForGroup)
-													<h6 class="text-muted">The supervisor's marks are hidden until you submit <b>Group {{ $question->group }}</b></h6>
+													<h6 class="text-muted">The supervisor's marks are hidden until you submit <b>{{ $question->group }}</b></h6>
 												@endif
 											@endif
 
@@ -432,12 +433,12 @@
 												($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group)) || 
 												($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group))
 											)
-												<p class="text-muted">You have submitted Group {{ $prevQuestionGroup }}</p>
+												<p class="text-muted">You have submitted {{ $prevQuestionGroup }}</p>
 												<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@unsubmitGroup', ['project' => $project->id, 'group' => $prevQuestionGroup]) }}">UNSUBMIT</a>
 
 												<input type="hidden" id="submitted_group_{{ $prevQuestionGroup }}" value="true">
 											@else
-												<button class="btn js-submission btn-primary my-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit Group {{ $prevQuestionGroup }}</button>
+												<button class="btn js-submission btn-primary my-3" type="button" data-activator data-dialog="submit-group-{{ $prevQuestionGroup }}-dialog">Submit {{ $prevQuestionGroup }}</button>
 											@endif
 										@endif
 									</div>
@@ -503,13 +504,13 @@
 								</div>
 
 								<p>
-									You are about to submit your part for <b>Group {{ $group }}</b> of the project evaluation.
+									You are about to submit your part for <b>{{ $group }}</b> of the project evaluation.
 									Once you do this, you will no longer be able to edit your marks or comments for this section.
 								</p>
 							</div>
 						@else
 							<div class="col-12">
-								<p>You may not submit <b>Group {{ $group }}</b> of the project evaluation for the following reasons:</p>
+								<p>You may not submit <b>{{ $group }}</b> of the project evaluation for the following reasons:</p>
 
 								<ul>
 									{!! $userIsSupervisor ? $evaluation->getSupervisorQuestionsLeftToFillSummary($group) : $evaluation->getMarkerQuestionsLeftToFillSummary($group) !!}

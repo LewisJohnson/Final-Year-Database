@@ -16,6 +16,9 @@
 					<th>Student Name</th>
 					<th>Second Marker</th>
 					<th>Project Title</th>
+					@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+						<th>Evaluation Status</th>
+					@endif
 					<th class="js-unsortable"></th>
 				</tr>
 			</thead>
@@ -28,16 +31,31 @@
 								<label for="accepted-{{ $accepted['student']->user->getFullName() }}" name="accepted-{{ $accepted['student']->user->getFullName() }}"></label>
 							</div>
 						</td>
-						<td><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a></td>
+						<td>
+							<a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a>
+						</td>
+
 						@if(isset($accepted['project']->marker))
-							<td><a href="mailto:{{ $accepted['project']->marker->user->email }}">{{ $accepted['project']->marker->user->getFullName() }}</a></td>
+							<td>
+								<a href="mailto:{{ $accepted['project']->marker->user->email }}">{{ $accepted['project']->marker->user->getFullName() }}</a>
+							</td>
 						@else
 							<td>-</td>
 						@endif
+						
 						<td>
 							<a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a>
 						</td>
 
+						@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+							<td>
+								@if(!empty($accepted['project']->evaluation))
+									<span class="{{ $accepted['project']->evaluation->getStatusBootstrapClass() }}">{{ $accepted['project']->evaluation->getStatus() }}</span>
+								@else
+									Not Started
+								@endif
+							</td>
+						@endif
 						<td class="text-right">
 							@if(Session::get('logged_in_as') != null)
 								<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" 

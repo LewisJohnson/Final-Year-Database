@@ -185,21 +185,34 @@
 								<tr>
 									<th>Student Name</th>
 									<th>Project Title</th>
+									@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+										<th>Evaluation Status</th>
+									@endif
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($secondMarkerProjects as $markerProjects)
 									<tr>
-										<td class="w-25">
+										<td>
 											<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
 										</td>
 	
-										<td class="w-50">
+										<td>
 											<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
 										</td>
-	
-										<td class="w-5 text-right">
+
+										@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+											<td>
+												@if(!empty($markerProjects['project']->evaluation))
+													<span class="{{ $markerProjects['project']->evaluation->getStatusBootstrapClass() }}">{{ $markerProjects['project']->evaluation->getStatus() }}</span>
+												@else
+													Not Started
+												@endif
+											</td>
+										@endif
+
+										<td class="text-right">
 											@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
 												<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
 											@endif
