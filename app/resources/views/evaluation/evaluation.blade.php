@@ -505,7 +505,7 @@
 
 								<p>
 									You are about to submit your part for <b>{{ $group }}</b> of the project evaluation.
-									Once you do this, you will no longer be able to edit your marks or comments for this section.
+									If the evaluation has not been finalised, you will be able to un-submit the group and make additional changes.
 								</p>
 							</div>
 						@else
