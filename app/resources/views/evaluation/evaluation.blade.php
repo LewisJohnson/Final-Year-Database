@@ -417,7 +417,7 @@
 
 												<div class="checkbox js-no-submission" style="display: none">
 													<input class="checkbox-input mr-2" id="{{ $loop->parent->index }}_{{ $type }}_omit_submission" name="{{ $loop->parent->index }}_{{ $type }}_omit_submission" type="checkbox" @if($question->$omissionAccessor) Checked @endif>
-													<label for="{{ $loop->parent->index }}_{{ $type }}_omit_submission" data-toggle="tooltip" data-placement="right" title="Select this option if you have no marks for this question">Omit Submission</label>
+													<label for="{{ $loop->parent->index }}_{{ $type }}_omit_submission" title="Select this option if you have no marks for this question">Omit Submission</label>
 												</div>
 											@else
 												<p style="opacity: 0.3" class="bg-light text-muted mt-1 py-1 text-center rounded">Hidden</p>

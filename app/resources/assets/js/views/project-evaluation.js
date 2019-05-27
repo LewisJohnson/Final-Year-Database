@@ -277,7 +277,6 @@
 			var group = $(this).data('group');
 
 			if($("#submitted_group_" + group).length == 0){
-				debugger;
 				$(this).hide();
 				$(this).next(".js-input" + selectorModifier).show();
 				$(this).next("textarea" + selectorModifier).show();
@@ -305,8 +304,4 @@
 
 		isInEditMode = true;
 	}
-
-	$(function () {
-		//$('[data-toggle="tooltip"]').tooltip();
-	});
 });
