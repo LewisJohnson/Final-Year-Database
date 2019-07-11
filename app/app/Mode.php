@@ -232,6 +232,15 @@ class Mode extends Model{
 		return Mode::Where('project_year', '<>', Mode::Instance()->project_year)->get();
 	}
 
+	/**
+	 * Gets old years
+	 *
+	 * @return string
+	 */
+	public static function getDependenciesForProjectYear(){
+		return Mode::Where('project_year', '<>', Mode::Instance()->project_year)->get();
+	}
+
 	private static function getPresetQuestions() {
 		$questions = [];
 

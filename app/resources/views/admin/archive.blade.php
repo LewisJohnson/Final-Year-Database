@@ -5,7 +5,7 @@
 @endsection
 
 @php
-	$usersWithYear1970 = \SussexProjects\User::where('active_year', '1970');
+	$usersWithYear1970 = \SussexProjects\User::where('active_year', '1970')->count();
 @endphp
 
 @section('content')
@@ -15,9 +15,36 @@
 		<p class="text-muted">The end of year archive will do the following in a single transaction</p>
 	</div>
 
+	@if($usersWithYear1970 > 0)
+		<div class="bg-warning p-2 my-5">
+			<span class="svg-sm">@include('svg.help')</span>
+			<span>Warning, there are users with the default active year of 1970 in the database. Either update "{{ ucfirst(Session::get('education_level')["longName"]) }} Parameters" to update their year or edit their user manually.</span>
+		</div>
+	@endif
+
+	@if(count(SussexProjects\Mode::all()) > 1)
+		<p>
+			You have the option to select a project year to archive because there are users with a different year than the current project year.<br>
+			If you select {{  SussexProjects\Mode::getProjectYear() }} a normal archive will occur (As per the description below).
+			Archiving any other year will delete all students regardless of conditions and the parameters entry for said year.
+		</p>
+
+		<div class="form-group">
+			<label for="project_year">Project Year <a href="{{ action('UserController@byYear') }}">(Click here for more)</a></label>
+			<br>
+			<select class="form-control w-auto" id="project_year" name="project_year">
+				@foreach(SussexProjects\Mode::all() as $mode)
+					<option>{{ $mode->project_year }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<hr>
+	@endif
+
 	<div class="row">
 		<div class="col-12">
-			<h5>Most Popular Project</h5>
+			<h6>Most Popular Project</h6>
 			<div class="border border-warning p-2">
 				<span class="svg-sm">@include('svg.fire')</span>
 				<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b> with <b>{{ $mostPopularProject->view_count }}</b> views!.</span>
@@ -25,7 +52,7 @@
 		</div>
 
 		<div class="col-6 mt-4">
-			<h5>Projects</h5>
+			<h6>Projects</h6>
 			<div class="border border-primary p-2">
 				<span class="svg-sm">@include('svg.playlist-edit')</span>
 				<span>The text “In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]” will be added to the description of projects.</span>
@@ -36,7 +63,7 @@
 				<span>All projects will be set to archived.</span>
 			</div>
 
-			<h5 class="mt-3">Users</h5>
+			<h6 class="mt-3">Users</h6>
 			<div class="border border-primary p-2 mt-2">
 				<span class="svg-sm">@include('svg.account-remove')</span>
 				<span>Students with un-finalised project evaluations will be kept.</span>
@@ -44,13 +71,13 @@
 		</div>
 
 		<div class="col-6 mt-4">
-			<h5>Projects</h5>
+			<h6>Projects</h6>
 			<div class="border border-danger p-2 mt-2">
 				<span class="svg-sm">@include('svg.delete-forever')</span>
 				<span>Student proposed projects which we're not accepted will be deleted.</span>
 			</div>
 
-			<h5 class="mt-3">Users</h5>
+			<h6 class="mt-3">Users</h6>
 			<div class="border border-danger p-2">
 				<span class="svg-sm">@include('svg.account-remove')</span>
 				<span>Students without projects will be deleted.</span>
@@ -61,7 +88,7 @@
 				<span>Students with finalised project evaluations will be deleted.</span>
 			</div>
 
-			<h5 class="mt-3">Transactions</h5>
+			<h6 class="mt-3">Transactions</h6>
 			<div class="border border-danger p-2 mt-2">
 				<span class="svg-sm">@include('svg.delete-forever')</span>
 				<span>The transactions table will be emptied.</span>
@@ -70,9 +97,11 @@
 	</div>
 
 	<div class="text-right mt-3">
-		<form id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
+		<a class="btn btn-primary" id="studentData" href="{{ action('ProjectAdminController@exportStudentSummary') }}">Download Student Data</a>
+
+		<form class="d-inline-block ml-2" id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
 			{{ csrf_field() }}
-			<button title="Start archiving" type="submit" class="btn btn-danger">Archive</button>
+			<button title="You must download the student data before archiving" id="eoyaButton" type="submit" class="btn btn-danger disabled" disabled>Archive</button>
 		</form>
 	</div>
 </div>

@@ -24,6 +24,7 @@
 					$students = SussexProjects\Student::select($student->getTable().'.*')
 						->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
 						->where('project_status', $status)
+						->where('user.active_year', SussexProjects\Mode::getProjectYear())
 						->orderBy('last_name', 'asc')
 						->get();
 
@@ -91,7 +92,9 @@
 					@endif
 			@endforeach
 		@else
-			<p>There are no students to report.</p>
+			<div class="col-12">
+				<p>There are no students to report.</p>
+			</div>
 		@endif
 	</div>
 </div>

@@ -176,7 +176,7 @@ class ModeController extends Controller{
 		}
 
 		$userTable = (new User())->getTable();
-		DB::table($userTable)->where('privileges', 'NOT LIKE', '%student%')->update(array('active_year' => $request->project_year));
+		DB::table($userTable)->where('privileges', '<>', 'student')->update(array('active_year' => $request->project_year));
 
 		// Update all with default 
 		DB::table($userTable)->where('active_year', '1970')->update(array('active_year' => $request->project_year));

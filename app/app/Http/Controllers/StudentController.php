@@ -72,7 +72,7 @@ class StudentController extends Controller{
 	 */
 	public function report(){
 		return view('students.report')
-			->with('studentCount', Student::count());
+			->with('studentCount', Student::getAllStudentsQuery()->count());
 	}
 
 	/**
@@ -694,7 +694,8 @@ class StudentController extends Controller{
 							'last_name' => $csv[$i][1],
 							'username' => $csv[$i][4],
 							'programme' => $studentProgrammeModel->id,
-							'email' => $csv[$i][4]."@sussex.ac.uk"
+							'email' => $csv[$i][4]."@sussex.ac.uk",
+							'active_year' => Mode::getProjectYear()
 						));
 						$user->save();
 
@@ -727,7 +728,7 @@ class StudentController extends Controller{
 					));
 				}
 
-				$students = Student::all();
+				$students = Student::getAllStudentsQuery()->get();
 				$users = User::whereIn('id', $students->pluck('id')->toArray())->get();
 
 				$view = view('admin.partials.import-student-table')

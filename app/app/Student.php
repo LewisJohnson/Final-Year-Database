@@ -87,6 +87,21 @@ class Student extends Model{
 	}
 
 	/**
+	 * A list of student in the current project year.
+	 *
+	 * @return QueryBuilder A query builder of all supervisors.
+	 */
+	public static function getAllStudentsQuery(){
+		$userTable = new User();
+		$studentTable = new Student();
+
+		return Student::join($userTable->getTable().' as user', 'user.id', '=', $studentTable->getTable().'.id')
+				->select($studentTable->getTable().'.*')
+				->where('user.active_year', Mode::getProjectYear())
+				->orderBy('user.last_name', 'asc');
+	}
+
+	/**
 	 * A list of all potential student project statues.
 	 *
 	 * @return string[] An array of all statues'.

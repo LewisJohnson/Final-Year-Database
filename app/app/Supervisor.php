@@ -212,6 +212,7 @@ class Supervisor extends Model{
 		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
 			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('user.active_year', Mode::getProjectYear())
 			->where('project_status', 'selected')
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
@@ -241,6 +242,7 @@ class Supervisor extends Model{
 		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
 			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('user.active_year', Mode::getProjectYear())
 			->where('project_status', 'accepted')
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
@@ -270,6 +272,7 @@ class Supervisor extends Model{
 		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
 			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+			->where('user.active_year', Mode::getProjectYear())
 			->where('project_status', 'proposed')
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
@@ -297,9 +300,12 @@ class Supervisor extends Model{
 
 		foreach($projects as $project){
 			$ar = array();
-			$ar["student"] = $project->getAcceptedStudent();
-			$ar["project"] = $project;
-			array_push($secondSupervisingProjects, $ar);
+
+			if($project->getAcceptedStudent()->user->active_year == Mode::getProjectYear()){
+				$ar["student"] = $project->getAcceptedStudent();
+				$ar["project"] = $project;
+				array_push($secondSupervisingProjects, $ar);
+			}
 		}
 
 		return $secondSupervisingProjects;

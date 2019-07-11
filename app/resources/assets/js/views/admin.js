@@ -200,22 +200,32 @@
 		});
 	});
 
+	$("#studentData").on('click', function(){
+		$("#eoyaButton").attr('disabled', false).removeClass('disabled');
+	});
+
 	// 1.3 EOYA
 	$('body').on('submit', '#endOfYearArchive', function(e) {
 		e.preventDefault();
 		var form = $(this);
 		var container = $('.eoya-container');
 		var oldContainerHtml = container.html();
+		var projectYear = $("#project_year").val();
+		var title = 'End of Year Archive';
+
+		if(projectYear != ''){
+			title += ' for ' + projectYear;
+		}
 
 		$.confirm({
-			title: 'End of Year Archive',
+			title: title,
 			type: 'red',
 			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z" /></svg></div></div>',
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
 			animateFromElement : false,
-			content: 'Are you sure you want to archive?',
+			content: 'Are you sure you want to archive? Make sure to double check the student data before pressing "Archive".',
 			buttons: {
 				archive: {
 					btnClass: 'btn-red',

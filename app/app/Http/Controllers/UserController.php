@@ -373,12 +373,21 @@ class UserController extends Controller {
 		// No privileges selected
 		if (empty($request->privileges) || !(is_array($request->privileges))){
 			$user->privileges = null;
+
+			$user->update(array(
+				'first_name' => $request['first_name'],
+				'last_name' => $request['last_name'],
+				'username' => $request['username'],
+				'programme' => $request['programme'],
+				'email' => $request['email'],
+				'active_year' => $request['active_year']
+			));
+
 			$user->save();
 
 			session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
 			session()->flash('message_type', 'success');
-
-			return redirect()->action('HomeController@index');
+			return redirect()->action('UserController@edit', ['user' => $user]);
 		}
 
 		// Validate Student
@@ -473,7 +482,6 @@ class UserController extends Controller {
 
 		session()->flash('message', 'User "'. $user->getFullName().'" has been updated successfully.');
 		session()->flash('message_type', 'success');
-
 		return redirect()->action('UserController@edit', ['user' => $user]);
 	}
 

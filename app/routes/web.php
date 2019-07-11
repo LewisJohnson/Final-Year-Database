@@ -273,6 +273,8 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
    2.3.1 PROJECT ADMIN OR STAFF
    ================================= */
 Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']], function() {
+	// Student Report
+	Route::get('admin/export-student-summary', 'ProjectAdminController@exportStudentSummary');
 
 	// Student Report
 	Route::get('reports/student', 'StudentController@report');

@@ -200,7 +200,8 @@ class Project extends Model {
 	 */
 	public function getStudentsWithProjectSelected(){
 		return Student::where('project_id', $this->id)
-			->where('project_status', 'selected')->get();
+			->where('project_status', 'selected')
+			->get();
 	}
 
 	/**
@@ -210,7 +211,8 @@ class Project extends Model {
 	 */
 	public function getAcceptedStudent(){
 		return Student::where('project_id', $this->id)
-			->where('project_status', 'accepted')->first();
+			->where('project_status', 'accepted')
+			->first();
 	}
 
 	/**

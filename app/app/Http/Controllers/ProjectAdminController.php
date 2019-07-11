@@ -197,7 +197,17 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function archive(){
+	public function archive(Request $request){
+
+		if(!empty($request->project_year)){
+			if($request->project_year != Mode::getProjectYear()){
+				prevYearArchive($request->project_year);
+			}
+		}
+
+
+		dd("NOOO");
+
 		DB::transaction(function(){
 			$projects = Project::all();
 			$studentsToDelete = Student::all();
@@ -238,6 +248,11 @@ class ProjectAdminController extends Controller{
 		return response()->json(array('successful' => true));
 	}
 
+	public function prevYearArchive($year){
+
+		dd("yes");
+	}
+
 	/**
 	 * The manual assign second marker view.
 	 *
@@ -252,6 +267,7 @@ class ProjectAdminController extends Controller{
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		$students = Student::select($student->getTable().'.*')
 				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
+				->where('user.active_year', Mode::getProjectYear())
 				->orderBy('last_name', 'asc')
 				->get();
 
@@ -419,7 +435,9 @@ class ProjectAdminController extends Controller{
 	 * @return \Illuminate\View\View
 	 */
 	public function swapSecondMarkerView(){
-		$projects = Project::whereNotNull('marker_id')->get();
+		$projects = Project::whereNotNull('marker_id')
+				->where('status', '<>' , 'archived')
+				->get();
 
 		return view('admin.swap-marker')->with('projects', $projects);
 	}
@@ -478,8 +496,8 @@ class ProjectAdminController extends Controller{
 				$ar["fName"] = $project->getAcceptedStudent()->user->first_name;
 				$ar["lName"] = $project->getAcceptedStudent()->user->last_name;
 			} else {
-				$ar["fName"] = "-";
-				$ar["lName"] = $student->user->last_name;
+				$ar["fName"] = '-';
+				$ar["lName"] = '-';
 			}
 
 			$ar["projectTitle"] = $project->title;
@@ -505,6 +523,110 @@ class ProjectAdminController extends Controller{
 		header('Content-Description: File Transfer');
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment; filename=SecondMarkerData.csv');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($filepath));
+
+		ob_clean();
+		flush();
+		readfile($filepath);
+		unlink($filepath);
+
+		return;
+	}
+
+		/**
+	 * The student propose a project view (Form).
+	 *
+	 * @return \Illuminate\View\View|\Illuminate\Http\Response
+	 */
+	public function exportStudentSummary(){
+		$students = Student::all();
+		$results = array();
+		
+		foreach($students as $student){
+			$ar = array();
+			
+			$ar["regNo"] = $student->registration_number;
+			$ar["username"] = $student->user->username;
+			$ar["programme"] = $student->user->programme_relationship->name;
+			$ar["fName"] = $student->user->first_name;
+			$ar["lName"] = $student->user->last_name;
+
+			if(!empty($student->project)){
+				$ar["projectTitle"] = $student->project->title;
+
+				if(!empty($student->project->supervisor)){
+					$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
+				} else {
+					$ar["supervisorName"] = '-';
+				}
+
+				if(!empty($student->project->marker)){
+					$ar["markerName"] = $student->project->marker->user->getFullName();
+				} else {
+					$ar["markerName"] = '-';
+				}
+
+				if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
+					$eval = $student->project->evaluation;
+
+					if($eval->hasPosterPresentationQuestion()){
+						$ar["posterMark"] = $eval->getPosterPresentationQuestion()->finalValue;
+					} else {
+						$ar["posterMark"] = '-';
+					}
+
+					if($eval->hasOralPresentationQuestion()){
+						$ar["presentationMark"] = $eval->getOralPresentationQuestion()->finalValue;
+					} else {
+						$ar["presentationMark"] = '-';
+					}
+
+					if($eval->hasDissertationQuestion()){
+						$ar["dissertationMark"] = $eval->getDissertationQuestion()->finalValue;
+					} else {
+						$ar["dissertationMark"] = '-';
+					}
+
+				} else {
+					$ar["posterMark"] = '-';
+					$ar["presentationMark"] = '-';
+					$ar["dissertationMark"] = '-';
+				}
+			} else {
+				$ar["projectTitle"] = '-';
+				$ar["supervisorName"] = '-';
+				$ar["markerName"] = '-';
+				$ar["posterMark"] = '-';
+				$ar["presentationMark"] = '-';
+				$ar["dissertationMark"] = '-';
+			}
+
+			array_push($results, $ar);
+		}
+
+		$filepath = "../storage/app/StudentData.csv";
+		$file = fopen($filepath, 'w');
+
+		fputcsv($file, array(
+			'Registration Number', 'Username', 'Programme',
+			'First Name', 'Last Name',
+			'Project Title', 'Supervisor', 'Second Marker',
+			'Agreed Poster Mark', 'Agreed Presentation Mark', 'Agreed Dissertation Mark'
+		));
+
+		foreach($results as $result){
+			fputcsv($file, $result);
+		}
+
+		fclose($file);
+
+		header('Content-Description: File Transfer');
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=StudentData.csv');
 		header('Content-Transfer-Encoding: binary');
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');

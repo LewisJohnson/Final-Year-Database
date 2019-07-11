@@ -108,11 +108,13 @@
 					@if($project->status != 'archived')
 						<a class="btn btn-primary" href="{{ action('ProjectController@edit', $project->id) }}">Edit Project</a>
 					@else
-						<form class="d-none" id="copy-project" action="{{ action('ProjectController@copy', $project->id) }}" method="POST" accept-charset="utf-8">
-							{{ csrf_field() }}
-						</form>
+						@if($project->isUserSupervisorOfProject())
+							<form class="d-none" id="copy-project" action="{{ action('ProjectController@copy', $project->id) }}" method="POST" accept-charset="utf-8">
+								{{ csrf_field() }}
+							</form>
 
-						<button type="submit" class="btn btn-primary" title="Copy {{ $project->title }}" onclick="$('#copy-project').submit()">Copy Project</button>
+							<button type="submit" class="btn btn-primary" title="Copy {{ $project->title }}" onclick="$('#copy-project').submit()">Copy Project</button>
+						@endif
 					@endif
 				@endif
 
