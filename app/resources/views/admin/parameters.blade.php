@@ -61,7 +61,7 @@
 							<label for="project_year">Project Year</label>
 							<br>
 							<select class="form-control w-auto" id="project_year" name="project_year">
-								@for ($i = (date("Y") - 5); $i < (date("Y") + 5); $i++)
+								@for ($i = (date("Y") - 2); $i < (date("Y") + 5); $i++)
 									<option @if($i == SussexProjects\Mode::getProjectYear()) selected @endif>{{ $i }}</option>
 								@endfor
 							</select>
