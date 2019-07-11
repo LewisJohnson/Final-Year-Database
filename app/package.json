@@ -17,7 +17,7 @@
         "jquery-confirm": "^3.3.2"
     },
     "devDependencies": {
-        "browser-sync": "^2.26.5",
+        "browser-sync": "^2.26.7",
         "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.2.0",
         "laravel-mix": "^1.0",
