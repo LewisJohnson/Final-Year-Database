@@ -183,11 +183,17 @@ class ProjectAdminController extends Controller{
 
 	/**
 	 * Runs the end of year archive script
+	 * PROJECTS:
 	 * - Adds This student was undertaken by [STUDENT NAME]” to project description.
 	 * - Set all projects status to archived.
-	 * - Empty the student tables.
+	 * - Remove student-proposed projects which haven't been accepted.
+	 * 
+	 * STUDENTS:
+	 * - Remove students without projects
+	 * - Remove students with a project and finalised project evaluation.
+	 * 
+	 * OTHER:
 	 * - Empty the transaction tables.
-	 * - Remove all students from the user table.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -204,7 +210,8 @@ class ProjectAdminController extends Controller{
 					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times. ++)";
 				}
 				
-				if($project->status == 'student-proposed'){
+				// Removed 
+				if($project->getAcceptedStudent() == null && $project->status == 'student-proposed'){
 					$project->delete();
 				}
 
@@ -214,7 +221,13 @@ class ProjectAdminController extends Controller{
 
 			// Empty the students table
 			foreach ($studentsToDelete as $student) {
-				User::destroy($student->id);
+				if(empty($student->project)){
+					User::destroy($student->id);
+				} else if(empty($student->project->evaluation)){
+					User::destroy($student->id);
+				} else if($student->project->evaluation->is_finalised){
+					User::destroy($student->id);
+				}
 			}
 
 			// Empty the transaction table

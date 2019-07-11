@@ -113,6 +113,9 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
 	// All users view
 	Route::get('users', 'UserController@index');
 
+	// All users by year view
+	Route::get('users/by-year', 'UserController@byYear');
+
 	// Create user view
 	Route::get('users/create', 'UserController@create');
 

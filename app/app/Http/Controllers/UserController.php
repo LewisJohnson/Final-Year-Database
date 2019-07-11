@@ -16,6 +16,7 @@ use Illuminate\Validation\ValidationException;
 use SussexProjects\Http\Requests\UserForm;
 use SussexProjects\Project;
 use SussexProjects\Student;
+use SussexProjects\Mode;
 use SussexProjects\Supervisor;
 use SussexProjects\User;
 
@@ -84,6 +85,19 @@ class UserController extends Controller {
 	}
 
 	/**
+	 * A list of all users in the system.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function byYear(Request $request){
+		$user = User::all();
+
+		return view('users.by-year');
+	}
+
+	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return \Illuminate\Http\Response
@@ -132,7 +146,8 @@ class UserController extends Controller {
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
 				'programme' => $request['programme'],
-				'email' => $request['email']
+				'email' => $request['email'],
+				'active_year' => Mode::getProjectYear()
 			));
 
 			$user->save();
@@ -394,7 +409,8 @@ class UserController extends Controller {
 				'last_name' => $request['last_name'],
 				'username' => $request['username'],
 				'programme' => $request['programme'],
-				'email' => $request['email']
+				'email' => $request['email'],
+				'active_year' => $request['active_year']
 			));
 
 			// Update student privilege

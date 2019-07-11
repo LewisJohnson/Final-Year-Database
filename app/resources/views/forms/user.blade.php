@@ -69,6 +69,20 @@
 			@include('forms.partials.error-block', ['name' => 'programme'])
 		</div>
 
+		@if($view === "edit")
+			<div class="form-group {{ $errors->has('active_year') ? 'has-error' : '' }}">
+				<label for="active_year">Active Year</label>
+				<br>
+				<select class="form-control w-auto" id="active_year" name="active_year">
+					@foreach(SussexProjects\Mode::all() as $mode)
+						<option @if($mode->project_year == $user->active_year) selected @endif>{{ $mode->project_year }}</option>
+					@endforeach
+				</select>
+
+				@include('forms.partials.error-block', ['name' => 'active_year'])
+			</div>
+		@endif
+
 		<div class="form-group {{ $errors->has('privileges') ? 'has-error' : '' }}">
 			<label>Privileges</label>
 

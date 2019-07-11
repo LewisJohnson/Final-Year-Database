@@ -8,6 +8,8 @@
 namespace SussexProjects\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use SussexProjects\User;
 use SussexProjects\Mode;
 use SussexProjects\ProjectEvaluation;
 use SussexProjects\PEQValueTypes;
@@ -42,6 +44,12 @@ class ModeController extends Controller{
 	 */
 	public function update(Request $request){
 		$mode = Mode::Instance();
+
+		if($mode->project_year != $request->project_year){
+			$mode = new Mode();
+			$mode->marker_released_to_staff = false;
+		}
+
 		$questions = [];
 
 		$amountOfPosterQuestions = 0;
@@ -147,7 +155,6 @@ class ModeController extends Controller{
 		$mode->save();
 
 		// Update all existing evaluations
-
 		$evaluations = ProjectEvaluation::where('project_year', Mode::getProjectYear())->get();
 
 		foreach ($evaluations as $evaluation) {
@@ -167,6 +174,12 @@ class ModeController extends Controller{
 				'questions' => $questions
 			));
 		}
+
+		$userTable = (new User())->getTable();
+		DB::table($userTable)->where('privileges', 'NOT LIKE', '%student%')->update(array('active_year' => $request->project_year));
+
+		// Update all with default 
+		DB::table($userTable)->where('active_year', '1970')->update(array('active_year' => $request->project_year));
 
 		session()->flash('message', 'Parameters and evaluations have been updated successfully.');
 		session()->flash('message_type', 'success');

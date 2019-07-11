@@ -15,6 +15,11 @@
 		</a>
 	</li>
 	<li>
+		<a class="btn w-100 text-left text-primary" href="{{ action('UserController@byYear') }}">
+			<span>@include('svg.clock')<span>Users By Year</span></span>
+		</a>
+	</li>
+	<li>
 		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@loginAsView')}}">
 			<span>@include('svg.login')<span>Log in as Another User</span></span>
 		</a>

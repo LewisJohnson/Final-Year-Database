@@ -190,5 +190,21 @@
 			</form>
 		</div>
 	</div>
+
+	@if(count(SussexProjects\Mode::getOldProjectYears()) > 0)
+		<div class="card mt-3">
+			<div class="card-header">
+				Old Project Years
+			</div>
+
+			<div class="card-body">
+				<div class="form-group">
+					@foreach(SussexProjects\Mode::getOldProjectYears() as $oldYear)
+						{{ $oldYear->project_year }}
+					@endforeach
+				</div>
+			</div>
+		</div>
+	@endif
 </div>
 @endsection

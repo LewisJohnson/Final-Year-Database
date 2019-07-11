@@ -87,7 +87,7 @@ class Mode extends Model{
 	 * @return Mode
 	 */
 	public static function Instance(){
-		$mode = Mode::first();
+		$mode = Mode::orderBy('project_year', 'desc')->first();
 
 		// There is no mode, create one
 		if($mode == null){
@@ -221,6 +221,15 @@ class Mode extends Model{
 	 */
 	public static function isMarkerReleasedToStaff(){
 		return Mode::Instance()->marker_released_to_staff;
+	}
+
+	/**
+	 * Gets old years
+	 *
+	 * @return string
+	 */
+	public static function getOldProjectYears(){
+		return Mode::Where('project_year', '<>', Mode::Instance()->project_year)->get();
 	}
 
 	private static function getPresetQuestions() {
