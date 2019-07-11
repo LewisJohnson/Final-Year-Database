@@ -2,6 +2,11 @@
 
 @section('scripts')
 	<script src="{{ asset('js/views/admin.js') }}"></script>
+
+	<script type="text/javascript">
+		Window["projectYear"] = {{ SussexProjects\Mode::getProjectYear() }};
+	</script>
+
 @endsection
 
 @php
@@ -25,7 +30,7 @@
 	@if(count(SussexProjects\Mode::all()) > 1)
 		<p>
 			You have the option to select a project year to archive because there are users with a different year than the current project year.<br>
-			If you select {{  SussexProjects\Mode::getProjectYear() }} a normal archive will occur (As per the description below).
+			If you select {{ SussexProjects\Mode::getProjectYear() }} a normal archive will occur (As per the description below).
 			Archiving any other year will delete all students regardless of conditions and the parameters entry for said year.
 		</p>
 
@@ -42,7 +47,7 @@
 		<hr>
 	@endif
 
-	<div class="row">
+	<div class="row" id="normalArchive">
 		<div class="col-12">
 			<h6>Most Popular Project</h6>
 			<div class="border border-warning p-2">
@@ -96,10 +101,24 @@
 		</div>
 	</div>
 
-	<div class="text-right mt-3">
-		<a class="btn btn-primary" id="studentData" href="{{ action('ProjectAdminController@exportStudentSummary') }}">Download Student Data</a>
+	<div class="row d-none" id="prevYearArchive">
+		<div class="col-12">
+			<div class="border border-danger p-2">
+				<span class="svg-sm">@include('svg.account-remove')</span>
+				<span>All students will be deleted.</span>
+			</div>
 
-		<form class="d-inline-block ml-2" id="endOfYearArchive" action="{{ action('ProjectAdminController@archive')}}" method="POST" accept-charset="utf-8">
+			<div class="border border-danger p-2 mt-2">
+				<span class="svg-sm">@include('svg.bin')</span>
+				<span>The parameter for this year will be deleted.</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="text-right mt-3">
+		<a class="btn btn-primary" id="studentData" href="{{ action('ProjectAdminController@exportStudentSummary') }}" data-base-url="{{ action('ProjectAdminController@exportStudentSummary') }}">Download Student Data</a>
+
+		<form class="d-inline-block ml-2" id="endOfYearArchive" action="{{ action('ProjectAdminController@archive') }}" data-base-url="{{ action('ProjectAdminController@archive') }}" method="POST" accept-charset="utf-8">
 			{{ csrf_field() }}
 			<button title="You must download the student data before archiving" id="eoyaButton" type="submit" class="btn btn-danger disabled" disabled>Archive</button>
 		</form>

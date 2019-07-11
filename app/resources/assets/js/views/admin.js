@@ -200,21 +200,52 @@
 		});
 	});
 
+	// 1.3 EOYA
+	if($("#project_year").length > 0){
+		updateEOYALinksAndButtonText();
+
+		$("#project_year").on('change', function(){
+			updateEOYALinksAndButtonText();
+		});
+	}
+
+	function updateEOYALinksAndButtonText(){
+		let projectYear = $("#project_year").val();
+
+		//Update links
+		$("#endOfYearArchive").attr('action', $("#endOfYearArchive").attr('data-base-url') + "?project_year=" + projectYear);
+		$("#studentData").attr('href', $("#studentData").attr('data-base-url') + "?project_year=" + projectYear);
+
+		//Update button text
+		$("#studentData").text('Download Student Data for ' + projectYear);
+		$("#eoyaButton").text('Archive ' + projectYear);
+
+		if(projectYear == Window['projectYear']){
+			$("#normalArchive").removeClass('d-none');
+			$("#prevYearArchive").addClass('d-none');
+		} else {
+			$("#normalArchive").addClass('d-none');
+			$("#prevYearArchive").removeClass('d-none');
+		}
+	}
+
 	$("#studentData").on('click', function(){
-		$("#eoyaButton").attr('disabled', false).removeClass('disabled');
+		$("#eoyaButton")
+			.attr('disabled', false)
+			.attr('title', 'Start archiving')
+			.removeClass('disabled');
 	});
 
-	// 1.3 EOYA
+	
 	$('body').on('submit', '#endOfYearArchive', function(e) {
 		e.preventDefault();
 		var form = $(this);
 		var container = $('.eoya-container');
 		var oldContainerHtml = container.html();
-		var projectYear = $("#project_year").val();
 		var title = 'End of Year Archive';
 
-		if(projectYear != ''){
-			title += ' for ' + projectYear;
+		if($("#project_year").length > 0){
+			title += ' for ' + $("#project_year").val();
 		}
 
 		$.confirm({

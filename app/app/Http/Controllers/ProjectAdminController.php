@@ -201,12 +201,9 @@ class ProjectAdminController extends Controller{
 
 		if(!empty($request->project_year)){
 			if($request->project_year != Mode::getProjectYear()){
-				prevYearArchive($request->project_year);
+				$this::prevYearArchive($request->project_year);
 			}
 		}
-
-
-		dd("NOOO");
 
 		DB::transaction(function(){
 			$projects = Project::all();
@@ -250,7 +247,17 @@ class ProjectAdminController extends Controller{
 
 	public function prevYearArchive($year){
 
-		dd("yes");
+		DB::transaction(function(){
+			$projects = Project::all();
+			$studentsToDelete = Student::all();
+
+			// Empty the students table
+			foreach ($studentsToDelete as $student) {
+				User::destroy($student->id);
+			}
+		});
+
+		return response()->json(array('successful' => true));
 	}
 
 	/**
@@ -488,6 +495,7 @@ class ProjectAdminController extends Controller{
 	public function exportSecondMarkerData(Request $request){
 		$projects = Project::whereNotNull('marker_id')->get();
 		$results = array();
+
 		foreach($projects as $project){
 			$ar = array();
 			
@@ -542,10 +550,21 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View|\Illuminate\Http\Response
 	 */
-	public function exportStudentSummary(){
-		$students = Student::all();
+	public function exportStudentSummary(Request $request){
+		if(!empty($request->project_year)){
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->select($studentTable.'.*')
+				->where('user.active_year', $request->project_year)
+				->orderBy('user.last_name', 'asc')
+				->get();
+		} else {
+			$students = Student::getAllStudentsQuery()->get();
+		}
+
 		$results = array();
-		
 		foreach($students as $student){
 			$ar = array();
 			
@@ -608,7 +627,14 @@ class ProjectAdminController extends Controller{
 			array_push($results, $ar);
 		}
 
-		$filepath = "../storage/app/StudentData.csv";
+		if(!empty($request->project_year)){
+			$fileName = "StudentData-".$request->project_year.".csv";
+		} else {
+			$fileName = "StudentData-".Mode::getProjectYear().".csv";
+		}
+
+		$filepath = "../storage/app/".$fileName;
+
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
@@ -626,7 +652,7 @@ class ProjectAdminController extends Controller{
 
 		header('Content-Description: File Transfer');
 		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment; filename=StudentData.csv');
+		header('Content-Disposition: attachment; filename='.$fileName);
 		header('Content-Transfer-Encoding: binary');
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
