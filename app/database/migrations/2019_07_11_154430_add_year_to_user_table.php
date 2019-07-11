@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddYearToUserTable extends Migration
+{
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up() {
+		foreach(get_departments() as $key => $department) {
+			$tableName = $department.'_users';
+
+			Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+				DB::statement("ALTER TABLE `".$tableName."` ADD `active_year` YEAR NOT NULL DEFAULT '1970' AFTER `programme`;");
+			});
+		}
+		
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down(){
+		$tableName = $department.'_users';
+
+		Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+			DB::dropColumn("active_year");
+		});
+	}
+}
