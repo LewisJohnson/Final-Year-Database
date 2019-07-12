@@ -30,7 +30,6 @@ use SussexProjects\PEQValueTypes;
 class ProjectEvaluationController extends Controller {
 
 	public function __construct(){
-
 		$this->middleware(function ($request, $next) {
 			if(Mode::getProjectEvaluationDate()->gte(\Carbon\Carbon::now())) {
 				return abort(404);
@@ -49,14 +48,22 @@ class ProjectEvaluationController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function index(){
-		$student = new Student();
-		$user = new User();
+	public function index(Request $request){
+		$userTable = (new User())->getTable();
+		$studentTable = (new Student())->getTable();
 
-		$students = Student::select($student->getTable().'.*')
-				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
-				->orderBy('last_name', 'asc')
+		if(!empty($request->project_year)){
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->select($studentTable.'.*')
+				->where('user.active_year', $request->project_year)
+				->orderBy('user.last_name', 'asc')
 				->get();
+		} else {
+			$students = Student::getAllStudentsQuery()->get();
+		}
 
 		return view('evaluation.index')
 			->with("students", $students);

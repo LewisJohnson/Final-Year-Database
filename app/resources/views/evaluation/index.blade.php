@@ -1,12 +1,25 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered mw-1800 js-show-scroll-top">
-
 	<h1>Project Evaluations</h1>
 
 	<div class="d-flex w-100">
 		<a class="ml-auto btn btn-primary" title="Download project evaluation data as CSV" href="{{ action('ProjectEvaluationController@export') }}"><span class="svg-xs">@include('svg.file-export')</span>Export CSV</a>
 	</div>
+					
+	@if(count(SussexProjects\Mode::all()) > 1)
+		<div class="form-group">
+			<label for="project_year">Project Year <a href="{{ action('UserController@byYear') }}">(Click here for more)</a></label>
+			<br>
+			<select class="form-control w-auto js-projectYear">
+				@foreach(SussexProjects\Mode::all() as $mode)
+					<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('ProjectEvaluationController@index', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<hr>
+	@endif
 
 	<div class="table-responsive">
 		<table class="table bg-white data-table sort-table shadow-sm mt-3">

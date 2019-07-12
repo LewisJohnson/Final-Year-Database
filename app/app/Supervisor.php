@@ -233,16 +233,17 @@ class Supervisor extends Model{
 	 *
 	 * @return array A key/value array where the key is the student and the value is the project they are accepted for
 	 */
-	public function getAcceptedStudents(){
+	public function getAcceptedStudents($year = null){
 		$project = new Project;
 		$student = new Student;
 		$user = new User;
 		$offers = array();
+		$year = $year ?? Mode::getProjectYear();
 
 		$students = Student::select($student->getTable().'.*', 'project.supervisor_id')
 			->join($project->getTable().' as project', 'project_id', '=', 'project.id')
 			->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
-			->where('user.active_year', Mode::getProjectYear())
+			->where('user.active_year', $year)
 			->where('project_status', 'accepted')
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
@@ -293,15 +294,15 @@ class Supervisor extends Model{
 	 *
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
-	public function getSecondMarkingProjects(){
+	public function getSecondMarkingProjects($year = null){
 		$projects = Project::where('marker_id', $this->id)->get();
-
+		$year = $year ?? Mode::getProjectYear();
 		$secondSupervisingProjects = array();
 
 		foreach($projects as $project){
 			$ar = array();
 
-			if($project->getAcceptedStudent()->user->active_year == Mode::getProjectYear()){
+			if(!empty($project->getAcceptedStudent()) && $project->getAcceptedStudent()->user->active_year == $year){
 				$ar["student"] = $project->getAcceptedStudent();
 				$ar["project"] = $project;
 				array_push($secondSupervisingProjects, $ar);

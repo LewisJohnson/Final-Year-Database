@@ -99,6 +99,9 @@
 				<div class="card-body">
 					<h1 class="d-flex">
 						Project Evaluation
+						@if($evaluation->project_year != SussexProjects\Mode::getProjectYear())
+						<span class="text-muted">&nbsp;/ {{ $evaluation->project_year }} </span>
+						@endif
 						<span class="ml-auto {{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</span>
 					</h1>
 

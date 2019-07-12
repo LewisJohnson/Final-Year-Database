@@ -249,7 +249,7 @@ class ProjectAdminController extends Controller{
 
 		DB::transaction(function() use ($year){
 			$projects = Project::all();
-			
+
 			$userTable = (new User())->getTable();
 			$studentTable = (new Student())->getTable();
 

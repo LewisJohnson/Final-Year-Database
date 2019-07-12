@@ -79,82 +79,112 @@
 			@endif
 		
 			@if(Auth::user()->isSupervisor())
-				<div class="col-12 col-md-6 mt-3 mt-md-4">
-					<div class="card">
-						<div class="card-body">
-							<h3 class="card-title">Options</h3>
-							<p>Here you can change your email preferences.</p>
-							@foreach(get_education_levels() as $educationLevel)
-								<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
-									{{ csrf_field() }}
-			
-									<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
-									<div class="form-field mb-2">
-										<div class="checkbox">
-											<input class="receive-emails-checkbox" type="checkbox" name="accept_emails_{{ $educationLevel["shortName"] }}" id="accept_emails_{{ $educationLevel["shortName"] }}" @if(Auth::user()->supervisor->getAcceptingEmails($educationLevel["shortName"])) checked @endif >
-											<label class="ml-1" for="accept_emails_{{ $educationLevel["shortName"] }}">Receive {{ $educationLevel["longName"] }} emails</label>
+				@if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
+					<div class="col-12 col-md-6 mt-3 mt-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">Options</h3>
+								<p>Here you can change your email preferences.</p>
+								@foreach(get_education_levels() as $educationLevel)
+									<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
+										{{ csrf_field() }}
+				
+										<input type="hidden" name="education_level" value="{{ $educationLevel["shortName"] }}">
+										<div class="form-field mb-2">
+											<div class="checkbox">
+												<input class="receive-emails-checkbox" type="checkbox" name="accept_emails_{{ $educationLevel["shortName"] }}" id="accept_emails_{{ $educationLevel["shortName"] }}" @if(Auth::user()->supervisor->getAcceptingEmails($educationLevel["shortName"])) checked @endif >
+												<label class="ml-1" for="accept_emails_{{ $educationLevel["shortName"] }}">Receive {{ $educationLevel["longName"] }} emails</label>
+											</div>
 										</div>
-									</div>
-								</form>
-							@endforeach
+									</form>
+								@endforeach
+							</div>
 						</div>
 					</div>
-				</div>
+				@endif
 			@endif
 		</div>
 
 		@if(Auth::user()->isSupervisor())
-			@include('supervisors.project-report')
 
+			@if(count(SussexProjects\Mode::all()) > 1)
 			<div class="row mt-3">
 				<div class="col-12">
 					<div class="card">
 						<div class="card-body">
-							<h3 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h3>
-
-							<div>
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item">Your {{ Session::get('education_level')["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</li>
-					
-									@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
-										<li class="list-group-item">You are accepting {{ Session::get('education_level')["longName"] }} students.</li>
-									@else
-										<li class="list-group-item">You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</li>
-									@endif
-					
-									@if(count(Auth::user()->supervisor->getInterestedStudents()) > 0)
-										<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getInterestedStudents()) }} student(s) are awaiting approval.</li>
-									@else
-										<li class="list-group-item">No students are awaiting approval.</li>
-									@endif
-					
-									@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
-										<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} student(s) have proposed a project to you.</li>
-									@else
-										<li class="list-group-item">No students have currently proposed a project to you.</li>
-									@endif
-					
-									@if(count(Auth::user()->supervisor->getAcceptedStudents()) > 0)
-										<li class="list-group-item">You have accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }} students.</li>
-									@else
-										<li class="list-group-item">You have accepted no students.</li>
-									@endif
-					
-									@if(count(Auth::user()->supervisor->getSecondMarkingProjects()) > 0)
-										<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondMarkingProjects()) }} projects.</li>
-									@else
-										<li class="list-group-item">You have not been assigned as second marker to any projects.</li>
-									@endif
-								</ul>
+							<h3 class="card-title">Project Year</h3>
+							<p>
+								You can still see un-finalised evaluations from last year.<br>
+								This option will disappear once everyone has finalised their evaluations from last year.
+							</p>
+							<div class="form-group">
+								<label for="project_year">Project Year</label>
+								<br>
+								<select class="form-control w-auto js-projectYear">
+									@foreach(SussexProjects\Mode::all() as $mode)
+										<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('HomeController@index', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+									@endforeach
+								</select>
 							</div>
-						</div>
-
-						<div class="card-footer">
-							<a href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
 						</div>
 					</div>
 				</div>
 			</div>
+			@endif
+
+			@include('supervisors.project-report')
+
+			@if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
+				<div class="row mt-3">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h3>
+
+								<div>
+									<ul class="list-group list-group-flush">
+										<li class="list-group-item">Your {{ Session::get('education_level')["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</li>
+						
+										@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
+											<li class="list-group-item">You are accepting {{ Session::get('education_level')["longName"] }} students.</li>
+										@else
+											<li class="list-group-item">You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</li>
+										@endif
+						
+										@if(count(Auth::user()->supervisor->getInterestedStudents()) > 0)
+											<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getInterestedStudents()) }} student(s) are awaiting approval.</li>
+										@else
+											<li class="list-group-item">No students are awaiting approval.</li>
+										@endif
+						
+										@if(count(Auth::user()->supervisor->getStudentProjectProposals()) > 0)
+											<li class="list-group-item">A total of {{ count(Auth::user()->supervisor->getStudentProjectProposals()) }} student(s) have proposed a project to you.</li>
+										@else
+											<li class="list-group-item">No students have currently proposed a project to you.</li>
+										@endif
+						
+										@if(count(Auth::user()->supervisor->getAcceptedStudents()) > 0)
+											<li class="list-group-item">You have accepted {{ count(Auth::user()->supervisor->getAcceptedStudents()) }} students.</li>
+										@else
+											<li class="list-group-item">You have accepted no students.</li>
+										@endif
+						
+										@if(count(Auth::user()->supervisor->getSecondMarkingProjects()) > 0)
+											<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondMarkingProjects()) }} projects.</li>
+										@else
+											<li class="list-group-item">You have not been assigned as second marker to any projects.</li>
+										@endif
+									</ul>
+								</div>
+							</div>
+
+							<div class="card-footer">
+								<a href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
 		@endif
 
 		<div class="row">

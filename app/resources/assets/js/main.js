@@ -550,6 +550,10 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 		}
 	}
 
+	$(".js-projectYear").on('change', function(){
+		window.location = $(".js-projectYear :selected").attr('data-href');
+	});
+
 	/* ======================
 		 6. HTML EDITOR
 	   ====================== */
