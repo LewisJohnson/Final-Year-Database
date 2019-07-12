@@ -255,7 +255,7 @@ class ProjectAdminController extends Controller{
 
 			$studentsToDelete = Student::select($studentTable.'.*')
 				->join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
-				->where('user.active_year', Mode::getProjectYear())
+				->where('user.active_year', $year)
 				->orderBy('last_name', 'asc')
 				->get();
 
