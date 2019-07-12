@@ -247,14 +247,22 @@ class ProjectAdminController extends Controller{
 
 	public function prevYearArchive($year){
 
-		DB::transaction(function(){
+		DB::transaction(function() use ($year){
 			$projects = Project::all();
-			$studentsToDelete = Student::all();
+			$studentTable = (new Student)->getTable();
+
+			$studentsToDelete = Student::select($studentTable.'.*')
+				->join($user->getTable().' as user', 'user.id', '=', $studentTable.'.id')
+				->where('user.active_year', Mode::getProjectYear())
+				->orderBy('last_name', 'asc')
+				->get();
 
 			// Empty the students table
 			foreach ($studentsToDelete as $student) {
 				User::destroy($student->id);
 			}
+
+			Mode::where('project_year', $year)->delete();
 		});
 
 		return response()->json(array('successful' => true));
