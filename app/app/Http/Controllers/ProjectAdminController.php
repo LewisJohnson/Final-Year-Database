@@ -249,10 +249,12 @@ class ProjectAdminController extends Controller{
 
 		DB::transaction(function() use ($year){
 			$projects = Project::all();
-			$studentTable = (new Student)->getTable();
+			
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
 
 			$studentsToDelete = Student::select($studentTable.'.*')
-				->join($user->getTable().' as user', 'user.id', '=', $studentTable.'.id')
+				->join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
 				->where('user.active_year', Mode::getProjectYear())
 				->orderBy('last_name', 'asc')
 				->get();
