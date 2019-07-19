@@ -213,17 +213,14 @@ class ProjectAdminController extends Controller{
 			foreach($projects as $project){
 				if($project->getAcceptedStudent() != null){
 					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
-				} else {
-					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times. ++)";
+					$project->status = 'archived';
+					$project->save();
 				}
 				
 				// Removed 
 				if($project->getAcceptedStudent() == null && $project->status == 'student-proposed'){
 					$project->delete();
 				}
-
-				$project->status = 'archived';
-				$project->save();
 			}
 
 			// Empty the students table
