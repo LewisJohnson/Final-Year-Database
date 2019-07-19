@@ -140,6 +140,9 @@ Route::group(['middleware' => ['web', 'admin', 'checkDepartment']], function() {
    ================================== */
 Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']], function() {
 
+	
+	Route::get('fix', 'ProjectAdminController@tempFixArchivedProject');
+
 	// System admin dashboard
 	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
 

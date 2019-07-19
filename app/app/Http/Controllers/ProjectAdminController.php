@@ -270,6 +270,20 @@ class ProjectAdminController extends Controller{
 		return response()->json(array('successful' => true));
 	}
 
+	public function tempFixArchivedProject(){
+		$projects = Project::all();
+
+		foreach ($projects as $project) {
+			if (strpos($project->description, 'undertaken by') === false) {
+				$project->status = "on-offer";
+				$project->save();
+				echo 'Now on-offer "'.$project->title.'" <br>';
+			}
+			
+		}
+		echo 'All fixed :)';
+	}
+
 	/**
 	 * The manual assign second marker view.
 	 *
