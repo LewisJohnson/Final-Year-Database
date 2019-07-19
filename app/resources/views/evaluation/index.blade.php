@@ -4,7 +4,8 @@
 	<h1>Project Evaluations</h1>
 
 	<div class="d-flex w-100">
-		<a class="ml-auto btn btn-primary" title="Download project evaluation data as CSV" href="{{ action('ProjectEvaluationController@export') }}"><span class="svg-xs">@include('svg.file-export')</span>Export CSV</a>
+		<a class="ml-auto btn btn-primary" target="_blank" rel="noopener noreferrer" title="Print all project evaluations" href="{{ action('ProjectEvaluationController@all') }}"><span class="svg-xs">@include('svg.printer')</span>Print All</a>
+		<a class="ml-2 btn btn-primary" title="Download project evaluation data as CSV" href="{{ action('ProjectEvaluationController@export') }}"><span class="svg-xs">@include('svg.file-export')</span>Export CSV</a>
 	</div>
 					
 	@if(count(SussexProjects\Mode::all()) > 1)

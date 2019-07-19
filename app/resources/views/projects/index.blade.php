@@ -3,7 +3,6 @@
 	<script src="{{ asset('js/views/project-preview.js') }}"></script>
 @endsection
 
-
 @section ('content')
 <div class="centered mw-1200 js-show-scroll-top">
 	@if($view == "index")

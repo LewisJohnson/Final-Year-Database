@@ -300,6 +300,9 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 	// Project evaluation
 	Route::get('reports/evaluations', 'ProjectEvaluationController@index');
 
+	// All project evaluation data
+	Route::get('/evaluations/all', 'ProjectEvaluationController@all');
+
 	// Export project evaluation data
 	Route::get('reports/evaluations/export', 'ProjectEvaluationController@export');
 
