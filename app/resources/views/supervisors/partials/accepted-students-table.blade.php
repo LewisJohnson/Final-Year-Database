@@ -1,10 +1,6 @@
-@php
-	$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
-@endphp
-
 <div class="table-responsive">
 	<table class="table table-hover bg-white mt-3 mb-1 data-table sort-table supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
-		@if($acceptedStudents)
+		@if(count($acceptedStudents) > 0)
 			<thead class="thead-light">
 				<tr>
 					<th>

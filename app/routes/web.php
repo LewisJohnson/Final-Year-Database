@@ -333,7 +333,7 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');
 
 	// Accepted student table (Used with AJAX)
-	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
+	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentsTable');
 
 	// Accept student for their selected project
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');

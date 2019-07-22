@@ -12,7 +12,6 @@
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents(Request::get('project_year'));
 		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects(Request::get('project_year'));
 	}
-
 @endphp
 
 {{-- INTRESTED STUDENTS --}}
@@ -173,7 +172,7 @@
 					<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ Request::get('project_year') }}.</h6>
 				@endif
 
-				@include('supervisors.partials.accepted-students-table')
+				@include('supervisors.partials.accepted-students-table', $acceptedStudents)
 				
 				<div class="text-right mt-3">
 					<a class="btn btn-light email-selected accepted-students" href="#">Email Selected</a>

@@ -78,7 +78,7 @@ class SupervisorController extends Controller{
 		}
 
 		return view('supervisors.report')
-			->with("supervisors", $supervisors)
+			->with('supervisors', $supervisors)
 			->with('sr_hide_closed', $request->sr_hide_closed);
 	}
 
@@ -88,8 +88,13 @@ class SupervisorController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 
 	 */
-	public function acceptedStudentTable(){
-		return view('supervisors.partials.accepted-students-table');
+	public function acceptedStudentsTable(Request $request){
+
+		// We don't need to specify a student year because you can't accept students from any year but active 
+		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
+
+		return view('supervisors.partials.accepted-students-table')
+				->with('acceptedStudents', $acceptedStudents);
 	}
 
 	/**
