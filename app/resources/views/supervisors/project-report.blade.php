@@ -8,9 +8,11 @@
 		$studentProposals = Auth::user()->supervisor->getStudentProjectProposals();
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
 		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects();
+		$showEvaluationButton = SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
 	} else {
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents(Request::get('project_year'));
 		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects(Request::get('project_year'));
+		$showEvaluationButton = true;
 	}
 @endphp
 
@@ -172,7 +174,7 @@
 					<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ Request::get('project_year') }}.</h6>
 				@endif
 
-				@include('supervisors.partials.accepted-students-table', $acceptedStudents)
+				@include('supervisors.partials.accepted-students-table', ['acceptedStudents' => $acceptedStudents, 'showEvaluationButton' => $showEvaluationButton])
 				
 				<div class="text-right mt-3">
 					<a class="btn btn-light email-selected accepted-students" href="#">Email Selected</a>
@@ -202,10 +204,11 @@
 								<tr>
 									<th>Student Name</th>
 									<th>Project Title</th>
-									@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+									
+									@if($showEvaluationButton)
 										<th>Evaluation Status</th>
+										<th></th>
 									@endif
-									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -219,7 +222,7 @@
 											<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
 										</td>
 
-										@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+										@if($showEvaluationButton)
 											<td>
 												@if(!empty($markerProjects['project']->evaluation))
 													<span class="{{ $markerProjects['project']->evaluation->getStatusBootstrapClass() }}">{{ $markerProjects['project']->evaluation->getStatus() }}</span>
@@ -227,13 +230,11 @@
 													Not Started
 												@endif
 											</td>
-										@endif
 
-										<td class="text-right">
-											@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
-												<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
-											@endif
-										</td>
+											<td class="text-right">
+													<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
+											</td>
+										@endif
 									</tr>
 								@endforeach
 							</tbody>

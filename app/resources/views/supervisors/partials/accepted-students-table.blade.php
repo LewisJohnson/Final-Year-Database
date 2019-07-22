@@ -12,7 +12,7 @@
 					<th>Student Name</th>
 					<th>Second Marker</th>
 					<th>Project Title</th>
-					@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+					@if($showEvaluationButton)
 						<th>Evaluation Status</th>
 					@endif
 					<th class="js-unsortable"></th>
@@ -60,7 +60,7 @@
 									data-project-title="{{ $accepted['project']->title }}">Undo</button>
 							@endif
 
-							@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+							@if($showEvaluationButton)
 								<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
 							@endif
 						</td>
