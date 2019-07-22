@@ -48,15 +48,18 @@ class Handler extends ExceptionHandler{
 	 */
 	public function render($request, Exception $exception){
 		if ($exception && !env('APP_DEBUG')){
-			session()->flash('message', 'Sorry, an SQL error occurred. Please try again.');
-			session()->flash('message_type', 'error');
+			if($exception instanceof \Illuminate\Database\QueryException || $exception instanceof \Illuminate\Database\PDOException){
+				session()->flash('message', 'Sorry, an SQL error occurred. Please try again.');
+				session()->flash('message_type', 'error');
 
-			if($request->isMethod('post') && isset($_SERVER['HTTP_REFERER'])) {
-				return redirect($_SERVER['HTTP_REFERER']);
-			} else {
-				return redirect('/');
+				if($request->isMethod('post') && isset($_SERVER['HTTP_REFERER'])) {
+					return redirect($_SERVER['HTTP_REFERER']);
+				} else {
+					return redirect('/');
+				}
 			}
 		}
+
 		return parent::render($request, $exception);
 	}
 }
