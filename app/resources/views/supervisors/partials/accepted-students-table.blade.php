@@ -43,7 +43,7 @@
 							<a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a>
 						</td>
 
-						@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+						@if($showEvaluationButton)
 							<td>
 								@if(!empty($accepted['project']->evaluation))
 									<span class="{{ $accepted['project']->evaluation->getStatusBootstrapClass() }}">{{ $accepted['project']->evaluation->getStatus() }}</span>
