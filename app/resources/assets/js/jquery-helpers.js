@@ -150,10 +150,3 @@ $(function() {
 	n);f&&(h?(h.className=n,h.offsetTop+h.offsetHeight>a.scrollTop+a.offsetHeight&&(a.scrollTop+=h.offsetHeight)):k[0].className=n)}!d||13!=c.keyCode&&9!=c.keyCode||v(d)}})}var x="datalist-polyfill",n="datalist-polyfill__active",m=!(!f.createElement("datalist")||!window.HTMLDataListElement),b=navigator.userAgent,b=b.match(/Android/)&&!b.match(/(Firefox|Chrome|Opera|OPR)/);if(!m||b)for(var m=f.querySelectorAll("input[list]"),y=function(e,b){var g;f.createEvent?(g=f.createEvent("HTMLEvents"),g.initEvent(b,
 	!0,!0),e.dispatchEvent(g)):(g=f.createEventObject(),g.eventType=b,e.fireEvent("on"+b,g))},b=0;b<m.length;b++){var r=m[b],s=r.getAttribute("list"),p=f.getElementById(s);if(!p){console.error("No datalist found for input: "+s);break}var q=f.querySelector('select[data-datalist="'+s+'"]'),z=(q||p).getElementsByTagName("option");w(r,p,z);q&&q.parentNode.removeChild(q)}})(document);
 });
-
-// A catch all approach to AJAX errors.
-$(document).ajaxError(function(event, request, settings) {
-	if(config.showAjaxRequestFailNotification){
-		createToast('error', 'Something went wrong with that request.');
-	}
-});
