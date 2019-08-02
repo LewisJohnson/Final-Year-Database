@@ -16,7 +16,7 @@
 	font-weight: 600;
 	opacity: 0;
 	z-index: 100;
-	animation: flash-message $notification-animation-duration cubic-bezier(0.18, 0.89, 0.32, 1.28);;
+	animation: flash-message $notification-animation-duration cubic-bezier(0.18, 0.89, 0.32, 1.28);
 	-webkit-font-smoothing: antialiased;
 	pointer-events: none;
 	font-size: 20px;

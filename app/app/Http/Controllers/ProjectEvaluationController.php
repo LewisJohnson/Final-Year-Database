@@ -49,9 +49,6 @@ class ProjectEvaluationController extends Controller {
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index(Request $request){
-		$userTable = (new User())->getTable();
-		$studentTable = (new Student())->getTable();
-
 		if(!empty($request->project_year)){
 			$userTable = (new User())->getTable();
 			$studentTable = (new Student())->getTable();
@@ -642,6 +639,46 @@ class ProjectEvaluationController extends Controller {
 		return view('evaluation.feedback')
 			->with("students", $students)
 			->with('pe_hide_incomplete', $request->pe_hide_incomplete);
+	}
+
+	/**
+	 * An overall view of project evaluations.
+	 *
+	 * @param  Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function all(Request $request){
+		$userTable = (new User())->getTable();
+		$studentTable = (new Student())->getTable();
+
+		$students = Student::select($studentTable.'.*')
+				->join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->orderBy('last_name', 'asc')
+				->get();
+
+		$students = $students->sortBy(function ($student) {
+			if(empty($student->project)){
+				return 4;
+			}
+
+			if(empty($student->project->evaluation)){
+				return 3;
+			}
+
+			if($student->project->evaluation->is_deferred){
+				return 2;
+			}
+
+			if(!$student->project->evaluation->is_finalised){
+				return 1;
+			}
+
+			return 0;
+		});
+
+		return view('evaluation.all')
+			->with("students", $students);
 	}
 
 

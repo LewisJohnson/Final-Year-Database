@@ -6,9 +6,9 @@
 	nav, footer{ background: #a70101 !important; }
 </style>
 
-<div class="centered" style="max-width: 700px">
-	<h1>🤷 We couldn't find the requested page.</h1>
+<div class="centered mw-600">
+	<h1>⛔ You're not allowed here ⛔</h1>
 
-	<p class="pt-3">The server could not find the requested page.</p>
+	<p class="pt-3">This page is not available to you.</p>
 </div>
 @endsection

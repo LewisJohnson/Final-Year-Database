@@ -92,8 +92,6 @@ class UserController extends Controller {
 	 * @return \Illuminate\View\View
 	 */
 	public function byYear(Request $request){
-		$user = User::all();
-
 		return view('users.by-year');
 	}
 

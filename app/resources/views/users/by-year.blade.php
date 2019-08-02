@@ -6,12 +6,19 @@
 
 @section('content')
 <div class="centered mw-800">
-	<h1>Users By Year</h1>
+	<h1>Students by Year</h1>
 
 	<div class="row mt-3">
 		@foreach(SussexProjects\Mode::all() as $mode)
 			@php
-				$usersWithThisYear = SussexProjects\User::where('active_year', $mode->project_year)->get();
+				$userTable = (new SussexProjects\User())->getTable();
+				$studentTable = (new SussexProjects\Student())->getTable();
+
+				$studentsWithThisYear = SussexProjects\Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+						->select($studentTable.'.*')
+						->where('user.active_year', $mode->project_year)
+						->orderBy('user.last_name', 'asc')
+						->get();
 			@endphp
 					
 			<div class="col-6 mt-3 mt-md-0">
@@ -20,9 +27,9 @@
 						<h5 class="card-title">{{ $mode->project_year }}</h5>
 								
 						<ol class="order-list-js last-name-header-list-js list-unstyled">
-							@foreach($usersWithThisYear as $user)
-								<li data-sort-name="{{ $user->last_name }}">
-									<a title="Edit {{ $user->getFullName() }}" href="{{ action('UserController@edit', $user) }}">{{ $user->getFullName() }}</a>
+							@foreach($studentsWithThisYear as $student)
+								<li>
+									<a title="Edit {{ $student->user->getFullName() }}" href="{{ action('UserController@edit', $student->user) }}">{{ $student->user->getFullName() }}</a>
 								</li>
 							@endforeach
 						</ol>

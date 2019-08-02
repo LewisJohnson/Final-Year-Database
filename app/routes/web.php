@@ -300,6 +300,9 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 	// Project evaluation
 	Route::get('reports/evaluations', 'ProjectEvaluationController@index');
 
+	// All project evaluation data
+	Route::get('/evaluations/all', 'ProjectEvaluationController@all');
+
 	// Export project evaluation data
 	Route::get('reports/evaluations/export', 'ProjectEvaluationController@export');
 
@@ -330,7 +333,7 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	Route::patch('supervisor/receive-emails', 'SupervisorController@receiveEmails');
 
 	// Accepted student table (Used with AJAX)
-	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentTable');
+	Route::get('supervisor/accepted-students-table', 'SupervisorController@acceptedStudentsTable');
 
 	// Accept student for their selected project
 	Route::post('supervisor/student-accept', 'SupervisorController@acceptStudent');

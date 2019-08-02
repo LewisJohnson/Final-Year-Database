@@ -1,10 +1,6 @@
-@php
-	$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
-@endphp
-
 <div class="table-responsive">
 	<table class="table table-hover bg-white mt-3 mb-1 data-table sort-table supervisor-table accepted-students" id="supervisor-accepted-students-table" data-supervisor-email="{{ Auth::user()->email }}" data-status="accepted-students">
-		@if($acceptedStudents)
+		@if(count($acceptedStudents) > 0)
 			<thead class="thead-light">
 				<tr>
 					<th>
@@ -16,7 +12,7 @@
 					<th>Student Name</th>
 					<th>Second Marker</th>
 					<th>Project Title</th>
-					@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+					@if($showEvaluationButton)
 						<th>Evaluation Status</th>
 					@endif
 					<th class="js-unsortable"></th>
@@ -47,7 +43,7 @@
 							<a href="{{ action('ProjectController@show', $accepted['project']) }}">{{ $accepted['project']->title }}</a>
 						</td>
 
-						@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+						@if($showEvaluationButton)
 							<td>
 								@if(!empty($accepted['project']->evaluation))
 									<span class="{{ $accepted['project']->evaluation->getStatusBootstrapClass() }}">{{ $accepted['project']->evaluation->getStatus() }}</span>
@@ -64,7 +60,7 @@
 									data-project-title="{{ $accepted['project']->title }}">Undo</button>
 							@endif
 
-							@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
+							@if($showEvaluationButton)
 								<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
 							@endif
 						</td>
