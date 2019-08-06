@@ -31,8 +31,10 @@ class ProjectEvaluationController extends Controller {
 
 	public function __construct(){
 		$this->middleware(function ($request, $next) {
-			if(Mode::getProjectEvaluationDate()->gte(\Carbon\Carbon::now())) {
-				return abort(404);
+			if(!(Auth::user()->isExternalMarker() || Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]))) {
+				if(Mode::getProjectEvaluationDate()->gte(\Carbon\Carbon::now())) {
+					return abort(403);
+				}
 			}
 			
 			return $next($request);
