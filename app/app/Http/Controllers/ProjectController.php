@@ -379,13 +379,13 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@show', $project);
 		}
 
-		preg_match('/\(\+\+(.)*\+\+\)/umix', $input->description, $macthes);
+		preg_match('/\(\+\+.*\+\+\)/umix', $input->description, $macthes);
 
 		// Has the supervisor forgotten to remove the archive text?
-		if ($macthes > 0) {
+		if (!empty($macthes)) {
 			if(empty($macthes[0])){
 				//This shouldn't happen
-				session()->flash('message', 'Please remove the text (++ ++)');
+				session()->flash('message', 'Please remove the text between (++ ++)');
 			} else {
 				session()->flash('message', 'Please remove the text "'.$macthes[0].'"');
 			}
