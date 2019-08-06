@@ -379,9 +379,11 @@ class ProjectController extends Controller{
 			return redirect()->action('ProjectController@show', $project);
 		}
 
+		preg_match('/\(\+\+(.)*\+\+\)/umix', $input->description, $macthes, PREG_OFFSET_CAPTURE);
+
 		// Has the supervisor forgotten to remove the archive text?
-		if (strpos($input->description, '(++ In') !== false) {
-			session()->flash('message', 'Have you forgotten to remove the archive text?');
+		if ($macthes > 0) {
+			session()->flash('message', 'Please remove the text "'.$macthes[0][0].'"');
 			session()->flash('message_type', 'warning');
 			return redirect()->action('ProjectController@edit', $project);
 		}
@@ -464,9 +466,11 @@ class ProjectController extends Controller{
 			$newProject = new Project;
 			$transaction = new Transaction;
 
+			$description = preg_replace('/\(\+\+(.)*\+\+\)/umix', '', $project->description);
+
 			$newProject->fill(array(
 				'title' => $project->title." (Copied)",
-				'description' => $project->description,
+				'description' => $description,
 				'status' => 'withdrawn',
 				'skills' => $project->skills
 			));
