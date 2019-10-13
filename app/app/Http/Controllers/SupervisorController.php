@@ -92,7 +92,7 @@ class SupervisorController extends Controller{
 
 		// We don't need to specify a student year because you can't accept students from any year but active 
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
-		$showEvaluationButton = SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
+		$showEvaluationButton = Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
 
 		return view('supervisors.partials.accepted-students-table')
 				->with('acceptedStudents', $acceptedStudents)
