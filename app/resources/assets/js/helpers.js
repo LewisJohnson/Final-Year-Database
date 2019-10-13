@@ -32,7 +32,7 @@ function createToast(type, message){
 	setTimeout(function() {
 		// Delete toast
 		$(toast).remove();
-	}, 4000);
+	}, 9000);
 }
 
 function addLastNameHeadersToList(ul) {

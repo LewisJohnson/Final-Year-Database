@@ -30,14 +30,6 @@ use SussexProjects\PEQValueTypes;
 class ProjectEvaluationController extends Controller {
 
 	public function __construct(){
-		$this->middleware(function ($request, $next) {
-			if(Mode::getProjectEvaluationDate()->gte(\Carbon\Carbon::now())) {
-				return abort(404);
-			}
-			
-			return $next($request);
-		});
-
 		parent::__construct();
 	}
 
