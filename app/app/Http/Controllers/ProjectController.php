@@ -397,19 +397,28 @@ class ProjectController extends Controller{
 			$transaction = new Transaction;
 			$cleanHtml = Purify::clean($input->description, $this->htmlPurifyConfig);
 
-			// So student proposals can't be overridden
-			if($project->status == "student-proposed"){
-				$status = "student-proposed";
-			} else {
-				$status = $input->status;
-			}
+			// You can't update the status of an accepted project
+			if($project->getAcceptedStudent() == null){
+				// So student proposals can't be overridden
+				if($project->status == "student-proposed"){
+					$status = "student-proposed";
+				} else {
+					$status = $input->status;
+				}
 
-			$project->update([
-				'title' => $input->title,
-				'description' => $cleanHtml,
-				'status' => $status,
-				'skills' => $input->skills
-			]);
+				$project->update([
+					'title' => $input->title,
+					'description' => $cleanHtml,
+					'status' => $status,
+					'skills' => $input->skills
+				]);
+			} else {
+				$project->update([
+					'title' => $input->title,
+					'description' => $cleanHtml,
+					'skills' => $input->skills
+				]);
+			}
 
 			if($project->status == "student-proposed"){
 				$transaction->fill(array(
