@@ -190,9 +190,13 @@ class ProjectEvaluationController extends Controller {
 			$questions[$i]->$commentAccessor = $request[$i.'_'.$accessor.'_comment'];
 		}
 
-		$evaluation->update(array(
-			'questions' => $questions
-		));
+		$evaluation->questions = $questions;
+
+		if (!empty($request->canvas_url)) {
+			$evaluation->canvas_url = $request->canvas_url;
+		}
+
+		$evaluation->save();
 
 		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
 		session()->flash('message_type', 'success');

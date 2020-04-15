@@ -137,6 +137,10 @@
 						<label class="col-sm-2 col-form-label py-0">Second Marker</label>
 						<div class="col-sm-10">
 							<input type="text" readonly class="form-control-plaintext py-0" value="{{ $marker->getFullName() }}">
+					<div class="form-group row view">
+						<label class="col-sm-2 col-form-label">Canvas</label>
+						<div class="col-sm-10">
+							<a class="form-control-plaintext text-primary" target="_blank" href="{{ empty($evaluation->canvas_url) ? '#' : $evaluation->canvas_url }}">{{ empty($evaluation->canvas_url) ? 'Not set' : $evaluation->canvas_url }}</a>
 						</div>
 					</div>
 
@@ -247,6 +251,13 @@
 							@php
 								$prevQuestionGroup = null;
 							@endphp
+
+							<div class="form-group row edit">
+								<label class="col-sm-2 col-form-label">Canvas URL</label>
+								<div class="col-sm-10">
+									<input class="form-control" name="canvas_url" type="text" value="{{ $evaluation->canvas_url }}">
+								</div>
+							</div>
 
 							@foreach($questions as $question)
 								@php

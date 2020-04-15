@@ -65,6 +65,9 @@
 	$(".js-input").hide();
 	$(".custom-range").hide();
 
+	// Hide canvas url
+	$(".form-group.edit").hide();
+
 	$("#edit").on('click', function(e){
 		e.preventDefault();
 		editMode();
@@ -257,7 +260,7 @@
 		input.prev('.js-value').css('color', 'rgb(' + rgb + ')');
 	}
 
-	function editMode(){
+	function editMode() {
 		// Into edit mode
 		$(".js-no-submission input").each(function(){
 			var pp = $(this).parent().parent();
@@ -287,6 +290,9 @@
 			}
 		});
 
+		// Show canvas url input
+		$(".form-group.view").hide();
+		$(".form-group.edit").show();
 
 		$("[data-unset]").removeAttr("data-unset");
 
