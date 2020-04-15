@@ -100,7 +100,7 @@
 					<h1 class="d-flex">
 						Project Evaluation
 						@if($evaluation->project_year != SussexProjects\Mode::getProjectYear())
-						<span class="text-muted">&nbsp;/ {{ $evaluation->project_year }} </span>
+							<span class="text-muted">&nbsp;/ {{ $evaluation->project_year }} </span>
 						@endif
 						<span class="ml-auto {{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</span>
 					</h1>
@@ -120,23 +120,26 @@
 					</div>
 
 					<div class="form-group row mb-0">
-						<label class="col-sm-2 col-form-label py-0">Student</label>
+						<label class="col-sm-2 col-form-label pt-0">Student</label>
 						<div class="col-sm-10">
-							<input type="text" readonly class="form-control-plaintext py-0" value="{{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->getFullName() }}">
+							<input type="text" readonly class="form-control-plaintext pt-0" value="{{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->getFullName() }}">
 						</div>
 					</div>
 
 					<div class="form-group row mb-0">
-						<label class="col-sm-2 col-form-label py-0">Supervisor</label>
+						<label class="col-sm-2 col-form-label pb-0">Supervisor</label>
 						<div class="col-sm-10">
-							<input type="text" readonly class="form-control-plaintext py-0" value="{{ $supervisor->getFullName() }}">
+							<input type="text" readonly class="form-control-plaintext pb-0" value="{{ $supervisor->getFullName() }}">
 						</div>
 					</div>
 
 					<div class="form-group row mb-0">
-						<label class="col-sm-2 col-form-label py-0">Second Marker</label>
+						<label class="col-sm-2 col-form-label pt-0">Second Marker</label>
 						<div class="col-sm-10">
-							<input type="text" readonly class="form-control-plaintext py-0" value="{{ $marker->getFullName() }}">
+							<input type="text" readonly class="form-control-plaintext pt-0" value="{{ $marker->getFullName() }}">
+						</div>
+					</div>
+
 					<div class="form-group row view">
 						<label class="col-sm-2 col-form-label">Canvas</label>
 						<div class="col-sm-10">
@@ -220,7 +223,7 @@
 												@if($dissertation->supervisorOmitSubmission && $dissertation->markerOmitSubmission)
 													Omitted
 												@else
-														{{ $dissertation->finalValue }}%
+													{{ $dissertation->finalValue }}%
 												@endif
 											</div>
 										</div>
