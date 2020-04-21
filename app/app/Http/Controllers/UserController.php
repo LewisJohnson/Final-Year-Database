@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use SussexProjects\Http\Requests\UserForm;
 use SussexProjects\Project;
@@ -117,8 +118,9 @@ class UserController extends Controller {
 		
 		// Validate Student
 		if(in_array("student", $request->privileges)){
+			$studentDb = new student;
 			$request->validate([
-				'registration_number' => 'required'
+				'registration_number' => ['required', 'unique:'.$studentDb->getTable()]
 			]);
 		}
 
@@ -390,8 +392,12 @@ class UserController extends Controller {
 
 		// Validate Student
 		if(in_array("student", $request->privileges)){
+			$studentDb = new student;
 			$request->validate([
-				'registration_number' => 'required'
+				'registration_number' => [
+					'required',
+					Rule::unique($studentDb->getTable())->ignore($user->id)
+				],
 			]);
 		}
 
