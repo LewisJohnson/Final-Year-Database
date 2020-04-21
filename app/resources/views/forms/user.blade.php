@@ -135,9 +135,10 @@
 		<div id="student-form">
 			<h5>Student</h5>
 			<p>You are creating an {{ lang_sess('full_name') }} student.</p>
-			<div class="form-group">
+			<div class="form-group {{ $errors->has('registration_number') ? 'has-error' : '' }}">
 				<label for="registration_number">Registration Number</label>
-				<input class="form-control" id="registration_number" type="number" name="registration_number" @if($view === "edit") @if($user->isStudent()) value="{{ $user->student->registration_number }}" @endif @endif>
+				<input class="form-control" id="registration_number" type="number" name="registration_number" @if($view === "edit") @if($user->isStudent()) value="{{ $user->student->registration_number }}" @endif @else value="{{ old('registration_number') }}" @endif>
+				@include('forms.partials.error-block', ['name' => 'registration_number'])
 			</div>
 		</div>
 
