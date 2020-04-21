@@ -52,7 +52,7 @@
 			<h6>Most Popular Project</h6>
 			<div class="border border-warning p-2">
 				<span class="svg-sm">@include('svg.fire')</span>
-				<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b> with <b>{{ $mostPopularProject->view_count }}</b> views!.</span>
+				<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b> with <b>{{ $mostPopularProject->view_count }}</b> views!</span>
 			</div>
 		</div>
 
