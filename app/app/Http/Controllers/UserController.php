@@ -112,76 +112,76 @@ class UserController extends Controller {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function store(UserForm $request){
+	public function store(UserForm $userForm){
 
-		$request->privileges = $request->privileges ?? [];
+		$userForm->privileges = $userForm->privileges ?? [];
 		
 		// Validate Student
-		if(in_array("student", $request->privileges)){
+		if(in_array("student", $userForm->privileges)){
 			$studentDb = new student;
-			$request->validate([
+			$userForm->validate([
 				'registration_number' => ['required', 'unique:'.$studentDb->getTable()]
 			]);
 		}
 
 		// Validate Supervisor
-		if(in_array("supervisor", $request->privileges)){
-			$request->validate([
+		if(in_array("supervisor", $userForm->privileges)){
+			$userForm->validate([
 				'title' => 'required|max:6'
 			]);
 		}
 
-		if(!$this->checkPrivilegeConditions($request->privileges)){
+		if(!$this->checkPrivilegeConditions($userForm->privileges)){
 			return redirect()->action('HomeController@index');
 		}
 
 		$user = new User;
-		DB::transaction(function() use ($request, $user){
-			if ($request['programme'] === '') {
-				$request['programme'] = null;
+		DB::transaction(function() use ($userForm, $user){
+			if ($userForm['programme'] === '') {
+				$userForm['programme'] = null;
 			}
 			
 			$user->fill(array(
-				'first_name' => $request['first_name'],
-				'last_name' => $request['last_name'],
-				'username' => $request['username'],
-				'programme' => $request['programme'],
-				'email' => $request['email'],
+				'first_name' => $userForm['first_name'],
+				'last_name' => $userForm['last_name'],
+				'username' => $userForm['username'],
+				'programme' => $userForm['programme'],
+				'email' => $userForm['email'],
 				'active_year' => Mode::getProjectYear()
 			));
 
 			$user->save();
 
-			if (!empty($request->privileges) && is_array($request->privileges)){
-				if(in_array("student", $request->privileges)){
+			if (!empty($userForm->privileges) && is_array($userForm->privileges)){
+				if(in_array("student", $userForm->privileges)){
 					$student = Student::create([
 						'id' => $user->id,
-						'registration_number' => $request['registration_number'],
+						'registration_number' => $userForm['registration_number'],
 					]);
 					$student->save();
 				}
 
-				if(in_array("supervisor", $request->privileges)){
+				if(in_array("supervisor", $userForm->privileges)){
 					$supervisor = new Supervisor();
 					$supervisor['id'] = $user->id;
-					$supervisor['title'] = $request->title;
+					$supervisor['title'] = $userForm->title;
 
 					foreach (get_education_levels() as $education_level) {
-						if($request['project_load_'.$education_level['shortName']] != null){
-							$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+						if($userForm['project_load_'.$education_level['shortName']] != null){
+							$supervisor['project_load_'.$education_level['shortName']] = $userForm['project_load_'.$education_level['shortName']];
 						} else {
 							// We need this because the DB doesn't have a default value
 							$supervisor['project_load_'.$education_level['shortName']] = 0;
 						}
-						$supervisor['take_students_'.$education_level['shortName']] = empty($request['take_students_'.$education_level['shortName']]);
-						$supervisor['accept_email_'.$education_level['shortName']] = empty($request['accept_email_'.$education_level['shortName']]);
+						$supervisor['take_students_'.$education_level['shortName']] = empty($userForm['take_students_'.$education_level['shortName']]);
+						$supervisor['accept_email_'.$education_level['shortName']] = empty($userForm['accept_email_'.$education_level['shortName']]);
 					}
 
 					$supervisor->save();
 				}
 
 				$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-				$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+				$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $userForm->privileges), $user->id], $string);
 				DB::statement($replaced);
 			}
 
@@ -367,20 +367,19 @@ class UserController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(UserForm $userForm){
-		$request = request();
 		$user = User::find($userForm->id);
 
 		// No privileges selected
-		if (empty($request->privileges) || !(is_array($request->privileges))){
+		if (empty($userForm->privileges) || !(is_array($userForm->privileges))){
 			$user->privileges = null;
 
 			$user->update(array(
-				'first_name' => $request['first_name'],
-				'last_name' => $request['last_name'],
-				'username' => $request['username'],
-				'programme' => $request['programme'],
-				'email' => $request['email'],
-				'active_year' => $request['active_year']
+				'first_name' => $userForm['first_name'],
+				'last_name' => $userForm['last_name'],
+				'username' => $userForm['username'],
+				'programme' => $userForm['programme'],
+				'email' => $userForm['email'],
+				'active_year' => $userForm['active_year']
 			));
 
 			$user->save();
@@ -391,9 +390,10 @@ class UserController extends Controller {
 		}
 
 		// Validate Student
-		if(in_array("student", $request->privileges)){
+		if(in_array("student", $userForm->privileges)){
 			$studentDb = new student;
-			$request->validate([
+
+			$userForm->validate([
 				'registration_number' => [
 					'required',
 					Rule::unique($studentDb->getTable())->ignore($user->id)
@@ -402,41 +402,41 @@ class UserController extends Controller {
 		}
 
 		// Validate Supervisor
-		if(in_array("supervisor", $request->privileges)){
-			$request->validate([
+		if(in_array("supervisor", $userForm->privileges)){
+			$userForm->validate([
 				'title' => 'required|max:6'
 			]);
 		}
 
-		if(!$this->checkPrivilegeConditions($request->privileges)){
+		if(!$this->checkPrivilegeConditions($userForm->privileges)){
 			return redirect()->action('HomeController@index');
 		}
 
-		DB::transaction(function() use ($request, $user){
-			if ($request['programme'] === '') {
-				$request['programme'] = null;
+		DB::transaction(function() use ($userForm, $user){
+			if ($userForm['programme'] === '') {
+				$userForm['programme'] = null;
 			}
 
 			$user->update(array(
-				'first_name' => $request['first_name'],
-				'last_name' => $request['last_name'],
-				'username' => $request['username'],
-				'programme' => $request['programme'],
-				'email' => $request['email'],
-				'active_year' => $request['active_year']
+				'first_name' => $userForm['first_name'],
+				'last_name' => $userForm['last_name'],
+				'username' => $userForm['username'],
+				'programme' => $userForm['programme'],
+				'email' => $userForm['email'],
+				'active_year' => $userForm['active_year']
 			));
 
 			// Update student privilege
-			if(in_array("student", $request->privileges)){
+			if(in_array("student", $userForm->privileges)){
 				if($user->isStudent()){
 					// If they are a student already, update
-					$user->student->registration_number = $request['registration_number'];
+					$user->student->registration_number = $userForm['registration_number'];
 					$user->student->save();
 				} else {
 					// Else, create a new student
 					$student = Student::create([
 						'id' => $user->id,
-						'registration_number' => $request['registration_number'],
+						'registration_number' => $userForm['registration_number'],
 					]);
 					$student->save();
 				}
@@ -444,12 +444,12 @@ class UserController extends Controller {
 
 			// If a user was a student and they had their student privilege revoked
 			// Delete the student model (Remove them from student table)
-			if(!in_array("student", $request->privileges) && $user->isStudent()){
+			if(!in_array("student", $userForm->privileges) && $user->isStudent()){
 				$user->student->delete();
 			}
 
 			// Update student supervisor
-			if(in_array("supervisor", $request->privileges)){
+			if(in_array("supervisor", $userForm->privileges)){
 				if($user->isSupervisor()){
 					$supervisor = $user->supervisor;
 				} else {
@@ -461,18 +461,18 @@ class UserController extends Controller {
 					}
 				}
 
-				$supervisor['title'] = $request['title'];
+				$supervisor['title'] = $userForm['title'];
 
 				foreach (get_education_levels() as $education_level) {
-					if($request['project_load_'.$education_level['shortName']] != null){
-						$supervisor['project_load_'.$education_level['shortName']] = $request['project_load_'.$education_level['shortName']];
+					if($userForm['project_load_'.$education_level['shortName']] != null){
+						$supervisor['project_load_'.$education_level['shortName']] = $userForm['project_load_'.$education_level['shortName']];
 					} else {
 						// We need this because the DB doesn't have a default value
 						$supervisor['project_load_'.$education_level['shortName']] = 0;
 					}
 
-					$supervisor['take_students_'.$education_level['shortName']] = isset($request['take_students_'.$education_level['shortName']]);
-					$supervisor['accept_email_'.$education_level['shortName']] = isset($request['accept_email_'.$education_level['shortName']]);
+					$supervisor['take_students_'.$education_level['shortName']] = isset($userForm['take_students_'.$education_level['shortName']]);
+					$supervisor['accept_email_'.$education_level['shortName']] = isset($userForm['accept_email_'.$education_level['shortName']]);
 				}
 
 				$supervisor->save();
@@ -480,7 +480,7 @@ class UserController extends Controller {
 
 			$user->save();
 			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
-			$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $request->privileges), $user->id], $string);
+			$replaced = str_replace_array('?', [Session::get("department").'_users', implode(",", $userForm->privileges), $user->id], $string);
 			DB::statement($replaced);
 		});
 

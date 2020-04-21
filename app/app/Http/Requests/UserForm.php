@@ -8,18 +8,22 @@
 namespace SussexProjects\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
 use SussexProjects\Http\Controllers\UserController;
+use SussexProjects\User;
 
-class UserForm extends FormRequest{
+class UserForm extends FormRequest
+{
 	/**
 	 * Determine if the user is authorized to make this request.
 	 *
 	 * @return bool
 	 */
-	public function authorize(){
+	public function authorize()
+	{
 		if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]) || Auth::user()->isSystemAdmin()){
 			return true;
 		}
@@ -32,13 +36,29 @@ class UserForm extends FormRequest{
 	 *
 	 * @return array
 	 */
-	public function rules(){
-		return [
-			'username' => 'required|max:32',
-			'first_name' => 'required|max:128',
-			'last_name' => 'required|max:128',
-			'email' => 'required|max:128'
-		];
+	public function rules()
+	{
+		if(!empty($this->id)){
+			$user = User::find($this->id);
+		}
+
+		$userDb = new User;
+
+		if(empty($user)){
+			return [
+				'username' => 	['required', 'max:32', Rule::unique($userDb->getTable())],
+				'email' => 		['required', 'max:128', Rule::unique($userDb->getTable())],
+				'first_name' => ['required', 'max:128'],
+				'last_name' => 	['required', 'max:128']
+			];
+		} else {
+			return [
+				'username' => 	['required', 'max:32', Rule::unique($userDb->getTable())->ignore($user->id)],
+				'email' => 		['required', 'max:128', Rule::unique($userDb->getTable())->ignore($user->id)],
+				'first_name' => ['required', 'max:128'],
+				'last_name' => 	['required', 'max:128']
+			];
+		}
 	}
 
 	/**
@@ -48,7 +68,8 @@ class UserForm extends FormRequest{
 	 *
 	 * @return void
 	 */
-	public function withValidator($validator){
+	public function withValidator($validator)
+	{
 		$validator->after(function(){
 			UserController::checkPrivilegeConditions(Request::get('privileges'));
 		});
