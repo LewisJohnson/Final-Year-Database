@@ -577,7 +577,13 @@ class ProjectAdminController extends Controller{
 			
 			$ar["regNo"] = $student->registration_number;
 			$ar["username"] = $student->user->username;
-			$ar["programme"] = $student->user->programme_relationship->name;
+
+			if(!empty($student->user->programme_relationship)){
+				$ar["programme"] = $student->user->programme_relationship->name;
+			} else {
+				$ar["programme"] = '-';
+			}
+			
 			$ar["fName"] = $student->user->first_name;
 			$ar["lName"] = $student->user->last_name;
 
