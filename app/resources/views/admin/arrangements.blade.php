@@ -35,7 +35,7 @@
 				</tbody>
 			</table>
 			<div class="text-right mt-3">
-				<input type="submit" class="btn btn-primary">
+				<input type="submit" value="Submit" class="btn btn-primary">
 			</div>
 		</div>
 	</form>
