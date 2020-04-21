@@ -40,11 +40,10 @@
 		<form action="{{ action('ProjectAdminController@calculateSecondMarkers') }}" id="calculate-second-markers" method="POST" accept-charset="utf-8">
 			
 			{{ csrf_field() }}
-			<div class="text-right">
+			<div class="text-right w-20 ml-auto">
 				<div class="form-group">
 					<label>Max students per marker</label>
-					<br>
-					<input type="number" name="max_students_per_supervisor" value="{{ round(SussexProjects\Supervisor::getAllSupervisorsQuery()->count() / SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectCount()) }}" min="1" max="99">
+					<input type="number" name="max_students_per_supervisor" class="form-control" value="{{ round(SussexProjects\Supervisor::getAllSupervisorsQuery()->count() / SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectCount()) }}" min="1" max="99">
 				</div>
 
 				<button type="submit" class="btn btn-primary">Calculate</button>
