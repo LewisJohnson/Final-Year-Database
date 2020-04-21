@@ -10,58 +10,34 @@
 	@endif
 
 		{{ csrf_field() }}
-		<div class="form-group {{ $errors->has('username') ? 'has-error' : '' }}">
-			<label for="username">Username</label>
 
-			@if($view === "new")
-				<input class="form-control" id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
-			@elseif($view === "edit")
-				<input class="form-control" id="username" type="text" name="username" value="{{ $user->username }}" autofocus>
-			@endif
+		@include('forms.partials.form-field', [
+			'label' => 'Username',
+			'name' => 'username',
+			'autofocus' => true
+		])
 
-			@include('forms.partials.error-block', ['name' => 'username'])
-		</div>
+		@include('forms.partials.form-field', [
+			'label' => 'First Name', 
+			'name' => 'first_name'
+		])
 
-		<div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
-			<label for="first_name">First Name</label>
+		@include('forms.partials.form-field', [
+			'label' => 'Last Name', 
+			'name' => 'last_name'
+		])
 
-			@if($view === "new")
-				<input class="form-control" id="first_name" type="text" name="first_name" value="{{ old('first_name') }}" required>
-			@elseif($view === "edit")
-				<input class="form-control" id="first_name" type="text" name="first_name" value="{{ $user->first_name }}">
-			@endif
-			@include('forms.partials.error-block', ['name' => 'first_name'])
-		</div>
-
-		<div class="form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
-			<label for="last_name">Last Name</label>
-
-			@if($view === "new")
-				<input class="form-control" id="last_name" type="text" name="last_name" value="{{ old('last_name') }}" required>
-			@elseif($view === "edit")
-				<input class="form-control" id="last_name" type="text" name="last_name" value="{{ $user->last_name }}">
-			@endif
-
-			@include('forms.partials.error-block', ['name' => 'last_name'])
-		</div>
-
-		<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-			<label for="email">E-Mail Address</label>
-
-			@if($view === "new")
-				<input class="form-control" id="email" type="email" name="email" value="{{ old('email') }}" required>
-			@elseif($view === "edit")
-				<input class="form-control" id="email" type="email" name="email" value="{{ $user->email }}">
-			@endif
-
-			@include('forms.partials.error-block', ['name' => 'email'])
-		</div>
+		@include('forms.partials.form-field', [
+			'label' => 'E-Mail Address',
+			'name' => 'email',
+			'type' => 'email'
+		])
 
 		<div class="form-group {{ $errors->has('programme') ? 'has-error' : '' }}">
 			<label for="programme">Programme</label>
 			<br>
 			@if($view === "new" || empty($user->programme))
-				{!! SussexProjects\Programme::getSelectList() !!}
+				{!! SussexProjects\Programme::getSelectList(old('programme')) !!}
 			@elseif($view === "edit")
 				{!! SussexProjects\Programme::getSelectList($user->programme) !!}
 			@endif
@@ -92,7 +68,23 @@
 				<div class="row">
 					<div class="col-6 col-sm-2">
 						<div class="checkbox">
-							<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input js-student" @if($view === "edit") @if($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName']) checked @endif @endif>
+							@php
+								$checkStudentCheckbox = false;
+
+								if (!empty(old('registration_number')))
+								{
+									$checkStudentCheckbox = true; 
+								}
+								else if ($view === "edit")
+								{
+									if ($user->isStudent() && $user->studentType()['shortName'] == Session::get('education_level')['shortName'])
+									{ 
+										$checkStudentCheckbox = true; 
+									} 
+								}
+
+							@endphp
+							<input type="checkbox" id="privileges-student" name="privileges[]" value="student" class="checkbox-input js-student" @if($checkStudentCheckbox) checked @endif>
 							<label class="ml-1" for="privileges-student">Student</label>
 						</div>
 					</div>
@@ -155,7 +147,7 @@
 			<div class="form-group">
 				<label for="title">Title</label>
 				@include('forms.partials.error-block', ['name' => 'title'])
-				<input class="form-control w-auto" list="titleDataList" id="title" type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @endif>
+				<input class="form-control w-auto" list="titleDataList" id="title" type="text" name="title" maxlength="6" @if($view === "edit") @if($user->isSupervisor()) value="{{ $user->supervisor->title }}" @endif @else value="{{ old('title') }}" @endif>
 			</div>
 
 			<div class="row">
