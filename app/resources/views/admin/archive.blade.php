@@ -110,7 +110,7 @@
 
 			<div class="border border-danger p-2 mt-2">
 				<span class="svg-sm">@include('svg.bin')</span>
-				<span>The parameter for this year will be deleted.</span>
+				<span>The parameters for this year will be deleted.</span>
 			</div>
 		</div>
 	</div>
