@@ -518,12 +518,7 @@ class ProjectEvaluationController extends Controller {
 			$ar["regNo"] = $student->registration_number;
 			$ar["fName"] = $student->user->first_name;
 			$ar["lName"] = $student->user->last_name;
-
-			if(!empty($student->user->programme_relationship)){
-				$ar["prog"] = $student->user->programme_relationship->name;
-			} else {
-				$ar["prog"] = '-';
-			}
+			$ar["prog"] = $student->user->getProgrammeName();
 
 			if(!empty($student->project)){
 				$ar["proj"] = $student->project->title;
@@ -696,12 +691,7 @@ class ProjectEvaluationController extends Controller {
 			$ar["regNo"] = $student->registration_number;
 			$ar["fName"] = $student->user->first_name;
 			$ar["lName"] = $student->user->last_name;
-
-			if(!empty($student->user->programme_relationship)){
-				$ar["prog"] = $student->user->programme_relationship->name;
-			} else {
-				$ar["prog"] = '-';
-			}
+			$ar["prog"] = $student->user->getProgrammeName();
 
 			if(!empty($student->project)){
 				$ar["proj"] = $student->project->title;

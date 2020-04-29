@@ -36,7 +36,7 @@
 					<p>
 						 <span class="d-inline-block" style="width: 110px">Student:</span> {{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->getFullName() }}
 					 <br><span class="d-inline-block" style="width: 110px">Project:</span> {{ $project->title }}
-					 <br><span class="d-inline-block" style="width: 110px">Programme:</span> {{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->programme_relationship->name }}
+					 <br><span class="d-inline-block" style="width: 110px">Programme:</span> {{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->getProgrammeName() }}
 					 <br><span class="d-inline-block" style="width: 110px">Supervisor:</span> {{ $supervisor->getFullName() }}
 					 <br><span class="d-inline-block" style="width: 110px">Second Marker:</span> {{ $marker->getFullName() }}
 					</p>

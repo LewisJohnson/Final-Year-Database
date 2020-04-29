@@ -115,7 +115,7 @@
 					<div class="form-group row mb-0">
 						<label class="col-sm-2 col-form-label py-0">Programme</label>
 						<div class="col-sm-10">
-							<input type="text" readonly class="form-control-plaintext py-0" value="{{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->programme_relationship->name }}">
+							<input type="text" readonly class="form-control-plaintext py-0" value="{{ empty($project->getAcceptedStudent()) ? 'Unavailable' : $project->getAcceptedStudent()->user->getProgrammeName() }}">
 						</div>
 					</div>
 

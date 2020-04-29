@@ -122,6 +122,19 @@ class User extends Authenticatable{
 	 *
 	 * @return Programme
 	 */
+	public function getProgrammeName(){
+		if (empty($this->programme_relationship)) {
+			return "-";
+		} else {
+			return $this->programme_relationship->name;
+		}
+	}
+
+	/**
+	 * Returns the programme related to this user.
+	 *
+	 * @return Programme
+	 */
 	public function programme_relationship(){
 		return $this->hasOne(Programme::class, 'id', 'programme');
 	}
