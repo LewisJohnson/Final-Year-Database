@@ -278,7 +278,8 @@ import Swappable from '@shopify/draggable/lib/swappable';
 						createToast('', response.message);
 					}
 
-					if(!response.email_successful){
+					if(response.email_successful === false)
+					{
 						var message = "The student was successful " + actionType + "ed. However, the confirmation email failed to send. We recommend you send one to them manually.";
 
 						$.confirm({
