@@ -16,7 +16,7 @@ class AddCanvasUrlToProjectEvaluation extends Migration
 		foreach(get_departments() as $key => $department) {
 			foreach(get_education_levels() as $key => $level) {
 				Schema::table($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
-					$table->string('canvas_url')->default(0);
+					$table->string('canvas_url')->nullable();
 				});
 			}
 		}
