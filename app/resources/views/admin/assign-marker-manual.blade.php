@@ -72,15 +72,19 @@
 <div id="assign-dialog" class="dialog" data-dialog="assign">
 	<div class="container">
 		<div class="border-bottom">
-			<h4 id="dialog-title" class="text-center p-3 m-0 font-weight-bold">ASSIGN</h4>
+			<h4 id="dialog-title" class="text-center p-3 m-0 font-weight-bold">Assign Second Marker</h4>
 		</div>
 
-		<div class="row mt-4">
+		<div class="alert alert-warning mt-3">
+			<span>&#128161;</span><span class="ml-2">Have you selected the correct second marker?</span>
+		</div>
+
+		<div class="row mt-4 mb-5">
 			<div class="col-5">
-				<h5>Student</h5>
+				<h5 class="font-weight-bold">Student</h5>
 				<p id="student-name"></p>
 
-				<h5>Project</h5>
+				<h5 class="font-weight-bold">Project</h5>
 				<p id="project-title"></p>
 			</div>
 
@@ -89,20 +93,16 @@
 			</div>
 
 			<div class="col-5 text-right">
-				<h5>Supervisor</h5>
+				<h5 class="font-weight-bold">Supervisor</h5>
 				<p id="supervisor-name"></p>
 
-				<h5>2<sup>nd</sup> Marker</h5>
+				<h5 class="font-weight-bold">2<sup>nd</sup> Marker</h5>
 				<p id="marker-name"></p>
 			</div>
 		</div>
 		
-		<div class="row mt-5">
-			<div class="col-12 bg-light border-top">
-				<div class="p-2 text-right">
-					<button class="btn btn-primary" type="button" id="submitAssignMarker">ASSIGN MARKER</button>
-				</div>
-			</div>
+		<div class="footer">
+			<button class="btn btn-primary" type="button" id="submitAssignMarker">Assign</button>
 		</div>
 	</div>
 </div>
