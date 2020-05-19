@@ -25,7 +25,7 @@
 				</div>
 			</form>
 	
-			<h3 class="card-title mt-5 mb-1">Exisiting Topics</h3>
+			<h3 class="card-title mt-5 mb-1">Existing Topics</h3>
 			<p class="mt-0 text-muted">Deleting a topic will also remove it from any associated projects.</p>
 
 			<div id="edit-topic-list" class="row">
