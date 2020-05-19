@@ -105,6 +105,68 @@ class ProjectEvaluationController extends Controller {
 	}
 
 	/**
+	 * An view to set the canvas URLs for project evaluations.
+	 *
+	 * @param  Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function amendCanvasUrlsView(Request $request)
+	{
+
+		if (!empty($request->project_year))
+		{
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->select($studentTable.'.*')
+				->where('user.active_year', $request->project_year)
+				->orderBy('user.last_name', 'asc')
+				->get();
+		}
+		else 
+		{
+			$students = Student::getAllStudentsQuery()->get();
+		}
+
+		return view('evaluation.amend-canvas-urls')
+			->with("students", $students);
+	}
+
+	/**
+	 * An view to set the canvas URLs for project evaluations.
+	 *
+	 * @param  Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function amendCanvasUrls(Request $request)
+	{
+		$students = Student::getAllStudentsQuery()->get();
+
+		foreach($students as $student)
+		{
+			if(!empty($student->project) && !empty($student->project->evaluation))
+			{
+				$canvas_url = $request[$student->project->evaluation->id."_canvas_url"];
+
+				if ($canvas_url != null)
+				{
+					$student->project->evaluation->canvas_url = $canvas_url;
+					$student->project->evaluation->save();
+				}
+			}
+		}
+
+		session()->flash('message', 'Evaluation Canvas URls have been updated successfully');
+		session()->flash('message_type', 'success');
+
+		return view('evaluation.amend-canvas-urls')
+			->with("students", $students);
+	}
+
+	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param Project	$project

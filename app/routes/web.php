@@ -290,6 +290,11 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 
 	// Export marker data
 	Route::get('admin/marker/export-download', 'ProjectAdminController@exportSecondMarkerData');
+
+	// Export second marker data view
+	Route::get('/evaluations/amend-canvas-urls', 'ProjectEvaluationController@amendCanvasUrlsView');
+
+	Route::post('/evaluations/amend-canvas-urls', 'ProjectEvaluationController@amendCanvasUrls');
 });
 
 /* =================================

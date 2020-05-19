@@ -416,6 +416,16 @@
 												</li>
 											</ul>
 										</li>
+										<li>
+											<ul>
+												<h5>Project Evaluations</h5>
+												<li>
+													<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@amendCanvasUrlsView') }}">
+														<span>@include('svg.canvas')<span>Amend Canvas URLs</span></span>
+													</a>
+												</li>
+											</ul>
+										</li>
 									</ul>
 								</div>
 							</li>

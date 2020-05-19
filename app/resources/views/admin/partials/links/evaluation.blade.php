@@ -10,4 +10,10 @@
 			<span>@include('svg.gavel')<span>Manual Finalisation</span></span>
 		</a>
 	</li>
+
+	<li>
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@amendCanvasUrlsView') }}">
+			<span>@include('svg.canvas')<span>Amend Canvas URLs</span></span>
+		</a>
+	</li>
 </ul>
