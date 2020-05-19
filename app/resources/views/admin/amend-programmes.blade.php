@@ -6,8 +6,11 @@
 
 @section('content')
 <div class="centered mw-1000">
-	<h1>Amend {{ ucfirst(Session::get('department')) }} Programmes</h1>
-	<h5>Programmes are shared between all education levels.</h5>
+	<h2>Programmes <small class="text-muted">/ Amend {{ ucfirst(Session::get('department')) }} Programmes</small></h2>
+	
+	<div class="alert alert-info mt-3">
+		<span>&#128161;</span><span class="ml-2">Programmes are shared between educations levels but are unique to each department</span>
+	</div>
 	
 	<div class="card mt-3">
 		<div class="card-body">

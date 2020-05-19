@@ -2,10 +2,11 @@
 @section('content')
 
 <div class="centered mw-1200">
-	<h1>Login as Another User</h1>
-	<div class="d-flex">
-		<h5>Select a user to login as, this will bypassing authentication.</h5>
-		<p class="ml-auto text-muted">Please use this feature responsibly.</p>
+	
+	<h2>Login <small class="text-muted">/ Login as Another User</small></h2>
+	<div class="alert alert-info mt-3 d-flex">
+		<span>&#128161;</span><span class="ml-2">Select a user to login as, this will bypassing authentication</span>
+		<span class="ml-auto text-muted">Please use this feature responsibly.</span>
 	</div>
 
 	<div class="row mt-3">

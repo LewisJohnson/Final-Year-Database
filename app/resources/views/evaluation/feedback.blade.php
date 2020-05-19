@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
-	<h1 id="page-title">Project Evaluation Student Feedback</h1>
+	<h2 id="page-title">Project Evaluations <small class="text-muted">/ Student Feedback</small></h2>
 
  	<div class="d-flex w-100">
  		<button class="ml-auto btn btn-primary js-print-all-student-feedback" title="Print all project evaluation student feedback data" type="button"><span class="svg-xs">@include('svg.printer')</span>Print All</button>

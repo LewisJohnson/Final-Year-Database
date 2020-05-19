@@ -1,8 +1,11 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered mw-1000">
-	<h1>Amend {{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Arrangements</h1>
-	<h5>Amend the arrangements you wish then press submit at the bottom of the page</h5>
+	<h2>Supervisors <small class="text-muted">/ Amend {{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Arrangements</small></h2>
+	
+	<div class="alert alert-info mt-3">
+		<span>&#128161;</span><span class="ml-2">Amend the arrangements you wish then press submit at the bottom of the page</span>
+	</div>
 
 	<form action="{{ action('ProjectAdminController@amendSupervisorArrangements') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}

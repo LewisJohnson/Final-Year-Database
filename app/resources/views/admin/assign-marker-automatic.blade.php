@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="centered mw-800">
-	<h1>Automatic Second Marker Assignment</h1>
+	<h2>Second Marker <small class="text-muted">/ Automatic Assignment</small></h2>
 	
 	@if(SussexProjects\Student::getAllStudentsWithoutProjectCount() > 0)
 		<div class="alert alert-primary" role="alert">

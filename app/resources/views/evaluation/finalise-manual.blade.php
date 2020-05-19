@@ -6,10 +6,12 @@
 
 @section('content')
 <div class="centered mw-1200">
-
-	<h1>Finalise Project Evaluations</h1>
-	<h5>Only students with accepted projects and un-finalised evaluations will be shown</h5>
-
+	
+	<h2>Project Evaluations <small class="text-muted">/ Manual Finalisation</small></h2>
+	<div class="alert alert-info mt-3">
+		<span>&#128161;</span><span class="ml-2">Only students with accepted projects and un-finalised evaluations will be shown</span>
+	</div>
+	
 	<form id="manual-finalise-form" action="{{ action('ProjectEvaluationController@manualFinalise') }}" method="POST" accept-charset="utf-8">
 		{{ csrf_field() }}
 		<div class="table-responsive">

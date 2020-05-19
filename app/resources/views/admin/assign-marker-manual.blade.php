@@ -2,8 +2,11 @@
 @section('content')
 
 <div class="centered mw-1200">
-	<h1>Manual Second Marker Assignment</h1>
-	<h5>Select a student, then select a supervisor to be their second marker.</h5>
+
+	<h2>Second Marker <small class="text-muted">/ Manual Assignment</small></h2>
+	<div class="alert alert-info mt-3">
+		<span>&#128161;</span><span class="ml-2">Select a student, then select a supervisor to be their second marker</span>
+	</div>
 
 	<div class="row mt-3">
 

@@ -1,11 +1,13 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered mw-1200">
-	<h1>Export Second Marker Data</h1>
 
-	<p>The second marker export includes the student's name followed by their project, supervisor and second marker.</p>
+	<h2>Second Marker <small class="text-muted">/ Export Second Marker Data</small></h2>
+	<div class="alert alert-info mt-3">
+		<span>&#128161;</span><span class="ml-2">The second marker export includes the student's name followed by their project, supervisor and second marker.</span>
+	</div>
 
-	<h4>Example Export</h4>
+	<h4 class="mt-5">Example Export</h4>
 	<div class="table-responsive">
 		<table class="table table-hover bg-white mw-800">
 			<thead>
