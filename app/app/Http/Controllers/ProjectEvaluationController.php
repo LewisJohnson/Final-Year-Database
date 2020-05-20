@@ -159,7 +159,7 @@ class ProjectEvaluationController extends Controller {
 			}
 		}
 
-		session()->flash('message', 'Evaluation Canvas URls have been updated successfully');
+		session()->flash('message', 'Evaluation Canvas URLs have been updated successfully');
 		session()->flash('message_type', 'success');
 
 		return view('evaluation.amend-canvas-urls')

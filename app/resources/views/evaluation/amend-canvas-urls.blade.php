@@ -50,7 +50,7 @@
 
 								@if(Auth::user()->isProjectAdmin())
 									<td class="border-left text-right">
-											<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+										<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
 									</td>
 								@endif
 							</tr>
@@ -60,7 +60,7 @@
 			</table>
 
 			<div class="text-right mt-3">
-				<input type="submit" value="Submit" class="btn btn-primary">
+				<input type="submit" value="Save" class="btn btn-primary">
 			</div>
 		</div>
 	</form>
