@@ -48,6 +48,14 @@ class ModeController extends Controller{
 		if($mode->project_year != $request->project_year){
 			$mode = new Mode();
 			$mode->marker_released_to_staff = false;
+
+			if (Mode::where('project_year', $request->project_year)->first() != null)
+			{
+				session()->flash('message', 'This project year already exists.');
+				session()->flash('message_type', 'error');
+
+				return redirect()->action('ModeController@index');
+			}
 		}
 
 		$questions = [];
