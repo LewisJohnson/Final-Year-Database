@@ -19,7 +19,10 @@
 						<th>Supervisor</th>
 						<th>2<sup>nd</sup> Marker</th>
 						<th class="border-left">Canvas URL</th>
-						<th class="border-left"></th>
+
+						@if(Auth::user()->isProjectAdmin())
+							<th class="border-left"></th>
+						@endif
 					</tr>
 				</thead>
 				<tbody>
@@ -45,9 +48,11 @@
 									<input class="form-control" type="url" name="{{ $student->project->evaluation->id }}_canvas_url" value="{{ $canvasUrl }}">
 								</td>
 
-								<td class="border-left text-right">
-									<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
-								</td>
+								@if(Auth::user()->isProjectAdmin())
+									<td class="border-left text-right">
+											<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+									</td>
+								@endif
 							</tr>
 						@endif
 					@endforeach
