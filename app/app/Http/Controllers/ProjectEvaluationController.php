@@ -105,6 +105,45 @@ class ProjectEvaluationController extends Controller {
 	}
 
 	/**
+	 * Creates all project evaluations for accepted students.
+	 *
+	 * @param  \Illuminate\Http\Project $project
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function createAll(Project $project)
+	{
+		$students = Student::getAllStudentsQuery()->where('project_status', 'accepted')->get();
+
+		foreach ($students as $student)
+		{
+			if (empty($student->project))
+			{
+				throw new Exception('The student "'.$student->getFullName().'" has been accepted but has no project.');
+			}
+
+			$evaluation = $student->project->evaluation;
+		
+			// If the evaluation is null, set up a new one
+			if(is_null($evaluation)){
+				$evaluation = new ProjectEvaluation;
+
+				$evaluation->project_id = $student->project->id;
+				$evaluation->fill(array(
+					'is_finalised' => false,
+					'questions' => Mode::getEvaluationQuestions(),
+					'project_year' => Mode::getProjectYear()
+				));
+
+				$evaluation->save();
+			}
+		}
+
+		return redirect()->action('ProjectEvaluationController@index');
+	}
+
+
+	/**
 	 * An view to set the canvas URLs for project evaluations.
 	 *
 	 * @param  Project $project

@@ -178,6 +178,9 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	// Un-finalise Project evaluation
 	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
 
+	// Creates all project evaluations at once
+	Route::get('evaluation/create-all', 'ProjectEvaluationController@createAll');
+
 	/* SUPERVISOR ARRANGMENTS */
 	// Amend supervisor arrangements form
 	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
