@@ -18,13 +18,23 @@
  * @param {string} type The css class to add to the toast
  * @param {string} message The message to add to the toast
  */
-function createToast(type, message){
-
+function createToast(type, message, quick) {
+	if (quick == null || quick == 'undefined') {
+		quick = false;
+	}
+	
 	// Create new toast
 	var toast = $('<div class="notification shadow-lg" role="alert"></div>').appendTo('body');
 
 	// Add message to toast
 	$(toast).html("<p>" + message + "</p>");
+
+	var timeout = 9000;
+
+	if (quick === true) {
+		$(toast).addClass('quick');
+		timeout = 2000;
+	}
 
 	// Add classes to toast
 	$(toast).addClass(type);
@@ -32,7 +42,7 @@ function createToast(type, message){
 	setTimeout(function() {
 		// Delete toast
 		$(toast).remove();
-	}, 9000);
+	}, timeout);
 }
 
 function addLastNameHeadersToList(ul) {

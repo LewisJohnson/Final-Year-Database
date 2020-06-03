@@ -299,10 +299,19 @@ class ProjectEvaluationController extends Controller {
 
 		$evaluation->save();
 
-		session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
-		session()->flash('message_type', 'success');
+		if ($request->ajax)
+		{
+			return response()->json(array(
+				'successful' => true
+			));
+		}
+		else
+		{
+			session()->flash('message', 'The project evaluation for "'.$project->title.'" has been updated.');
+			session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $project);
+		}
 	}
 
 

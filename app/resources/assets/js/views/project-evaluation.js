@@ -308,6 +308,30 @@
 		// Hide finalise button
 		$("#finaliseEvaluation").hide();
 
+		$(".js-input" + selectorModifier).on('change', function(){
+			var form = $("#project-evaluation-form");
+
+			$.post(form.attr('action'), form.serialize() + "&ajax=true")
+				.done(function() {
+					createToast('autosave success', 'Saved', true);
+				})
+				.fail(function() {
+					createToast('error', 'Something went wrong with that request.');
+				});
+		});
+
 		isInEditMode = true;
 	}
+
+	window.addEventListener("beforeunload", function (event) {
+		if (!($(event.explicitOriginalTarget).is(":button") || $(event.srcElement.activeElement).is(":button"))) {
+			if (isInEditMode) {
+				// Most browsers.
+				event.preventDefault();
+				
+				// Chrome/Chromium based browsers still need this one.
+				event.returnValue = "\o/";
+			}
+		}
+	}); 
 });
