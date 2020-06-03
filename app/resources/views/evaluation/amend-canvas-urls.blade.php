@@ -71,4 +71,16 @@
 		vertical-align: middle;
 	}
 </style>
+
+<script type="text/javascript">
+	window.addEventListener("beforeunload", function (event) {
+		if (!($(event.explicitOriginalTarget).is(":input") || $(event.srcElement.activeElement).is(":input"))) {
+			// Most browsers.
+			event.preventDefault();
+			
+			// Chrome/Chromium based browsers still need this one.
+			event.returnValue = "\o/";
+		}
+	}); 
+</script>
 @endsection
