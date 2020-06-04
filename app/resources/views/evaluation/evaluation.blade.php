@@ -78,8 +78,7 @@
 		var message = 
 			"Hey there, some users couldn't find the save button... so we've <b>added autosave</b>.<br><br> " + 
 			"After you change a slider or add a comment, the evaluation will now automatically be saved. " + 
-			"In addition to this, we've added a confirmation before you leave the page, just in case.<br><br> " +
-			"We apologise to any users that didn't know how forms worked."
+			"In addition to this, we've added a confirmation before you leave the page, just in case.";
 
 		$.confirm({
 			type: 'blue',
