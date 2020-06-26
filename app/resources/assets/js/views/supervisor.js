@@ -41,12 +41,23 @@ import Swappable from '@shopify/draggable/lib/swappable';
 
 	ProjectTopics.prototype.functions = {
 		addTopicToProjectBeingCreated: function (topicName) {
-			if($(".topics-list.create li.topic:last").length > 0){
-				$(".topics-list.create li.topic:last").after(`
-					<li class="topic" data-topic-id="${ topicName }">
-						<button type="button" class="btn rounded-0 topic-remove">X</button>
-						<input type="text" readonly name="topics[]" class="topic-name" size="${ topicName.length }" value="${ topicName }">
-					</li>`);
+			let isDuplicate = false;
+			
+			if ($(".topics-list.create li.topic:last").length > 0) {
+
+				$(".topics-list.create li.topic .topic-name").each(function() {
+					if ($(this).val() == topicName) {
+						isDuplicate = true;
+					}
+				});
+
+				if (!isDuplicate) {
+					$(".topics-list.create li.topic:last").after(`
+						<li class="topic" data-topic-id="${ topicName }">
+							<button type="button" class="btn rounded-0 topic-remove">X</button>
+							<input type="text" readonly name="topics[]" class="topic-name" size="${ topicName.length }" value="${ topicName }">
+						</li>`);
+				}
 			} else {
 				$(".topics-list.create").prepend(`
 					<li class="topic first" data-topic-id="${ topicName }">
@@ -108,8 +119,13 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		},
 
 		removeTopicFromProject: function (projectId, topicId) {
-			$(".loader").show();
+			$(".spinner").show();
+
 			var ajaxUrl = "projects/topic-remove";
+			let self = $(this);
+
+			self.hide();
+
 			$.ajax({
 				type: "PATCH",
 				url: ajaxUrl,
@@ -117,15 +133,14 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					topic_id : topicId,
 					project_id: projectId
 				},
-				success: function(){
-					$(".topics-list.edit li.topic").each(function(i, obj) {
-						if($(this).data("topic-id") == topicId){
-							$(this).remove();
-						}
-					});
+				success: function() {
+					$('.topics-list.edit li.topic[data-topic-id="' + topicId + '"]').remove();
 				},
+				error: function() {
+					self.show();
+				}
 			}).always(function(){
-				$(".loader").hide();
+				$(".spinner").hide();
 			});
 		},
 

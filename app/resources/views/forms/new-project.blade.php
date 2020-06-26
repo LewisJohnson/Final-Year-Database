@@ -45,7 +45,7 @@
 				<label>Topics <span class="ml-1 text-muted" style="font-size: 12px;">Press COMMA to save topic.</span></label>
 				<div id="create-topic-input-container" class="border p-2">
 					<ul class="topics-list create">
-						<input list="topicsDataList" type="text" id="create-project-add-topic-input">
+						<input class="form-control" list="topicsDataList" type="text" id="create-project-add-topic-input">
 					</ul>
 					<div class="spinner spinner-border text-primary" style="display: none"></div>
 				</div>
