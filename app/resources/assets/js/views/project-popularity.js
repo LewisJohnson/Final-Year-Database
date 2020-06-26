@@ -18,7 +18,7 @@ import WordCloud from '../wordcloud';
 
 	WordCloud.minFontSize = 12;
 
-	$('.loader').show();
+	$('.spinner').show();
 	$('.content').hide();
 
 	var titleArray = [];
