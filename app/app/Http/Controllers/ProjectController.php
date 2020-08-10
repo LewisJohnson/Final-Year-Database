@@ -420,7 +420,8 @@ class ProjectController extends Controller{
 				]);
 			}
 
-			if($project->status == "student-proposed"){
+			// Supervisors can update student-proposed projects too
+			if($project->status == "student-proposed" && Auth::user()->isStudent()){
 				$transaction->fill(array(
 					'type' => 'project',
 					'action' => 'updated',
@@ -441,12 +442,12 @@ class ProjectController extends Controller{
 			$transaction->save();
 		});
 
-		if($project->status == "student-proposed" && Auth::user()->isSupervisor()){
+		if($project->status == "student-proposed" && !Auth::user()->isStudent()){
 			try{
 				Mail::to($project->student->user->email)
 					->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));
 			} catch (\Exception $e){
-
+				
 			}
 		}
 
