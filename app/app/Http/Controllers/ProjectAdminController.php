@@ -279,11 +279,19 @@ class ProjectAdminController extends Controller{
 		$user = new User;
 
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
-		$students = Student::select($student->getTable().'.*')
-				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
-				->where('user.active_year', Mode::getProjectYear())
-				->orderBy('last_name', 'asc')
+
+		if(!empty($request->project_year)){
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->select($studentTable.'.*')
+				->where('user.active_year', $request->project_year)
+				->orderBy('user.last_name', 'asc')
 				->get();
+		} else {
+			$students = Student::getAllStudentsQuery()->get();
+		}
 
 		return view('admin.assign-marker-manual')
 			->with('supervisors', $supervisors)

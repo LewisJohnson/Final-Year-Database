@@ -5,8 +5,22 @@
 
 	<h2>Second Marker <small class="text-muted">/ Manual Assignment</small></h2>
 	<div class="alert alert-info mt-3">
-		<span>&#128161;</span><span class="ml-2">Select a student, then select a supervisor to be their second marker</span>
+		<span>&#128161;</span><span class="ml-2">Select a student, then select a supervisor to be their second marker. Only students with a project will be shown</span>
 	</div>
+
+	@if(count(SussexProjects\Mode::all()) > 1)
+		<div class="form-group">
+			<label for="project_year">Project Year <a href="{{ action('UserController@byYear') }}">(Click here for more)</a></label>
+			<br>
+			<select class="form-control w-auto js-projectYear">
+				@foreach(SussexProjects\Mode::all() as $mode)
+					<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('ProjectAdminController@manualSecondMarkerView', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<hr>
+	@endif
 
 	<div class="row mt-3">
 
