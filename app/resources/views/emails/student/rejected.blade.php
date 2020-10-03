@@ -3,9 +3,9 @@
 @section('body')
 
 @if($project->status == 'student-proposed')
-	<h1>Your proposal has been unsuccessful 😤.</h1>
+	<h1>Your proposal has been unsuccessful.</h1>
 @else
-	<h1>Your selection has been unsuccessful 😤.</h1>
+	<h1>Your selection has been unsuccessful.</h1>
 @endif
 
 <p>Hi {{ $student->user->first_name }},</p>
