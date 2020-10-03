@@ -4,7 +4,29 @@
 <div class="centered mw-1600">
 	<div>
 		@if($studentCount > 0)
-			<a class="btn btn-secondary fr" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}">Email students not accepted</a>
+			<button data-activator="true" data-dialog="supervisor-emails" class="btn btn-sm fr">
+				<svg style="width:36px; height:36px" viewBox="0 0 24 24">
+					<path fill="rgba(0, 0, 0, 0.5)" d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"></path>
+				</svg>
+			</button>
+
+			<div id="supervisor-emails-dialog" class="dialog p-3" data-dialog="supervisor-emails">
+				<div class="header">
+					<h2>Email Students</h2>
+				</div>
+
+				<div class="content mt-5">
+					<div class="row">
+						<div class="col-2"><p class="btn">Email:</p></div>
+						<div class="col-10">
+							<a class="btn text-primary text-left w-100" href="{{ SussexProjects\Student::getAllStudentsMailtoString() }}" title="Email all students">All Students</a>
+							<a class="btn text-primary text-left w-100" href="{{ SussexProjects\Student::getAllStudentsNeverLoggedInMailtoString() }}" title="Email all that have never logged in">Students never logged-in</a>
+							<a class="btn text-primary text-left w-100" href="{{ SussexProjects\Student::getAllStudentsAcceptedMailtoString() }}" title="Email all students accepted">Students accepted</a>
+							<a class="btn text-primary text-left w-100" href="{{ SussexProjects\Student::getAllStudentsWithoutProjectMailtoString() }}" title="Email all students not accepted">Students not accepted</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		@endif
 
 		<h1>Student Report</h1>
