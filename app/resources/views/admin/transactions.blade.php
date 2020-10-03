@@ -72,7 +72,7 @@
 						<td data-hover="{{ $transaction->supervisor }}">{{ $transaction->getName($transaction->supervisor) }}</td>
 						<td data-hover="{{ $transaction->marker }}"	>{{  $transaction->getName($transaction->marker) }}</td>
 						<td data-hover="{{ $transaction->admin }}">{{ $transaction->getName($transaction->admin) }}</td>
-						<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->format('M j, H:i') }}</td>
+						<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->format('d/m/yy H:i:s') }}</td>
 					</tr>
 				@endforeach
 			</tbody>
