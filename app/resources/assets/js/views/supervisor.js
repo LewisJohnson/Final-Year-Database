@@ -339,7 +339,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 		setTimeout(select($(this)), 2000);
 	});
 
-	$('#supervisor-accepted-students-table').on('click', '.supervisor-undo-accept', function(e) {
+	$('#supervisor-accepted-students-table, #ProjectTableOverview').on('click', '.supervisor-undo-accept', function(e) {
 		var tableRow = $(this);
 		var studentName = tableRow.data('student-name');
 		var projectTitle = tableRow.data('project-title');
@@ -359,7 +359,7 @@ import Swappable from '@shopify/draggable/lib/swappable';
 					action: function(){
 						$.ajax({
 							method: 'PATCH',
-							url: 'supervisor/student-undo',
+							url: 'admin/student-undo',
 							data: {
 								project_id : tableRow.data('project-id'),
 								student_id : tableRow.data('student-id')

@@ -900,4 +900,30 @@ class ProjectController extends Controller{
 
 		return response()->json(array('successful' => true));
 	}
+
+	/**
+	 * The project overview view.
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function overview()
+	{
+		if (!empty($request->project_year))
+		{
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+				->select($studentTable.'.*')
+				->where('user.active_year', $request->project_year)
+				->orderBy('user.last_name', 'asc')
+				->get();
+		} else
+		{
+			$students = Student::getAllStudentsQuery()->get();
+		}
+
+		return view('admin.projects.overview')
+			->with("students", $students);
+	}
 }

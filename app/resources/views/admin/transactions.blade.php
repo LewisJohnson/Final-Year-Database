@@ -56,6 +56,10 @@
 							<td>
 								{{ $transaction->project }}
 							</td>
+						@elseif($transaction->action == "undo")
+							<td>
+								{{ $transaction->project }}
+							</td>
 						@else
 							@php
 								$projTitle = $transaction->getProjectTitle();

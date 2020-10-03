@@ -43,7 +43,7 @@ if(env('APP_DEBUG')){
 		$student = SussexProjects\Student::first();
 		$supervisor = SussexProjects\Supervisor::first();
 		$project = SussexProjects\Project::first();
-		return new SussexProjects\Mail\StudentAccepted($supervisor, $student, $project);
+		return new SussexProjects\Mail\StudentRejected($supervisor, $student, $project);
 	});
 }
 
@@ -173,6 +173,13 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 
 	// Import student form
 	Route::post('admin/students/import', 'StudentController@importStudents');
+
+	/* PROJECTS */
+	// Project overview view
+	Route::get('admin/projects/overview', 'ProjectController@overview');
+
+	// Undo student's accepted project
+	Route::patch('admin/student-undo', 'ProjectAdminController@undoStudent');
 
 	/* PROJECT EVALUATION */
 	// Un-finalise Project evaluation
@@ -348,9 +355,6 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Reject student for their selected project
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
-
-	// Undo student's accepted project
-	Route::patch('supervisor/student-undo', 'SupervisorController@undoStudent');
 
 	// Update project evaluation
 	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');

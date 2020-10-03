@@ -288,6 +288,7 @@
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Settings', 'links' => 'settings'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Project Evaluation', 'links' => 'evaluation'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Projects', 'links' => 'projects'])</li>
 									</ul>
 								</div>
 							</li>

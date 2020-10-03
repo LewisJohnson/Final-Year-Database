@@ -20,6 +20,7 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use SussexProjects\Mail\SupervisorUndo;
 
 /**
  * The admin controller.
@@ -560,7 +561,7 @@ class ProjectAdminController extends Controller{
 		return;
 	}
 
-		/**
+	/**
 	 * The student propose a project view (Form).
 	 *
 	 * @return \Illuminate\View\View|\Illuminate\Http\Response
@@ -681,5 +682,77 @@ class ProjectAdminController extends Controller{
 		unlink($filepath);
 
 		return;
+	}
+
+
+	/**
+	 * Undoes an accepted student.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 *
+	 * @return \Illuminate\Http\Response JSON
+	 */
+	public function undoStudent(Request $request)
+	{
+		$student = Student::findOrFail(request('student_id'));
+		$projectId = $student->project->id;
+
+		DB::transaction(function() use ($request, $student, $projectId)
+		{
+			$transaction = new Transaction;
+
+			$transaction->fill(array(
+				'type' => 'student',
+				'action' => 'undo',
+				'project' => $student->project->name,
+				'student' => $student->id,
+				'supervisor' => $student->project->supervisor->id,
+				'admin' => Auth::user()->id,
+				'transaction_date' => new Carbon
+			));
+
+			$transaction->save();
+
+			$student->project->marker_id = null;
+
+			if($student->project->status == "student-proposed")
+			{
+				$student->project->supervisor_id = null;
+			}
+
+			$student->project->save();
+
+			$student->project_id = null;
+			$student->project_status = 'none';
+			$student->save();
+		});
+
+		$emailError = false;
+
+		try
+		{
+			// Send undo email
+			Mail::to($student->user->email)
+				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $projectId));
+		} catch (\Exception $e){
+			$emailError = true;
+		}
+
+		$message = $student->getName()." is no longer accepted.";
+
+		if ($emailError)
+		{
+			return response()->json(array(
+				'successful' => true,
+				'email_successful' => false,
+				'message' => $message
+			));
+		}
+
+		return response()->json(array(
+			'successful' => true,
+			'email_successful' => true,
+			'message' => $message
+		));
 	}
 }

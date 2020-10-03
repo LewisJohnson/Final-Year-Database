@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Mail\StudentAccepted;
 use SussexProjects\Mail\StudentRejected;
-use SussexProjects\Mail\SupervisorUndo;
 use SussexProjects\Mode;
 use SussexProjects\Project;
 use SussexProjects\Student;
@@ -284,77 +283,6 @@ class SupervisorController extends Controller{
 
 		return response()->json(array(
 			'successful' => true,
-			'message' => $message
-		));
-	}
-
-	/**
-	 * Undoes an accepted student.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 *
-	 * @return \Illuminate\Http\Response JSON
-	 */
-	public function undoStudent(Request $request){
-
-		if(Session::get('logged_in_as') == null){
-			return response()->json(array(
-				'successful' => false,
-				'email_successful' => true,
-				'message' => "You are not allowed to perform this action."
-			));
-		}
-
-		$student = Student::findOrFail(request('student_id'));
-		$projectId = $student->project->id;
-
-		DB::transaction(function() use ($request, $student, $projectId){
-			$transaction = new Transaction;
-
-			$transaction->fill(array(
-				'type' => 'student',
-				'action' => 'undo',
-				'project' => $student->project_id,
-				'student' => $student->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
-			));
-			$transaction->save();
-
-			$student->project->marker_id = null;
-
-			if($student->project->status == "student-proposed"){
-				$student->project->supervisor_id = null;
-			}
-			$student->project->save();
-
-			$student->project_id = null;
-			$student->project_status = 'none';
-			$student->save();
-		});
-
-		$emailError = false;
-		try{
-			// Send declined email
-			Mail::to($student->user->email)
-				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $projectId));
-		} catch (\Exception $e){
-			$emailError = true;
-		}
-
-		$message = $student->getName()." is no longer accepted.";
-
-		if($emailError){
-			return response()->json(array(
-				'successful' => true,
-				'email_successful' => false,
-				'message' => $message
-			));
-		}
-
-		return response()->json(array(
-			'successful' => true,
-			'email_successful' => true,
 			'message' => $message
 		));
 	}

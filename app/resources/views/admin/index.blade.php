@@ -17,6 +17,7 @@
 			@include('admin.partials.hub-section', ['title' => 'Settings', 'links' => 'settings', 'svg' => 'cog'])
 			@include('admin.partials.hub-section', ['title' => 'Second Marker', 'links' => 'marker', 'svg' => 'account-multiple'])
 			@include('admin.partials.hub-section', ['title' => 'Project Evaluation', 'links' => 'evaluation', 'svg' => 'clipboard-check'])
+			@include('admin.partials.hub-section', ['title' => 'Projects', 'links' => 'projects', 'svg' => 'file'])
 		</div>
 	</div>
 @endsection
