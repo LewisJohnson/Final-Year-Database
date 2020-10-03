@@ -802,4 +802,14 @@ class StudentController extends Controller{
 			'message' => $view
 		));
 	}
+
+	public static function studentsPendingDecision()
+	{
+		return Student::getAllStudentsQuery()->where('project_status' , 'selected')->count();
+	}
+
+	public static function studentsPendingProposedDecision()
+	{
+		return Student::getAllStudentsQuery()->where('project_status' , 'proposed')->count();
+	}
 }

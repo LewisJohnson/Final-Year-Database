@@ -846,6 +846,19 @@ class ProjectController extends Controller{
 			->first();
 	}
 
+	public static function getAcceptedProjectWithoutSecondMarkerCount()
+	{
+		$project = new Project;
+		$student = new Student;
+		
+		return Project::join($student->getTable().' as student', $project->getTable().'.id', '=', 'student.project_id')
+			->where('student.project_status', 'accepted')
+			->whereNull($project->getTable().'.marker_id')
+			->select($project->getTable().'.*')
+			->count();
+	}
+
+
 	/**
 	 * Returns the first accepted project without a second marker.
 	 *

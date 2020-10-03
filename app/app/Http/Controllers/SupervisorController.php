@@ -286,4 +286,8 @@ class SupervisorController extends Controller{
 			'message' => $message
 		));
 	}
+
+	public static function sumOfProjectLoads(){
+		return Supervisor::getAllSupervisorsQuery()->sum('project_load_'.Session::get('education_level')["shortName"]);
+	}
 }

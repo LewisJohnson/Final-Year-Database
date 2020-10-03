@@ -194,8 +194,31 @@
 						<div class="card">
 							<div class="card-body">
 								<h3 class="card-title">{{ ucfirst($level["longName"]) }} Administrator</h3>
-								<p>{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator. Take a look at the {{ $level["longName"] }} admin hub to see the actions you can perform.</p>
-			
+								<p>
+									{{ Auth::user()->first_name }}, you are an {{ $level["longName"] }} administrator.
+									Take a look at the {{ $level["longName"] }} admin hub to see the actions you can perform.
+								</p>
+
+								<h5>At a Glance</h5>
+								<b>Users</b>
+								<ul>
+									<li>Students: {{ SussexProjects\Student::getAllStudentsQuery()->count() }}</li>
+									<li>Supervisors: {{ SussexProjects\Supervisor::getAllSupervisorsQuery()->count() }}</li>
+								</ul>
+
+								<b>Projects</b>
+								<ul>
+									<li>Projects Pending Decision: {{ SussexProjects\Http\Controllers\StudentController::studentsPendingDecision() }}</li>
+									<li>Proposed Projects Pending Decision: {{ SussexProjects\Http\Controllers\StudentController::studentsPendingProposedDecision() }}</li>
+									<li>Projects Accepted: {{ SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectCount() }}</li>
+									<li>Projects Accepted Without 2<sup>nd</sup> Marker: {{ SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectWithoutSecondMarkerCount() }}</li>
+								</ul>
+
+								<b>Supervisors</b>
+								<ul>
+									<li>Sum of Project Loads: {{ SussexProjects\Http\Controllers\SupervisorController::sumOfProjectLoads() }}</li>
+								</ul>
+						
 							</div>
 							<div class="card-footer">
 								<a href="{{ action('ProjectAdminController@index', 'educationLevel='.$level["shortName"]) }}">{{ ucfirst($level["longName"]) }} Administrator Hub</a>
