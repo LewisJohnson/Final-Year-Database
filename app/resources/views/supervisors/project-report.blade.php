@@ -56,14 +56,15 @@
 										@foreach($interestedStudents as $interested)
 											<tr data-student-id="{{ $interested['student']->id }}" data-project-id="{{ $interested['project']->id }}">
 												<td class="w-5">
-													<div class="checkbox">
+													<div class="checkbox mt-1">
 														<input class="checkbox-input" id="offer-{{ $interested['student']->user->getFullName() }}" type="checkbox" data-email="{{ $interested['student']->user->email }}">
 														<label for="offer-{{ $interested['student']->user->getFullName() }}" name="offer-{{ $interested['student']->user->getFullName() }}"></label>
 													</div>
 												</td>
 		
-												<td class="w-25">
-													<a href="mailto:{{ $interested['student']->user->email }}">{{ $interested['student']->user->getFullName() }}</a>
+												<td class="w-25" style="line-height: 16px">
+													{{ $interested['student']->user->getFullName() }}<br>
+													<small><a href="mailto:{{ $interested['student']->user->email }}">{{ $interested['student']->user->email }}</a></small>
 												</td>
 		
 												<td class="w-50">
@@ -120,8 +121,9 @@
 													</div>
 												</td>
 		
-												<td class="w-25">
-													<a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->getFullName() }}</a>
+												<td class="w-25" style="line-height: 16px">
+													{{ $proposal['student']->user->getFullName() }}<br>
+													<small><a href="mailto:{{ $proposal['student']->user->email }}">{{ $proposal['student']->user->email }}</a></small>
 												</td>
 		
 												<td class="w-50">

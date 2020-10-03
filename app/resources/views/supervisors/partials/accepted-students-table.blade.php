@@ -27,8 +27,10 @@
 								<label for="accepted-{{ $accepted['student']->user->getFullName() }}" name="accepted-{{ $accepted['student']->user->getFullName() }}"></label>
 							</div>
 						</td>
-						<td>
-							<a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->getFullName() }}</a>
+
+						<td style="line-height: 16px">
+							{{ $accepted['student']->user->getFullName() }}<br>
+							<small><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->email }}</a></small>
 						</td>
 
 						@if(isset($accepted['project']->marker))
