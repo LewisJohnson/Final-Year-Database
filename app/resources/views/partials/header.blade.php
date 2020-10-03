@@ -4,6 +4,12 @@
 	@include('partials.ie-banner')
 @endif
 
+@if(env('APP_DEBUG'))
+	@if(Auth::check() && Auth::user()->isSystemAdmin())
+		@include('partials.debug-banner')
+	@endif
+@endif
+
 @if(Session::get('department') != null)
 	<nav class="navbar navbar-expand navbar-dark bg-dark p-0">
 		<div class="collapse navbar-collapse">
