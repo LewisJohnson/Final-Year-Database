@@ -29,7 +29,7 @@
 					<th>Student</th>
 					<th>Project Title</th>
 					<th class="border-left">Supervisor<br><span class="text-muted">Name</span></th>
-					<th class="border-left">2<sup>nd</sup> Marker<br><span class="text-muted">Name</span></th>
+					<th>2<sup>nd</sup> Marker<br><span class="text-muted">Name</span></th>
 					<th class="border-left d-print-none js-unsortable"></th>
 				</tr>
 			</thead>
@@ -41,13 +41,7 @@
 							<td>No project</td>
 							<td class="border-left"></td>
 							<td>-</td>
-							<td>-</td>
 							<td class="border-left"></td>
-							<td>-</td>
-							<td>-</td>
-							<td class="border-left">-</td>
-							<td>-</td>
-							<td>-</td>
 						</tr>
 					@else
 						@php
@@ -58,7 +52,7 @@
 							<td><a href="{{ action('ProjectController@show', $project) }}">{{ $project->title }}</a></td>
 	
 							<td class="border-left"><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
-							<td class="border-left">
+							<td>
 								@if(empty($project->marker))
 									-
 								@else
