@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -16,7 +15,8 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\TransactionController
  */
-class Transaction extends Model {
+class Transaction extends Model
+{
 	use Traits\Uuids;
 
 	/**
@@ -25,7 +25,7 @@ class Transaction extends Model {
 	 * @var string
 	 */
 	public $timestamps = false;
-	
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -50,34 +50,53 @@ class Transaction extends Model {
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_transactions_'.get_el_short_name();
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_transactions_' . get_el_short_name();
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}
 
-	public function getProjectTitle(){
+	/**
+	 * @return mixed
+	 */
+	public function getProjectTitle()
+	{
 		$project = Project::find($this->project);
 
-		if($project != null){
+		if ($project != null)
+		{
 			return $project->title;
-		} else {
+		}
+		else
+		{
 			return "-";
-		}		
+		}
 	}
 
-	public function getName($userId){
+	/**
+	 * @param  $userId
+	 * @return mixed
+	 */
+	public function getName($userId)
+	{
 		$user = User::find($userId);
 
-		if($user != null){
+		if ($user != null)
+		{
 			return $user->getFullName();
-		} else {
+		}
+		else
+		{
 			return "-";
-		}	
+		}
 	}
 }

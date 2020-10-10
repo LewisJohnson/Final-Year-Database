@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @see SussexProjects\Http\Controllers\HomeController
  */
-class Feedback extends Model{
+class Feedback extends Model
+{
 	use Traits\Uuids;
 
 	/**
@@ -43,7 +43,8 @@ class Feedback extends Model{
 	 *
 	 * @return string
 	 */
-	public function getTable(){
+	public function getTable()
+	{
 		return 'feedback';
 	}
 }

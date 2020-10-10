@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -16,7 +15,8 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\ProgrammeController
  */
-class Programme extends Model{
+class Programme extends Model
+{
 	use Traits\Uuids;
 
 	/**
@@ -43,20 +43,25 @@ class Programme extends Model{
 	/**
 	 * A HTML data-list of all topics.
 	 *
-	 * @param null $userProgrammeId
 	 *
+	 * @param  null     $userProgrammeId
 	 * @return string
 	 */
-	public static function getSelectList($userProgrammeId = null){
+	public static function getSelectList($userProgrammeId = null)
+	{
 		$programmes = Programme::all();
 
 		$rtnString = '<select class="form-control w-auto" name="programme">';
 		$rtnString .= '<option value="">None</option>';
-		foreach($programmes as $prog){
-			if($userProgrammeId == $prog->id){
-				$rtnString .= '<option selected value="'.$prog->id.'">'.$prog->name.'</option>';
-			} else {
-				$rtnString .= '<option value="'.$prog->id.'">'.$prog->name.'</option>';
+		foreach ($programmes as $prog)
+		{
+			if ($userProgrammeId == $prog->id)
+			{
+				$rtnString .= '<option selected value="' . $prog->id . '">' . $prog->name . '</option>';
+			}
+			else
+			{
+				$rtnString .= '<option value="' . $prog->id . '">' . $prog->name . '</option>';
 			}
 		}
 		$rtnString .= '</select>';
@@ -67,13 +72,17 @@ class Programme extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_programmes';
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_programmes';
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}

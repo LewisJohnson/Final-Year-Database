@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -17,7 +16,8 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\ProjectController
  */
-class Project extends Model {
+class Project extends Model
+{
 	use Traits\Uuids;
 
 	/**
@@ -33,7 +33,7 @@ class Project extends Model {
 	 * @var bool
 	 */
 	public $incrementing = false;
-	
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -74,28 +74,32 @@ class Project extends Model {
 	 *
 	 * @return string The project's status.
 	 */
-	public function getStatus(){
-		if($this->status == "withdrawn" && !empty($this->getAcceptedStudent())){
+	public function getStatus()
+	{
+		if ($this->status == "withdrawn" && !empty($this->getAcceptedStudent()))
+		{
 			return "accepted";
 		}
 
-		if($this->status == "student-proposed" && !empty($this->getAcceptedStudent())){
+		if ($this->status == "student-proposed" && !empty($this->getAcceptedStudent()))
+		{
 			return "accepted (student proposed)";
 		}
-		
+
 		return $this->status;
 	}
-
 
 	/**
 	 * Get's the project status.
 	 *
 	 * @return string The project's status.
 	 */
-	public function getStatusAsBootstrapClass(){
+	public function getStatusAsBootstrapClass()
+	{
 		$status = $this->getStatus();
-		
-		switch ($status) {
+
+		switch ($status)
+		{
 			case 'accepted':
 			case 'accepted (student proposed)':
 				return "success";
@@ -108,7 +112,7 @@ class Project extends Model {
 			case 'archived':
 				return "danger";
 				break;
-			
+
 			default:
 				return "secondary";
 				break;
@@ -118,13 +122,17 @@ class Project extends Model {
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_projects_'.get_el_short_name();
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_projects_' . get_el_short_name();
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}
@@ -134,8 +142,9 @@ class Project extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany Topics
 	 */
-	public function topics(){
-		$projectTopic = new ProjectTopic;
+	public function topics()
+	{
+		$projectTopic = new ProjectTopic();
 
 		return $this->belongsToMany(Topic::class, $projectTopic->getTable(), 'project_id', 'topic_id')
 			->withPivot('primary');
@@ -146,7 +155,8 @@ class Project extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function supervisor(){
+	public function supervisor()
+	{
 		return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
 	}
 
@@ -155,7 +165,8 @@ class Project extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
 	 */
-	public function marker(){
+	public function marker()
+	{
 		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
 	}
 
@@ -164,7 +175,8 @@ class Project extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function student(){
+	public function student()
+	{
 		return $this->belongsTo(Student::class, 'student_id', 'id');
 	}
 
@@ -173,7 +185,8 @@ class Project extends Model {
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function evaluation(){
+	public function evaluation()
+	{
 		return $this->hasOne(ProjectEvaluation::class, 'project_id', 'id');
 	}
 
@@ -183,9 +196,12 @@ class Project extends Model {
 	 *
 	 * @return Topic
 	 */
-	public function getPrimaryTopic(){
-		foreach($this->topics as $key => $value){
-			if($value->pivot->primary){
+	public function getPrimaryTopic()
+	{
+		foreach ($this->topics as $key => $value)
+		{
+			if ($value->pivot->primary)
+			{
 				return $value;
 			}
 		}
@@ -198,7 +214,8 @@ class Project extends Model {
 	 *
 	 * @return Student
 	 */
-	public function getStudentsWithProjectSelected(){
+	public function getStudentsWithProjectSelected()
+	{
 		return Student::where('project_id', $this->id)
 			->where('project_status', 'selected')
 			->get();
@@ -209,7 +226,8 @@ class Project extends Model {
 	 *
 	 * @return Student
 	 */
-	public function getAcceptedStudent(){
+	public function getAcceptedStudent()
+	{
 		return Student::where('project_id', $this->id)
 			->where('project_status', 'accepted')
 			->first();
@@ -220,10 +238,14 @@ class Project extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function isOwnedByUser(){
-		if(Auth::user()->isSupervisor() && $this->status != "student-proposed"){
+	public function isOwnedByUser()
+	{
+		if (Auth::user()->isSupervisor() && $this->status != "student-proposed")
+		{
 			return $this->supervisor_id === Auth::user()->id;
-		} elseif(Auth::user()->isStudent()) {
+		}
+		elseif (Auth::user()->isStudent())
+		{
 			return $this->student_id === Auth::user()->id;
 		}
 
@@ -235,8 +257,10 @@ class Project extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function isUserSupervisorOfProject(){
-		if(Auth::user()->isSupervisor()){
+	public function isUserSupervisorOfProject()
+	{
+		if (Auth::user()->isSupervisor())
+		{
 			return $this->supervisor_id === Auth::user()->id;
 		}
 
@@ -248,8 +272,10 @@ class Project extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function isUserMarkerOfProject(){
-		if(Auth::user()->isSupervisor()){
+	public function isUserMarkerOfProject()
+	{
+		if (Auth::user()->isSupervisor())
+		{
 			return $this->marker_id === Auth::user()->id;
 		}
 
@@ -261,17 +287,20 @@ class Project extends Model {
 	 *
 	 * @return boolean
 	 */
-	public function getShortDescription(){
+	public function getShortDescription()
+	{
 		$returnString = strip_tags($this->description);
 		$longString = false;
 
-		if(strlen($returnString) > 70){
+		if (strlen($returnString) > 70)
+		{
 			$longString = true;
 		}
 
 		$returnString = substr($returnString, 0, 70);
 
-		if($longString){
+		if ($longString)
+		{
 			$returnString .= "...";
 		}
 

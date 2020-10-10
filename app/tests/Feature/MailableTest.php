@@ -2,21 +2,20 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
+use SussexProjects\Mail\StudentAccepted;
+use SussexProjects\Mail\StudentProposed;
+use SussexProjects\Mail\StudentRejected;
 use SussexProjects\Mail\StudentSelected;
 use SussexProjects\Mail\StudentUnselected;
-use SussexProjects\Mail\StudentProposed;
-use SussexProjects\Mail\StudentAccepted;
-use SussexProjects\Mail\StudentRejected;
-use SussexProjects\Supervisor;
 use SussexProjects\Project;
 use SussexProjects\Student;
+use SussexProjects\Supervisor;
+use Tests\TestCase;
 
-class MailableTest extends TestCase{
+class MailableTest extends TestCase
+{
 	use RefreshDatabase;
 
 	/**
@@ -25,7 +24,7 @@ class MailableTest extends TestCase{
 	 * @var Supervisor
 	 */
 	public $supervisor;
-	
+
 	/**
 	 * The supervisor instance.
 	 *
@@ -45,7 +44,8 @@ class MailableTest extends TestCase{
 	 *
 	 * @return void
 	 */
-	public function setUp(){
+	public function setUp()
+	{
 		parent::setUp();
 
 		// Set up supervisor
@@ -65,7 +65,8 @@ class MailableTest extends TestCase{
 	 *
 	 * @return void
 	 */
-	public function testStudentSelected(){
+	public function testStudentSelected()
+	{
 		Mail::fake();
 
 		// POST request to your controller@action
@@ -74,9 +75,9 @@ class MailableTest extends TestCase{
 		// you can check if response was ok
 		$this->assertTrue($response->isOk(), "Something went wrong.");
 
-
 		// Perform order shipping...
-		Mail::assertSent(StudentSelected::class, function ($mail) {
+		Mail::assertSent(StudentSelected::class, function ($mail)
+		{
 			return $mail->order->id === $order->id;
 		});
 
@@ -86,7 +87,8 @@ class MailableTest extends TestCase{
 		Mail::assertSent(StudentSelected::class);
 
 		// Assert a message was sent to supervisor
-		Mail::assertSent(StudentSelected::class, function ($mail) use ($user) {
+		Mail::assertSent(StudentSelected::class, function ($mail) use ($user)
+		{
 			return $mail->hasTo($this->supervisor->user->email);
 		});
 

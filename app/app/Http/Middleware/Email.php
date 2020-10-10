@@ -10,12 +10,21 @@ namespace SussexProjects\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Session;
 
-class Email{
+class Email
+{
 
-	public function handle($request, Closure $next){
+	/**
+	 * @param  $request
+	 * @param  Closure     $next
+	 * @return mixed
+	 */
+	public function handle($request, Closure $next)
+	{
 		// Check to see if query param is set
-		if($request->query('utm_medium') != null){
-			if($request->query('utm_medium') == 'email'){
+		if ($request->query('utm_medium') != null)
+		{
+			if ($request->query('utm_medium') == 'email')
+			{
 				Session::put('after_login', $request->getPathInfo());
 			}
 		}

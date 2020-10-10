@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -20,15 +19,16 @@ use Illuminate\Support\Facades\Session;
  * @see Project
  * @see Topic
  */
-class ProjectTopic extends Model{
-	
+class ProjectTopic extends Model
+{
+
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
 	 * @var string
 	 */
 	public $timestamps = false;
-	
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -60,13 +60,17 @@ class ProjectTopic extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_project_topics_'.get_el_short_name();
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_project_topics_' . get_el_short_name();
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}

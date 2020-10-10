@@ -4,16 +4,14 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 use SussexProjects\Mail\StudentAccepted;
 use SussexProjects\Mail\StudentRejected;
 use SussexProjects\Mode;
@@ -27,9 +25,11 @@ use SussexProjects\User;
  * The supervisor controller.
  * Handles all functions related to supervisors.
  */
-class SupervisorController extends Controller{
+class SupervisorController extends Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 		$this->middleware('auth');
 	}
@@ -39,7 +39,8 @@ class SupervisorController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function projectReport(){
+	public function projectReport()
+	{
 		return view('supervisors.project-report');
 	}
 
@@ -48,7 +49,8 @@ class SupervisorController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function projectPopularity(){
+	public function projectPopularity()
+	{
 		return view('supervisors.project-popularity')
 			->with("projects", Auth::user()->supervisor->getPopularProjects());
 	}
@@ -56,23 +58,30 @@ class SupervisorController extends Controller{
 	/**
 	 * The supervisor report.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request                                   $request
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function report(Request $request){
+	public function report(Request $request)
+	{
 
-		if(isset($request->sr_hide_closed)){
+		if (isset($request->sr_hide_closed))
+		{
 			Cookie::queue('sr_hide_closed', $request->sr_hide_closed, 525600);
-		} else {
+		}
+		else
+		{
 			$request->sr_hide_closed = Cookie::get('sr_hide_closed');
 		}
 
-		if($request->sr_hide_closed){
+		if ($request->sr_hide_closed)
+		{
 			$supervisors = Supervisor::getAllSupervisorsQuery()
-				->where('take_students_'.get_el_short_name(), true)
+				->where('take_students_' . get_el_short_name(), true)
 				->get();
-		} else {
+		}
+		else
+		{
 			$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 		}
 
@@ -85,31 +94,33 @@ class SupervisorController extends Controller{
 	 * A table of all accepted students.
 	 *
 	 * @return \Illuminate\Http\Response
-	 
 	 */
-	public function acceptedStudentsTable(Request $request){
+	public function acceptedStudentsTable(Request $request)
+	{
 
-		// We don't need to specify a student year because you can't accept students from any year but active 
+		// We don't need to specify a student year because you can't accept students from any year but active
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
 		$showEvaluationButton = Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
 
 		return view('supervisors.partials.accepted-students-table')
-				->with('acceptedStudents', $acceptedStudents)
-				->with('showEvaluationButton', $showEvaluationButton);
+			->with('acceptedStudents', $acceptedStudents)
+			->with('showEvaluationButton', $showEvaluationButton);
 	}
 
 	/**
 	 * Accepts a student for their selected project.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response JSON
 	 */
-	public function acceptStudent(Request $request){
-		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
+	public function acceptStudent(Request $request)
+	{
+		if (Mode::getSupervisorAcceptDate()->gt(Carbon::now()))
+		{
 			return response()->json(array(
 				'successful' => false,
-				'message' => 'You are not allowed to accept students until '.Mode::getSupervisorAcceptDate(true).'.'
+				'message'    => 'You are not allowed to accept students until ' . Mode::getSupervisorAcceptDate(true) . '.',
 			));
 		}
 
@@ -121,46 +132,51 @@ class SupervisorController extends Controller{
 		$student = Student::findOrFail(request('student_id'));
 
 		// We must return the error because the return in the transaction will not break out of the function.
-		$error = DB::transaction(function() use ($request, $student){
+		$error = DB::transaction(function () use ($request, $student)
+		{
 			$project = Project::findOrFail(request('project_id'));
-			$transaction = new Transaction;
+			$transaction = new Transaction();
 
-			if($project->id != $student->project_id){
+			if ($project->id != $student->project_id)
+			{
 				return response()->json(array(
 					'successful' => false,
-					'message' => 'Project ID and student project ID do not match up.'
+					'message'    => 'Project ID and student project ID do not match up.',
 				));
 			}
 
-			if($project->getAcceptedStudent() != null){
+			if ($project->getAcceptedStudent() != null)
+			{
 				return response()->json(array(
 					'successful' => false,
-					'message' => 'This project has already been allocated to another student.'
+					'message'    => 'This project has already been allocated to another student.',
 				));
 			}
 
-			if(count($project->getStudentsWithProjectSelected()) > 1){
+			if (count($project->getStudentsWithProjectSelected()) > 1)
+			{
 				return response()->json(array(
 					'successful' => false,
-					'message' => 'You must reject all other students for "'.$project->title.'" before accepting '.$student->user->getFullName()
+					'message'    => 'You must reject all other students for "' . $project->title . '" before accepting ' . $student->user->getFullName(),
 				));
 			}
 
-			if($project->status != "student-proposed"){
+			if ($project->status != "student-proposed")
+			{
 				$project->status = 'withdrawn';
 			}
-			
+
 			$student->project_status = 'accepted';
 			$project->save();
 			$student->save();
 
 			$transaction->fill(array(
-				'type' => 'student',
-				'action' => 'accepted',
-				'project' => $student->project_id,
-				'student' => $student->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
+				'type'             => 'student',
+				'action'           => 'accepted',
+				'project'          => $student->project_id,
+				'student'          => $student->id,
+				'supervisor'       => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon(),
 			));
 
 			$transaction->save();
@@ -168,59 +184,66 @@ class SupervisorController extends Controller{
 			return null;
 		});
 
-		if($error != null){
+		if ($error != null)
+		{
 			return $error;
 		}
 
-		try{
+		try {
 			// Send accepted email
 			Mail::to($student->user->email)
 				->send(new StudentAccepted(Auth::user()->supervisor, $student));
-		} catch (\Exception $e){
+		}
+		catch (\Exception $e)
+		{
 			return response()->json(array(
-				'successful' => true,
+				'successful'       => true,
 				'email_successful' => false,
-				'message' => $student->user->first_name.' was accepted. However, the confirmation email failed to send.'
+				'message'          => $student->user->first_name . ' was accepted. However, the confirmation email failed to send.',
 			));
 		}
 
 		return response()->json(array(
 			'successful' => true,
-			'message' => $student->user->first_name.' has been accepted.'
+			'message'    => $student->user->first_name . ' has been accepted.',
 		));
 	}
 
 	/**
 	 * Rejects a student for their selected project.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response JSON
 	 */
-	public function rejectStudent(Request $request){
-		if(Mode::getSupervisorAcceptDate()->gt(Carbon::now())){
+	public function rejectStudent(Request $request)
+	{
+		if (Mode::getSupervisorAcceptDate()->gt(Carbon::now()))
+		{
 			return response()->json(array(
 				'successful' => false,
-				'message' => 'You are not allowed to reject students until '.Mode::getSupervisorAcceptDate(true).'.'
+				'message'    => 'You are not allowed to reject students until ' . Mode::getSupervisorAcceptDate(true) . '.',
 			));
 		}
 
 		$student = Student::findOrFail(request('student_id'));
 		$projectId = $student->project->id;
 
-		DB::transaction(function() use ($request, $student, $projectId){
-			$transaction = new Transaction;
+		DB::transaction(function () use ($request, $student, $projectId)
+		{
+			$transaction = new Transaction();
 			$transaction->fill(array(
-				'type' => 'student',
-				'action' => 'rejected',
-				'project' => $student->project_id,
-				'student' => $student->id,
-				'supervisor' => Auth::user()->supervisor->id,
-				'transaction_date' => new Carbon
+				'type'             => 'student',
+				'action'           => 'rejected',
+				'project'          => $student->project_id,
+				'student'          => $student->id,
+				'supervisor'       => Auth::user()->supervisor->id,
+				'transaction_date' => new Carbon(),
 			));
 			$transaction->save();
 
-			if($student->project->status == "student-proposed"){
+			if ($student->project->status == "student-proposed")
+			{
 				$student->project->supervisor_id = null;
 				$student->project->save();
 			}
@@ -229,65 +252,75 @@ class SupervisorController extends Controller{
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
-
 		});
 
 		$emailError = false;
-		try{
+		try {
 			// Send declined email
 			Mail::to($student->user->email)
 				->send(new StudentRejected(Auth::user()->supervisor, $student, $projectId));
-		} catch (\Exception $e){
+		}
+		catch (\Exception $e)
+		{
 			$emailError = true;
 		}
 
-		if($emailError){
+		if ($emailError)
+		{
 			return response()->json(array(
-				'successful' => true,
+				'successful'       => true,
 				'email_successful' => false,
-				'message' => $student->user->first_name.' has been rejected.'
+				'message'          => $student->user->first_name . ' has been rejected.',
 			));
 		}
 
 		return response()->json(array(
-			'successful' => true,
+			'successful'       => true,
 			'email_successful' => true,
-			'message' => $student->user->first_name.' has been rejected.'
+			'message'          => $student->user->first_name . ' has been rejected.',
 		));
 	}
 
 	/**
 	 * Updates the students share name to other students preference.
 	 *
-	 * @param \Illuminate\Http\Request
 	 *
+	 * @param  \Illuminate\Http\Request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function receiveEmails(Request $request){
+	public function receiveEmails(Request $request)
+	{
 		$educationLevels = get_education_levels(true);
 
-		if(in_array($request->education_level, $educationLevels)){
-			Auth::user()->supervisor->setAcceptingEmails(isset($request["accept_emails_".$request->education_level]) ? 1 : 0, $request->education_level);
-		} else {
+		if (in_array($request->education_level, $educationLevels))
+		{
+			Auth::user()->supervisor->setAcceptingEmails(isset($request["accept_emails_" . $request->education_level]) ? 1 : 0, $request->education_level);
+		}
+		else
+		{
 			return response()->json(array(
 				'successful' => false,
-				'message' => 'Incorrect parameters.'
+				'message'    => 'Incorrect parameters.',
 			));
 		}
 
-		if(isset($request["accept_emails_".$request->education_level])){
-			$message = "You have opted in to ".$request->education_level." emails.";
-		} else {
-			$message = "You have opted out of ".$request->education_level." emails.";
+		if (isset($request["accept_emails_" . $request->education_level]))
+		{
+			$message = "You have opted in to " . $request->education_level . " emails.";
+		}
+		else
+		{
+			$message = "You have opted out of " . $request->education_level . " emails.";
 		}
 
 		return response()->json(array(
 			'successful' => true,
-			'message' => $message
+			'message'    => $message,
 		));
 	}
 
-	public static function sumOfProjectLoads(){
-		return Supervisor::getAllSupervisorsQuery()->sum('project_load_'.get_el_short_name());
+	public static function sumOfProjectLoads()
+	{
+		return Supervisor::getAllSupervisorsQuery()->sum('project_load_' . get_el_short_name());
 	}
 }

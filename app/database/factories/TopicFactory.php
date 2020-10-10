@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 use Faker\Generator as Faker;
 
 $names = [
@@ -61,30 +60,35 @@ $names = [
 	"Software Engineering",
 	"Video Streaming",
 	"Virtual Environments",
-	"Web Technology"
+	"Web Technology",
 ];
 
 $topicNameIncrement = topicNameIncrement();
 $topicIdIncrement = topicIdIncrement();
 
-$factory->define(SussexProjects\Topic::class, function (Faker $faker) use ($topicNameIncrement, $topicIdIncrement, $names) {
+$factory->define(SussexProjects\Topic::class, function (Faker $faker) use ($topicNameIncrement, $topicIdIncrement, $names)
+{
 	$topicNameIncrement->next();
 	$topicIdIncrement->next();
 
 	return [
-		'id' => $topicNameIncrement->current(),
-		'name' => $names[$topicNameIncrement->current()]
+		'id'   => $topicNameIncrement->current(),
+		'name' => $names[$topicNameIncrement->current()],
 	];
 });
 
-function topicNameIncrement(){
-	for ($i = 0; $i < 1000; $i++) {
+function topicNameIncrement()
+{
+	for ($i = 0; $i < 1000; $i++)
+	{
 		yield $i;
 	}
 }
 
-function topicIdIncrement(){
-	for ($i = 0; $i < 1000; $i++) {
+function topicIdIncrement()
+{
+	for ($i = 0; $i < 1000; $i++)
+	{
 		yield $i;
 	}
 }

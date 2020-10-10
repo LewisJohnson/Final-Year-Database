@@ -6,14 +6,19 @@ use Illuminate\Contracts\Encryption\DecryptException;
 /**
  * The Encryptable trait.
  */
-trait Encryptable {
-	
-	public function getAttribute($key) {
+trait Encryptable
+{
+
+	public function getAttribute($key)
+	{
 		$value = parent::getAttribute($key);
-		if (in_array($key, $this->encryptable)) {
+		if (in_array($key, $this->encryptable))
+		{
 			try {
 				$value = \Crypt::decrypt($value);
-			} catch (DecryptException $e) {
+			}
+			catch (DecryptException $e)
+			{
 				$value = $value;
 				\Log::error('Encryptable ERROR: Value not decryptable.');
 			}
@@ -21,9 +26,17 @@ trait Encryptable {
 		return $value;
 	}
 
-	public function setAttribute($key, $value, $encrypt = true) {
-		if ($encrypt) {
-			if (in_array($key, $this->encryptable)) {
+	/**
+	 * @param $key
+	 * @param $value
+	 * @param $encrypt
+	 */
+	public function setAttribute($key, $value, $encrypt = true)
+	{
+		if ($encrypt)
+		{
+			if (in_array($key, $this->encryptable))
+			{
 				$value = \Crypt::encrypt($value);
 			}
 		}
@@ -36,13 +49,17 @@ trait Encryptable {
 	 *
 	 * @return Array
 	 */
-	public function attributesToArray() {
+	public function attributesToArray()
+	{
 		$attributes = parent::attributesToArray();
-		foreach ($this->encryptable as $key) {
+		foreach ($this->encryptable as $key)
+		{
 			$value = parent::getAttribute($key);
 			try {
 				$attributes[$key] = \Crypt::decrypt($value);
-			} catch (DecryptException $e) {
+			}
+			catch (DecryptException $e)
+			{
 				// no need to do anything here - this attribute is already in the array
 			}
 		}

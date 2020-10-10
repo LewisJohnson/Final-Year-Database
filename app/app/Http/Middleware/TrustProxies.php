@@ -4,13 +4,13 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Middleware;
 
 use Fideloper\Proxy\TrustProxies as Middleware;
 use Illuminate\Http\Request;
 
-class TrustProxies extends Middleware{
+class TrustProxies extends Middleware
+{
 
 	/**
 	 * The trusted proxies for this application.

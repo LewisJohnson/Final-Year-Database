@@ -4,25 +4,25 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
+use Encryptable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use SussexProjects\Student;
-use Encryptable;
 
 /**
  * The student portfolio model.
  *
  * @see SussexProjects\Student
  */
-class ProjectEvaluation extends Model {
+class ProjectEvaluation extends Model
+{
 	use Traits\Uuids;
 	use Traits\Encryptable;
-	
+
 	/**
 	 * Indicates if Laravel default time-stamp columns are used.
 	 *
@@ -51,8 +51,8 @@ class ProjectEvaluation extends Model {
 	 */
 	protected $casts = [
 		'is_finalised' => 'boolean',
-		'is_deferred' => 'boolean',
-		'questions' => 'array'
+		'is_deferred'  => 'boolean',
+		'questions'    => 'array',
 	];
 
 	/**
@@ -65,13 +65,17 @@ class ProjectEvaluation extends Model {
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_project_evaluation_'.get_el_short_name();
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_project_evaluation_' . get_el_short_name();
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}
@@ -81,23 +85,33 @@ class ProjectEvaluation extends Model {
 	 *
 	 * @return Project
 	 */
-	public function project(){
+	public function project()
+	{
 		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
 
-	public function supervisorHasSubmittedAllQuestions($group = null){
-		foreach($this->getQuestions() as $question) {
-			if($group != null){
-				if($question->group != $group){
+	/**
+	 * @param $group
+	 */
+	public function supervisorHasSubmittedAllQuestions($group = null)
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($group != null)
+			{
+				if ($question->group != $group)
+				{
 					continue;
 				}
 			}
 
-			if($question->supervisorOmitSubmission){
+			if ($question->supervisorOmitSubmission)
+			{
 				continue;
 			}
 
-			if(!$question->supervisorSubmitted){
+			if (!$question->supervisorSubmitted)
+			{
 				return false;
 			}
 		}
@@ -105,19 +119,28 @@ class ProjectEvaluation extends Model {
 		return true;
 	}
 
-	public function markerHasSubmittedAllQuestions($group = null){
-		foreach($this->getQuestions() as $question) {
-			if($group != null){
-				if($question->group != $group){
+	/**
+	 * @param $group
+	 */
+	public function markerHasSubmittedAllQuestions($group = null)
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($group != null)
+			{
+				if ($question->group != $group)
+				{
 					continue;
 				}
 			}
 
-			if($question->markerOmitSubmission){
+			if ($question->markerOmitSubmission)
+			{
 				continue;
 			}
 
-			if(!$question->markerSubmitted){
+			if (!$question->markerSubmitted)
+			{
 				return false;
 			}
 		}
@@ -125,51 +148,67 @@ class ProjectEvaluation extends Model {
 		return true;
 	}
 
-	public function getStatus(){
-		if($this->is_finalised){
+	public function getStatus()
+	{
+		if ($this->is_finalised)
+		{
 			return "Finalised";
 		}
 
-		if($this->is_deferred){
+		if ($this->is_deferred)
+		{
 			return "Deferred";
 		}
 
-		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
+		if ($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions())
+		{
 			return "Submitted";
 		}
 
-		if((Auth::user()->id == $this->project->supervisor_id) && $this->supervisorHasSubmittedAllQuestions()){
+		if ((Auth::user()->id == $this->project->supervisor_id) && $this->supervisorHasSubmittedAllQuestions())
+		{
 			return "Supervisor Submitted";
 		}
 
-		if((Auth::user()->id == $this->project->supervisor_id) && $this->markerHasSubmittedAllQuestions()){
+		if ((Auth::user()->id == $this->project->supervisor_id) && $this->markerHasSubmittedAllQuestions())
+		{
 			return "Marker Submitted";
 		}
 
 		return "In-Progress";
 	}
 
-	public function getStatusBootstrapClass(){
-		if($this->is_finalised){
+	public function getStatusBootstrapClass()
+	{
+		if ($this->is_finalised)
+		{
 			return "text-danger";
 		}
 
-		if($this->is_deferred){
+		if ($this->is_deferred)
+		{
 			return "text-info";
 		}
 
-		if($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions()){
+		if ($this->supervisorHasSubmittedAllQuestions() && $this->markerHasSubmittedAllQuestions())
+		{
 			return "text-success";
 		}
 
 		return "text-warning";
 	}
 
-	public function getGroups(){
+	/**
+	 * @return mixed
+	 */
+	public function getGroups()
+	{
 		$groups = [];
 
-		foreach($this->getQuestions() as $question) {
-			if(!in_array($question->group, $groups)) {
+		foreach ($this->getQuestions() as $question)
+		{
+			if (!in_array($question->group, $groups))
+			{
 				array_push($groups, $question->group);
 			}
 		}
@@ -177,10 +216,15 @@ class ProjectEvaluation extends Model {
 		return $groups;
 	}
 
-	public function getQuestions(){
+	/**
+	 * @return mixed
+	 */
+	public function getQuestions()
+	{
 		$questions = [];
 
-		foreach($this->questions as $question) {
+		foreach ($this->questions as $question)
+		{
 			$peq = new ProjectEvaluationQuestion(null, null, null, null, null, null);
 			$peq->map($question);
 
@@ -190,9 +234,12 @@ class ProjectEvaluation extends Model {
 		return $questions;
 	}
 
-	public function hasPosterPresentationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::PosterPresentation) {
+	public function hasPosterPresentationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::PosterPresentation)
+			{
 				return true;
 			}
 		}
@@ -200,9 +247,15 @@ class ProjectEvaluation extends Model {
 		return false;
 	}
 
-	public function getPosterPresentationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::PosterPresentation) {
+	/**
+	 * @return mixed
+	 */
+	public function getPosterPresentationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::PosterPresentation)
+			{
 				return $question;
 			}
 		}
@@ -210,9 +263,12 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding poster mark.");
 	}
 
-	public function hasOralPresentationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::OralPresentation) {
+	public function hasOralPresentationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::OralPresentation)
+			{
 				return true;
 			}
 		}
@@ -220,9 +276,15 @@ class ProjectEvaluation extends Model {
 		return false;
 	}
 
-	public function getOralPresentationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::OralPresentation) {
+	/**
+	 * @return mixed
+	 */
+	public function getOralPresentationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::OralPresentation)
+			{
 				return $question;
 			}
 		}
@@ -230,19 +292,28 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding oral presentation mark.");
 	}
 
-	public function hasDissertationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::Dissertation) {
+	public function hasDissertationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::Dissertation)
+			{
 				return true;
 			}
 		}
 
 		return false;
 	}
-	
-	public function getDissertationQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::Dissertation) {
+
+	/**
+	 * @return mixed
+	 */
+	public function getDissertationQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::Dissertation)
+			{
 				return $question;
 			}
 		}
@@ -250,9 +321,12 @@ class ProjectEvaluation extends Model {
 		throw new Exception("Error finding dissertation mark.");
 	}
 
-	public function hasStudentFeedbackQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::StudentFeedback) {
+	public function hasStudentFeedbackQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::StudentFeedback)
+			{
 				return true;
 			}
 		}
@@ -260,38 +334,55 @@ class ProjectEvaluation extends Model {
 		return false;
 	}
 
-	public function getStudentFeedbackQuestion(){
-		foreach($this->getQuestions() as $question) {
-			if($question->type == PEQValueTypes::StudentFeedback) {
+	/**
+	 * @return mixed
+	 */
+	public function getStudentFeedbackQuestion()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->type == PEQValueTypes::StudentFeedback)
+			{
 				return $question;
 			}
 		}
 
 		throw new Exception("Error finding student feedback.");
 	}
-	
-	public function hasSupervisorFilledGroup($group) {
-		foreach ($this::getQuestions() as $question) {
-			if($question->group != $group){
+
+	/**
+	 * @param $group
+	 */
+	public function hasSupervisorFilledGroup($group)
+	{
+		foreach ($this::getQuestions() as $question)
+		{
+			if ($question->group != $group)
+			{
 				continue;
 			}
 
-			if($question->submissionType == PEQSubmissionTypes::Optional){
+			if ($question->submissionType == PEQSubmissionTypes::Optional)
+			{
 				continue;
 			}
 
-			if($question->supervisorOmitSubmission){
+			if ($question->supervisorOmitSubmission)
+			{
 				continue;
 			}
 
-			if(is_null($question->supervisorValue)){
-				if($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback){
+			if (is_null($question->supervisorValue))
+			{
+				if ($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback)
+				{
 					return false;
 				}
 			}
 
-			// Check comments 
-			if(strlen($question->supervisorComment) < $question->minCommentLength){
+			// Check comments
+			if (strlen($question->supervisorComment) < $question->minCommentLength)
+			{
 				return false;
 			}
 		}
@@ -299,32 +390,44 @@ class ProjectEvaluation extends Model {
 		return true;
 	}
 
-	public function hasMarkerFilledGroup($group) {
-		foreach ($this::getQuestions() as $question) {
-			if($question->group != $group){
+	/**
+	 * @param $group
+	 */
+	public function hasMarkerFilledGroup($group)
+	{
+		foreach ($this::getQuestions() as $question)
+		{
+			if ($question->group != $group)
+			{
 				continue;
 			}
 
-			if($question->submissionType == PEQSubmissionTypes::Optional){
+			if ($question->submissionType == PEQSubmissionTypes::Optional)
+			{
 				continue;
 			}
 
-			if($question->markerOmitSubmission){
-				continue;
-			}
-			
-			if($question->submissionType == PEQSubmissionTypes::SupervisorOnly){
+			if ($question->markerOmitSubmission)
+			{
 				continue;
 			}
 
-			if(is_null($question->markerValue)){
-				if($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback){
+			if ($question->submissionType == PEQSubmissionTypes::SupervisorOnly)
+			{
+				continue;
+			}
+
+			if (is_null($question->markerValue))
+			{
+				if ($question->type != PEQValueTypes::CommentOnly && $question->type != PEQValueTypes::StudentFeedback)
+				{
 					return false;
 				}
 			}
 
-			// Check comments 
-			if(strlen($question->markerComment) < $question->minCommentLength){
+			// Check comments
+			if (strlen($question->markerComment) < $question->minCommentLength)
+			{
 				return false;
 			}
 		}
@@ -332,82 +435,108 @@ class ProjectEvaluation extends Model {
 		return true;
 	}
 
-	public function getSupervisorQuestionsLeftToFillSummary($group) {
+	/**
+	 * @param  $group
+	 * @return mixed
+	 */
+	public function getSupervisorQuestionsLeftToFillSummary($group)
+	{
 		$output = "";
 
-		foreach($this::getQuestions() as $question) {
-			if($question->group != $group){
+		foreach ($this::getQuestions() as $question)
+		{
+			if ($question->group != $group)
+			{
 				continue;
 			}
 
-			if($question->submissionType == PEQSubmissionTypes::Optional){
+			if ($question->submissionType == PEQSubmissionTypes::Optional)
+			{
 				continue;
 			}
 
-			if($question->supervisorOmitSubmission){
+			if ($question->supervisorOmitSubmission)
+			{
 				continue;
 			}
 
-			$isBad = (is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)) || 
-				strlen($question->supervisorComment) < $question->minCommentLength;
+			$isBad = (is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)) ||
+			strlen($question->supervisorComment) < $question->minCommentLength;
 
-			if($isBad){
-				$output .= '<li class="list-unstyled"><b>'.$question->title.'</b>';
+			if ($isBad)
+			{
+				$output .= '<li class="list-unstyled"><b>' . $question->title . '</b>';
 			}
 
-			if(is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)){
+			if (is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback))
+			{
 				$output .= "	<li>Value is not filled in</li>";
 			}
 
-			if(strlen($question->supervisorComment) < $question->minCommentLength){
+			if (strlen($question->supervisorComment) < $question->minCommentLength)
+			{
 				$output .= "	<li>Comment is too short</li>";
 			}
 
-			if($isBad){
+			if ($isBad)
+			{
 				$output .= "<br></li>";
 			}
-			
 		}
 
 		return $output;
 	}
 
-	public function getMarkerQuestionsLeftToFillSummary($group) {
+	/**
+	 * @param  $group
+	 * @return mixed
+	 */
+	public function getMarkerQuestionsLeftToFillSummary($group)
+	{
 
 		$output = "";
 
-		foreach($this::getQuestions() as $question) {
-			if($question->group != $group){
+		foreach ($this::getQuestions() as $question)
+		{
+			if ($question->group != $group)
+			{
 				continue;
 			}
 
-			if($question->submissionType == PEQSubmissionTypes::Optional){
+			if ($question->submissionType == PEQSubmissionTypes::Optional)
+			{
 				continue;
 			}
 
-			if($question->submissionType == PEQSubmissionTypes::SupervisorOnly){
+			if ($question->submissionType == PEQSubmissionTypes::SupervisorOnly)
+			{
 				continue;
 			}
 
-			if($question->markerOmitSubmission){
+			if ($question->markerOmitSubmission)
+			{
 				continue;
 			}
 
 			$isBad = is_null($question->markerValue) || strlen($question->markerComment) < $question->minCommentLength;
 
-			if($isBad){
-				$output .= '<li class="list-unstyled"><b>'.$question->title.'</b>';
+			if ($isBad)
+			{
+				$output .= '<li class="list-unstyled"><b>' . $question->title . '</b>';
 			}
 
-			if(is_null($question->markerValue) && ($question->type != PEQValueTypes::CommentOnly || $question->type != PEQValueTypes::StudentFeedback)){
+			if (is_null($question->markerValue) && ($question->type != PEQValueTypes::CommentOnly || $question->type != PEQValueTypes::StudentFeedback))
+			{
 				$output .= "	<li>Value is not filled in</li>";
 			}
 
-			if(strlen($question->markerComment) < $question->minCommentLength){
+			if (strlen($question->markerComment) < $question->minCommentLength)
+			{
 				$output .= "	<li>Comment is too short</li>";
 			}
 
-			if($isBad){
+			if ($isBad)
+			{
 				$output .= "<br></li>";
 			}
 		}

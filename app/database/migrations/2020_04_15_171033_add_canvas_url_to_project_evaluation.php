@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddCanvasUrlToProjectEvaluation extends Migration
 {
@@ -13,9 +13,12 @@ class AddCanvasUrlToProjectEvaluation extends Migration
 	 */
 	public function up()
 	{
-		foreach(get_departments() as $key => $department) {
-			foreach(get_education_levels() as $key => $level) {
-				Schema::table($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
+		foreach (get_departments() as $key => $department)
+		{
+			foreach (get_education_levels() as $key => $level)
+			{
+				Schema::table($department . '_project_evaluation_' . $level['shortName'], function (Blueprint $table) use ($department, $level)
+				{
 					$table->string('canvas_url')->nullable();
 				});
 			}
@@ -29,9 +32,12 @@ class AddCanvasUrlToProjectEvaluation extends Migration
 	 */
 	public function down()
 	{
-		 foreach(get_departments() as $key => $department) {
-			foreach(get_education_levels() as $key => $level) {
-				Schema::table($department.'_project_evaluation_'.$level['shortName'], function (Blueprint $table) use ($department, $level){
+		foreach (get_departments() as $key => $department)
+		{
+			foreach (get_education_levels() as $key => $level)
+			{
+				Schema::table($department . '_project_evaluation_' . $level['shortName'], function (Blueprint $table) use ($department, $level)
+				{
 					$table->dropColumn("canvas_url");
 				});
 			}

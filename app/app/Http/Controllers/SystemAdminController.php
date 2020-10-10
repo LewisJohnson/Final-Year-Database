@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,9 +16,11 @@ use SussexProjects\UserAgentString;
  *
  * @see SussexProjects\User
  */
-class SystemAdminController extends Controller{
+class SystemAdminController extends Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 		$this->middleware('auth');
 	}
@@ -29,7 +30,8 @@ class SystemAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function feedback(){
+	public function feedback()
+	{
 		$feedback = Feedback::orderBy('date', 'desc')->paginate(25);
 		return view('admin.feedback')
 			->with('feedback', $feedback);
@@ -40,11 +42,12 @@ class SystemAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function destroyFeedback(Request $request){
+	public function destroyFeedback(Request $request)
+	{
 		Feedback::find($request->feedback_id)->delete();
 
 		return response()->json(array(
-			'successful' => true
+			'successful' => true,
 		));
 	}
 
@@ -53,7 +56,8 @@ class SystemAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function systemDashboardView(){
+	public function systemDashboardView()
+	{
 		return view('admin.system.dashboard');
 	}
 
@@ -61,22 +65,27 @@ class SystemAdminController extends Controller{
 	 * Updates the system configuration
 	 * The view for this request is systemDashboard()
 	 *
-	 * @param Request $request
 	 *
+	 * @param  Request                     $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function updateSystemConfiguration(Request $request){
-		foreach($request->all() as $key => $value){
-			if(substr($key, -4, 4) != "json"){
+	public function updateSystemConfiguration(Request $request)
+	{
+		foreach ($request->all() as $key => $value)
+		{
+			if (substr($key, -4, 4) != "json")
+			{
 				// This is to convert strings to PHP booleans
-				if($value === "true"){
+				if ($value === "true")
+				{
 					$value = true;
 				}
-				if($value === "false"){
+				if ($value === "false")
+				{
 					$value = false;
 				}
 
-				get_config_json($request[$key."-json"], $value);
+				get_config_json($request[$key . "-json"], $value);
 			}
 		}
 
@@ -86,20 +95,27 @@ class SystemAdminController extends Controller{
 	/**
 	 * User agent string view.
 	 *
-	 * @param \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request                                   $request
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function userAgentView(Request $request){
-		if($request->query("unique") == "1"){
+	public function userAgentView(Request $request)
+	{
+		if ($request->query("unique") == "1")
+		{
 			$userAgents = UserAgentString::where('first_visit', 1);
-		} else {
+		}
+		else
+		{
 			$userAgents = UserAgentString::where('first_visit', 0);
 		}
 
-		if($request->query("page")){
+		if ($request->query("page"))
+		{
 			return view('system.partials.user-agent-row')->with('userAgents', $userAgents->paginate($this->paginationCount));
-		} else {
+		}
+		else
+		{
 			return view('system.user-agent')->with('userAgents', $userAgents->paginate($this->paginationCount));
 		}
 	}

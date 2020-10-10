@@ -4,12 +4,12 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider{
+class AuthServiceProvider extends ServiceProvider
+{
 	/**
 	 * The policy mappings for the application.
 	 *
@@ -22,7 +22,8 @@ class AuthServiceProvider extends ServiceProvider{
 	 *
 	 * @return void
 	 */
-	public function boot(){
+	public function boot()
+	{
 		$this->registerPolicies();
 
 		//

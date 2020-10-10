@@ -4,14 +4,12 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 use SussexProjects\Http\Controllers\UserController;
 use SussexProjects\User;
 
@@ -24,7 +22,8 @@ class UserForm extends FormRequest
 	 */
 	public function authorize()
 	{
-		if(Auth::user()->isAdminOfEducationLevel() || Auth::user()->isSystemAdmin()){
+		if (Auth::user()->isAdminOfEducationLevel() || Auth::user()->isSystemAdmin())
+		{
 			return true;
 		}
 
@@ -38,25 +37,29 @@ class UserForm extends FormRequest
 	 */
 	public function rules()
 	{
-		if(!empty($this->id)){
+		if (!empty($this->id))
+		{
 			$user = User::find($this->id);
 		}
 
-		$userDb = new User;
+		$userDb = new User();
 
-		if(empty($user)){
+		if (empty($user))
+		{
 			return [
-				'username' => 	['required', 'max:32', Rule::unique($userDb->getTable())],
-				'email' => 		['required', 'max:128', Rule::unique($userDb->getTable())],
+				'username'   => ['required', 'max:32', Rule::unique($userDb->getTable())],
+				'email'      => ['required', 'max:128', Rule::unique($userDb->getTable())],
 				'first_name' => ['required', 'max:128'],
-				'last_name' => 	['required', 'max:128']
+				'last_name'  => ['required', 'max:128'],
 			];
-		} else {
+		}
+		else
+		{
 			return [
-				'username' => 	['required', 'max:32', Rule::unique($userDb->getTable())->ignore($user->id)],
-				'email' => 		['required', 'max:128', Rule::unique($userDb->getTable())->ignore($user->id)],
+				'username'   => ['required', 'max:32', Rule::unique($userDb->getTable())->ignore($user->id)],
+				'email'      => ['required', 'max:128', Rule::unique($userDb->getTable())->ignore($user->id)],
 				'first_name' => ['required', 'max:128'],
-				'last_name' => 	['required', 'max:128']
+				'last_name'  => ['required', 'max:128'],
 			];
 		}
 	}
@@ -64,13 +67,14 @@ class UserForm extends FormRequest
 	/**
 	 * Configure the validator instance.
 	 *
-	 * @param  \Illuminate\Validation\Validator $validator
 	 *
+	 * @param  \Illuminate\Validation\Validator $validator
 	 * @return void
 	 */
 	public function withValidator($validator)
 	{
-		$validator->after(function(){
+		$validator->after(function ()
+		{
 			UserController::checkPrivilegeConditions(Request::get('privileges'));
 		});
 	}

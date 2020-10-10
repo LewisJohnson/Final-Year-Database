@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +15,8 @@ use Illuminate\Routing\Controller as BaseController;
  * The controller to be inherited by all other controllers.
  * Includes properties and constants needed for all controllers.
  */
-class Controller extends BaseController{
+class Controller extends BaseController
+{
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 	/**
@@ -26,9 +26,14 @@ class Controller extends BaseController{
 	 */
 	public $paginationCount;
 
-	public function __construct(){
+	/**
+	 * @return mixed
+	 */
+	public function __construct()
+	{
 
-		$this->middleware(function($request, $next){
+		$this->middleware(function ($request, $next)
+		{
 			return $next($request);
 		});
 	}

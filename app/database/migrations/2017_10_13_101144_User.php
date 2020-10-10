@@ -4,27 +4,31 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class User extends Migration{
+class User extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up(){
+	public function up()
+	{
 		$projectAdminLevels = "";
 
-		foreach(get_education_levels(true) as $key => $level) {
-			$projectAdminLevels.="'admin_".$level."',";
+		foreach (get_education_levels(true) as $key => $level)
+		{
+			$projectAdminLevels .= "'admin_" . $level . "',";
 		}
 
-		foreach(get_departments() as $key => $department) {
-			$tableName = $department.'_users';
-			Schema::create($tableName, function (Blueprint $table) use ($department) {
+		foreach (get_departments() as $key => $department)
+		{
+			$tableName = $department . '_users';
+			Schema::create($tableName, function (Blueprint $table) use ($department)
+			{
 				$table->uuid('id')->unique();
 				$table->string('first_name');
 				$table->string('last_name');
@@ -35,15 +39,16 @@ class User extends Migration{
 				$table->rememberToken();
 
 				$table->primary('id');
-				$table->foreign('programme')->references('id')->on($department.'_programmes');
+				$table->foreign('programme')->references('id')->on($department . '_programmes');
 			});
 
-			$privilegesSql = "ALTER TABLE `".$tableName."` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system') AFTER `id`;";
+			$privilegesSql = "ALTER TABLE `" . $tableName . "` ADD COLUMN `privileges` SET('student', 'staff', 'supervisor', " . $projectAdminLevels . " 'admin_system') AFTER `id`;";
 			DB::statement($privilegesSql);
 		}
 
 		// Create test table
-		Schema::create("test_users", function (Blueprint $table) {
+		Schema::create("test_users", function (Blueprint $table)
+		{
 			$table->uuid('id')->unique()->nullable(false);
 			$table->string('first_name', 128)->nullable(false);
 			$table->string('last_name', 128)->nullable(false);
@@ -61,9 +66,11 @@ class User extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
-		foreach(get_departments() as $key => $department) {
-			Schema::dropIfExists($department.'_users');
+	public function down()
+	{
+		foreach (get_departments() as $key => $department)
+		{
+			Schema::dropIfExists($department . '_users');
 		}
 		Schema::dropIfExists('test_users');
 	}

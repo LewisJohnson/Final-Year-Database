@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use SussexProjects\Mail\SupervisorUndo;
 use SussexProjects\Mode;
 use SussexProjects\Programme;
 use SussexProjects\Project;
@@ -20,7 +20,6 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
-use SussexProjects\Mail\SupervisorUndo;
 
 /**
  * The admin controller.
@@ -28,9 +27,11 @@ use SussexProjects\Mail\SupervisorUndo;
  *
  * @see SussexProjects\User
  */
-class ProjectAdminController extends Controller{
+class ProjectAdminController extends Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 		$this->middleware('auth');
 	}
@@ -41,17 +42,18 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function index(){
+	public function index()
+	{
 		return view('admin.index');
 	}
-
 
 	/**
 	 * The amend supervisor arrangements view.
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function amendSupervisorArrangementsView(){
+	public function amendSupervisorArrangementsView()
+	{
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
 		return view('admin.arrangements')->with('supervisors', $supervisors);
@@ -60,18 +62,21 @@ class ProjectAdminController extends Controller{
 	/**
 	 * Amends supervisor arrangements.
 	 *
-	 * @param \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\View\View
 	 */
-	public function amendSupervisorArrangements(Request $request){
+	public function amendSupervisorArrangements(Request $request)
+	{
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
-		foreach($supervisors as $supervisor){
-			$project_load = $request[$supervisor->id."_project_load"];
-			$take_students = $request[$supervisor->id."_take_students"];
+		foreach ($supervisors as $supervisor)
+		{
+			$project_load = $request[$supervisor->id . "_project_load"];
+			$take_students = $request[$supervisor->id . "_take_students"];
 
-			if($project_load != null){
+			if ($project_load != null)
+			{
 				$supervisor->setProjectLoad($project_load);
 			}
 			$supervisor->setTakingStudents(isset($take_students) ? 1 : 0);
@@ -88,7 +93,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function amendTopicsView(){
+	public function amendTopicsView()
+	{
 		$topics = Topic::all();
 
 		return view('admin.amend-topics')->with('topics', $topics);
@@ -99,7 +105,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function amendProgrammesView(){
+	public function amendProgrammesView()
+	{
 		$programmes = Programme::all();
 
 		return view('admin.amend-programmes')->with('programmes', $programmes);
@@ -110,28 +117,29 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function loginAsView(){
-		$student = new Student;
-		$user = new User;
+	public function loginAsView()
+	{
+		$student = new Student();
+		$user = new User();
 
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-					->get();
+			->get();
 
-		$students = Student::select($student->getTable().'.*')
-				->join($user->getTable().' as user', 'user.id', '=', $student->getTable().'.id')
-				->orderBy('last_name', 'asc')
-				->get();
+		$students = Student::select($student->getTable() . '.*')
+			->join($user->getTable() . ' as user', 'user.id', '=', $student->getTable() . '.id')
+			->orderBy('last_name', 'asc')
+			->get();
 
 		$staffUsers = User::where('privileges', 'LIKE', '%staff%')
-				->orderBy('last_name', 'asc')
-				->get();
+			->orderBy('last_name', 'asc')
+			->get();
 		$externalMarkers = User::where('privileges', 'LIKE', '%external_marker%')
-				->orderBy('last_name', 'asc')
-				->get();
+			->orderBy('last_name', 'asc')
+			->get();
 
 		$noPrivilegesUsers = User::whereNull('privileges')
-				->orderBy('last_name', 'asc')
-				->get();
+			->orderBy('last_name', 'asc')
+			->get();
 
 		return view('admin.login-as')
 			->with('supervisors', $supervisors)
@@ -144,14 +152,16 @@ class ProjectAdminController extends Controller{
 	/**
 	 * Log-in the currently authenticated user as another user.
 	 *
-	 * @param string $id User ID
 	 *
+	 * @param  string                  $id User ID
 	 * @return \Illuminate\View\View
 	 */
-	public function loginAs($id){
+	public function loginAs($id)
+	{
 		$userToLoginAs = User::findOrFail($id);
 
-		if($userToLoginAs->isSystemAdmin() || $userToLoginAs->isProjectAdmin()){
+		if ($userToLoginAs->isSystemAdmin() || $userToLoginAs->isProjectAdmin())
+		{
 			session()->flash('message', 'You may not log in as an administrator.');
 			session()->flash('message_type', 'error');
 
@@ -161,7 +171,7 @@ class ProjectAdminController extends Controller{
 		Auth::login($userToLoginAs);
 
 		// Redirect
-		session()->flash('message', 'You have logged in as '.$userToLoginAs->getFullName());
+		session()->flash('message', 'You have logged in as ' . $userToLoginAs->getFullName());
 		session()->flash('message_type', 'success');
 		Session::put('logged_in_as', true);
 
@@ -173,7 +183,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function archiveView(){
+	public function archiveView()
+	{
 		$mostPopularProject = Project::whereNull('student_id')
 			->limit(1)
 			->orderBy('view_count', 'desc')
@@ -188,49 +199,62 @@ class ProjectAdminController extends Controller{
 	 * - Adds This student was undertaken by [STUDENT NAME]” to project description.
 	 * - Set all projects status to archived.
 	 * - Remove student-proposed projects which haven't been accepted.
-	 * 
+	 *
 	 * STUDENTS:
 	 * - Remove students without projects
 	 * - Remove students with a project and finalised project evaluation.
-	 * 
+	 *
 	 * OTHER:
 	 * - Empty the transaction tables.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function archive(Request $request){
+	public function archive(Request $request)
+	{
 
-		if(!empty($request->project_year)){
-			if($request->project_year != Mode::getProjectYear()){
+		if (!empty($request->project_year))
+		{
+			if ($request->project_year != Mode::getProjectYear())
+			{
 				$this::prevYearArchive($request->project_year);
 			}
 		}
 
-		DB::transaction(function(){
+		DB::transaction(function ()
+		{
 			$projects = Project::all();
 			$studentsToDelete = Student::all();
 
 			// Archive all projects
-			foreach($projects as $project){
-				if($project->getAcceptedStudent() != null){
-					$project->description = $project->description." (++ In ".Mode::getFriendlyProjectYear()." this project was viewed ".$project->view_count." times and undertaken by ".$project->getAcceptedStudent()->user->getFullName()." ++)";
+			foreach ($projects as $project)
+			{
+				if ($project->getAcceptedStudent() != null)
+				{
+					$project->description = $project->description . " (++ In " . Mode::getFriendlyProjectYear() . " this project was viewed " . $project->view_count . " times and undertaken by " . $project->getAcceptedStudent()->user->getFullName() . " ++)";
 					$project->status = 'archived';
 					$project->save();
 				}
-				
-				// Removed 
-				if($project->getAcceptedStudent() == null && $project->status == 'student-proposed'){
+
+				// Removed
+				if ($project->getAcceptedStudent() == null && $project->status == 'student-proposed')
+				{
 					$project->delete();
 				}
 			}
 
 			// Empty the students table
-			foreach ($studentsToDelete as $student) {
-				if(empty($student->project)){
+			foreach ($studentsToDelete as $student)
+			{
+				if (empty($student->project))
+				{
 					User::destroy($student->id);
-				} else if(empty($student->project->evaluation)){
+				}
+				else if (empty($student->project->evaluation))
+				{
 					User::destroy($student->id);
-				} else if($student->project->evaluation->is_finalised){
+				}
+				else if ($student->project->evaluation->is_finalised)
+				{
 					User::destroy($student->id);
 				}
 			}
@@ -243,22 +267,28 @@ class ProjectAdminController extends Controller{
 		return response()->json(array('successful' => true));
 	}
 
-	public function prevYearArchive($year){
+	/**
+	 * @param $year
+	 */
+	public function prevYearArchive($year)
+	{
 
-		DB::transaction(function() use ($year){
+		DB::transaction(function () use ($year)
+		{
 			$projects = Project::all();
 
 			$userTable = (new User())->getTable();
 			$studentTable = (new Student())->getTable();
 
-			$studentsToDelete = Student::select($studentTable.'.*')
-				->join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
+			$studentsToDelete = Student::select($studentTable . '.*')
+				->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
 				->where('user.active_year', $year)
 				->orderBy('last_name', 'asc')
 				->get();
 
 			// Empty the students table
-			foreach ($studentsToDelete as $student) {
+			foreach ($studentsToDelete as $student)
+			{
 				User::destroy($student->id);
 			}
 
@@ -271,26 +301,30 @@ class ProjectAdminController extends Controller{
 	/**
 	 * The manual assign second marker view.
 	 *
-	 * @param \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\View\View
 	 */
-	public function manualSecondMarkerView(Request $request){
-		$student = new Student;
-		$user = new User;
+	public function manualSecondMarkerView(Request $request)
+	{
+		$student = new Student();
+		$user = new User();
 
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
-		if(!empty($request->project_year)){
+		if (!empty($request->project_year))
+		{
 			$userTable = (new User())->getTable();
 			$studentTable = (new Student())->getTable();
 
-			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
-				->select($studentTable.'.*')
+			$students = Student::join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
+				->select($studentTable . '.*')
 				->where('user.active_year', $request->project_year)
 				->orderBy('user.last_name', 'asc')
 				->get();
-		} else {
+		}
+		else
+		{
 			$students = Student::getAllStudentsQuery()->get();
 		}
 
@@ -304,7 +338,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function computeSecondMarkerView(){
+	public function computeSecondMarkerView()
+	{
 		return view('admin.assign-marker-automatic');
 	}
 
@@ -313,55 +348,59 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response A HTML report of assigned markers
 	 */
-	public function calculateSecondMarkers(Request $request){
+	public function calculateSecondMarkers(Request $request)
+	{
 		$maxStudentsPerSupervisor = PHP_INT_MAX;
 
-		if(!empty($request->max_students_per_supervisor)){
+		if (!empty($request->max_students_per_supervisor))
+		{
 			$maxStudentsPerSupervisor = max(1, $request->max_students_per_supervisor);
 		}
 
-		if(ProjectController::getAcceptedProjectCount() > (Supervisor::getAllSupervisorsQuery()
-				->where('project_load_'.get_el_short_name(), '>', 0)
-				->count() * $maxStudentsPerSupervisor)){
-			
+		if (ProjectController::getAcceptedProjectCount() > (Supervisor::getAllSupervisorsQuery()
+			->where('project_load_' . get_el_short_name(), '>', 0)
+			->count() * $maxStudentsPerSupervisor))
+		{
 			return response()->json(array(
 				'successful' => false,
-				'message' => "Please increase the maximum students per supervisor."
+				'message'    => "Please increase the maximum students per supervisor.",
 			));
 		}
 
-		DB::transaction(function () use ($maxStudentsPerSupervisor) {
-			$projectTable = new Project;
+		DB::transaction(function () use ($maxStudentsPerSupervisor)
+		{
+			$projectTable = new Project();
 
 			// Reset every project's second marker
 			DB::table($projectTable->getTable())->update(array(
-				'marker_id' => null
+				'marker_id' => null,
 			));
 
 			// Assign students taking lazy score in to consideration
-			while(ProjectController::getAcceptedProjectWithoutSecondMarker() != null){
+			while (ProjectController::getAcceptedProjectWithoutSecondMarker() != null)
+			{
 				// Get the project
 				$projectToAssign = ProjectController::getAcceptedProjectWithoutSecondMarker();
 
 				// Recalculate scores
 				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor, $projectToAssign->supervisor_id);
-				
+
 				// Get the laziest supervisor
 				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
 
 				$projectToAssign->marker_id = $laziestSupervisor->id;
 				$projectToAssign->save();
 
-				$transaction = new Transaction;
+				$transaction = new Transaction();
 				$transaction->fill(array(
-					'type' => 'marker',
-					'action' => 'marker-assigned',
-					'project' => $projectToAssign->id,
-					'student' => $projectToAssign->getAcceptedStudent()->id,
-					'supervisor' => $projectToAssign->supervisor_id,
-					'marker' => $projectToAssign->marker_id,
-					'admin' => Auth::user()->id,
-					'transaction_date' => new Carbon
+					'type'             => 'marker',
+					'action'           => 'marker-assigned',
+					'project'          => $projectToAssign->id,
+					'student'          => $projectToAssign->getAcceptedStudent()->id,
+					'supervisor'       => $projectToAssign->supervisor_id,
+					'marker'           => $projectToAssign->marker_id,
+					'admin'            => Auth::user()->id,
+					'transaction_date' => new Carbon(),
 				));
 
 				$transaction->save();
@@ -376,37 +415,44 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \app\app\Supervisor
 	 */
-	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor, $supervisorToIgnoreId){
+	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor, $supervisorToIgnoreId)
+	{
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-				->where('project_load_'.get_el_short_name(), '>', 0)
-				->get();
+			->where('project_load_' . get_el_short_name(), '>', 0)
+			->get();
 
 		// Set up the numbers
-		foreach($supervisors as $key => $supervisor){
-
-			if($supervisor->id == $supervisorToIgnoreId){
+		foreach ($supervisors as $key => $supervisor)
+		{
+			if ($supervisor->id == $supervisorToIgnoreId)
+			{
 				unset($supervisors[$key]);
 			}
 
-			if($isSetupView) {
+			if ($isSetupView)
+			{
 				$supervisor->second_supervising_count = 0;
-			} else {
+			}
+			else
+			{
 				$supervisor->second_supervising_count = count($supervisor->getSecondMarkingProjects());
 			}
 
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
 		}
 
-		if(count($supervisors) > 1){
-			$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor) {	
+		if (count($supervisors) > 1)
+		{
+			$supervisors = $supervisors->filter(function ($supervisor) use ($maxStudentsPerSupervisor)
+			{
 				return $supervisor->second_supervising_count < $maxStudentsPerSupervisor;
 			});
 		}
 
-		foreach($supervisors as $supervisor){
-
-			$loadMinusStudentCount = $supervisors->sum('project_load_'.get_el_short_name()) - Student::count();
-			$slack = floor($loadMinusStudentCount / max(1 ,$supervisors->where('second_supervising_count', 0)->count()));
+		foreach ($supervisors as $supervisor)
+		{
+			$loadMinusStudentCount = $supervisors->sum('project_load_' . get_el_short_name()) - Student::count();
+			$slack = floor($loadMinusStudentCount / max(1, $supervisors->where('second_supervising_count', 0)->count()));
 
 			$supervisor->project_load = $supervisor->getProjectLoad();
 			$supervisor->target_load = ($supervisor->project_load * 2) - $supervisor->accepted_student_count;
@@ -423,7 +469,8 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function secondMarkerReport(){
+	public function secondMarkerReport()
+	{
 		$supervisors = Supervisor::getAllSupervisorsQuery()->get();
 
 		$view = view('admin.partials.second-supervisor-assignment-report-table')
@@ -431,7 +478,7 @@ class ProjectAdminController extends Controller{
 
 		return response()->json(array(
 			'successful' => true,
-			'html' => json_encode($view->render())
+			'html'       => json_encode($view->render()),
 		));
 	}
 
@@ -439,16 +486,16 @@ class ProjectAdminController extends Controller{
 	 * An overview of each automatically assigned second marker.
 	 *
 	 * @return \Illuminate\Http\Response
-
 	 */
-	public function automaticSecondMarkerPreview(){
+	public function automaticSecondMarkerPreview()
+	{
 		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX, "");
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 
 		return response()->json(array(
 			'successful' => true,
-			'html' => $view->render()
+			'html'       => $view->render(),
 		));
 	}
 
@@ -457,10 +504,11 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function swapSecondMarkerView(){
+	public function swapSecondMarkerView()
+	{
 		$projects = Project::whereNotNull('marker_id')
-				->where('status', '<>' , 'archived')
-				->get();
+			->where('status', '<>', 'archived')
+			->get();
 
 		return view('admin.swap-marker')->with('projects', $projects);
 	}
@@ -468,15 +516,18 @@ class ProjectAdminController extends Controller{
 	/**
 	 * Swap project A's and project B's second markers.
 	 *
-	 * @param \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request    $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function swapSecondMarker(Request $request){
+	public function swapSecondMarker(Request $request)
+	{
 		try {
 			$projectA = Project::findOrFail($request->projectA);
 			$projectB = Project::findOrFail($request->projectB);
-		} catch(ModelNotFoundException $e) {
+		}
+		catch (ModelNotFoundException $e)
+		{
 			return response()->json(array('successful' => false));
 		}
 
@@ -497,29 +548,35 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function exportSecondMarkerDataView(){
+	public function exportSecondMarkerDataView()
+	{
 		return view('admin.export-marker');
 	}
 
 	/**
 	 * Exports the second marker data to either JSON or CSV.
 	 *
-	 * @param \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response The second marker data.
 	 */
-	public function exportSecondMarkerData(Request $request){
+	public function exportSecondMarkerData(Request $request)
+	{
 		$projects = Project::whereNotNull('marker_id')->get();
 		$results = array();
 
-		foreach($projects as $project){
+		foreach ($projects as $project)
+		{
 			$ar = array();
-			
+
 			// This should never happen but you never know
-			if($project->getAcceptedStudent() != null){
+			if ($project->getAcceptedStudent() != null)
+			{
 				$ar["fName"] = $project->getAcceptedStudent()->user->first_name;
 				$ar["lName"] = $project->getAcceptedStudent()->user->last_name;
-			} else {
+			}
+			else
+			{
 				$ar["fName"] = '-';
 				$ar["lName"] = '-';
 			}
@@ -535,10 +592,11 @@ class ProjectAdminController extends Controller{
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'First Name', 'Last Name', 'Project Title', 'Supervisor', 'Second Marker'
+			'First Name', 'Last Name', 'Project Title', 'Supervisor', 'Second Marker',
 		));
 
-		foreach($results as $result){
+		foreach ($results as $result)
+		{
 			fputcsv($file, $result);
 		}
 
@@ -566,73 +624,98 @@ class ProjectAdminController extends Controller{
 	 *
 	 * @return \Illuminate\View\View|\Illuminate\Http\Response
 	 */
-	public function exportStudentSummary(Request $request){
-		if(!empty($request->project_year)){
+	public function exportStudentSummary(Request $request)
+	{
+		if (!empty($request->project_year))
+		{
 			$userTable = (new User())->getTable();
 			$studentTable = (new Student())->getTable();
 
-			$students = Student::join($userTable.' as user', 'user.id', '=', $studentTable.'.id')
-				->select($studentTable.'.*')
+			$students = Student::join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
+				->select($studentTable . '.*')
 				->where('user.active_year', $request->project_year)
 				->orderBy('user.last_name', 'asc')
 				->get();
-		} else {
+		}
+		else
+		{
 			$students = Student::getAllStudentsQuery()->get();
 		}
 
 		$results = array();
-		foreach($students as $student){
+		foreach ($students as $student)
+		{
 			$ar = array();
-			
+
 			$ar["regNo"] = $student->registration_number;
 			$ar["username"] = $student->user->username;
 			$ar["programme"] = $student->user->getProgrammeName();
-			
+
 			$ar["fName"] = $student->user->first_name;
 			$ar["lName"] = $student->user->last_name;
 
-			if(!empty($student->project)){
+			if (!empty($student->project))
+			{
 				$ar["projectTitle"] = $student->project->title;
 
-				if(!empty($student->project->supervisor)){
+				if (!empty($student->project->supervisor))
+				{
 					$ar["supervisorName"] = $student->project->supervisor->user->getFullName();
-				} else {
+				}
+				else
+				{
 					$ar["supervisorName"] = '-';
 				}
 
-				if(!empty($student->project->marker)){
+				if (!empty($student->project->marker))
+				{
 					$ar["markerName"] = $student->project->marker->user->getFullName();
-				} else {
+				}
+				else
+				{
 					$ar["markerName"] = '-';
 				}
 
-				if(!empty($student->project->evaluation) && $student->project->evaluation->is_finalised){
+				if (!empty($student->project->evaluation) && $student->project->evaluation->is_finalised)
+				{
 					$eval = $student->project->evaluation;
 
-					if($eval->hasPosterPresentationQuestion()){
+					if ($eval->hasPosterPresentationQuestion())
+					{
 						$ar["posterMark"] = $eval->getPosterPresentationQuestion()->finalValue;
-					} else {
+					}
+					else
+					{
 						$ar["posterMark"] = '-';
 					}
 
-					if($eval->hasOralPresentationQuestion()){
+					if ($eval->hasOralPresentationQuestion())
+					{
 						$ar["presentationMark"] = $eval->getOralPresentationQuestion()->finalValue;
-					} else {
+					}
+					else
+					{
 						$ar["presentationMark"] = '-';
 					}
 
-					if($eval->hasDissertationQuestion()){
+					if ($eval->hasDissertationQuestion())
+					{
 						$ar["dissertationMark"] = $eval->getDissertationQuestion()->finalValue;
-					} else {
+					}
+					else
+					{
 						$ar["dissertationMark"] = '-';
 					}
-
-				} else {
+				}
+				else
+				{
 					$ar["posterMark"] = '-';
 					$ar["presentationMark"] = '-';
 					$ar["dissertationMark"] = '-';
 				}
-			} else {
+			}
+			else
+			{
 				$ar["projectTitle"] = '-';
 				$ar["supervisorName"] = '-';
 				$ar["markerName"] = '-';
@@ -644,13 +727,16 @@ class ProjectAdminController extends Controller{
 			array_push($results, $ar);
 		}
 
-		if(!empty($request->project_year)){
-			$fileName = "StudentData-".$request->project_year.".csv";
-		} else {
-			$fileName = "StudentData-".Mode::getProjectYear().".csv";
+		if (!empty($request->project_year))
+		{
+			$fileName = "StudentData-" . $request->project_year . ".csv";
+		}
+		else
+		{
+			$fileName = "StudentData-" . Mode::getProjectYear() . ".csv";
 		}
 
-		$filepath = "../storage/app/".$fileName;
+		$filepath = "../storage/app/" . $fileName;
 
 		$file = fopen($filepath, 'w');
 
@@ -658,10 +744,11 @@ class ProjectAdminController extends Controller{
 			'Registration Number', 'Username', 'Programme',
 			'First Name', 'Last Name',
 			'Project Title', 'Supervisor', 'Second Marker',
-			'Agreed Poster Mark', 'Agreed Presentation Mark', 'Agreed Dissertation Mark'
+			'Agreed Poster Mark', 'Agreed Presentation Mark', 'Agreed Dissertation Mark',
 		));
 
-		foreach($results as $result){
+		foreach ($results as $result)
+		{
 			fputcsv($file, $result);
 		}
 
@@ -669,7 +756,7 @@ class ProjectAdminController extends Controller{
 
 		header('Content-Description: File Transfer');
 		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment; filename='.$fileName);
+		header('Content-Disposition: attachment; filename=' . $fileName);
 		header('Content-Transfer-Encoding: binary');
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
@@ -684,12 +771,11 @@ class ProjectAdminController extends Controller{
 		return;
 	}
 
-
 	/**
 	 * Undoes an accepted student.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response JSON
 	 */
 	public function undoStudent(Request $request)
@@ -697,25 +783,25 @@ class ProjectAdminController extends Controller{
 		$student = Student::findOrFail(request('student_id'));
 		$projectId = $student->project->id;
 
-		DB::transaction(function() use ($request, $student, $projectId)
+		DB::transaction(function () use ($request, $student, $projectId)
 		{
-			$transaction = new Transaction;
+			$transaction = new Transaction();
 
 			$transaction->fill(array(
-				'type' => 'student',
-				'action' => 'undo',
-				'project' => $student->project->name,
-				'student' => $student->id,
-				'supervisor' => $student->project->supervisor->id,
-				'admin' => Auth::user()->id,
-				'transaction_date' => new Carbon
+				'type'             => 'student',
+				'action'           => 'undo',
+				'project'          => $student->project->name,
+				'student'          => $student->id,
+				'supervisor'       => $student->project->supervisor->id,
+				'admin'            => Auth::user()->id,
+				'transaction_date' => new Carbon(),
 			));
 
 			$transaction->save();
 
 			$student->project->marker_id = null;
 
-			if($student->project->status == "student-proposed")
+			if ($student->project->status == "student-proposed")
 			{
 				$student->project->supervisor_id = null;
 			}
@@ -734,25 +820,27 @@ class ProjectAdminController extends Controller{
 			// Send undo email
 			Mail::to($student->user->email)
 				->send(new SupervisorUndo(Auth::user()->supervisor, $student, $projectId));
-		} catch (\Exception $e){
+		}
+		catch (\Exception $e)
+		{
 			$emailError = true;
 		}
 
-		$message = $student->getName()." is no longer accepted.";
+		$message = $student->getName() . " is no longer accepted.";
 
 		if ($emailError)
 		{
 			return response()->json(array(
-				'successful' => true,
+				'successful'       => true,
 				'email_successful' => false,
-				'message' => $message
+				'message'          => $message,
 			));
 		}
 
 		return response()->json(array(
-			'successful' => true,
+			'successful'       => true,
 			'email_successful' => true,
-			'message' => $message
+			'message'          => $message,
 		));
 	}
 }

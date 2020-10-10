@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,9 +14,11 @@ use SussexProjects\Programme;
  * The programme controller.
  * Handles all functions related to programmes.
  */
-class ProgrammeController extends Controller{
+class ProgrammeController extends Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 		$this->middleware('auth');
 	}
@@ -25,12 +26,14 @@ class ProgrammeController extends Controller{
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request    $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request){
-		$result = DB::transaction(function() use ($request){
+	public function store(Request $request)
+	{
+		$result = DB::transaction(function () use ($request)
+		{
 			$programme = Programme::create(['name' => $request->programme_name]);
 
 			return $programme;
@@ -42,12 +45,14 @@ class ProgrammeController extends Controller{
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request    $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request){
-		$result = DB::transaction(function() use ($request){
+	public function update(Request $request)
+	{
+		$result = DB::transaction(function () use ($request)
+		{
 			$programme = Programme::findOrFail($request->programme_id);
 			$programme->name = $request->programme_name;
 			$programme->save();
@@ -59,12 +64,14 @@ class ProgrammeController extends Controller{
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  \Illuminate\Http\Request $request
 	 *
+	 * @param  \Illuminate\Http\Request    $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Request $request){
-		$result = DB::transaction(function() use ($request){
+	public function destroy(Request $request)
+	{
+		$result = DB::transaction(function () use ($request)
+		{
 			$programme = Programme::findOrFail($request->programme_id);
 			$programme->delete();
 		});

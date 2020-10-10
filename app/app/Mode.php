@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -17,7 +16,8 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\ModeController
  */
-class Mode extends Model{
+class Mode extends Model
+{
 	use Traits\Encryptable;
 
 	/**
@@ -26,7 +26,7 @@ class Mode extends Model{
 	 * @var string
 	 */
 	public $timestamps = false;
-	
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -55,8 +55,8 @@ class Mode extends Model{
 	 * @var array
 	 */
 	protected $casts = [
-		'thresholds' => 'array',
-		'evaluation_questions' => 'array'
+		'thresholds'           => 'array',
+		'evaluation_questions' => 'array',
 	];
 
 	/**
@@ -69,13 +69,17 @@ class Mode extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_mode_'.get_el_short_name();
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_mode_' . get_el_short_name();
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}
@@ -86,11 +90,13 @@ class Mode extends Model{
 	 *
 	 * @return Mode
 	 */
-	public static function Instance(){
+	public static function Instance()
+	{
 		$mode = Mode::orderBy('project_year', 'desc')->first();
 
 		// There is no mode, create one
-		if($mode == null){
+		if ($mode == null)
+		{
 			$newMode = new Mode();
 			$carbon = Carbon::now();
 
@@ -105,12 +111,14 @@ class Mode extends Model{
 			return $newMode;
 		}
 
-		if($mode->evaluation_questions == null){
+		if ($mode->evaluation_questions == null)
+		{
 			$mode->evaluation_questions = Mode::getPresetQuestions();
 			$mode->save();
 		}
 
-		if($mode->project_evaluation_date == null){
+		if ($mode->project_evaluation_date == null)
+		{
 			$mode->project_evaluation_date = Carbon::now()->addYear();
 			$mode->save();
 		}
@@ -121,14 +129,18 @@ class Mode extends Model{
 	/**
 	 * Gets project selection date
 	 *
-	 * @param boolean $human
 	 *
+	 * @param  boolean  $human
 	 * @return string
 	 */
-	public static function getProjectSelectionDate($human = null){
-		if($human){
+	public static function getProjectSelectionDate($human = null)
+	{
+		if ($human)
+		{
 			return Mode::Instance()->project_selection->toDayDateTimeString();
-		} else {
+		}
+		else
+		{
 			return Mode::Instance()->project_selection;
 		}
 	}
@@ -136,14 +148,18 @@ class Mode extends Model{
 	/**
 	 * Gets supervisor accept date
 	 *
-	 * @param boolean $human
 	 *
+	 * @param  boolean  $human
 	 * @return string
 	 */
-	public static function getSupervisorAcceptDate($human = null){
-		if($human){
+	public static function getSupervisorAcceptDate($human = null)
+	{
+		if ($human)
+		{
 			return Mode::Instance()->supervisor_accept->toDayDateTimeString();
-		} else {
+		}
+		else
+		{
 			return Mode::Instance()->supervisor_accept;
 		}
 	}
@@ -151,14 +167,18 @@ class Mode extends Model{
 	/**
 	 * Gets supervisor accept date
 	 *
-	 * @param boolean $human
 	 *
+	 * @param  boolean  $human
 	 * @return string
 	 */
-	public static function getProjectEvaluationDate($human = null){
-		if($human){
+	public static function getProjectEvaluationDate($human = null)
+	{
+		if ($human)
+		{
 			return Mode::Instance()->project_evaluation_date->toDayDateTimeString();
-		} else {
+		}
+		else
+		{
 			return Mode::Instance()->project_evaluation_date;
 		}
 	}
@@ -168,7 +188,8 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getProjectYear(){
+	public static function getProjectYear()
+	{
 		return Mode::Instance()->project_year;
 	}
 
@@ -177,8 +198,9 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getFriendlyProjectYear(){
-		return Mode::Instance()->project_year.'/'.(Mode::Instance()->project_year + 1);
+	public static function getFriendlyProjectYear()
+	{
+		return Mode::Instance()->project_year . '/' . (Mode::Instance()->project_year + 1);
 	}
 
 	/**
@@ -186,10 +208,12 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getThresholds(){
+	public static function getThresholds()
+	{
 		$thresholds = Mode::Instance()->thresholds;
 
-		if(!empty($thresholds)) {
+		if (!empty($thresholds))
+		{
 			sort($thresholds);
 		}
 
@@ -201,7 +225,8 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getEvaluationQuestions(){
+	public static function getEvaluationQuestions()
+	{
 		return Mode::Instance()->evaluation_questions;
 	}
 
@@ -210,7 +235,8 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getEvaluationPercentageDifference(){
+	public static function getEvaluationPercentageDifference()
+	{
 		return Mode::Instance()->project_evaluation_percentage_difference;
 	}
 
@@ -219,7 +245,8 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function isMarkerReleasedToStaff(){
+	public static function isMarkerReleasedToStaff()
+	{
 		return Mode::Instance()->marker_released_to_staff;
 	}
 
@@ -228,7 +255,8 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getOldProjectYears(){
+	public static function getOldProjectYears()
+	{
 		return Mode::Where('project_year', '<>', Mode::Instance()->project_year)->get();
 	}
 
@@ -237,11 +265,16 @@ class Mode extends Model{
 	 *
 	 * @return string
 	 */
-	public static function getDependenciesForProjectYear(){
+	public static function getDependenciesForProjectYear()
+	{
 		return Mode::Where('project_year', '<>', Mode::Instance()->project_year)->get();
 	}
 
-	private static function getPresetQuestions() {
+	/**
+	 * @return mixed
+	 */
+	private static function getPresetQuestions()
+	{
 		$questions = [];
 
 		array_push($questions,

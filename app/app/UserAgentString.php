@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects;
 
 use Exception;
@@ -16,7 +15,8 @@ use Illuminate\Support\Facades\Session;
  *
  * @see SussexProjects\Http\Controllers\UserAgentStringController
  */
-class UserAgentString extends Model{
+class UserAgentString extends Model
+{
 	use Traits\Uuids;
 
 	/**
@@ -35,13 +35,17 @@ class UserAgentString extends Model{
 	/**
 	 * The table to retrieve data from.
 	 *
-	 * @return string Table string
 	 * @throws Exception Database not found
+	 * @return string    Table string
 	 */
-	public function getTable(){
-		if(Session::get('department') !== null){
-			return Session::get('department').'_user_agent_strings';
-		} else {
+	public function getTable()
+	{
+		if (Session::get('department') !== null)
+		{
+			return Session::get('department') . '_user_agent_strings';
+		}
+		else
+		{
 			throw new Exception('Database not found.');
 		}
 	}

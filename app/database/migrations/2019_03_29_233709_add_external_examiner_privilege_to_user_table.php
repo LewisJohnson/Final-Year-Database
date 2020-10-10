@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddExternalExaminerPrivilegeToUserTable extends Migration
 {
@@ -11,21 +11,24 @@ class AddExternalExaminerPrivilegeToUserTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up()
+	{
 		$projectAdminLevels = "";
 
-		foreach(get_education_levels(true) as $key => $level) {
-			$projectAdminLevels.="'admin_".$level."',";
+		foreach (get_education_levels(true) as $key => $level)
+		{
+			$projectAdminLevels .= "'admin_" . $level . "',";
 		}
 
-		foreach(get_departments() as $key => $department) {
-			$tableName = $department.'_users';
+		foreach (get_departments() as $key => $department)
+		{
+			$tableName = $department . '_users';
 
-			Schema::table($tableName, function (Blueprint $table) use ($tableName, $projectAdminLevels) {
-				DB::statement("ALTER TABLE `".$tableName."` CHANGE COLUMN `privileges` `privileges` SET('student', 'staff', 'supervisor', ".$projectAdminLevels." 'admin_system', 'external_marker');");
+			Schema::table($tableName, function (Blueprint $table) use ($tableName, $projectAdminLevels)
+			{
+				DB::statement("ALTER TABLE `" . $tableName . "` CHANGE COLUMN `privileges` `privileges` SET('student', 'staff', 'supervisor', " . $projectAdminLevels . " 'admin_system', 'external_marker');");
 			});
 		}
-		
 	}
 
 	/**
@@ -33,7 +36,8 @@ class AddExternalExaminerPrivilegeToUserTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function down(){
+	public function down()
+	{
 		//lol.
 	}
 }

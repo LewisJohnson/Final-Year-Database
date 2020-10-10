@@ -4,23 +4,23 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
 
-class EngineeringSeeder extends Seeder{
+class EngineeringSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
 	 *
 	 * @return void
 	 */
-	public function run(){
+	public function run()
+	{
 
 		Session::put('education_level', current(get_education_levels()));
 		Session::put('department', 'engineering');
-		
+
 		// factory(SussexProjects\Student::class, 200)->create();
 		// factory(SussexProjects\Supervisor::class, 50)->create();
 		// factory(SussexProjects\Project::class, 200)->create();

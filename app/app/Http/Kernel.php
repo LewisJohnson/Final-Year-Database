@@ -4,12 +4,12 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends HttpKernel{
+class Kernel extends HttpKernel
+{
 	/**
 	 * The application's global HTTP middleware stack.
 	 * These middleware are run during every request to your application.
@@ -45,10 +45,10 @@ class Kernel extends HttpKernel{
 			\SussexProjects\Http\Middleware\Email::class,
 			\SussexProjects\Http\Middleware\SetDepartment::class,
 			\SussexProjects\Http\Middleware\SetEducationLevel::class,
-			\Illuminate\Routing\Middleware\SubstituteBindings::class
+			\Illuminate\Routing\Middleware\SubstituteBindings::class,
 		],
 
-		'api' => ['throttle:5,1', 'bindings']
+		'api' => ['throttle:5,1', 'bindings'],
 	];
 
 	/**
@@ -58,21 +58,21 @@ class Kernel extends HttpKernel{
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-		'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-		'admin' => \SussexProjects\Http\Middleware\Admin::class,
-		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-		'can' => \Illuminate\Auth\Middleware\Authorize::class,
-		'checkDepartment' => \SussexProjects\Http\Middleware\CheckDepartment::class,
-		'guest' => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
-		'ldapGuest' => \SussexProjects\Http\Middleware\LdapGuest::class,
-		'projectAdministrator' => \SussexProjects\Http\Middleware\ProjectAdmin::class,
-		'systemAdministrator' => \SussexProjects\Http\Middleware\SystemAdmin::class,
-		'supervisor' => \SussexProjects\Http\Middleware\Supervisor::class,
-		'student' => \SussexProjects\Http\Middleware\Student::class,
-		'staffOrProjectAdmin' => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
-		'externalMarkerOrProjectAdmin' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdmin::class,
+		'auth.basic'                               => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+		'auth'                                     => \Illuminate\Auth\Middleware\Authenticate::class,
+		'admin'                                    => \SussexProjects\Http\Middleware\Admin::class,
+		'bindings'                                 => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+		'can'                                      => \Illuminate\Auth\Middleware\Authorize::class,
+		'checkDepartment'                          => \SussexProjects\Http\Middleware\CheckDepartment::class,
+		'guest'                                    => \SussexProjects\Http\Middleware\RedirectIfAuthenticated::class,
+		'ldapGuest'                                => \SussexProjects\Http\Middleware\LdapGuest::class,
+		'projectAdministrator'                     => \SussexProjects\Http\Middleware\ProjectAdmin::class,
+		'systemAdministrator'                      => \SussexProjects\Http\Middleware\SystemAdmin::class,
+		'supervisor'                               => \SussexProjects\Http\Middleware\Supervisor::class,
+		'student'                                  => \SussexProjects\Http\Middleware\Student::class,
+		'staffOrProjectAdmin'                      => \SussexProjects\Http\Middleware\StaffOrProjectAdmin::class,
+		'externalMarkerOrProjectAdmin'             => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdmin::class,
 		'externalMarkerOrProjectAdminOrSupervisor' => \SussexProjects\Http\Middleware\ExternalMarkerOrProjectAdminOrSupervisor::class,
-		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class
+		'throttle'                                 => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 	];
 }

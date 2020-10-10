@@ -15,10 +15,10 @@ use SussexProjects\User;
 | commands. Each Closure is bound to a command instance allowing a
 | simple approach to interacting with each command's IO methods.
 |
-*/
+ */
 
-
-Artisan::command('make:admin', function () {
+Artisan::command('make:admin', function ()
+{
 	$this->error("+++ YOU ARE CREATING A SYSTEM ADMINISTRATOR!!! +++");
 	$this->error("+++ This should only be used when first deploying the system. +++");
 	$this->line("==================================================================");
@@ -31,19 +31,20 @@ Artisan::command('make:admin', function () {
 	$lastName = $this->ask('Last name?');
 
 	Session::put('department', $department);
-	
+
 	$this->line("Username: {$username}");
 	$this->line("First Name: {$firstName}");
 	$this->line("Last Name: {$lastName}");
 
-	if ($this->confirm('Is this correct?')) {
-		$user = new User;
+	if ($this->confirm('Is this correct?'))
+	{
+		$user = new User();
 		$user->fill(array(
 			'first_name' => $firstName,
-			'last_name' => $lastName,
-			'username' => $username,
-			'email' => $username."@sussex.ac.uk",
-			'privileges' => 'admin_system'
+			'last_name'  => $lastName,
+			'username'   => $username,
+			'email'      => $username . "@sussex.ac.uk",
+			'privileges' => 'admin_system',
 		));
 		$user->save();
 	}

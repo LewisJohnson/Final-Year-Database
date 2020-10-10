@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -16,7 +15,8 @@ use SussexProjects\Supervisor;
 /**
  * The email sent to the student when they are accepted.
  */
-class StudentAccepted extends Mailable{
+class StudentAccepted extends Mailable
+{
 	use Queueable, SerializesModels;
 
 	/**
@@ -46,7 +46,8 @@ class StudentAccepted extends Mailable{
 	 * @param Supervisor $supervisor
 	 * @param Student    $student
 	 */
-	public function __construct(Supervisor $supervisor, Student $student){
+	public function __construct(Supervisor $supervisor, Student $student)
+	{
 		$this->supervisor = $supervisor;
 		$this->student = $student;
 		$this->project = $this->student->project;
@@ -57,11 +58,12 @@ class StudentAccepted extends Mailable{
 	 *
 	 * @return $this
 	 */
-	public function build(){
+	public function build()
+	{
 		return $this->view('emails.student.accepted')->with([
 			'supervisor' => $this->supervisor,
-			'student' => $this->student,
-			'project' => $this->project
+			'student'    => $this->student,
+			'project'    => $this->project,
 		]);
 	}
 }

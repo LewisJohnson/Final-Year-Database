@@ -4,7 +4,6 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
-
 namespace SussexProjects\Http\Controllers;
 
 use SussexProjects\ProjectTopic;
@@ -15,15 +14,20 @@ use SussexProjects\ProjectTopic;
  *
  * @see ProjectController
  */
-class ProjectTopicController extends Controller{
+class ProjectTopicController extends Controller
+{
 
-	public function __construct(){
+	public function __construct()
+	{
 		parent::__construct();
 		$this->middleware('auth');
 	}
 
-	public function index(ProjectTopic $projectTopic){
+	/**
+	 * @param ProjectTopic $projectTopic
+	 */
+	public function index(ProjectTopic $projectTopic)
+	{
 		return ProjectTopic::findOrFail($projectTopic);
 	}
 }
-
