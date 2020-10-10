@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
-	<h1>{{ ucfirst(Session::get('education_level')["longName"]) }} Project Evaluations</h1>
+	<h1>{{ ucfirst(get_el_long_name()) }} Project Evaluations</h1>
 
 	<div class="d-flex w-100">
 		<a class="ml-auto btn btn-primary" target="_blank" rel="noopener noreferrer" title="Print all project evaluations" href="{{ action('ProjectEvaluationController@all') }}"><span class="svg-xs">@include('svg.printer')</span>Print All</a>

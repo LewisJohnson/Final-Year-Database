@@ -116,7 +116,7 @@
 						</li>
 					@endif
 
-					@if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]))
+					@if(Auth::user()->isAdminOfEducationLevel(get_el_short_name()))
 						<li class="has-dropdown links" data-content="project-admin">
 							<a href="#0">Admin</a>
 						</li>
@@ -276,7 +276,7 @@
 							</li>
 						@endif
 
-						@if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]))
+						@if(Auth::user()->isAdminOfEducationLevel(get_el_short_name()))
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">

@@ -321,7 +321,7 @@ class ProjectAdminController extends Controller{
 		}
 
 		if(ProjectController::getAcceptedProjectCount() > (Supervisor::getAllSupervisorsQuery()
-				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+				->where('project_load_'.get_el_short_name(), '>', 0)
 				->count() * $maxStudentsPerSupervisor)){
 			
 			return response()->json(array(
@@ -378,7 +378,7 @@ class ProjectAdminController extends Controller{
 	 */
 	private function getSupervisorsWithLazyScore($isSetupView, $maxStudentsPerSupervisor, $supervisorToIgnoreId){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-				->where('project_load_'.Session::get('education_level')["shortName"], '>', 0)
+				->where('project_load_'.get_el_short_name(), '>', 0)
 				->get();
 
 		// Set up the numbers
@@ -405,7 +405,7 @@ class ProjectAdminController extends Controller{
 
 		foreach($supervisors as $supervisor){
 
-			$loadMinusStudentCount = $supervisors->sum('project_load_'.Session::get('education_level')["shortName"]) - Student::count();
+			$loadMinusStudentCount = $supervisors->sum('project_load_'.get_el_short_name()) - Student::count();
 			$slack = floor($loadMinusStudentCount / max(1 ,$supervisors->where('second_supervising_count', 0)->count()));
 
 			$supervisor->project_load = $supervisor->getProjectLoad();

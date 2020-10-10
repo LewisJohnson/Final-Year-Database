@@ -21,7 +21,7 @@ if(!function_exists('lang_sess')){
 	function lang_sess($key = null){
 		$key = str_replace('"', '', $key);
 		$key = str_replace('\'', '', $key);
-		$key = 'messages_'.Session::get('education_level')["shortName"].'.'.$key;
+		$key = 'messages_'.get_el_short_name().'.'.$key;
 		$string = Lang::get($key);
 
 		if($string != $key){

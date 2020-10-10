@@ -74,7 +74,7 @@ class Topic extends Model{
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
-			return Session::get('department').'_topics_'.Session::get('education_level')["shortName"];
+			return Session::get('department').'_topics_'.get_el_short_name();
 		} else {
 			throw new Exception('Database not found.');
 		}
@@ -100,7 +100,7 @@ class Topic extends Model{
 			->where('topic_id', $this->id)
 			->where('status', 'on-offer')
 			->where('user.privileges', 'LIKE', '%supervisor%')
-			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
+			->where('supervisor.take_students_'.get_el_short_name(), true)
 			->count();
 	}
 }

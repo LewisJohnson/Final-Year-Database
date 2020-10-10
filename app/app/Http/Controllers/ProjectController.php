@@ -97,8 +97,8 @@ class ProjectController extends Controller{
 				return $query->where('status', 'on-offer');
 			})
 			->where('user.privileges', 'LIKE', '%supervisor%')
-			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
-			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
+			->where('supervisor.take_students_'.get_el_short_name(), true)
+			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.get_el_short_name())
 			->orderBy($sortCol, $sortDir)
 			->paginate($this->paginationCount);
 
@@ -625,7 +625,7 @@ class ProjectController extends Controller{
 			->where('topic_id', $topic->id)
 			->where('status', 'on-offer')
 			->where('user.privileges', 'LIKE', '%supervisor%')
-			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
+			->where('supervisor.take_students_'.get_el_short_name(), true)
 			->select($projectTable->getTable().'.*')
 			->orderBy($sortCol, $sortDir)
 			->paginate($this->paginationCount);
@@ -643,7 +643,7 @@ class ProjectController extends Controller{
 	 */
 	public function showSupervisors(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-						->where("take_students_".Session::get('education_level')["shortName"], true)
+						->where("take_students_".get_el_short_name(), true)
 						->get();
 
 		return view('projects.by-supervisor')->with('supervisors', $supervisors);
@@ -745,11 +745,11 @@ class ProjectController extends Controller{
 		// So we can display which filters were selected.
 		session()->flash('search_filters', $selectedFilters);
 
-		$sessionDbPrefix = Session::get('department')."_projects_".Session::get('education_level')["shortName"];
+		$sessionDbPrefix = Session::get('department')."_projects_".get_el_short_name();
 
-		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"].'')
-			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')
-			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
+		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.get_el_short_name().'')
+			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.get_el_short_name().'.supervisor_id', '=', Session::get('department').'_supervisors.id')
+			->where(Session::get('department').'_supervisors.take_students_'.get_el_short_name(), true);
 
 		if(Auth::check()){
 			if(Auth::user()->isSupervisor()){
@@ -882,7 +882,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+		if(!Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');

@@ -55,7 +55,7 @@ class Transaction extends Model {
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
-			return Session::get('department').'_transactions_'.Session::get('education_level')["shortName"];
+			return Session::get('department').'_transactions_'.get_el_short_name();
 		} else {
 			throw new Exception('Database not found.');
 		}

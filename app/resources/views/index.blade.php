@@ -9,7 +9,7 @@
 <div class="centered animated-entrance mw-1000 container-fluid">
 	@if(Auth::check())
 		<h1 class="text-center">{{ $helloArray[$randIndex] }}, {{ Auth::user()->first_name }}.</h1>
-		<h6 class="text-center" style="opacity: 0.5">{{ ucfirst(Session::get('department')) }} | {{ ucfirst(Session::get('education_level')["longName"]) }}</h6>
+		<h6 class="text-center" style="opacity: 0.5">{{ ucfirst(Session::get('department')) }} | {{ ucfirst(get_el_long_name()) }}</h6>
 
 		<div class="row mt-4">
 			<div class="col-12">
@@ -85,6 +85,7 @@
 							<div class="card-body">
 								<h3 class="card-title">Options</h3>
 								<p>Here you can change your email preferences.</p>
+								
 								@foreach(get_education_levels() as $educationLevel)
 									<form id='receive-emails-{{ $educationLevel["shortName"] }}' class="receive-emails-form" action="{{ action('SupervisorController@receiveEmails') }}" method="POST" accept-charset="utf-8">
 										{{ csrf_field() }}
@@ -139,16 +140,16 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h3 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Overview</h3>
+								<h3 class="card-title">{{ ucfirst(get_el_long_name()) }} Supervisor Overview</h3>
 
 								<div>
 									<ul class="list-group list-group-flush">
-										<li class="list-group-item">Your {{ Session::get('education_level')["longName"] }} project load is {{ Auth::user()->supervisor['project_load_'.Session::get('education_level')["shortName"]]}}.</li>
+										<li class="list-group-item">Your {{ get_el_long_name() }} project load is {{ Auth::user()->supervisor->getProjectLoad() }}.</li>
 						
-										@if(Auth::user()->supervisor['take_students_'.Session::get('education_level')["shortName"]])
-											<li class="list-group-item">You are accepting {{ Session::get('education_level')["longName"] }} students.</li>
+										@if(Auth::user()->supervisor->getTakingStudents())
+											<li class="list-group-item">You are accepting {{ get_el_long_name() }} students.</li>
 										@else
-											<li class="list-group-item">You are NOT accepting {{ Session::get('education_level')["longName"] }} students.</li>
+											<li class="list-group-item">You are NOT accepting {{ get_el_long_name() }} students.</li>
 										@endif
 						
 										@if(count(Auth::user()->supervisor->getInterestedStudents()) > 0)
@@ -179,7 +180,7 @@
 							</div>
 
 							<div class="card-footer">
-								<a href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => Session::get('education_level')['shortName']]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Projects</a>
+								<a href="{{ action('UserController@projects', ['user' => Auth::user(), 'educationLevel' => get_el_short_name()]) }}">{{ ucfirst(get_el_long_name()) }} Projects</a>
 							</div>
 						</div>
 					</div>
@@ -192,10 +193,10 @@
 				<div class="col-12 col-md-6 mt-3">
 					<div class="card">
 						<div class="card-body">
-							<h3 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Administrator</h3>
+							<h3 class="card-title">{{ ucfirst(get_el_long_name()) }} Administrator</h3>
 							<p>
-								{{ Auth::user()->first_name }}, you are an {{ Session::get('education_level')["longName"] }} administrator.
-								Take a look at the {{ Session::get('education_level')["longName"] }} admin hub to see the actions you can perform.
+								{{ Auth::user()->first_name }}, you are an {{ get_el_long_name() }} administrator.
+								Take a look at the {{ get_el_long_name() }} admin hub to see the actions you can perform.
 							</p>
 
 							<h5>At a Glance</h5>
@@ -220,7 +221,7 @@
 					
 						</div>
 						<div class="card-footer">
-							<a href="{{ action('ProjectAdminController@index', 'educationLevel='.Session::get('education_level')["shortName"]) }}">{{ ucfirst(Session::get('education_level')["longName"]) }} Administrator Hub</a>
+							<a href="{{ action('ProjectAdminController@index', 'educationLevel='.get_el_short_name()) }}">{{ ucfirst(get_el_long_name()) }} Administrator Hub</a>
 						</div>
 					</div>
 				</div>

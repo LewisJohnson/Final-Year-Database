@@ -78,7 +78,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h3 class="card-title">Real Import Students</h3>
-					<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ Session::get('education_level')["longName"] }} student table.</p>
+					<p>Uploading a file to this form will upload the data to the {{ Session::get('department') }} {{ get_el_long_name() }} student table.</p>
 					<form class="import-student-form" data-type="prod" action="{{ action('StudentController@importStudents') }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 						{{ csrf_field() }}
 
@@ -97,7 +97,7 @@
 								<label class="ml-1" for="empty_students">Empty students table</label>
 							</div>
 							<p class="text-danger ml-4">
-								This will option will <b>empty</b> the <span class="text-uppercase">{{ Session::get('education_level')["shortName"] }}</span> students table and delete the entries from the user table.<br>
+								This will option will <b>empty</b> the <span class="text-uppercase">{{ get_el_short_name() }}</span> students table and delete the entries from the user table.<br>
 							</p>
 						</div>
 

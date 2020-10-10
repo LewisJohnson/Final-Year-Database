@@ -70,7 +70,7 @@ class SupervisorController extends Controller{
 
 		if($request->sr_hide_closed){
 			$supervisors = Supervisor::getAllSupervisorsQuery()
-				->where('take_students_'.Session::get('education_level')["shortName"], true)
+				->where('take_students_'.get_el_short_name(), true)
 				->get();
 		} else {
 			$supervisors = Supervisor::getAllSupervisorsQuery()->get();
@@ -288,6 +288,6 @@ class SupervisorController extends Controller{
 	}
 
 	public static function sumOfProjectLoads(){
-		return Supervisor::getAllSupervisorsQuery()->sum('project_load_'.Session::get('education_level')["shortName"]);
+		return Supervisor::getAllSupervisorsQuery()->sum('project_load_'.get_el_short_name());
 	}
 }

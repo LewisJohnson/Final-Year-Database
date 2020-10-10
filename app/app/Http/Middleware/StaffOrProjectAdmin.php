@@ -23,7 +23,7 @@ class StaffOrProjectAdmin{
 	 */
 	public function handle($request, Closure $next){
 		if(Auth::check()){
-			if(Auth::user()->isStaff() || Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+			if(Auth::user()->isStaff() || Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
 				return $next($request);
 			}
 		}

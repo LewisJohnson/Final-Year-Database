@@ -84,7 +84,7 @@ class HomeController extends Controller{
 		}
 
 		if(!empty(Session::get('education_level'))){
-			$feedback->education_level = Session::get('education_level')["shortName"];
+			$feedback->education_level = get_el_short_name();
 		}
 
 		$feedback->save();

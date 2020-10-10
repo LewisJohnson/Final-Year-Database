@@ -14,7 +14,7 @@
 		</div>
 
 		<div class="content">
-			<p class="subtitle">Your {{ count($projects) }} most popular on-offer {{ Session::get('education_level')["longName"] }} projects viewed by students.</p>
+			<p class="subtitle">Your {{ count($projects) }} most popular on-offer {{ get_el_long_name() }} projects viewed by students.</p>
 
 			<table class="table table-hover bg-white data-table sort-table">
 				<thead>

@@ -12,7 +12,7 @@
 @endphp
 
 <div class="centered mw-800">
-	<h2>Global Parameters <small class="text-muted">/ Amend {{ ucfirst(Session::get('education_level')["longName"]) }} Global Parameters</small></h2>
+	<h2>Global Parameters <small class="text-muted">/ Amend {{ ucfirst(get_el_long_name()) }} Global Parameters</small></h2>
 
 	<div class="alert alert-info mt-3">
 		<span>&#128161;</span><span class="ml-2">Change all the settings you wish then press Update at the bottom of the page</span>

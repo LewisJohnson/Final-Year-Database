@@ -21,7 +21,7 @@ if(!function_exists('lang_sess')){
 	function lang_sess($key = null){
 		$key = str_replace('"', '', $key);
 		$key = str_replace('\'', '', $key);
-		$key = 'messages_'.Session::get('education_level')["shortName"].'.'.$key;
+		$key = 'messages_'.get_el_short_name().'.'.$key;
 		$string = Lang::get($key);
 
 		if($string != $key){
@@ -119,6 +119,22 @@ if(!function_exists('get_education_level')){
 	 */
 	function get_education_level($shortName = null, $longName = null){
 		return call_user_func_array('get_education_level', func_get_args());
+	}
+}
+
+if(!function_exists('get_el_short_name'))
+{
+	function get_el_short_name()
+	{
+		return Session::get('education_level')["shortName"];
+	}
+}
+
+if(!function_exists('get_el_long_name'))
+{
+	function get_el_long_name()
+	{
+		return Session::get('education_level')["longName"];
 	}
 }
 

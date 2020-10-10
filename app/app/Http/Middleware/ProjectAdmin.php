@@ -22,7 +22,7 @@ class ProjectAdmin{
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if(Auth::check() && Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"])){
+		if(Auth::check() && Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
 			return $next($request);
 		}
 

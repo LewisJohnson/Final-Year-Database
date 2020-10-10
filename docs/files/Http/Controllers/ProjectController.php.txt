@@ -87,8 +87,8 @@ class ProjectController extends Controller{
 			->join($supervisorTable->getTable().' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable().' as user', 'user.id', '=', 'supervisor.id')
 			->where('user.privileges', 'LIKE', '%supervisor%')
-			->where('supervisor.take_students_'.Session::get('education_level')["shortName"], true)
-			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.Session::get('education_level')["shortName"])
+			->where('supervisor.take_students_'.get_el_short_name(), true)
+			->select($projectTable->getTable().'.*', 'supervisor.take_students_'.get_el_short_name())
 			->orderBy('title', 'asc')
 			->paginate($this->paginationCount);
 
@@ -510,11 +510,11 @@ class ProjectController extends Controller{
 		// So we can display which filters were selected.
 		session()->flash('search_filters', $selectedFilters);
 
-		$sessionDbPrefix = Session::get('department')."_projects_".Session::get('education_level')["shortName"];
+		$sessionDbPrefix = Session::get('department')."_projects_".get_el_short_name();
 
-		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"].'')
-			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.Session::get('education_level')["shortName"].'.supervisor_id', '=', Session::get('department').'_supervisors.id')
-			->where(Session::get('department').'_supervisors.take_students_'.Session::get('education_level')["shortName"], true);
+		$projects = Project::select($sessionDbPrefix.'.*', Session::get('department').'_supervisors.take_students_'.get_el_short_name().'')
+			->join(Session::get('department').'_supervisors', Session::get('department').'_projects_'.get_el_short_name().'.supervisor_id', '=', Session::get('department').'_supervisors.id')
+			->where(Session::get('department').'_supervisors.take_students_'.get_el_short_name(), true);
 
 		if(Auth::check()){
 			if(!Auth::user()->isSupervisor()){

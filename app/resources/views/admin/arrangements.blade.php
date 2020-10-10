@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="centered mw-1000">
-	<h2>Supervisors <small class="text-muted">/ Amend {{ ucfirst(Session::get('education_level')["longName"]) }} Supervisor Arrangements</small></h2>
+	<h2>Supervisors <small class="text-muted">/ Amend {{ ucfirst(get_el_long_name()) }} Supervisor Arrangements</small></h2>
 	
 	<div class="alert alert-info mt-3">
 		<span>&#128161;</span><span class="ml-2">Amend the arrangements you wish then press submit at the bottom of the page</span>

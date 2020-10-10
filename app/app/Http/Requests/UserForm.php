@@ -24,7 +24,7 @@ class UserForm extends FormRequest
 	 */
 	public function authorize()
 	{
-		if(Auth::user()->isAdminOfEducationLevel(Session::get('education_level')["shortName"]) || Auth::user()->isSystemAdmin()){
+		if(Auth::user()->isAdminOfEducationLevel(get_el_short_name()) || Auth::user()->isSystemAdmin()){
 			return true;
 		}
 

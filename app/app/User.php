@@ -248,7 +248,7 @@ class User extends Authenticatable{
 	{
 		if (empty($educationLevel))
 		{
-			$educationLevel = Session::get('education_level')["shortName"];
+			$educationLevel = get_el_short_name();
 		}
 
 		return in_array("admin_".$educationLevel, $this->getPrivileges());

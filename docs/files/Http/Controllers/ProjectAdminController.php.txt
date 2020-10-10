@@ -340,8 +340,8 @@ class ProjectAdminController extends Controller{
 
 		foreach($supervisors as $key => $supervisor){
 			$supervisor->accepted_student_count = count($supervisor->getAcceptedStudents());
-			$supervisor->project_load = $supervisor['project_load_'.Session::get('education_level')["shortName"]];
-			$supervisor->target_load = ($supervisor['project_load_'.Session::get('education_level')["shortName"]] * 2) - $supervisor->accepted_student_count;
+			$supervisor->project_load = $supervisor['project_load_'.get_el_short_name()];
+			$supervisor->target_load = ($supervisor['project_load_'.get_el_short_name()] * 2) - $supervisor->accepted_student_count;
 
 			$supervisorLoadTotal += $supervisor->project_load;
 

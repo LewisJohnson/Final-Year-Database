@@ -26,7 +26,7 @@
 	@endif
 
 	@if($view == "personal")
-		<h1>My {{ ucfirst(Session::get('education_level')["longName"]) }} Projects</h1>
+		<h1>My {{ ucfirst(get_el_long_name()) }} Projects</h1>
 		@if(count($projects) < 1)
 			<div class="text-center mt-5">
 				<h1>You have no projects...</h1>

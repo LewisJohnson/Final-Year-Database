@@ -94,7 +94,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["accept_email_".$educationLevel] = $value;
 		} else {
-			$this["accept_email_".Session::get('education_level')["shortName"]] = $value;
+			$this["accept_email_".get_el_short_name()] = $value;
 		}
 
 		$this->save();
@@ -112,7 +112,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["take_students_".$educationLevel] = $value;
 		} else {
-			$this["take_students_".Session::get('education_level')["shortName"]] = $value;
+			$this["take_students_".get_el_short_name()] = $value;
 		}
 		$this->save();
 
@@ -129,7 +129,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["project_load_".$educationLevel] = $value;
 		} else {
-			$this["project_load_".Session::get('education_level')["shortName"]] = $value;
+			$this["project_load_".get_el_short_name()] = $value;
 		}
 		$this->save();
 
@@ -149,7 +149,7 @@ class Supervisor extends Model{
 			return $this["accept_email_".$educationLevel];
 		}
 
-		return $this["accept_email_".Session::get('education_level')["shortName"]];
+		return $this["accept_email_".get_el_short_name()];
 	}
 
 	/**
@@ -165,7 +165,7 @@ class Supervisor extends Model{
 			return $this["take_students_".$educationLevel];
 		}
 
-		return $this["take_students_".Session::get('education_level')["shortName"]];
+		return $this["take_students_".get_el_short_name()];
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Supervisor extends Model{
 			return $this["project_load_".$educationLevel];
 		}
 
-		return $this["project_load_".Session::get('education_level')["shortName"]];
+		return $this["project_load_".get_el_short_name()];
 	}
 
 	/**
@@ -319,7 +319,7 @@ class Supervisor extends Model{
 	 */
 	public static function getTitleDatalist(){
 		$titles = Supervisor::groupBy('title')
-			->where("take_students_".Session::get('education_level')["shortName"], true)
+			->where("take_students_".get_el_short_name(), true)
 			->pluck('title');
 
 		$rtnString = '<datalist id="titleDataList">';

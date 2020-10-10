@@ -70,7 +70,7 @@ class ProjectEvaluation extends Model {
 	 */
 	public function getTable(){
 		if(Session::get('department') !== null){
-			return Session::get('department').'_project_evaluation_'.Session::get('education_level')["shortName"];
+			return Session::get('department').'_project_evaluation_'.get_el_short_name();
 		} else {
 			throw new Exception('Database not found.');
 		}

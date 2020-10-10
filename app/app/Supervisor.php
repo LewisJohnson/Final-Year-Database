@@ -75,7 +75,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["accept_email_".$educationLevel] = $value;
 		} else {
-			$this["accept_email_".Session::get('education_level')["shortName"]] = $value;
+			$this["accept_email_".get_el_short_name()] = $value;
 		}
 
 		$this->save();
@@ -93,7 +93,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["take_students_".$educationLevel] = $value;
 		} else {
-			$this["take_students_".Session::get('education_level')["shortName"]] = $value;
+			$this["take_students_".get_el_short_name()] = $value;
 		}
 		$this->save();
 
@@ -110,7 +110,7 @@ class Supervisor extends Model{
 		if(isset($educationLevel)){
 			$this["project_load_".$educationLevel] = $value;
 		} else {
-			$this["project_load_".Session::get('education_level')["shortName"]] = $value;
+			$this["project_load_".get_el_short_name()] = $value;
 		}
 		$this->save();
 
@@ -130,7 +130,7 @@ class Supervisor extends Model{
 			return $this["accept_email_".$educationLevel];
 		}
 
-		return $this["accept_email_".Session::get('education_level')["shortName"]];
+		return $this["accept_email_".get_el_short_name()];
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Supervisor extends Model{
 			return $this["take_students_".$educationLevel];
 		}
 
-		return $this["take_students_".Session::get('education_level')["shortName"]];
+		return $this["take_students_".get_el_short_name()];
 	}
 
 	/**
@@ -162,7 +162,7 @@ class Supervisor extends Model{
 			return $this["project_load_".$educationLevel];
 		}
 
-		return $this["project_load_".Session::get('education_level')["shortName"]];
+		return $this["project_load_".get_el_short_name()];
 	}
 
 	/**
@@ -356,7 +356,7 @@ class Supervisor extends Model{
 	public static function getSupervisorNameDatalist($hideClosedToOffers = true){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 			->when($hideClosedToOffers, function($query) {
-				return $query->where("take_students_".Session::get('education_level')["shortName"], true);
+				return $query->where("take_students_".get_el_short_name(), true);
 			})
 			->get();
 
@@ -403,7 +403,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsOpenToStudentsMailtoString(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".Session::get('education_level')["shortName"], true)->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".get_el_short_name(), true)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -416,7 +416,7 @@ class Supervisor extends Model{
 	}
 
 	public static function getSupervisorsClosedToStudentsMailtoString(){
-		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".Session::get('education_level')["shortName"], false)->get();
+		$supervisors = Supervisor::getAllSupervisorsQuery()->where("take_students_".get_el_short_name(), false)->get();
 		$return = 'mailto:'.Auth::user()->email;
 		$return .= '?bcc=';
 

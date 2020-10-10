@@ -23,7 +23,7 @@
 	@if($usersWithYear1970 > 0)
 		<div class="bg-warning p-2 my-5">
 			<span class="svg-sm">@include('svg.help')</span>
-			<span>Warning, there are users with the default active year of 1970 in the database. Either update "{{ ucfirst(Session::get('education_level')["longName"]) }} Parameters" to update their year or edit their user manually.</span>
+			<span>Warning, there are users with the default active year of 1970 in the database. Either update "{{ ucfirst(get_el_long_name()) }} Parameters" to update their year or edit their user manually.</span>
 		</div>
 	@endif
 

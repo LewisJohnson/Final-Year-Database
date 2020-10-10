@@ -7,7 +7,7 @@
 @section('content')
 <div class="centered mw-1000">
 	
-	<h2>Topics <small class="text-muted">/ Amend {{ ucfirst(Session::get('department'))." ".ucfirst(Session::get('education_level')["longName"]) }} Topics</small></h2>
+	<h2>Topics <small class="text-muted">/ Amend {{ ucfirst(Session::get('department'))." ".ucfirst(get_el_long_name()) }} Topics</small></h2>
 
 	<div class="alert alert-info mt-3">
 		<span>&#128161;</span><span class="ml-2">Topics are unique to each department and education level</span>

@@ -30,7 +30,7 @@
 		<div class="col-12 mt-3 mt-md-0 @if(Auth::user()->isSystemAdmin()) col-md-3 @else col-md-4 @endif">
 			<div class="card">
 				<div class="card-body">
-					<h5 class="card-title">{{ ucfirst(Session::get('education_level')["longName"]) }} Students</h5>
+					<h5 class="card-title">{{ ucfirst(get_el_long_name()) }} Students</h5>
 							
 					<ol class="order-list-js last-name-header-list-js list-unstyled" id="studentList">
 						@foreach($students as $student)

@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
-	<h1>{{ ucfirst(Session::get('education_level')["longName"]) }} Project Overview</h1>
+	<h1>{{ ucfirst(get_el_long_name()) }} Project Overview</h1>
 
 	@if(count(SussexProjects\Mode::all()) > 1)
 		<div class="form-group">

@@ -142,7 +142,7 @@ class StudentController extends Controller{
 	 */
 	public function proposeProjectView(){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-			->where("take_students_".Session::get('education_level')["shortName"], true)
+			->where("take_students_".get_el_short_name(), true)
 			->get();
 
 		if(Auth::user()->student->project_status == "none"){
@@ -253,7 +253,7 @@ class StudentController extends Controller{
 	 */
 	public function proposeExistingProjectView(Project $project){
 		$supervisors = Supervisor::getAllSupervisorsQuery()
-						->where("take_students_".Session::get('education_level')["shortName"], true)
+						->where("take_students_".get_el_short_name(), true)
 						->get();
 
 		if(Auth::user()->student->project_status == "none"){

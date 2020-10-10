@@ -23,7 +23,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h3 class="card-title">Pending Decisions <span class="fr @if(count($interestedStudents + $studentProposals) > 0) bg-primary text-white @else text-primary @endif px-2 py-1 rounded">{{ count($interestedStudents + $studentProposals) }}</span></h3>
-					<h6 class="card-subtitle mb-2 text-muted">Your {{ Session::get('education_level')["longName"] }} project load is currently {{ Auth::user()->supervisor->getProjectLoad() }}.</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Your {{ get_el_long_name() }} project load is currently {{ Auth::user()->supervisor->getProjectLoad() }}.</h6>
 				
 					@if(SussexProjects\Mode::getSupervisorAcceptDate()->gt(\Carbon\Carbon::now()))
 						<div class="alert alert-info" role="alert">
