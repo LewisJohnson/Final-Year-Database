@@ -23,7 +23,7 @@ class Admin{
 	 */
 	public function handle($request, Closure $next){
 		if(Auth::check()){
-			if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
+			if(Auth::user()->isSystemAdmin() || Auth::user()->isAdminOfEducationLevel()){
 				return $next($request);
 			}
 		}

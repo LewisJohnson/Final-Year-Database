@@ -11,7 +11,8 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class AdminPrivilegeCheck{
+class AdminPrivilegeCheck
+{
 
 	/**
 	 * This middleware checks if the project admin is allowed to perform the current task.
@@ -24,11 +25,12 @@ class AdminPrivilegeCheck{
 	 *
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next){
-		if(Auth::check()){
-			if(Auth::user()
-				->isAdminOfEducationLevel(get_el_short_name())
-			){
+	public function handle($request, Closure $next)
+	{
+		if(Auth::check())
+		{
+			if(Auth::user()->isAdminOfEducationLevel())
+			{
 				return $next($request);
 			}
 		}

@@ -295,7 +295,7 @@
 									$canViewSupervisorValuesForGroup = $userIsSupervisor || ($userIsMarker && $evaluation->markerHasSubmittedAllQuestions($question->group));
 
 									if(!$canViewSupervisorValuesForGroup){
-										if(!$userIsMarker && Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
+										if(!$userIsMarker && Auth::user()->isAdminOfEducationLevel()){
 											$canViewSupervisorValuesForGroup = true;
 										}
 									}
@@ -303,7 +303,7 @@
 									$canViewMarkerValuesForGroup = $userIsMarker || ($userIsSupervisor && $evaluation->supervisorHasSubmittedAllQuestions($question->group));
 
 									if(!$canViewMarkerValuesForGroup){
-										if(!$userIsSupervisor && Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
+										if(!$userIsSupervisor && Auth::user()->isAdminOfEducationLevel()){
 											$canViewMarkerValuesForGroup = true;
 										}
 									}
@@ -504,7 +504,7 @@
 				</div>
 			</div>
 
-			@if($evaluation->is_finalised && Auth::user()->isAdminOfEducationLevel(get_el_short_name()))
+			@if($evaluation->is_finalised && Auth::user()->isAdminOfEducationLevel())
 				<form action="{{ action('ProjectEvaluationController@undoFinalise', $evaluation->id) }}" method="POST" accept-charset="utf-8">
 					{{ csrf_field() }}
 					<div class="text-right mt-3">

@@ -23,7 +23,7 @@ class ExternalMarkerOrProjectAdminOrSupervisor
 	 */
 	public function handle($request, Closure $next){
 		if(Auth::check()){
-			if(Auth::user()->isExternalMarker() || Auth::user()->isAdminOfEducationLevel(get_el_short_name()) || Auth::user()->isSupervisor()){
+			if(Auth::user()->isExternalMarker() || Auth::user()->isAdminOfEducationLevel() || Auth::user()->isSupervisor()){
 				return $next($request);
 			}
 		}

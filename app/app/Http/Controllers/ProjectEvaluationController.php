@@ -74,7 +74,7 @@ class ProjectEvaluationController extends Controller {
 		}
 
 		if(Auth::user()->id != $project->supervisor->id && Auth::user()->id != $project->marker_id){
-			if(!Auth::user()->isAdminOfEducationLevel(get_el_short_name()) && !Auth::user()->isExternalMarker()){
+			if(!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isExternalMarker()){
 				session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 				session()->flash('message_type', 'error');
 				return redirect()->action('HomeController@index');

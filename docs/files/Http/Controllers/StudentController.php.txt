@@ -525,7 +525,7 @@ class StudentController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
+		if(!Auth::user()->isAdminOfEducationLevel()){
 			return redirect()->action('HomeController@index');
 		}
 

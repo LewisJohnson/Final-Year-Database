@@ -882,7 +882,7 @@ class ProjectController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateSecondMarker(Request $request){
-		if(!Auth::user()->isAdminOfEducationLevel(get_el_short_name())){
+		if(!Auth::user()->isAdminOfEducationLevel()){
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
