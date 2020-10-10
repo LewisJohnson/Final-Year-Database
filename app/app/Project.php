@@ -1,8 +1,8 @@
 <?php
 /**
- * Copyright (C) University of Sussex 2019.
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Written by Lewis Johnson <lj234@sussex.com>
+ * University of Sussex.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
 
 namespace SussexProjects;
