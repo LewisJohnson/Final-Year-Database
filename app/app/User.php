@@ -244,7 +244,13 @@ class User extends Authenticatable{
 	 *
 	 * @return boolean
 	 */
-	public function isAdminOfEducationLevel($educationLevel){
+	public function isAdminOfEducationLevel($educationLevel = null)
+	{
+		if (empty($educationLevel))
+		{
+			$educationLevel = Session::get('education_level')["shortName"];
+		}
+
 		return in_array("admin_".$educationLevel, $this->getPrivileges());
 	}
 
