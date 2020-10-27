@@ -10,6 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="git-last-commit" content="{{ shell_exec('git log -1') }}">
 	<link rel="shortcut icon" sizes="16x16" href="{{ asset('favicon.png') }}">
 
 	<!-- Fonts -->
