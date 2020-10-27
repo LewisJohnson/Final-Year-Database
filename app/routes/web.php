@@ -178,9 +178,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	// Project overview view
 	Route::get('admin/projects/overview', 'ProjectController@overview');
 
-	// Undo student's accepted project
-	Route::patch('admin/student-undo', 'ProjectAdminController@undoStudent');
-
 	/* PROJECT EVALUATION */
 	// Un-finalise Project evaluation
 	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
@@ -374,6 +371,9 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 
 	// Undefer project evaluation
 	Route::post('projects/{evaluation}/evaluation/undefer', 'ProjectEvaluationController@undefer');
+
+	// Undo student's accepted project (this has to stay as a supervisor method otherwise it won't work when "logged in as")
+	Route::patch('admin/student-undo', 'ProjectAdminController@undoStudent');
 });
 
 /* =================
