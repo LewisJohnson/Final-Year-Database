@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Session;
 use Stevebauman\Purify\Facades\Purify;
 use SussexProjects\Http\Requests\ProjectForm;
 use SussexProjects\Mail\SupervisorEditedProposedProject;
+use SussexProjects\Mode;
 use SussexProjects\Project;
 use SussexProjects\ProjectTopic;
 use SussexProjects\Student;
@@ -945,8 +946,11 @@ class ProjectController extends Controller
 	{
 		$project = new Project();
 		$student = new Student();
+		$user = new User();
 
 		return Project::join($student->getTable() . ' as student', $project->getTable() . '.id', '=', 'student.project_id')
+			->join($user->getTable() . ' as user', 'user.id', '=', 'student.id')
+			->where('user.active_year', Mode::getProjectYear())
 			->where('student.project_status', 'accepted')
 			->whereNull($project->getTable() . '.marker_id')
 			->select($project->getTable() . '.*')
@@ -957,8 +961,11 @@ class ProjectController extends Controller
 	{
 		$project = new Project();
 		$student = new Student();
+		$user = new User();
 
 		return Project::join($student->getTable() . ' as student', $project->getTable() . '.id', '=', 'student.project_id')
+			->join($user->getTable() . ' as user', 'user.id', '=', 'student.id')
+			->where('user.active_year', Mode::getProjectYear())
 			->where('student.project_status', 'accepted')
 			->whereNull($project->getTable() . '.marker_id')
 			->select($project->getTable() . '.*')

@@ -83,7 +83,7 @@ class Student extends Model
 	 */
 	public static function getAllStudentsMailtoString()
 	{
-		$students = Student::all();
+		$students = Student::getAllStudentsQuery()::all();
 		$return = 'mailto:' . Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -104,7 +104,7 @@ class Student extends Model
 		$userTable = new User();
 		$studentTable = new Student();
 
-		$students = Student::join($userTable->getTable() . ' as user', 'user.id', '=', $studentTable->getTable() . '.id')
+		$students = Student::getAllStudentsQuery()::join($userTable->getTable() . ' as user', 'user.id', '=', $studentTable->getTable() . '.id')
 			->select($studentTable->getTable() . '.*')
 			->whereNull('user.last_login')
 			->get();
@@ -126,7 +126,7 @@ class Student extends Model
 	 */
 	public static function getAllStudentsAcceptedMailtoString()
 	{
-		$students = Student::Where('project_status', 'accepted')->get();
+		$students = Student::getAllStudentsQuery()::Where('project_status', 'accepted')->get();
 		$return = 'mailto:' . Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -144,7 +144,7 @@ class Student extends Model
 	 */
 	public static function getAllStudentsWithoutProjectMailtoString()
 	{
-		$students = Student::Where('project_status', '<>', 'accepted')->get();
+		$students = Student::getAllStudentsQuery()->Where('project_status', '<>', 'accepted')->get();
 		$return = 'mailto:' . Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -159,7 +159,7 @@ class Student extends Model
 
 	public static function getAllStudentsWithoutProjectCount()
 	{
-		return Student::Where('project_status', '<>', 'accepted')->count();
+		return Student::getAllStudentsQuery()->Where('project_status', '<>', 'accepted')->count();
 	}
 
 	/**
