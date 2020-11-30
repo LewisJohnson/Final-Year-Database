@@ -14,6 +14,19 @@
 @endphp
 
 @section('content')
+
+<style>
+	.svg-sm {
+		position: relative;
+		top: -2px;
+		display: inline-block;
+	}
+
+	.border {
+		border-top-width: 4px !important;
+	}
+</style>
+
 <div class="centered animated-entrance mw-1000 eoya-container">
 	<div class="text-center">
 		<h1>End of Year Archive</h1>
@@ -47,75 +60,121 @@
 		<hr>
 	@endif
 
-	<div class="row" id="normalArchive">
+	<div id="normalArchive" class="row">
 		<div class="col-12">
-			<h6>Most Popular Project</h6>
-			<div class="border border-warning p-2">
-				<span class="svg-sm">@include('svg.fire')</span>
-				<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b> with <b>{{ $mostPopularProject->view_count }}</b> views!</span>
+			<div class="mt-3 card border border-warning">
+				<div class="card-body">
+					<h3 class="card-title text-center">Most Viewed Project</h3>
+
+					<div class="mt-3">
+						<span class="svg-sm">@include('svg.fire')</span>
+						<span>Be sure to congratulate <b>{{ $mostPopularProject->supervisor->user->getFullName() }}</b> on having the most popular project of the year <b><a href="{{ action('ProjectController@show', $mostPopularProject) }}">{{ $mostPopularProject->title }}</a></b> with <b>{{ $mostPopularProject->view_count }}</b> views!</span>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div class="col-6 mt-4">
-			<h6>Projects</h6>
-			<div class="border border-primary p-2">
-				<span class="svg-sm">@include('svg.playlist-edit')</span>
-				<span>The text “In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]” will be added to the description of projects.</span>
-			</div>
+		<div class="col-12 mt-5">
+			<div class="card border border-primary">
+				<div class="card-body">
+					<h3 class="card-title text-center">Non-destructive Changes</h3>
 
-			<div class="border border-primary p-2 mt-2">
-				<span class="svg-sm">@include('svg.archive')</span>
-				<span>All projects will be set to archived.</span>
-			</div>
-
-			<h6 class="mt-3">Users</h6>
-			<div class="border border-primary p-2 mt-2">
-				<span class="svg-sm">@include('svg.account-remove')</span>
-				<span>Students with un-finalised project evaluations will be kept.</span>
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Projects</h5>
+						</li>
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.playlist-edit')</span>
+							<span>The text <i>“In [PROJECT YEAR] this project was viewed [VIEW COUNT] times and undertaken by [STUDENT NAME]”</i><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will be added to the description of projects.</span>
+						</li>
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.archive')</span>
+							<span>All projects will be set to archived.</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 
-		<div class="col-6 mt-4">
-			<h6>Projects</h6>
-			<div class="border border-danger p-2 mt-2">
-				<span class="svg-sm">@include('svg.delete-forever')</span>
-				<span>Student proposed projects which we're not accepted will be deleted.</span>
-			</div>
+		<div class="col-12 mt-5">
+			<div class="card border border-danger">
+				<div class="card-body">
+					<h3 class="card-title text-center">Destructive Changes</h3>
 
-			<h6 class="mt-3">Users</h6>
-			<div class="border border-danger p-2">
-				<span class="svg-sm">@include('svg.account-remove')</span>
-				<span>Students without projects will be deleted.</span>
-			</div>
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Projects</h5>
+						</li>
 
-			<div class="border border-danger p-2 mt-2">
-				<span class="svg-sm">@include('svg.account-remove')</span>
-				<span>Students with finalised project evaluations will be deleted.</span>
-			</div>
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm ">@include('svg.delete-forever')</span>
+							<span>Student proposed projects which we're not accepted will be deleted.</span>
+						</li>
+					</ul>
 
-			<h6 class="mt-3">Transactions</h6>
-			<div class="border border-danger p-2 mt-2">
-				<span class="svg-sm">@include('svg.delete-forever')</span>
-				<span>The transactions table will be emptied.</span>
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Users</h5>
+						</li>
+
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.account-remove')</span>
+							<span>Students without projects will be deleted.</span>
+						</li>
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.account-remove')</span>
+							<span>Students with finalised project evaluations will be deleted.</span>
+						</li>
+					</ul>
+
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Transactions</h5>
+						</li>
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.delete-forever')</span>
+							<span>The transactions table will be emptied.</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="row d-none" id="prevYearArchive">
 		<div class="col-12">
-			<div class="border border-danger p-2">
-				<span class="svg-sm">@include('svg.account-remove')</span>
-				<span>All students will be deleted.</span>
-			</div>
+			<div class="card border border-danger">
+				<div class="card-body">
+					<h3 class="card-title text-center">Destructive Changes</h3>
 
-			<div class="border border-danger p-2 mt-2">
-				<span class="svg-sm">@include('svg.bin')</span>
-				<span>The parameters for this year will be deleted.</span>
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Users</h5>
+						</li>
+
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.account-remove')</span>
+							<span>All students will be deleted.</span>
+						</li>
+					</ul>
+
+					<ul class="list-group mt-4 shadow-sm">
+						<li class="list-group-item py-2">
+							<h5 class="m-0">Other</h5>
+						</li>
+
+						<li class="list-group-item list-group-item-action">
+							<span class="svg-sm">@include('svg.bin')</span>
+							<span>The parameters for this year will be deleted.</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="text-right mt-3">
+	<div class="text-right mt-5">
+		<p><b>Note:</b> You must download the student data before archiving.</p>
 		<a class="btn btn-primary" id="studentData" href="{{ action('ProjectAdminController@exportStudentSummary') }}" data-base-url="{{ action('ProjectAdminController@exportStudentSummary') }}">Download Student Data</a>
 
 		<form class="d-inline-block ml-2" id="endOfYearArchive" action="{{ action('ProjectAdminController@archive') }}" data-base-url="{{ action('ProjectAdminController@archive') }}" method="POST" accept-charset="utf-8">
