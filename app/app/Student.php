@@ -83,7 +83,7 @@ class Student extends Model
 	 */
 	public static function getAllStudentsMailtoString()
 	{
-		$students = Student::getAllStudentsQuery()::all();
+		$students = Student::getAllStudentsQuery();
 		$return = 'mailto:' . Auth::user()->email;
 		$return .= '?bcc=';
 
@@ -104,8 +104,7 @@ class Student extends Model
 		$userTable = new User();
 		$studentTable = new Student();
 
-		$students = Student::getAllStudentsQuery()::join($userTable->getTable() . ' as user', 'user.id', '=', $studentTable->getTable() . '.id')
-			->select($studentTable->getTable() . '.*')
+		$students = Student::getAllStudentsQuery()
 			->whereNull('user.last_login')
 			->get();
 
@@ -126,7 +125,7 @@ class Student extends Model
 	 */
 	public static function getAllStudentsAcceptedMailtoString()
 	{
-		$students = Student::getAllStudentsQuery()::Where('project_status', 'accepted')->get();
+		$students = Student::getAllStudentsQuery()->Where('project_status', 'accepted')->get();
 		$return = 'mailto:' . Auth::user()->email;
 		$return .= '?bcc=';
 
