@@ -193,12 +193,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	Route::post('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangements');
 
 	/* SECOND MARKER */
-	// Manual assign second marker view
-	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
-
-	// Manual second marker assignment
-	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
-
 	// Automatically assign second marker view
 	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
 
@@ -302,6 +296,14 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 	Route::get('/evaluations/amend-canvas-urls', 'ProjectEvaluationController@amendCanvasUrlsView');
 
 	Route::post('/evaluations/amend-canvas-urls', 'ProjectEvaluationController@amendCanvasUrls');
+
+
+	/* SECOND MARKER */
+	// Manual assign second marker view
+	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
+
+	// Manual second marker assignment
+	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
 });
 
 /* =================================

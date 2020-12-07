@@ -997,7 +997,7 @@ class ProjectController extends Controller
 	 */
 	public function updateSecondMarker(Request $request)
 	{
-		if (!Auth::user()->isAdminOfEducationLevel())
+		if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isStaff())
 		{
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			session()->flash('message_type', 'error');
