@@ -34,7 +34,7 @@
 						<div class="input-group" data-topic-id="{{ $topic->id }}" data-original-topic-name="{{ $topic->name }}">
 							<input class="form-control" spellcheck="true" name="name" type="text" value="{{ $topic->name }}">
 							<div class="input-group-append">
-								<button class="js-edit btn btn-outline-secondary disabled">Edit</button>
+								<button class="js-edit btn btn-outline-secondary disabled" title="Modify Topic name to edit">Edit</button>
 								<button class="js-delete btn btn-outline-danger">Delete</button>
 							</div>
 						</div>

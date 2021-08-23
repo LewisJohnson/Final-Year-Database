@@ -35,7 +35,7 @@
 						<div class="input-group" data-programme-id="{{ $programme->id }}" data-original-programme-name="{{ $programme->name }}">
 							<input class="form-control" spellcheck="true" name="name" type="text" value="{{ $programme->name }}">
 							<div class="input-group-append">
-								<button class="js-edit btn btn-outline-secondary disabled">Edit</button>
+								<button class="js-edit btn btn-outline-secondary disabled" title="Modify Programme name to edit">Edit</button>
 								<button class="js-delete btn btn-outline-danger">Delete</button>
 							</div>
 						</div>
