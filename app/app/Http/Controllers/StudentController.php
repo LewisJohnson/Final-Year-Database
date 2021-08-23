@@ -618,6 +618,12 @@ class StudentController extends Controller
 		if ($request->file('studentFile')->isValid())
 		{
 			$userUpload = $request->file('studentFile');
+			$userTable = (new User())->getTable();
+			$studentTable = (new Student())->getTable();
+
+			$students = Student::select($studentTable . '.*')
+				->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
+				->get();
 
 			// Move uploaded file to temp dir
 			$file = file($userUpload->getRealPath());
@@ -747,9 +753,9 @@ class StudentController extends Controller
 					{
 						unset($user, $student, $studentProgramme, $studentProgrammeModel);
 
-						if ($csv[$i][0] == null)
+						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() !== null)
 						{
-							continue;
+							throw new Exception("Student at row:" . $i . ". The registration number \"" . $csv[$i][0] . "\" is already in use.");
 						}
 						if ($csv[$i][1] === NULL)
 						{
@@ -767,7 +773,7 @@ class StudentController extends Controller
 						{
 							throw new Exception("Student at row:" . $i . " has an invalid username.");
 						}
-						if (User::where('username', $csv[$i][4])->first() !== null)
+						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && User::where('username', $csv[$i][4])->first() !== null)
 						{
 							throw new Exception("Student at row:" . $i . ". The username \"" . $csv[$i][4] . "\" is already in use.");
 						}
@@ -782,23 +788,42 @@ class StudentController extends Controller
 							throw new Exception("There was a problem at row:" . $i . ". The programme name \"" . $studentProgrammeModel . "\" could not be imported.");
 						}
 
-						$user->fill(array(
-							'privileges'  => 'student',
-							'first_name'  => $csv[$i][2],
-							'last_name'   => $csv[$i][1],
-							'username'    => $csv[$i][4],
-							'programme'   => $studentProgrammeModel->id,
-							'email'       => $csv[$i][4] . "@sussex.ac.uk",
-							'active_year' => Mode::getProjectYear(),
-						));
-						$user->save();
+						if (isset($request->ignore_duplicate_entries))
+						{
+							continue;
+						}
+						else if (isset($request->update_duplicate_entries))
+						{
+							$user = $students->where('registration_number', $csv[$i][0])->first()->user;
 
-						$student->fill(array(
-							'id'                  => $user->id,
-							'registration_number' => $csv[$i][0],
-						));
+							$user->fill(array(
+								'first_name' => $csv[$i][2],
+								'last_name'  => $csv[$i][1],
+								'username'   => $csv[$i][4],
+								'programme'  => $studentProgrammeModel->id,
+							));
+							$user->save();
+						}
+						else
+						{
+							$user->fill(array(
+								'privileges'  => 'student',
+								'first_name'  => $csv[$i][2],
+								'last_name'   => $csv[$i][1],
+								'username'    => $csv[$i][4],
+								'programme'   => $studentProgrammeModel->id,
+								'email'       => $csv[$i][4] . "@sussex.ac.uk",
+								'active_year' => Mode::getProjectYear(),
+							));
+							$user->save();
 
-						$student->save();
+							$student->fill(array(
+								'id'                  => $user->id,
+								'registration_number' => $csv[$i][0],
+							));
+
+							$student->save();
+						}
 					}
 
 					DB::commit();

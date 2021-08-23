@@ -72,21 +72,36 @@
 
 		formData.append('studentFile', fileData);
 
-		modalDesc += '<br><br><span class="text-primary">FILE: ' + fileData.name + '</span>';
+		modalDesc += '<br><p class="text-primary">FILE NAME: ' + fileData.name + '</p>';
 
 		if($(this).find('#auto_programmes').is(":checked")){
 			formData.append('auto_programmes', true);
-			modalDesc += '<br><span class="text-primary">OPTION: Auto import programmes</span>';
+			modalDesc += '<hr><p class="text-info">OPTION: Auto import programmes<br>';
+			modalDesc += '<span class="text-muted">This will automatically import all of the programmes to the database.</span></p>';
+		}
+		
+		if ($(this).find('#ignore_duplicate_entries').is(":checked")) {
+			formData.append('ignore_duplicate_entries', true);
+			modalDesc += '<hr><p class="text-info">OPTION: Ignore duplicate entries<br>';
+			modalDesc += '<span class="text-muted">This  will ignore the duplicate entries on import.</span></p>';
+		}
+
+		if ($(this).find('#update_duplicate_entries').is(":checked")) {
+			formData.append('update_duplicate_entries', true);
+			modalDesc += '<hr><p class="text-warning">OPTION: Update duplicate entries<br>';
+			modalDesc += '<span class="text-muted">This will update the Username, Last Name, First Name and Programme of a Student if a matching registration number is found.</span></p>';
 		}
 
 		if($(this).find('#empty_programmes').is(":checked")){
 			formData.append('empty_programmes', true);
-			modalDesc += '<br><span class="text-danger">OPTION: Empty programmes table.<br>This will delete all programmes for <b>ALL</b> education levels.</span>';
+			modalDesc += '<hr><span class="text-danger"><h5><b>⚠ DANGER ⚠<br> Empty programmes table</b></h5>';
+			modalDesc += 'This will delete all programmes for <b>ALL</b> education levels.</span><hr>';
 		}
 
 		if($(this).find('#empty_students').is(":checked")){
 			formData.append('empty_students', true);
-			modalDesc += '<br><span class="text-danger">OPTION: Empty students table.<br>This will delete all students for this education level.</span>';
+			modalDesc += '<hr><span class="text-danger"><h5><b>⚠ DANGER ⚠<br> Empty students table</b></h5>';
+			modalDesc += 'This will delete <b>ALL</b> students for this education level.</span><hr>';
 		}
 
 		$.confirm({
