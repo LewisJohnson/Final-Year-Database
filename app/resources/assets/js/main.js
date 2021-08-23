@@ -44,7 +44,19 @@ $(document).ajaxSend(function(event, jqxhr, request) {
 });
 
 // A catch all approach to AJAX errors.
-$(document).ajaxError(function(event, request, settings) {
+$(document).ajaxError(function (event, request, settings) {
+	if (request.responseJSON.errors !== undefined) {
+		let errors = "";
+
+		$.each(request.responseJSON.errors, function () {
+			errors += this.join() + "<br>";
+		});
+
+		createToast('error', errors);
+		return;
+	}
+	
+
 	if(request.responseJSON.message !== undefined){
 		createToast('error', request.responseJSON.message);
 		return;
