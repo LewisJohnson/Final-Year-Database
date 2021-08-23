@@ -1,0 +1,39 @@
+/*!
+ * University of Sussex.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
+ */
+
+body, .dialog .footer {
+	background-color: rgb(32, 32, 32) !important;
+ }
+
+.card, .bg-light {
+	background-color: rgb(52, 58, 64) !important;
+}
+
+a, b, span, p, li, tr, th, td, h1, h2, h3, h4, h5, h6, label, ins, select, div.card-header {
+	color: rgba(255, 255, 255, 0.88) !important;
+}
+
+tr, li, nav.mobile, nav.desktop, .cd-morph-dropdown, .cd-morph-dropdown .content, .table .thead-light th {
+	background-color: rgb(52, 58, 64) !important;
+}
+
+.btn, .btn-light, select, .dropdown-list, .morph-dropdown-wrapper, .form-control, .dialog {
+	background-color: rgb(52, 58, 64) !important;
+	border-color: rgb(73, 77, 82) !important;
+	color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.btn:hover {
+	background-color: rgb(23, 25, 27) !important;
+	color: white !important;
+}
+
+.table {
+	background-color: rgb(52, 58, 64);
+}
+.table .thead-light th, .table th, .table td {
+	border-color: rgb(69, 77, 85) !important;
+}

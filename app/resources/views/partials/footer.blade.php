@@ -14,6 +14,14 @@
 			<a href="?high_contrast=true">High Contrast</a>
 		@endif
 
+        <span class="mx-2 text-muted d-none d-md-inline-block">|</span>
+
+        @if(Cookie::get('accessibility_dark_mode') == "true")
+			<a href="?dark_mode=false">Light Mode</a>
+		@else
+			<a href="?dark_mode=true">Dark Mode</a>
+		@endif
+
 		@if(ldap_guest())
 			<p>Guest Mode</p>
 		@endif

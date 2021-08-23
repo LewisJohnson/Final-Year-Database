@@ -47,7 +47,10 @@ mix.less('resources/assets/sass/jquery-confirm.less', 'public/css');
 mix.sass('resources/assets/sass/email.scss', 'public/css');
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 mix.sass('resources/assets/sass/ie.scss', 'public/css');
+
+// ACCESSIBILITY MODES
 mix.sass('resources/assets/sass/accessible-contrast.scss', 'public/css');
 mix.sass('resources/assets/sass/accessible-font.scss', 'public/css');
+mix.sass('resources/assets/sass/accessible-dark-mode.scss', 'public/css');
 
 

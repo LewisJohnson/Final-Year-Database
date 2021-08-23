@@ -32,6 +32,11 @@ class Accessibility
 			Cookie::queue('accessibility_contrast', $request->query("high_contrast"), 525600);
 		}
 
+		if ($request->query("dark_mode") != null)
+		{
+			Cookie::queue('accessibility_dark_mode', $request->query("dark_mode"), 525600);
+		}
+
 		return $next($request);
 	}
 }

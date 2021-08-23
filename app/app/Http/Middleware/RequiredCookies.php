@@ -37,6 +37,13 @@ class RequiredCookies
 			Cookie::queue('accessibility_contrast', false, 525600);
 		}
 
+		// View: All
+		// Action: Toggles dark mode
+		if (Cookie::get('dark_mode') == null)
+		{
+			Cookie::queue('dark_mode', false, 525600);
+		}
+
 		// View: Home (Student), Project (Student)
 		// Action: A list of favourite projects
 		if (empty(Cookie::get('favourite_projects')))
