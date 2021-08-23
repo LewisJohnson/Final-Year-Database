@@ -48,10 +48,21 @@ class UserController extends Controller
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 			->get();
 
-		$students = Student::select($student->getTable() . '.*')
-			->join($user->getTable() . ' as user', 'user.id', '=', $student->getTable() . '.id')
-			->orderBy('last_name', 'asc')
-			->get();
+		if (!empty($request->student_year))
+		{
+			$students = Student::select($student->getTable() . '.*')
+				->join($user->getTable() . ' as user', 'user.id', '=', $student->getTable() . '.id')
+				->where('user.active_year', $request->student_year)
+				->orderBy('last_name', 'asc')
+				->get();
+		}
+		else
+		{
+			$students = Student::select($student->getTable() . '.*')
+				->join($user->getTable() . ' as user', 'user.id', '=', $student->getTable() . '.id')
+				->orderBy('last_name', 'asc')
+				->get();
+		}
 
 		$staffUsers = User::where('privileges', 'LIKE', '%staff%')
 			->orderBy('last_name', 'asc')
