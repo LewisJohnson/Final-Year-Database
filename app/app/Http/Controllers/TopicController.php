@@ -36,10 +36,9 @@ class TopicController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		if (strlen($request->topic_name) < 2)
-		{
-			return false;
-		}
+		$validated = $request->validate([
+			'topic_name' => 'required|min:2|max:191',
+		]);
 
 		$result = DB::transaction(function () use ($request)
 		{
@@ -71,10 +70,9 @@ class TopicController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		if (strlen($request->topic_name) < 2)
-		{
-			return false;
-		}
+		$validated = $request->validate([
+			'topic_name' => 'required|min:2|max:191',
+		]);
 
 		$result = DB::transaction(function () use ($request)
 		{
@@ -107,6 +105,10 @@ class TopicController extends Controller
 	 */
 	public function destroy(Request $request)
 	{
+		$validated = $request->validate([
+			'topic_id' => 'required|min:2|max:191',
+		]);
+
 		$result = DB::transaction(function () use ($request)
 		{
 			$projectTopic = ProjectTopic::where('topic_id', $request->topic_id);

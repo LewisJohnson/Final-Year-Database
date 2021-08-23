@@ -32,6 +32,10 @@ class ProgrammeController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		$validated = $request->validate([
+			'programme_name' => 'required|min:2|max:191',
+		]);
+
 		$result = DB::transaction(function () use ($request)
 		{
 			$programme = Programme::create(['name' => $request->programme_name]);
@@ -51,6 +55,10 @@ class ProgrammeController extends Controller
 	 */
 	public function update(Request $request)
 	{
+		$validated = $request->validate([
+			'programme_name' => 'required|min:2|max:191',
+		]);
+
 		$result = DB::transaction(function () use ($request)
 		{
 			$programme = Programme::findOrFail($request->programme_id);
@@ -70,6 +78,10 @@ class ProgrammeController extends Controller
 	 */
 	public function destroy(Request $request)
 	{
+		$validated = $request->validate([
+			'programme_id' => 'required',
+		]);
+
 		$result = DB::transaction(function () use ($request)
 		{
 			$programme = Programme::findOrFail($request->programme_id);
