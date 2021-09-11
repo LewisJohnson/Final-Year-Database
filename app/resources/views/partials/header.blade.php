@@ -280,12 +280,12 @@
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">
-									<h3>Administrator</h3>
+									<h4>Administrator</h4>
 									<ul>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Second Marker', 'links' => 'marker'])</li>
-										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Settings', 'links' => 'settings'])</li>
+										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Amendments', 'links' => 'settings'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Transactions', 'links' => 'transaction'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Project Evaluation', 'links' => 'evaluation'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Projects', 'links' => 'projects'])</li>

@@ -438,3 +438,17 @@ $color-4: #548c7e; // Patina
 		padding-top: 80px;
 	}
 }
+
+#project-admin > .content ul li {
+	margin-bottom: 0px;
+}
+
+#project-admin > .content h5 {
+	margin-top: 15px;
+}
+
+#project-admin > .content ul a,
+#project-admin > .content ul .icon p
+{
+	padding: 2px;
+}
