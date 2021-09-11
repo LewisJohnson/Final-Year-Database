@@ -29,7 +29,7 @@
 |			1.7.4 Manual Finalise
 |		1.8 PE student Feedback
 |			1.8.1 Print
-|			1.8.1 Print All
+|			1.8.2 Print All
 |	2. System Admin
 |		2.1 User Feedback
 |		
