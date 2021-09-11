@@ -52,9 +52,9 @@
 	$('#project-evaluation-form textarea').autogrow();
 
 	if(userIsSupervisor) {
-		selectorModifier = ".supervisor ";
+		selectorModifier = ".supervisor";
 	} else if(userIsMarker) {
-		selectorModifier = ".marker ";
+		selectorModifier = ".marker";
 	}
 
 	// Hide save and cancel buttons
@@ -81,8 +81,8 @@
 	$("#defer").on('click', function(e){
 		$.confirm({
 			title: 'Defer Evaluation',
-			content: 'Are you sure you want to defer this evaluation?<br>The evaluation will be put aside, and can be undeferred when you like.',
-			type: 'orange',
+			content: 'Are you sure you want to defer this evaluation?<br>The evaluation will be put aside, and can be undeferred whenever you like.',
+			type: 'info',
 			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M7.88,3.39L6.6,1.86L2,5.71L3.29,7.24L7.88,3.39M22,5.72L17.4,1.86L16.11,3.39L20.71,7.25L22,5.72M12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22A9,9 0 0,0 21,13A9,9 0 0,0 12,4M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M9,11H12.63L9,15.2V17H15V15H11.37L15,10.8V9H9V11Z" /></svg></div></div>',
 			theme: 'modern',
 			escapeKey: true,
@@ -91,7 +91,7 @@
 			buttons: {
 				formSubmit: {
 					text: 'Defer',
-					btnClass: 'btn-warning',
+					btnClass: 'btn-info',
 					action: function () {
 						$("#deferForm").submit();
 					}
@@ -175,7 +175,6 @@
 		}
 	});
 	
-
 	$('body').on('input change', '.custom-range', function(){
 		showScaleText($(this));
 	});
@@ -311,6 +310,23 @@
 		$(".js-input" + selectorModifier).on('change', function(){
 			var form = $("#project-evaluation-form");
 
+			debugger;
+
+			// Fill student evaluation
+			if ($("#AutofillStudentEvaluation").is(":checked")) {
+				var str = "";
+
+				$("textarea.js-input" + selectorModifier + ":not([data-question-type='9'])").each(function () {
+					let val = $(this).val();
+
+					if (val != '')
+						str += val + "\n";
+				});
+
+				// 9 = Student evaluation
+				$(".js-input" + selectorModifier + "[data-question-type='9']").val(str);
+			}
+
 			$.post(form.attr('action'), form.serialize() + "&ajax=true")
 				.done(function() {
 					createToast('autosave success', 'Saved', true);
@@ -318,6 +334,7 @@
 				.fail(function() {
 					createToast('error', 'Something went wrong with that request.');
 				});
+			
 		});
 
 		isInEditMode = true;

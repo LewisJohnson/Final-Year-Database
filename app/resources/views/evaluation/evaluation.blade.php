@@ -101,28 +101,31 @@
 @endif
 
 <div class="centered mw-1200 js-show-scroll-top">
-	<div class="row mt-3">
-		<div class="col-12 text-right">
-			<a class="btn btn-outline-primary" href="{{ action('HomeController@help', ['tab-name' => 'Supervisor', 'header-name' => 'supervisor-project-evaluation']) }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
-			<button class="btn btn-primary ml-2 js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
-		</div>
-
+	<div class="row bg-white shadow-sm rounded p-2 border mx-1">
 		{{-- FINALISE BANNER --}}
-		<div class="col-12 mt-3">
+		<div class="col-6">
 			@if(!$evaluation->is_finalised && !$evaluation->is_deferred && $userIsSupervisor)
 				@if($evaluation->supervisorHasSubmittedAllQuestions() && $evaluation->markerHasSubmittedAllQuestions())
-					<p class="bg-success rounded text-white text-center w-100 p-2">
+					<p class="bg-success text-white text-center w-100 p-2 mb-0">
 						READY TO BE FINALISED
 					</p>
 				@else
-					<p class="bg-danger rounded text-white text-center w-100 p-2">
+					<p class="bg-danger text-white text-center w-100 p-2 mb-0">
 						NOT READY TO BE FINALISED
 					</p>
 				@endif
 			@endif
 		</div>
 
-		<div class="col-12 mt-3">
+		{{-- BUTTONS --}}
+		<div class="col-6 text-right">
+			<a class="btn btn-outline-primary" href="{{ action('HomeController@help', ['tab-name' => 'Supervisor', 'header-name' => 'supervisor-project-evaluation']) }}"><span class="svg-xs">@include('svg.help')</span>Help</a>
+			<button class="btn btn-primary ml-2 js-print-project-evaluation" title="Print project evaluation" type="button"><span class="svg-xs">@include('svg.printer')</span>Print</button>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
 					<h1 class="d-flex">
@@ -189,7 +192,7 @@
 										{{-- DEFER --}}
 										<form id="deferForm" class="d-inline-block" action="{{ action('ProjectEvaluationController@defer', $evaluation->id) }}" method="POST" accept-charset="utf-8">
 											{{ csrf_field() }}
-											<button type="button" id="defer" class="btn btn-warning" data-id="{{ $evaluation->id }}" ><span class="svg-xs">@include('svg.alarm-snooze')</span>Defer</button>
+											<button type="button" id="defer" class="btn btn-info" data-id="{{ $evaluation->id }}" ><span class="svg-xs">@include('svg.alarm-snooze')</span>Defer</button>
 										</form>
 									@endif
 								@endif
@@ -278,6 +281,7 @@
 					<form id="project-evaluation-form" action="{{ action('ProjectEvaluationController@update', $project->id) }}" method="POST" accept-charset="utf-8">
 						{{ csrf_field() }}
 						{{ method_field('PATCH') }}
+
 						<div id="ProjectEvaluationQuestions" @if($evaluation->is_finalised) class="collapse mt-3" @endif>
 							@php
 								$prevQuestionGroup = null;
@@ -287,6 +291,16 @@
 								<label class="col-sm-2 col-form-label">Canvas URL</label>
 								<div class="col-sm-10">
 									<input class="form-control" name="canvas_url" type="text" value="{{ $evaluation->canvas_url }}">
+								</div>
+							</div>
+
+							<div class="form-group row edit ml-1">
+								<div class="checkbox">
+									<input type="checkbox" name="autofill_se" id="AutofillStudentEvaluation" value="0">
+									<label class="ml-1" for="AutofillStudentEvaluation">Autofill Student Evaluation</label>
+									<p class="text-muted ml-4">
+										This will autofill the student evaluation with all the comments from other sections.
+									</p>
 								</div>
 							</div>
 
@@ -458,7 +472,7 @@
 												@endif
 
 												<p data-group="{{ $question->group }}" class="js-value text-pre-wrap {{ $type }} pl-2 mt-3" style="min-height: 100px;">{{ $question->$commentAccessor }}</p>
-												<textarea class="js-input {{ $type }} mb-3 form-control" style="min-height: 100px;" name="{{ $loop->parent->index }}_{{ $type }}_comment">{{ $question->$commentAccessor }}</textarea>
+												<textarea class="js-input {{ $type }} mb-3 form-control" style="min-height: 100px;" name="{{ $loop->parent->index }}_{{ $type }}_comment" data-type="{{ $type }}" data-question-type="{{ $question->type }}">{{ $question->$commentAccessor }}</textarea>
 
 												<div class="checkbox js-no-submission" style="display: none">
 													<input class="checkbox-input mr-2" id="{{ $loop->parent->index }}_{{ $type }}_omit_submission" name="{{ $loop->parent->index }}_{{ $type }}_omit_submission" type="checkbox" @if($question->$omissionAccessor) Checked @endif>
