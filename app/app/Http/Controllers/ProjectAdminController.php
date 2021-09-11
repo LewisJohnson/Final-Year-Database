@@ -856,4 +856,182 @@ class ProjectAdminController extends Controller
 			'message'          => $message,
 		));
 	}
+
+	/**
+	 * The assign a project to a student view.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\View\View
+	 */
+	public function assignProjectView(Request $request)
+	{
+		if (empty($request->project_year))
+		{
+			$request->project_year = Mode::getProjectYear();
+		}
+
+		$userTable = (new User())->getTable();
+		$studentTable = (new Student())->getTable();
+		$supervisorTable = (new Supervisor())->getTable();
+
+		$students = Student::select($studentTable . '.*')
+			->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
+			->where('user.active_year', $request->project_year)
+			->orderBy('last_name', 'asc')
+			->get();
+
+		$projects = Project::
+			whereNotNull('supervisor_id')
+			->where('status', '<>', 'archived')
+			->get();
+
+		if ($request->accepted_projects == false)
+		{
+			$projects = $projects->filter(function ($project)
+			{
+				return empty($project->getAcceptedStudent());
+			});
+		}
+
+		if (is_null($request->students_with_project) || $request->students_with_project == false)
+		{
+			$students = $students->filter(function ($student)
+			{
+				return empty($student->project);
+			});
+		}
+
+		$request->flash();
+
+		return view('admin.assign-project')
+			->with('projects', $projects)
+			->with('students', $students);
+	}
+
+	/**
+	 * Assigns a project to a student
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	/**
+	 * @param $student
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	/**
+	 * @param $request
+	 * @param $student
+	 * @param $project
+	 */
+	public function assignProject(Request $request)
+	{
+		$this->validate(request(), [
+			'student_id' => 'required',
+			'project_id' => 'required',
+		]);
+
+		$student = Student::findOrFail($request->student_id);
+
+		// We must return the error because the return in the transaction will not break out of the function.
+		$error = DB::transaction(function () use ($request, $student)
+		{
+			$project = Project::findOrFail($request->project_id);
+			$transaction = new Transaction();
+
+			function rejectStudent($request, $student, $project)
+			{
+				DB::transaction(function () use ($request, $student, $project)
+				{
+					$transaction = new Transaction();
+					$transaction->fill(array(
+						'type'             => 'student',
+						'action'           => 'rejected',
+						'project'          => $project->id,
+						'student'          => $student->id,
+						'supervisor'       => $project->supervisor_id,
+						'admin'            => Auth::user()->id,
+						'transaction_date' => new Carbon(),
+					));
+
+					$transaction->save();
+
+					$student->reject_count = ++$student->reject_count;
+					$student->project_id = null;
+					$student->project_status = 'none';
+					$student->save();
+				});
+			}
+
+			// Reject currently accepted student
+			if ($project->getAcceptedStudent() != null)
+			{
+				rejectStudent($request, $project->getAcceptedStudent(), $project);
+			}
+
+			// Reject all other students
+			foreach ($project->getStudentsWithProjectSelected() as $student)
+			{
+				rejectStudent($request, $student, $project);
+			}
+
+			if (!empty($project->evaluation))
+			{
+				$project->evaluation->delete();
+			}
+
+			$project->status = 'withdrawn';
+
+			$student->project_id = $project->id;
+			$student->project_status = 'accepted';
+
+			$project->save();
+			$student->save();
+
+			$transaction->fill(array(
+				'type'             => 'student',
+				'action'           => 'accepted',
+				'project'          => $student->project_id,
+				'student'          => $student->id,
+				'supervisor'       => $project->supervisor_id,
+				'admin'            => Auth::user()->id,
+				'transaction_date' => new Carbon(),
+			));
+
+			$transaction->save();
+
+			return null;
+		});
+
+		if ($error != null)
+		{
+			return $error;
+		}
+
+		return response()->json(array(
+			'successful' => true,
+		));
+	}
 }

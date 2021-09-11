@@ -222,7 +222,7 @@
 						<li id="browse" class="dropdown links">
 							<a href="#0" class="label">Browse</a>
 							<div class="content">
-								<h3>Browse</h3>
+								<h5>Browse</h5>
 								<ul>
 									<li>
 										<ul>
@@ -280,9 +280,9 @@
 							<li id="project-admin" class="dropdown links wide">
 								<a href="#0" class="label">Administrator</a>
 								<div class="content">
-									<h4>Administrator</h4>
 									<ul>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Users', 'links' => 'user'])</li>
+                                        <li>@include('partials.header.admin-sub-dropdown', ['title' => 'Students', 'links' => 'students'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Reports', 'links' => 'report'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Second Marker', 'links' => 'marker'])</li>
 										<li>@include('partials.header.admin-sub-dropdown', ['title' => 'Amendments', 'links' => 'settings'])</li>
@@ -298,7 +298,6 @@
 							<li id="system-admin" class="dropdown links wide-ish">
 								<a href="#0" class="label">System Administrator</a>
 								<div class="content">
-									<h3>System Administrator</h3>
 									<ul>
 										<li>
 											<h5>System</h5>

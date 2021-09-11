@@ -42,6 +42,8 @@ mix.js('resources/assets/js/views/supervisor.js', 'public/js/views');
 mix.js('resources/assets/js/views/marker-assign.js', 'public/js/views');
 mix.js('resources/assets/js/views/project-evaluation.js', 'public/js/views');
 
+mix.js('resources/assets/js/views/admin/assign-student-project.js', 'public/js/views/admin');
+
 // STYLE
 mix.less('resources/assets/sass/jquery-confirm.less', 'public/css');
 mix.sass('resources/assets/sass/email.scss', 'public/css');

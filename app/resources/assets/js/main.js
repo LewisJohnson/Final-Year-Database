@@ -575,7 +575,7 @@ $(document).ajaxError(function (event, request, settings) {
 	}
 
 	$(".js-projectYear").on('change', function(){
-		window.location = $(".js-projectYear :selected").attr('data-href');
+		window.location = $(":selected", this).attr('data-href');
 	});
 
 	/* ======================
