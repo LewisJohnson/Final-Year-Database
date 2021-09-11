@@ -31,7 +31,33 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ ucfirst(get_el_long_name()) }} Students</h5>
-							
+					
+					@if(count(SussexProjects\Mode::all()) > 1)
+						<div class="form-group row">
+							<label class="col-6 col-form-label">Student Year</label>
+
+							<div class="col-6">
+								<select class="form-control w-auto js-projectYear">
+									
+									<option @if(empty(
+										Request::get('student_year')) || 
+										Request::get('student_year') == '' || 
+										Request::get('student_year') == null) selected @endif data-href="{{ action('ProjectAdminController@loginAsView', ['student_year' => '']) }}">All</option>
+
+									@foreach(SussexProjects\Mode::all() as $mode)
+										<option @if(!empty(Request::get('student_year')) && (Request::get('student_year') == $mode->project_year)) selected @endif 
+											data-href="{{ action('ProjectAdminController@loginAsView', ['student_year' => $mode->project_year]) }}">
+											{{ $mode->project_year }}
+										</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+
+						<hr>
+					@endif
+					<br>
+
 					<ol class="order-list-js last-name-header-list-js list-unstyled" id="studentList">
 						@foreach($students as $student)
 							<li data-sort-name="{{ $student->user->last_name }}">
