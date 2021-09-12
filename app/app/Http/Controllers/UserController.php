@@ -484,15 +484,6 @@ class UserController extends Controller
 				$userForm['programme'] = null;
 			}
 
-			$user->update(array(
-				'first_name'  => $userForm['first_name'],
-				'last_name'   => $userForm['last_name'],
-				'username'    => $userForm['username'],
-				'programme'   => $userForm['programme'],
-				'email'       => $userForm['email'],
-				'active_year' => $userForm['active_year'],
-			));
-
 			// Update student privilege
 			if (in_array("student", $userForm->privileges))
 			{
@@ -501,6 +492,11 @@ class UserController extends Controller
 					// If they are a student already, update
 					$user->student->registration_number = $userForm['registration_number'];
 					$user->student->save();
+
+					if ($user->active_year != $userForm['active_year'])
+					{
+						$user->student->project->evaluation->delete();
+					}
 				}
 				else
 				{
@@ -558,6 +554,15 @@ class UserController extends Controller
 
 				$supervisor->save();
 			}
+
+			$user->update(array(
+				'first_name'  => $userForm['first_name'],
+				'last_name'   => $userForm['last_name'],
+				'username'    => $userForm['username'],
+				'programme'   => $userForm['programme'],
+				'email'       => $userForm['email'],
+				'active_year' => $userForm['active_year'],
+			));
 
 			$user->save();
 			$string = "UPDATE `?` SET `privileges`= '?' WHERE `id`= '?'";
@@ -690,6 +695,7 @@ class UserController extends Controller
 			{
 				$projects = Project::where('student_id', $user->id)->delete();
 			}
+
 			$user->delete();
 
 			return response()->json(array('successful' => true, 'message' => 'User has been deleted.'));

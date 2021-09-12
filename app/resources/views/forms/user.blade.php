@@ -134,7 +134,12 @@
 		{{-- STUDENT FORM --}}
 		<div id="student-form">
 			<h5>Student</h5>
-			<p>You are creating an {{ lang_sess('full_name') }} student.</p>
+			@if($view == "new")
+				<p>You are creating an {{ lang_sess('full_name') }} student.</p>
+			@else
+				<p>You are editing an {{ lang_sess('full_name') }} student.<br>Changing their active year will delete any Project Evaluation they may have.</p>
+			@endif
+			
 			<div class="form-group {{ $errors->has('registration_number') ? 'has-error' : '' }}">
 				<label for="registration_number">Registration Number</label>
 				<input class="form-control" id="registration_number" type="number" name="registration_number" @if($view === "edit") @if($user->isStudent()) value="{{ $user->student->registration_number }}" @endif @else value="{{ old('registration_number') }}" @endif>
