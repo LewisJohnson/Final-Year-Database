@@ -27,6 +27,7 @@
 |			1.7.2 Questions
 |			1.7.3 Print
 |			1.7.4 Manual Finalise
+|			1.7.5 Delete
 |		1.8 PE student Feedback
 |			1.8.1 Print
 |			1.8.2 Print All
@@ -599,6 +600,40 @@
 					cancel: {},
 				}
 			});
+	});
+
+	// 1.7.5 Project Evaluation - Delete
+	$(".js-delete-pe").on('click', function (e) {
+		e.preventDefault();
+
+		let url = $(e.target).attr("href");
+
+		$.confirm({
+			title: 'Delete Evaluation',
+			content: 'Are you sure you want to delete this evaluation?<br>It has no questions answered so this is a safe action.',
+			type: 'red',
+			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement: true,
+			buttons: {
+				formSubmit: {
+					text: 'Delete',
+					btnClass: 'btn-danger',
+					action: function () {
+						$.ajax({
+							method: 'DELETE',
+							url: url,
+							success: function () {
+								window.location.reload();
+							}
+						});
+					}
+				},
+				cancel: function () { },
+			}
+		});
 	});
 
 	// 1.8 PE Student Feedback

@@ -148,6 +148,35 @@ class ProjectEvaluation extends Model
 		return true;
 	}
 
+	/**
+	 *
+	 * Returns true if any questions has a value in it
+	 *
+	 * @param $group
+	 */
+	public function hasAnyQuestionBeenAnswered()
+	{
+		foreach ($this->getQuestions() as $question)
+		{
+			if ($question->supervisorOmitSubmission || $question->markerOmitSubmission)
+			{
+				continue;
+			}
+
+			if ($question->supervisorSubmitted || $question->markerSubmitted)
+			{
+				return true;
+			}
+
+			if (!empty($question->supervisorComment) || !empty($question->markerComment))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public function getStatus()
 	{
 		if ($this->is_finalised)

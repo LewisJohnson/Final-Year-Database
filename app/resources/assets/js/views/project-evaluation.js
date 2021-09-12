@@ -310,8 +310,6 @@
 		$(".js-input" + selectorModifier).on('change', function(){
 			var form = $("#project-evaluation-form");
 
-			debugger;
-
 			// Fill student evaluation
 			if ($("#AutofillStudentEvaluation").is(":checked")) {
 				var str = "";

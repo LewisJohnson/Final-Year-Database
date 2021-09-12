@@ -1,4 +1,9 @@
 @extends('layouts.app')
+
+@section('scripts')
+	<script src="{{ asset('js/views/admin.js') }}"></script>
+@endsection
+
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
 	<h1>{{ ucfirst(get_el_long_name()) }} Project Evaluations</h1>
@@ -40,6 +45,7 @@
 					<th class="text-muted"><span class="svg-sm">@include('svg.paper-stacked')</span>Dissertation</th>
 					<th class="border-left">Status</th>
 					<th class="border-left d-print-none js-unsortable"></th>
+					<th class="d-print-none js-unsortable"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -99,6 +105,14 @@
 							<td class="border-left text-right d-print-none">
 								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
 							</td>
+
+							<td class="text-right d-print-none">
+								@if($evaluation->hasAnyQuestionBeenAnswered())
+									<a class="btn btn-sm btn-outline-danger disabled" disabled="disabled" href="#" title="Project Evaluation can not be deleted as some questions have been answered">Delete</a>
+								@else
+									<a class="btn btn-sm btn-outline-danger js-delete-pe" href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}">Delete</a>
+								@endif
+							</td>
 						</tr>
 					@elseif(!empty($student->project) && !empty($student->project->marker))
 						<tr style="opacity: 0.7">
@@ -119,6 +133,7 @@
 									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student->project->id) }}">Create Evaluation</a>
 								@endif
 							</td>
+							<td></td>
 						</tr>
 					@else
 						<tr style="opacity: 0.3">
@@ -134,7 +149,8 @@
 							<td>-</td>
 							<td>-</td>
 							<td class="border-left">-</td>
-							<td class="border-left text-right d-print-none"></td>
+							<td class="border-left d-print-none"></td>
+							<td class="d-print-none"></td>
 						</tr>
 					@endif
 				@endforeach

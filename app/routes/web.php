@@ -192,13 +192,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	// Project overview view
 	Route::get('admin/projects/overview', 'ProjectController@overview');
 
-	/* PROJECT EVALUATION */
-	// Un-finalise Project evaluation
-	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
-
-	// Creates all project evaluations at once
-	Route::get('evaluation/create-all', 'ProjectEvaluationController@createAll');
-
 	/* SUPERVISOR ARRANGEMENTS */
 	// Amend supervisor arrangements form
 	Route::get('admin/supervisor/arrangements', 'ProjectAdminController@amendSupervisorArrangementsView');
@@ -277,6 +270,15 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	Route::post('students', 'StudentController@store');
 
 	/* PROJECT EVALUATION */
+	// Un-finalise Project evaluation
+	Route::post('evaluation/{evaluation}/undo', 'ProjectEvaluationController@undoFinalise');
+
+	// Delete
+	Route::delete('evaluation/{evaluation}/delete', 'ProjectEvaluationController@delete');
+
+	// Creates all project evaluations at once
+	Route::get('evaluation/create-all', 'ProjectEvaluationController@createAll');
+
 	// Manual finalisation view
 	Route::get('/evaluations/finalise', 'ProjectEvaluationController@manualFinaliseView');
 

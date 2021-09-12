@@ -635,6 +635,25 @@ class ProjectEvaluationController extends Controller
 	}
 
 	/**
+	 * Deletes a project evaluation.
+	 *
+	 *
+	 * @param  ProjectEvaluation	$evaluation
+	 * @return \Illuminate\Http\Response
+	 */
+	public function delete(ProjectEvaluation $evaluation)
+	{
+		$evaluation->delete();
+
+		session()->flash('message', 'The project evaluation has been deleted');
+		session()->flash('message_type', 'danger');
+
+		return response()->json(array(
+			'successful' => true,
+		));
+	}
+
+	/**
 	 * Defers a project evaluation.
 	 *
 	 *
