@@ -55,7 +55,7 @@
 							</td>
 						@endif
 						<td class="text-right">
-							@if(Session::get('logged_in_as') != null)
+							@if(Session::get('logged_in_as') != null || Auth::user()->isProjectAdmin())
 								<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" 
 									title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" 
 									data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" 
