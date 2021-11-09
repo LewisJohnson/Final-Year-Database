@@ -1004,11 +1004,39 @@ class ProjectController extends Controller
 			return redirect()->action('HomeController@index');
 		}
 
+		$request->validate([
+			'student_id'    => 'required',
+			'marker_id' => 'required'
+		]);
+
 		DB::transaction(function () use ($request)
 		{
-			$project = Project::findOrFail(request('project_id'));
-			$student = Student::findOrFail(request('student_id'));
-			$marker = Supervisor::findOrFail(request('marker_id'));
+			$project = Project::find($request->project_id);
+			$student = Student::findOrFail($request->student_id);
+			$marker = Supervisor::findOrFail($request->marker_id);
+
+			// If project is null, assign a temp project to student
+			if ($project == null)
+			{
+				$newProject = new Project();
+
+				$newProject->fill(array(
+					'title'			=> 'Temp Project ('.$student->user->getFullName().')',
+					'description'	=> 'This is a temporary placeholder project.',
+					'status'		=> 'archived',
+					'skills'		=> 'Temporary'
+				));
+
+				$newProject->student_id = $student->user->id;
+				$newProject->save();
+
+				$student->project_id = $newProject->id;
+				$student->project_status = 'selected';
+				$student->save();
+
+				$project = $newProject;
+			}
+
 			$transaction = new Transaction();
 
 			$transaction->fill(array(

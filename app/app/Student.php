@@ -244,22 +244,28 @@ class Student extends Model
 	 */
 	public function getStatusString()
 	{
-		$return = '';
+		$returnText = '';
+
 		switch ($this->project_status)
 		{
 			case 'none':
-				$return = 'You haven\'t selected a project.';
+				$returnText = 'You haven\'t selected a project.';
 				break;
 			case 'selected':
 			case 'proposed':
-				$return = 'You\'re awaiting supervisor approval.';
+				$returnText = 'You\'re awaiting supervisor approval.';
 				break;
 			case 'accepted':
-				$return = 'Congratulations. You\'ve been accepted.';
+				$returnText = 'Congratulations. You\'ve been accepted.';
 				break;
 		}
 
-		return $return;
+		if($this->project->skills == 'Temporary')
+		{
+			$returnText = 'Awaiting further action.';
+		}
+
+		return $returnText;
 	}
 
 	/**

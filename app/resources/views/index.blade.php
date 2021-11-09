@@ -246,7 +246,7 @@
 				<div class="col-12 mt-3">
 					<div class="card">
 						<div class="card-body">
-							@if(Auth::user()->student->project_status == 'selected'|| Auth::user()->student->project_status == 'proposed')
+							@if((Auth::user()->student->project_status == 'selected' || Auth::user()->student->project_status == 'proposed') && Auth::user()->student->project->skills != 'Temporary')
 								<button id="student-undo-select" class="btn btn-sm btn-outline-danger fr" title="Un-select {{ Auth::user()->student->project->title }}">UNDO</button>
 							@endif
 			
