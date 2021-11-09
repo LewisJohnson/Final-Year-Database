@@ -302,6 +302,14 @@ class ProjectController extends Controller
 			'status' => 'required',
 		]);
 
+		if($request->skills == 'Temporary' || $request->skills == 'Temp')
+		{
+			session()->flash('message', 'Your project contains forbidden characteristics.');
+			session()->flash('message_type', 'danger');
+
+			return redirect()->action('ProjectController@create');
+		}
+
 		$result = DB::transaction(function () use ($request)
 		{
 			$project = new Project();
@@ -409,6 +417,14 @@ class ProjectController extends Controller
 			session()->flash('message', 'You are not allowed to edit "' . $project->title . '".');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectController@show', $project);
+		}
+
+		if($input->skills == 'Temporary' || $input->skills == 'Temp')
+		{
+			session()->flash('message', 'Your project contains forbidden characteristics.');
+			session()->flash('message_type', 'danger');
+
+		return redirect()->action('ProjectController@show', $project);
 		}
 
 		preg_match('/\(\+\+.*\+\+\)/umix', $input->description, $macthes);
