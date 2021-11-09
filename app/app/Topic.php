@@ -99,15 +99,15 @@ class Topic extends Model
 		$projectTable = new Project();
 		$projectTopicTable = new ProjectTopic();
 
-		return;
-		Project::whereNotNull('supervisor_id')
-			->join($supervisorTable->getTable() . ' as supervisor', 'supervisor_id', '=', 'supervisor.id')
-			->join($userTable->getTable() . ' as user', 'user.id', '=', 'supervisor.id')
-			->rightJoin($projectTopicTable->getTable() . ' as projectTopic', 'projectTopic.project_id', '=', $projectTable->getTable() . '.id')
-			->where('topic_id', $this->id)
-			->where('status', 'on-offer')
-			->where('user.privileges', 'LIKE', '%supervisor%')
-			->where('supervisor.take_students_' . get_el_short_name(), true)
-			->count();
+		return
+			Project::whereNotNull('supervisor_id')
+				->join($supervisorTable->getTable() . ' as supervisor', 'supervisor_id', '=', 'supervisor.id')
+				->join($userTable->getTable() . ' as user', 'user.id', '=', 'supervisor.id')
+				->rightJoin($projectTopicTable->getTable() . ' as projectTopic', 'projectTopic.project_id', '=', $projectTable->getTable() . '.id')
+				->where('topic_id', $this->id)
+				->where('status', 'on-offer')
+				->where('user.privileges', 'LIKE', '%supervisor%')
+				->where('supervisor.take_students_' . get_el_short_name(), true)
+				->count();
 	}
 }
