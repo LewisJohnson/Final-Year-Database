@@ -45,8 +45,10 @@
 										Request::get('student_year') == null) selected @endif data-href="{{ action('UserController@index', ['student_year' => '']) }}">All</option>
 								   
 									@foreach(SussexProjects\Mode::all() as $mode)
-										<option 
-										@if(!empty(Request::get('student_year')) && (Request::get('student_year') == $mode->project_year)) selected @endif data-href="{{ action('UserController@index', ['student_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+										<option @if(!empty(Request::get('student_year')) && (Request::get('student_year') == $mode->project_year)) selected @endif 
+											data-href="{{ action('UserController@index', ['student_year' => $mode->project_year]) }}">
+											{{ $mode->project_year }}
+										</option>
 									@endforeach
 								</select>
 							</div>

@@ -260,9 +260,12 @@ class Student extends Model
 				break;
 		}
 
-		if($this->project->skills == 'Temporary')
+		if ($this->project != null)
 		{
-			$returnText = 'Awaiting further action.';
+			if ($this->project->skills == 'Temporary')
+			{
+				$returnText = 'Awaiting further action.';
+			}
 		}
 
 		return $returnText;
