@@ -21,6 +21,7 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use Log;
 
 /**
  * The admin controller.
@@ -370,19 +371,28 @@ class ProjectAdminController extends Controller
 			$maxStudentsPerSupervisor = max(1, $request->max_students_per_supervisor);
 		}
 
+		Log::info("CALC: MAX");
+
 		if (ProjectController::getAcceptedProjectCount() > (Supervisor::getAllSupervisorsQuery()
 			->where('project_load_' . get_el_short_name(), '>', 0)
 			->count() * $maxStudentsPerSupervisor))
 		{
+
+			Log::info("CALC: MAX not enough");
+
 			return response()->json(array(
 				'successful' => false,
 				'message'    => "Please increase the maximum students per supervisor.",
 			));
 		}
 
+		Log::info("CALC: Pre transaction");
+
 		DB::transaction(function () use ($maxStudentsPerSupervisor)
 		{
 			$projectTable = new Project();
+
+			Log::info("CALC: Clearing second markers");
 
 			// Reset every project's second marker
 			DB::table($projectTable->getTable())->update(array(
@@ -394,15 +404,20 @@ class ProjectAdminController extends Controller
 			{
 				// Get the project
 				$projectToAssign = ProjectController::getAcceptedProjectWithoutSecondMarker();
+				Log::info("CALC: Getting project :".$projectToAssign->title);
 
 				// Recalculate scores
 				$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(false, $maxStudentsPerSupervisor, $projectToAssign->supervisor_id);
 
 				// Get the laziest supervisor
 				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
+				Log::info("CALC: Got lazy supervisor ".$laziestSupervisor->user->getFullName(). " with lazy score ".$laziestSupervisor["lazy_score"]);
+
 
 				$projectToAssign->marker_id = $laziestSupervisor->id;
 				$projectToAssign->save();
+
+				Log::info("CALC: Assigning ".$projectToAssign->getAcceptedStudent()->user->getFullName(). " to ".$projectToAssign->marker->user->getFullName());
 
 				$transaction = new Transaction();
 				$transaction->fill(array(
