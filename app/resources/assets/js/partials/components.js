@@ -905,10 +905,7 @@
 		ASSIGN_MARKER: 'admin/marker/manual',
 	};
 
-	Marker.prototype.selectStudent = function (studentRowDOM, marker)
-	{
-		$("#AssignModalNotAcceptedWarning").hide();
-
+	Marker.prototype.selectStudent = function(studentRowDOM, marker){
 		var row = $(studentRowDOM);
 
 		marker.unselectAll(marker);
@@ -932,16 +929,11 @@
 		if(marker.selectedStudent != null){
 			row.addClass("is-selected");
 			marker.selectedSupervisor = row;
-
 			Marker.prototype.showDialog(
 				marker.selectedStudent.data('student-name'),
 				marker.selectedStudent.data('supervisor-name'),
 				row.data('marker-name'),
 				marker.selectedStudent.data('project-title'));
-			
-			if (marker.selectedStudent.data('show-warning')) {
-				$("#AssignModalNotAcceptedWarning").show();
-			}
 		}
 	}
 
@@ -949,7 +941,6 @@
 		$(marker.studentDataTable.bodyRows).removeClass("is-selected");
 		$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
 		$(marker.supervisorDataTable.bodyRows).attr("disabled", true);
-		$("#AssignModalNotAcceptedWarning").hide();
 		marker.selectedStudent = null;
 		marker.selectedSupervisor = null;
 	}
@@ -959,10 +950,7 @@
 		$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Marker.prototype.showDialog = function (studentName, supervisorName, markerName, projectTitle) {
-		supervisorName = supervisorName || 'None';
-		projectTitle = projectTitle || 'A temporary project will be created for this student';
-
+	Marker.prototype.showDialog = function(studentName, supervisorName, markerName, projectTitle){
 		$("#student-name").text(studentName);
 		$("#supervisor-name").text(supervisorName);
 		$("#marker-name").text(markerName);
@@ -978,7 +966,7 @@
 			$("#assign-dialog")[0].dialog.hideDialog();
 			return;
 		};
-		
+
 		$("#assign-dialog")[0].dialog.showLoader();
 
 		var projectId = marker.selectedStudent.data('project-id');
@@ -996,7 +984,7 @@
 			success: function(response){
 				window.location.reload();
 			}
-		}).always(function (data) {
+		}).always(function(data){
 			$("#assign-dialog")[0].dialog.hideDialog();
 			$("#assign-dialog")[0].dialog.hideLoader();
 			marker.resetView(marker);

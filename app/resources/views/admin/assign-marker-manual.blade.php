@@ -37,38 +37,23 @@
 				</thead>
 				<tbody>
 					@foreach($students as $student)
-						<tr class="cursor--pointer" 
-							@if(!empty($student->project) && !empty($student->project->supervisor))
-								data-supervisor-id="{{ $student->project->supervisor->id }}"
-								data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}"
+						@if(!is_null($student->project) && !is_null($student->project->supervisor))
+							<tr class="cursor--pointer" 
+									data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}"
+									@if(!empty($student->project->marker)) data-marker-id="{{ $student->project->marker->id }}" @endif
+									data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" 
+									data-project-id="{{ $student->project->id }}" data-project-title="{{ $student->project->title }}">
+								<td>{{ $student->getName() }}</td>
+								<td>{{ $student->project->title }}</td>
+								<td>{{ $student->project->supervisor->user->getFullName() }}</td>
 
-								@if($student->project_status != 'accepted')
-									data-show-warning="true"
+								@if(empty($student->project->marker))
+									<td>None</td>
+								@else
+									<td>{{ $student->project->marker->user->getFullName() }}</td>
 								@endif
-							@endif
-
-							@if(!empty($student->project) && !empty($student->project->marker))
-								data-marker-id="{{ $student->project->marker->id }}" 
-							@endif
-
-							@if(!empty($student->project) && $student->project_status == 'accepted')
-								data-project-id="{{ $student->project->id }}" 
-								data-project-title="{{ $student->project->title }}"
-							@endif
-
-							data-student-id="{{ $student->user->id }}" 
-							data-student-name="{{ $student->getName() }}" 
-						>
-							<td>{{ $student->getName() }}</td>
-							<td>{{ empty($student->project) ? '-' : $student->project->title }}</td>
-							<td>{{ (empty($student->project) || empty($student->project->supervisor)) ? '-' : $student->project->supervisor->user->getFullName() }}</td>
-
-							@if(empty($student->project->marker))
-								<td>None</td>
-							@else
-								<td>{{ $student->project->marker->user->getFullName() }}</td>
-							@endif
-						</tr>
+							</tr>
+						@endif
 					@endforeach
 				</tbody>
 			</table>
@@ -105,15 +90,7 @@
 		</div>
 
 		<div class="alert alert-warning mt-3">
-			<span>💡</span><span class="ml-2">Have you selected the correct second marker?</span>
-		</div>
-
-		<div id="AssignModalNotAcceptedWarning" class="alert alert-danger mt-3" style="display: none">
-			<span>⚠️</span>
-			<span class="ml-2">
-				<b>WARNING:</b> This student has not been accepted for this project.
-				Assigning them a Second Marker will remove their current project selection and assign them a temporary project.
-			</span>
+			<span>&#128161;</span><span class="ml-2">Have you selected the correct second marker?</span>
 		</div>
 
 		<div class="row mt-4 mb-5">
