@@ -364,6 +364,8 @@ class ProjectAdminController extends Controller
 	 */
 	public function calculateSecondMarkers(Request $request)
 	{
+		set_time_limit(120);
+
 		$maxStudentsPerSupervisor = PHP_INT_MAX;
 
 		if (!empty($request->max_students_per_supervisor))
