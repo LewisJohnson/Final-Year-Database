@@ -203,9 +203,11 @@
 
 			<div class="card-body">
 				<div class="form-group">
-					@foreach(SussexProjects\Mode::getOldProjectYears() as $oldYear)
-						{{ $oldYear->project_year }}
-					@endforeach
+					<ul>
+						@foreach(SussexProjects\Mode::getOldProjectYears() as $oldYear)
+							<li>{{ $oldYear->project_year }}</li>
+						@endforeach
+					</ul>
 				</div>
 			</div>
 		</div>
