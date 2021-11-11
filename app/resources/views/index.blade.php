@@ -298,7 +298,7 @@
 									@foreach($projects as $project)
 										<div class="col-12 col-md-6 mb-2">
 											<div class="border p-2 bg-light">
-												<a class="w-75 d-inline-block text-truncate" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+												<a class="w-75 d-inline-block text-truncate" style="vertical-align: middle;" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
 
 												<div class="favourite-container cursor--pointer" data-project-id="{{ $project->id }}">
 													<svg class="favourite" title="Remove from favourites" viewBox="0 0 24 24" height="24" width="24">
