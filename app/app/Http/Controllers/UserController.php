@@ -495,7 +495,10 @@ class UserController extends Controller
 
 					if ($user->active_year != $userForm['active_year'])
 					{
-						$user->student->project->evaluation->delete();
+						if($user->student->project != null && $user->student->project->evaluation != null)
+						{
+							$user->student->project->evaluation->delete();
+						}
 					}
 				}
 				else
