@@ -7,7 +7,7 @@
 
 <br>
 
-<p>@if(ctype_alpha(Session::get('education_level')['longName']) && preg_match('/^[aeiou]/i', Session::get('education_level')['longName'])) An @else A @endif {{ Session::get('education_level')['longName'] }} student, <b>{{ $student->user->getFullName() }}</b>, has proposed a project titled <b><a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a></b> to you.</p>
+<p>@if(ctype_alpha(Session::get('education_level')['longName']) && preg_match('/^[aeiou]/i', Session::get('education_level')['longName'])) An @else A @endif {{ Session::get('education_level')['longName'] }} student, <b>{{ $student->user->getFullName() }}</b>, has proposed a project titled <b><a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department'), 'utm_medium' => 'email']) }}">{{ $project->title }}</a></b> to you.</p>
 
 @if($supervisorAcceptDateIsInFuture)
 	<p class="accept-date-in-future">You can not make accept or reject {{ $student->user->first_name }} until {{ $supervisorAcceptDate }}.</p>

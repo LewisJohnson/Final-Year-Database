@@ -10,7 +10,7 @@
 						</div>
 					</th>
 					<th>Student Name</th>
-					<th>Candidate No.</th>
+					<th class="js-unsortable">Candidate No.</th>
 					<th>Second Marker</th>
 					<th>Project Title</th>
 					@if($showEvaluationButton)

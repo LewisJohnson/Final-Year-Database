@@ -189,6 +189,8 @@ class SupervisorController extends Controller
 			return $error;
 		}
 
+		$emailSuccess = true;
+
 		try {
 			// Send accepted email
 			Mail::to($student->user->email)
@@ -196,15 +198,12 @@ class SupervisorController extends Controller
 		}
 		catch (\Exception $e)
 		{
-			return response()->json(array(
-				'successful'       => true,
-				'email_successful' => false,
-				'message'          => $student->user->first_name . ' was accepted. However, the confirmation email failed to send.',
-			));
+			$emailSuccess = false;
 		}
 
 		return response()->json(array(
 			'successful' => true,
+			'email_successful' => $emailSuccess,
 			'message'    => $student->user->first_name . ' has been accepted.',
 		));
 	}
@@ -254,7 +253,8 @@ class SupervisorController extends Controller
 			$student->save();
 		});
 
-		$emailError = false;
+		$emailSuccess = true;
+		
 		try {
 			// Send declined email
 			Mail::to($student->user->email)
@@ -262,21 +262,12 @@ class SupervisorController extends Controller
 		}
 		catch (\Exception $e)
 		{
-			$emailError = true;
-		}
-
-		if ($emailError)
-		{
-			return response()->json(array(
-				'successful'       => true,
-				'email_successful' => false,
-				'message'          => $student->user->first_name . ' has been rejected.',
-			));
+			$emailSuccess = false;
 		}
 
 		return response()->json(array(
 			'successful'       => true,
-			'email_successful' => true,
+			'email_successful' => $emailSuccess,
 			'message'          => $student->user->first_name . ' has been rejected.',
 		));
 	}

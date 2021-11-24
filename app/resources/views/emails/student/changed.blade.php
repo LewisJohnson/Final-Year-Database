@@ -7,6 +7,6 @@
 
 <br>
 
-<p><b>{{ $supervisor->user->getFullName() }}</b> has changed the content of your proposed project <a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department')]) }}">{{ $project->title }}</a>.</p>
+<p><b>{{ $supervisor->user->getFullName() }}</b> has changed the content of your proposed project <a href="{{ action('ProjectController@show', ['project' => $project, 'educationLevel' => Session::get('education_level')['shortName'], 'department' => Session::get('department'), 'utm_medium' => 'email']) }}">{{ $project->title }}</a>.</p>
 
 @endsection
