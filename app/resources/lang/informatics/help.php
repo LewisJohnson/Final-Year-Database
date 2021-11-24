@@ -181,9 +181,9 @@ return [
 	'help_tab_system_admin_content' =>
 		'<p>A user logged in with administrator permissions will have the Administrator Options menu displayed, this will make the following available: </p>
 		<ul>
-			<li><b>System Dashboard</b><br>
+			<li><b>System Settings</b><br>
 				Here you can configure parameters for the system. Please note, each department has a separate configuration, so you will have to swap departments to change the one you want.</li>
-			<li class="sub-help">System Admin > System Dashboard</li>
+			<li class="sub-help">System Admin > System Settings</li>
 
 			<li><b>User Agent Strings</b><br>
 				If enabled, here you can see the <a href="https://en.wikipedia.org/wiki/User_agent">user agent strings</a> of users and which page they were on.</li>
