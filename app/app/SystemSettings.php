@@ -55,14 +55,13 @@ class SystemSettings extends Model
 	 */
 	public function getTable()
 	{
-		if (Session::get('department') !== null)
+		if (Session::get('department') !== null && Session::get('education_level') !== null)
 		{
 			return Session::get('department') . '_system_settings_' . get_el_short_name();
 		}
-		else
-		{
-			throw new Exception('Database not found.');
-		}
+
+		// Default system settings table
+		return 'system_settings';
 	}
 
 	/**

@@ -17,11 +17,22 @@ class AddSystemSettingsTable extends Migration
 	 */
 	public function up()
 	{
+		Schema::create('system_settings', function (Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('section');
+			$table->string('name')->unique();
+			$table->string('type');
+			$table->text('description');
+			$table->text('value');
+			$table->timestamps();
+		});
+
 		foreach (get_departments() as $key => $department)
 		{
 			foreach (get_education_levels() as $key => $level)
 			{
-				Schema::create($department . '_system_settings_' . $level['shortName'], function (Blueprint $table) use ($department, $level)
+				Schema::create($department.'_system_settings_'.$level['shortName'], function (Blueprint $table) use ($department, $level)
 				{
 					$table->increments('id');
 					$table->string('section');
@@ -42,6 +53,8 @@ class AddSystemSettingsTable extends Migration
 	 */
 	public function down()
 	{
+		Schema::dropIfExists('system_settings');
+
 		foreach (get_departments() as $key => $department)
 		{
 			foreach (get_education_levels() as $key => $level)
