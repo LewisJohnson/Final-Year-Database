@@ -6,7 +6,7 @@
 	$randIndex = array_rand($helloArray, 1);
 @endphp
 
-<div class="centered mw-1000 container-fluid">
+<div class="centered mw-1200 container-fluid">
 	@if(Auth::check())
 		<h1 class="text-center">{{ $helloArray[$randIndex] }}, {{ Auth::user()->first_name }}.</h1>
 		<h6 class="text-center" style="opacity: 0.5">{{ ucfirst(Session::get('department')) }} | {{ ucfirst(get_el_long_name()) }}</h6>
