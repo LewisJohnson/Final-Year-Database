@@ -1303,8 +1303,8 @@
 
 	if(window["showLoginDialog"] == true){
 		window["loginDialog"].showDialog();
-		$("#redirect-block p").text(window["redirectUrl"]);
-		$("#redirect-block").show();
+		$("#RedirectBlockUrl").text(window["redirectUrl"]);
+		$("#RedirectBlock").show();
 	}
 
 });
