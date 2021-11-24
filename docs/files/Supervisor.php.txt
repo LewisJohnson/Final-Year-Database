@@ -206,7 +206,7 @@ class Supervisor extends Model{
 	 *
 	 * @return array A key/value array where the key is the student and the value is their selected project
 	 */
-	public function getIntrestedStudents(){
+	public function getInterestedStudents(){
 		$project = new Project;
 		$student = new Student;
 		$offers = array();

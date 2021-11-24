@@ -50,7 +50,7 @@
 				unset(
 					$onOfferProjects, $onOfferProjectsCount,
 					$acceptedStudents, $acceptedStudentsCount,
-					$intrestedStudents, $intrestedStudentsCount,
+					$interestedStudents, $interestedStudentsCount,
 					$proposals, $proposalsCount);
 
 				$onOfferProjects = $supervisor->getProjects('on-offer');
@@ -59,8 +59,8 @@
 				$acceptedStudents = $supervisor->getAcceptedStudents();
 				$acceptedStudentsCount = count($acceptedStudents) ?? 0;
 
-				$intrestedStudents = $supervisor->getInterestedStudents();
-				$intrestedStudentsCount = count($intrestedStudents) ?? 0;
+				$interestedStudents = $supervisor->getInterestedStudents();
+				$interestedStudentsCount = count($interestedStudents) ?? 0;
 
 				$proposals = $supervisor->getStudentProjectProposals();
 				$proposalsCount = count($proposals) ?? 0;
@@ -114,10 +114,10 @@
 					@endif
 
 					{{-- PROJECT OFFERS --}}
-					@if($intrestedStudentsCount > 0)
+					@if($interestedStudentsCount > 0)
 						@foreach($supervisor->getInterestedStudents() as $selected)
 							<tr>
-								<td>@if($loop->iteration == 1)Awaiting Approval ({{ $intrestedStudentsCount }})@endif</td>
+								<td>@if($loop->iteration == 1)Awaiting Approval ({{ $interestedStudentsCount }})@endif</td>
 								<td><a href="{{ action('ProjectController@show', ['project' => $selected['project']]) }}">{{ $selected['project']->title }}</a></td>
 								<td>{{ $selected['student']->getName() }}</td>
 							</tr>

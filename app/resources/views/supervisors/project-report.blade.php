@@ -16,7 +16,7 @@
 	}
 @endphp
 
-{{-- INTRESTED STUDENTS --}}
+{{-- INTERESTED STUDENTS --}}
 @if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
 	<div class="row mt-3">
 		<div class="col-12">
