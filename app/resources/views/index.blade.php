@@ -271,11 +271,11 @@
 								<h3 class="card-title">Your Proposed Projects</h3>
 								<h6 class="card-subtitle mb-2 text-muted">Without a supervisor</h6>
 		
-								<div class="row">
+								<div class="row mt-3">
 									@foreach(Auth::user()->student->getProposedProjectsWithoutSupervisor() as $project)
 										<div class="col-12 col-md-6 mb-2">
-											<div class="d-flex">
-												<a class="w-75 d-inline-block text-truncate" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
+											<div class="border p-2 bg-light d-flex">
+												<a class="w-75 d-inline-block text-truncate" style="vertical-align: middle;" href="{{ action('ProjectController@show', $project->id) }}">{{ $project->title }}</a>
 																						
 												<div class="ml-auto">
 													<a class="btn btn-sm btn-secondary" href="{{ action('StudentController@proposeExistingProjectView', $project) }}">Re-propose</a>
