@@ -28,8 +28,8 @@
 					<td>{{ $piece->department }}</td>
 					<td>{{ $piece->education_level }}</td>
 					<td>{{ $piece->comment }}</td>
-					<td><a class="blue-link" href="mailto:{{ $piece->email }}">{{ $piece->email }}</a></td>
-					<td data-use-hover-value data-hover="{{ $piece->date }}">{{ $piece->date->format('M j, H:i') }}</td>
+					<td><a class="blue-link" href="mailto:{{ $piece->email }}">{{ empty($piece->email) ? 'A User' : $piece->email }}</a></td>
+					<td data-use-hover-value data-hover="{{ $piece->date }}">{{ $piece->date->format('d/m/Y, H:i') }}</td>
 					<td class="text-right">
 						<a class="js-delete-feedback btn btn-sm text-danger" data-id="{{ $piece->id }}" href="{{ action('SystemAdminController@destroyFeedback') }}">X</a>
 					</td>
