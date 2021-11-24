@@ -5,7 +5,7 @@
 		<thead class="thead-light">
 			<tr>
 				<th>ID</th>
-				<th>Registration Number</th>
+				<th>Candidate Number</th>
 				<th>Username</th>
 				<th>First Name</th>
 				<th>Last Name</th>

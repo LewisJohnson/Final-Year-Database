@@ -22,7 +22,7 @@
 					<table class="table w-60">
 						<thead class="thead-light">
 							<tr>
-								<th>Registration Number</th>
+								<th>Candidate Number</th>
 								<th>Last Name</th>
 								<th>First Name</th>
 								<th>Programme</th>
@@ -114,7 +114,7 @@
 											<input type="checkbox" name="update_duplicate_entries" value="update_duplicate_entries" id="update_duplicate_entries" onchange="$('#import-students-submit').addClass('btn-warning')">
 											<label class="ml-1" for="update_duplicate_entries">Update duplicate entries</label>
 											<p class="text-warning ml-4">
-												This option will update the Username, Last Name, First Name and Programme of a Student if a matching registration number is found.
+												This option will update the Username, Last Name, First Name and Programme of a Student if a matching candidate number is found.
 											</p>
 										</div>
 									</div>
