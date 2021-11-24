@@ -934,39 +934,6 @@ class ProjectAdminController extends Controller
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	/**
-	 * @param $student
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
-	/**
-	 * @param $request
-	 * @param $student
-	 * @param $project
-	 */
 	public function assignProject(Request $request)
 	{
 		$this->validate(request(), [
