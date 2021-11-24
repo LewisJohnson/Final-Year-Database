@@ -27,7 +27,7 @@
 	}
 </style>
 
-<div class="centered animated-entrance mw-1000 eoya-container">
+<div class="centered mw-1000 eoya-container">
 	<div class="text-center">
 		<h1>End of Year Archive</h1>
 		<p class="text-muted">The end of year archive will do the following in a single transaction</p>

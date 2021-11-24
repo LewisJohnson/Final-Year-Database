@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section ('content')
-	<div class="centered animated-entrance mw-800">
+	<div class="centered mw-800">
 		<div class="card">
 			<h5 class="card-header">About</h5>
 			<div class="card-body">
