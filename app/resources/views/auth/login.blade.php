@@ -28,10 +28,13 @@
 					</div>
 	
 					<p class="help-block" style="display: none;"></p>
-					<div id="redirect-block" style="display: none;">
-						<h3 style="margin-bottom: 5px">After login, you will be redirected to</h3>
-						<p style="margin-top: 0"></p>
-					</div>
+
+					@if(Session::get("after_login") != null)
+						<div id="RedirectBlock" style="display: none;">
+							<h3 style="margin-bottom: 5px">After login, you will be redirected to</h3>
+							<p style="margin-top: 0">{{ Session::get('after_login') }}</p>
+						</div>
+					@endif
 	
 					<div class="text-right mt-3">
 						<button class="btn btn-primary" type="submit">LOG IN</button>
@@ -42,10 +45,7 @@
 	</div>
 
 	<script>
-		@if(Session::get("after_login") != null)
-			$("#redirect-block p").text("{{ Session::get('after_login') }}");
-			$("#redirect-block").show();
-		@endif
+		
 	</script>
 @else
 	<div id="login-dialog" data-type="ajax" class="dialog login" data-dialog="login">
@@ -67,7 +67,7 @@
 		
 						<div class="form-group">
 							<label for="password">Password</label>
-							<input class="form-control" id="password" type="password" name="password" required>
+							<input class="form-control" id="password" type="password" name="password" required value="password">
 						</div>
 		
 						<div class="form-group" title="This is not recommended for shared devices">
@@ -78,9 +78,9 @@
 						</div>
 		
 						<p class="help-block" style="display: none;"></p>
-						<div id="redirect-block" style="display: none;">
-							<h3 style="margin-bottom: 5px">After login, you will be redirected to</h3>
-							<p style="margin-top: 0"></p>
+
+						<div id="RedirectBlock" style="display: none;" class="alert alert-info mt-3">
+							<span><span>&#128161;</span> After login, you will be redirected to <b id="RedirectBlockUrl"></b></span>
 						</div>
 					</div>
 				</div>
