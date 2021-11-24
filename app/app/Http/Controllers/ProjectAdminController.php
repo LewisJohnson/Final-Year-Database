@@ -606,11 +606,13 @@ class ProjectAdminController extends Controller
 			{
 				$ar["fName"] = $project->getAcceptedStudent()->user->first_name;
 				$ar["lName"] = $project->getAcceptedStudent()->user->last_name;
+				$ar["cNo"] = $project->getAcceptedStudent()->registration_number;
 			}
 			else
 			{
 				$ar["fName"] = '-';
 				$ar["lName"] = '-';
+				$ar["cNo"] = '-';
 			}
 
 			$ar["projectTitle"] = $project->title;
@@ -624,7 +626,7 @@ class ProjectAdminController extends Controller
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'First Name', 'Last Name', 'Project Title', 'Supervisor', 'Second Marker',
+			'First Name', 'Last Name', 'Candidate Number', 'Project Title', 'Supervisor', 'Second Marker',
 		));
 
 		foreach ($results as $result)

@@ -4,15 +4,17 @@
 
 	<h2>Second Marker <small class="text-muted">/ Export Second Marker Data</small></h2>
 	<div class="alert alert-info mt-3">
-		<span>&#128161;</span><span class="ml-2">The second marker export includes the student's name followed by their project, supervisor and second marker.</span>
+		<span>&#128161;</span><span class="ml-2">The second marker export includes the student's name followed by their Candidate Number, Project Title, Supervisor name and Second Marker name.</span>
 	</div>
 
 	<h4 class="mt-5">Example Export</h4>
 	<div class="table-responsive">
-		<table class="table table-hover bg-white mw-800">
+		<table class="table table-hover bg-white mw-1000">
 			<thead>
 				<tr>
-					<th>Student Name</th>
+					<th>Student First Name</th>
+					<th>Student Last Name</th>
+					<th>Candidate No.</th>
 					<th>Project Title</th>
 					<th>Supervisor</th>
 					<th>Second Marker</th>
@@ -20,19 +22,25 @@
 			</thead>
 			<tbody>
 					<tr>
-						<td>John Smith</td>
+						<td>John</td>
+						<td>Smith</td>
+						<td>28394756</td>
 						<td>Machine Learning</td>
 						<td>Prof Jonathan Smith</td>
 						<td>Prof Wesley Dale</td>
 					</tr>
 					<tr>
-						<td>Timothy Atkins</td>
+						<td>Timothy</td>
+						<td>Atkins</td>
+						<td>39384710</td>
 						<td>Haskell Compiler</td>
 						<td>Dr Rex Akguinda</td>
 						<td>Prof Jonathan Smith</td>
 					</tr>
 					<tr>
-						<td>Charles Van Der Pol</td>
+						<td>Charles</td>
+						<td>Van Der Pol</td>
+						<td>29384712</td>
 						<td>Spatial Audio Engine</td>
 						<td>Dr Harry Yolks</td>
 						<td>Prof Wesley Dale</td>
