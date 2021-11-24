@@ -10,6 +10,7 @@
 						</div>
 					</th>
 					<th>Student Name</th>
+					<th>Candidate No.</th>
 					<th>Second Marker</th>
 					<th>Project Title</th>
 					@if($showEvaluationButton)
@@ -31,6 +32,10 @@
 						<td style="line-height: 16px">
 							{{ $accepted['student']->user->getFullName() }}<br>
 							<small><a href="mailto:{{ $accepted['student']->user->email }}">{{ $accepted['student']->user->email }}</a></small>
+						</td>
+
+						<td style="line-height: 16px">
+							{{ $accepted['student']->registration_number }}<br>
 						</td>
 
 						@if(isset($accepted['project']->marker))
