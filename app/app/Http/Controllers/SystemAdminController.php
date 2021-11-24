@@ -52,47 +52,6 @@ class SystemAdminController extends Controller
 	}
 
 	/**
-	 * System administrator dashboard view.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function systemDashboardView()
-	{
-		return view('admin.system.dashboard');
-	}
-
-	/**
-	 * Updates the system configuration
-	 * The view for this request is systemDashboard()
-	 *
-	 *
-	 * @param  Request                     $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function updateSystemConfiguration(Request $request)
-	{
-		foreach ($request->all() as $key => $value)
-		{
-			if (substr($key, -4, 4) != "json")
-			{
-				// This is to convert strings to PHP booleans
-				if ($value === "true")
-				{
-					$value = true;
-				}
-				if ($value === "false")
-				{
-					$value = false;
-				}
-
-				get_config_json($request[$key . "-json"], $value);
-			}
-		}
-
-		return redirect()->action('SystemAdminController@systemDashboardView');
-	}
-
-	/**
 	 * User agent string view.
 	 *
 	 *
