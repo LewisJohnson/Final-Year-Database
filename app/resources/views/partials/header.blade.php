@@ -61,7 +61,7 @@
 @endif
 
 <div class="header-container d-print-none">
-	<header class="cd-morph-dropdown" style="background: {{ get_config_json('header.background.value') }}">
+	<header class="cd-morph-dropdown" style="background: {{ SussexProjects\SystemSettings::get('theme_colour')->value }}">
 		<div class="d-flex">
 			<a class="text-white h4 font-weight-bolder p-3 m-0" href="{{ action('HomeController@index') }}" title="Home">
 				@if(Session::get('education_level') != null)
@@ -71,7 +71,7 @@
 				@endif
 			</a>
 
-			<a class="d-block ml-auto mr-2" href="https://www.sussex.ac.uk" title="Suusex University Logo" style="background-size: contain;width: 50px;height: 50px;background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
+			<a class="d-block ml-auto mr-2" href="https://www.sussex.ac.uk" title="Logo" style="background-size: contain;width: 50px;height: 50px;background-image: url('{{ SussexProjects\SystemSettings::get('logo_url')->value }}')"></a>
 		</div>
 
 		@if(Auth::check() || ldap_guest())
@@ -303,8 +303,8 @@
 											<h5>System</h5>
 											<ul>
 												<li>
-													<a class="btn w-100 text-left text-primary" href="{{ action('SystemAdminController@systemDashboardView') }}">
-														<span>@include('svg.tune')<span>System Dashboard</span></span>
+													<a class="btn w-100 text-left text-primary" href="{{ action('SystemSettingsController@index') }}">
+														<span>@include('svg.tune')<span>System Settings</span></span>
 													</a>
 												</li>
 

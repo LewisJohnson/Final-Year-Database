@@ -12,7 +12,7 @@
 				<a href="{{ action('HomeController@index') }}" title="Home"><h1>Error {{ $exception->getStatusCode() }} @if($exception->getMessage() != "")({{ $exception->getMessage() }})@endif</h1></a>
 
 				<div class="logo-container">
-					<a href="{{ action('HomeController@index') }}" class="logo" style="background-image: url('{{ get_config_json("header.logo_url.value") }}')"></a>
+					<a href="{{ action('HomeController@index') }}" class="logo" style="background-image: url('{{ SussexProjects\SystemSettings::get('logo_url')->value }}')"></a>
 				</div>
 			</header>
 		</div>

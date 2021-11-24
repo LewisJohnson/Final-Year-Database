@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-@if(get_config_json('user_agent.collect_user_agent.value'))
+@if(SussexProjects\SystemSettings::get('collect_user_agent')->value == "true")
 	<div class="centered mw-1200">
 		<h1>User Agent Strings</h1>
 		<h3>An overview of user agent strings.</h3>
@@ -14,9 +14,9 @@
 			@endif
 		</div>
 
-		@if(!get_config_json('user_agent.collect_referrer.value'))
+		@if(SussexProjects\SystemSettings::get('collect_referrer')->value != "true")
 			<div class="alert alert-info mt-3">
-				<span>&#128161;</span><span class="ml-2">Referral URLs are currently not being collected. You can turn it back on in the system dashboard.</span>
+				<span>&#128161;</span><span class="ml-2">Referral URLs are currently not being collected. You can turn it back on in the System Settings.</span>
 			</div>
 		@endif
 
@@ -25,7 +25,7 @@
 				<tr>
 					<th>User Agent</th>
 
-					@if(get_config_json('user_agent.collect_referrer.value'))
+					@if(SussexProjects\SystemSettings::get('collect_referrer')->value == "true")
 						<th>Referrer</th>
 					@else
 						<th></th>
@@ -40,8 +40,8 @@
 	</div>
 @else
 	<div class="centered mw-800 text-center">
-		<h1>User agent string collection is disabled.</h1>
-		<p class="text-muted">You can turn it back on in the <a href="{{ action('SystemAdminController@systemDashboardView') }}">system dashboard</a>.</p>
+		<h1>User Agent String collection is currently disabled.</h1>
+		<p class="text-muted">You can turn it back on in the <a href="{{ action('SystemSettingsController@index') }}">System Settings</a>.</p>
 	</div>
 @endif
 

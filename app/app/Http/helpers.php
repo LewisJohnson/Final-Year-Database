@@ -34,56 +34,6 @@ if (!function_exists('lang_sess'))
 	}
 }
 
-if (!function_exists('get_config_json'))
-{
-	/**
-	 * This function is used to get or set the department
-	 * specific JSON configuration file or a value in the said file.
-	 *
-	 *
-	 * @param  string              $key   The key to search for.
-	 * @param  string              $value The value to set.
-	 * @return string|boolean|null If $key is null, the whole file is returned. If $value is null, the key-value is returned. If $key and $value is set, a boolean is returned.
-	 */
-	function get_config_json($key = null, $value = null)
-	{
-		if (Session::get('department') == null)
-		{
-			$config = json_decode(Storage::disk('local')
-					->get(config("app.default_department_config_file")), true);
-		}
-		else
-		{
-			$fileDir = config("app.department_config_dir") . "\\" . Session::get('department') . ".json";
-			$config = json_decode(Storage::disk('local')->get($fileDir), true);
-		}
-
-		if ($key === null)
-		{
-			// If no key, return the whole file
-			return $config;
-		}
-
-		if ($value === null)
-		{
-			// If only key, return value
-			return data_get($config, $key);
-		}
-
-		if (isset($key) && isset($value))
-		{
-			// If key and value, set value
-			$key .= ".value";
-			data_set($config, $key, $value);
-			Storage::disk('local')->put($fileDir, json_encode($config, JSON_PRETTY_PRINT));
-
-			return true;
-		}
-
-		return null;
-	}
-}
-
 if (!function_exists('get_education_levels'))
 {
 	/**

@@ -26,7 +26,44 @@ ins {
 }
 
 footer {
-	//margin-top: 53vh !important;
+	.rainbow {
+		display: flex;
+		flex-direction: row;
+		width: 80%;
+		margin-top: 5px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 0;
+
+		div {
+			width: 100%;
+			height: 10px;
+		}
+
+		:nth-child(1) {
+			background: rgb(254, 163, 170);
+		}
+
+		:nth-child(2) {
+			background: rgb(248, 184, 139);
+		}
+
+		:nth-child(3) {
+			background: rgb(250, 248, 132);
+		}
+
+		:nth-child(4) {
+			background: rgb(186, 237, 145);
+		}
+
+		:nth-child(5) {
+			background: rgb(178, 206, 254);
+		}
+
+		:nth-child(6) {
+			background: rgb(242, 162, 232);
+		}
+	}
 }
 
 

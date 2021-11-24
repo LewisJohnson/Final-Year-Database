@@ -6,6 +6,7 @@
     "/css/ie.css": "/css/ie.css",
     "/css/accessible-contrast.css": "/css/accessible-contrast.css",
     "/css/accessible-font.css": "/css/accessible-font.css",
+    "/css/accessible-dark-mode.css": "/css/accessible-dark-mode.css",
     "/js/main.js": "/js/main.js",
     "/js/views/project-popularity.js": "/js/views/project-popularity.js",
     "/js/views/supervisor.js": "/js/views/supervisor.js",
@@ -13,6 +14,7 @@
     "/js/views/project-preview.js": "/js/views/project-preview.js",
     "/js/views/project-evaluation.js": "/js/views/project-evaluation.js",
     "/js/views/marker-assign.js": "/js/views/marker-assign.js",
+    "/js/views/admin/assign-student-project.js": "/js/views/admin/assign-student-project.js",
     "/js/views/admin.js": "/js/views/admin.js",
     "/js/jquery-helpers.js": "/js/jquery-helpers.js",
     "/js/helpers.js": "/js/helpers.js"

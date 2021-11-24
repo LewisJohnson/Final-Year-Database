@@ -148,13 +148,10 @@ Route::group(['middleware' => ['web', 'systemAdministrator', 'checkDepartment']]
 {
 
 	// System admin dashboard
-	Route::get('admin/dashboard', 'SystemAdminController@systemDashboardView');
+	Route::get('admin/settings', 'SystemSettingsController@index');
 
 	// Updated configuration post
-	Route::post('admin/dashboard/system', 'SystemAdminController@updateSystemConfiguration');
-
-	// Add new department
-	Route::post('admin/system/new-department', 'SystemAdminController@newDepartment');
+	Route::post('admin/settings', 'SystemSettingsController@update');
 
 	// User agent view
 	Route::get('system/user-agent', 'SystemAdminController@userAgentView');

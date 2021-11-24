@@ -6,7 +6,7 @@
 	$randIndex = array_rand($helloArray, 1);
 @endphp
 
-<div class="centered animated-entrance mw-1000 container-fluid">
+<div class="centered mw-1000 container-fluid">
 	@if(Auth::check())
 		<h1 class="text-center">{{ $helloArray[$randIndex] }}, {{ Auth::user()->first_name }}.</h1>
 		<h6 class="text-center" style="opacity: 0.5">{{ ucfirst(Session::get('department')) }} | {{ ucfirst(get_el_long_name()) }}</h6>
@@ -232,11 +232,11 @@
 					<div class="card">
 						<div class="card-body">
 							<h3 class="card-title">System Administrator</h3>
-							<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the system dashboard to see the actions you can perform.</p>
+							<p>{{ Auth::user()->first_name }}, you are a system administrator. Take a look at the System Settings to see the actions you can perform.</p>
 		
 						</div>
 						<div class="card-footer">
-							<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+							<a href="{{ action('SystemSettingsController@index') }}">System Settings</a>
 						</div>
 					</div>
 				</div>

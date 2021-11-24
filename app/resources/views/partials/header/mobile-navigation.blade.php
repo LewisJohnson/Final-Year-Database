@@ -59,7 +59,7 @@
 				<div class="col-6">
 					<h6 class="text-uppercase">System</h6>
 					<div class="list-group">
-						<a href="{{ action('SystemAdminController@systemDashboardView') }}">System Dashboard</a>
+						<a href="{{ action('SystemSettingsController@index') }}">System Settings</a>
 						<a href="{{ action('SystemAdminController@userAgentView') }}">User Agent Strings</a>
 						<a href="{{ action('SystemAdminController@feedback') }}">User Feedback</a>
 					</div>

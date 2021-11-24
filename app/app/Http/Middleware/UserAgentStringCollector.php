@@ -9,6 +9,7 @@ namespace SussexProjects\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Cookie;
 use SussexProjects\UserAgentString;
+use SussexProjects\SystemSettings;
 
 class UserAgentStringCollector
 {
@@ -23,7 +24,7 @@ class UserAgentStringCollector
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (!get_config_json('user_agent.collect_user_agent.value'))
+		if (SystemSettings::get('collect_user_agent')->value != "true")
 		{
 			return $next($request);
 		}
@@ -43,7 +44,7 @@ class UserAgentStringCollector
 		$userAgentString = new UserAgentString();
 		$userAgentString->user_agent = $request->header('User-Agent');
 
-		if (isset($_SERVER["HTTP_REFERER"]) && get_config_json('user_agent.collect_referrer.value'))
+		if (isset($_SERVER["HTTP_REFERER"]) && SystemSettings::get('collect_referrer')->value == "true")
 		{
 			$ref = mb_convert_encoding($_SERVER["HTTP_REFERER"], 'UTF-8', 'UTF-8');
 			$ref = htmlentities($ref, ENT_QUOTES, 'UTF-8');
