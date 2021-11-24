@@ -765,7 +765,7 @@ class ProjectEvaluationController extends Controller
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'Registration Number', 'First name', 'Last name', 'Programme', 'Project Title',
+			'Candidate Number', 'First name', 'Last name', 'Programme', 'Project Title',
 			'Agreed Poster Mark', 'Agreed Presentation Mark', 'Agreed Dissertation Mark',
 		));
 
@@ -953,7 +953,7 @@ class ProjectEvaluationController extends Controller
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'Registration Number', 'Student First name', 'Student Last name', 'Programme',
+			'Candidate Number', 'Student First name', 'Student Last name', 'Programme',
 			'Project Title', 'Supervisor Name', 'Marker Name', 'Feedback',
 		));
 

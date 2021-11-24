@@ -366,6 +366,8 @@ class ProjectAdminController extends Controller
 	{
 		set_time_limit(120);
 
+		Log::info("CALC: MAX (Number of projects)");
+
 		$maxStudentsPerSupervisor = PHP_INT_MAX;
 
 		if (!empty($request->max_students_per_supervisor))
@@ -771,7 +773,7 @@ class ProjectAdminController extends Controller
 		$file = fopen($filepath, 'w');
 
 		fputcsv($file, array(
-			'Registration Number', 'Username', 'Programme',
+			'Candidate Number', 'Username', 'Programme',
 			'First Name', 'Last Name',
 			'Project Title', 'Supervisor', 'Second Marker',
 			'Agreed Poster Mark', 'Agreed Presentation Mark', 'Agreed Dissertation Mark',

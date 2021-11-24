@@ -755,7 +755,7 @@ class StudentController extends Controller
 
 						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() !== null)
 						{
-							throw new Exception("Student at row:" . $i . ". The registration number \"" . $csv[$i][0] . "\" is already in use.");
+							throw new Exception("Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.");
 						}
 						if ($csv[$i][1] === NULL)
 						{

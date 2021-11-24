@@ -90,7 +90,7 @@
 		if ($(this).find('#update_duplicate_entries').is(":checked")) {
 			formData.append('update_duplicate_entries', true);
 			modalDesc += '<hr><p class="text-warning">OPTION: Update duplicate entries<br>';
-			modalDesc += '<span class="text-muted">This will update the Username, Last Name, First Name and Programme of a Student if a matching registration number is found.</span></p>';
+			modalDesc += '<span class="text-muted">This will update the Username, Last Name, First Name and Programme of a Student if a matching candidate number is found.</span></p>';
 		}
 
 		if($(this).find('#empty_programmes').is(":checked")){
