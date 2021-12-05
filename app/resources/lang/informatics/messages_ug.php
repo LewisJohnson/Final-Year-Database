@@ -41,7 +41,7 @@ return [
 	'footer_maintainer_email' => 'bn345@susx.ac.uk', // You are free to comment out this line.
 
 	/* 4. HEADER */
-	'homepage_main_header' => 'Informatics Final Year Projects',
+	'homepage_main_header' => 'Informatics Final Year Projects | Undergraduate',
 	'toolbar_text' => 'Undergraduate',
 
 	// Help links are shown in the help->links dropdown, you may add up to 20 help links.
