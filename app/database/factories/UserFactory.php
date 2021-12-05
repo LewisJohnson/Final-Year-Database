@@ -9,7 +9,7 @@ use Faker\Generator as Faker;
 $factory->define(SussexProjects\User::class, function (Faker $faker)
 {
 	// Sussex style username
-	$username = $faker->randomLetter . $faker->randomLetter . $faker->numberBetween(0, 999);
+	$username = $faker->randomLetter.$faker->randomLetter.$faker->numberBetween(0, 999);
 
 	return [
 		'first_name' => $faker->firstName,
