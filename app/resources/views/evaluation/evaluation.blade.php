@@ -72,34 +72,6 @@
 
 @section('content')
 
-{{-- todo: delete this eventually --}}
-@if(empty($_COOKIE['seen_project_evaluation_autosave']))
-	<script>
-		var message = 
-			"Hey there, some users couldn't find the save button... so we've <b>added autosave</b>.<br><br> " + 
-			"After you change a slider or add a comment, the evaluation will now automatically be saved. " + 
-			"In addition to this, we've added a confirmation before you leave the page, just in case.";
-
-		$.confirm({
-			type: 'blue',
-			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div></div>',
-			theme: 'modern',
-			escapeKey: true,
-			animateFromElement : true,
-			backgroundDismiss: false,
-			title: 'User Experience Changes',
-			content: message,
-			buttons: {
-				okay: {
-					action: function() {
-						setCookie('seen_project_evaluation_autosave', true, 365);
-					}
-				},
-			}
-		});
-	</script>
-@endif
-
 <div class="centered mw-1200 js-show-scroll-top">
 	<div class="row bg-white shadow-sm rounded p-2 border mx-1">
 		{{-- FINALISE BANNER --}}
