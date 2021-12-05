@@ -154,7 +154,7 @@ return [
 		// SussexProjects\Providers\BroadcastServiceProvider::class,
 		SussexProjects\Providers\EventServiceProvider::class,
 		SussexProjects\Providers\RouteServiceProvider::class,
-
+		SussexProjects\Providers\RepositoryServiceProvider::class,
 	],
 
 	/*

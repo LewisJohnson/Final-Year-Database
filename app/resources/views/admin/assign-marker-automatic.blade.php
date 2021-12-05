@@ -15,12 +15,11 @@
 			&nbsp; &nbsp; <b>There are still {{ SussexProjects\Student::getAllStudentsWithoutProjectCount() }} students without a project.</b>
 		</div>
 	@else
-		<div class="alert alert-primary" role="alert">
-			 &#128161;
-			Using this tool will reset all currently assigned second markers.
+		<div class="alert alert-warning" role="alert">
+			⚠️ Using this tool will reset all currently assigned second markers.
 		</div>
 
-		@if(SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectWithoutSecondMarker() === null)
+		@if($allProjectsHaveMarkerAssigned)
 			<div class="alert alert-danger" role="alert">
 				&#9888;&#65039;
 				<b>Warning!</b> All projects already have a second marker assigned to them. <a id="show-automatic-assignment-report" href="#">Click to view second marker report table.</a>

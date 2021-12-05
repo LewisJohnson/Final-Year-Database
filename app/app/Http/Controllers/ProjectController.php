@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Flash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Stevebauman\Purify\Facades\Purify;
-use SussexProjects\Http\Requests\ProjectForm;
-use SussexProjects\Mail\SupervisorEditedProposedProject;
 use SussexProjects\Mode;
 use SussexProjects\Project;
 use SussexProjects\ProjectTopic;
@@ -25,10 +23,16 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use SussexProjects\Http\Requests\ProjectForm;
+use SussexProjects\Interfaces\IProjectRepository;
+use SussexProjects\Mail\SupervisorEditedProposedProject;
+use Log;
 
 /**
  * The project controller.
- * Handles all functions related to projects.
+ * Handles all controller functions related to projects.
+ * 
+ * @see SussexProjects\Interfaces\IProjectRepository
  */
 class ProjectController extends Controller
 {
@@ -41,8 +45,10 @@ class ProjectController extends Controller
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
 	 */
 	public $htmlPurifyConfig;
+	
+	private $projectRepository;
 
-	public function __construct()
+	public function __construct(IProjectRepository $projectRepository)
 	{
 		parent::__construct();
 		$this->paginationCount = 50;
@@ -61,6 +67,8 @@ class ProjectController extends Controller
 		$config->set('Cache.SerializerPath', base_path('storage/framework/cache'));
 
 		$htmlPurifyConfig = $config;
+
+		//$this->projectRepository = $projectRepository;
 	}
 
 	/**
@@ -943,26 +951,6 @@ class ProjectController extends Controller
 
 		// Fallback
 		return redirect()->action('ProjectController@index');
-	}
-
-	/**
-	 * Returns the first accepted project without a second marker.
-	 *
-	 * @return Project The next accepted project without a second marker.
-	 */
-	public static function getAcceptedProjectWithoutSecondMarker()
-	{
-		$project = new Project();
-		$student = new Student();
-		$user = new User();
-
-		return Project::join($student->getTable() . ' as student', $project->getTable() . '.id', '=', 'student.project_id')
-			->join($user->getTable() . ' as user', 'user.id', '=', 'student.id')
-			->where('user.active_year', Mode::getProjectYear())
-			->where('student.project_status', 'accepted')
-			->whereNull($project->getTable() . '.marker_id')
-			->select($project->getTable() . '.*')
-			->first();
 	}
 
 	public static function getAcceptedProjectWithoutSecondMarkerCount()

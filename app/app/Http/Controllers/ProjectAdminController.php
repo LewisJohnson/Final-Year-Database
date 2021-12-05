@@ -21,6 +21,7 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use SussexProjects\Interfaces\IProjectRepository;
 use Log;
 
 /**
@@ -32,10 +33,14 @@ use Log;
 class ProjectAdminController extends Controller
 {
 
-	public function __construct()
+	private $projectRepository;
+
+	public function __construct(IProjectRepository $projectRepository)
 	{
 		parent::__construct();
+
 		$this->middleware('auth');
+		$this->projectRepository = $projectRepository;
 	}
 
 	/**
@@ -354,7 +359,8 @@ class ProjectAdminController extends Controller
 	 */
 	public function computeSecondMarkerView()
 	{
-		return view('admin.assign-marker-automatic');
+		return view('admin.assign-marker-automatic')
+			->with('allProjectsHaveMarkerAssigned', empty($this->projectRepository->getAcceptedProjectsWithoutSecondMarker()));
 	}
 
 	/**
@@ -404,10 +410,8 @@ class ProjectAdminController extends Controller
 			));
 
 			// Assign students taking lazy score in to consideration
-			while (ProjectController::getAcceptedProjectWithoutSecondMarker() != null)
+			foreach ($this->projectRepository->getAcceptedProjectsWithoutSecondMarker() as $projectToAssign)
 			{
-				// Get the project
-				$projectToAssign = ProjectController::getAcceptedProjectWithoutSecondMarker();
 				Log::info("CALC: Getting project :".$projectToAssign->title);
 
 				// Recalculate scores
@@ -416,7 +420,6 @@ class ProjectAdminController extends Controller
 				// Get the laziest supervisor
 				$laziestSupervisor = $supervisorsWithLazyScore->sortByDesc('lazy_score')->first();
 				Log::info("CALC: Got lazy supervisor ".$laziestSupervisor->user->getFullName(). " with lazy score ".$laziestSupervisor["lazy_score"]);
-
 
 				$projectToAssign->marker_id = $laziestSupervisor->id;
 				$projectToAssign->save();
