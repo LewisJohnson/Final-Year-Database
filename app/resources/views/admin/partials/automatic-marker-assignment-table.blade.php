@@ -4,6 +4,7 @@
 			<th>Supervisor</th>
 			<th>Project Load</th>
 			<th>Actual Load</th>
+			<th>2<sup>nd</sup> Marker Count</th>
 			<th>Target 2<sup>nd</sup> Marker Load</th>
 			<th>Lazy Score</th>
 		</tr>
@@ -13,6 +14,7 @@
 			<tr>
 				<td>{{ $supervisor->user->getFullName() }}</td>
 				<td>{{ $supervisor->project_load }}</td>
+				<td>{{ $supervisor->second_supervising_count }}</td>
 				<td>{{ $supervisor->accepted_student_count }}</td>
 				<td>{{ $supervisor->target_load }}</td>
 				<td>{{ $supervisor->lazy_score }}</td>
