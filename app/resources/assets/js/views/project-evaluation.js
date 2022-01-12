@@ -78,7 +78,7 @@
 		window.location.reload();
 	});
 
-	$("#defer").on('click', function(e){
+	$("#EvaluationDeferFormButton").on('click', function (e) {
 		$.confirm({
 			title: 'Defer Evaluation',
 			content: 'Are you sure you want to defer this evaluation?<br>The evaluation will be put aside, and can be undeferred whenever you like.',
@@ -93,10 +93,33 @@
 					text: 'Defer',
 					btnClass: 'btn-info',
 					action: function () {
-						$("#deferForm").submit();
+						$("#EvaluationDeferForm").submit();
 					}
 				},
 				cancel: function () {},
+			}
+		});
+	});
+
+	$("#EvaluationUnfinaliseFormButton").on('click', function (e) {
+		$.confirm({
+			title: 'Un-finalise Evaluation',
+			content: 'Are you sure you want to un-finalise this evaluation?<br>You will have to write the joint report again.',
+			type: 'red',
+			icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div></div>',
+			theme: 'modern',
+			escapeKey: true,
+			backgroundDismiss: true,
+			animateFromElement: true,
+			buttons: {
+				formSubmit: {
+					text: 'Un-finalise',
+					btnClass: 'btn-danger',
+					action: function () {
+						$("#EvaluationUnfinaliseForm").submit();
+					}
+				},
+				cancel: function () { },
 			}
 		});
 	});
@@ -295,7 +318,7 @@
 
 		$("[data-unset]").removeAttr("data-unset");
 
-		$("#defer").hide();
+		$("EvaluationDeferFormButton").hide();
 		$("#edit").hide();
 
 		$("#cancel").show();
