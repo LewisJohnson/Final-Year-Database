@@ -21,14 +21,14 @@
 						->get();
 			@endphp
 					
-			<div class="col-6 mt-3 mt-md-0">
+			<div class="col-6 mb-3 mt-md-0">
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title">{{ $mode->project_year }}</h5>
 								
-						<ol class="order-list-js last-name-header-list-js list-unstyled">
+						<ol id="Students{{ $mode->project_year }}" class="order-list-js last-name-header-list-js list-unstyled">
 							@foreach($studentsWithThisYear as $student)
-								<li>
+								<li data-sort-name="{{ $student->user->getFullName() }}">
 									<a title="Edit {{ $student->user->getFullName() }}" href="{{ action('UserController@edit', $student->user) }}">{{ $student->user->getFullName() }}</a>
 								</li>
 							@endforeach
