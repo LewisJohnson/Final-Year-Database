@@ -66,7 +66,7 @@
 				$proposalsCount = count($proposals) ?? 0;
 			@endphp
 			<table class="table table-hover bg-white shadow-sm supervisor-row" data-supervisor-name="{{ $supervisor->user->getFullName() }}">
-				<thead class="thead-light">
+				<thead class="thead-light border-left {{ $supervisor->getTakingStudents() ? 'border-success' : 'border-danger' }}">
 					<tr>
 						<th style="width: 280px;">{{ $supervisor->user->getFullName() }} (Load: {{ $supervisor->getProjectLoad() }})</th>
 
