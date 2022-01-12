@@ -1,6 +1,9 @@
 <form class="form text-left" method="POST" action="{{ action('HomeController@feedback') }}">
 	{{ csrf_field() }}
-	<p>Please send us any comments, feedback, or problems you may be experiencing.</p>
+	<p>
+		Please send us any comments, feedback, or problems you may be experiencing.
+		If you are experience a technical problem, feel free to leave an issue on <a href="https://github.com/LewisJohnson/Final-Year-Database/issues" target="_blank">GitHub</a>.
+	</p>
 
 	<div class="form-group">
 		<label>Comment</label>
@@ -11,7 +14,7 @@
 		<div class="form-group">
 			<div class="checkbox">
 				<input type="checkbox" id="anonymous" name="anonymous" class="checkbox-input">
-				<label for="anonymous">Send Anonymously <small><ins>Your email will not be recorded.</ins></small></label>
+				<label class="ml-1" for="anonymous">Send Anonymously <small><ins>Your email will not be recorded.</ins></small></label>
 			</div>
 		</div>
 	@else
