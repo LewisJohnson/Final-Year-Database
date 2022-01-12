@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="centered mw-800">
+<div class="centered mw-1000">
 	<h2>Second Marker <small class="text-muted">/ Automatic Assignment</small></h2>
 	
 	@if(SussexProjects\Student::getAllStudentsWithoutProjectCount() > 0)
