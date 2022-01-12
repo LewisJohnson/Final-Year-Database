@@ -1,6 +1,6 @@
 <ul class="list-unstyled">
 	<li>
-		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@computeSecondMarkerView') }}">
+		<a class="btn w-100 text-left text-primary" href="{{ action('ProjectAdminController@secondMarkerView') }}">
 			<span>@include('svg.memory')<span>Automatic Assignment</span></span>
 		</a>
 	</li>

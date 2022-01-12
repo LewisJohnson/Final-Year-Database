@@ -357,7 +357,7 @@ class ProjectAdminController extends Controller
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function computeSecondMarkerView()
+	public function secondMarkerView()
 	{
 		return view('admin.assign-marker-automatic')
 			->with('allProjectsHaveMarkerAssigned', empty($this->projectRepository->getAcceptedProjectsWithoutSecondMarker()));
@@ -525,6 +525,7 @@ class ProjectAdminController extends Controller
 	public function automaticSecondMarkerPreview()
 	{
 		$supervisorsWithLazyScore = $this->getSupervisorsWithLazyScore(true, PHP_INT_MAX, "");
+
 		$view = view('admin.partials.automatic-marker-assignment-table')
 			->with('supervisors', $supervisorsWithLazyScore);
 
