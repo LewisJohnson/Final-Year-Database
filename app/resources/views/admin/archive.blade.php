@@ -174,7 +174,10 @@
 	</div>
 
 	<div class="text-right mt-5">
-		<p><b>Note:</b> You must download the student data before archiving.</p>
+		<div class="alert alert-info mt-3">
+			<span>&#128161;</span><span class="ml-2">You must download the student data before archiving.</span>
+		</div>
+
 		<a class="btn btn-primary" id="studentData" href="{{ action('ProjectAdminController@exportStudentSummary') }}" data-base-url="{{ action('ProjectAdminController@exportStudentSummary') }}">Download Student Data</a>
 
 		<form class="d-inline-block ml-2" id="endOfYearArchive" action="{{ action('ProjectAdminController@archive') }}" data-base-url="{{ action('ProjectAdminController@archive') }}" method="POST" accept-charset="utf-8">
