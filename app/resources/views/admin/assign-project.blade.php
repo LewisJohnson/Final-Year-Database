@@ -14,35 +14,37 @@
 
 		<div class="col-4">
 			<div class="form-inline">
-				<label>Project Year</label>
-				
-				<select name="project_year" class="form-control ml-auto" style="width: 100px" onchange="submit()">
-					@foreach(SussexProjects\Mode::all() as $mode)
-						<option 
-							@if(old('project_year') == $mode->project_year) selected @endif
-							data-href="{{ action('ProjectAdminController@assignProjectView', ['project_year' => $mode->project_year]) }}">
-							{{ $mode->project_year }}
-						</option>
-					@endforeach
-				</select>
-			</div>
-
-			<div class="form-inline mt-2">
-				<label>Students with Projects</label>
-				
-				<select name="students_with_project" class="form-control ml-auto" style="width: 100px" onchange="submit()">
-					<option value="0" @if (old('students_with_project') == false) selected="selected" @endif>Hide</option>
-					<option value="1" @if (old('students_with_project') == true) selected="selected" @endif>Show</option>
-				</select>
-			</div>
-
-			<div class="form-inline mt-2">
-				<label>Accepted Projects</label>
-				
-				<select name="accepted_projects" class="form-control ml-auto" style="width: 100px" onchange="submit()">
-					<option value="0" @if (old('accepted_projects') == false) selected="selected" @endif>Hide</option>
-					<option value="1" @if (old('accepted_projects') == true) selected="selected" @endif>Show</option>
-				</select>
+				<div class="form-group mb-2 w-100">
+					<label>Project Year</label>
+					
+					<select name="project_year" class="form-control ml-auto" style="width: 100px" onchange="submit()">
+						@foreach(SussexProjects\Mode::all() as $mode)
+							<option 
+								@if(old('project_year') == $mode->project_year) selected @endif
+								data-href="{{ action('ProjectAdminController@assignProjectView', ['project_year' => $mode->project_year]) }}">
+								{{ $mode->project_year }}
+							</option>
+						@endforeach
+					</select>
+				</div>
+	
+				<div class="form-group mb-2 w-100">
+					<label>Students with Projects</label>
+					
+					<select name="students_with_project" class="form-control ml-auto" style="width: 100px" onchange="submit()">
+						<option value="0" @if (old('students_with_project') == false) selected="selected" @endif>Hide</option>
+						<option value="1" @if (old('students_with_project') == true) selected="selected" @endif>Show</option>
+					</select>
+				</div>
+	
+				<div class="form-group w-100">
+					<label>Accepted Projects</label>
+					
+					<select name="accepted_projects" class="form-control ml-auto" style="width: 100px" onchange="submit()">
+						<option value="0" @if (old('accepted_projects') == false) selected="selected" @endif>Hide</option>
+						<option value="1" @if (old('accepted_projects') == true) selected="selected" @endif>Show</option>
+					</select>
+				</div>
 			</div>
 		</div>
 		
