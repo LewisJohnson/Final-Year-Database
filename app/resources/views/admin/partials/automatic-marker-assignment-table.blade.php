@@ -1,12 +1,12 @@
-<table class="table table-hover bg-white shadow-sm" id="2nd-marker-supervisor-table">
+<table class="table table-hover bg-white shadow-sm sort-table" id="2nd-marker-supervisor-table">
 	<thead class="thead-light">
 		<tr>
-			<th>Supervisor</th>
-			<th>Project Load</th>
-			<th>Actual Load</th>
-			<th>2<sup>nd</sup> Marker Count</th>
-			<th>Target 2<sup>nd</sup> Marker Load</th>
-			<th>Lazy Score</th>
+			<th data-default="true" class="cursor--pointer">Supervisor</th>
+			<th data-default="true" class="cursor--pointer">Project Load</th>
+			<th data-default="true" class="cursor--pointer">Actual Load</th>
+			<th data-default="true" class="cursor--pointer">2<sup>nd</sup> Marker Count</th>
+			<th data-default="true" class="cursor--pointer">Target 2<sup>nd</sup> Marker Load</th>
+			<th data-default="true" class="cursor--pointer">Lazy Score</th>
 		</tr>
 	</thead>
 	<tbody>
