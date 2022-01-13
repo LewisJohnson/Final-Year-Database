@@ -617,7 +617,7 @@
 			$.confirm({
 				title: 'Change Topic Name',
 				type: 'blue',
-				icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div></div>',
+				icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z" /></svg></div></div>',
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
@@ -770,7 +770,7 @@
 			$.confirm({
 				title: 'Change Programme Name',
 				type: 'blue',
-				icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div></div>',
+				icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z" /></svg></div></div>',
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
