@@ -114,10 +114,16 @@ $(function() {
 		window['project'] = $('.js-project');
 	}
 
-	$('.sort-table thead tr th:not(.js-unsortable)').on('click', function() {
+	/**
+	 * Client side sort table
+	*/
+	$('body').on('click', '.sort-table thead tr th:not(.js-unsortable)', function() {
 		sortTable($(this), $(this).closest('table'));
 	});
 
+	/**
+	 * Server side Sort table
+	*/
 
 	if($('.server-sort-table').length > 0){
 		var urlParams = new URLSearchParams(window.location.search);
