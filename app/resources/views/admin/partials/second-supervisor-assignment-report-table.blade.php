@@ -1,4 +1,4 @@
-<h1>Automatic Assignment Report</h1>
+<h3>Automatic Assignment Report</h5>
 
 <table class="table table-hover bg-white shadow-sm mt-3">
 	<thead class="thead-light">
