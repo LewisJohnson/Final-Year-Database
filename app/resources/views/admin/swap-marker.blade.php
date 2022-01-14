@@ -1,13 +1,34 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="centered mw-1200">
+<div class="centered mw-1200 bg-white shadow-sm rounded p-4">
 
-	<h2>Second Marker <small class="text-muted">/ Swap Second Markers</small></h2>
-	<div class="alert alert-info mt-3">
-		<span>&#128161;</span><span class="ml-2">Select two projects to swap their second markers</span>
+	<h2 class="main-title">Second Marker <small class="text-muted">/ Swap Second Markers</small></h2>
+
+	<div class="row">
+		<div class="col-4">
+			<div class="form-inline">
+				<div class="form-group w-100">
+					<label for="project_year">Project Year</label>
+
+					<select class="form-control ml-auto js-projectYear" style="width: 100px">
+						@foreach(SussexProjects\Mode::all() as $mode)
+							<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('ProjectAdminController@swapSecondMarkerView', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-8">
+			<div class="alert alert-info">
+				<span>💡</span>
+				<span class="ml-2">Select two projects to swap their second markers.</span><br>
+			</div>
+		</div>
 	</div>
-
+	<hr>
+	
 	<div class="row mt-3">
 		<div class="col-12">
 			<table class="table table-hover bg-white data-table shadow-sm" id="swap-marker-student-table">
@@ -27,13 +48,13 @@
 
 						<tr class="cursor--pointer" 
 							data-project-id="{{ $project->id }}" data-supervisor-id="{{ $project->supervisor_id }}"
-							data-marker-id="{{ $project->getSecondMarker()->id }}" data-marker-name="{{ $project->getSecondMarker()->user->getFullName() }}"
+							data-marker-id="{{ $project->getSecondMarker()->id }}" data-marker-name="{{ $student->getSecondMarker()->getFullName() }}"
 							data-student-id="{{ $student->id }}" data-student-name="{{ $student->user->getFullName() }}">
 
 							<td title="{{ $project->description }}">{{ $project->title }}</td>
 							<td>{{ $student->user->getFullName() }}</td>
 							<td>{{ $project->supervisor->user->getFullName() }}</td>
-							<td>{{ $project->getSecondMarker()->user->getFullName() }}</td>
+							<td>{{ $student->getSecondMarker()->getFullName() }}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -55,10 +76,10 @@
 				<div class="col-5">
 					<div>
 						<h5 class="font-weight-bold">Student</h5>
-						<p id="projectA-name"></p>
+						<p id="studentA-name"></p>
 
-						<h5 class="font-weight-bold">Student's Marker</h5>
-						<p id="projectA-marker"></p>
+						<h5 class="font-weight-bold">Second Marker</h5>
+						<p id="studentA-marker"></p>
 					</div>
 				</div>
 
@@ -69,10 +90,10 @@
 				<div class="col-5">
 					<div>
 						<h5 class="font-weight-bold">Student</h3>
-						<p id="projectB-name"></p>
+						<p id="studentB-name"></p>
 
-						<h5 class="font-weight-bold">Student's Marker</h5>
-						<p id="projectB-marker"></p>
+						<h5 class="font-weight-bold">Second Marker</h5>
+						<p id="studentB-marker"></p>
 					</div>
 				</div>
 			</div>

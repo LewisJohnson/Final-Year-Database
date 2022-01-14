@@ -1005,31 +1005,39 @@
 	/* ==========================
 		5.1 Second Marker [Swap]
 	============================= */
-	var Swap = function Swap() {
-		if($("#swap-marker-student-table").length < 1){
+	var Swap = function Swap()
+	{
+		if ($("#swap-marker-student-table").length < 1)
+		{
 			return;
 		}
-		this.projectA = null;
-		this.projectB = null;
+
+		this.studentA = null;
+		this.studentB = null;
 		this.markerTable = $("#swap-marker-student-table");
 		this.markerDataTable = this.markerTable[0].dataTable;
 		this.underlay = $('.underlay');
 		this.init();
 	};
 
-	Swap.prototype.Urls_ = {
+	Swap.prototype.Urls_ =
+	{
 		SWAP_MARKER: 'admin/marker/swap',
 	};
 
-	Swap.prototype.selectStudent = function(studentRowDOM, swap){
+	Swap.prototype.selectStudent = function (studentRowDOM, swap)
+	{
 		var row = $(studentRowDOM);
 
-		if(swap.projectA == null){
+		if (swap.studentA == null)
+		{
 			row.addClass("is-selected");
-			swap.projectA = $(row);
-		} else if(swap.projectB == null){
+			swap.studentA = $(row);
+		}
+		else if (swap.studentB == null)
+		{
 			// If user clicks same project again, reset the view (Unselect all)
-			if(row.index() == swap.projectA.index()){
+			if (row.index() == swap.studentA.index()){
 				swap.resetView(swap);
 				return;
 			}
@@ -1039,16 +1047,20 @@
 			}
 
 			row.addClass("is-selected");
-			swap.projectB = $(row);
+			swap.studentB = $(row);
 		}
 
-		if(swap.projectA != null){
-			$(swap.markerDataTable.bodyRows).each(function (index, student){
-				if(swap.projectA.index() != index) {			
-					if(swap.projectA.data('supervisor-id') == $(student).data('marker-id') ||
-						swap.projectA.data('marker-id') == $(student).data('marker-id') ||
-						swap.projectA.data('marker-id') == $(student).data('supervisor-id')
-					){
+		if (swap.studentA != null)
+		{
+			$(swap.markerDataTable.bodyRows).each(function (index, student)
+			{
+				if (swap.studentA.index() != index)
+				{			
+					if (swap.studentA.data('supervisor-id') == $(student).data('marker-id') ||
+						swap.studentA.data('marker-id') == $(student).data('marker-id') ||
+						swap.studentA.data('marker-id') == $(student).data('supervisor-id')
+					)
+					{
 						$(student).attr('disabled', true);
 					} else {
 						$(student).attr('disabled', false);
@@ -1057,39 +1069,39 @@
 			});
 		}
 
-		if(swap.projectA != null && swap.projectB != null){
+		if (swap.studentA != null && swap.studentB != null){
 			Swap.prototype.showDialog(
-				swap.projectA.data('student-name'),
-				swap.projectA.data('marker-name'),
-				swap.projectB.data('student-name'),
-				swap.projectB.data('marker-name'));
+				swap.studentA.data('student-name'),
+				swap.studentA.data('marker-name'),
+				swap.studentB.data('student-name'),
+				swap.studentB.data('marker-name'));
 		}
 	}
 
 	Swap.prototype.resetView = function(swap){
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 		$(swap.markerDataTable.bodyRows).attr('disabled', false);
-		swap.projectA = null;
-		swap.projectB = null;
+		swap.studentA = null;
+		swap.studentB = null;
 	}
 
 	Swap.prototype.unselectAll = function(swap){
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Swap.prototype.showDialog = function(projectA_Student, projectA_Marker, projectB_Student, projectB_Marker){
-		$("#projectA-name").text(projectA_Student);
-		$("#projectA-marker").text(projectA_Marker);
+	Swap.prototype.showDialog = function (studentA_Student, studentA_Marker, studentB_Student, studentB_Marker){
+		$("#studentA-name").text(studentA_Student);
+		$("#studentA-marker").text(studentA_Marker);
 
-		$("#projectB-name").text(projectB_Student);
-		$("#projectB-marker").text(projectB_Marker);
+		$("#studentB-name").text(studentB_Student);
+		$("#studentB-marker").text(studentB_Marker);
 		$("#swap-dialog")[0].dialog.showDialog();
 	}
 
 	$('#submitSwapMarker').on('click', function(){
 		var swap = window['Swap'];
 
-		if(swap.projectB == null || swap.projectB == null){
+		if(swap.studentB == null || swap.studentB == null){
 			$("#swap-dialog")[0].dialog.hideDialog();
 			return;
 		};
@@ -1100,28 +1112,34 @@
 			type: "PATCH",
 			url: swap.Urls_.SWAP_MARKER,
 			data: {
-				projectA: swap.projectA.data('project-id'),
-				projectB: swap.projectB.data('project-id'),
+				student_a: swap.studentA.data('student-id'),
+				student_b: swap.studentB.data('student-id'),
 			},
-			success: function(response){
-				if(response.successful){
+			success: function (response)
+			{
+				if (response.successful)
+				{
 					// eq.(3) is the marker name
-					var markerAName = swap.projectA.find('td').eq(3).text();
-					var markerAId = swap.projectA.data('marker-id');
+					var markerAName = swap.studentA.find('td').eq(3).text();
+					var markerAId = swap.studentA.data('marker-id');
 
-					var markerBName = swap.projectB.find('td').eq(3).text();
-					var markerBId = swap.projectA.data('marker-id');
+					var markerBName = swap.studentB.find('td').eq(3).text();
+					var markerBId = swap.studentB.data('marker-id');
 
-					swap.projectA.find('td').eq(3).text(markerBName);
-					swap.projectB.find('td').eq(3).text(markerAName);
+					swap.studentA.find('td').eq(3).text(markerBName);
+					swap.studentB.find('td').eq(3).text(markerAName);
 
-					swap.projectA.data('marker-id', markerBId);
-					swap.projectB.data('marker-id', markerAId);
+					swap.studentA.data('marker-id', markerBId);
+					swap.studentB.data('marker-id', markerAId);
 
 					swap.resetView(swap);
 
+					$("#someElement").fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+
 					createToast('success', 'Second markers have been swapped.');
-				} else {
+				}
+				else
+				{
 					createToast('error', 'The selected project(s) could not be found.');
 				}
 			},
