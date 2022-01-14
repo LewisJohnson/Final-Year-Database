@@ -22,7 +22,7 @@ use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
 use SussexProjects\ProjectEvaluation;
-use SussexProjects\ProjectEvaluationPivot;
+use SussexProjects\SecondMarkerPivot;
 use SussexProjects\Interfaces\IProjectRepository;
 use Log;
 
@@ -609,11 +609,10 @@ class ProjectAdminController extends Controller
 	{
 		$projectTable = (new Project())->getTable();
 		$projEvalTable = (new ProjectEvaluation())->getTable();
-		$pivotTable = (new ProjectEvaluationPivot())->getTable();
+		$pivotTable = (new SecondMarkerPivot())->getTable();
 
 		$projects = Project::
 			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
-			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
 			->select($projectTable.'.*')
 			->whereNotNull('piv.marker_id')
 			->get();
@@ -623,24 +622,27 @@ class ProjectAdminController extends Controller
 		foreach ($projects as $project)
 		{
 			$ar = array();
+			$student = $project->getAcceptedStudent();
 
 			// This should never happen but you never know
-			if ($project->getAcceptedStudent() != null)
+			if ($student != null)
 			{
-				$ar["fName"] = $project->getAcceptedStudent()->user->first_name;
-				$ar["lName"] = $project->getAcceptedStudent()->user->last_name;
-				$ar["cNo"] = $project->getAcceptedStudent()->registration_number;
+				$ar["fName"] = $student->user->first_name;
+				$ar["lName"] = $student->user->last_name;
+				$ar["cNo"] = $student->registration_number;
+				$ar["projectTitle"] = $project->title;
+				$ar["supervisorName"] = $project->supervisor->user->getFullName();
+				$ar["markerName"] = $student->getSecondMarker()->getFullName();
 			}
 			else
 			{
-				$ar["fName"] = '-';
-				$ar["lName"] = '-';
-				$ar["cNo"] = '-';
+				$ar["fName"] = 'ERROR';
+				$ar["lName"] = 'ERROR';
+				$ar["cNo"] = 'ERROR';
+				$ar["projectTitle"] = $project->title;
+				$ar["supervisorName"] = $project->supervisor->user->getFullName();
+				$ar["markerName"] = 'ERROR';
 			}
-
-			$ar["projectTitle"] = $project->title;
-			$ar["supervisorName"] = $project->supervisor->user->getFullName();
-			$ar["markerName"] = $project->getSecondMarker()->user->getFullName();
 
 			array_push($results, $ar);
 		}

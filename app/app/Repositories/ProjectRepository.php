@@ -11,6 +11,7 @@ use SussexProjects\Project;
 use SussexProjects\Student;
 use SussexProjects\User;
 use SussexProjects\Mode;
+use SussexProjects\SecondMarkerPivot;
 
 class ProjectRepository implements IProjectRepository
 {
@@ -23,14 +24,17 @@ class ProjectRepository implements IProjectRepository
 	{
 		$projectTable = (new Project())->getTable();
 		$studentTable = (new Student())->getTable();
+		$pivotTable = (new SecondMarkerPivot())->getTable();
 		$userTable = (new User())->getTable();
 		$projectYear = Mode::getProjectYear();
 
-		$projects = Project::join($studentTable.' as student', $projectTable.'.id', '=', 'student.project_id')
+		$projects = Project::
+			join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
+			->join($studentTable.' as student', $projectTable.'.id', '=', 'student.project_id')
 			->join($userTable.' as user', 'user.id', '=', 'student.id')
 			->where('user.active_year', $projectYear)
 			->where('student.project_status', 'accepted')
-			->whereNull($projectTable.'.marker_id')
+			->whereNull('piv.marker_id')
 			->select($projectTable.'.*')
 			->get();
 
