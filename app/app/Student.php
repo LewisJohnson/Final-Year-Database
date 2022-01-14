@@ -60,6 +60,34 @@ class Student extends Model
 	}
 
 	/**
+	 * The project this student has selected.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Project
+	 */
+	public function project()
+	{
+		return $this->hasOne(Project::class, 'id', 'project_id');
+	}
+
+	/**
+	 * Returns the student's Project Evaluation.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function getEvaluation()
+	{
+		$projEvalTable = (new ProjectEvaluation())->getTable();
+		$pivotTable = (new ProjectEvaluationPivot())->getTable();
+		$studentTable = (new Student())->getTable();
+
+		return ProjectEvaluation::
+			  join($pivotTable.' as piv', 'piv.proj_eval_id', '=', $projEvalTable.'.id')
+			->join($studentTable.' as stu', 'stu.id', '=', 'piv.student_id')
+			->select($projEvalTable.'.*')
+			->where('stu.id', '=', $this->id)
+			->first();
+	}
+	/**
 	 * @param  $status
 	 * @return mixed
 	 */
@@ -225,16 +253,6 @@ class Student extends Model
 	public function user()
 	{
 		return $this->hasOne(User::class, 'id');
-	}
-
-	/**
-	 * The project this student has selected.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Project
-	 */
-	public function project()
-	{
-		return $this->hasOne(Project::class, 'id', 'project_id');
 	}
 
 	/**

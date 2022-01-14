@@ -38,7 +38,7 @@
 
 						<p class="card-text">
 							<b>Supervisor:</b> {{ $project->supervisor->user->getFullName() }}<br>
-							<b>Second Marker:</b> {{ $project->marker->user->getFullName() }}
+							<b>Second Marker:</b> {{ $project->getSecondMarker()->user->getFullName() }}
 						</p>
 
 						<p class="card-text">{{ $evaluation->getStudentFeedbackQuestion()->supervisorComment }}</p>

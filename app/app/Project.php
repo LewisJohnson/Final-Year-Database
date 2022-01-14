@@ -165,9 +165,18 @@ class Project extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\belongsTo Supervisor
 	 */
-	public function marker()
+	public function getSecondMarker()
 	{
-		return $this->belongsTo(Supervisor::class, 'marker_id', 'id');
+		$userTable = (new User())->getTable();
+		$pivotTable = (new SecondMarkerPivot())->getTable();
+		$projectTable = (new Project())->getTable();
+
+		return User::
+			  join($pivotTable.' as piv', 'piv.marker_id', '=', $userTable.'.id')
+			->join($projectTable.' as proj', 'proj.id', '=', 'piv.project_id')
+			->select($userTable.'.*')
+			->where('proj.id', '=', $this->id)
+			->first();
 	}
 
 	/**
@@ -187,7 +196,9 @@ class Project extends Model
 	 */
 	public function evaluation()
 	{
-		return $this->hasOne(ProjectEvaluation::class, 'project_id', 'id');
+		$pivotTable = Session::get('department') . '_proj_eval_pivot_' . get_el_short_name();
+
+		return $this->belongsToMany(ProjectEvaluation::class, $pivotTable, 'project_id', 'project_id');
 	}
 
 	/**

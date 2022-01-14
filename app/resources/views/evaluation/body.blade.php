@@ -1,6 +1,6 @@
 @php
 	$supervisor = $project->supervisor->user;
-	$marker = $project->marker->user;
+	$marker = $project->getSecondMarker()->user;
 
 	$questions = $evaluation->getQuestions();
 

@@ -35,7 +35,7 @@
 						@php
 							$project = $student->project;
 							$supervisorUser = $project->supervisor->user;
-							$markerUser = $project->marker->user;
+							$markerUser = $project->getSecondMarker()->user;
 						@endphp
 						<tr>
 							<td>

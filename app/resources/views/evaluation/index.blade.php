@@ -83,7 +83,7 @@
 							@endif
 							<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
 	
-							<td class="border-left"><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
+							<td class="border-left"><a href="mailto:{{ $student->getSecondMarker()->email }}">{{ $student->getSecondMarker()->getFullName() }}</a></td>
 							@if(is_null($dissertation))
 								<td>n/a</td>
 							@else
@@ -121,7 +121,7 @@
 							<td class="border-left"><a href="mailto:{{ $student->project->supervisor->user->email }}">{{ $student->project->supervisor->user->getFullName() }}</a></td>
 							<td>-</td>
 							<td>-</td>
-							<td class="border-left"><a href="mailto:{{ $student->project->marker->user->email }}">{{ $student->project->marker->user->getFullName() }}</a></td>
+							<td class="border-left"><a href="mailto:{{ $student->getSecondMarker()->user->email }}">{{ $student->project->marker->user->getFullName() }}</a></td>
 							<td>-</td>
 							<td>-</td>
 							<td class="border-left">-</td>

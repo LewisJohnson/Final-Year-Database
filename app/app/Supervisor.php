@@ -231,19 +231,20 @@ class Supervisor extends Model
 	 */
 	public function getInterestedStudents()
 	{
-		$project = new Project();
-		$student = new Student();
-		$user = new User();
-		$offers = array();
-
-		$students = Student::select($student->getTable() . '.*', 'project.supervisor_id')
-			->join($project->getTable() . ' as project', 'project_id', '=', 'project.id')
-			->join($user->getTable() . ' as user', 'user.id', '=', $student->getTable() . '.id')
+		$projectTable = (new Project())->getTable();
+		$studentTable = (new Student())->getTable();
+		$userTable = (new User())->getTable();
+		
+		$students = Student::select($studentTable . '.*', 'project.supervisor_id')
+			->join($projectTable . ' as project', 'project_id', '=', 'project.id')
+			->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
 			->where('user.active_year', Mode::getProjectYear())
 			->where('project_status', 'selected')
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
 			->get();
+		
+		$offers = array();
 
 		foreach ($students as $student)
 		{
@@ -328,8 +329,16 @@ class Supervisor extends Model
 	 */
 	public function getSecondMarkingProjects($year = null)
 	{
-		$projects = Project::where('marker_id', $this->id)->get();
 		$year = $year ?? Mode::getProjectYear();
+		
+		$projectTable = (new Project())->getTable();
+		$pivotTable = (new SecondMarkerPivot())->getTable();
+
+		$projects = Project::
+			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
+			->where('piv.marker_id', '=', $this->id)
+			->get();
+
 		$secondSupervisingProjects = array();
 
 		foreach ($projects as $project)

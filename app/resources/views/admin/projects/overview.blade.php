@@ -53,10 +53,10 @@
 	
 							<td class="border-left"><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
 							<td>
-								@if(empty($project->marker))
+								@if(empty($project->getSecondMarker()))
 									-
 								@else
-									<a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a>
+									<a href="mailto:{{ $project->getSecondMarker()->user->email }}">{{ $project->getSecondMarker()->user->getFullName() }}</a>
 								@endif
 							</td>
 	

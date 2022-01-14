@@ -42,7 +42,7 @@
 		
 								<td><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
 		
-								<td><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
+								<td><a href="mailto:{{ $project->getSecondMarker()->user->email }}">{{ $project->getSecondMarker()->user->getFullName() }}</a></td>
 
 								<td class="border-left">
 									<input class="form-control" type="url" name="{{ $student->project->evaluation->id }}_canvas_url" value="{{ $canvasUrl }}">

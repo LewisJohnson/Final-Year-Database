@@ -27,13 +27,13 @@
 
 						<tr class="cursor--pointer" 
 							data-project-id="{{ $project->id }}" data-supervisor-id="{{ $project->supervisor_id }}"
-							data-marker-id="{{ $project->marker->id }}" data-marker-name="{{ $project->marker->user->getFullName() }}"
+							data-marker-id="{{ $project->getSecondMarker()->id }}" data-marker-name="{{ $project->getSecondMarker()->user->getFullName() }}"
 							data-student-id="{{ $student->id }}" data-student-name="{{ $student->user->getFullName() }}">
 
 							<td title="{{ $project->description }}">{{ $project->title }}</td>
 							<td>{{ $student->user->getFullName() }}</td>
 							<td>{{ $project->supervisor->user->getFullName() }}</td>
-							<td>{{ $project->marker->user->getFullName() }}</td>
+							<td>{{ $project->getSecondMarker()->user->getFullName() }}</td>
 						</tr>
 					@endforeach
 				</tbody>

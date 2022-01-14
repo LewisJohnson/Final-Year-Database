@@ -687,7 +687,7 @@ class UserController extends Controller
 
 				foreach ($user->supervisor->getSecondMarkingProjects() as $project)
 				{
-					$project->marker_id = null;
+					$project->getSecondMarker()->id = null;
 					$project->save();
 				}
 

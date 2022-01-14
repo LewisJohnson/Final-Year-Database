@@ -1025,7 +1025,7 @@ class ProjectController extends Controller
 
 			$transaction->save();
 
-			$project->marker_id = $marker->id;
+			$project->getSecondMarker()->id = $marker->id;
 			$project->save();
 		});
 
