@@ -86,7 +86,7 @@
 		</div>
 
 		<div class="col-12 mt-3 text-right">
-			{{-- STUDENT SELECT --}}
+			{{-- PAGE BUTTONS --}}
 			@if(Auth::check())
 				@if($view != "StudentProject")
 					@if(Auth::user()->isStudent())
@@ -128,7 +128,13 @@
 
 				@if($project->isUserSupervisorOfProject() || $project->isUserMarkerOfProject())
 					@if(SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now()))
-						<a class="btn btn-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+						@php
+							$student = $project->getAcceptedStudent();
+						@endphp
+
+						@if(!empty($student))
+							<a class="btn btn-primary" href="{{ action('ProjectEvaluationController@show', $student->id) }}">Evaluation</a>
+						@endif
 					@endif
 				@endif
 			@endif

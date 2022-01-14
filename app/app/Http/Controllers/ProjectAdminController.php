@@ -21,6 +21,8 @@ use SussexProjects\Supervisor;
 use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use SussexProjects\ProjectEvaluation;
+use SussexProjects\ProjectEvaluationPivot;
 use SussexProjects\Interfaces\IProjectRepository;
 use Log;
 
@@ -370,6 +372,7 @@ class ProjectAdminController extends Controller
 	 */
 	public function calculateSecondMarkers(Request $request)
 	{
+		// Increase timeout limit as this can take a little longer
 		set_time_limit(120);
 
 		Log::info("CALC: MAX (Number of projects)");
@@ -398,16 +401,22 @@ class ProjectAdminController extends Controller
 
 		Log::info("CALC: Pre transaction");
 
-		DB::transaction(function () use ($maxStudentsPerSupervisor)
+		DB::transaction(function () use ($maxStudentsPerSupervisor, $request)
 		{
 			$projectTable = new Project();
 
-			Log::info("CALC: Clearing second markers");
+			if($request->keep_assigned_markers == 0){
+				Log::info("CALC: Clearing second markers");
 
-			// Reset every project's second marker
-			DB::table($projectTable->getTable())->update(array(
-				'marker_id' => null,
-			));
+				// Reset every project's second marker
+				DB::table($projectTable->getTable())->update(array(
+					'marker_id' => null,
+				));
+			}
+			else 
+			{
+				Log::info("CALC: NOT Clearing second markers");
+			}
 
 			// Assign students taking lazy score in to consideration
 			foreach ($this->projectRepository->getAcceptedProjectsWithoutSecondMarker() as $projectToAssign)
@@ -598,7 +607,17 @@ class ProjectAdminController extends Controller
 	 */
 	public function exportSecondMarkerData(Request $request)
 	{
-		$projects = Project::whereNotNull('marker_id')->get();
+		$projectTable = (new Project())->getTable();
+		$projEvalTable = (new ProjectEvaluation())->getTable();
+		$pivotTable = (new ProjectEvaluationPivot())->getTable();
+
+		$projects = Project::
+			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
+			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
+			->select($projectTable.'.*')
+			->whereNotNull('piv.marker_id')
+			->get();
+
 		$results = array();
 
 		foreach ($projects as $project)
@@ -621,7 +640,7 @@ class ProjectAdminController extends Controller
 
 			$ar["projectTitle"] = $project->title;
 			$ar["supervisorName"] = $project->supervisor->user->getFullName();
-			$ar["markerName"] = $project->marker->user->getFullName();
+			$ar["markerName"] = $project->getSecondMarker()->user->getFullName();
 
 			array_push($results, $ar);
 		}

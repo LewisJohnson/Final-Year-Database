@@ -49,7 +49,7 @@
 		createToast('error', "Something went wrong (ERROR: Window variable 'isFinialised' is null).");
 	}
 
-	$('#project-evaluation-form textarea').autogrow();
+	$('#ProjectEvaluationForm textarea').autogrow();
 
 	if(userIsSupervisor) {
 		selectorModifier = ".supervisor";
@@ -331,7 +331,7 @@
 		$("#finaliseEvaluation").hide();
 
 		$(".js-input" + selectorModifier).on('change', function(){
-			var form = $("#project-evaluation-form");
+			var form = $("#ProjectEvaluationForm");
 
 			// Fill student evaluation
 			if ($("#AutofillStudentEvaluation").is(":checked")) {
@@ -347,7 +347,7 @@
 				// 9 = Student evaluation
 				$(".js-input" + selectorModifier + "[data-question-type='9']").val(str);
 			}
-
+			
 			$.post(form.attr('action'), form.serialize() + "&ajax=true")
 				.done(function() {
 					createToast('autosave success', 'Saved', true);

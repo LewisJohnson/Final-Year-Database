@@ -198,7 +198,7 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 
 	/* SECOND MARKER */
 	// Automatically assign second marker view
-	Route::get('admin/marker/automatic', 'ProjectAdminController@computeSecondMarkerView');
+	Route::get('admin/marker/automatic', 'ProjectAdminController@secondMarkerView');
 
 	// Automatically assigned second markers table
 	Route::get('admin/marker/automatic/preview', 'ProjectAdminController@automaticSecondMarkerPreview');
@@ -348,7 +348,7 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdminOrSupervisor'
 {
 	/* PROJECT EVALUATION */
 	// Project evaluation
-	Route::get('projects/{project}/evaluation', 'ProjectEvaluationController@show');
+	Route::get('students/{student}/evaluation', 'ProjectEvaluationController@show');
 });
 
 /* =================
@@ -372,23 +372,24 @@ Route::group(['middleware' => ['web', 'supervisor', 'checkDepartment']], functio
 	Route::post('supervisor/student-reject', 'SupervisorController@rejectStudent');
 
 	// Update project evaluation
-	Route::patch('projects/{project}/evaluation', 'ProjectEvaluationController@update');
+	Route::patch('evaluations/{evaluation}', 'ProjectEvaluationController@update');
 
 	// Submit project evaluation group
-	Route::patch('projects/{project}/evaluation/submit/{group}', 'ProjectEvaluationController@submitGroup');
+	Route::patch('evaluations/{evaluation}/submitGroup', 'ProjectEvaluationController@submitGroup');
 
 	// Unsubmit project evaluation group
 	// Note: The only reason this is a GET is because we can't have a <form> in another <form> in the view
-	Route::get('projects/{project}/evaluation/unsubmit/{group}', 'ProjectEvaluationController@unsubmitGroup');
+	Route::get('evaluations/{evaluation}/unsubmitGroup', 'ProjectEvaluationController@unsubmitGroup');
 
 	// Finalise project evaluation
-	Route::patch('projects/{project}/evaluation/finalise', 'ProjectEvaluationController@finalise');
+	Route::patch('evaluations/{evaluation}/finalise', 'ProjectEvaluationController@finalise');
 
+	// todo: update evaluation URL to use format on line 390
 	// Defer project evaluation
-	Route::post('projects/{evaluation}/evaluation/defer', 'ProjectEvaluationController@defer');
+	Route::post('evaluations/{evaluation}/defer', 'ProjectEvaluationController@defer');
 
 	// Undefer project evaluation
-	Route::post('projects/{evaluation}/evaluation/undefer', 'ProjectEvaluationController@undefer');
+	Route::post('evaluations/{evaluation}/undefer', 'ProjectEvaluationController@undefer');
 
 	// Undo student's accepted project (this has to stay as a supervisor method otherwise it won't work when "logged in as")
 	Route::patch('admin/student-undo', 'ProjectAdminController@undoStudent');

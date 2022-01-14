@@ -21,6 +21,10 @@
 			</thead>
 			<tbody>
 				@foreach($acceptedStudents as $accepted)
+					@php
+						$evaluation = $accepted['student']->getEvaluation()
+					@endphp
+
 					<tr>
 						<td>
 							<div class="checkbox">
@@ -38,9 +42,9 @@
 							{{ $accepted['student']->registration_number }}<br>
 						</td>
 
-						@if(isset($accepted['project']->marker))
+						@if(isset($accepted['student']->marker))
 							<td>
-								<a href="mailto:{{ $accepted['project']->marker->user->email }}">{{ $accepted['project']->marker->user->getFullName() }}</a>
+								<a href="mailto:{{ $accepted['student']->marker->user->email }}">{{ $accepted['prostudentject']->marker->user->getFullName() }}</a>
 							</td>
 						@else
 							<td>-</td>
@@ -52,23 +56,25 @@
 
 						@if($showEvaluationButton)
 							<td>
-								@if(!empty($accepted['project']->evaluation))
-									<span class="{{ $accepted['project']->evaluation->getStatusBootstrapClass() }}">{{ $accepted['project']->evaluation->getStatus() }}</span>
+								
+								@if(!empty($evaluation))
+									<span class="{{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</span>
 								@else
 									Not Started
 								@endif
 							</td>
 						@endif
+
 						<td class="text-right">
+							@if($showEvaluationButton)
+								<a class="btn btn-sm btn-outline-secondary mb-1" style="width: 80px" href="{{ action('ProjectEvaluationController@show', $accepted['student']->id) }}">Evaluation</a>
+							@endif
+
 							@if(Session::get('logged_in_as') != null || Auth::user()->isProjectAdmin())
-								<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" 
+								<button class="btn btn-sm btn-outline-danger supervisor-undo-accept" style="width: 80px"
 									title="Un-accept {{ $accepted['student']->user->getFullName() }} for {{ $accepted['project']->title }}" 
 									data-student-id="{{ $accepted['student']->id }}" data-student-name="{{ $accepted['student']->user->getFullName() }}" 
 									data-project-title="{{ $accepted['project']->title }}">Undo</button>
-							@endif
-
-							@if($showEvaluationButton)
-								<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $accepted['project']->id) }}">Evaluation</a>
 							@endif
 						</td>
 					</tr>

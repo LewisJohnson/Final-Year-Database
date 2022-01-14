@@ -16,6 +16,7 @@ use SussexProjects\Mode;
 use SussexProjects\PEQValueTypes;
 use SussexProjects\Project;
 use SussexProjects\ProjectEvaluation;
+use SussexProjects\ProjectEvaluationPivot;
 use SussexProjects\Student;
 use SussexProjects\User;
 
@@ -66,20 +67,15 @@ class ProjectEvaluationController extends Controller
 	 * The project evaluation view.
 	 *
 	 *
-	 * @param  \Illuminate\Http\Project                                   $project
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @param  \Illuminate\Http\Project	$project
+	 * @return \Illuminate\View\View
 	 */
-	public function show(Project $project)
+	public function show(Student $student)
 	{
-
-		if (empty($project->marker_id))
-		{
-			session()->flash('message', 'A second marker is yet to be set up for this project.');
-			session()->flash('message_type', 'error');
-			return redirect()->action('HomeController@index');
-		}
-
-		if (Auth::user()->id != $project->supervisor->id && Auth::user()->id != $project->marker_id)
+		$project = $student->project;
+		
+		// If user isn't the supervisor or second marker, check if they're admin or external marker
+		if (Auth::user()->id != ($project->supervisor->id || $project->getSecondMarker()->id))
 		{
 			if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isExternalMarker())
 			{
@@ -89,29 +85,43 @@ class ProjectEvaluationController extends Controller
 			}
 		}
 
-		$evaluation = $project->evaluation;
+		$evaluation = $student->getEvaluation();
 
 		// If the evaluation is null, set up a new one
 		if (is_null($evaluation))
 		{
-			$evaluation = new ProjectEvaluation();
+			DB::transaction(function () use ($student)
+			{
+				$evaluation = new ProjectEvaluation();
+				$evaluation->fill(array(
+					'is_finalised' => false,
+					'questions'    => Mode::getEvaluationQuestions(),
+					'project_year' => Mode::getProjectYear(),
+				));
 
-			$evaluation->project_id = $project->id;
-			$evaluation->fill(array(
-				'is_finalised' => false,
-				'questions'    => Mode::getEvaluationQuestions(),
-				'project_year' => Mode::getProjectYear(),
-			));
+				$evaluation->save();
 
-			$evaluation->save();
+				$pivot = new ProjectEvaluationPivot();
+				$pivot->proj_eval_id = $evaluation->id;
+				$pivot->student_id = $student->id;
 
-			return redirect()->action('ProjectEvaluationController@show', $project);
+				if(!is_null($student->project))
+				{
+					$pivot->project_id = $student->project->id;
+				}
+
+				$pivot->save();
+			});
+
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 
 		return view('evaluation.evaluation')
-			->with("project", $project)
+			->with("student", $student)
+			->with("project", $student->project)
 			->with("evaluation", $evaluation);
 	}
+
 
 	/**
 	 * Creates all project evaluations for accepted students.
@@ -215,17 +225,34 @@ class ProjectEvaluationController extends Controller
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Updates a specified resource in storage.
 	 *
 	 *
 	 * @param  Project	$project
 	 * @param  Request	$request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Project $project, Request $request)
+	public function update(ProjectEvaluation $evaluation, Request $request)
 	{
+		$project = $evaluation->getProject();
+		$student = $evaluation->getStudent();
+
+		if (empty($project))
+		{
+			session()->flash('message', 'The project evaluation must have a project before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($student))
+		{
+			session()->flash('message', 'The project evaluation must have a student before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
-		$isProjectMarker = Auth::user()->id == $project->marker->id;
+		$isProjectMarker = Auth::user()->id == $student->getSecondMarker()->id;
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
@@ -234,25 +261,22 @@ class ProjectEvaluationController extends Controller
 			return redirect()->action('HomeController@index');
 		}
 
-		$evaluation = ProjectEvaluation::find($project->evaluation->id);
-		$questions = $evaluation->questions;
-
-		if (
-			($isProjectSupervisor && $project->evaluation->supervisorHasSubmittedAllQuestions()) ||
-			($isProjectMarker && $project->evaluation->markerHasSubmittedAllQuestions())
-		)
+		if (($isProjectSupervisor && $evaluation->supervisorHasSubmittedAllQuestions()) ||
+			($isProjectMarker && $evaluation->markerHasSubmittedAllQuestions()))
 		{
 			session()->flash('message', 'You have already submitted all your marks.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
-
+		
 		if ($evaluation->is_finalised)
 		{
 			session()->flash('message', 'This project evaluation has been finalised.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
+			
+		$questions = $evaluation->questions;
 
 		for ($i = 0; $i < count($questions); $i++)
 		{
@@ -331,23 +355,50 @@ class ProjectEvaluationController extends Controller
 			session()->flash('message', 'The project evaluation for "' . $project->title . '" has been updated.');
 			session()->flash('message_type', 'success');
 
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 	}
 
 	/**
-	 * Submits the group for the evaluation
+	 * Submits a group for the evaluation
 	 *
 	 *
-	 * @param  Project	$project            The project the evaluation belongs too
-	 * @param  string	$group               The group to submit
-	 * @param  Request	$request
+	 * @param  Request				$request		Must include the group to be submitted
+	 * @param  ProjectEvaluation	$evaluation		The project the evaluation belongs too
 	 * @return \Illuminate\Http\Response
 	 */
-	public function submitGroup(Project $project, string $group, Request $request)
+	public function submitGroup(Request $request, ProjectEvaluation $evaluation)
 	{
+		$group = $request->group;
+		$project = $evaluation->getProject();
+		$student = $evaluation->getStudent();
+
+		if (empty($group))
+		{
+			session()->flash('message', 'Invalid group submitted.');
+			session()->flash('message_type', 'error');
+
+			Log::error("ProjectEvaluationController::submitGroup - Tried to submit empty group.");
+
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($project))
+		{
+			session()->flash('message', 'The project evaluation must have a project before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($student))
+		{
+			session()->flash('message', 'The project evaluation must have a student before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
-		$isProjectMarker = Auth::user()->id == $project->marker->id;
+		$isProjectMarker = Auth::user()->id == $student->getSecondMarker()->id;
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
@@ -356,13 +407,11 @@ class ProjectEvaluationController extends Controller
 			return redirect()->action('HomeController@index');
 		}
 
-		$evaluation = ProjectEvaluation::find($project->evaluation->id);
-
 		if ($evaluation->is_finalised)
 		{
 			session()->flash('message', 'This project evaluation has been finalised.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 
 		$questions = $evaluation->questions;
@@ -391,22 +440,49 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'You have successfully submitted Group "' . $group . '".');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@show', $project);
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**
 	 * Un-submits the group for the evaluation
 	 *
 	 *
-	 * @param  Project	$project            The project the evaluation belongs too
-	 * @param  string	$group               The group to un-submit
-	 * @param  Request	$request
+	 * @param  Request	$request	Must include the group to be un-submitted
+	 * @param  Project	$project	The project the evaluation belongs too
 	 * @return \Illuminate\Http\Response
 	 */
-	public function unsubmitGroup(Project $project, string $group, Request $request)
+	public function unsubmitGroup(Request $request, ProjectEvaluation $evaluation)
 	{
+		$group = $request->group;
+		$project = $evaluation->getProject();
+		$student = $evaluation->getStudent();
+
+		if (empty($group))
+		{
+			session()->flash('message', 'Invalid group submitted.');
+			session()->flash('message_type', 'error');
+
+			Log::error("ProjectEvaluationController::unsubmitGroup - Tried to un-submit empty group.");
+
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($project))
+		{
+			session()->flash('message', 'The project evaluation must have a project before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($student))
+		{
+			session()->flash('message', 'The project evaluation must have a student before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
-		$isProjectMarker = Auth::user()->id == $project->marker->id;
+		$isProjectMarker = Auth::user()->id == $student->getSecondMarker()->id;
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
@@ -415,13 +491,11 @@ class ProjectEvaluationController extends Controller
 			return redirect()->action('HomeController@index');
 		}
 
-		$evaluation = ProjectEvaluation::find($project->evaluation->id);
-
 		if ($evaluation->is_finalised)
 		{
 			session()->flash('message', 'This project evaluation has been finalised.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 
 		$questions = $evaluation->questions;
@@ -453,7 +527,7 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'You have un-submitted Group "' . $group . '".');
 		session()->flash('message_type', 'warning');
 
-		return redirect()->action('ProjectEvaluationController@show', $project);
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**
@@ -535,10 +609,27 @@ class ProjectEvaluationController extends Controller
 	 * @param  Request	$request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function finalise(Project $project, Request $request)
+	public function finalise(ProjectEvaluation $evaluation, Request $request)
 	{
+		$project = $evaluation->getProject();
+		$student = $evaluation->getStudent();
+
+		if (empty($project))
+		{
+			session()->flash('message', 'The project evaluation must have a project before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('ProjectEvaluationController@show', $student);
+		}
+
+		if (empty($student))
+		{
+			session()->flash('message', 'The project evaluation must have a student before being updated.');
+			session()->flash('message_type', 'error');
+			return redirect()->action('HomeController@index');
+		}
+
 		$isProjectSupervisor = Auth::user()->id == $project->supervisor->id;
-		$isProjectMarker = Auth::user()->id == $project->marker->id;
+		$isProjectMarker = Auth::user()->id == $project->getSecondMarker()->id;
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
@@ -547,22 +638,21 @@ class ProjectEvaluationController extends Controller
 			return redirect()->action('HomeController@index');
 		}
 
-		$evaluation = ProjectEvaluation::find($project->evaluation->id);
-		$questions = $evaluation->questions;
-
 		if ($evaluation->is_finalised)
 		{
 			session()->flash('message', 'This project evaluation has already been finalised.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 
 		if (!empty($request->joint_report) && strlen($request->joint_report) < 30)
 		{
 			session()->flash('message', 'The joint report is too short.');
 			session()->flash('message_type', 'error');
-			return redirect()->action('ProjectEvaluationController@show', $project);
+			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
+
+		$questions = $evaluation->questions;
 
 		for ($i = 0; $i < count($questions); $i++)
 		{
@@ -612,7 +702,7 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'The project evaluation for "' . $project->title . '" has been finalised.');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@show', $project);
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**

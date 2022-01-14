@@ -12,9 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use SussexProjects\Student;
+use SussexProjects\Project;
+use SussexProjects\User;
 
 /**
- * The student portfolio model.
+ * The student evaluation model.
+ * 
+ * See: The project evaluation pivot table
  *
  * @see SussexProjects\Student
  */
@@ -85,9 +89,37 @@ class ProjectEvaluation extends Model
 	 *
 	 * @return Project
 	 */
-	public function project()
+	public function getProject()
 	{
-		return $this->hasOne(Project::class, 'id', 'project_id');
+		$projectTable = (new Project())->getTable();
+		$projEvalTable = (new ProjectEvaluation())->getTable();
+		$pivotTable = (new ProjectEvaluationPivot())->getTable();
+
+		return Project::
+			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
+			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
+			->select($projectTable.'.*')
+			->where('proj_eval.id', '=', $this->id)
+			->first();
+	}
+
+	/**
+	 * Returns the student related to this evaluation.
+	 *
+	 * @return Project
+	 */
+	public function getStudent()
+	{
+		$studentTable = (new Student())->getTable();
+		$projEvalTable = (new ProjectEvaluation())->getTable();
+		$pivotTable = (new ProjectEvaluationPivot())->getTable();
+
+		return Student::
+			  join($pivotTable.' as piv', 'piv.student_id', '=', $studentTable.'.id')
+			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
+			->select($studentTable.'.*')
+			->where('proj_eval.id', '=', $this->id)
+			->first();
 	}
 
 	/**
@@ -179,6 +211,11 @@ class ProjectEvaluation extends Model
 
 	public function getStatus()
 	{
+		if(is_null($this->getProject()))
+		{
+			return "No Project";
+		}
+
 		if ($this->is_finalised)
 		{
 			return "Finalised";
@@ -194,12 +231,12 @@ class ProjectEvaluation extends Model
 			return "Submitted";
 		}
 
-		if ((Auth::user()->id == $this->project->supervisor_id) && $this->supervisorHasSubmittedAllQuestions())
+		if ((Auth::user()->id == $this->getProject()->supervisor_id) && $this->supervisorHasSubmittedAllQuestions())
 		{
 			return "Supervisor Submitted";
 		}
 
-		if ((Auth::user()->id == $this->project->supervisor_id) && $this->markerHasSubmittedAllQuestions())
+		if ((Auth::user()->id == $this->getProject()->supervisor_id) && $this->markerHasSubmittedAllQuestions())
 		{
 			return "Marker Submitted";
 		}

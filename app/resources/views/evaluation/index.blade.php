@@ -50,10 +50,11 @@
 			</thead>
 			<tbody>
 				@foreach($students as $student)
-					@if(!empty($student->project) && !empty($student->project->evaluation))
+					{{-- Student has project and project evaluation  --}}
+					@if(!empty($student->project) && !empty($student->getEvaluation() && !empty($student->getSecondMarker())))
 						@php
 							$project = $student->project;
-							$evaluation = $project->evaluation;
+							$evaluation = $student->getEvaluation();
 
 							$poster = null;
 							$presentation = null;
@@ -103,7 +104,7 @@
 							<td class="border-left {{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</td>
 	
 							<td class="border-left text-right d-print-none">
-								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $project->id) }}">Evaluation</a>
+								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $student->id) }}">Evaluation</a>
 							</td>
 
 							<td class="text-right d-print-none">
@@ -114,7 +115,46 @@
 								@endif
 							</td>
 						</tr>
-					@elseif(!empty($student->project) && !empty($student->project->marker))
+
+					{{-- Student has JUST project evaluation  --}}
+					@elseif(!empty($student->getEvaluation()))
+						{{-- We can assume if they have an evaluation without a project, they won't have any marks --}}
+						@php
+							$evaluation = $student->getEvaluation();
+						@endphp
+
+						<tr>
+							<td>{{ $student->user->getFullName() }}</td>
+							<td>- dddddd</td>
+	
+							<td class="border-left">-</td>
+							<td>n/a</td>
+							<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
+	
+							<td class="border-left">-</td>
+							<td>n/a</td>
+
+							<td>{{ $evaluation->markerHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
+
+							<td class="border-left" style="opacity: 0.3">-</td>
+							<td style="opacity: 0.3">-</td>
+							<td style="opacity: 0.3">-</td>
+							
+							<td class="border-left {{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</td>
+	
+							<td class="border-left text-right d-print-none">
+								<a class="btn btn-sm btn-outline-primary" href="{{ action('ProjectEvaluationController@show', $student->id) }}">Evaluation</a>
+							</td>
+
+							<td class="text-right d-print-none">
+								@if($evaluation->hasAnyQuestionBeenAnswered())
+									<a class="btn btn-sm btn-outline-danger disabled" disabled="disabled" href="#" title="Project Evaluation can not be deleted as some questions have been answered">Delete</a>
+								@else
+									<a class="btn btn-sm btn-outline-danger js-delete-pe" href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}">Delete</a>
+								@endif
+							</td>
+						</tr>
+					@elseif(!empty($student->getSecondMarker()))
 						<tr style="opacity: 0.7">
 							<td>{{ $student->getName() }}</td>
 							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
@@ -149,7 +189,11 @@
 							<td>-</td>
 							<td>-</td>
 							<td class="border-left">-</td>
-							<td class="border-left d-print-none"></td>
+							<td class="border-left text-right d-print-none">
+								@if(Auth::user()->isProjectAdmin())
+									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student) }}">Create Evaluation</a>
+								@endif
+							</td>
 							<td class="d-print-none"></td>
 						</tr>
 					@endif

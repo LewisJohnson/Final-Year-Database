@@ -3,21 +3,23 @@
 @endsection
 
 @php
-	if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear())){
+	$projectYear = Request::get('project_year');
+
+	if(empty($projectYear) || ($projectYear == SussexProjects\Mode::getProjectYear())){
 		$interestedStudents = Auth::user()->supervisor->getInterestedStudents();
 		$studentProposals = Auth::user()->supervisor->getStudentProjectProposals();
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
 		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects();
 		$showEvaluationButton = SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
 	} else {
-		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents(Request::get('project_year'));
-		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects(Request::get('project_year'));
+		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents($projectYear);
+		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects($projectYear);
 		$showEvaluationButton = true;
 	}
 @endphp
 
 {{-- INTERESTED STUDENTS --}}
-@if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
+@if(empty($projectYear) || ($projectYear == SussexProjects\Mode::getProjectYear()))
 	<div class="row mt-3">
 		<div class="col-12">
 			<div class="card">
@@ -170,10 +172,10 @@
 			<div class="card-body">
 				<h3 class="card-title">Accepted Students <span class="fr text-primary px-2 py-1">{{ count($acceptedStudents) }}</span></h3>
 
-				@if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
+				@if(empty($projectYear) || ($projectYear == SussexProjects\Mode::getProjectYear()))
 					<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
 				@else
-					<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ Request::get('project_year') }}.</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Every student you've accepted for {{ $projectYear }}.</h6>
 				@endif
 
 				@include('supervisors.partials.accepted-students-table', ['acceptedStudents' => $acceptedStudents, 'showEvaluationButton' => $showEvaluationButton])
@@ -193,10 +195,10 @@
 			<div class="card-body">
 				<h3 class="card-title">Second Marker Projects<span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
 
-				@if(empty(Request::get('project_year')) || (Request::get('project_year') == SussexProjects\Mode::getProjectYear()))
+				@if(empty($projectYear) || ($projectYear == SussexProjects\Mode::getProjectYear()))
 					<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
 				@else
-					<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ Request::get('project_year') }}.</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ $projectYear }}.</h6>
 				@endif
 
 				<div class="table-responsive">
@@ -226,15 +228,15 @@
 
 										@if($showEvaluationButton)
 											<td>
-												@if(!empty($markerProjects['project']->evaluation))
-													<span class="{{ $markerProjects['project']->evaluation->getStatusBootstrapClass() }}">{{ $markerProjects['project']->evaluation->getStatus() }}</span>
+												@if(!empty($markerProjects['student']->evaluation))
+													<span class="{{ $markerProjects['student']->evaluation->getStatusBootstrapClass() }}">{{ $markerProjects['student']->evaluation->getStatus() }}</span>
 												@else
 													Not Started
 												@endif
 											</td>
 
 											<td class="text-right">
-													<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['project']->id) }}">Evaluation</a>
+													<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $markerProjects['student']->id) }}">Evaluation</a>
 											</td>
 										@endif
 									</tr>
