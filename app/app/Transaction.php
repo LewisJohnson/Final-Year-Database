@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects;
 
 use Exception;
@@ -93,6 +95,10 @@ class Transaction extends Model
 		if ($user != null)
 		{
 			return $user->getFullName();
+		}
+		else if (!empty($userId))
+		{
+			return "Deleted User";
 		}
 		else
 		{
