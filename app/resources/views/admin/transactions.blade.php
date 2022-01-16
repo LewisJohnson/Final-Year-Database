@@ -5,10 +5,25 @@
 
 	<div class="d-flex">
 		<div class="btn-group">
-			<a class="btn @if($transaction_type == "Project") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=project') }}" data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
-			<a class="btn @if($transaction_type == "Student") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=student') }}" data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
-			<a class="btn @if($transaction_type == "Marker") {{'btn-primary'}}  @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=marker') }}" data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
-			<a class="btn @if($transaction_type == "Topic") {{'btn-primary'}} @else btn-secondary @endif" href="{{ action('TransactionController@index', 'type=topic') }}" data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
+			<a class="btn {{ $transaction_type == 'All' ? 'btn-primary' : 'btn-secondary' }}"
+				href="{{ action('TransactionController@index', 'type=all') }}"
+				data-element-to-replace-with-loader-selector="#responsive-table">All</a>
+
+			<a class="btn border-left {{ $transaction_type == 'Project' ? 'btn-primary' : 'btn-secondary' }}"
+				href="{{ action('TransactionController@index', 'type=project') }}"
+				data-element-to-replace-with-loader-selector="#responsive-table">Project</a>
+
+			<a class="btn border-left {{ $transaction_type == 'Student' ? 'btn-primary' : 'btn-secondary' }}"
+				href="{{ action('TransactionController@index', 'type=student') }}"
+				data-element-to-replace-with-loader-selector="#responsive-table">Student</a>
+
+			<a class="btn border-left {{ $transaction_type == 'Marker' ? 'btn-primary' : 'btn-secondary' }}"
+				href="{{ action('TransactionController@index', 'type=marker') }}"
+				data-element-to-replace-with-loader-selector="#responsive-table">Marker</a>
+
+			<a class="btn border-left {{ $transaction_type == 'Topic' ? 'btn-primary' : 'btn-secondary' }}"
+				href="{{ action('TransactionController@index', 'type=topic') }}"
+				data-element-to-replace-with-loader-selector="#responsive-table">Topic</a>
 		</div>
 		<div class="checkbox ml-auto">
 			<input type="checkbox" id="showTransactionDetailOnHover">
