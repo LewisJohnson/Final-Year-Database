@@ -12,6 +12,13 @@ class SecondMarkerPivot extends Model
 	 *
 	 * @var string
 	 */
+	protected $primaryKey = 'student_id';
+
+	/**
+	 * Indicates if Laravel default time-stamp columns are used.
+	 *
+	 * @var string
+	 */
 	public $timestamps = false;
 
 	/**
