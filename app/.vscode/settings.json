@@ -1,0 +1,8 @@
+{
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/public": true,
+		"**/vendor": true
+	},
+	"cSpell.enabled": true
+}
