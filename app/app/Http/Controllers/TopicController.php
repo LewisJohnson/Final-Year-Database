@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -58,6 +60,8 @@ class TopicController extends Controller
 			return $topic;
 		});
 
+		parent::logInfo(__METHOD__, "Added new topic", ['topic-name' => $request->topic_name]);
+
 		return $result->toJson();
 	}
 
@@ -74,9 +78,11 @@ class TopicController extends Controller
 			'topic_name' => 'required|min:2|max:191',
 		]);
 
-		$result = DB::transaction(function () use ($request)
+		$topic = Topic::findOrFail($request->topic_id);
+		$oldTopicName = $topic->name;
+
+		$result = DB::transaction(function () use ($topic, $request)
 		{
-			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction();
 
 			$topic->name = $request->topic_name;
@@ -92,6 +98,8 @@ class TopicController extends Controller
 
 			$transaction->save();
 		});
+
+		parent::logInfo(__METHOD__, "Updated topic", ['old-topic-name' => $oldTopicName, 'new-topic-name' => $request->topic_name]);
 
 		return $result;
 	}
@@ -109,10 +117,12 @@ class TopicController extends Controller
 			'topic_id' => 'required|min:2|max:191',
 		]);
 
-		$result = DB::transaction(function () use ($request)
+		$topic = Topic::findOrFail($request->topic_id);
+		$topicName = $topic->name;
+
+		$result = DB::transaction(function () use ($topic, $request)
 		{
 			$projectTopic = ProjectTopic::where('topic_id', $request->topic_id);
-			$topic = Topic::findOrFail($request->topic_id);
 			$transaction = new Transaction();
 
 			$projectTopic->delete();
@@ -128,6 +138,8 @@ class TopicController extends Controller
 
 			$transaction->save();
 		});
+
+		parent::logInfo(__METHOD__, "Updated topic", ['old-topic-name' => $topicName, 'new-topic-name' => $request->topic_name]);
 
 		return $result;
 	}
