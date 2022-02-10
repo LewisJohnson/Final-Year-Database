@@ -36,15 +36,22 @@ class SystemSettingsController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		foreach ($request->all() as $key => $value)
+		$keys = $request->all();
+
+		// Remove _token so it's not exposed in the logs
+		unset($keys["_token"]);
+
+		foreach ($keys as $key => $value)
 		{
 			if (SystemSettings::get($key) == false)
 			{
-				Log::error("SystemSettingsController::update - failed to find key (".$key.")");
+				Log::error("SystemSettingsController::update - failed to find key (" . $key . ")");
 			}
 
 			SystemSettings::set($key, $value);
 		}
+
+		parent::logInfo(__METHOD__, "Updated system settings", ['settings' => $keys]);
 
 		return redirect()->action('SystemSettingsController@index');
 	}
