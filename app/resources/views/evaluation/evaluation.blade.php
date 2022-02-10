@@ -288,10 +288,10 @@
 
 								<div class="form-group row edit ml-1">
 									<div class="checkbox">
-										<input type="checkbox" name="autofill_se" id="AutofillStudentEvaluation" value="0">
-										<label class="ml-1" for="AutofillStudentEvaluation">Autofill Student Evaluation</label>
+										<input type="checkbox" name="autofill_se" id="AutofillStudentEvaluation" value="1" checked>
+										<label class="ml-1" for="AutofillStudentEvaluation">Autofill Student Feedback</label>
 										<p class="text-muted ml-4">
-											This will autofill the student evaluation with all the comments from other sections.
+											This will autofill the student feedback with all the comments from other sections.
 										</p>
 									</div>
 								</div>
@@ -521,7 +521,7 @@
 
 						@if(is_null($supervisor))
 							<div class="alert alert-danger mt-3">
-								<span>&#9888;&#65039;</span><span class="ml-2">This Project Evaluation has no Supervisor assigned.</span>
+								<span>&#9888;&#65039;</span><span class="ml-2">This Project Evaluation has no supervisor assigned.</span>
 							</div>
 						@endif
 
@@ -611,6 +611,10 @@
 
 				<div class="row mt-3">
 					<div class="col-6">
+						<div class="alert alert-info">
+							<span>&#128161;</span>
+							<span class="ml-2">Fields are auto-filled with the average mark (rounded up)</span>
+						</div>					
 						<p>
 							You are about to finalise the project evaluation for the project "{{ $project->title }}".
 							Once you do this, the evaluation will no longer be editable by you or the second marker.
@@ -686,7 +690,6 @@
 						@else
 							<p>Not part of evaluation</p>
 						@endif
-						<p class="mt-1 text-muted"><small>Fields are auto-filled with the average mark</small></p>
 					</div>
 
 					@if($straddles != false || $differsByPercentage)
