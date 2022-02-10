@@ -1,4 +1,4 @@
-@for $i from 1 through 8 {
+@for $i from 1 through 10 {
 	$width: $i * 2;
 
 	.mw-#{$width}00 {
