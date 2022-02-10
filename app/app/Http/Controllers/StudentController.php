@@ -774,6 +774,8 @@ class StudentController extends Controller
 					}
 				}
 
+				$importedStudentIds = [];
+
 				// ACTUALLY IMPORT STUDENTS
 				DB::beginTransaction();
 				try
@@ -901,7 +903,9 @@ class StudentController extends Controller
 							}
 						}
 
+						array_push($importedStudentIds, $user->id);
 					}
+
 
 					DB::commit();
 				}
@@ -930,7 +934,10 @@ class StudentController extends Controller
 					));
 				}
 
-				$students = Student::getAllStudentsQuery()->get();
+				$students = Student::getAllStudentsQuery()
+					->whereIn('user.id', $importedStudentIds)
+					->get();
+
 				$users = User::whereIn('id', $students->pluck('id')->toArray())->get();
 
 				$view = view('admin.partials.import-student-table')
