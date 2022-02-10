@@ -16,23 +16,3 @@
 		}
 	}
 }
-
-.project-preview.project-preview--student {
-	padding: 1rem;
-
-	.project {
-		max-height: 8rem;
-		overflow: hidden;
-		box-shadow: 0px 16px 11px -11px rgba(0, 0, 0, 0.1);
-	}
-
-	.project.expand {
-		max-height: 90rem;
-		overflow: overlay;
-		box-shadow: none;
-	}
-
-	img {
-		width: 100%;
-	}
-}

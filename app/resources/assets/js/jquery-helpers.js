@@ -36,16 +36,6 @@ $(function () {
 	});
 
 	/**
-		* The "Show more" button on students homepage.
-		* 
-		* Only shown if a student has selected, proposed or been accepted for a project.
-	*/
-	$("body").on("click", "#expand-student-project-preview",  function(e) {
-		$(this).hide();
-		$('.project').addClass('expand');
-	});
-
-	/**
 		* Toggle label flips toggle.
 		*
 		* Toggles a toggle if it's label is clicked.
