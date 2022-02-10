@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Database\QueryException;
@@ -24,8 +26,8 @@ use SussexProjects\Topic;
 use SussexProjects\Transaction;
 use SussexProjects\User;
 use SussexProjects\Http\Requests\ProjectForm;
-use SussexProjects\Interfaces\IProjectRepository;
 use SussexProjects\Mail\SupervisorEditedProposedProject;
+use SussexProjects\Interfaces\IFactoryRepository;
 use Log;
 
 /**
@@ -45,10 +47,10 @@ class ProjectController extends Controller
 	 * @see https://github.com/ezyang/htmlpurifier The Laravel implementation of HTML purifier.
 	 */
 	public $htmlPurifyConfig;
-	
+
 	private $projectRepository;
 
-	public function __construct(IProjectRepository $projectRepository)
+	public function __construct(IFactoryRepository $factoryRepository)
 	{
 		parent::__construct();
 		$this->paginationCount = 50;
@@ -103,11 +105,11 @@ class ProjectController extends Controller
 		}
 
 		$projects =
-		Project::whereNotNull('supervisor_id')
+			Project::whereNotNull('supervisor_id')
 			->join($supervisorTable->getTable() . ' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable() . ' as user', 'user.id', '=', 'supervisor.id')
 			->when((Auth::check() && !Auth::user()->isSupervisor()) || ldap_guest(), function ($query)
-		{
+			{
 				return $query->where('status', 'on-offer');
 			})
 			->where('user.privileges', 'LIKE', '%supervisor%')
@@ -217,7 +219,8 @@ class ProjectController extends Controller
 			$projectTopic->topic_id = $topic->id;
 			$projectTopic->project_id = $project->id;
 
-			try {
+			try
+			{
 				$projectTopic->save();
 			}
 			catch (QueryException $e)
@@ -310,7 +313,7 @@ class ProjectController extends Controller
 			'status' => 'required',
 		]);
 
-		if($request->skills == 'Temporary' || $request->skills == 'Temp')
+		if ($request->skills == 'Temporary' || $request->skills == 'Temp')
 		{
 			session()->flash('message', 'Your project contains forbidden characteristics.');
 			session()->flash('message_type', 'danger');
@@ -506,7 +509,8 @@ class ProjectController extends Controller
 
 		if ($project->status == "student-proposed" && !Auth::user()->isStudent())
 		{
-			try {
+			try
+			{
 				Mail::to($project->student->user->email)
 					->send(new SupervisorEditedProposedProject(Auth::user()->supervisor, $project->student, $project));
 			}
@@ -705,7 +709,7 @@ class ProjectController extends Controller
 		}
 
 		$projects =
-		Project::whereNotNull('supervisor_id')
+			Project::whereNotNull('supervisor_id')
 			->join($supervisorTable->getTable() . ' as supervisor', 'supervisor_id', '=', 'supervisor.id')
 			->join($userTable->getTable() . ' as user', 'user.id', '=', 'supervisor.id')
 			->rightJoin($projectTopicTable->getTable() . ' as projectTopic', 'projectTopic.project_id', '=', $projectTable->getTable() . '.id')
@@ -980,56 +984,8 @@ class ProjectController extends Controller
 
 		// We shouldn't return 0 because division by zero could occur
 		return max(1, Project::join($student->getTable() . ' as student', $project->getTable() . '.id', '=', 'student.project_id')
-				->where('student.project_status', 'accepted')
-				->count());
-	}
-
-	/**
-	 * Updates the projects second marker.
-	 *
-	 *
-	 * @param  \Illuminate\Http\Request    $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function updateSecondMarker(Request $request)
-	{
-		if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isStaff())
-		{
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
-			session()->flash('message_type', 'error');
-			return redirect()->action('HomeController@index');
-		}
-
-		$request->validate([
-			'student_id'    => 'required',
-			'marker_id' => 'required'
-		]);
-
-		DB::transaction(function () use ($request)
-		{
-			$project = Project::find($request->project_id);
-			$student = Student::findOrFail($request->student_id);
-			$marker = Supervisor::findOrFail($request->marker_id);
-			$transaction = new Transaction();
-
-			$transaction->fill(array(
-				'type'             => 'marker',
-				'action'           => 'marker-assigned',
-				'project'          => $project->id,
-				'student'          => $student->id,
-				'supervisor'       => $project->supervisor_id,
-				'marker'           => $marker->id,
-				'admin'            => Auth::user()->id,
-				'transaction_date' => new Carbon(),
-			));
-
-			$transaction->save();
-
-			$project->getSecondMarker()->id = $marker->id;
-			$project->save();
-		});
-
-		return response()->json(array('successful' => true));
+			->where('student.project_status', 'accepted')
+			->count());
 	}
 
 	/**
