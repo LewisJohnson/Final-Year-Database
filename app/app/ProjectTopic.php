@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects;
 
 use Exception;
@@ -39,7 +41,7 @@ class ProjectTopic extends Model
 	/**
 	 * The models primary key
 	 *
-	 * @var integer
+	 * @var array
 	 */
 	protected $primaryKey = ['project_id', 'topic_id'];
 
