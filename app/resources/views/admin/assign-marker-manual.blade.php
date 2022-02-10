@@ -5,7 +5,11 @@
 
 	<h2>Second Marker <small class="text-muted">/ Manual Assignment</small></h2>
 	<div class="alert alert-info mt-3">
-		<span>&#128161;</span><span class="ml-2">Select a student, then select a supervisor to be their second marker. Only students with a project will be shown</span>
+		<span>&#128161;</span>
+		<span class="ml-2">
+			You can now assign a Second Marker to student without them having a project.<br>
+			Select a student, then select a supervisor to be their second marker. Only students with a project will be shown
+		</span>
 	</div>
 
 	@if(count(SussexProjects\Mode::all()) > 1)
@@ -37,23 +41,33 @@
 				</thead>
 				<tbody>
 					@foreach($students as $student)
-						@if(!is_null($student->project) && !is_null($student->project->supervisor))
-							<tr class="cursor--pointer" 
-									data-supervisor-id="{{ $student->project->supervisor->id }}" data-supervisor-name="{{ $student->project->supervisor->user->getFullName() }}"
-									@if(!empty($student->project->marker)) data-marker-id="{{ $student->project->marker->id }}" @endif
-									data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" 
-									data-project-id="{{ $student->project->id }}" data-project-title="{{ $student->project->title }}">
-								<td>{{ $student->getName() }}</td>
-								<td>{{ $student->project->title }}</td>
-								<td>{{ $student->project->supervisor->user->getFullName() }}</td>
+						@php
+							$project = $student->project;
+						@endphp
 
-								@if(empty($student->project->marker))
+							<tr class="cursor--pointer" 
+									@if(!empty($project)) 
+										data-supervisor-id="{{ $project->supervisor->user->id }}" 
+										data-supervisor-name="{{ $project->supervisor->user->getFullName() }}"
+										data-project-id="{{ $project->id }}"
+										data-project-title="{{ $project->title }}"
+									@endif
+
+									@if(!empty($student->getSecondMarker())) 
+										data-marker-id="{{ $student->getSecondMarker()->id }}" 
+									@endif
+									data-student-id="{{ $student->user->id }}" data-student-name="{{ $student->getName() }}" 
+									>
+								<td>{{ $student->getName() }}</td>
+								<td>{{ empty($project) ? '-' : $project->title }}</td>
+								<td>{{ empty($project) ? '-' : $project->supervisor->user->getFullName() }}</td>
+
+								@if(empty($student->getSecondMarker()))
 									<td>None</td>
 								@else
-									<td>{{ $student->project->marker->user->getFullName() }}</td>
+									<td>{{ $student->getSecondMarker()->getFullName() }}</td>
 								@endif
 							</tr>
-						@endif
 					@endforeach
 				</tbody>
 			</table>
