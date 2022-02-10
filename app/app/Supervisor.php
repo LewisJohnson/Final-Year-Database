@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects;
 
 use Exception;
@@ -234,7 +236,7 @@ class Supervisor extends Model
 		$projectTable = (new Project())->getTable();
 		$studentTable = (new Student())->getTable();
 		$userTable = (new User())->getTable();
-		
+
 		$students = Student::select($studentTable . '.*', 'project.supervisor_id')
 			->join($projectTable . ' as project', 'project_id', '=', 'project.id')
 			->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
@@ -243,7 +245,7 @@ class Supervisor extends Model
 			->where('project.supervisor_id', $this->id)
 			->orderBy('user.last_name', 'asc')
 			->get();
-		
+
 		$offers = array();
 
 		foreach ($students as $student)
@@ -323,37 +325,42 @@ class Supervisor extends Model
 	}
 
 	/**
-	 * A list of projects this supervisor is second marker too.
+	 * A list of students this supervisor is second marker too.
 	 *
+	 * @param null $projectYear The year of the student, current if null
+	 * 
 	 * @return array Array A key/value array where the key is the student and the value is their project
 	 */
-	public function getSecondMarkingProjects($year = null)
+	public function getSecondMarkingStudents($projectYear = null)
 	{
-		$year = $year ?? Mode::getProjectYear();
-		
-		$projectTable = (new Project())->getTable();
-		$pivotTable = (new SecondMarkerPivot())->getTable();
+		$projectYear = $projectYear ?? Mode::getProjectYear();
 
-		$projects = Project::
-			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
-			->where('piv.marker_id', '=', $this->id)
+		$pivots = SecondMarkerPivot::where('marker_id', '=', $this->id)
 			->get();
 
-		$secondSupervisingProjects = array();
+		$secondSupervisingArray = array();
 
-		foreach ($projects as $project)
+		foreach ($pivots as $piv)
 		{
 			$ar = array();
 
-			if (!empty($project->getAcceptedStudent()) && $project->getAcceptedStudent()->user->active_year == $year)
+			if (!empty($piv->student))
 			{
-				$ar["student"] = $project->getAcceptedStudent();
-				$ar["project"] = $project;
-				array_push($secondSupervisingProjects, $ar);
+				if ($piv->student->user->active_year == $projectYear)
+				{
+					$ar["student"] = $piv->student;
+				}
 			}
+
+			if (!empty($piv->project))
+			{
+				$ar["project"] = $piv->project;
+			}
+
+			array_push($secondSupervisingArray, $ar);
 		}
 
-		return $secondSupervisingProjects;
+		return $secondSupervisingArray;
 	}
 
 	/**
@@ -408,7 +415,7 @@ class Supervisor extends Model
 	{
 		$supervisors = Supervisor::getAllSupervisorsQuery()
 			->when($hideClosedToOffers, function ($query)
-		{
+			{
 				return $query->where("take_students_" . get_el_short_name(), true);
 			})
 			->get();
