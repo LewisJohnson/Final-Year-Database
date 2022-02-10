@@ -3,21 +3,11 @@
 namespace SussexProjects\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use SussexProjects\Repositories\ProjectRepository;
-use SussexProjects\Interfaces\IProjectRepository;
+use SussexProjects\Interfaces\IFactoryRepository;
+use SussexProjects\Repositories\FactoryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-	/**
-	 * Bootstrap services.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		//
-	}
-
 	/**
 	 * Register services.
 	 *
@@ -25,6 +15,6 @@ class RepositoryServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->bind(IProjectRepository::class, ProjectRepository::class);
+		$this->app->bind(IFactoryRepository::class, FactoryRepository::class);
 	}
 }
