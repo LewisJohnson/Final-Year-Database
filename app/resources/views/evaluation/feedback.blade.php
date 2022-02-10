@@ -50,7 +50,7 @@
 							@if(empty($student->getSecondMarker()))
 								<b>Second Marker:</b> <span class="text-danger">None</span>
 							@else
-								<b>Second Marker:</b> {{ $student->getSecondMarker()->user->getFullName() }}
+								<b>Second Marker:</b> {{ $student->getSecondMarker()->getFullName() }}
 							@endif
 						</p>
 
