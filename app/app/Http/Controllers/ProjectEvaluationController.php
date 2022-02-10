@@ -1085,7 +1085,7 @@ class ProjectEvaluationController extends Controller
 			{
 				$ar["proj"] = $student->project->title;
 
-				$ar["supervisor"] = $student->project->supervisor->getFullName();
+				$ar["supervisor"] = $student->project->supervisor->user->getFullName();
 
 				if (!empty($student->getSecondMarker()))
 				{
@@ -1096,9 +1096,9 @@ class ProjectEvaluationController extends Controller
 					$ar["marker"] = '-';
 				}
 
-				if (!empty($student->project->evaluation) && $student->project->evaluation->is_finalised)
+				if (!empty($student->getEvaluation()) && $student->getEvaluation()->is_finalised)
 				{
-					$ar["feedback"] = $student->project->evaluation->getStudentFeedbackQuestion()->supervisorComment;
+					$ar["feedback"] = $student->getEvaluation()->getStudentFeedbackQuestion()->supervisorComment;
 				}
 				else
 				{
