@@ -217,14 +217,6 @@ class SupervisorController extends Controller
 	 */
 	public function rejectStudent(Request $request)
 	{
-		if (Mode::getSupervisorAcceptDate()->gt(Carbon::now()))
-		{
-			return response()->json(array(
-				'successful' => false,
-				'message'    => 'You are not allowed to reject students until ' . Mode::getSupervisorAcceptDate(true) . '.',
-			));
-		}
-
 		$student = Student::findOrFail(request('student_id'));
 		$projectId = $student->project->id;
 
