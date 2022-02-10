@@ -7,6 +7,7 @@
 <div class="centered mw-1400 bg-white shadow-sm rounded p-4">
 	<h2 class="main-title">Transactions <small class="text-muted">/ {{ $transaction_type }}</small></h2>
 
+	@include('admin.partials.transactions-search')
 
 	<div class="d-flex">
 		<div class="btn-group">
@@ -99,6 +100,22 @@
 					{{-- Supervisor column --}}
 					<td data-hover="{{ $transaction->supervisor }}">{{ $transaction->getName($transaction->supervisor) }}</td>
 
+					{{-- Marker column --}}
+					@if ($transaction->action == 'marker-swap')
+						@php
+							$splitMarker = explode('->', $transaction->marker);
+							$markerAId = trim($splitMarker[0]);
+							$markerBId = trim($splitMarker[1]);
+						@endphp
+
+						<td data-hover="{{ $markerAId.' ⮕ '.$markerBId }}">
+							<span>{{ $transaction->getName($markerAId) }}</span>
+							<span>⮕</span>
+							<span>{{ $transaction->getName($markerBId) }}</span>
+						</td>
+					@else
+						<td data-hover="{{ $transaction->marker }}">{{ $transaction->getName($transaction->marker) }}</td>
+					@endif
 
 					<td data-hover="{{ $transaction->admin }}">{{ $transaction->getName($transaction->admin) }}</td>
 					<td data-use-hover-value data-hover="{{ $transaction->transaction_date }}">{{ $transaction->transaction_date->format('d/m/yy H:i:s') }}</td>

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,20 +26,30 @@ class TransactionController extends Controller
 
 	/**
 	 * A list of all transactions sorted by transaction time.
-	 *
-	 * @return \Illuminate\View\View
+	 * 
+	 * @param Request $request
+	 * 
+	 * @return View
 	 */
 	public function index(Request $request)
 	{
-		$type = $request->query('type') ?? 'project';
+		$type = $request->query('type') ?? 'all';
+		$transactions = [];
 
-		$transactions = Transaction::where('type', $type)
-			->orderBy('transaction_date', 'desc')
-			->paginate(50);
+		if ($type == "all")
+		{
+			$transactions = Transaction::orderBy('transaction_date', 'desc')
+				->paginate(50);
+		}
+		else
+		{
+			$transactions = Transaction::where('type', $type)
+				->orderBy('transaction_date', 'desc')
+				->paginate(50);
+		}
 
 		return view('admin.transactions')
 			->with('transactions', $transactions)
 			->with('transaction_type', ucfirst($type));
 	}
-
 }
