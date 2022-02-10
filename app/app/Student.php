@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects;
 
 use Exception;
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use DB;
 
 /**
  * The student model.
@@ -60,6 +63,16 @@ class Student extends Model
 	}
 
 	/**
+	 * The user related to this student.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Student
+	 */
+	public function user()
+	{
+		return $this->hasOne(User::class, 'id');
+	}
+
+	/**
 	 * The project this student has selected.
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Project
@@ -80,13 +93,31 @@ class Student extends Model
 		$pivotTable = (new ProjectEvaluationPivot())->getTable();
 		$studentTable = (new Student())->getTable();
 
-		return ProjectEvaluation::
-			  join($pivotTable.' as piv', 'piv.proj_eval_id', '=', $projEvalTable.'.id')
-			->join($studentTable.' as stu', 'stu.id', '=', 'piv.student_id')
-			->select($projEvalTable.'.*')
+		return ProjectEvaluation::join($pivotTable . ' as piv', 'piv.proj_eval_id', '=', $projEvalTable . '.id')
+			->join($studentTable . ' as stu', 'stu.id', '=', 'piv.student_id')
+			->select($projEvalTable . '.*')
 			->where('stu.id', '=', $this->id)
 			->first();
 	}
+
+	/**
+	 * Returns the student's Second Marker.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function getSecondMarker()
+	{
+		$userTable = (new User())->getTable();
+		$pivotTable = (new SecondMarkerPivot())->getTable();
+		$studentTable = (new Student())->getTable();
+
+		return User::join($pivotTable . ' as piv', 'piv.marker_id', '=', $userTable . '.id')
+			->join($studentTable . ' as stu', 'stu.id', '=', 'piv.student_id')
+			->select($userTable . '.*')
+			->where('stu.id', '=', $this->id)
+			->first();
+	}
+
 	/**
 	 * @param  $status
 	 * @return mixed
@@ -184,23 +215,22 @@ class Student extends Model
 		return $return;
 	}
 
-	public static function getAllStudentsWithoutProjectCount()
-	{
-		return Student::getAllStudentsQuery()->Where('project_status', '<>', 'accepted')->count();
-	}
-
 	/**
 	 * A list of student in the current project year.
 	 *
+	 * @param null $year The year of the students
+	 * 
 	 * @return QueryBuilder A query builder of all supervisors.
 	 */
-	public static function getAllStudentsQuery()
+	public static function getAllStudentsQuery($year = null)
 	{
-		$userTable = new User();
-		$studentTable = new Student();
+		$year = $year ?? Mode::getProjectYear();
 
-		return Student::join($userTable->getTable() . ' as user', 'user.id', '=', $studentTable->getTable() . '.id')
-			->select($studentTable->getTable() . '.*')
+		$userTable = (new User())->getTable();
+		$studentTable = (new Student())->getTable();
+
+		return Student::join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
+			->select($studentTable . '.*')
 			->where('user.active_year', Mode::getProjectYear())
 			->orderBy('user.last_name', 'asc');
 	}
@@ -246,16 +276,6 @@ class Student extends Model
 	}
 
 	/**
-	 * The user related to this student.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne Student
-	 */
-	public function user()
-	{
-		return $this->hasOne(User::class, 'id');
-	}
-
-	/**
 	 * The status of the student in a pretty string.
 	 *
 	 * @return String status
@@ -274,7 +294,7 @@ class Student extends Model
 				$returnText = 'You\'re awaiting supervisor approval.';
 				break;
 			case 'accepted':
-				$returnText = 'Congratulations. You\'ve been accepted.';
+				$returnText = 'You\'ve been accepted.';
 				break;
 		}
 
@@ -300,8 +320,7 @@ class Student extends Model
 	 */
 	public function getProposedProjectsWithoutSupervisor()
 	{
-		return Project::
-			where('status', 'student-proposed')
+		return Project::where('status', 'student-proposed')
 			->where('student_id', $this->id)
 			->whereNull('supervisor_id')
 			->get();
@@ -343,8 +362,7 @@ class Student extends Model
 	 */
 	public static function favouriteProjectCookieIsValid()
 	{
-		return !(
-			Cookie::get('favourite_projects') == "none" ||
+		return !(Cookie::get('favourite_projects') == "none" ||
 			Cookie::get('favourite_projects') == "a:0:{}" ||
 			empty(Cookie::get('favourite_projects'))
 		);
