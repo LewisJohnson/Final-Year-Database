@@ -5,10 +5,9 @@
 @endsection
 
 @section('content')
-	<div class="centered mw-800">
-		<div class="card">
-			<div class="card-header">Create New User</div>
-			@include('forms.user', ['view' => 'new'])
-		</div>
+	<div class="centered mw-800 bg-white shadow-sm rounded p-4">
+		<h2 class="main-title">Users <small class="text-muted">/ Create</small></h2>
+
+		@include('forms.user', ['view' => 'new'])
 	</div>
 @endsection
