@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Exception;
@@ -143,6 +145,8 @@ class StudentController extends Controller
 		$student->share_name = isset($request->share_name);
 		$student->save();
 
+		parent::logInfo(__METHOD__, "Changed share name value", ["value" => isset($request->share_name)]);
+
 		return response()->json(array('share_name' => $student->share_name));
 	}
 
@@ -248,15 +252,21 @@ class StudentController extends Controller
 
 			session()->flash('message', 'You have proposed "' . $project->title . '" to ' . $supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
+
+			parent::logInfo(__METHOD__, "Proposed a new project", ["project" => $project->id]);
+
 			return true;
 		});
 
 		// Send student proposed email
 		if ($result)
 		{
+
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
 				try {
+				try
+				{
 					// Send accepted email
 					Mail::to($student->project->supervisor->user->email)
 						->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
@@ -382,6 +392,8 @@ class StudentController extends Controller
 
 			$student->save();
 
+			parent::logInfo(__METHOD__, "Proposed an existing project", ["project" => $project]);
+
 			session()->flash('message', 'You have proposed "' . $project->title . '" to ' . $supervisor->user->getFullName());
 			session()->flash('message_type', 'success');
 			return true;
@@ -393,6 +405,8 @@ class StudentController extends Controller
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
 				try {
+				try
+				{
 					// Send accepted email
 					Mail::to($student->project->supervisor->user->email)
 						->send(new StudentProposed($student->project->supervisor, Auth::user()->student));
@@ -426,6 +440,8 @@ class StudentController extends Controller
 		{
 			$project = Project::findOrFail(request('project_id'));
 
+		$result = DB::transaction(function () use ($request, $student, $project)
+		{
 			if (Mode::getProjectSelectionDate()->gt(Carbon::now()))
 			{
 				session()->flash('message', 'You are not allowed to select a project until ' . Mode::getProjectSelectionDate(true) . '.');
@@ -477,6 +493,8 @@ class StudentController extends Controller
 			));
 
 			$transaction->save();
+
+
 			session()->flash('message', 'You have selected "' . $project->title . '".');
 			session()->flash('message_type', 'success');
 
@@ -485,9 +503,13 @@ class StudentController extends Controller
 
 		if ($result)
 		{
+			parent::logInfo(__METHOD__, "Selected a project", ["project" => $project->id]);
+
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
 				try {
+				try
+				{
 					// Send selected email
 					if ($student->project->supervisor->getAcceptingEmails())
 					{
@@ -557,9 +579,13 @@ class StudentController extends Controller
 			$student->project->save();
 		});
 
+		parent::logInfo(__METHOD__, "Un-selected a project");
+
 		if ($student->project->supervisor->getAcceptingEmails())
 		{
 			try {
+			try
+			{
 				// Send selected email
 				if ($student->project->supervisor->getAcceptingEmails())
 				{
@@ -612,6 +638,7 @@ class StudentController extends Controller
 			return response()->json(array(
 				'successful' => false,
 				'message'    => 'Invalid file encoding.',
+				'message'    => 'Invalid file encoding (Must be UTF-8).',
 			));
 		}
 
@@ -633,15 +660,20 @@ class StudentController extends Controller
 
 			if ($request->query('test') == 1)
 			{
+				parent::logInfo(__METHOD__, "Test Student import started");
+
 				return $this->testImportStudents($csv);
 			}
 			else
 			{
 				// Import to prod tables
+				parent::logInfo(__METHOD__, "Real Student import started");
 
 				// EMPTY STUDENTS
 				if (isset($request->empty_students))
 				{
+					parent::logInfo(__METHOD__, "Emptying Students via Student import");
+
 					$studentsToDelete = Student::all();
 
 					foreach ($studentsToDelete as $student)
@@ -653,11 +685,15 @@ class StudentController extends Controller
 				// EMPTY PROGRAMMES
 				if (isset($request->empty_programmes))
 				{
+					parent::logInfo(__METHOD__, "Emptying Programmes via Student import");
+
 					$userTable = new User();
 
 					DB::beginTransaction();
 
 					try {
+					try
+					{
 						DB::table($userTable->getTable())->update(array('programme' => null));
 						DB::statement("SET foreign_key_checks=0");
 						Programme::truncate();
@@ -756,26 +792,68 @@ class StudentController extends Controller
 						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() !== null)
 						{
 							throw new Exception("Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . " has an invalid candidate number.",
+							));
 						}
 						if ($csv[$i][1] === NULL)
+
+						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() != null)
 						{
 							throw new Exception("Student at row:" . $i . " has an invalid last name.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.",
+							));
 						}
 						if ($csv[$i][2] === NULL)
+
+						if ($csv[$i][1] == null)
 						{
 							throw new Exception("Student at row:" . $i . " has an invalid first name.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . " has an invalid last name.",
+							));
+						}
+
+						if ($csv[$i][2] == null)
+						{
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . " has an invalid first name.",
+							));
 						}
 						if ($csv[$i][3] === NULL)
+
+						if ($csv[$i][3] == null)
 						{
 							throw new Exception("Student at row:" . $i . " has an invalid programme.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . " has an invalid programme.",
+							));
 						}
 						if ($csv[$i][4] === NULL)
+
+						if ($csv[$i][4] == null)
 						{
 							throw new Exception("Student at row:" . $i . " has an invalid username.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . " has an invalid username.",
+							));
 						}
 						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && User::where('username', $csv[$i][4])->first() !== null)
+
+						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && User::where('username', $csv[$i][4])->first() != null)
 						{
 							throw new Exception("Student at row:" . $i . ". The username \"" . $csv[$i][4] . "\" is already in use.");
+							return response()->json(array(
+								'successful' => false,
+								'message'    => "Student at row:" . $i . ". The username \"" . $csv[$i][4] . "\" is already in use.",
+							));
 						}
 
 						$user = new User();
@@ -868,6 +946,8 @@ class StudentController extends Controller
 				));
 			}
 		}
+
+		parent::logInfo(__METHOD__, "Import students finished");
 
 		return response()->json(array(
 			'successful' => false,
