@@ -34,26 +34,26 @@
 			<table class="table table-hover bg-white data-table shadow-sm" id="swap-marker-student-table">
 				<thead>
 					<tr>
-						<th>Project Title</th>
 						<th>Student</th>
+						<th>Project Title</th>
 						<th>Supervisor</th>
 						<th>Marker</th>
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($projects as $project)
+					@foreach($students as $student)
 						@php
-							$student = $project->getAcceptedStudent();
+							$project = $student->project;
 						@endphp
 
 						<tr class="cursor--pointer" 
-							data-project-id="{{ $project->id }}" data-supervisor-id="{{ $project->supervisor_id }}"
-							data-marker-id="{{ $project->getSecondMarker()->id }}" data-marker-name="{{ $student->getSecondMarker()->getFullName() }}"
-							data-student-id="{{ $student->id }}" data-student-name="{{ $student->user->getFullName() }}">
-
-							<td title="{{ $project->description }}">{{ $project->title }}</td>
+							data-marker-id="{{ $student->getSecondMarker()->id }}" 
+							data-marker-name="{{ $student->getSecondMarker()->getFullName() }}"
+							data-student-id="{{ $student->id }}" data-student-name="{{ $student->user->getFullName() }}"
+						>
 							<td>{{ $student->user->getFullName() }}</td>
-							<td>{{ $project->supervisor->user->getFullName() }}</td>
+							<td>{{ empty($project) ? '-' : $project->title }}</td>
+							<td>{{ empty($project) ? '-' : $project->supervisor->user->getFullName() }}</td>
 							<td>{{ $student->getSecondMarker()->getFullName() }}</td>
 						</tr>
 					@endforeach

@@ -634,20 +634,17 @@ class ProjectAdminController extends Controller
 	{
 		$projectYear = $request->project_year ?? Mode::getProjectYear();
 
-		$projectTable = (new Project())->getTable();
 		$studentTable = (new Student())->getTable();
 		$pivotTable = (new SecondMarkerPivot())->getTable();
 		$userTable = (new User())->getTable();
 
-		$projects = Project::join($pivotTable . ' as piv', 'piv.project_id', '=', $projectTable . '.id')
-			->join($studentTable . ' as student', $projectTable . '.id', '=', 'student.project_id')
-			->join($userTable . ' as user', 'user.id', '=', 'student.id')
+		$students = Student::join($pivotTable . ' as piv', 'piv.student_id', '=', $studentTable . '.id')
+			->join($userTable . ' as user', 'user.id', '=', $studentTable . '.id')
 			->where('user.active_year', $projectYear)
 			->whereNotNull('piv.marker_id')
-			->select($projectTable . '.*')
 			->get();
 
-		return view('admin.swap-marker')->with('projects', $projects);
+		return view('admin.swap-marker')->with('students', $students);
 	}
 
 	/**
