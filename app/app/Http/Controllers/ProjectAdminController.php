@@ -94,6 +94,8 @@ class ProjectAdminController extends Controller
 		session()->flash('message', 'Supervisor arrangements have been updated successfully');
 		session()->flash('message_type', 'success');
 
+		parent::logInfo(__METHOD__, "Amended supervisor arrangements");
+
 		return view('admin.arrangements')->with('supervisors', $supervisors);
 	}
 
@@ -196,6 +198,8 @@ class ProjectAdminController extends Controller
 		session()->flash('message_type', 'success');
 		Session::put('logged_in_as', true);
 
+		parent::logInfo(__METHOD__, "Logged in-as");
+
 		return redirect()->action('HomeController@index');
 	}
 
@@ -232,6 +236,7 @@ class ProjectAdminController extends Controller
 	 */
 	public function archive(Request $request)
 	{
+		parent::logInfo(__METHOD__, "Running archive for current year");
 
 		if (!empty($request->project_year))
 		{
@@ -285,6 +290,8 @@ class ProjectAdminController extends Controller
 			DB::table($transaction->getTable())->delete();
 		});
 
+		parent::logInfo(__METHOD__, "Finished archive for current year");
+
 		return response()->json(array('successful' => true));
 	}
 
@@ -293,6 +300,7 @@ class ProjectAdminController extends Controller
 	 */
 	public function prevYearArchive($year)
 	{
+		parent::logInfo(__METHOD__, "Running archive for year ($year)");
 
 		DB::transaction(function () use ($year)
 		{
@@ -315,6 +323,8 @@ class ProjectAdminController extends Controller
 
 			Mode::where('project_year', $year)->delete();
 		});
+
+		parent::logInfo(__METHOD__, "Finished archiving for year ($year)");
 
 		return response()->json(array('successful' => true));
 	}
@@ -376,6 +386,7 @@ class ProjectAdminController extends Controller
 		set_time_limit(120);
 
 		Log::info("CALC: MAX (Number of projects)");
+		parent::logInfo(__METHOD__, "Running calculate second markers");
 
 		$maxStudentsPerSupervisor = PHP_INT_MAX;
 
@@ -392,6 +403,7 @@ class ProjectAdminController extends Controller
 		{
 
 			Log::info("CALC: MAX not enough");
+			parent::logInfo(__METHOD__, "Max students not high enough");
 
 			return response()->json(array(
 				'successful' => false,
