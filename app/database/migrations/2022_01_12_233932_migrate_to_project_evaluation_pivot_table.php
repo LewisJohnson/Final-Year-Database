@@ -1,4 +1,5 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
@@ -26,9 +27,11 @@ class MigrateToProjectEvaluationPivotTable extends Migration
 				$pivotTable = $department . '_proj_eval_pivot_' . $level['shortName'];
 				$studentTableName = $department . '_students_' . $level['shortName'];
 
-				// Select the project IDs
-				$sql =
-<<<EOT
+				if (Schema::hasColumn($projectEvaluationTableName, 'project_id'))
+				{
+					// Select the project IDs
+					$sql =
+						<<<EOT
 	SELECT 
 		pe.id as pe_id, 
 		student.id as student_id, 
@@ -36,17 +39,18 @@ class MigrateToProjectEvaluationPivotTable extends Migration
 	FROM $projectEvaluationTableName pe
 		LEFT JOIN $studentTableName student ON pe.project_id = student.project_id
 EOT;
-				// Store the values
-				$data = DB::select($sql);
+					// Store the values
+					$data = DB::select($sql);
 
-				// Insert data into new pivot table
-				foreach ($data as $d)
-				{
-					$sql =
-<<<EOT
+					// Insert data into new pivot table
+					foreach ($data as $d)
+					{
+						$sql =
+							<<<EOT
 	INSERT INTO $pivotTable VALUES ('$d->pe_id', '$d->student_id', '$d->project_id')
 EOT;
-					DB::statement($sql);
+						DB::statement($sql);
+					}
 				}
 			}
 		}
