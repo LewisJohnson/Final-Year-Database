@@ -9,11 +9,11 @@
 		$interestedStudents = Auth::user()->supervisor->getInterestedStudents();
 		$studentProposals = Auth::user()->supervisor->getStudentProjectProposals();
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents();
-		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects();
+		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingStudents();
 		$showEvaluationButton = SussexProjects\Mode::getProjectEvaluationDate()->lte(\Carbon\Carbon::now());
 	} else {
 		$acceptedStudents = Auth::user()->supervisor->getAcceptedStudents($projectYear);
-		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingProjects($projectYear);
+		$secondMarkerProjects = Auth::user()->supervisor->getSecondMarkingStudents($projectYear);
 		$showEvaluationButton = true;
 	}
 @endphp
@@ -188,17 +188,17 @@
 	</div>
 </div>
 
-{{-- SECOND MARKING PROJECTS --}}
+{{-- SECOND MARKING STUDENTS --}}
 <div class="row mt-3">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<h3 class="card-title">Second Marker Projects<span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
+				<h3 class="card-title">Second Marker Students<span class="fr text-primary px-2 py-1">{{ count($secondMarkerProjects) }}</span></h3>
 
 				@if(empty($projectYear) || ($projectYear == SussexProjects\Mode::getProjectYear()))
-					<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Students you're second marker to in {{ SussexProjects\Mode::getFriendlyProjectYear() }}.</h6>
 				@else
-					<h6 class="card-subtitle mb-2 text-muted">Projects you're second marker to in {{ $projectYear }}.</h6>
+					<h6 class="card-subtitle mb-2 text-muted">Students you're second marker to in {{ $projectYear }}.</h6>
 				@endif
 
 				<div class="table-responsive">
@@ -219,17 +219,28 @@
 								@foreach($secondMarkerProjects as $markerProjects)
 									<tr>
 										<td>
-											<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
+											@if(empty($markerProjects['student']))
+												-
+											@else
+												<a href="mailto:{{ $markerProjects['student']->user->email }}">{{ $markerProjects['student']->user->getFullName() }}</a>
+											@endif
 										</td>
 	
 										<td>
-											<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
+											@if(empty($markerProjects['project']))
+												-
+											@else
+												<a href="{{ action('ProjectController@show', $markerProjects['project']) }}">{{ $markerProjects['project']->title }}</a>
+											@endif
 										</td>
 
-										@if($showEvaluationButton)
+										@if($showEvaluationButton && !empty($markerProjects['student']))
+											@php
+												$evaluation = $markerProjects['student']->getEvaluation();
+											@endphp
 											<td>
-												@if(!empty($markerProjects['student']->evaluation))
-													<span class="{{ $markerProjects['student']->evaluation->getStatusBootstrapClass() }}">{{ $markerProjects['student']->evaluation->getStatus() }}</span>
+												@if(!empty($evaluation))
+													<span class="{{ $evaluation->getStatusBootstrapClass() }}">{{ $evaluation->getStatus() }}</span>
 												@else
 													Not Started
 												@endif
