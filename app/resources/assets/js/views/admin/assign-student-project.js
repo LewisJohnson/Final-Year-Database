@@ -16,7 +16,7 @@
 		this.urls = {
 			ASSIGN_PROJECT: 'admin/students/assign-project',
 		};
-		
+
 		// Methods
 		this.init = function () {
 			let self = this;
@@ -57,7 +57,7 @@
 			let studentName = this.selectedStudent.data('student-name');
 			let supervisorName = this.selectedProject.data('supervisor-name');
 			let projectTitle = this.selectedProject.data('project-title');
-			
+
 			$("#AssignProjectModal #StudentName").text(studentName);
 			$("#AssignProjectModal #SupervisorName").text(supervisorName);
 			$("#AssignProjectModal #ProjectTitle").text(projectTitle);

@@ -37,8 +37,8 @@ $.ajaxSetup({
 	}
 });
 
-$(document).ajaxSend(function(event, jqxhr, request) {
-	if(!(request.url.toLowerCase().includes('http') || request.url.toLowerCase().includes('https'))){
+$(document).ajaxSend(function (event, jqxhr, request) {
+	if (!(request.url.toLowerCase().includes('http') || request.url.toLowerCase().includes('https'))) {
 		request.url = config.ajaxBaseUrl + request.url;
 	}
 });
@@ -55,30 +55,30 @@ $(document).ajaxError(function (event, request, settings) {
 		createToast('error', errors);
 		return;
 	}
-	
 
-	if(request.responseJSON.message !== undefined){
+
+	if (request.responseJSON.message !== undefined) {
 		createToast('error', request.responseJSON.message);
 		return;
 	}
 
-	if(config.showAjaxRequestFailNotification){
+	if (config.showAjaxRequestFailNotification) {
 		createToast('error', 'Something went wrong with that request.');
 	}
 });
 
 // DOC READY
 "use strict";
-;$(function() {
+; $(function () {
 
-	if($('.navbar').length > 0){
+	if ($('.navbar').length > 0) {
 		$(window).scrollTop($('.navbar').outerHeight());
 	}
-	
+
 	/* ========================
 		2. HTML Modifications
 	   ======================== */
-	if($('.js-show-scroll-top').length > 0){
+	if ($('.js-show-scroll-top').length > 0) {
 		$('body').append('<button class="btn btn-primary scroll-to-top" style="display: none">Scroll to Top</button>');
 	}
 
@@ -92,11 +92,11 @@ $(document).ajaxError(function (event, request, settings) {
 		*
 		* There used to be more, but they were unused.
 	*/
-	$('.order-list-js').each(function() {
+	$('.order-list-js').each(function () {
 		var list = $(this);
 
-		if(list.hasClass('last-name-header-list-js')){
-			if(!list.attr('id')){
+		if (list.hasClass('last-name-header-list-js')) {
+			if (!list.attr('id')) {
 				console.error('A unique id is required.');
 				return;
 			}
@@ -117,16 +117,16 @@ $(document).ajaxError(function (event, request, settings) {
 	*/
 
 	var canChangeShareNamePreference = true;
-	$("#share-name-form").on('submit', function(e){
+	$("#share-name-form").on('submit', function (e) {
 		e.preventDefault();
 
-		if(canChangeShareNamePreference){
+		if (canChangeShareNamePreference) {
 			$.ajax({
 				url: $(this).prop('action'),
-				type:'PATCH',
+				type: 'PATCH',
 				data: $(this).serialize(),
-				success:function(response){
-					if(response.share_name){
+				success: function (response) {
+					if (response.share_name) {
 						createToast('success', 'Your name is being shared with other students.');
 					} else {
 						createToast('', 'You are no longer sharing your name with other students.');
@@ -139,9 +139,9 @@ $(document).ajaxError(function (event, request, settings) {
 			createToast('error', "Please wait a few seconds before changing your preference again.");
 		}
 
-		setTimeout(function(){
+		setTimeout(function () {
 			canChangeShareNamePreference = true;
-		}, 5000);
+		}, 1000);
 	});
 
 
@@ -150,15 +150,15 @@ $(document).ajaxError(function (event, request, settings) {
 		*
 		* Visible on a supervisor's homepage.
 	*/
-	$(".receive-emails-form").on('submit', function(e){
+	$(".receive-emails-form").on('submit', function (e) {
 		e.preventDefault();
 
 		$.ajax({
 			url: $(this).prop('action'),
-			type:'PATCH',
+			type: 'PATCH',
 			data: $(this).serialize(),
-			success:function(response){
-				if(response.successful){
+			success: function (response) {
+				if (response.successful) {
 					createToast('success', response.message);
 				} else {
 					createToast('error', response.message);
@@ -171,9 +171,9 @@ $(document).ajaxError(function (event, request, settings) {
 		* Submit receive email form when checkbox toggled.
 	*/
 	var userCanChangeEmailPreference = true;
-	$('.receive-emails-checkbox').on('click', function(e){
+	$('.receive-emails-checkbox').on('click', function (e) {
 
-		if(userCanChangeEmailPreference){
+		if (userCanChangeEmailPreference) {
 			$(this).submit();
 			userCanChangeEmailPreference = false;
 		} else {
@@ -181,30 +181,30 @@ $(document).ajaxError(function (event, request, settings) {
 			createToast('error', "Please wait a few seconds before changing your preference again.");
 		}
 
-		setTimeout(function(){
+		setTimeout(function () {
 			userCanChangeEmailPreference = true;
-		}, 2000);
+		}, 1000);
 	});
 
 	/**
 		* Submit login form.
 	*/
-	$("#loginForm").on('submit', function(e){
+	$("#loginForm").on('submit', function (e) {
 		e.preventDefault();
 
 		$('.help-block', '#loginForm').css("display", "none");
 
-		if($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined){
+		if ($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined) {
 			$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.showLoader();
 		}
 
 		$.ajax({
 			url: $(this).prop('action'),
-			type:'POST',
+			type: 'POST',
 			data: $(this).serialize(),
-			success: function(response){
-				if(response.successful){
-					if(response.url != null){
+			success: function (response) {
+				if (response.successful) {
+					if (response.url != null) {
 						window.location = response.url;
 					} else {
 						location.reload(true);
@@ -214,8 +214,8 @@ $(document).ajaxError(function (event, request, settings) {
 					$('.help-block', AjaxFunctions.prototype.Selectors_.LOG_IN_FORM).text(response.message);
 				}
 			}
-		}).always(function(response){
-			if($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined){
+		}).always(function (response) {
+			if ($(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0] !== undefined) {
 				$(AjaxFunctions.prototype.Selectors_.LOG_IN_DIALOG)[0].dialog.hideLoader();
 			}
 		});
@@ -225,7 +225,7 @@ $(document).ajaxError(function (event, request, settings) {
 	/**
 		* Delete a project form submit.
 	*/
-	$('form#delete-project').on('submit', function(e) {
+	$('form#delete-project').on('submit', function (e) {
 		e.preventDefault();
 		var form = $(this);
 		var projectName = form.data('project-title');
@@ -237,20 +237,20 @@ $(document).ajaxError(function (event, request, settings) {
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
-			animateFromElement : false,
+			animateFromElement: false,
 			content: 'Are you sure you want to delete <b>' + projectName + '</b>?',
 			buttons: {
 				confirm: {
 					btnClass: 'btn-red',
-					action: function(){
+					action: function () {
 						$.ajax({
 							method: 'DELETE',
 							url: form.prop('action'),
 							data: {
 								project_id: form.data('project-id'),
 							},
-							success:function(response){
-								if(response.successful){
+							success: function (response) {
+								if (response.successful) {
 									window.location.href = response.url;
 								} else {
 									createToast('error', response.message);
@@ -272,8 +272,8 @@ $(document).ajaxError(function (event, request, settings) {
 	/**
 		* External links can be used to give the illusion of AJAX.
 	*/
-	$("body").on("click", ".external-link",  function(e) {
-		if(alreadyChangingDocument){
+	$("body").on("click", ".external-link", function (e) {
+		if (alreadyChangingDocument) {
 			return;
 		}
 		alreadyChangingDocument = true;
@@ -292,7 +292,7 @@ $(document).ajaxError(function (event, request, settings) {
 	/**
 		* The student undo project form.
 	*/
-	$('#student-undo-select').on('click', function(e) {
+	$('#student-undo-select').on('click', function (e) {
 		var card = $(this).parent();
 		$.confirm({
 			title: 'Undo Project Selection',
@@ -301,24 +301,25 @@ $(document).ajaxError(function (event, request, settings) {
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
-			animateFromElement : false,
+			animateFromElement: false,
 			autoClose: 'cancel|10000',
 			content: 'Are you sure you want to un-select your selected project?<br>You may only perform this action prior to being accepted',
 			buttons: {
 				confirm: {
 					btnClass: 'btn-red',
-					action: function(){
+					action: function () {
 						$.ajax({
 							method: 'PATCH',
 							url: 'students/project/undo',
-							success:function(response){
-								if(response.successful){
+							success: function (response) {
+								if (response.successful) {
 									createToast('success', 'Undo successful.');
-									card.slideUp(400, function() {
+									card.slideUp(400, function () {
 										location.reload();
 									});
 
-								} else {location.reload();
+								} else {
+									location.reload();
 									createToast('error', response.message);
 								}
 							}
@@ -333,7 +334,7 @@ $(document).ajaxError(function (event, request, settings) {
 	/**
 		* The site-wide feedback form.
 	*/
-	$('#leave-feedback-button').on('click', function(e){
+	$('#leave-feedback-button').on('click', function (e) {
 		$.confirm({
 			title: 'Feedback',
 			content: function () {
@@ -344,7 +345,7 @@ $(document).ajaxError(function (event, request, settings) {
 					method: 'GET',
 				}).done(function (response) {
 					self.setContent(response);
-				}).fail(function(){
+				}).fail(function () {
 					self.setContent('Something went wrong.');
 				});
 			},
@@ -353,14 +354,14 @@ $(document).ajaxError(function (event, request, settings) {
 			theme: 'modern',
 			escapeKey: true,
 			backgroundDismiss: true,
-			animateFromElement : true,
+			animateFromElement: true,
 			buttons: {
 				formSubmit: {
 					text: 'Submit',
 					btnClass: 'btn-blue',
 					action: function () {
 						var comment = this.$content.find('.comment').val();
-						if(!comment){
+						if (!comment) {
 							$.alert('Please provide some feedback.');
 							return false;
 						}
@@ -369,8 +370,8 @@ $(document).ajaxError(function (event, request, settings) {
 							url: 'feedback',
 							method: 'POST',
 							data: this.$content.find('form').serialize(),
-							success:function(response){
-								if(response.successful){
+							success: function (response) {
+								if (response.successful) {
 									createToast('success', response.message);
 								} else {
 									createToast('error', response.message);
@@ -379,7 +380,7 @@ $(document).ajaxError(function (event, request, settings) {
 						});
 					}
 				},
-				cancel: function () {},
+				cancel: function () { },
 			},
 			onContentReady: function () {
 				$('#feedback-page').val(window.location.pathname);
@@ -397,18 +398,18 @@ $(document).ajaxError(function (event, request, settings) {
 	/**
 		* Adds or removes a project from a student favourites.
 	*/
-	$(".favourite-container").on('click', function() {
+	$(".favourite-container").on('click', function () {
 
 		var svgContainer = $(this);
 		var svg = svgContainer.find('svg');
 
 		// The last event is still loading, so return until it is complete.
-		if($('.spinner-grow', svgContainer).css('display') !== 'none'){
+		if ($('.spinner-grow', svgContainer).css('display') !== 'none') {
 			createToast('', 'Please wait a few seconds before changing your preference again.');
 			return;
 		}
 
-		if(window['project'] != null){
+		if (window['project'] != null) {
 			var projectId = window['project'].data('project-id');
 		} else {
 			var projectId = $(this).data('project-id');
@@ -417,7 +418,7 @@ $(document).ajaxError(function (event, request, settings) {
 		svg.hide();
 		$('.spinner-grow', svgContainer).show();
 
-		if(svg.hasClass('favourite')){
+		if (svg.hasClass('favourite')) {
 			var action = 'remove';
 			var ajaxUrl = 'students/favourites/remove';
 
@@ -428,18 +429,18 @@ $(document).ajaxError(function (event, request, settings) {
 
 		$.ajax({
 			url: ajaxUrl,
-			type:'PATCH',
+			type: 'PATCH',
 			data: {
 				project_id: projectId
 			},
-			success:function(){
-				if(action == "add"){
+			success: function () {
+				if (action == "add") {
 					svg.addClass('favourite');
 				} else {
 					svg.removeClass('favourite');
 				}
 			}
-		}).always(function(data){
+		}).always(function (data) {
 			svg.fadeIn(config.animtions.fast);
 			$('.spinner-grow', svgContainer).hide();
 		});
@@ -450,8 +451,8 @@ $(document).ajaxError(function (event, request, settings) {
 	   ====================== */
 
 	var dontRemindAgainAmoutMailtoLimit = false;
-	$("body").on("change", ".email-table .checkbox input", function() {
-		var select = function(dom){
+	$("body").on("change", ".email-table .checkbox input", function () {
+		var select = function (dom) {
 			var status = dom.parents().eq(4).data('status');
 			var adminEmail = dom.parents().eq(4).data('admin-email');
 			var checkboxSelector = '.email-table.' + status + ' .checkbox input';
@@ -463,10 +464,10 @@ $(document).ajaxError(function (event, request, settings) {
 			var emailString = "mailto:" + adminEmail + "?bcc=";
 			var overflowEmailString = "mailto:" + adminEmail + "?bcc=";
 
-			$(checkboxSelector).each(function(index, value) {
+			$(checkboxSelector).each(function (index, value) {
 				// Add to second email if first URL length is too long
-				if($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
-					if(emailString.length <= config.maxUrlLength){
+				if ($(value).is(":checked") && !$(value).hasClass("master-checkbox")) {
+					if (emailString.length <= config.maxUrlLength) {
 						emailString += $(value).data('email');
 						emailString += ",";
 					} else {
@@ -479,27 +480,27 @@ $(document).ajaxError(function (event, request, settings) {
 				}
 			});
 
-			if(emailString.length >= config.maxUrlLength && !dontRemindAgainAmoutMailtoLimit){
+			if (emailString.length >= config.maxUrlLength && !dontRemindAgainAmoutMailtoLimit) {
 				$.confirm({
 					type: 'red',
 					icon: '<div class="svg-md"><div class="svg-container"><svg viewBox="0 0 24 24"><path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" /></svg></div></div>',
 					theme: 'modern',
 					escapeKey: true,
-					animateFromElement : false,
+					animateFromElement: false,
 					backgroundDismiss: true,
 					title: 'Mailto Limit Reached',
 					content: 'Some older web browsers and email clients have a URL length limit of 2000 characters. ' +
-							'Because of this we have generated multiple emails for you. ' +
-							'You can either try your luck with the longer URL (The "Email Selected" button), or use the separate email links here. ' +
-							'<div style="margin: 2rem auto">' +
-							'	<a class="button button--raised" style="margin-right: 10px" href="' + emailString + '">Email 1</a>' +
-							'	<a class="button button--raised" href="' + overflowEmailString + '">Email 2</a>' +
-							'</div> ',
+						'Because of this we have generated multiple emails for you. ' +
+						'You can either try your luck with the longer URL (The "Email Selected" button), or use the separate email links here. ' +
+						'<div style="margin: 2rem auto">' +
+						'	<a class="button button--raised" style="margin-right: 10px" href="' + emailString + '">Email 1</a>' +
+						'	<a class="button button--raised" href="' + overflowEmailString + '">Email 2</a>' +
+						'</div> ',
 					buttons: {
 						neveragain: {
 							text: "Don't remind me again",
 							btnClass: 'btn-red-text',
-							action: function(){
+							action: function () {
 								dontRemindAgainAmoutMailtoLimit = true;
 							}
 						},
@@ -515,18 +516,18 @@ $(document).ajaxError(function (event, request, settings) {
 	});
 
 	// Check title name
-	if($('.js-project-title').length > 0){
+	if ($('.js-project-title').length > 0) {
 		var titleCharCount = $('#title-character-count');
 		var title = $('#title');
 		var projectId = $('.js-project-form').data('project-id');
 
 		// Bind value
 		// Only bind blur to not spam DB
-		title.on("blur",  function(){
+		title.on("blur", function () {
 			checkTitleInDatabase(projectId);
 		});
 
-		title.on("blur keydown change",  function(){
+		title.on("blur keydown change", function () {
 			checkTitleLength();
 		});
 
@@ -535,23 +536,23 @@ $(document).ajaxError(function (event, request, settings) {
 		checkTitleInDatabase(projectId);
 	}
 
-	function checkTitleInDatabase(projectId){
+	function checkTitleInDatabase(projectId) {
 		// Check already used titles
 		$.ajax({
 			url: 'projects/check-title',
-			type:'POST',
+			type: 'POST',
 			data: {
 				project_title: title.val(),
 				project_id: projectId
 			},
-			success:function(result){
-				if(result.hasSameTitle){
+			success: function (result) {
+				if (result.hasSameTitle) {
 					$('#title-already-used').fadeIn(config.animtions.medium);
 					$('#similar-title-already-used').fadeOut(config.animtions.medium);
 				} else {
 					$('#title-already-used').fadeOut(config.animtions.medium);
 
-					if(result.hasSimiliarTitle){
+					if (result.hasSimiliarTitle) {
 						$('#similar-title-already-used').fadeIn(config.animtions.medium);
 					} else {
 						$('#similar-title-already-used').fadeOut(config.animtions.medium);
@@ -561,31 +562,31 @@ $(document).ajaxError(function (event, request, settings) {
 		});
 	}
 
-	function checkTitleLength(){
+	function checkTitleLength() {
 		var length = title.val().length;
 		titleCharCount.text(length + '/40');
 
-		if(length >= 40){
+		if (length >= 40) {
 			titleCharCount.css('color', 'red');
-		} else if(length > 34){
+		} else if (length > 34) {
 			titleCharCount.css('color', 'orange');
 		} else {
 			titleCharCount.css('color', 'darkgray');
 		}
 	}
 
-	$(".js-projectYear").on('change', function(){
+	$(".js-projectYear").on('change', function () {
 		window.location = $(":selected", this).attr('data-href');
 	});
 
 	/* ======================
 		 6. HTML EDITOR
 	   ====================== */
-	$('.html-editor').each(function(index, value){
+	$('.html-editor').each(function (index, value) {
 		$.ajax({
 			url: 'snippet?snippet=html-editor-toolbar',
-			type:'GET',
-			success:function(result){
+			type: 'GET',
+			success: function (result) {
 				$('.html-editor--input').after(result);
 			},
 		});
@@ -600,7 +601,7 @@ $(document).ajaxError(function (event, request, settings) {
 		$('.html-editor--top-buttons .html').addClass('active');
 	});
 
-	$('.html-editor--top-buttons .html').on('click', function(){
+	$('.html-editor--top-buttons .html').on('click', function () {
 		$(this).addClass('active');
 		$('.html-editor--top-buttons .preview').removeClass('active');
 
@@ -609,8 +610,8 @@ $(document).ajaxError(function (event, request, settings) {
 		$('.html-editor--preview-container').hide();
 	});
 
-	$('.html-editor--top-buttons .preview').on('click', function(){
-		if($(this).hasClass('active')){
+	$('.html-editor--top-buttons .preview').on('click', function () {
+		if ($(this).hasClass('active')) {
 			return;
 		}
 
@@ -623,22 +624,22 @@ $(document).ajaxError(function (event, request, settings) {
 		updateProjectPreview();
 	});
 
-	function updateProjectPreview(){
+	function updateProjectPreview() {
 		$.ajax({
 			url: 'projects/description-preview',
-			type:'POST',
+			type: 'POST',
 			data: {
 				'description': $('.html-editor--input').val()
 			},
-			success: function(result){
+			success: function (result) {
 				$('.html-editor--preview').html(result.message);
 			}
 		});
 	}
 
 	// Toggle label flips toggle
-	$(".html-editor").on("click", ".html-editor--toolbar li button",  function(e) {
-		switch($(this).data('type')){
+	$(".html-editor").on("click", ".html-editor--toolbar li button", function (e) {
+		switch ($(this).data('type')) {
 			case "linebreak":
 				insertAtCaret('html-editor--input', '<br>');
 				break;
@@ -670,8 +671,8 @@ $(document).ajaxError(function (event, request, settings) {
 			case "video":
 				var inputUrl = prompt("Enter the video URL", "https://www.");
 				var html = '<video controls>\n';
-					html += '<source src="'+ inputUrl +'" type="video/mp4">\n';
-					html += '</video>\n';
+				html += '<source src="' + inputUrl + '" type="video/mp4">\n';
+				html += '</video>\n';
 				insertAtCaret('html-editor--input', html);
 				break;
 
@@ -699,7 +700,7 @@ $(document).ajaxError(function (event, request, settings) {
 				$.dialog({
 					theme: 'modern',
 					escapeKey: true,
-					animateFromElement : false,
+					animateFromElement: false,
 					backgroundDismiss: true,
 					title: 'HTML Editor',
 					content: 'Here are some notes to... note about the HTML editor. <ul style="text-align: left;padding-top: 15px;"><li>All external links will open in a new tab.</li><li>All HTML 5 elements are valid for the description field, excluding;<ul><li>Script tags.</li><li>Heading tags.</li><li>HTML document tags.</li><li>Body tags.</li></li></ul></ul>',
@@ -711,15 +712,15 @@ $(document).ajaxError(function (event, request, settings) {
 	/* ======================
 		 7. OTHER
 	   ====================== */
-	$('[data-hover]').on('mouseenter', function(){
-		if($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1){
+	$('[data-hover]').on('mouseenter', function () {
+		if ($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1) {
 			$(this).attr('data-original', $(this).html());
 			$(this).html($(this).data('hover'));
 		}
 	});
 
-	$('[data-hover]').on('mouseleave', function(){
-		if($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1){
+	$('[data-hover]').on('mouseleave', function () {
+		if ($('#showTransactionDetailOnHover').prop("checked") || $('#showTransactionDetailOnHover').length < 1) {
 			$(this).html($(this).data('original'));
 		}
 	});
