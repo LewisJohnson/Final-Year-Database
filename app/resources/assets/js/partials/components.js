@@ -31,7 +31,7 @@
 */
 "use strict";
 
-;$(function() {
+; $(function () {
 
 	/* ==================
 		 1. Mobile Menu
@@ -43,7 +43,7 @@
 		* @param {HTMLElement} element The element that will be upgraded.
 	*/
 	var MobileMenu = function MobileMenu(element) {
-		if(window['MobileMenu'] == null){
+		if (window['MobileMenu'] == null) {
 			window['MobileMenu'] = this;
 			this.element = $(element);
 			this.activator = $(this.Selectors_.HAMBURGER_CONTAINER);
@@ -65,7 +65,7 @@
 		UNDERLAY: '.mobile-nav-underlay'
 	};
 
-	MobileMenu.prototype.openMenu = function (){
+	MobileMenu.prototype.openMenu = function () {
 		this.activator.attr("aria-expanded", "true");
 		this.element.addClass(this.CssClasses_.IS_VISIBLE);
 
@@ -73,7 +73,7 @@
 		this.underlay.addClass(this.CssClasses_.IS_VISIBLE);
 	};
 
-	MobileMenu.prototype.closeMenu = function (){
+	MobileMenu.prototype.closeMenu = function () {
 		this.activator.attr("aria-expanded", "false");
 		this.element.removeClass(this.CssClasses_.IS_VISIBLE);
 
@@ -89,7 +89,7 @@
 	};
 
 	MobileMenu.prototype.initAll = function () {
-		$(this.Selectors_.MOBILE_MENU).each(function() {
+		$(this.Selectors_.MOBILE_MENU).each(function () {
 			this.mobileMenu = new MobileMenu(this);
 		});
 	};
@@ -97,7 +97,7 @@
 	/* =========================
 		1.1 Desktop menu (MORPH)
 	   ========================= */
-	function morphDropdown( element ) {
+	function morphDropdown(element) {
 		this.element = element;
 		this.mainNavigation = this.element.find('.main-nav');
 		this.mainNavigationItems = this.mainNavigation.find('.has-dropdown');
@@ -109,51 +109,51 @@
 		this.bindEvents();
 	}
 
-	morphDropdown.prototype.checkMq = function() {
+	morphDropdown.prototype.checkMq = function () {
 		//check screen size
 		var self = this;
 		return window.getComputedStyle(self.element.get(0), '::before').getPropertyValue('content').replace(/'/g, "").replace(/"/g, "").split(', ');
 	};
 
-	morphDropdown.prototype.bindEvents = function() {
+	morphDropdown.prototype.bindEvents = function () {
 		var self = this;
 		//hover over an item in the main navigation
-		this.mainNavigationItems.mouseenter(function(event){
+		this.mainNavigationItems.mouseenter(function (event) {
 			//hover over one of the nav items -> show dropdown
 			self.showDropdown($(this));
-		}).mouseleave(function(){
-			setTimeout(function(){
+		}).mouseleave(function () {
+			setTimeout(function () {
 				//if not hovering over a nav item or a dropdown -> hide dropdown
-				if( self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) self.hideDropdown();
+				if (self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0) self.hideDropdown();
 			}, 50);
 		});
 
 		//hover over the dropdown
-		this.dropdownList.mouseleave(function(){
-			setTimeout(function(){
+		this.dropdownList.mouseleave(function () {
+			setTimeout(function () {
 				//if not hovering over a dropdown or a nav item -> hide dropdown
-				(self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) && self.hideDropdown();
+				(self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0) && self.hideDropdown();
 			}, 50);
 		});
 
 		//click on an item in the main navigation -> open a dropdown on a touch device
-		this.mainNavigationItems.on('touchstart', function(event){
-			var selectedDropdown = self.dropdownList.find('#'+$(this).data('content'));
-			if( !self.element.hasClass('is-dropdown-visible') || !selectedDropdown.hasClass('active') ) {
+		this.mainNavigationItems.on('touchstart', function (event) {
+			var selectedDropdown = self.dropdownList.find('#' + $(this).data('content'));
+			if (!self.element.hasClass('is-dropdown-visible') || !selectedDropdown.hasClass('active')) {
 				event.preventDefault();
 				self.showDropdown($(this));
 			}
 		});
 	};
 
-	morphDropdown.prototype.showDropdown = function(item) {
+	morphDropdown.prototype.showDropdown = function (item) {
 		this.mq = this.checkMq();
 
 		var self = this;
-		var selectedDropdown = this.dropdownList.find('#'+item.data('content')),
+		var selectedDropdown = this.dropdownList.find('#' + item.data('content')),
 			selectedDropdownHeight = selectedDropdown.innerHeight(),
 			selectedDropdownWidth = selectedDropdown.children('.content').innerWidth(),
-			selectedDropdownLeft = item.offset().left + item.innerWidth()/2 - selectedDropdownWidth/2;
+			selectedDropdownLeft = item.offset().left + item.innerWidth() / 2 - selectedDropdownWidth / 2;
 
 		//update dropdown position and size
 		this.updateDropdown(selectedDropdown, parseInt(selectedDropdownHeight), selectedDropdownWidth, parseInt(selectedDropdownLeft));
@@ -162,23 +162,23 @@
 		selectedDropdown.addClass('active').removeClass('move-left move-right').prevAll().addClass('move-left').end().nextAll().addClass('move-right');
 		item.addClass('active');
 		//show the dropdown wrapper if not visible yet
-		if( !this.element.hasClass('is-dropdown-visible') ) {
-			setTimeout(function(){
+		if (!this.element.hasClass('is-dropdown-visible')) {
+			setTimeout(function () {
 				self.element.addClass('is-dropdown-visible');
 			}, 10);
 		}
 
 	};
 
-	morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left) {
+	morphDropdown.prototype.updateDropdown = function (dropdownItem, height, width, left) {
 		this.dropdownList.css({
 			'-moz-transform': 'translateX(' + left + 'px)',
 			'-webkit-transform': 'translateX(' + left + 'px)',
 			'-ms-transform': 'translateX(' + left + 'px)',
 			'-o-transform': 'translateX(' + left + 'px)',
 			'transform': 'translateX(' + left + 'px)',
-			'width': width+'px',
-			'height': height+'px'
+			'width': width + 'px',
+			'height': height + 'px'
 		});
 
 		this.dropdownBg.css({
@@ -190,7 +190,7 @@
 		});
 	};
 
-	morphDropdown.prototype.hideDropdown = function() {
+	morphDropdown.prototype.hideDropdown = function () {
 		this.mq = this.checkMq();
 		this.element
 			.removeClass('is-dropdown-visible')
@@ -204,13 +204,13 @@
 			.removeClass('move-right');
 	};
 
-	morphDropdown.prototype.resetDropdown = function() {
+	morphDropdown.prototype.resetDropdown = function () {
 		this.mq = this.checkMq();
 	};
 
 	var morphDropdowns = [];
-	if( $('.cd-morph-dropdown').length > 0) {
-		$('.cd-morph-dropdown').each(function(){
+	if ($('.cd-morph-dropdown').length > 0) {
+		$('.cd-morph-dropdown').each(function () {
 			//create a morphDropdown object for each .cd-morph-dropdown
 			morphDropdowns.push(new morphDropdown($(this)));
 		});
@@ -219,15 +219,15 @@
 
 		//on resize, reset dropdown style property
 		updateDropdownPosition();
-		$(window).on('resize', function(){
-			if( !resizing ) {
+		$(window).on('resize', function () {
+			if (!resizing) {
 				resizing = true;
 				(!window.requestAnimationFrame) ? setTimeout(updateDropdownPosition, 300) : window.requestAnimationFrame(updateDropdownPosition);
 			}
 		});
 
 		function updateDropdownPosition() {
-			morphDropdowns.forEach(function(element){
+			morphDropdowns.forEach(function (element) {
 				element.resetDropdown();
 			});
 
@@ -276,7 +276,7 @@
 		DIALOG_FOOTER: 'footer, .footer',
 	};
 
-	Dialog.prototype.showLoader = function(){
+	Dialog.prototype.showLoader = function () {
 		// Show loader
 		this.loader.removeClass('d-none');
 		this.loader.addClass('d-flex');
@@ -288,7 +288,7 @@
 		this.footer.hide();
 	};
 
-	Dialog.prototype.hideLoader = function(){
+	Dialog.prototype.hideLoader = function () {
 		// Hide loader
 		this.loader.removeClass('d-flex');
 		this.loader.addClass('d-none');
@@ -298,7 +298,7 @@
 		this.footer.show();
 	};
 
-	Dialog.prototype.showDialog = function(){
+	Dialog.prototype.showDialog = function () {
 
 		// Disable body scroll
 		$("body").css("overflow", "hidden");
@@ -312,13 +312,13 @@
 		this.element.addClass(this.CssClasses_.ACTIVE);
 		window['Dialog'] = this;
 
-		if (typeof(window['MobileMenu']) != "undefined"){
+		if (typeof (window['MobileMenu']) != "undefined") {
 			window['MobileMenu'].closeMenu();
 		}
 	};
 
-	Dialog.prototype.hideDialog = function(){
-		if(this.isClosable && this.underlay.data("owner") == this.dialogName){
+	Dialog.prototype.hideDialog = function () {
+		if (this.isClosable && this.underlay.data("owner") == this.dialogName) {
 			// Enable body scroll
 			$("body").css("overflow", "auto");
 
@@ -329,13 +329,13 @@
 		}
 	};
 
-	Dialog.prototype.init = function(){
+	Dialog.prototype.init = function () {
 		// Needed for context
 		var dialog = this;
 
 		// Find activator button
-		$('button, a').each(function() {
-			if(($(this).data('activator') || $(this).is('[data-activator]')) && $(this).data('dialog') == dialog.dialogName){
+		$('button, a').each(function () {
+			if (($(this).data('activator') || $(this).is('[data-activator]')) && $(this).data('dialog') == dialog.dialogName) {
 				dialog.activatorButtons.push($(this));
 			}
 		});
@@ -344,30 +344,30 @@
 		dialog.element.attr("aria-hidden", "true");
 		dialog.underlay.on('click', dialog.hideDialog.bind(dialog));
 
-		try{
-			$(dialog.activatorButtons).each(function() {
+		try {
+			$(dialog.activatorButtons).each(function () {
 				$(this).on('click', dialog.showDialog.bind(dialog));
 			});
-		} catch(err){
+		} catch (err) {
 			console.error("Dialog " + dialog.dialogName + " has no activator button.");
 			console.error(err);
 		}
 	};
 
-	Dialog.prototype.initAll = function(){
-		$(this.Selectors_.DIALOG).each(function() {
+	Dialog.prototype.initAll = function () {
+		$(this.Selectors_.DIALOG).each(function () {
 			this.dialog = new Dialog(this);
 		});
 	};
 
-	$(document).ready(function() {
-		$(this).keydown(function(e) {
+	$(document).ready(function () {
+		$(this).keydown(function (e) {
 			// Is ESC key is pressed, hide dialogs and mobile menu
-			if(e.keyCode == 27 && window['Dialog'] != null) {
+			if (e.keyCode == 27 && window['Dialog'] != null) {
 				window['Dialog'].hideDialog();
 			}
 
-			if(e.keyCode == 27 && window['MobileMenu'] != null) {
+			if (e.keyCode == 27 && window['MobileMenu'] != null) {
 				window['MobileMenu'].closeMenu();
 			}
 		});
@@ -408,8 +408,8 @@
 	};
 
 	DataTable.prototype.functions = {
-		selectAllRows: function() {
-			if(this.masterCheckbox.is(':checked')){
+		selectAllRows: function () {
+			if (this.masterCheckbox.is(':checked')) {
 				this.rows.addClass(DataTable.prototype.CssClasses_.IS_SELECTED);
 				this.checkboxes.prop('checked', true);
 			} else {
@@ -432,13 +432,13 @@
 		var dataTable = this;
 
 		this.masterCheckbox.on('change', $.proxy(this.functions.selectAllRows, dataTable));
-		$(this.checkboxes).each(function(i) {
+		$(this.checkboxes).each(function (i) {
 			$(this).on('change', $.proxy(dataTable.functions.selectRow, this, $(this), dataTable.bodyRows.eq(i)));
 		});
 	};
 
 	DataTable.prototype.initAll = function () {
-		$(this.Selectors_.DATA_TABLE).each(function() {
+		$(this.Selectors_.DATA_TABLE).each(function () {
 			this.dataTable = new DataTable(this);
 		});
 	};
@@ -477,8 +477,8 @@
 	};
 
 	ColumnToggleTable.prototype.functions = {
-		toggleColumn: function(columnIndex, toggleTable, checked) {
-			if(checked){
+		toggleColumn: function (columnIndex, toggleTable, checked) {
+			if (checked) {
 				toggleTable.head.children().eq(columnIndex).removeAttr('hidden');
 				toggleTable.head.children().eq(columnIndex).show();
 			} else {
@@ -486,8 +486,8 @@
 				toggleTable.head.children().eq(columnIndex).hide();
 			}
 
-			toggleTable.bodyRows.each(function(){
-				if(checked){
+			toggleTable.bodyRows.each(function () {
+				if (checked) {
 					$(this).children().eq(columnIndex).show();
 				} else {
 					$(this).children().eq(columnIndex).hide();
@@ -495,25 +495,25 @@
 			});
 		},
 
-		refresh: function(toggleTable) {
+		refresh: function (toggleTable) {
 			var hideIndices = [];
 
 			toggleTable.bodyRows = toggleTable.table.find('tbody tr');
-			toggleTable.headers.each(function(){
-				if($(this).attr('hidden')){
+			toggleTable.headers.each(function () {
+				if ($(this).attr('hidden')) {
 					hideIndices.push($(this).index());
 				}
 			});
 
-			toggleTable.bodyRows.each(function(){
+			toggleTable.bodyRows.each(function () {
 				for (var i = 0; i < hideIndices.length; i++) {
 					$(this).children().eq(hideIndices[i]).hide();
 				}
 			});
 		},
 
-		refreshAll: function() {
-			$(ColumnToggleTable.prototype.Selectors_.TOGGLE_TABLE).each(function() {
+		refreshAll: function () {
+			$(ColumnToggleTable.prototype.Selectors_.TOGGLE_TABLE).each(function () {
 				ColumnToggleTable.prototype.functions.refresh(this.ColumnToggleTable);
 			});
 		},
@@ -533,14 +533,14 @@
 		this.selectorButton = columnSelectorButton;
 		this.selectorMenu = columnSelectorMenu;
 
-		this.headers.each(function (){
+		this.headers.each(function () {
 			var checked = $(this).data("default") ? "checked" : "";
 
-			if($(this).data("default") == false){
+			if ($(this).data("default") == false) {
 				$(this).attr("hidden", "true");
 			}
 
-			if($(this).data("default") == "desktop" && $(window).width() <= config.mobileWidth){
+			if ($(this).data("default") == "desktop" && $(window).width() <= config.mobileWidth) {
 				$(this).attr("hidden", "true");
 			}
 
@@ -549,20 +549,20 @@
 			columnSelectorMenu.append(`
 				<li class="p-2 p-md-1">
 					<div class="checkbox d-flex">
-						<input class="column-toggle js-cookie" id="column-${ id }" type="checkbox" ${ checked }>
-						<label class="text-body ml-2 flex-grow-1" for="column-${ id }">${ $(this).contents().get(0).nodeValue }</label>
+						<input class="column-toggle js-cookie" id="column-${id}" type="checkbox" ${checked}>
+						<label class="text-body ml-2 flex-grow-1" for="column-${id}">${$(this).contents().get(0).nodeValue}</label>
 					</div>
 				</li>`
 			);
 		});
 
-		columnSelectorButton.on("click", function(e){
-			if($(e.target).hasClass("btn")){
+		columnSelectorButton.on("click", function (e) {
+			if ($(e.target).hasClass("btn")) {
 				columnSelectorMenu.fadeToggle(config.animtions.medium);
 			}
 		})
 
-		$("body").on("change", ".column-toggle", function(){
+		$("body").on("change", ".column-toggle", function () {
 			var index = $('.column-toggle').index(this);
 			ColumnToggleTable.prototype.functions.toggleColumn(index, toggleTable, $(this).prop('checked'));
 		});
@@ -570,7 +570,7 @@
 
 
 	ColumnToggleTable.prototype.initAll = function () {
-		$(this.Selectors_.TOGGLE_TABLE).each(function() {
+		$(this.Selectors_.TOGGLE_TABLE).each(function () {
 			this.ColumnToggleTable = new ColumnToggleTable(this);
 		});
 
@@ -608,9 +608,9 @@
 	};
 
 	EditTopic.prototype.functions = {
-		editTopic: function() {
+		editTopic: function () {
 			var topic = this;
-			if(topic.originalName == topic.nameInput.val()){
+			if (topic.originalName == topic.nameInput.val()) {
 				return;
 			}
 
@@ -621,12 +621,12 @@
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
-				animateFromElement : false,
-				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.nameInput.val() +'"</b>?',
+				animateFromElement: false,
+				content: 'Are you sure you want to change the topic name from <b>"' + topic.originalName + '"</b> to <b>"' + topic.nameInput.val() + '"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
-						action: function(){
+						action: function () {
 							topic.nameInput.prop('disabled', true);
 							topic.editButton.html('<div class="spinner-border spinner-border-sm text-primary"</div>');
 
@@ -636,31 +636,31 @@
 								context: topic,
 								data: {
 									topic_id: topic.Id,
-									topic_name : topic.nameInput.val()
+									topic_name: topic.nameInput.val()
 								},
-								success: function(){
+								success: function () {
 									createToast('success', 'Topic Updated');
 									topic.element.data('original-topic-name', topic.nameInput.val());
 									topic.nameInput.change();
 								}
-							}).always(function(){
+							}).always(function () {
 								topic.nameInput.prop('disabled', false);
 								topic.editButton.html('Edit');
 								topic.originalName = topic.nameInput.val();
 							});
 						}
 					},
-					cancel: function(){
+					cancel: function () {
 						topic.nameInput.val(topic.originalName);
 					}
 				},
-				backgroundDismiss: function(){
+				backgroundDismiss: function () {
 					topic.nameInput.val(topic.originalName);
 				},
 			});
 		},
 
-		deleteTopic: function() {
+		deleteTopic: function () {
 			var topic = this;
 			$.confirm({
 				title: 'Delete Topic',
@@ -669,13 +669,13 @@
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
-				animateFromElement : false,
+				animateFromElement: false,
 				content: 'Are you sure you want to delete <b>"' + topic.nameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
-						action: function(){
+						action: function () {
 							topic.nameInput.prop('disabled', true);
 							$.ajax({
 								method: 'DELETE',
@@ -684,10 +684,10 @@
 								data: {
 									topic_id: topic.Id,
 								},
-								success: function(){
+								success: function () {
 									createToast('', 'Topic deleted');
 
-									topic.element.closest('.js-topic').fadeOut(config.animtions.medium, function() {
+									topic.element.closest('.js-topic').fadeOut(config.animtions.medium, function () {
 										topic.element.closest('.js-topic').remove();
 									});
 								}
@@ -699,7 +699,7 @@
 			});
 		},
 
-		createEditTopicDOM: function(id, name){
+		createEditTopicDOM: function (id, name) {
 			var newTopicElement = $(
 				`<div class="col-12 col-md-6 mt-2 js-topic">
 					<div class="input-group" data-topic-id="${id}" data-original-topic-name="${name}">
@@ -725,7 +725,7 @@
 	};
 
 	EditTopic.prototype.initAll = function () {
-		$(this.Selectors_.EDIT_TOPIC).each(function() {
+		$(this.Selectors_.EDIT_TOPIC).each(function () {
 			this.EditTopic = new EditTopic(this);
 		});
 	};
@@ -760,10 +760,10 @@
 	};
 
 	EditProgramme.prototype.functions = {
-		EditProgramme: function() {
+		EditProgramme: function () {
 			var programme = this;
 
-			if(programme.originalName == programme.nameInput.val()){
+			if (programme.originalName == programme.nameInput.val()) {
 				return;
 			}
 
@@ -774,12 +774,12 @@
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
-				animateFromElement : false,
-				content: 'Are you sure you want to change the programme name from <b>"' + programme.originalName + '"</b> to <b>"' + programme.nameInput.val() +'"</b>?',
+				animateFromElement: false,
+				content: 'Are you sure you want to change the programme name from <b>"' + programme.originalName + '"</b> to <b>"' + programme.nameInput.val() + '"</b>?',
 				buttons: {
 					confirm: {
 						btnClass: 'btn-blue',
-						action: function(){
+						action: function () {
 							programme.nameInput.prop('disabled', true);
 							programme.editButton.html('<div class="spinner-border spinner-border-sm text-primary"</div>');
 
@@ -789,31 +789,31 @@
 								context: programme,
 								data: {
 									programme_id: programme.Id,
-									programme_name : programme.nameInput.val()
+									programme_name: programme.nameInput.val()
 								},
-								success: function(){
+								success: function () {
 									programme.element.data('original-programme-name', programme.nameInput.val());
 									programme.nameInput.change();
 									createToast('success', 'Programme Updated');
 								}
-							}).always(function(){
+							}).always(function () {
 								programme.nameInput.prop('disabled', false);
 								programme.editButton.html('Edit');
 								programme.originalName = programme.nameInput.val();
 							});
 						}
 					},
-					cancel: function(){
+					cancel: function () {
 						programme.nameInput.val(programme.originalName);
 					}
 				},
-				backgroundDismiss: function(){
+				backgroundDismiss: function () {
 					programme.nameInput.val(programme.originalName);
 				},
 			});
 		},
 
-		deleteProgramme: function() {
+		deleteProgramme: function () {
 			var programme = this;
 			$.confirm({
 				title: 'Delete Programme',
@@ -822,13 +822,13 @@
 				theme: 'modern',
 				escapeKey: true,
 				backgroundDismiss: true,
-				animateFromElement : false,
+				animateFromElement: false,
 				content: 'Are you sure you want to delete <b>"' + programme.nameInput.val() + '"</b>?',
 				autoClose: 'cancel|10000',
 				buttons: {
 					delete: {
 						btnClass: 'btn-red',
-						action: function(){
+						action: function () {
 							programme.nameInput.prop('disabled', true);
 							$.ajax({
 								method: 'DELETE',
@@ -837,9 +837,9 @@
 								data: {
 									programme_id: programme.Id,
 								},
-								success: function(){
+								success: function () {
 									createToast('success', 'Programme Deleted');
-									programme.element.closest('.js-topic').fadeOut(config.animtions.medium, function() {
+									programme.element.closest('.js-topic').fadeOut(config.animtions.medium, function () {
 										programme.element.closest('.js-topic').remove();
 									});
 								}
@@ -851,7 +851,7 @@
 			});
 		},
 
-		createEditProgrammeDOM: function(id, name){
+		createEditProgrammeDOM: function (id, name) {
 			var newProgrammeElement = $(
 				`<div class="col-12 col-md-6 mt-2 js-programme">
 					<div class="input-group" data-programme-id="${id}" data-original-programme-name="${name}">
@@ -879,7 +879,7 @@
 	};
 
 	EditProgramme.prototype.initAll = function () {
-		$(this.Selectors_.EDIT_PROGRAMME).each(function() {
+		$(this.Selectors_.EDIT_PROGRAMME).each(function () {
 			this.EditProgramme = new EditProgramme(this);
 		});
 	};
@@ -888,10 +888,10 @@
 		5. Second Marker [Assign]
 	=============================== */
 	var Marker = function Marker() {
-		if($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1){
+		if ($("#2nd-marker-student-table").length < 1 || $("#2nd-marker-supervisor-table").length < 1) {
 			return;
 		}
-		
+
 		this.selectedStudent = null;
 		this.selectedSupervisor = null;
 		this.studentTable = $("#2nd-marker-student-table");
@@ -905,15 +905,15 @@
 		ASSIGN_MARKER: 'admin/marker/manual',
 	};
 
-	Marker.prototype.selectStudent = function(studentRowDOM, marker){
+	Marker.prototype.selectStudent = function (studentRowDOM, marker) {
 		var row = $(studentRowDOM);
 
 		marker.unselectAll(marker);
 		row.addClass("is-selected");
 		marker.selectedStudent = $(row);
 
-		$(marker.supervisorDataTable.bodyRows).each(function() {
-			if($(this).data('marker-id') == row.data('supervisor-id') || $(this).data('marker-id') == row.data('marker-id')){
+		$(marker.supervisorDataTable.bodyRows).each(function () {
+			if ($(this).data('marker-id') == row.data('supervisor-id') || $(this).data('marker-id') == row.data('marker-id')) {
 				$(this).attr('disabled', true);
 			} else {
 				$(this).attr('disabled', false);
@@ -921,12 +921,12 @@
 		});
 	}
 
-	Marker.prototype.selectSupervisor = function(supervisorRowDOM, marker){
+	Marker.prototype.selectSupervisor = function (supervisorRowDOM, marker) {
 		var row = $(supervisorRowDOM);
 
-		if(row.attr('disabled')){ return; }
+		if (row.attr('disabled')) { return; }
 
-		if(marker.selectedStudent != null){
+		if (marker.selectedStudent != null) {
 			row.addClass("is-selected");
 			marker.selectedSupervisor = row;
 			Marker.prototype.showDialog(
@@ -937,7 +937,7 @@
 		}
 	}
 
-	Marker.prototype.resetView = function(marker){
+	Marker.prototype.resetView = function (marker) {
 		$(marker.studentDataTable.bodyRows).removeClass("is-selected");
 		$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
 		$(marker.supervisorDataTable.bodyRows).attr("disabled", true);
@@ -945,12 +945,12 @@
 		marker.selectedSupervisor = null;
 	}
 
-	Marker.prototype.unselectAll = function(marker){
+	Marker.prototype.unselectAll = function (marker) {
 		$(marker.studentDataTable.bodyRows).removeClass("is-selected");
 		$(marker.supervisorDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Marker.prototype.showDialog = function(studentName, supervisorName, markerName, projectTitle){
+	Marker.prototype.showDialog = function (studentName, supervisorName, markerName, projectTitle) {
 		$("#student-name").text(studentName);
 		$("#supervisor-name").text(supervisorName);
 		$("#marker-name").text(markerName);
@@ -959,10 +959,10 @@
 		$("#assign-dialog")[0].dialog.showDialog();
 	}
 
-	$('#submitAssignMarker').on('click', function(){
+	$('#submitAssignMarker').on('click', function () {
 		var marker = window['Marker'];
 
-		if(marker.selectedStudent == null || marker.selectedSupervisor == null){
+		if (marker.selectedStudent == null || marker.selectedSupervisor == null) {
 			$("#assign-dialog")[0].dialog.hideDialog();
 			return;
 		};
@@ -981,23 +981,23 @@
 				student_id: studentId,
 				marker_id: markerId,
 			},
-			success: function(response){
+			success: function (response) {
 				window.location.reload();
 			}
-		}).always(function(data){
+		}).always(function (data) {
 			$("#assign-dialog")[0].dialog.hideDialog();
 			$("#assign-dialog")[0].dialog.hideLoader();
 			marker.resetView(marker);
 		});
 	});
 
-	Marker.prototype.init = function(){
+	Marker.prototype.init = function () {
 		var marker = this;
-		$(marker.studentDataTable.bodyRows).on('click', function() { Marker.prototype.selectStudent(this, marker); });
-		$(marker.supervisorDataTable.bodyRows).on('click', function() { Marker.prototype.selectSupervisor(this, marker); });
+		$(marker.studentDataTable.bodyRows).on('click', function () { Marker.prototype.selectStudent(this, marker); });
+		$(marker.supervisorDataTable.bodyRows).on('click', function () { Marker.prototype.selectSupervisor(this, marker); });
 	}
 
-	Marker.prototype.initAll = function(){
+	Marker.prototype.initAll = function () {
 		window['Marker'] = new Marker();
 	}
 
@@ -1005,10 +1005,8 @@
 	/* ==========================
 		5.1 Second Marker [Swap]
 	============================= */
-	var Swap = function Swap()
-	{
-		if ($("#swap-marker-student-table").length < 1)
-		{
+	var Swap = function Swap() {
+		if ($("#swap-marker-student-table").length < 1) {
 			return;
 		}
 
@@ -1025,24 +1023,21 @@
 		SWAP_MARKER: 'admin/marker/swap',
 	};
 
-	Swap.prototype.selectStudent = function (studentRowDOM, swap)
-	{
+	Swap.prototype.selectStudent = function (studentRowDOM, swap) {
 		var row = $(studentRowDOM);
 
-		if (swap.studentA == null)
-		{
+		if (swap.studentA == null) {
 			row.addClass("is-selected");
 			swap.studentA = $(row);
 		}
-		else if (swap.studentB == null)
-		{
+		else if (swap.studentB == null) {
 			// If user clicks same project again, reset the view (Unselect all)
-			if (row.index() == swap.studentA.index()){
+			if (row.index() == swap.studentA.index()) {
 				swap.resetView(swap);
 				return;
 			}
 
-			if(row.attr('disabled')){ 
+			if (row.attr('disabled')) {
 				return;
 			}
 
@@ -1050,17 +1045,13 @@
 			swap.studentB = $(row);
 		}
 
-		if (swap.studentA != null)
-		{
-			$(swap.markerDataTable.bodyRows).each(function (index, student)
-			{
-				if (swap.studentA.index() != index)
-				{			
+		if (swap.studentA != null) {
+			$(swap.markerDataTable.bodyRows).each(function (index, student) {
+				if (swap.studentA.index() != index) {
 					if (swap.studentA.data('supervisor-id') == $(student).data('marker-id') ||
 						swap.studentA.data('marker-id') == $(student).data('marker-id') ||
 						swap.studentA.data('marker-id') == $(student).data('supervisor-id')
-					)
-					{
+					) {
 						$(student).attr('disabled', true);
 					} else {
 						$(student).attr('disabled', false);
@@ -1069,7 +1060,7 @@
 			});
 		}
 
-		if (swap.studentA != null && swap.studentB != null){
+		if (swap.studentA != null && swap.studentB != null) {
 			Swap.prototype.showDialog(
 				swap.studentA.data('student-name'),
 				swap.studentA.data('marker-name'),
@@ -1078,18 +1069,18 @@
 		}
 	}
 
-	Swap.prototype.resetView = function(swap){
+	Swap.prototype.resetView = function (swap) {
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 		$(swap.markerDataTable.bodyRows).attr('disabled', false);
 		swap.studentA = null;
 		swap.studentB = null;
 	}
 
-	Swap.prototype.unselectAll = function(swap){
+	Swap.prototype.unselectAll = function (swap) {
 		$(swap.markerDataTable.bodyRows).removeClass("is-selected");
 	}
 
-	Swap.prototype.showDialog = function (studentA_Student, studentA_Marker, studentB_Student, studentB_Marker){
+	Swap.prototype.showDialog = function (studentA_Student, studentA_Marker, studentB_Student, studentB_Marker) {
 		$("#studentA-name").text(studentA_Student);
 		$("#studentA-marker").text(studentA_Marker);
 
@@ -1098,10 +1089,10 @@
 		$("#swap-dialog")[0].dialog.showDialog();
 	}
 
-	$('#submitSwapMarker').on('click', function(){
+	$('#submitSwapMarker').on('click', function () {
 		var swap = window['Swap'];
 
-		if(swap.studentB == null || swap.studentB == null){
+		if (swap.studentB == null || swap.studentB == null) {
 			$("#swap-dialog")[0].dialog.hideDialog();
 			return;
 		};
@@ -1115,10 +1106,8 @@
 				student_a: swap.studentA.data('student-id'),
 				student_b: swap.studentB.data('student-id'),
 			},
-			success: function (response)
-			{
-				if (response.successful)
-				{
+			success: function (response) {
+				if (response.successful) {
 					// eq.(3) is the marker name
 					var markerAName = swap.studentA.find('td').eq(3).text();
 					var markerAId = swap.studentA.data('marker-id');
@@ -1138,25 +1127,24 @@
 
 					createToast('success', 'Second markers have been swapped.');
 				}
-				else
-				{
+				else {
 					createToast('error', 'The selected project(s) could not be found.');
 				}
 			},
-		}).always(function(response){
+		}).always(function (response) {
 			$("#swap-dialog")[0].dialog.hideDialog();
 			$("#swap-dialog")[0].dialog.hideLoader();
 			swap.resetView(swap);
 		});
 	});
 
-	Swap.prototype.init = function(){
+	Swap.prototype.init = function () {
 		var swap = this;
-		$(swap.markerDataTable.bodyRows).on('click', function() { Swap.prototype.selectStudent(this, swap); });
-		$(swap.underlay).on('click', function() { swap.resetView(swap); });
+		$(swap.markerDataTable.bodyRows).on('click', function () { Swap.prototype.selectStudent(this, swap); });
+		$(swap.underlay).on('click', function () { swap.resetView(swap); });
 	}
 
-	Swap.prototype.initAll = function(){
+	Swap.prototype.initAll = function () {
 		window['Swap'] = new Swap();
 	}
 
@@ -1165,7 +1153,7 @@
 	 ============================== */
 
 	var Search = function Search() {
-		if($("#universal-search-input").length < 1){
+		if ($("#universal-search-input").length < 1) {
 			return;
 		}
 
@@ -1179,8 +1167,8 @@
 	};
 
 	Search.prototype.functions = {
-		get: function(search, searchTerm) {
-			if(searchTerm.length < 1){
+		get: function (search, searchTerm) {
+			if (searchTerm.length < 1) {
 				return;
 			}
 
@@ -1190,19 +1178,19 @@
 				data: {
 					search_term: searchTerm,
 				},
-				success: function(response){
-					if(response.successful) {
+				success: function (response) {
+					if (response.successful) {
 						var html = "";
 
-						$.each(response.results, function(key, value) {
+						$.each(response.results, function (key, value) {
 							value = JSON.parse(value);
 							html += '<ul class="list-unstyled">';
 							html += "<li><b>" + key + "</b></li>";
 
-							if(Array.isArray(value) && value.length > 0) {
+							if (Array.isArray(value) && value.length > 0) {
 								var resultType = key;
-								$.each(value, function(innerKey, innerValue) {
-									switch(resultType){
+								$.each(value, function (innerKey, innerValue) {
+									switch (resultType) {
 										case "projects":
 											html += '<li><a class="btn text-primary w-100 text-left" href="' + config.ajaxBaseUrl + 'projects/' + innerValue.id + '">';
 											html += innerValue.title;
@@ -1214,7 +1202,7 @@
 											html += "</li></a>";
 											break;
 									}
-									
+
 								});
 							} else {
 								html += '<li class="text-muted m-2">No results found.</li>';
@@ -1231,27 +1219,27 @@
 			search.SearchResults.fadeIn(config.animtions.medium);
 		},
 
-		clear: function(search){
+		clear: function (search) {
 			search.SearchResults.fadeOut(config.animtions.medium);
 			search.SearchResults.html('');
 		}
 	}
 
-	Search.prototype.init = function(){
+	Search.prototype.init = function () {
 		var search = this;
 
-		$(search.SearchInput).on('keydown change', function() { 
-			Search.prototype.functions.get(search, $(this).val()); 
+		$(search.SearchInput).on('keydown change', function () {
+			Search.prototype.functions.get(search, $(this).val());
 		});
 
-		$('body').on('click', function(e){
-			if(e.target != $("#universal-search-results *")){
-				 Search.prototype.functions.clear(search);
+		$('body').on('click', function (e) {
+			if (e.target != $("#universal-search-results *")) {
+				Search.prototype.functions.clear(search);
 			}
 		});
 	}
 
-	Search.prototype.initAll = function(){
+	Search.prototype.initAll = function () {
 		window['Search'] = new Search();
 	}
 
@@ -1264,7 +1252,7 @@
 	* Class constructor for ajax functions.
 	*/
 
-	var AjaxFunctions = function AjaxFunctions() {};
+	var AjaxFunctions = function AjaxFunctions() { };
 	window['AjaxFunctions'] = AjaxFunctions;
 
 	AjaxFunctions.prototype.CssClasses_ = {
@@ -1282,27 +1270,27 @@
 	};
 
 	// Project page search focus
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function(e){
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focus', function (e) {
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).removeClass('shadow-sm');
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow');
 	});
 
 	// Project page search focus out
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function(e){
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_INPUT).on('focusout', function (e) {
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).removeClass('shadow');
 		$(AjaxFunctions.prototype.Selectors_.SEARCH_CONTAINER).addClass('shadow-sm');
 	});
 
 	// SEARCH
-	$(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function() {
+	$(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_BUTTON).on('click', function () {
 		var container = $(AjaxFunctions.prototype.Selectors_.SEARCH_FILTER_CONTAINER);
 		var filterButton = $(this);
 
-		if(container.hasClass('active')){
+		if (container.hasClass('active')) {
 			container.removeClass('active');
 			filterButton.removeClass('active');
 			filterButton.blur();
-		} else{
+		} else {
 			container.addClass('active');
 			filterButton.addClass('active');
 		}
@@ -1319,7 +1307,7 @@
 	Swap.prototype.initAll();
 	Search.prototype.initAll();
 
-	if(window["showLoginDialog"] == true){
+	if (window["showLoginDialog"] == true) {
 		window["loginDialog"].showDialog();
 		$("#RedirectBlockUrl").text(window["redirectUrl"]);
 		$("#RedirectBlock").show();
