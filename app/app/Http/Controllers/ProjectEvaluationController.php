@@ -129,6 +129,8 @@ class ProjectEvaluationController extends Controller
 	 *
 	 * @param  \Illuminate\Http\Project                                   $project
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 * @param  \Illuminate\Http\Project	$project
+	 * @return \Illuminate\View\View
 	 */
 	public function createAll(Project $project)
 	{
@@ -160,6 +162,10 @@ class ProjectEvaluationController extends Controller
 		}
 
 		return redirect()->action('ProjectEvaluationController@index');
+		parent::logInfo(__METHOD__, "Created all Project Evaluations for accepted students");
+		parent::logAdminTransaction('evaluation', 'created-all');
+
+		return redirect()->action('ProjectEvaluationController@report');
 	}
 
 	/**
@@ -217,6 +223,9 @@ class ProjectEvaluationController extends Controller
 			}
 		}
 
+		parent::logInfo(__METHOD__, "Updated Project Evaluation Canvas URLs");
+		parent::logAdminTransaction('evaluation', 'updated-canvas-urls');
+
 		session()->flash('message', 'Evaluation Canvas URLs have been updated successfully');
 		session()->flash('message_type', 'success');
 
@@ -257,25 +266,36 @@ class ProjectEvaluationController extends Controller
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
 		}
 
 		if (($isProjectSupervisor && $evaluation->supervisorHasSubmittedAllQuestions()) ||
 			($isProjectMarker && $evaluation->markerHasSubmittedAllQuestions()))
+			($isProjectMarker && $evaluation->markerHasSubmittedAllQuestions())
+		)
 		{
+			$context = ['evaluation' => $evaluation];
+			parent::logInfo(__METHOD__, 'User tried to update project evaluation with all marks submitted', $context);
+
 			session()->flash('message', 'You have already submitted all your marks.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 		
+
 		if ($evaluation->is_finalised)
 		{
+			$context = ['evaluation' => $evaluation];
+			parent::logInfo(__METHOD__, 'User tried to update finalised project evaluation', $context);
+
 			session()->flash('message', 'This project evaluation has been finalised.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 			
+
 		$questions = $evaluation->questions;
 
 		for ($i = 0; $i < count($questions); $i++)
@@ -405,6 +425,7 @@ class ProjectEvaluationController extends Controller
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
+			return parent::Unauthorised(__METHOD__);
 		}
 
 		if ($evaluation->is_finalised)
@@ -462,6 +483,7 @@ class ProjectEvaluationController extends Controller
 			session()->flash('message', 'Invalid group submitted.');
 			session()->flash('message_type', 'error');
 
+
 			Log::error("ProjectEvaluationController::unsubmitGroup - Tried to un-submit empty group.");
 
 			return redirect()->action('ProjectEvaluationController@show', $student);
@@ -487,6 +509,7 @@ class ProjectEvaluationController extends Controller
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			return parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
 		}
@@ -634,6 +657,7 @@ class ProjectEvaluationController extends Controller
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
 			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
+			return parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
 		}
@@ -752,6 +776,8 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function defer(ProjectEvaluation $evaluation, Request $request)
 	{
+		parent::logInfo(__METHOD__, "Project evaluation deferred", ['evaluation' => $evaluation]);
+
 		$evaluation->is_deferred = true;
 		$evaluation->save();
 
@@ -770,6 +796,8 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function undefer(ProjectEvaluation $evaluation, Request $request)
 	{
+		parent::logInfo(__METHOD__, "Project evaluation un-deferred", ['evaluation' => $evaluation]);
+
 		$evaluation->is_deferred = false;
 		$evaluation->save();
 
@@ -788,6 +816,7 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function export(Request $request)
 	{
+		parent::logInfo(__METHOD__, "Export started");
 
 		$students = Student::all();
 		$results = array();
@@ -879,6 +908,8 @@ class ProjectEvaluationController extends Controller
 		flush();
 		readfile($filepath);
 		unlink($filepath);
+
+		parent::logInfo(__METHOD__, "Export finished");
 
 		return;
 	}
@@ -1069,5 +1100,50 @@ class ProjectEvaluationController extends Controller
 		unlink($filepath);
 
 		return;
+	}
+
+	/**
+	 * 
+	 * A helper method to log project evaluation changes to the transaction table.
+	 * 
+	 * @return [type]
+	 */
+	private function logEvaluationTransaction($action, $studentId, $projectId)
+	{
+		if (empty($action))
+		{
+			return parent::logError(__METHOD__, "Required parameter (\$action) is missing");
+		}
+
+		if (empty($studentId))
+		{
+			return parent::logError(__METHOD__, "Required parameter (\$student) is missing");
+		}
+
+		$transaction = new Transaction();
+		$transaction->fill(array(
+			'type'             => 'evaluation',
+			'action'           => $action,
+			'student'          => $studentId,
+			'transaction_date' => new Carbon()
+		));
+
+		if (!empty($projectId))
+		{
+			$transaction->project = $projectId;
+		}
+
+		if (Auth::user()->id == $project->supervisor->id)
+		{
+			$transaction->supervisor = Auth::user()->id;
+		}
+		else if (Auth::user()->id == $project->getSecondMarker()->id)
+		{
+			$transaction->admin = Auth::user()->id;
+		}
+		else
+		{
+			$transaction->admin = Auth::user()->id;
+		}
 	}
 }
