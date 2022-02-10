@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects;
 
 use Encryptable;
@@ -95,10 +97,9 @@ class ProjectEvaluation extends Model
 		$projEvalTable = (new ProjectEvaluation())->getTable();
 		$pivotTable = (new ProjectEvaluationPivot())->getTable();
 
-		return Project::
-			  join($pivotTable.' as piv', 'piv.project_id', '=', $projectTable.'.id')
-			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
-			->select($projectTable.'.*')
+		return Project::join($pivotTable . ' as piv', 'piv.project_id', '=', $projectTable . '.id')
+			->join($projEvalTable . ' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
+			->select($projectTable . '.*')
 			->where('proj_eval.id', '=', $this->id)
 			->first();
 	}
@@ -114,10 +115,9 @@ class ProjectEvaluation extends Model
 		$projEvalTable = (new ProjectEvaluation())->getTable();
 		$pivotTable = (new ProjectEvaluationPivot())->getTable();
 
-		return Student::
-			  join($pivotTable.' as piv', 'piv.student_id', '=', $studentTable.'.id')
-			->join($projEvalTable.' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
-			->select($studentTable.'.*')
+		return Student::join($pivotTable . ' as piv', 'piv.student_id', '=', $studentTable . '.id')
+			->join($projEvalTable . ' as proj_eval', 'proj_eval.id', '=', 'piv.proj_eval_id')
+			->select($studentTable . '.*')
 			->where('proj_eval.id', '=', $this->id)
 			->first();
 	}
@@ -211,9 +211,14 @@ class ProjectEvaluation extends Model
 
 	public function getStatus()
 	{
-		if(is_null($this->getProject()))
+		if (empty($this->getProject()))
 		{
 			return "No Project";
+		}
+
+		if (!empty($this->getStudent()) && empty($this->getStudent()->getSecondMarker()))
+		{
+			return "No Second Marker";
 		}
 
 		if ($this->is_finalised)
@@ -251,7 +256,7 @@ class ProjectEvaluation extends Model
 			return "text-danger";
 		}
 
-		if ($this->is_deferred)
+		if ($this->is_deferred || empty($this->getProject()))
 		{
 			return "text-info";
 		}
@@ -527,7 +532,7 @@ class ProjectEvaluation extends Model
 			}
 
 			$isBad = (is_null($question->supervisorValue) && !($question->type == PEQValueTypes::CommentOnly || $question->type == PEQValueTypes::StudentFeedback)) ||
-			strlen($question->supervisorComment) < $question->minCommentLength;
+				strlen($question->supervisorComment) < $question->minCommentLength;
 
 			if ($isBad)
 			{
