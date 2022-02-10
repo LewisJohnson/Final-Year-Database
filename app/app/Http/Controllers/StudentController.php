@@ -264,7 +264,6 @@ class StudentController extends Controller
 
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
-				try {
 				try
 				{
 					// Send accepted email
@@ -404,7 +403,6 @@ class StudentController extends Controller
 			// Send student proposed email
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
-				try {
 				try
 				{
 					// Send accepted email
@@ -430,15 +428,12 @@ class StudentController extends Controller
 	 */
 	public function selectProject(Request $request)
 	{
-
 		$request->validate([
 			'project_id' => 'required',
 		]);
 
 		$student = Auth::user()->student;
-		$result = DB::transaction(function () use ($request, $student)
-		{
-			$project = Project::findOrFail(request('project_id'));
+		$project = Project::findOrFail(request('project_id'));
 
 		$result = DB::transaction(function () use ($request, $student, $project)
 		{
@@ -507,7 +502,6 @@ class StudentController extends Controller
 
 			if ($student->project->supervisor->getAcceptingEmails())
 			{
-				try {
 				try
 				{
 					// Send selected email
@@ -528,7 +522,6 @@ class StudentController extends Controller
 
 	/**
 	 * Undoes a selected project.
-	 *
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response JSON
@@ -583,7 +576,6 @@ class StudentController extends Controller
 
 		if ($student->project->supervisor->getAcceptingEmails())
 		{
-			try {
 			try
 			{
 				// Send selected email
@@ -637,7 +629,6 @@ class StudentController extends Controller
 		{
 			return response()->json(array(
 				'successful' => false,
-				'message'    => 'Invalid file encoding.',
 				'message'    => 'Invalid file encoding (Must be UTF-8).',
 			));
 		}
@@ -691,7 +682,6 @@ class StudentController extends Controller
 
 					DB::beginTransaction();
 
-					try {
 					try
 					{
 						DB::table($userTable->getTable())->update(array('programme' => null));
@@ -730,15 +720,18 @@ class StudentController extends Controller
 				// AUTO PROGRAMMES
 				if (isset($request->auto_programmes))
 				{
+					parent::logInfo(__METHOD__, "Importing Programmes via Student import");
+
 					DB::beginTransaction();
 
-					try {
+					try
+					{
 						// Remove CSV header and tail
 						for ($i = 1; $i < count($csv); $i++)
 						{
 							unset($studentProgramme, $autoProgramme);
 
-							if ($csv[$i][3] === NULL)
+							if ($csv[$i][3] == null)
 							{
 								throw new Exception("Student at row:" . $i . " has an invalid programme.");
 							}
@@ -783,35 +776,31 @@ class StudentController extends Controller
 
 				// ACTUALLY IMPORT STUDENTS
 				DB::beginTransaction();
-				try {
+				try
+				{
 					// Remove CSV header and tail
 					for ($i = 1; $i < count($csv); $i++)
 					{
 						unset($user, $student, $studentProgramme, $studentProgrammeModel);
 
-						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() !== null)
+						if ($csv[$i][0] == null)
 						{
-							throw new Exception("Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . " has an invalid candidate number.",
 							));
 						}
-						if ($csv[$i][1] === NULL)
 
 						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && $students->where('registration_number', $csv[$i][0])->first() != null)
 						{
-							throw new Exception("Student at row:" . $i . " has an invalid last name.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.",
 							));
 						}
-						if ($csv[$i][2] === NULL)
 
 						if ($csv[$i][1] == null)
 						{
-							throw new Exception("Student at row:" . $i . " has an invalid first name.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . " has an invalid last name.",
@@ -825,31 +814,25 @@ class StudentController extends Controller
 								'message'    => "Student at row:" . $i . " has an invalid first name.",
 							));
 						}
-						if ($csv[$i][3] === NULL)
 
 						if ($csv[$i][3] == null)
 						{
-							throw new Exception("Student at row:" . $i . " has an invalid programme.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . " has an invalid programme.",
 							));
 						}
-						if ($csv[$i][4] === NULL)
 
 						if ($csv[$i][4] == null)
 						{
-							throw new Exception("Student at row:" . $i . " has an invalid username.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . " has an invalid username.",
 							));
 						}
-						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && User::where('username', $csv[$i][4])->first() !== null)
 
 						if ((!isset($request->ignore_duplicate_entries) && !isset($request->update_duplicate_entries)) && User::where('username', $csv[$i][4])->first() != null)
 						{
-							throw new Exception("Student at row:" . $i . ". The username \"" . $csv[$i][4] . "\" is already in use.");
 							return response()->json(array(
 								'successful' => false,
 								'message'    => "Student at row:" . $i . ". The username \"" . $csv[$i][4] . "\" is already in use.",
@@ -861,28 +844,16 @@ class StudentController extends Controller
 						$studentProgramme = $csv[$i][3];
 						$studentProgrammeModel = Programme::where('name', $studentProgramme)->first();
 
-						if ($studentProgrammeModel === NULL)
+						if (empty($studentProgrammeModel))
 						{
 							throw new Exception("There was a problem at row:" . $i . ". The programme name \"" . $studentProgrammeModel . "\" could not be imported.");
 						}
 
-						if (isset($request->ignore_duplicate_entries))
-						{
-							continue;
-						}
-						else if (isset($request->update_duplicate_entries))
-						{
-							$user = $students->where('registration_number', $csv[$i][0])->first()->user;
+						// Check to see if student already exists
+						$existingStudent = $students->where('registration_number', $csv[$i][0])->first();
 
-							$user->fill(array(
-								'first_name' => $csv[$i][2],
-								'last_name'  => $csv[$i][1],
-								'username'   => $csv[$i][4],
-								'programme'  => $studentProgrammeModel->id,
-							));
-							$user->save();
-						}
-						else
+						// If student doesn't exist, normal import
+						if (empty($existingStudent))
 						{
 							$user->fill(array(
 								'privileges'  => 'student',
@@ -902,6 +873,34 @@ class StudentController extends Controller
 
 							$student->save();
 						}
+						else
+						{
+							// Student already exists
+							// If ignore duplicate it's fine
+							if (isset($request->ignore_duplicate_entries))
+							{
+								continue;
+							}
+							// If update is selected, update a few properties
+							else if (isset($request->update_duplicate_entries))
+							{
+								$user = $existingStudent->user;
+
+								$user->fill(array(
+									'first_name' => $csv[$i][2],
+									'last_name'  => $csv[$i][1],
+									'username'   => $csv[$i][4],
+									'programme'  => $studentProgrammeModel->id,
+								));
+								$user->save();
+							}
+							else
+							{
+								// Should be caught from before
+								throw new Exception("Student at row:" . $i . ". The Candidate Number \"" . $csv[$i][0] . "\" is already in use.");
+							}
+						}
+
 					}
 
 					DB::commit();
