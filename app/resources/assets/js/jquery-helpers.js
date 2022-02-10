@@ -13,12 +13,12 @@
 |
 */
 
-$(function() {
+$(function () {
 
 	/**
 		* Show scroll to top button.
 	*/
-	$(window).scroll(function(){
+	$(window).scroll(function () {
 		if ($(this).scrollTop() > config.showScrollToTopButtonOffset) {
 			$('.scroll-to-top').fadeIn();
 		} else {
@@ -29,7 +29,7 @@ $(function() {
 	/**
 		* Scroll to top when button is clicked.
 	*/
-	$("body").on("click", ".scroll-to-top", function(e) {
+	$("body").on("click", ".scroll-to-top", function (e) {
 		$('html, body').animate({
 			scrollTop: 0
 		}, config.scrollToTopDuration);
@@ -50,7 +50,7 @@ $(function() {
 		*
 		* Toggles a toggle if it's label is clicked.
 	*/
-	$("body").on("click", ".switch-label.switch-label--toggle",  function(e) {
+	$("body").on("click", ".switch-label.switch-label--toggle", function (e) {
 		var id = "#" + $(this).attr('for');
 		$(id).click();
 	});
@@ -61,8 +61,8 @@ $(function() {
 		*
 		* Toggles a toggle if it's form is clicked.
 	*/
-	$("body").on("click", ".form-field--toggle",  function(e) {
-		if($(e.target).hasClass("toggle") || $(e.target).parent().hasClass("toggle")){
+	$("body").on("click", ".form-field--toggle", function (e) {
+		if ($(e.target).hasClass("toggle") || $(e.target).parent().hasClass("toggle")) {
 			return;
 		}
 
@@ -74,7 +74,7 @@ $(function() {
 		*
 		* Hides banner when clicked.
 	*/
-	$("#cookie-banner").on("click", "button",  function(e) {
+	$("#cookie-banner").on("click", "button", function (e) {
 		setCookie('seen_cookie_banner', true, 365);
 		$("#cookie-banner").hide(config.animtions.medium);
 	});
@@ -84,12 +84,12 @@ $(function() {
 		*
 		* Instead of 'checked' attribute, the values will be true/false
 	*/
-	$(".boolean-checkbox").each(function() {
-		$(this).parent().parent().after('<input type="hidden" name="' + $(this).attr("name") + '" value="' + $(this).is(':checked') +'" />');
+	$(".boolean-checkbox").each(function () {
+		$(this).parent().parent().after('<input type="hidden" name="' + $(this).attr("name") + '" value="' + $(this).is(':checked') + '" />');
 	});
 
-	$("body").on("click", ".boolean-checkbox",  function(e) {
-		if($(this).is(':checked')) {
+	$("body").on("click", ".boolean-checkbox", function (e) {
+		if ($(this).is(':checked')) {
 			$(this).parent().parent().next().val("true");
 		} else {
 			$(this).parent().parent().next().val("false");
@@ -101,7 +101,7 @@ $(function() {
 		*
 		* Toggles a toggle if it's form is clicked.
 	*/
-	$('body').on('change', '.js-cookie:checkbox', function() {
+	$('body').on('change', '.js-cookie:checkbox', function () {
 		rememberFormValues("checkbox");
 	});
 
@@ -110,14 +110,14 @@ $(function() {
 		*
 		* Used as an easy way for functions to get current project data from other JS files.
 	*/
-	if($('.js-project').length > 0){
+	if ($('.js-project').length > 0) {
 		window['project'] = $('.js-project');
 	}
 
 	/**
 	 * Client side sort table
 	*/
-	$('body').on('click', '.sort-table thead tr th:not(.js-unsortable)', function() {
+	$('body').on('click', '.sort-table thead tr th:not(.js-unsortable)', function () {
 		sortTable($(this), $(this).closest('table'));
 	});
 
@@ -125,14 +125,14 @@ $(function() {
 	 * Server side Sort table
 	*/
 
-	if($('.server-sort-table').length > 0){
+	if ($('.server-sort-table').length > 0) {
 		var urlParams = new URLSearchParams(window.location.search);
 		var sortCol = urlParams.get('sortCol');
 		var sortDir = urlParams.get('sortDir');
 
-		$(this).find('th').each(function() {
-			if($(this).text().toLowerCase() == sortCol){
-				if(sortDir == "asc"){
+		$(this).find('th').each(function () {
+			if ($(this).text().toLowerCase() == sortCol) {
+				if (sortDir == "asc") {
 					$(this).append('<span class="js-colSortDir">&#x25BC;</span>');
 				} else {
 					$(this).append('<span class="js-colSortDir">&#x25B2;</span>');
@@ -141,7 +141,7 @@ $(function() {
 		});
 	}
 
-	$('.server-sort-table thead tr th:not(.js-unsortable)').on('click', function() {
+	$('.server-sort-table thead tr th:not(.js-unsortable)').on('click', function () {
 		serverSortTable($(this), $(this).closest('table'));
 	});
 
