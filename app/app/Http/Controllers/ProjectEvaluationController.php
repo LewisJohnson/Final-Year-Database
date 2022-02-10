@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,8 +19,11 @@ use SussexProjects\PEQValueTypes;
 use SussexProjects\Project;
 use SussexProjects\ProjectEvaluation;
 use SussexProjects\ProjectEvaluationPivot;
+use Illuminate\Support\Carbon;
+use SussexProjects\Transaction;
 use SussexProjects\Student;
 use SussexProjects\User;
+use Log;
 
 /**
  * The admin controller.
@@ -41,7 +46,7 @@ class ProjectEvaluationController extends Controller
 	 * @param  Project                                                    $project
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function index(Request $request)
+	public function report(Request $request)
 	{
 		if (!empty($request->project_year))
 		{
@@ -59,39 +64,54 @@ class ProjectEvaluationController extends Controller
 			$students = Student::getAllStudentsQuery()->get();
 		}
 
-		return view('evaluation.index')
+		return view('evaluation.report')
 			->with("students", $students);
 	}
 
 	/**
 	 * The project evaluation view.
 	 *
-	 *
 	 * @param  \Illuminate\Http\Project	$project
 	 * @return \Illuminate\View\View
 	 */
 	public function show(Student $student)
 	{
-		$project = $student->project;
-		
-		// If user isn't the supervisor or second marker, check if they're admin or external marker
-		if (Auth::user()->id != ($project->supervisor->id || $project->getSecondMarker()->id))
+		$evaluation = $student->getEvaluation();
+		$project = null;
+
+		if (!empty($evaluation))
 		{
-			if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isExternalMarker())
-			{
-				session()->flash('message', 'Sorry, you are not allowed to perform this action.');
-				session()->flash('message_type', 'error');
-				return redirect()->action('HomeController@index');
-			}
+			$project = $evaluation->getProject();
 		}
 
-		$evaluation = $student->getEvaluation();
+		// If user isn't the supervisor or second marker, check if they're admin or external marker
+		if (empty($project))
+		{
+			if (!empty($student->getSecondMarker()) && !$student->getSecondMarker()->id)
+			{
+				if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isExternalMarker())
+				{
+					return parent::Unauthorised(__METHOD__);
+				}
+			}
+		}
+		else
+		{
+			if (Auth::user()->id != ($project->supervisor->id || $project->getSecondMarker()->id))
+			{
+				if (!Auth::user()->isAdminOfEducationLevel() && !Auth::user()->isExternalMarker())
+				{
+					return parent::Unauthorised(__METHOD__);
+				}
+			}
+		}
 
 		// If the evaluation is null, set up a new one
 		if (is_null($evaluation))
 		{
 			DB::transaction(function () use ($student)
 			{
+				$studentProject = $student->project;
 				$evaluation = new ProjectEvaluation();
 				$evaluation->fill(array(
 					'is_finalised' => false,
@@ -105,20 +125,45 @@ class ProjectEvaluationController extends Controller
 				$pivot->proj_eval_id = $evaluation->id;
 				$pivot->student_id = $student->id;
 
-				if(!is_null($student->project))
+				if (!empty($studentProject))
 				{
-					$pivot->project_id = $student->project->id;
+					$pivot->project_id = $studentProject->id;
 				}
 
 				$pivot->save();
+
+				$transaction = new Transaction();
+				$transaction->fill(array(
+					'type'             => 'evaluation',
+					'action'           => 'created',
+					'student'          => $pivot->student_id,
+					'transaction_date' => new Carbon()
+				));
+
+				if (!empty($studentProject) && Auth::user()->id == $studentProject->supervisor->id)
+				{
+					$transaction->supervisor = Auth::user()->id;
+				}
+				else if (!empty($studentProject) && !empty($studentProject->getSecondMarker()) && Auth::user()->id == $studentProject->getSecondMarker()->id)
+				{
+					$transaction->admin = Auth::user()->id;
+				}
+				else
+				{
+					$transaction->admin = Auth::user()->id;
+				}
+
+				$transaction->save();
 			});
+
+			parent::logInfo(__METHOD__, "Project evaluation created");
 
 			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
 
 		return view('evaluation.evaluation')
 			->with("student", $student)
-			->with("project", $student->project)
+			->with("project", $project)
 			->with("evaluation", $evaluation);
 	}
 
@@ -127,8 +172,6 @@ class ProjectEvaluationController extends Controller
 	 * Creates all project evaluations for accepted students.
 	 *
 	 *
-	 * @param  \Illuminate\Http\Project                                   $project
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 * @param  \Illuminate\Http\Project	$project
 	 * @return \Illuminate\View\View
 	 */
@@ -161,7 +204,6 @@ class ProjectEvaluationController extends Controller
 			}
 		}
 
-		return redirect()->action('ProjectEvaluationController@index');
 		parent::logInfo(__METHOD__, "Created all Project Evaluations for accepted students");
 		parent::logAdminTransaction('evaluation', 'created-all');
 
@@ -265,14 +307,12 @@ class ProjectEvaluationController extends Controller
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
 		}
 
 		if (($isProjectSupervisor && $evaluation->supervisorHasSubmittedAllQuestions()) ||
-			($isProjectMarker && $evaluation->markerHasSubmittedAllQuestions()))
 			($isProjectMarker && $evaluation->markerHasSubmittedAllQuestions())
 		)
 		{
@@ -283,7 +323,6 @@ class ProjectEvaluationController extends Controller
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
-		
 
 		if ($evaluation->is_finalised)
 		{
@@ -294,7 +333,6 @@ class ProjectEvaluationController extends Controller
 			session()->flash('message_type', 'error');
 			return redirect()->action('ProjectEvaluationController@show', $student);
 		}
-			
 
 		$questions = $evaluation->questions;
 
@@ -422,9 +460,6 @@ class ProjectEvaluationController extends Controller
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
-			session()->flash('message_type', 'error');
-			return redirect()->action('HomeController@index');
 			return parent::Unauthorised(__METHOD__);
 		}
 
@@ -508,7 +543,6 @@ class ProjectEvaluationController extends Controller
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			return parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
@@ -656,7 +690,6 @@ class ProjectEvaluationController extends Controller
 
 		if (!$isProjectSupervisor && !$isProjectMarker)
 		{
-			session()->flash('message', 'Sorry, you are not allowed to perform this action.');
 			return parent::Unauthorised(__METHOD__);
 			session()->flash('message_type', 'error');
 			return redirect()->action('HomeController@index');
@@ -726,6 +759,7 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'The project evaluation for "' . $project->title . '" has been finalised.');
 		session()->flash('message_type', 'success');
 
+		$student = $evaluation->getStudent();
 		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
@@ -738,14 +772,15 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function undoFinalise(ProjectEvaluation $evaluation)
 	{
-
 		$evaluation->is_finalised = false;
 		$evaluation->save();
+
 
 		session()->flash('message', 'The project evaluation has been un-finalised');
 		session()->flash('message_type', 'warning');
 
-		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
+		$student = $evaluation->getStudent();
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**
@@ -757,9 +792,21 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function delete(ProjectEvaluation $evaluation)
 	{
-		$evaluation->delete();
+		$student = $evaluation->getStudent();
 
-		session()->flash('message', 'The project evaluation has been deleted');
+		$transaction = new Transaction();
+		$transaction->fill(array(
+			'type'             => $type,
+			'action'           => $action,
+			'student'		   => $student->id,
+			'admin'            => Auth::user()->id,
+			'transaction_date' => new Carbon()
+		));
+
+		$evaluation->delete();
+		$transaction->save();
+
+		session()->flash('message', 'The project evaluation for "' . $student->user->getfullName() . '" has been deleted');
 		session()->flash('message_type', 'danger');
 
 		return response()->json(array(
@@ -784,12 +831,12 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'The project evaluation has been deferred');
 		session()->flash('message_type', 'warning');
 
-		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
+		$student = $evaluation->getStudent();
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**
 	 * Defers a project evaluation.
-	 *
 	 *
 	 * @param  ProjectEvaluation	$evaluation
 	 * @return \Illuminate\Http\Response
@@ -804,7 +851,8 @@ class ProjectEvaluationController extends Controller
 		session()->flash('message', 'The project evaluation is now in-progress');
 		session()->flash('message_type', 'success');
 
-		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
+		$student = $evaluation->getStudent();
+		return redirect()->action('ProjectEvaluationController@show', $student);
 	}
 
 	/**
@@ -944,22 +992,19 @@ class ProjectEvaluationController extends Controller
 		{
 			$students = $students->filter(function ($student)
 			{
-				if (empty($student->project))
+				$eval = $student->getEvaluation();
+
+				if (empty($eval))
 				{
 					return false;
 				}
 
-				if (empty($student->project->evaluation))
+				if ($eval->is_deferred)
 				{
 					return false;
 				}
 
-				if ($student->project->evaluation->is_deferred)
-				{
-					return false;
-				}
-
-				return $student->project->evaluation->is_finalised;
+				return $eval->is_finalised;
 			});
 		}
 
@@ -1040,11 +1085,11 @@ class ProjectEvaluationController extends Controller
 			{
 				$ar["proj"] = $student->project->title;
 
-				$ar["supervisor"] = $student->project->supervisor->user->getFullName();
+				$ar["supervisor"] = $student->project->supervisor->getFullName();
 
-				if (!empty($student->project->marker))
+				if (!empty($student->getSecondMarker()))
 				{
-					$ar["marker"] = $student->project->marker->user->getFullName();
+					$ar["marker"] = $student->getSecondMarker()->getFullName();
 				}
 				else
 				{
