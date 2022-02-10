@@ -450,7 +450,7 @@
 									<h6>Project Evaluation</h6>
 									<ul>
 										<li class="w-100">
-											<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@index') }}">
+											<a class="btn w-100 text-left text-primary" href="{{ action('ProjectEvaluationController@report') }}">
 												<span>@include('svg.clipboard-check')<span>Project Evaluation Report</span></span>
 											</a>
 										</li>
