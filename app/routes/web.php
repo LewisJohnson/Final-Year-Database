@@ -1,10 +1,13 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,7 +100,8 @@ Route::group(['middleware' => ['web']], function ()
 	// Teapot error code
 	Route::get('teapot', function ()
 	{
-		abort(418, "I'm a teapot");});
+		abort(418, "I'm a teapot");
+	});
 
 	// Feedback form
 	Route::get('feedback', 'HomeController@showFeedbackForm');
@@ -233,9 +237,6 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 	// Transactions by time view
 	Route::get('admin/transactions', 'TransactionController@index');
 
-	// Transactions by project view
-	Route::get('admin/transactions/by-project', 'TransactionController@byProject');
-
 	/* TOPIC */
 	// Update topic view
 	Route::get('admin/topics', 'ProjectAdminController@amendTopicsView');
@@ -316,7 +317,7 @@ Route::group(['middleware' => ['web', 'staffOrProjectAdmin', 'checkDepartment']]
 	Route::get('admin/marker/manual', 'ProjectAdminController@manualSecondMarkerView');
 
 	// Manual second marker assignment
-	Route::patch('admin/marker/manual', 'ProjectController@updateSecondMarker');
+	Route::patch('admin/marker/manual', 'ProjectAdminController@updateSecondMarker');
 });
 
 /* =================================
@@ -326,7 +327,7 @@ Route::group(['middleware' => ['web', 'externalMarkerOrProjectAdmin', 'checkDepa
 {
 	/* PROJECT EVALUATION */
 	// Project evaluation
-	Route::get('reports/evaluations', 'ProjectEvaluationController@index');
+	Route::get('reports/evaluations', 'ProjectEvaluationController@report');
 
 	// All project evaluation data
 	Route::get('/evaluations/all', 'ProjectEvaluationController@all');
@@ -510,4 +511,3 @@ Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
-});
