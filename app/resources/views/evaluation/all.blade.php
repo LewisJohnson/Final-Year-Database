@@ -7,7 +7,7 @@
 			$evaluation = $project->evaluation ?? null;
 		@endphp
 
-		@if(!empty($project) && !is_null($evaluation) && !empty($student->project->marker))
+		@if(!empty($project) && !is_null($evaluation) && !empty($student->getSecondMarker()))
 			@php
 				$view = view('evaluation.body')
 						->with("project", $project)
