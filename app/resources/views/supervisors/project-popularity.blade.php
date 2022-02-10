@@ -37,7 +37,7 @@
 
 			<h2>Word Cloud</h2>
 
-			<div class="flex flex--row flex--stretch-children">
+			<div class="flex flex--row flex--stretch-children mb-3">
 				<span>The Word Cloud shows the most used words in your projects.</span>
 
 				<div class="form-field--toggle" style="text-align: right">
@@ -50,7 +50,7 @@
 			</div>
 
 			<canvas width="800" height="400" id="word-cloud"></canvas>
-			<canvas width="800" height="400" hidden id="word-cloud-title-only"></canvas>
+			<canvas width="800" height="400" id="word-cloud-title-only" style="display: none"></canvas>
 		</div>
 	</div>
 @endsection
