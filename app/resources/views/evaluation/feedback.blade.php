@@ -26,32 +26,45 @@
 	<div class="card-columns mt-3" id="card-container">
 		@foreach($students as $student)
 			@php
-				$project = $student->project;
-				$evaluation = $project->evaluation ?? null;
+				$evaluation = $student->getEvaluation() ?? null;
+				$project = null;
+				
+				if (empty($evaluation))
+				{
+					$project = $student->project;
+				}
+				else
+				{
+					$project = $evaluation->getProject();
+				}
 			@endphp
 
 			<div class="card">
 				<div class="card-body">
-					@if(!empty($project) && !is_null($evaluation) && $evaluation->is_finalised)
+					@if(!empty($project) && !empty($evaluation))
 						<h5 class="card-title">{{ $student->user->getFullName() }}</h5>
 						<h6 class="card-subtitle mb-2 text-muted">{{ $project->title }}</h6>
 
 						<p class="card-text">
 							<b>Supervisor:</b> {{ $project->supervisor->user->getFullName() }}<br>
-							<b>Second Marker:</b> {{ $project->getSecondMarker()->user->getFullName() }}
+							@if(empty($student->getSecondMarker()))
+								<b>Second Marker:</b> <span class="text-danger">None</span>
+							@else
+								<b>Second Marker:</b> {{ $student->getSecondMarker()->user->getFullName() }}
+							@endif
 						</p>
 
 						<p class="card-text">{{ $evaluation->getStudentFeedbackQuestion()->supervisorComment }}</p>
 
-						<a href="{{ action('ProjectEvaluationController@show', $student->project) }}" class="ml-auto card-link d-print-none"><span class="svg-sm">@include('svg.clipboard-check')</span></a>
+						<a href="{{ action('ProjectEvaluationController@show', $student->id) }}" class="ml-auto card-link d-print-none"><span class="svg-sm">@include('svg.clipboard-check')</span></a>
 						<a href="#print" class="card-link d-print-none js-print-student-feedback"><span class="svg-sm">@include('svg.printer')</span></a>
-					@elseif(!empty($project) && !empty($student->project->marker))
-						<h5 class="card-title">{{ $student->user->getFullName() }}</h5>
-						<h6 class="card-subtitle mb-2 text-muted">{{ $project->title }}</h6>
-						<p class="card-text">Evaluation not finalised</p>
 					@else
 						<h5 class="card-title">{{ $student->user->getFullName() }}</h5>
-						<h6 class="card-subtitle mb-2 text-muted">No Project</h6>
+						
+						<h6 class="card-subtitle mb-2 text-muted">
+							@if(empty($project)) No Project @endif
+							@if(empty($evaluation)) No Evaluation @endif
+						</h6>
 					@endif
 				</div>
 			</div>
