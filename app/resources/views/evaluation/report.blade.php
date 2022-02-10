@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="centered mw-1600 js-show-scroll-top">
+<div class="centered mw-1800 js-show-scroll-top">
 	<h1>{{ ucfirst(get_el_long_name()) }} Project Evaluations</h1>
 
 	<div class="d-flex w-100">
@@ -20,7 +20,7 @@
 			<br>
 			<select class="form-control w-auto js-projectYear">
 				@foreach(SussexProjects\Mode::all() as $mode)
-					<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('ProjectEvaluationController@index', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
+					<option @if(!empty(Request::get('project_year')) && (Request::get('project_year') == $mode->project_year)) selected @elseif(empty(Request::get('project_year'))) @if(SussexProjects\Mode::getProjectYear() == $mode->project_year) selected @endif @endif data-href="{{ action('ProjectEvaluationController@report', ['project_year' => $mode->project_year]) }}">{{ $mode->project_year }}</option>
 				@endforeach
 			</select>
 		</div>
@@ -108,11 +108,9 @@
 							</td>
 
 							<td class="text-right d-print-none">
-								@if($evaluation->hasAnyQuestionBeenAnswered())
-									<a class="btn btn-sm btn-outline-danger disabled" disabled="disabled" href="#" title="Project Evaluation can not be deleted as some questions have been answered">Delete</a>
-								@else
-									<a class="btn btn-sm btn-outline-danger js-delete-pe" href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}">Delete</a>
-								@endif
+								<a class="btn btn-sm btn-outline-danger js-delete-pe" 
+								href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}"
+								data-show-warning="{{ $evaluation->hasAnyQuestionBeenAnswered() ? 'true' : 'false' }}">Delete</a>
 							</td>
 						</tr>
 
@@ -125,14 +123,14 @@
 
 						<tr>
 							<td>{{ $student->user->getFullName() }}</td>
-							<td>- dddddd</td>
+							<td>No Project</td>
 	
 							<td class="border-left">-</td>
-							<td>n/a</td>
+							<td>-</td>
 							<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
 	
 							<td class="border-left">-</td>
-							<td>n/a</td>
+							<td>-</td>
 
 							<td>{{ $evaluation->markerHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
 
@@ -147,21 +145,31 @@
 							</td>
 
 							<td class="text-right d-print-none">
-								@if($evaluation->hasAnyQuestionBeenAnswered())
-									<a class="btn btn-sm btn-outline-danger disabled" disabled="disabled" href="#" title="Project Evaluation can not be deleted as some questions have been answered">Delete</a>
-								@else
-									<a class="btn btn-sm btn-outline-danger js-delete-pe" href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}">Delete</a>
-								@endif
+								<a class="btn btn-sm btn-outline-info js-delete-pe"
+									href="{{ action('ProjectEvaluationController@delete', $evaluation->id) }}"
+									data-show-warning="{{ $evaluation->hasAnyQuestionBeenAnswered() ? 'true' : 'false' }}">Delete</a>
 							</td>
 						</tr>
 					@elseif(!empty($student->getSecondMarker()))
 						<tr style="opacity: 0.7">
 							<td>{{ $student->getName() }}</td>
-							<td><a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a></td>
-							<td class="border-left"><a href="mailto:{{ $student->project->supervisor->user->email }}">{{ $student->project->supervisor->user->getFullName() }}</a></td>
+							<td>
+								@if(empty($student->project))
+									No Project
+								@else
+									<a href="{{ action('ProjectController@show', $student->project) }}">{{ $student->project->title }}</a>
+								@endif
+							</td>
+							<td class="border-left">
+								@if(empty($student->project))
+									-
+								@else
+									<a href="mailto:{{ $student->project->supervisor->user->email }}">{{ $student->project->supervisor->user->getFullName() }}</a>
+								@endif
+							</td>
 							<td>-</td>
 							<td>-</td>
-							<td class="border-left"><a href="mailto:{{ $student->getSecondMarker()->user->email }}">{{ $student->project->marker->user->getFullName() }}</a></td>
+							<td class="border-left"><a href="mailto:{{ $student->getSecondMarker()->email }}">{{ $student->getSecondMarker()->getFullName() }}</a></td>
 							<td>-</td>
 							<td>-</td>
 							<td class="border-left">-</td>
@@ -170,7 +178,9 @@
 							<td class="border-left">Not Started</td>
 							<td class="border-left text-right d-print-none">
 								@if(Auth::user()->isProjectAdmin())
-									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student->project->id) }}">Create Evaluation</a>
+									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student->id) }}">
+										Create Evaluation
+									</a>
 								@endif
 							</td>
 							<td></td>
@@ -178,7 +188,7 @@
 					@else
 						<tr style="opacity: 0.3">
 							<td>{{ $student->getName() }}</td>
-							<td>{{ !empty($student->project) && empty($student->project->marker) ? 'No Second Marker' : 'No Project' }}</td>
+							<td>{{ !empty($student->project) && empty($student->getSecondMarker()) ? 'No Second Marker' : 'No Project' }}</td>
 							<td class="border-left">-</td>
 							<td>-</td>
 							<td>-</td>
@@ -191,7 +201,9 @@
 							<td class="border-left">-</td>
 							<td class="border-left text-right d-print-none">
 								@if(Auth::user()->isProjectAdmin())
-									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student) }}">Create Evaluation</a>
+									<a class="btn btn-sm btn-outline-secondary" href="{{ action('ProjectEvaluationController@show', $student) }}">
+										Create Evaluation
+									</a>
 								@endif
 							</td>
 							<td class="d-print-none"></td>
