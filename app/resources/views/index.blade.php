@@ -170,8 +170,8 @@
 											<li class="list-group-item">You have accepted no students.</li>
 										@endif
 						
-										@if(count(Auth::user()->supervisor->getSecondMarkingProjects()) > 0)
-											<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondMarkingProjects()) }} projects.</li>
+										@if(count(Auth::user()->supervisor->getSecondMarkingStudents()) > 0)
+											<li class="list-group-item">You are second marker to {{ count(Auth::user()->supervisor->getSecondMarkingStudents()) }} students.</li>
 										@else
 											<li class="list-group-item">You have not been assigned as second marker to any projects.</li>
 										@endif
@@ -211,7 +211,7 @@
 								<li>Projects Pending Decision: {{ SussexProjects\Http\Controllers\StudentController::studentsPendingDecision() }}</li>
 								<li>Proposed Projects Pending Decision: {{ SussexProjects\Http\Controllers\StudentController::studentsPendingProposedDecision() }}</li>
 								<li>Projects Accepted: {{ SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectCount() }}</li>
-								<li>Projects Accepted Without 2<sup>nd</sup> Marker: {{ SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectWithoutSecondMarkerCount() }}</li>
+								{{-- <li>Projects Accepted Without 2<sup>nd</sup> Marker: {{ SussexProjects\Http\Controllers\ProjectController::getAcceptedProjectWithoutSecondMarkerCount() }}</li> --}}
 							</ul>
 
 							<b>Supervisors</b>
