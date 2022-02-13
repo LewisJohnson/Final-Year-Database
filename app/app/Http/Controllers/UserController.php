@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -383,21 +385,21 @@ class UserController extends Controller
 		}
 
 		$projects =
-		Project::where('supervisor_id', $user->id)
+			Project::where('supervisor_id', $user->id)
 			->when($view == 'supervisor', function ($query)
-		{
+			{
 				return $query->where('status', 'on-offer');
 			})
 			->when(Auth::user()->isSupervisor(), function ($query)
-		{
+			{
 				return $query->where('status', '<>', 'student-proposed');
 			})
 			->when($view == 'personal' && $request->mp_hide_archived, function ($query)
-		{
+			{
 				return $query->where('status', '<>', 'archived');
 			})
-		                                       ->orderBy($sortCol, $sortDir)
-		                                       ->paginate($this->paginationCount);
+			->orderBy($sortCol, $sortDir)
+			->paginate($this->paginationCount);
 
 		return view('projects.index')
 			->with('projects', $projects)
@@ -495,7 +497,7 @@ class UserController extends Controller
 
 					if ($user->active_year != $userForm['active_year'])
 					{
-						if($user->student->project != null && $user->student->project->evaluation != null)
+						if ($user->student->project != null && $user->student->project->evaluation != null)
 						{
 							$user->student->project->evaluation->delete();
 						}
@@ -618,7 +620,7 @@ class UserController extends Controller
 			$infoString .= "<li>They have " . count($user->supervisor->getInterestedStudents()) . " interested students.</li>";
 			$infoString .= "<li>They have " . count($user->supervisor->getAcceptedStudents()) . " accepted students.</li>";
 			$infoString .= "<li>They have " . count($user->supervisor->getStudentProjectProposals()) . " students who have proposed a project to them.</li>";
-			$infoString .= "<li>They are second marker to " . count($user->supervisor->getSecondMarkingProjects()) . " projects.</li>";
+			$infoString .= "<li>They are second marker to " . count($user->supervisor->getSecondMarkingStudents()) . " students.</li>";
 			$infoString .= "<li style='list-style: none;opacity:.3'><hr></li>";
 		}
 
@@ -685,11 +687,12 @@ class UserController extends Controller
 					$student->save();
 				}
 
-				foreach ($user->supervisor->getSecondMarkingProjects() as $project)
-				{
-					$project->getSecondMarker()->id = null;
-					$project->save();
-				}
+				// todo
+				// foreach ($user->supervisor->getSecondMarkingStudents() as $project)
+				// {
+				// 	$project->getSecondMarker()->id = null;
+				// 	$project->save();
+				// }
 
 				$projects = Project::where('supervisor_id', $user->id)->delete();
 			}
