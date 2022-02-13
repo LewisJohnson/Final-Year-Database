@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -20,6 +22,7 @@ use SussexProjects\Student;
 use SussexProjects\Supervisor;
 use SussexProjects\Transaction;
 use SussexProjects\User;
+use SussexProjects\Interfaces\IFactoryRepository;
 
 /**
  * The supervisor controller.
@@ -28,10 +31,16 @@ use SussexProjects\User;
 class SupervisorController extends Controller
 {
 
-	public function __construct()
+	private $supervisorRepository;
+	private $secondMarkerPivotRepository;
+
+	public function __construct(IFactoryRepository $factoryRepository)
 	{
 		parent::__construct();
 		$this->middleware('auth');
+
+		$this->supervisorRepository = $factoryRepository->getSupervisorRepository();
+		$this->secondMarkerPivotRepository = $factoryRepository->getSecondMarkerPivotRepository();
 	}
 
 	/**
@@ -129,42 +138,32 @@ class SupervisorController extends Controller
 			'project_id' => 'required',
 		]);
 
-		$student = Student::findOrFail(request('student_id'));
+		$student = Student::findOrFail($request->student_id);
+		$project = Project::findOrFail($request->project_id);
 
-		// We must return the error because the return in the transaction will not break out of the function.
-		$error = DB::transaction(function () use ($request, $student)
+		if ($project->id != $student->project_id)
 		{
-			$project = Project::findOrFail(request('project_id'));
-			$transaction = new Transaction();
 			return parent::logError(__METHOD__, 'Project ID and student project ID do not match up.');
 		}
 
-			if ($project->id != $student->project_id)
-			{
-				return response()->json(array(
-					'successful' => false,
-					'message'    => 'Project ID and student project ID do not match up.',
-				));
-			}
+		if ($project->getAcceptedStudent() != null)
+		{
+			return parent::logError(__METHOD__, 'This project has already been allocated to another student.');
+		}
 
-			if ($project->getAcceptedStudent() != null)
-			{
-				return response()->json(array(
-					'successful' => false,
-					'message'    => 'This project has already been allocated to another student.',
-				));
-			}
+		if (count($project->getStudentsWithProjectSelected()) > 1)
+		{
 			return response()->json(array(
 				'successful' => false,
 				'message'    => 'You must reject all other students for "' . $project->title . '" before accepting ' . $student->user->getFullName(),
+			));
+		}
 
-			if (count($project->getStudentsWithProjectSelected()) > 1)
-			{
-				return response()->json(array(
-					'successful' => false,
-					'message'    => 'You must reject all other students for "' . $project->title . '" before accepting ' . $student->user->getFullName(),
-				));
-			}
+		$secondMarkerPivotRepository = $this->secondMarkerPivotRepository;
+
+		DB::transaction(function () use ($request, $student, $project, $secondMarkerPivotRepository)
+		{
+			$transaction = new Transaction();
 
 			if ($project->status != "student-proposed")
 			{
@@ -175,6 +174,7 @@ class SupervisorController extends Controller
 			$project->save();
 			$student->save();
 
+			// Save a transaction
 			$transaction->fill(array(
 				'type'             => 'student',
 				'action'           => 'accepted',
@@ -186,17 +186,14 @@ class SupervisorController extends Controller
 
 			$transaction->save();
 
+			// Update second marker pivot table
+			$secondMarkerPivotRepository->update($student->id, null, $project->id);
+
 			return null;
 		});
 
-		if ($error != null)
-		{
-			return $error;
-		}
-
 		$emailSuccess = true;
 
-		try {
 		parent::logInfo(__METHOD__, "Accepted student", [
 			"student_id" => $student->id,
 			"student_name" => $student->user->getFullName(),
@@ -257,11 +254,15 @@ class SupervisorController extends Controller
 			$student->project_id = null;
 			$student->project_status = 'none';
 			$student->save();
+
+			//todo: update second marker pivot
+			//todo: delete evaluation
 		});
 
 		$emailSuccess = true;
-		
-		try {
+
+		try
+		{
 			// Send declined email
 			Mail::to($student->user->email)
 				->send(new StudentRejected(Auth::user()->supervisor, $student, $projectId));
