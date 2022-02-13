@@ -136,6 +136,8 @@ class SupervisorController extends Controller
 		{
 			$project = Project::findOrFail(request('project_id'));
 			$transaction = new Transaction();
+			return parent::logError(__METHOD__, 'Project ID and student project ID do not match up.');
+		}
 
 			if ($project->id != $student->project_id)
 			{
@@ -152,6 +154,9 @@ class SupervisorController extends Controller
 					'message'    => 'This project has already been allocated to another student.',
 				));
 			}
+			return response()->json(array(
+				'successful' => false,
+				'message'    => 'You must reject all other students for "' . $project->title . '" before accepting ' . $student->user->getFullName(),
 
 			if (count($project->getStudentsWithProjectSelected()) > 1)
 			{
@@ -192,6 +197,15 @@ class SupervisorController extends Controller
 		$emailSuccess = true;
 
 		try {
+		parent::logInfo(__METHOD__, "Accepted student", [
+			"student_id" => $student->id,
+			"student_name" => $student->user->getFullName(),
+			"project_id" => $project->id,
+			"project_title" => $project->title,
+		]);
+
+		try
+		{
 			// Send accepted email
 			Mail::to($student->user->email)
 				->send(new StudentAccepted(Auth::user()->supervisor, $student));
