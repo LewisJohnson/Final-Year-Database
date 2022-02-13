@@ -511,3 +511,4 @@ Route::group(['middleware' => ['web', 'ldapGuest', 'checkDepartment']], function
 
 	// Show project
 	Route::get('projects/{project}', 'ProjectController@show');
+});
