@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section ('content')
 
 <div class="centered mw-800">
 
@@ -16,7 +15,7 @@
 	@endif
 
 	<div class="card">
-		<div class="card-header">Propose Project</div>
+		<h2 class="main-title">Projects <small class="text-muted">/ Propose</small></h2>
 		@include('forms.new-project', ['user_type' => 'student'])
 	</div>
 </div>

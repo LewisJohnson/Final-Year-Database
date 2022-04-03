@@ -591,7 +591,7 @@ $(document).ajaxError(function (event, request, settings) {
 			},
 		});
 
-		var buttonsHtml = "<div class='html-editor--top-buttons d-flex'><button class='html btn btn-sm rounded-0' type='button'>HTML</button><button class='preview btn btn-sm rounded-0' type='button'>PREVIEW</button></div>";
+		var buttonsHtml = "<div class='html-editor--top-buttons d-flex'><button class='html btn btn-sm' type='button'>HTML</button><button class='preview btn btn-sm' type='button'>PREVIEW</button></div>";
 		var previewHtml = "<div class='html-editor--preview-container'><div class='html-editor--preview'></div></div>";
 
 		$('.html-editor--input').before(buttonsHtml);
@@ -703,7 +703,7 @@ $(document).ajaxError(function (event, request, settings) {
 					animateFromElement: false,
 					backgroundDismiss: true,
 					title: 'HTML Editor',
-					content: 'Here are some notes to... note about the HTML editor. <ul style="text-align: left;padding-top: 15px;"><li>All external links will open in a new tab.</li><li>All HTML 5 elements are valid for the description field, excluding;<ul><li>Script tags.</li><li>Heading tags.</li><li>HTML document tags.</li><li>Body tags.</li></li></ul></ul>',
+					content: 'Here are some notes to... note about the HTML editor. <ul style="text-align: left;padding-top: 15px;"><li> All external links will open in a new tab.</li> <li>All HTML 5 elements are valid for the description field, excluding;<ul><li>Script tags.</li><li>Heading tags.</li><li>HTML document tags.</li><li>Body tags.</li></li></ul ></ul > ',
 				});
 				break;
 		}

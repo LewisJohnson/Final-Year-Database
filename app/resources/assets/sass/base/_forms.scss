@@ -24,3 +24,21 @@
 	color: red;
 	font-weight: 900;
 }
+
+.draggable-source--is-dragging {  
+	animation: flash 1.2s infinite;
+
+	button {
+		display: none;
+	}
+}
+
+@keyframes flash {
+	from, 50%, to {
+		opacity: 0.6;
+	}
+
+	25%, 75% {
+		opacity: 0.2;
+	}
+}

@@ -7,7 +7,7 @@
 @section ('content')
 <div class="centered mw-800">
 	<div class="card">
-		<div class="card-header">Create New Project</div>
+		<h2 class="main-title">Projects <small class="text-muted">/ Create</small></h2>
 		@include('forms.new-project', ['user_type' => 'supervisor'])
 	</div>
 </div>
