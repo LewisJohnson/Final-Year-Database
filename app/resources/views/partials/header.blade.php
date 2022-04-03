@@ -71,7 +71,7 @@
 				@endif
 			</a>
 
-			<a class="d-block ml-auto mr-2" href="https://www.sussex.ac.uk" title="Logo" style="background-size: contain;width: 50px;height: 50px;background-image: url('{{ SussexProjects\SystemSettings::get('logo_url')->value }}')"></a>
+			<a class="d-block ml-auto mr-2" href="https://www.sussex.ac.uk" title="Logo" style="background-size: contain;min-width: 50px;height: 50px;background-image: url('{{ SussexProjects\SystemSettings::get('logo_url')->value }}')"></a>
 		</div>
 
 		@if(Auth::check() || ldap_guest())
