@@ -102,6 +102,13 @@ footer {
 	border-bottom: 2px solid rgba(29, 66, 137, 0.25)
 }
 
+.card .main-title {
+	margin: 0rem;
+	padding: 12px;
+	border-radius: 0.25rem 0.25rem 0 0;
+	border-bottom: 2px solid rgba(29, 66, 137, 0.25)
+}
+
 .bg-danger.is-selected 
 {
 	opacity: 0.8 !important;
