@@ -2,7 +2,11 @@
 	@if(isset($exception))
 		<title>Error {{ $exception->getStatusCode() }} @if($exception->getMessage() != "")({{ $exception->getMessage() }})@endif - @lang("messages.official_name")</title>
 	@else
-		<title>@lang("messages.official_name")</title>
+		@hasSection('pageTitle'))
+			<title>@yield('pageTitle') - @lang("messages.official_name")</title>
+		@else
+			<title>@lang("messages.official_name")</title>
+		@endif
 	@endif
 
 	<!-- Meta -->

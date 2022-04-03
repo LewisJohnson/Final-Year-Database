@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Edit Project')
 
 @section('scripts')
 	<script src="{{ asset('js/views/supervisor.js') }}"></script>

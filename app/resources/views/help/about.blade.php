@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'About')
+
 @section ('content')
 	<div class="centered mw-800 bg-white shadow-sm rounded p-4">
 		<h2 class="main-title">About</h2>

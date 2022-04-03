@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Student Report')
+
 @section('content')
 
 <div class="centered mw-1600">

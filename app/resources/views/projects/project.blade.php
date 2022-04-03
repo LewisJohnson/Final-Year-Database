@@ -1,6 +1,7 @@
 @extends('layouts.app')
-@section('content')
+@section('pageTitle', $project->title)
 
+@section('content')
 <div class="centered mw-1200">
 	@if($view != "StudentProject")
 		@if(Auth::check())

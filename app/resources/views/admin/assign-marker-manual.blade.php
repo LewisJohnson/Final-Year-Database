@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Manual Marker Assignment')
+
 @section('content')
 
 <div class="centered mw-1200">

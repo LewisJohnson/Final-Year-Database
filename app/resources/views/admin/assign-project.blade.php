@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Assign Project')
 
 @section('scripts')
 	<script src="{{ asset('js/views/admin/assign-student-project.js') }}"></script>

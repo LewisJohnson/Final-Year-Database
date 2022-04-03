@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Project by Supervisor')
 
 @section('content')
 <div class="centered mw-800">

@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Amends Canvas URLs')
+
 @section('content')
 <div class="centered mw-1600 js-show-scroll-top">
 

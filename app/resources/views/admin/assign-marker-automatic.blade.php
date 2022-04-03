@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Automatic Marker Assignment')
 
 @section('scripts')
 	<script src="{{ asset('js/views/marker-assign.js') }}"></script>

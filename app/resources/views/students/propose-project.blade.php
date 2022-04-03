@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('pageTitle', 'Propose Project')
+
+@section ('content')
 <div class="centered mw-800">
 
 	@if(SussexProjects\Mode::getProjectSelectionDate()->gt(\Carbon\Carbon::now()))

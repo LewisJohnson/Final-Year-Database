@@ -1,4 +1,9 @@
 @extends('layouts.app')
+
+@section('pageTitle')
+Transactions - {{ $transaction_type }}
+@endsection
+
 @section('content')
 @php
 	$showTypeColumn = $transaction_type == 'All' ? 'true' : 'false';

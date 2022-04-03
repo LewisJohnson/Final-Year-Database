@@ -1,10 +1,11 @@
 @extends('layouts.app')
+@section('pageTitle', 'Project by Topic')
+
 @section ('content')
 <div class="centered mw-800">
 	<h1>Projects by Topic</h1>
 	<h5>Select a topic to browse related projects.</h5>
 	
-	<table class="table table-hover bg-white data-table mt-3 sort-table shadow-sm">
 		<thead>
 			<tr>
 				<th>Topic</th>

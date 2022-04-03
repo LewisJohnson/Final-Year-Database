@@ -1,4 +1,25 @@
 @extends('layouts.app')
+
+@if($view == "index")
+	@section('pageTitle', 'Projects')
+@elseif($view == "supervisor")
+	@section('pageTitle')
+		Projects by {{ $owner->getFullName() }}
+	@endsection
+@elseif($view == "topic")
+	@section('pageTitle')
+		Projects by Topic - {{ $topic->name }}
+	@endsection
+@elseif($view == "personal")
+	@section('pageTitle')
+		My {{ ucfirst(get_el_long_name()) }} Projects
+	@endsection
+@elseif($view == "search")
+	@section('pageTitle', 'Project search results')
+@elseif($view == "transaction")
+	@section('pageTitle', 'Project Transactions')
+@endif
+
 @section('scripts')
 	<script src="{{ asset('js/views/project-preview.js') }}"></script>
 @endsection

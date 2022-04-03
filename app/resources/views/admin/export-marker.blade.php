@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Export Marker Data')
+
 @section('content')
 <div class="centered mw-1200">
 

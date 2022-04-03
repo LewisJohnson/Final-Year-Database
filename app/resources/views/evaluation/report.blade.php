@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('pageTitle')
+	{{ ucfirst(get_el_long_name()) }} Project Evaluations
+@endsection
+
 @section('scripts')
 	<script src="{{ asset('js/views/admin.js') }}"></script>
 @endsection

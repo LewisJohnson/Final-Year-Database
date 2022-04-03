@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Supervisor Report')
 
 @section('content')
 <div class="centered mw-1000 js-show-scroll-top position-relative">

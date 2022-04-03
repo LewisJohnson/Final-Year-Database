@@ -1,7 +1,10 @@
 @extends('layouts.app')
+@section('pageTitle', 'Help')
+
 @section('scripts')
 	<script src="{{ asset('js/views/tab-view.js') }}"></script>
 @endsection
+
 @section ('content')
 <div class="centered mw-1000">
 	<h1>Help</h1>

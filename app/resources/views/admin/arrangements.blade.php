@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Supervisor Arrangements')
+
 @section('content')
 <div class="centered mw-1000">
 	<h2>Supervisors <small class="text-muted">/ Amend {{ ucfirst(get_el_long_name()) }} Supervisor Arrangements</small></h2>

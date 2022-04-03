@@ -479,7 +479,7 @@
 									<li>
 										<div class="d-flex">
 											<h5>External Links</h5>
-											<span class="ml-2" style="height: 24px; width: 24px">@include('svg.external')</span>
+											<span class="ml-2" style="height: 18px; width: 18x">@include('svg.external')</span>
 										</div>
 										<ul class="links-list">
 											@include('partials.header.help-links', ['platform' => 'desktop'])

@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'User Agent Strings')
+
 @section('content')
 
 @if(SussexProjects\SystemSettings::get('collect_user_agent')->value == "true")

@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Log-in as')
+
 @section('content')
 
 <div class="centered mw-1200">

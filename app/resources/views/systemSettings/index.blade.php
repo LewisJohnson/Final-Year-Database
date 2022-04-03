@@ -8,6 +8,7 @@
 
 
 @extends('layouts.app')
+@section('pageTitle', 'System Settings')
 
 @section('scripts')
 	<script src="{{ asset('js/views/tab-view.js') }}"></script>

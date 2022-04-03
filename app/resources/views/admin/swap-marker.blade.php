@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('pageTitle', 'Swap Markers')
+
 @section('content')
 
 <div class="centered mw-1200 bg-white shadow-sm rounded p-4">

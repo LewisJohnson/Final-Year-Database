@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Project Popularity')
 
 @section('scripts')
 	<script src="{{ asset('js/views/project-popularity.js') }}"></script>

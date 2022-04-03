@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('pageTitle', 'Amend Programmes')
 
 @section('scripts')
 	<script src="{{ asset('js/views/admin.js') }}"></script>
