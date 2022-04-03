@@ -25,10 +25,11 @@
 		<link rel="stylesheet" href="{{ asset('css/ie.css') }}">
 	@endif
 
+
 	<!-- Accessibility Style -->
-	@if(Cookie::get('accessibility_contrast') === "true") <link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}"> @endif
-	@if(Cookie::get('accessibility_font') === "true") <link rel="stylesheet" href="{{ asset('css/accessible-font.css') }}"> @endif
-    @if(Cookie::get('accessibility_dark_mode') === "true") <link rel="stylesheet" href="{{ asset('css/accessible-dark-mode.css') }}"> @endif
+	@if(Cookie::get('accessibility_contrast') === "true" || (!empty($enable_contrast) && $enable_contrast === "true")) <link rel="stylesheet" href="{{ asset('css/accessible-contrast.css') }}"> @endif
+	@if(Cookie::get('accessibility_font') === "true" || (!empty($enable_font) && $enable_font === "true")) <link rel="stylesheet" href="{{ asset('css/accessible-font.css') }}"> @endif
+    @if(Cookie::get('accessibility_dark_mode') === "true" || (!empty($enable_dark_mode) && $enable_dark_mode === "true")) <link rel="stylesheet" href="{{ asset('css/accessible-dark-mode.css') }}"> @endif
 
 	<!-- Scripts -->
 	{{-- ONLY CHANGE THE ORDER IF YOU KNOW WHAT YOU'RE DOING --}}
