@@ -9,10 +9,11 @@ html {
 	min-height: 100%;
 }
 
-code {
-	background: rgba(0, 0, 0, 0.03);
-	padding: 5px;
-	display: inline-block;
+code, pre code {
+	background: rgba(0, 0, 0, 0.03) !important;
+	padding: 5px !important;
+	display: inline-block !important;
+	color: #e83e8c !important;
 }
 
 ins {
