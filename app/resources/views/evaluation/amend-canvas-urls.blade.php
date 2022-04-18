@@ -29,10 +29,10 @@
 				</thead>
 				<tbody>
 					@foreach($students as $student)
-						@if(!empty($student->project) && !empty($student->project->evaluation))
+						@if(!empty($student->project) && !empty($student->getEvaluation()))
 							@php
-								$project = $student->project;
-								$evaluation = $project->evaluation;
+								$evaluation = $student->getEvaluation();
+								$project = $evaluation->getProject();
 
 								$canvasUrl = $evaluation->canvas_url;
 
@@ -44,10 +44,16 @@
 		
 								<td><a href="mailto:{{ $project->supervisor->user->email }}">{{ $project->supervisor->user->getFullName() }}</a></td>
 		
-								<td><a href="mailto:{{ $project->getSecondMarker()->user->email }}">{{ $project->getSecondMarker()->user->getFullName() }}</a></td>
+								<td>
+									@if(empty($student->getSecondMarker()))
+									-
+									@else
+										<a href="mailto:{{ $student->getSecondMarker()->email }}">{{ $student->getSecondMarker()->getFullName() }}</a>
+									@endif
+								</td>
 
 								<td class="border-left">
-									<input class="form-control" type="url" name="{{ $student->project->evaluation->id }}_canvas_url" value="{{ $canvasUrl }}">
+									<input class="form-control" type="url" name="{{ $evaluation->id }}_canvas_url" value="{{ $canvasUrl }}">
 								</td>
 
 								@if(Auth::user()->isProjectAdmin())

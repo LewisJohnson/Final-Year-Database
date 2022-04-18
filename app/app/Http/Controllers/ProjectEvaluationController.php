@@ -219,7 +219,6 @@ class ProjectEvaluationController extends Controller
 	 */
 	public function amendCanvasUrlsView(Request $request)
 	{
-
 		if (!empty($request->project_year))
 		{
 			$userTable = (new User())->getTable();
