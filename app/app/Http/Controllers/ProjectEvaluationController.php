@@ -606,17 +606,15 @@ class ProjectEvaluationController extends Controller
 
 		$students = $students->filter(function ($student)
 		{
-			if (empty($student->project))
+			$project = $student->project;
+			$evaluation = $student->getEvaluation();
+
+			if (empty($project) || empty($evaluation))
 			{
 				return false;
 			}
 
-			if (empty($student->project->evaluation))
-			{
-				return false;
-			}
-
-			return !$student->project->evaluation->is_finalised;
+			return !$evaluation->is_finalised;
 		});
 
 		return view('evaluation.finalise-manual')
