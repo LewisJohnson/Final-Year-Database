@@ -1159,6 +1159,17 @@
 
 		this.SearchInput = $("#universal-search-input");
 		this.SearchResults = $("#universal-search-results");
+		this.placeholderValues = [
+			"everywhere",
+			"projects",
+			"topics",
+			"supervisors",
+			"skills",
+			"descriptions",
+			"project titles",
+		];
+		this.placeholderIndex = 0;
+
 		this.init();
 	};
 
@@ -1226,17 +1237,33 @@
 	}
 
 	Search.prototype.init = function () {
-		var search = this;
+		var self = this;
 
-		$(search.SearchInput).on('keydown change', function () {
-			Search.prototype.functions.get(search, $(this).val());
+		$(self.SearchInput).on('keydown change', function () {
+			Search.prototype.functions.get(self, $(this).val());
 		});
 
 		$('body').on('click', function (e) {
 			if (e.target != $("#universal-search-results *")) {
-				Search.prototype.functions.clear(search);
+				Search.prototype.functions.clear(self);
 			}
 		});
+
+		var updatePlaceholder = function () {
+
+			$(self.SearchInput).attr('placeholder', 'Search ' + self.placeholderValues[self.placeholderIndex] + '...');
+
+			if (self.placeholderValues.length - 1 !== self.placeholderIndex) {
+				self.placeholderIndex++;
+			}
+			else {
+				self.placeholderIndex = 0;
+			}
+
+			setTimeout(updatePlaceholder, 3000);
+		}
+
+		setTimeout(updatePlaceholder, 3000);
 	}
 
 	Search.prototype.initAll = function () {
