@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -116,6 +118,7 @@ class HomeController extends Controller
 		$searchTerm = $request->get("search_term");
 
 		$projects = Project::where('title', 'LIKE', '%' . $searchTerm . '%')
+			->orWhere('skills', 'LIKE', '%' . $searchTerm . '%')
 			->limit(5)
 			->get();
 
