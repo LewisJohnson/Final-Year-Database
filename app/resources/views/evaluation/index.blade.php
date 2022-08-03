@@ -83,7 +83,13 @@
 							@endif
 							<td>{{ $evaluation->supervisorHasSubmittedAllQuestions() ? 'Yes' : 'No' }}</td>
 	
-							<td class="border-left"><a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a></td>
+							<td class="border-left">
+								@if(!empty($project->marker))
+								<a href="mailto:{{ $project->marker->user->email }}">{{ $project->marker->user->getFullName() }}</a>
+								@else
+									n/a
+								@endif
+							</td>
 							@if(is_null($dissertation))
 								<td>n/a</td>
 							@else

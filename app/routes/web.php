@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 use Illuminate\Http\Request;
 
 /*
@@ -97,7 +99,8 @@ Route::group(['middleware' => ['web']], function ()
 	// Teapot error code
 	Route::get('teapot', function ()
 	{
-		abort(418, "I'm a teapot");});
+		abort(418, "I'm a teapot");
+	});
 
 	// Feedback form
 	Route::get('feedback', 'HomeController@showFeedbackForm');
@@ -284,6 +287,9 @@ Route::group(['middleware' => ['web', 'projectAdministrator', 'checkDepartment']
 
 	// Manual finalisation
 	Route::post('/evaluations/finalise', 'ProjectEvaluationController@manualFinalise');
+
+	// moveToCurrentYear
+	Route::post('evaluation/{evaluation}/moveToCurrentYear', 'ProjectEvaluationController@moveToCurrentYear');
 });
 
 /* =================================

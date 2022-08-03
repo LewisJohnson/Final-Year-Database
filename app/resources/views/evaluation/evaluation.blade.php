@@ -526,6 +526,15 @@
 					</div>
 				</form>
 			@endif
+
+			@if($evaluation->project_year != SussexProjects\Mode::getProjectYear())
+				<form action="{{ action('ProjectEvaluationController@moveToCurrentYear', $evaluation->id) }}" method="POST" accept-charset="utf-8">
+					{{ csrf_field() }}
+					<div class="text-right mt-3">
+						<button class="btn btn-outline-warning" type="submit">MOVE TO CURRENT YEAR</button>
+					</div>
+				</form>
+			@endif
 		</div>
 	</div>
 </div>

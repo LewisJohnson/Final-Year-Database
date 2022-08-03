@@ -1,9 +1,11 @@
 <?php
+
 /**
  * University of Sussex.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Written by Lewis Johnson <lewisjohnsondev@gmail.com>
  */
+
 namespace SussexProjects\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -651,6 +653,17 @@ class ProjectEvaluationController extends Controller
 		return response()->json(array(
 			'successful' => true,
 		));
+	}
+
+	public function moveToCurrentYear(ProjectEvaluation $evaluation, Request $request)
+	{
+		$evaluation->project_year = Mode::getProjectYear();
+		$evaluation->save();
+
+		session()->flash('message', 'The project evaluation has been updated');
+		session()->flash('message_type', 'warning');
+
+		return redirect()->action('ProjectEvaluationController@show', $evaluation->project);
 	}
 
 	/**

@@ -19,6 +19,7 @@
 	if($evaluation->hasStudentFeedbackQuestion()){
 		$studentFeedback = $evaluation->getStudentFeedbackQuestion();
 	}
+
 @endphp
 
 <div class="evaluation">
@@ -44,9 +45,17 @@
 
 				@if($evaluation->is_finalised)
 					<div class="col-4">
+						@if(!empty($poster))
 							<span class="d-inline-block" style="width: 150px">Poster:</span> {{ $poster->supervisorOmitSubmission && $poster->markerOmitSubmission ? 'Omitted' : $poster->finalValue.'%' }}
-						<br><span class="d-inline-block" style="width: 150px">Presentation:</span> {{ $presentation->supervisorOmitSubmission && $presentation->markerOmitSubmission ? 'Omitted' : $presentation->finalValue.'%' }}
-						<br><span class="d-inline-block" style="width: 150px">Dissertation Mark:</span> {{ $dissertation->supervisorOmitSubmission && $dissertation->markerOmitSubmission ? 'Omitted' : $dissertation->finalValue.'%' }}
+						@endif
+						@if(!empty($presentation))
+							<br>
+							<span class="d-inline-block" style="width: 150px">Presentation:</span> {{ $presentation->supervisorOmitSubmission && $presentation->markerOmitSubmission ? 'Omitted' : $presentation->finalValue.'%' }}
+						@endif
+						@if(!empty($dissertation))
+							<br>
+							<span class="d-inline-block" style="width: 150px">Dissertation Mark:</span> {{ $dissertation->supervisorOmitSubmission && $dissertation->markerOmitSubmission ? 'Omitted' : $dissertation->finalValue.'%' }}
+						@endif
 					</div>
 				@endif
 			</div>
